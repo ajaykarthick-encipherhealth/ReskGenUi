@@ -11,6 +11,11 @@ export const MenuList = [
         iconStyle:SVGICON.Apps,
         to: '/patient-list',
     },
+    {   
+        title:'File Management',
+        iconStyle:SVGICON.TaskIcon,
+        to: '/file-management',
+    },
 
     
 ]

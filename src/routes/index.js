@@ -22,11 +22,18 @@ import Dashboard from "../screens/admin/dashboard/dashboard";
 // Patient
 import PatientList from "../screens/admin/patient/patient-list";
 
+// FileManagement
+
+import FileManagement from "../screens/admin/file-management/file-management";
+
+
 const allroutes = [
     // Dashboard
       { url: "", component: <Dashboard /> },     
       { url: "/dashboard", component: <Dashboard /> },     
-      { url: "/patient-list", component: <PatientList /> },     
+      { url: "/patient-list", component: <PatientList /> },   
+      { url: "/file-management", component: <FileManagement /> },     
+  
 
   ];
   
