@@ -14,7 +14,7 @@ const initialState = {
   primaryColor : "color_1",
   secondaryColor : "color_1",
   navigationHader: "color_2",
-  haderColor: "color_1",
+  haderColor: "color_2",
   sidebarColor: "color_2",
   background : {value:"light", label:"Light"},
   containerPositionSize: {value: "wide-boxed", label: "Wide Boxed"},

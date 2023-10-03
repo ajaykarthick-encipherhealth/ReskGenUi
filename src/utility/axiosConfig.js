@@ -1,4 +1,5 @@
 import axios from 'axios';
+import LoadingSpinner from "../jsx/components/spinner/spinner";
 
 import ENDPOINTS from '../utility/enpoints';
 axios.defaults.baseURL = ENDPOINTS.apiEndoint;
@@ -15,7 +16,8 @@ axios.defaults.baseURL = ENDPOINTS.apiEndoint;
         console.log(error)
   })
   
-  axios.interceptors.response.use(function (response) {    
+  axios.interceptors.response.use(function (response) { 
+    <LoadingSpinner />   
     return response;
   }, function (error) {
     

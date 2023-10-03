@@ -7,14 +7,24 @@ export const MenuList = [
         to: '/dashboard',
     },
     {   
-        title:'PatientList',
+        title:'User Management',
         iconStyle:SVGICON.Apps,
-        to: '/patient-list',
+        to: '/user-list',
     },
+    // {   
+    //     title:'PatientList',
+    //     iconStyle:SVGICON.Apps,
+    //     to: '/patient-list',
+    // },
     {   
         title:'File Management',
         iconStyle:SVGICON.TaskIcon,
         to: '/file-management',
+    },
+    {   
+        title:'File View',
+        iconStyle:SVGICON.TaskIcon,
+        to: '/file-view',
     },
 
     

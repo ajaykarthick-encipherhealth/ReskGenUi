@@ -1,0 +1,59 @@
+
+/* Header and SideNav Style */
+.header,
+.nav-header,
+.deznav {
+    background-color: #241571 !important;
+}
+
+/* Side nav active and List Style */
+.mm-active {
+    background: white !important;
+    border-radius: 50px !important;
+}
+
+.mm-active>a>span {
+    color: #222b40 !important;
+}
+
+.metismenu li {
+    margin: 0 5px 0px 5px !important;
+}
+
+.deznav .deznav-scroll {
+    overflow-y: auto !important;
+}
+
+/* Table Style */
+
+table > thead {
+    background-color: #241571 !important;
+}
+table>thead>tr>th{
+    color: #fff !important;
+}
+
+/* serachform style */
+
+.search-area .form-control{
+    color: #000 !important;
+}
+.flr{
+    float: right !important;
+}
+.height450{
+    height: 450px !important;
+}
+.height80{
+    height: 80px !important;
+}
+.rpv-toolbar__right,.rpv-default-layout__sidebar-header{
+    display: none;
+}
+
+/* select style ? */
+
+.custom-react-select > div:nth-child(3){
+    height: 2.813rem !important;
+}
+

@@ -1,0 +1,73 @@
+/* filemanagement Style  */
+
+.nav-pills .nav-link {
+    border-radius: 100px !important;
+    padding: 8px 60px !important;
+}
+
+/* .mix-chart-tab .nav-link {
+    background: #ccc !important;
+}
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+    background-color: #241571 !important;
+}
+.pdt-0{
+ padding-top: 0px !important;
+} */
+
+/* th,td{
+    font-size: 14px !important;
+} */
+
+
+.completed {
+    background: #14e600 !important;
+}
+
+.in-progress {
+    background-color: #F8DE22 !important;
+}
+
+.finished-validation {
+    background-color: #279EFF !important;
+}
+
+.hold {
+    background-color: #EE9322 !important;
+}
+
+.invalidation {
+    background-color: #81d0c3 !important;
+}
+
+
+.completed-patch {
+    border: 1px solid #a2ff99 !important;
+    border-radius: 1.25rem;
+    padding: 0.1875rem 0.8125rem;
+  }
+  
+  .in-progress-patch {
+    border: 1px solid #fcf09c !important;
+    border-radius: 1.25rem;
+    padding: 0.1875rem 0.8125rem;
+  }
+  
+  .finished-validation-patch {
+    border: 1px solid #9afeee !important;
+    border-radius: 1.25rem;
+    padding: 0.1875rem 0.8125rem;
+  }
+  
+  .hold-patch {
+    border: 1px solid #f8d1a0 !important;
+    border-radius: 1.25rem;
+    padding: 0.1875rem 0.8125rem;
+  }
+  
+  .nopatching-patch {
+    border: 1px solid #9afeee !important;
+    border-radius: 1.25rem;
+    padding: 0.1875rem 0.8125rem;
+  }
+  

@@ -9,6 +9,7 @@ import { ThemeContext } from "../context/ThemeContext";
 import "../main-css/index.css";
 import "../main-css/chart.css";
 import "../main-css/step.css";
+import "../main-css/custom.css";
 
 import Nav from "../jsx/layouts/nav";
 import Footer from "../jsx/layouts/Footer";
@@ -19,20 +20,28 @@ import ScrollToTop from "../jsx/layouts/ScrollToTop";
 /// Dashboard
 import Dashboard from "../screens/admin/dashboard/dashboard";
 
+// User
+import UserList from "../screens/admin/user-management/user-list";
+
 // Patient
 import PatientList from "../screens/admin/patient/patient-list";
 
 // FileManagement
 
 import FileManagement from "../screens/admin/file-management/file-management";
+import FileView from "../screens/admin/file-management/file-view";
+
 
 
 const allroutes = [
     // Dashboard
       { url: "", component: <Dashboard /> },     
-      { url: "/dashboard", component: <Dashboard /> },     
+      { url: "/dashboard", component: <Dashboard /> }, 
+      { url: "/user-list", component: <UserList /> },     
       { url: "/patient-list", component: <PatientList /> },   
-      { url: "/file-management", component: <FileManagement /> },     
+      { url: "/file-management", component: <FileManagement /> }, 
+      { url: "/file-view", component: <FileView /> },       
+ 
   
 
   ];
