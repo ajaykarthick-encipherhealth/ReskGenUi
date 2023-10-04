@@ -17,6 +17,8 @@ import ScrollToTop from "../jsx/layouts/ScrollToTop";
 
 
 
+// Admin
+
 /// Dashboard
 import Dashboard from "../screens/admin/dashboard/dashboard";
 
@@ -32,17 +34,31 @@ import FileManagement from "../screens/admin/file-management/file-management";
 import FileView from "../screens/admin/file-management/file-view";
 
 
+// Physican
+import Dashboard2 from "../screens/physican/dashboard/dashboard";
+import PhysicanPatientList from "../screens/physican/patient/patient-list";
+import SummaryDetails from "../screens/physican/patient/summary-details";
+import PatientDocumentView from "../screens/physican/patient/patient-document-view";
+
+
+
+
+
 
 const allroutes = [
-    // Dashboard
+    // Admin
       { url: "", component: <Dashboard /> },     
-      { url: "/dashboard", component: <Dashboard /> }, 
+      { url: "/dashboard2", component: <Dashboard /> }, 
       { url: "/user-list", component: <UserList /> },     
-      { url: "/patient-list", component: <PatientList /> },   
+      // { url: "/patient-list", component: <PhysicanPatientList /> },   
       { url: "/file-management", component: <FileManagement /> }, 
-      { url: "/file-view", component: <FileView /> },       
- 
-  
+      { url: "/file-view", component: <FileView /> },   
+      
+      // Physican
+      { url: "/dashboard", component: <Dashboard2 /> }, 
+      { url: "/patient-list", component: <PhysicanPatientList /> },
+      { url: "/summary-details", component: <SummaryDetails /> },
+      { url: "/document-view", component: <PatientDocumentView /> },
 
   ];
   

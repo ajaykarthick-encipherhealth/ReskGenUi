@@ -26,6 +26,19 @@ export const MenuList = [
         iconStyle:SVGICON.TaskIcon,
         to: '/file-view',
     },
+    
+]
 
+export const PhysicanMenuList = [
+    {   
+        title:'Dashboard',
+        iconStyle: SVGICON.Home,
+        to: '/dashboard',
+    },
+    {   
+        title:'PatientList',
+        iconStyle:SVGICON.Apps,
+        to: '/patient-list',
+    }
     
 ]

@@ -1,0 +1,221 @@
+.cards-seperators {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 250px;
+  min-height: 20vh;
+  background-color: #fff;
+  /* margin-left: 15pc; */
+}
+.cards {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.4s;
+  width: 450px;
+  height: 210px;
+  border-radius: 16px;
+  display: flex;
+}
+
+.cards:hover {
+  box-shadow: 0 30px 80px 0 rgba(0, 0, 0, 0.2);
+}
+span.ant-progress-text {
+  display: none !important;
+}
+.text {
+  color: #000;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.64px;
+  padding: 10px;
+}
+.text-num {
+    
+    font-family: Roboto;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.48px;
+  }
+  .text-status {
+    
+    color: #000;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.24px;
+  }
+.vertical-line {
+  border-left: 4px solid #65ddea; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+  margin-left: 10px;
+}
+.bac {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: #65ddea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+.gray {
+  border-left: 1px solid #9d9b9b; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+}
+:where(.css-dev-only-do-not-override-1ck3jst).ant-progress.ant-progress-circle
+  .ant-progress-text {
+  inset-block-start: -10%;
+}
+.ant-progress-circle .ant-progress-success-bg {
+  background-color: red;
+}
+.text-Pending {
+  color: #000;
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text-pending {
+  color: #000;
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.32px;
+}
+.vertical-line-red {
+  border-left: 4px solid #f00; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+  margin-left: 10px;
+}
+.vertical-line-green {
+  border-left: 4px solid #14e600; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+  margin-left: 10px;
+}
+.vertical-line-yellow-must {
+  border-left: 4px solid #e1e12a; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+  margin-left: 10px;
+}
+.vertical-line-violet {
+  border-left: 4px solid #9400ff; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+  margin-left: 10px;
+}
+.vertical-line-orange {
+  border-left: 4px solid #ffa500; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+  margin-left: 10px;
+}
+.vertical-line-orange-lite {
+  border-left: 4px solid #ffc04d; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+  margin-left: 10px;
+}
+.vertical-line-blue {
+  border-left: 4px solid #0000ff; /* Adjust thickness and color as needed */
+  height: 190px; /* Adjust the height of the line */
+  margin: 10px 0px;
+  margin-left: 10px;
+}
+:where(.css-dev-only-do-not-override-1ck3jst).ant-progress
+  .ant-progress-inner:not(.ant-progress-circle-gradient)
+  .ant-progress-circle-path {
+  stroke: red;
+}
+.ant-progress-circle-path {
+  fill: red;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 20px;
+  background: red;
+  margin-right: 4px;
+}
+
+
+@media (max-width: 1680px) {
+    /* Styles for screens with a maximum width of 768px (mobile screens) */
+  
+    .cards-separators {
+      flex-direction: column; /* Stack cards vertically */
+      height: auto; /* Allow cards to expand based on content */
+      margin-left: 0; /* Remove left margin */
+    }
+  
+    .cards {
+      width: 400px; /* Take full width of the viewport */
+      margin: 10px 0; /* Add spacing between cards */
+      height: auto; /* Allow cards to expand based on content */
+    }
+  
+    /* Add styles for text and lines to make them fit better on mobile screens */
+    .text {
+      font-size: 15px; /* Adjust font size */
+      padding: 5px; /* Adjust padding */
+    }
+  
+    .text-num {
+      font-size: 15px; /* Adjust font size */
+    }
+  
+    .text-status {
+      font-size: 15px; /* Adjust font size */
+    }
+  
+    .vertical-line, 
+    .vertical-line-red,
+    .vertical-line-green,
+    .vertical-line-yellow-must,
+    .vertical-line-violet,
+    .vertical-line-orange,
+    .vertical-line-orange-lite,
+    .vertical-line-blue {
+      /* Adjust thickness and color as needed */
+      height: 190px; /* Adjust the height of the line */
+      margin: 8px 0px; /* Adjust margin */
+      margin-left: 10px; /* Remove left margin */
+    }
+  
+    /* Add styles for the dot */
+    .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 10px;
+      background: red;
+      margin-right: 2px;
+    }
+  }
+
+  .eye-icon{
+    padding-top: 8px;
+    padding-left: 15px;
+    cursor: pointer;
+  }
+  

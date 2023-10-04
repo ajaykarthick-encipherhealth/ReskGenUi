@@ -136,21 +136,26 @@ const FileProcessing = () => {
                                     <tr key={index}>
                                         <td><span>{index + 1}</span></td>
                                         <td><span>{item.name}</span></td>
-                                        <td>
-                                            <span className={`${item.status === "Completed"
-                                                ? "completed badge badge-rounded badge-primary"
-                                                : item.status === "In-Progress"
-                                                    ? "in-progress badge badge-rounded badge-primary"
-                                                    : item.status === "Finished Validation"
-                                                        ? "finished-validation badge badge-rounded badge-primary"
-                                                        : item.status === "Hold"
-                                                            ? "hold badge badge-rounded badge-primary"
-                                                            : item.status === "In-Validation"
-                                                                ? "invalidation badge badge-rounded badge-primary"
-                                                                : ""
-                                                } status-gray`} >
+                                        <td className='td-backcolor'>
+
+
+                                            <label
+                                                className={
+                                                    item.status === "Completed"
+                                                        ? "completed"
+                                                        : item.status === "In-Progress"
+                                                            ? "in-progress"
+                                                            : item.status === "Finished Validation"
+                                                                ? "finished-validation"
+                                                                : item.status === "Hold"
+                                                                    ? "hold"
+                                                                    : item.status === "In-Validation"
+                                                                        ? "invalidation"
+                                                                        : ""
+                                                }
+                                            >
                                                 {item.status}
-                                            </span>
+                                            </label>
                                         </td>
                                         <td><span>{item.date}</span></td>
                                     </tr>

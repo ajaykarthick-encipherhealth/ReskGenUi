@@ -70,6 +70,7 @@ const FileManagement = () => {
 	const tabList = [
 		{ title: 'File Processing', type: 'File Processing' },
 		{ title: 'Data Validation', type: 'Data Validation' },
+		{ title: 'Settings', type: 'Settings' },
 	];
 
 

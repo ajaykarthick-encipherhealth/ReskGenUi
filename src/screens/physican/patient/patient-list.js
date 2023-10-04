@@ -5,20 +5,19 @@ import { Offcanvas } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
-import { SVGICON } from "../../../jsx/constant/theme";
-import LoadingSpinner from "../../../jsx/components/spinner/spinner";
+import { useNavigate } from "react-router-dom";
 
 
 
 
-
-const UserList = () => {
+const PatientList = () => {
+	const navigate = useNavigate();
 	const [validated, setValidated] = useState(false);
-	const [userList, setUserList] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [patientList, setPatientList] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 	const [isDataLoading, setIsDataLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [addUser, setAddUser] = useState(false);
+	const [addPatient, setAddPatient] = useState(false);
 
 	const recordsPage = 10;
 	const lastIndex = currentPage * recordsPage;
@@ -64,20 +63,19 @@ const UserList = () => {
 		console.log(response.data);
 		if (response.data) {
 			const records = response.data.slice(firstIndex, lastIndex);
-			setUserList(records);
+			setPatientList(records);
 			setRecords(records);
 			const npage = Math.ceil(response.data.length / recordsPage)
 			const number = [...Array(npage + 1).keys()].slice(1);
 			setNPage(npage);
 			setNumber(number);
 			setIsDataLoading(false);
-			setIsLoading(false);
 		}
 	}
 
-	const addUserForm = () => {
+	const addPatientForm = () => {
 		setValidated(false);
-		setAddUser(true);
+		setAddPatient(true);
 	}
 
 	const handleChange = async (e) => {
@@ -96,10 +94,9 @@ const UserList = () => {
 
 	};
 	const postPatient = async (data) => {
-		setAddUser(false);
-		setIsLoading(true);
 		const response = await axios.post(`/patient`, data)
 		if (response?.status == 200) {
+			setAddPatient(false);
 			getAllList();
 		} else {
 
@@ -110,67 +107,106 @@ const UserList = () => {
 		{ value: '1', label: 'ALL' },
 		{ value: '2', label: 'Enabled' },
 		{ value: '3', label: 'Disabled' },
-	]
+	];
+
+
+	const gotoSummaryDetails = (data) => {
+		navigate('/summary-details');	
+
+	};
+
+	const gotoDocumentView = (data) => {	
+		navigate('/document-view');	
+	};
 
 
 
 
 	return (
 		<>
-		{isLoading ? null :
 			<div className="container-fluid">
 				<div className="row">
 					<div className='col-xl-12'>
 						<div className="card">
 							<div className="card-body p-0">
 								<div className="table-responsive active-projects task-table">
+									{/* <div className="tbl-caption d-flex justify-content-between align-items-center">
+										<h4 className="heading mb-0">Patient List</h4>
+										<div>
+											<Button onClick={addPatientForm} className="btn btn-primary btn-sm ms-2">+ Add Patient</Button>
+										</div>
+									</div> */}
 									<div className="tbl-caption  align-items-center">
 										<div className="row">
 											<div className='col-xl-3'>
-											<input type="text" className="form-control" placeholder="Name" />
-												{/* <div className="input-group search-area">
-													<input type="text" className="form-control" placeholder="Name" />
-													<span className="input-group-text">
-														<Link to={"#"}>
-															{SVGICON.SearchIcon}
-														</Link>
-													</span>
-												</div> */}
+												<input type="name" className="form-control" placeholder="Name" />
 											</div>
 											<div className='col-xl-3'>
-											<input type="date" className="form-control" placeholder="Date" />
+												<input type="date" className="form-control" placeholder="Date" />
 											</div>
 											<div className='col-xl-3'>
-											<Select options={options3}  className="custom-react-select" 
-                                                defaultValue={options3[0]}
-                                                isSearchable={false}
-                                            />
-											</div>
-											<div className='col-xl-3'>
-											<Button onClick={addUserForm} className="btn btn-primary btn-sm ms-2 flr">+ Add User</Button>
+												<Select options={options3} className="custom-react-select"
+													defaultValue={options3[0]}
+													isSearchable={false}
+												/>
 											</div>
 										</div>
-									
+
 									</div>
 									<div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
 										<table id="empoloyeestbl2" className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0">
 											<thead>
 												<tr>
 													<th>SI.NO</th>
-													<th>Id</th>
+													{/* <th>Id</th> */}
 													<th>First Name</th>
 													<th>Last Name</th>
 													<th>Email</th>
+													<th>Status</th>
+													<th>Duration Status</th>
 												</tr>
 											</thead>
 											<tbody>
-												{userList.map((item, index) => (
+												{patientList.map((item, index) => (
 													<tr key={index}>
-														<td><span>{index + 1}</span></td>
-														<td><span>{item.id}</span></td>
-														<td><span>{item.firstName}</span></td>
-														<td><span>{item.lastName}</span></td>
-														<td><span>{item.email}</span></td>
+														<td  onClick={() => {gotoDocumentView(item)}}><span>{index + 1}</span></td>
+														{/* <td onClick={() => {gotoDocumentView(item)}}><span>{item.id}</span></td> */}
+														<td onClick={() => {gotoDocumentView(item)}}><span>{item.firstName}</span></td>
+														<td onClick={() => {gotoDocumentView(item)}}><span>{item.lastName}</span></td>
+														<td onClick={() => {gotoDocumentView(item)}}><span>{item.email}</span></td>
+														<td className='td-backcolor'>
+															<div className='d-flex'>
+																<label
+																	className={
+																		item.status !== "Completed"
+																			? "completed"
+																			: item.status === "In-Progress"
+																				? "in-progress"
+																				: item.status === "Finished Validation"
+																					? "finished-validation"
+																					: item.status === "Hold"
+																						? "hold"
+																						: item.status === "In-Validation"
+																							? "invalidation"
+																							: ""
+																	}
+																>
+																	Completed
+
+																</label>
+																<i className='eye-icon' onClick={() => {gotoSummaryDetails(item)}}>
+																	<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+																		<g id="view-alt-svgrepo-com 12">
+																			<path id="Vector" d="M10.0001 10.8333C10.4603 10.8333 10.8334 10.4602 10.8334 9.99996C10.8334 9.53972 10.4603 9.16663 10.0001 9.16663C9.53984 9.16663 9.16675 9.53972 9.16675 9.99996C9.16675 10.4602 9.53984 10.8333 10.0001 10.8333Z" stroke="black" />
+																			<path id="Vector_2" d="M15.1887 9.48375C15.296 9.695 15.3496 9.80058 15.3496 10C15.3496 10.1994 15.296 10.305 15.1887 10.5163C14.6667 11.5444 13.1767 13.75 9.99999 13.75C6.82332 13.75 5.33326 11.5444 4.81122 10.5163C4.704 10.305 4.65039 10.1994 4.65039 10C4.65039 9.80058 4.704 9.695 4.81122 9.48375C5.33326 8.45558 6.82332 6.25 9.99999 6.25C13.1767 6.25 14.6667 8.45558 15.1887 9.48375Z" stroke="black" />
+																			<path id="Vector_3" d="M14.1667 3.33337H14.3333C15.8261 3.33337 16.5725 3.33337 17.0363 3.79712C17.5 4.26087 17.5 5.00726 17.5 6.50004V6.66671M14.1667 16.6667H14.3333C15.8261 16.6667 16.5725 16.6667 17.0363 16.203C17.5 15.7392 17.5 14.9928 17.5 13.5V13.3334M5.83333 3.33337H5.66667C4.17388 3.33337 3.42749 3.33337 2.96375 3.79712C2.5 4.26087 2.5 5.00726 2.5 6.50004V6.66671M5.83333 16.6667H5.66667C4.17388 16.6667 3.42749 16.6667 2.96375 16.203C2.5 15.7392 2.5 14.9928 2.5 13.5V13.3334" stroke="black" stroke-linecap="round" />
+																		</g>
+																	</svg>
+																</i>
+															</div>
+
+														</td>
+														<td onClick={() => {gotoDocumentView(item)}}>10 Days / 10 days</td>
 													</tr>
 												))}
 											</tbody>
@@ -178,8 +214,8 @@ const UserList = () => {
 										<div className="d-sm-flex text-center justify-content-between align-items-center">
 											<div className='dataTables_info'>
 												Showing {lastIndex - recordsPage + 1} to{" "}
-												{userList.length < lastIndex ? userList.length : lastIndex}
-												{" "}of {userList.length} entries
+												{patientList.length < lastIndex ? patientList.length : lastIndex}
+												{" "}of {patientList.length} entries
 											</div>
 											<div
 												className="dataTables_paginate paging_simple_numbers justify-content-center"
@@ -218,12 +254,11 @@ const UserList = () => {
 					</div>
 				</div>
 			</div>
-        }
-			<Offcanvas show={addUser} onHide={setAddUser} className="offcanvas-end" placement='end'>
+			<Offcanvas show={addPatient} onHide={setAddPatient} className="offcanvas-end" placement='end'>
 				<div className="offcanvas-header">
-					<h5 className="modal-title" id="#gridSystemModal">Add File</h5>
+					<h5 className="modal-title" id="#gridSystemModal">Add Patient</h5>
 					<button type="button" className="btn-close"
-						onClick={() => setAddUser(false)}
+						onClick={() => setAddPatient(false)}
 					>
 						<i className="fa-solid fa-xmark"></i>
 					</button>
@@ -247,7 +282,7 @@ const UserList = () => {
 							</div>
 							<div>
 								<Button type='submit' className="btn btn-primary btn-sm me-1">Submit</Button>
-								<Button onClick={() => setAddUser(false)} className="btn btn-danger btn-sm light ms-1">Cancel</Button>
+								<Button onClick={() => setAddPatient(false)} className="btn btn-danger btn-sm light ms-1">Cancel</Button>
 							</div>
 						</Form>
 					</div>
@@ -257,4 +292,4 @@ const UserList = () => {
 	);
 };
 
-export default UserList;
+export default PatientList;

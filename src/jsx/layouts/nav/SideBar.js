@@ -6,7 +6,7 @@ import Collapse from 'react-bootstrap/Collapse';
 /// Link
 import { Link } from "react-router-dom";
 
-import {MenuList} from './Menu';
+import {MenuList,PhysicanMenuList} from './Menu';
 import {useScrollPosition} from "@n8tb1t/use-scroll-position";
 import { ThemeContext } from "../../../context/ThemeContext";
 
@@ -32,6 +32,8 @@ const SideBar = () => {
 
   const [state, setState] = useReducer(reducer, initialState);	
   const [stateActive, setStateActive] = useState(window.location.pathname);	
+  const [userRole, setUserRole] = useState('physican');	
+
 
 	useEffect(() => {
 
@@ -90,7 +92,8 @@ const SideBar = () => {
           : ""
       }`}
     >
-        <div className="deznav-scroll">         
+        <div className="deznav-scroll"> 
+        {userRole == 'admin' ?        
             <ul className="metismenu" id="menu">              
               {MenuList.map((data, index)=>{
                 let menuClass = data.classsChange;
@@ -180,7 +183,98 @@ const SideBar = () => {
                     )
                 }
               })}          
-          </ul>
+          </ul> :
+          <ul className="metismenu" id="menu">              
+          {PhysicanMenuList.map((data, index)=>{
+            let menuClass = data.classsChange;
+              if(menuClass === "menu-title"){
+                return(
+                  <li className={menuClass}  key={index} >{data.title}</li>
+                )
+              }else{
+                return(				
+                  <li className={` ${ stateActive === data.to ? 'mm-active' : ''}`}
+                    key={index} 
+                  >
+                    
+                    {data.content && data.content.length > 0 ?
+                        <>
+                          <Link to={"#"} 
+                            className="has-arrow"
+                            onClick={() => {handleMenuActive(data.to)}}
+                            >		
+                              <div className="menu-icon">
+                                {data.iconStyle}
+                              </div>
+                              {" "}<span className="nav-text">{data.title}
+                              {
+                                data.update && data.update.length > 0 ?
+                                  <span className="badge badge-xs badge-danger ms-2">{data.update}</span>
+                                :
+                                ''
+                              } 
+                            </span>
+                          </Link>
+                          <Collapse in={state.active === data.title ? true :false}>
+                              <ul className={`${menuClass === "mm-collapse" ? "mm-show" : ""}`}>
+                                {data.content && data.content.map((data,index) => {									
+                                  return(	
+                                      <li key={index}
+                                        className={`${ state.activeSubmenu === data.title ? "mm-active" : ""}`}                                    
+                                      >
+                                        {data.content && data.content.length > 0 ?
+                                            <>
+                                              <Link to={data.to} className={data.hasMenu ? 'has-arrow' : ''}
+                                                onClick={() => { handleSubmenuActive(data.title)}}
+                                              >
+                                                {data.title}
+                                              </Link>
+                                              <Collapse in={state.activeSubmenu === data.title ? true :false}>
+                                                  <ul className={`${menuClass === "mm-collapse" ? "mm-show" : ""}`}>
+                                                    {data.content && data.content.map((data,ind) => {
+                                                      return(	                                                           
+                                                        <li key={ind}>
+                                                          <Link className={`${path === data.to ? "mm-active" : ""}`} to={data.to}>{data.title}</Link>
+                                                        </li>                                                            
+                                                      )
+                                                    })}
+                                                  </ul>
+                                              </Collapse>
+                                            </>
+                                          :
+                                          <Link to={data.to}>
+                                            {data.title}
+                                          </Link>
+                                        }
+                                        
+                                      </li>
+                                    
+                                  )
+                                })}
+                              </ul>
+                            </Collapse>
+                        </>
+                    :
+                      <Link  to={data.to}   onClick={() => {handleMenuActive(data.to)}}>
+                        <div className="menu-icon">
+                            {data.iconStyle}
+                        </div>
+                          {" "}<span className="nav-text">{data.title}</span>
+                          {
+                              data.update && data.update.length > 0 ?
+                                <span className="badge badge-xs badge-danger ms-2">{data.update}</span>
+                              :
+                              ''
+                            } 
+                      </Link>
+                    }
+                   
+                  </li>	
+                )
+            }
+          })}          
+      </ul>
+}
         </div>
     </div>
   );
