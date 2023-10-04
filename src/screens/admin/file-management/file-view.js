@@ -9,6 +9,9 @@ import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose, faCheck } from "@fortawesome/free-solid-svg-icons";
+
 
 // import "@react-pdf-viewer/core/lib/styles/index.css";
 // import "@react-pdf-viewer/default-layout/lib/styles/index.css";
@@ -89,7 +92,7 @@ const FileView = () => {
 
     return (
         <>
-                  {/* <LoadingSpinner />  */}
+            {/* <LoadingSpinner />  */}
 
             <div className="container-fluid">
                 <div className="row">
@@ -123,12 +126,7 @@ const FileView = () => {
                                                     marginLeft: "auto",
                                                     marginRight: "auto"
                                                 }}
-                                            >
-                                                {/* <Viewer
-                                                    fileUrl="https://arxiv.org/pdf/quant-ph/0410100.pdf"
-                                                    plugins={[defaultLayoutPluginInstance]}
-                                                /> */}
-                                                <Viewer
+                                            >                          <Viewer
                                                     fileUrl={selectFileURL}
                                                     plugins={[defaultLayoutPluginInstance]}
                                                 />
@@ -168,7 +166,7 @@ const FileView = () => {
                                                                                     <h5 className="mb-1">I6523 - Occlusion and stenosis of bilateral carotid arteries</h5>
                                                                                 </div>
                                                                                 <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                                                                    {SVGICON.DeleteDanger}
+                                                                                    <FontAwesomeIcon icon={faClose} style={{ color: "red" }} />
                                                                                 </div>
                                                                             </div>
                                                                         </li>
@@ -178,7 +176,7 @@ const FileView = () => {
                                                                                     <h5 className="mb-1">I6523 - Occlusion and stenosis of bilateral carotid arteries</h5>
                                                                                 </div>
                                                                                 <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                                                                    {SVGICON.DeleteDanger}
+                                                                                    <FontAwesomeIcon icon={faClose} style={{ color: "red" }} />
                                                                                 </div>
                                                                             </div>
                                                                         </li>
@@ -189,7 +187,7 @@ const FileView = () => {
                                                                                     <h5 className="mb-1">I6523 - Occlusion and stenosis of bilateral carotid arteries</h5>
                                                                                 </div>
                                                                                 <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                                                                    {SVGICON.DeleteDanger}
+                                                                                    <FontAwesomeIcon icon={faClose} style={{ color: "red" }} />
                                                                                 </div>
                                                                             </div>
                                                                         </li>
@@ -199,7 +197,59 @@ const FileView = () => {
                                                                                     <h5 className="mb-1">I6523 - Occlusion and stenosis of bilateral carotid arteries</h5>
                                                                                 </div>
                                                                                 <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                                                                    {SVGICON.DeleteDanger}
+                                                                                    <FontAwesomeIcon icon={faClose} style={{ color: "red" }} />
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+
+                                                                    </ul>
+                                                                </div>
+
+
+                                                            </div>
+                                                        </Tab.Pane>
+                                                        <Tab.Pane id="my-posts" eventKey='invalidDiseases'>
+                                                            <div className="my-post-content pt-3">
+                                                                <div className="widget-media  ps--active-y" >
+                                                                    <ul className="timeline">
+                                                                        <li>
+                                                                            <div className="timeline-panel">
+                                                                                <div className="media-body">
+                                                                                    <h5 className="mb-1">I6523 - Occlusion and stenosis of bilateral carotid arteries</h5>
+                                                                                </div>
+                                                                                <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                                                    <FontAwesomeIcon icon={faCheck} style={{ color: "orange" }} />
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div className="timeline-panel">
+                                                                                <div className="media-body">
+                                                                                    <h5 className="mb-1">I6523 - Occlusion and stenosis of bilateral carotid arteries</h5>
+                                                                                </div>
+                                                                                <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                                                    <FontAwesomeIcon icon={faCheck} style={{ color: "orange" }} />
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <div className="timeline-panel">
+                                                                                <div className="media-body">
+                                                                                    <h5 className="mb-1">I6523 - Occlusion and stenosis of bilateral carotid arteries</h5>
+                                                                                </div>
+                                                                                <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                                                    <FontAwesomeIcon icon={faCheck} style={{ color: "orange" }} />
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div className="timeline-panel">
+                                                                                <div className="media-body">
+                                                                                    <h5 className="mb-1">I6523 - Occlusion and stenosis of bilateral carotid arteries</h5>
+                                                                                </div>
+                                                                                <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                                                    <FontAwesomeIcon icon={faCheck} style={{ color: "orange" }} />
                                                                                 </div>
                                                                             </div>
                                                                         </li>

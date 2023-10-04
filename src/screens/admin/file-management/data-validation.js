@@ -215,7 +215,7 @@ const DataValidation = () => {
                                 </span>
                                 </td>
                                         <td>
-                                        <label
+                                        <span
     className={
       item.status === "Completed"
         ? "completed"
@@ -231,7 +231,7 @@ const DataValidation = () => {
     }
   >
     {item.status}
-                                            </label>
+                                            </span>
                                         </td>
                                         <td><span>{item.date}</span></td>
                                     </tr>

@@ -139,10 +139,10 @@ const FileProcessing = () => {
                                         <td className='td-backcolor'>
 
 
-                                            <label
+                                            <span
                                                 className={
                                                     item.status === "Completed"
-                                                        ? "completed"
+                                                        ? " completed"
                                                         : item.status === "In-Progress"
                                                             ? "in-progress"
                                                             : item.status === "Finished Validation"
@@ -155,7 +155,7 @@ const FileProcessing = () => {
                                                 }
                                             >
                                                 {item.status}
-                                            </label>
+                                            </span>
                                         </td>
                                         <td><span>{item.date}</span></td>
                                     </tr>

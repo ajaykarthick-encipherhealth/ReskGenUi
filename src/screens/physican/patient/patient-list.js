@@ -176,7 +176,7 @@ const PatientList = () => {
 														<td onClick={() => {gotoDocumentView(item)}}><span>{item.email}</span></td>
 														<td className='td-backcolor'>
 															<div className='d-flex'>
-																<label
+																<span
 																	className={
 																		item.status !== "Completed"
 																			? "completed"
@@ -193,7 +193,7 @@ const PatientList = () => {
 																>
 																	Completed
 
-																</label>
+																</span>
 																<i className='eye-icon' onClick={() => {gotoSummaryDetails(item)}}>
 																	<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 																		<g id="view-alt-svgrepo-com 12">

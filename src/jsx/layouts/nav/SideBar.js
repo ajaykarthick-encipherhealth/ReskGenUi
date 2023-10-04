@@ -32,7 +32,7 @@ const SideBar = () => {
 
   const [state, setState] = useReducer(reducer, initialState);	
   const [stateActive, setStateActive] = useState(window.location.pathname);	
-  const [userRole, setUserRole] = useState('physican');	
+  const [userRole, setUserRole] = useState('admi22n');	
 
 
 	useEffect(() => {

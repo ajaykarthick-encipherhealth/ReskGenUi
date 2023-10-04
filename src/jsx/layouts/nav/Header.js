@@ -37,8 +37,9 @@ const Header = ({ onNote }) => {
 							<Dropdown className="header-profile2">
 								<Dropdown.Toggle className="nav-link i-false" as="div">
 									<div className="header-info2 d-flex align-items-center">
-										<div className="header-media">
-											<img src={IMAGES.User} alt="" />
+										<div className="header-media d-flex">
+											<img src={IMAGES.profileImage} alt="" />
+											{/* <h6 className="text-white">Admin</h6> */}
 										</div>										
 									</div>
 								</Dropdown.Toggle>
@@ -46,7 +47,7 @@ const Header = ({ onNote }) => {
 									<div className="card border-0 mb-0">
 										<div className="card-header py-2">
 											<div className="products">
-												<img src={IMAGES.User} className="avatar avatar-md" alt="" />
+												<img src={IMAGES.profileImage} className="avatar avatar-md" alt="" />
 												<div>
 													<h6>Admin</h6>
 													<span>Medical</span>	

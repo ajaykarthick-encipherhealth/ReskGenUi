@@ -9,7 +9,7 @@
     background-color: #fff;
 }
 
-.header {
+/* .header {
     width: 97% !important;
     top: 10px !important;
     right: 1.875rem !important;
@@ -36,7 +36,7 @@
 
 .content-body .container-fluid{
     padding-left : 2.875rem !important;
-}
+} */
 
 /* Side nav active and List Style */
 
@@ -68,6 +68,7 @@
 
 table > thead {
     background-color: #241571 !important;
+    /* background-color: #222B40 !important; */
     border-radius: 10px !important;
 }
 table>thead>tr>th{
