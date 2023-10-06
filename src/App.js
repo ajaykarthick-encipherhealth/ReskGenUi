@@ -9,7 +9,7 @@ import { checkAutoLogin } from './services/AuthService';
 import { isAuthenticated } from './store/selectors/AuthSelectors';
 /// Style
 import "./jsx/other/swiper/swiper-bundle.min.css";
-import "./jsx/other/bootstrap-select/dist/css/bootstrap-select.min.css";
+// import "./jsx/other/bootstrap-select/dist/css/bootstrap-select.min.css";
 import "./css/style.css";
 
 
