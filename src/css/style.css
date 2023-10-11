@@ -29027,7 +29027,8 @@ code {
     vertical-align: middle;
     border-color: #E6E6E6;
     white-space: nowrap;
-    background: transparent !important; }
+    /* background: transparent !important;  */
+  }
   .table:not(.table-bordered) thead th {
     border-top: none; }
   .table .thead-primary th {
@@ -29200,14 +29201,14 @@ table.dataTable {
   padding-bottom: 0.75em; }
 
 table.dataTable thead th, table.dataTable thead td {
-  border-bottom: 0.125rem solid #CCCCCC;
+  /* border-bottom: 0.125rem solid #CCCCCC; */
   border-top: 0; }
 
 table.dataTable tfoot th, table.dataTable tfoot td {
   border-top: 0; }
 
-table.dataTable tbody tr, table.dataTable tbody td {
-  background: transparent !important; }
+/* table.dataTable tbody tr, table.dataTable tbody td {
+  background: transparent !important; } */
 
 table.dataTable thead th {
   color: #374557;
@@ -29227,7 +29228,8 @@ table.dataTable tbody td {
   font-size: 15px;
   font-weight: 400;
   border-bottom: 0;
-  background: transparent !important; }
+  /* background: transparent !important; */
+ }
   @media only screen and (max-width: 35.9375rem) {
     table.dataTable tbody td {
       padding: 0.5rem 0.3125rem; } }

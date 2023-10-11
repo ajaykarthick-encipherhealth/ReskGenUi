@@ -4,10 +4,12 @@ import thunk from 'redux-thunk';
 import { AuthReducer } from './reducers/AuthReducer';
 import todoReducers from './reducers/Reducers';
 //import { reducer as reduxFormReducer } from 'redux-form';
+import { createWrapper } from "next-redux-wrapper";
+
 const middleware = applyMiddleware(thunk);
 
 const composeEnhancers =
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    compose;
 
 const reducers = combineReducers({
     sideMenu: toggleMenu,
@@ -21,3 +23,8 @@ const reducers = combineReducers({
 //const store = createStore(rootReducers);
 
 export const store = createStore(reducers,  composeEnhancers(middleware));
+
+// assigning store to next wrapper
+const makeStore = () => store;
+
+export const wrapper = createWrapper(makeStore);

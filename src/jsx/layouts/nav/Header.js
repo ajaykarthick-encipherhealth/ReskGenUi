@@ -1,10 +1,10 @@
 import React,{useState, useContext, useEffect} from "react";
 import { Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import Link from 'next/link';
 
-import LogoutPage from './Logout';
 import { IMAGES, SVGICON } from "../../constant/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
+import Image from 'next/image'
 
 
 const Header = ({ onNote }) => {
@@ -15,36 +15,44 @@ const Header = ({ onNote }) => {
 		});
 	}, []); 
 	
-	const {background, changeBackground } = useContext(ThemeContext);
-	const handleThemeMode = () => {
-		if(background.value === 'dark'){
-			changeBackground({ value: "light", label: "Light" });
-		}else{
-			changeBackground({ value: "dark", label: "Dark" });
-		}
-	}
+	// const {background, changeBackground } = useContext('');
+	// const handleThemeMode = () => {
+	// 	if(background.value === 'dark'){
+	// 		changeBackground({ value: "light", label: "Light" });
+	// 	}else{
+	// 		changeBackground({ value: "dark", label: "Dark" });
+	// 	}
+	// }
   
   return ( 
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
         <nav className="navbar navbar-expand">
           	<div className="collapse navbar-collapse justify-content-between">
-				<div className="header-left">					
+				<div className="header-logo">	
+				  <h3 className="text-white">Logo</h3>				
 				</div>
 				<div className="header-right d-flex align-items-center">				
 					<ul className="navbar-nav ">			
 						<li className="nav-item ps-3">
-							<Dropdown className="header-profile2">
-								<Dropdown.Toggle className="nav-link i-false" as="div">
+							<div className="header-profile2 cr-pointer">
+								<div className="nav-link i-false" as="div">
 									<div className="header-info2 d-flex align-items-center">
 										<div className="header-media d-flex">
-											<img src={IMAGES.profileImage} alt="" />
-											{/* <h6 className="text-white">Admin</h6> */}
+											<Image src={IMAGES.profileImage}/>
+											<div>
+											<span className="text-dark-50 ms-2 text-white header-name font-weight-bolder font-size-base d-flex mr-3">Admin</span>
+											<Link href="/login" className="ms-2 d-flex">
+												{SVGICON.Logout}{" "}
+												<h6 className="ms-2">Logout </h6>
+											</Link>
+											</div>
+
 										</div>										
 									</div>
-								</Dropdown.Toggle>
-								<Dropdown.Menu align="end">
-									<div className="card border-0 mb-0">
+								</div>
+								{/* <Dropdown.Menu align="end">
+									<div className="card border-0 mb-0 box-shadow-none">
 										<div className="card-header py-2">
 											<div className="products">
 												<img src={IMAGES.profileImage} className="avatar avatar-md" alt="" />
@@ -55,16 +63,15 @@ const Header = ({ onNote }) => {
 											</div>
 										</div>
 										<div className="card-body px-0 py-2">
-											<Link to={"/app-profile"} className="dropdown-item ai-icon ">
+											<Link href="/app-profile" className="dropdown-item ai-icon ">
 												{SVGICON.UserSvg}{" "}
 												<span className="ms-2">Profile </span>
 											</Link>
-											<LogoutPage />
 										</div>
 									</div>
 									
-								</Dropdown.Menu>
-							</Dropdown>
+								</Dropdown.Menu> */}
+							</div>
 						</li>						
 					</ul>
 				</div>

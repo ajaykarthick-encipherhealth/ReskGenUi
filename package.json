@@ -28,6 +28,9 @@
     "chart.js": "^4.4.0",
     "formik": "^2.2.9",
     "lightgallery": "^2.7.1",
+    "next": "^13.5.4",
+    "next-redux-wrapper": "^8.1.0",
+    "next-remove-imports": "^1.0.12",
     "node-sass": "8.0.0",
     "p-min-delay": "^4.0.2",
     "pdfjs-dist": "^3.11.174",
@@ -48,7 +51,6 @@
     "react-multiselect-dropdown-bootstrap": "^1.1.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.2",
-    "react-scripts": "5.0.1",
     "react-scroll": "^1.8.9",
     "react-select": "^5.7.3",
     "react-sparklines": "^1.7.0",
@@ -65,10 +67,9 @@
     "yup": "^1.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "sass": "node-sass --watch src/scss/main.scss src/css/style.css --source-map src/css/style.css.map"
   },
   "eslintConfig": {

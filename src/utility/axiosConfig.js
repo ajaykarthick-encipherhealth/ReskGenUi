@@ -2,12 +2,14 @@ import axios from 'axios';
 import LoadingSpinner from "../jsx/components/spinner/spinner";
 
 import ENDPOINTS from '../utility/enpoints';
-axios.defaults.baseURL = ENDPOINTS.apiEndoint;
+// axios.defaults.baseURL = ENDPOINTS.apiEndoint;
 
 
   axios.interceptors.request.use((config) => {    
-    let _list = 'auth/login'
-    const currentUrl = config?.url;
+    let _list = '/auth/login'
+    const currentUrl = config?.url?.split('/secure')[1]
+
+    console.log(currentUrl)
     if(_list !== currentUrl) {
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     }
@@ -17,7 +19,6 @@ axios.defaults.baseURL = ENDPOINTS.apiEndoint;
   })
   
   axios.interceptors.response.use(function (response) { 
-    <LoadingSpinner />   
     return response;
   }, function (error) {
     

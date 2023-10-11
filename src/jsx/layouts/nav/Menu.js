@@ -1,44 +1,33 @@
 import { SVGICON } from "../../constant/theme";
 
-export const MenuList = [
-    {   
-        title:'Dashboard',
-        iconStyle: SVGICON.Home,
-        to: '/dashboard',
-    },
+export const MenuList = [  
     {   
         title:'User Management',
         iconStyle:SVGICON.Apps,
-        to: '/user-list',
+        to: '/admin/user',
     },
-    // {   
-    //     title:'PatientList',
-    //     iconStyle:SVGICON.Apps,
-    //     to: '/patient-list',
-    // },
     {   
         title:'File Management',
-        iconStyle:SVGICON.TaskIcon,
-        to: '/file-management',
+        iconStyle:SVGICON.Pages,
+        to: '/admin/file-management',
     },
     {   
         title:'File View',
         iconStyle:SVGICON.TaskIcon,
-        to: '/file-view',
-    },
-    
+        to: '/admin/file-view',
+    },    
 ]
 
 export const PhysicanMenuList = [
     {   
         title:'Dashboard',
-        iconStyle: SVGICON.Home,
-        to: '/dashboard',
+        iconStyle: SVGICON.dashboardIcon,
+        to: '/physician/dashboard',
     },
     {   
-        title:'PatientList',
-        iconStyle:SVGICON.Apps,
-        to: '/patient-list',
+        title:'Patient List',
+        iconStyle:SVGICON.patientListIcon,
+        to: '/physician/patient',
     }
     
 ]
