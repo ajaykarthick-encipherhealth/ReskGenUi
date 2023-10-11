@@ -4,6 +4,7 @@ import ENDPOINTS from '../utility/enpoints';
 import axios from '../utility/axiosConfig';
 import { useRouter } from 'next/router';
 import LoginBack from '../images/logo/login-back.jpg';
+import { notification } from 'antd';
 
 
 
@@ -23,14 +24,14 @@ export default function Login() {
         e.preventDefault();
 
         if (email == "physician@gmail.com") {
-
             localStorage.setItem("userRole", 'physician')
             router.push("/physician/dashboard");
+            notification.success({
+                message: "Login Successful",
+            });
 
         }
         if (email == "testuser@encipherhealth.onmicrosoft.com") {
-
-
             try {
                 const postData = {
                     username: email,
@@ -41,9 +42,20 @@ export default function Login() {
                     localStorage.setItem("userRole", 'admin')
                     localStorage.setItem("token", response.data.access_token)
                     router.push("/admin/user");
+                    notification.success({
+                        message: "Login Successful",
+                    });
                 } else {
+                    setIsLoading(false);
+                    notification.error({
+                        message: "Login Failed",
+                    });
                 }
             } catch (e) {
+                setIsLoading(false);
+                notification.error({
+                    message: "Login Failed",
+                });
             }
         }
     }
