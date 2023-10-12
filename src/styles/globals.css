@@ -35188,7 +35188,7 @@
     margin-left: 5.7rem !important;
 }
 .deznav {
-  margin-top: 35px !important;
+  margin-top: 32px !important;
     margin: 0 0 0 20px;
     border-radius: 20px !important;
     height: 85vh !important;
@@ -35208,6 +35208,7 @@
 .header-logo{
     padding-left: 55px;
     text-align: center;
+    padding-top: 8px ;
 }
 .deznav{
     border-radius: 10px !important;
@@ -37218,7 +37219,7 @@ span.ant-progress-text {
     }
 
     .menu-toggle .content-body {
-      margin-left: 5.7rem !important;
+      margin-left: 4.7rem !important;
   }
   .deznav .metismenu a {
     padding: 10px 0px 10px 23px !important;

@@ -25,7 +25,7 @@ export default function Login() {
 
         if (email == "physician@gmail.com") {
             localStorage.setItem("userRole", 'physician')
-            router.push("/physician/dashboard");
+            router.push("/physician/home");
             notification.success({
                 message: "Login Successful",
             });
