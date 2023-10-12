@@ -3,12 +3,12 @@ import { SVGICON } from "../../constant/theme";
 export const MenuList = [  
     {   
         title:'User Management',
-        iconStyle:SVGICON.Apps,
+        iconStyle:SVGICON.Usermanagement,
         to: '/admin/user',
     },
     {   
         title:'File Management',
-        iconStyle:SVGICON.Pages,
+        iconStyle:SVGICON.File,
         to: '/admin/file-management',
     },
     {   
