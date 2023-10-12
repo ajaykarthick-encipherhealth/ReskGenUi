@@ -37250,5 +37250,11 @@ span.ant-progress-text {
   tr{
     text-align: center;
   }
+  :where(.css-dev-only-do-not-override-pr0fja).ant-switch .ant-switch-inner .ant-switch-inner-checked{
+    color:black
+  }
+  :where(.css-dev-only-do-not-override-pr0fja).ant-switch .ant-switch-inner .ant-switch-inner-unchecked{
+    color: black
+  }
 
 
