@@ -177,8 +177,10 @@ const UserList = () => {
 															<th>First Name</th>
 															<th>Last Name</th>
 															<th>Email</th>
+															<th>Password</th>
 															<th>Roles</th>
 															<th>Status</th>
+															<th>Date Created</th>
 															{/* <th>Action</th> */}
 														</tr>
 													</thead>
@@ -190,11 +192,14 @@ const UserList = () => {
 																<td><span>{item.firstName}</span></td>
 																<td><span>{item.lastName}</span></td>
 																<td><span>{item.email}</span></td>
+																<td><span>*****</span></td>
 																<td><span><Select options={RoleList} className="custom-react-select"
 																	defaultValue={RoleList[0]}
 																	isSearchable={false}
 																/></span></td>
 																<td><span>    <Switch checkedChildren="Enabled" unCheckedChildren="Disabled" defaultChecked /></span></td>
+																<td><span>22/06/2022</span></td>
+
 															</tr>
 														))}
 													</tbody>

@@ -37225,3 +37225,46 @@ span.ant-progress-text {
     padding: 10px 0px 10px 23px !important;
   }
 
+/* User Management */
+
+  :where(.css-dev-only-do-not-override-pr0fja).ant-switch.ant-switch-checked{
+    border-radius: 20px;
+    border: 0.7px solid #4CE652;
+    background: #BCF6BE;
+    color: black;
+  }
+  :where(.css-dev-only-do-not-override-pr0fja).ant-switch.ant-switch-checked:hover:not(.ant-switch-disabled) {
+    border-radius: 20px;
+    border: 0.7px solid #4CE652;
+    background: #BCF6BE;
+  }
+  :where(.css-dev-only-do-not-override-pr0fja).ant-switch:hover:not(.ant-switch-disabled){
+    border-radius: 20px;
+    border: 0.7px solid #E32727;
+    background: #F6BBBB;
+  }
+  :where(.css-dev-only-do-not-override-pr0fja).ant-switch {
+    border-radius: 20px;
+    border: 0.7px solid #E32727;
+    background: #F6BBBB;
+  }
+  .table > thead{
+    text-align: center;
+  }
+  tr{
+    text-align: center;
+  }
+  :where(.css-dev-only-do-not-override-pr0fja).ant-switch .ant-switch-inner .ant-switch-inner-checked{
+    color:black
+  }
+  :where(.css-dev-only-do-not-override-pr0fja).ant-switch .ant-switch-inner .ant-switch-inner-unchecked{
+    color: black
+  }
+  .show{
+    background-color: #ffff;
+  }
+  .card{
+    box-shadow: -2px -2px 6px 0px rgba(0, 0, 0, 0.15), 2px 2px 6px 0px rgba(0, 0, 0, 0.15)!important;
+  }
+
+
