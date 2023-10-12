@@ -37260,11 +37260,11 @@ span.ant-progress-text {
   :where(.css-dev-only-do-not-override-pr0fja).ant-switch .ant-switch-inner .ant-switch-inner-unchecked{
     color: black
   }
-  .show{
+  /* .show{
     background-color: #ffff;
-  }
-  .card{
+  } */
+  /* .card{
     box-shadow: -2px -2px 6px 0px rgba(0, 0, 0, 0.15), 2px 2px 6px 0px rgba(0, 0, 0, 0.15)!important;
-  }
+  } */
 
 

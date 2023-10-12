@@ -31,6 +31,7 @@ const FileView = () => {
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
+  const [comboDiseaseCodesListSplit, setComboDiseaseCodesListSplit] = useState([]);
   const [validDiseasesList, setValidDiseasesList] = useState([]);
   const [popOpen, setPopOpen] = useState(true);
   const [inputValue, setInputValue] = useState({
@@ -58,14 +59,48 @@ const FileView = () => {
     // ]
     // setValidDiseasesList(dummyalidList);
     // setInvalidDiseasesList(dummyInvalidList);
-    var combo =  "AI: 1. End-Stage Renal Disease (ESRD) on Peritoneal Dialysis (PD) with Hypertension (HTN) : I12.0\n2. Type 1 Diabetes Mellitus (DM) with Hypoglycemic episodes : E10.649\n3. Type 1 Diabetes Mellitus (DM) with Charcot Joint : E10.610\n4. Type 1 Diabetes Mellitus (DM) with polyneuropathy : E10.42\n5. Type 1 Diabetes Mellitus (DM) with Osteomyelitis due to Methicillin-Susceptible Staphylococcus Aureus (MSSA) : E10.69\n6. Hypertension (HTN) with Non-Obstructive Coronary Artery Disease (CAD) : I11.0\n7. Hypertension (HTN) with Hypothyroidism : E07.0 \n8. Depressive Disorder with Alteration of Mental Status (AMS) : F32.89\n9. Diabetes Mellitus (DM) with Diarrhea due to Clostridioides Difficile (C. diff) : E08.2\n10. Hypertension (HTN) with Pericardial Effusion : I11.0, I31.3\nPlease note that these combinations are based on the ICD-10 coding guidelines and their linked conditions. Some combinations might not be clinically relevant and should be used only as per the patient's individual medical history and current health status."
-    console.log(combo)
-    const myArray = combo.split(":");
-    const myArray2 = combo.split("\n");
-    console.log(myArray)
-    console.log(myArray2)
+  //   var combo =  "AI: 1. End-Stage Renal Disease (ESRD) on Peritoneal Dialysis (PD) with Hypertension (HTN) : I12.0\n2. Type 1 Diabetes Mellitus (DM) with Hypoglycemic episodes : E10.649\n3. Type 1 Diabetes Mellitus (DM) with Charcot Joint : E10.610\n4. Type 1 Diabetes Mellitus (DM) with polyneuropathy : E10.42\n5. Type 1 Diabetes Mellitus (DM) with Osteomyelitis due to Methicillin-Susceptible Staphylococcus Aureus (MSSA) : E10.69\n6. Hypertension (HTN) with Non-Obstructive Coronary Artery Disease (CAD) : I11.0\n7. Hypertension (HTN) with Hypothyroidism : E07.0 \n8. Depressive Disorder with Alteration of Mental Status (AMS) : F32.89\n9. Diabetes Mellitus (DM) with Diarrhea due to Clostridioides Difficile (C. diff) : E08.2\n10. Hypertension (HTN) with Pericardial Effusion : I11.0, I31.3\nPlease note that these combinations are based on the ICD-10 coding guidelines and their linked conditions. Some combinations might not be clinically relevant and should be used only as per the patient's individual medical history and current health status."
+  //   console.log(combo)
+  //   const myArray = combo.split("\n");
+  //   console.log(myArray)
+  //   var splitCodes = [];
+  //   var splitCodesArr = [];
 
-    setComboDiseaseCodesList(myArray)
+  //   myArray.map((res)=>{   
+  //     var split1 = res.split(":");
+  //     // console.log(split1)
+  //     splitCodes.push(split1);
+      
+  // });  
+  
+  // splitCodes.map((res)=>{   
+  //   console.log(res)
+  //   // res.map((res2)=>{   
+  //     // console.log(res2);
+  //     if(res.length > 1){
+  //     if(res[0] == 'AI'){
+  //     splitCodesArr.push({
+  //       name:res[1],
+  //       code:res[2]
+  //     })
+  //   }else{
+  //     splitCodesArr.push({
+  //       name:res[0],
+  //       code:res[1]
+  //     })
+  //   }
+  // }
+      
+  // });  
+
+
+    
+// });  
+
+// console.log(splitCodesArr);
+
+
+    // setComboDiseaseCodesList(splitCodesArr);
   }, []);
 
   const addPatientForm = () => {
@@ -127,7 +162,8 @@ const FileView = () => {
 
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
-        setComboDiseaseCodesList(result.comboDiseaseCodes);
+        // setComboDiseaseCodesList(result.comboDiseaseCodes);
+        comboCodeSplit(result.comboDiseaseCodes);
 
         setAddPatient(false);
         setIsLoading(false);
@@ -179,6 +215,47 @@ const FileView = () => {
     var newArray = [];
     newArray = [...validDiseasesList, ...namePush];
     setValidDiseasesList(newArray);
+  };
+
+  const comboCodeSplit = (combo) => {
+    console.log(combo)
+    const myArray = combo.split("\n");
+    console.log(myArray)
+    var splitCodes = [];
+    var splitCodesArr = [];
+
+    myArray.map((res)=>{   
+      var split1 = res.split(":");
+      // console.log(split1)
+      splitCodes.push(split1);
+      
+  });  
+  
+  splitCodes.map((res)=>{   
+    console.log(res)
+    // res.map((res2)=>{   
+      // console.log(res2);
+      if(res.length > 1){
+      if(res[0] == 'AI'){
+      splitCodesArr.push({
+        name:res[1],
+        code:res[2]
+      })
+    }else{
+      splitCodesArr.push({
+        name:res[0],
+        code:res[1]
+      })
+    }
+  }
+
+    
+});  
+
+console.log(splitCodesArr);
+
+
+    setComboDiseaseCodesList(splitCodesArr)
   };
 
   return (
@@ -429,13 +506,44 @@ const FileView = () => {
                                 <div className="widget-media  hegiht300 ps--active-y">
                                   <ul className="timeline">
                                     <li>
-                                      <div className="timeline-panel">
-                                        <div className="media-body">
-                                          <h5 className="mb-1 combodiseaseText">
-                                            {comboDiseaseCodesList}
-                                          </h5>
-                                        </div>
-                                      </div>
+                                     
+                                          <div className="tablecontainer">
+                                    <table
+                                      id="empoloyeestbl2"
+                                      className="dataTable no-footer mb-2 mb-sm-0 tableSyle fileView-table"
+                                      style={{
+                                        width: "90%",
+
+                                        margin: "auto",
+                                        marginTop: "10px",
+                                      }}
+                                    >
+                                      <thead>
+                                        <tr>
+                                          <th>Codes</th>
+                                          <th> Name</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {comboDiseaseCodesList?.map((item) => {
+                                          return (
+                                            <tr>
+                                              <td>
+                                                <span>{item.code}</span>
+                                              </td>
+
+                                              <td>
+                                                <span>{item.name}</span>
+                                              </td>
+                                           
+                                            </tr>
+                                          );
+                                        })}
+                                      </tbody>
+                                    </table>
+                                    </div>
+											
+                                         
                                     </li>
                                   </ul>
                                 </div>
