@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect,useContext } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import axios from '../../../utility/axiosConfig';
 import ENDPOINTS from '../../../utility/enpoints';
@@ -8,6 +8,7 @@ import Select from 'react-select';
 import NavBar from "../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
 import { ThemeContext } from "../../../context/ThemeContext";
+import { Switch } from 'antd';
 
 
 
@@ -18,7 +19,7 @@ const UserList = () => {
 
 	// const { sidebariconHover} = useContext(ThemeContext);
 
-    const sideMenu = useSelector(state => state.sideMenu);
+	const sideMenu = useSelector(state => state.sideMenu);
 
 
 	const [validated, setValidated] = useState(false);
@@ -69,7 +70,7 @@ const UserList = () => {
 
 
 	const getAllList = async () => {
-		const response = await axios.get(ENDPOINTS.apiEndoint+"/patient/getall");
+		const response = await axios.get(ENDPOINTS.apiEndoint + "/patient/getall");
 		console.log(response.data);
 		if (response.data) {
 			const records = response.data.slice(firstIndex, lastIndex);
@@ -120,72 +121,86 @@ const UserList = () => {
 		{ value: '2', label: 'Enabled' },
 		{ value: '3', label: 'Disabled' },
 	]
+	const RoleList = [
+		{ value: '1', label: 'Coder(Level 1)' },
+		{ value: '2', label: 'Coder(Level 2)' },
+		{ value: '3', label: 'Auditor' },
+		{ value: '4', label: 'Team Lead' },
+	]
 
 
 
 
 	return (
 		<>
-		<div className={`show ${ sideMenu ? "menu-toggle" : ""}`}> 
-		<NavBar />
-         <div className="content-body show menu-toggle">
-			<div className="container-fluid">
-				<div className="row">
-					<div className='col-xl-12'>
-						<div className="card">
-							<div className="card-body p-0">
-								<div className="table-responsive active-projects task-table">
-									<div className="tbl-caption  align-items-center">
-										<div className="row">
-											<div className='col-xl-3'>
-											<input type="text" className="form-control" placeholder="Name" />
-												{/* <div className="input-group search-area">
-													<input type="text" className="form-control" placeholder="Name" />
-													<span className="input-group-text">
-														<Link to={"#"}>
-															{SVGICON.SearchIcon}
-														</Link>
-													</span>
-												</div> */}
+			<div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+				<NavBar />
+				<div className="content-body show menu-toggle">
+					<div className="container-fluid">
+						<div className="row">
+							<div className='col-xl-12'>
+								<div className="card">
+									<div className="card-body p-0">
+										<div className="table-responsive active-projects task-table">
+											<div className="tbl-caption  align-items-center">
+												<div className="row">
+													<div className='col-xl-2'>
+														<input type="text" className="form-control" placeholder="Name" />
+													</div>
+													<div className='col-xl-2'>
+														<input type="date" className="form-control" placeholder="Date" />
+													</div>
+													<div className='col-xl-2'>
+														<Select options={RoleList} className="custom-react-select"
+															defaultValue={RoleList[0]}
+															isSearchable={false}
+														/>
+													</div>
+													<div className='col-xl-2'>
+														<Select options={options3} className="custom-react-select"
+															defaultValue={options3[0]}
+															isSearchable={false}
+														/>
+													</div>
+													<div className='col-xl-4'>
+														<Button onClick={addUserForm} className="btn btn-primary btn-sm ms-2 flr">+ Add User</Button>
+													</div>
+												</div>
+
 											</div>
-											<div className='col-xl-3'>
-											<input type="date" className="form-control" placeholder="Date" />
-											</div>
-											<div className='col-xl-3'>
-											<Select options={options3}  className="custom-react-select" 
-                                                defaultValue={options3[0]}
-                                                isSearchable={false}
-                                            />
-											</div>
-											<div className='col-xl-3'>
-											<Button onClick={addUserForm} className="btn btn-primary btn-sm ms-2 flr">+ Add User</Button>
+											<div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
+												<table id="empoloyeestbl2" className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0">
+													<thead>
+														<tr>
+															<th>SI.NO</th>
+															{/* <th>Id</th> */}
+															<th>First Name</th>
+															<th>Last Name</th>
+															<th>Email</th>
+															<th>Roles</th>
+															<th>Status</th>
+															{/* <th>Action</th> */}
+														</tr>
+													</thead>
+													<tbody>
+														{userList.map((item, index) => (
+															<tr key={index}>
+																<td><span>{index + 1}</span></td>
+																{/* <td><span>{item.id}</span></td> */}
+																<td><span>{item.firstName}</span></td>
+																<td><span>{item.lastName}</span></td>
+																<td><span>{item.email}</span></td>
+																<td><span><Select options={RoleList} className="custom-react-select"
+																	defaultValue={RoleList[0]}
+																	isSearchable={false}
+																/></span></td>
+																<td><span>    <Switch checkedChildren="Enabled" unCheckedChildren="Disabled" defaultChecked /></span></td>
+															</tr>
+														))}
+													</tbody>
+												</table>
 											</div>
 										</div>
-									
-									</div>
-									<div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-										<table id="empoloyeestbl2" className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0">
-											<thead>
-												<tr>
-													<th>SI.NO</th>
-													<th>Id</th>
-													<th>First Name</th>
-													<th>Last Name</th>
-													<th>Email</th>
-												</tr>
-											</thead>
-											<tbody>
-												{userList.map((item, index) => (
-													<tr key={index}>
-														<td><span>{index + 1}</span></td>
-														<td><span>{item.id}</span></td>
-														<td><span>{item.firstName}</span></td>
-														<td><span>{item.lastName}</span></td>
-														<td><span>{item.email}</span></td>
-													</tr>
-												))}
-											</tbody>
-										</table>
 									</div>
 								</div>
 							</div>
@@ -193,8 +208,6 @@ const UserList = () => {
 					</div>
 				</div>
 			</div>
-            </div> 
-			</div>       
 			<Offcanvas show={addUser} onHide={setAddUser} className="offcanvas-end" placement='end'>
 				<div className="offcanvas-header">
 					<h5 className="modal-title" id="#gridSystemModal">Add File</h5>
@@ -219,6 +232,14 @@ const UserList = () => {
 								<div className="col-xl-12 mb-3">
 									<Form.Label>Email  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='email' required type="email" onChange={handleChange} />
+								</div>
+								<div className="col-xl-12 mb-3">
+									<Form.Label>Role  <span className="text-danger">*</span> </Form.Label>
+									{/* <Form.Control name='email' required type="email" onChange={handleChange} /> */}
+									<Select options={RoleList} className="custom-react-select"
+										defaultValue={RoleList[0]}
+										isSearchable={false}
+									/>
 								</div>
 							</div>
 							<div>

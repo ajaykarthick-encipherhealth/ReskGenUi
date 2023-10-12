@@ -35140,8 +35140,7 @@
 /* Header and SideNav Style */
 
 .header {
-    /* background-color: #fff !important; */
-    /* box-shadow: 0 0 40px 0 rgba(82,63,105,.1) !important; */
+  height: 70px !important;
 }
 /* .nav-control{
     box-shadow: 0 0 40px 0 rgba(82,63,105,.1) !important;
@@ -35189,7 +35188,7 @@
     margin-left: 5.7rem !important;
 }
 .deznav {
-    margin-top  : 1.875rem !important;
+  margin-top: 35px !important;
     margin: 0 0 0 20px;
     border-radius: 20px !important;
     height: 85vh !important;

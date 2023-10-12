@@ -5,9 +5,16 @@ import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { Progress, Tooltip } from "antd";
 import NavBar from "../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
+import { useRouter } from 'next/navigation'
 
 const Screen = () => {
   const sideMenu = useSelector(state => state.sideMenu);
+  const navigate = useRouter();
+
+
+  const gotoPatientDetails = (data) => {	
+		navigate.push('/physician/patient');	
+	};
 
   return (
     <>
@@ -20,7 +27,7 @@ const Screen = () => {
     <div className="screen-container">
       <div> </div>
       <div className="cards-seperators">
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line"> </div>
           <div
             style={{
@@ -30,7 +37,7 @@ const Screen = () => {
               flexDirection: "column",
               margin: "auto",
               position: "relative",
-            }}
+            }}            
           >
             <div style={{ padding: "10px" }}>
               {" "}
@@ -58,7 +65,7 @@ const Screen = () => {
             </div>
           </div>
         </div>
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line-red"> </div>
           <div
             style={{
@@ -109,7 +116,7 @@ const Screen = () => {
           </div>
          
         </div>
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line-green"> </div>
           <div
             style={{
@@ -158,7 +165,7 @@ const Screen = () => {
         </div>
       </div>
       <div className="cards-seperators">
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line-yellow-must"> </div>
           <div
             style={{
@@ -196,7 +203,7 @@ const Screen = () => {
           </div>
          
         </div>
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line-yellow-must"> </div>
           <div
             style={{
@@ -235,7 +242,7 @@ const Screen = () => {
           </div>
          
         </div>
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line-violet"> </div>
           <div
             style={{
@@ -286,7 +293,7 @@ const Screen = () => {
         </div>
       </div>
       <div className="cards-seperators">
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line-orange"> </div>
           <div
             style={{
@@ -349,7 +356,7 @@ const Screen = () => {
           </div>
         
         </div>
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line-orange"> </div>
           <div
             style={{
@@ -388,7 +395,7 @@ const Screen = () => {
           </div>
          
         </div>
-        <div className="cards">
+        <div className="cards cr-pointer" onClick={() => {gotoPatientDetails()}}>
           <div class="vertical-line-blue"> </div>
           <div
             style={{
