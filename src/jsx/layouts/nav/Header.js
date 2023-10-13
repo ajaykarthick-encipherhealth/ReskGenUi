@@ -15,14 +15,6 @@ const Header = ({ onNote }) => {
 		});
 	}, []); 
 	
-	// const {background, changeBackground } = useContext('');
-	// const handleThemeMode = () => {
-	// 	if(background.value === 'dark'){
-	// 		changeBackground({ value: "light", label: "Light" });
-	// 	}else{
-	// 		changeBackground({ value: "dark", label: "Dark" });
-	// 	}
-	// }
   
   return ( 
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -44,33 +36,13 @@ const Header = ({ onNote }) => {
 											<span className="text-dark-50 ms-2 text-white header-name font-weight-bolder font-size-base d-flex mr-3">Admin</span>
 											<Link href="/login" className="ms-2 d-flex">
 												{SVGICON.Logout}{" "}
-												<h6 className="ms-2">Logout </h6>
+												<h6 className="logout-name">Logout </h6>
 											</Link>
 											</div>
 
 										</div>										
 									</div>
 								</div>
-								{/* <Dropdown.Menu align="end">
-									<div className="card border-0 mb-0 box-shadow-none">
-										<div className="card-header py-2">
-											<div className="products">
-												<img src={IMAGES.profileImage} className="avatar avatar-md" alt="" />
-												<div>
-													<h6>Admin</h6>
-													<span>Medical</span>	
-												</div>	
-											</div>
-										</div>
-										<div className="card-body px-0 py-2">
-											<Link href="/app-profile" className="dropdown-item ai-icon ">
-												{SVGICON.UserSvg}{" "}
-												<span className="ms-2">Profile </span>
-											</Link>
-										</div>
-									</div>
-									
-								</Dropdown.Menu> */}
 							</div>
 						</li>						
 					</ul>

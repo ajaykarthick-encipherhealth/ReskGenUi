@@ -9,7 +9,8 @@ import NavBar from "../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { Switch } from 'antd';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -24,6 +25,7 @@ const UserList = () => {
 
 	const [validated, setValidated] = useState(false);
 	const [userList, setUserList] = useState([]);
+	const [userListAll, setUserListAll] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isDataLoading, setIsDataLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -47,19 +49,13 @@ const UserList = () => {
 	});
 
 
-	function prePage() {
-		if (currentPage !== 1) {
-			setCurrentPage(currentPage - 1)
-		}
-	}
-	function changeCPage(id) {
-		setCurrentPage(id);
-	}
-	function nextPage() {
-		if (currentPage !== npage) {
-			setCurrentPage(currentPage + 1)
-		}
-	}
+	const [pageCount, setPageCount] = useState(0);
+	const [pageIndex, setPageIndex] = useState(0);
+	const [pageOptions, setPageOptions] = useState(0);
+	const [canPreviousPage, setCanPreviousPage] = useState(false);
+	const [canNextPage, setCanNextPage] = useState(true);
+	const [canMaxPage, setCanMaxPage] = useState(10);
+
 
 
 	useEffect(() => {
@@ -74,6 +70,7 @@ const UserList = () => {
 		console.log(response.data);
 		if (response.data) {
 			const records = response.data.slice(firstIndex, lastIndex);
+			setUserListAll(response.data);
 			setUserList(records);
 			setRecords(records);
 			const npage = Math.ceil(response.data.length / recordsPage)
@@ -126,7 +123,56 @@ const UserList = () => {
 		{ value: '2', label: 'Coder(Level 2)' },
 		{ value: '3', label: 'Auditor' },
 		{ value: '4', label: 'Team Lead' },
-	]
+	];
+
+
+	function gotoPage(number) {
+		if(canMaxPage > number){
+		setCanNextPage(true);
+		setPageIndex(number);
+		if (number > 0) {
+		  setCanPreviousPage(true);
+		} else {
+		  setCanPreviousPage(false);
+		}
+		setPageCount(number);
+	  }else{
+		setCanNextPage(false);
+	  }
+	  var start =  number * 10;
+	  var end =  start +  10;
+	  const records =userListAll.slice(start, end);
+	  setUserList(records);
+	  }
+	  function nextPage(number) {
+		if(canMaxPage > number){
+		setPageCount(number);
+		setPageIndex(number);
+		setCanPreviousPage(true);
+		}else{
+		  setCanNextPage(false);
+		}
+		var start =  number * 10;
+		var end =  start +  10;
+		const records =userListAll.slice(start, end);
+		setUserList(records);
+	  }
+	
+	  function previousPage(number) {
+		setCanNextPage(true);
+		setPageIndex(number);
+		if (number > 0) {
+		  setCanPreviousPage(true);
+		} else {
+		  setCanPreviousPage(false);
+		}
+		setPageCount(number);
+		var start =  number * 10;
+		var end =  start +  10;
+		const records =userListAll.slice(start, end);
+		setUserList(records);
+	  }
+	
 
 
 
@@ -204,6 +250,42 @@ const UserList = () => {
 														))}
 													</tbody>
 												</table>
+												<div className="d-flex justify-content-between mrt-15">
+                          <span>
+                            Page{' '}
+                            {/* <strong>
+                              {pageIndex + 1} of {pageOptions.length}
+                            </strong>{''} */}
+                            <strong>
+                              {pageIndex + 1} of 10
+                            </strong>{''}
+                          </span>
+                          <span className="table-index">
+                            Go to page : {' '}
+                            <input type="number" className="ml-2" defaultValue={pageIndex + 1} min="1" max={canMaxPage}
+                              onChange={e => {
+                                const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
+                                gotoPage(pageNumber)
+                              }}
+                            />
+                          </span>
+                        </div>
+                        <div className="text-center mb-3">
+                          <div className="filter-pagination  mt-3">
+                            <button className="previous-button" onClick={() => gotoPage(pageCount - 1)} disabled={!canPreviousPage}>
+                              <FontAwesomeIcon icon={faAngleLeft}  />
+                            </button>
+                            <button className="previous-button" onClick={() => previousPage(pageCount - 1)} disabled={!canPreviousPage}>
+                              Previous
+                            </button>
+                            <button className="next-button" onClick={() => nextPage(pageCount + 1)} disabled={!canNextPage}>
+                              Next
+                            </button>
+                            <button className="next-button" onClick={() => gotoPage(pageCount + 1)} disabled={!canNextPage}>
+                              <FontAwesomeIcon icon={faAngleRight} />
+                            </button>
+                          </div>
+                        </div>
 											</div>
 										</div>
 									</div>

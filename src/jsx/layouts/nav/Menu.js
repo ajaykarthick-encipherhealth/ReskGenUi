@@ -7,6 +7,11 @@ export const MenuList = [
         to: '/admin/user',
     },
     {   
+        title:'Patient File',
+        iconStyle:SVGICON.Apps,
+        to: '/admin/patient',
+    },
+    {   
         title:'File Management',
         iconStyle:SVGICON.File,
         to: '/admin/file-management',

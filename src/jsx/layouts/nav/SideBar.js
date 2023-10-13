@@ -17,17 +17,6 @@ export default function SideBar() {
   // const [sideMenu, setsideMenu] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-  // const openMenuToggle = () => {
-  //   if(sideMenu == true){
-  //     setsideMenu(false);
-
-  //   }else{
-  //     setsideMenu(true);
-
-  //   }
-
-  // };
-
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const handleToogle = () => {
