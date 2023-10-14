@@ -103,10 +103,10 @@ const UserList = () => {
 
 	};
 	const postPatient = async (data) => {
-		setAddUser(false);
 		setIsLoading(true);
-		const response = await axios.post(`/patient`, data)
+		const response = await axios.post(ENDPOINTS.apiEndoint+ `patient`, data)
 		if (response?.status == 200) {
+			setAddUser(false);
 			getAllList();
 		} else {
 
@@ -257,7 +257,7 @@ const UserList = () => {
                               {pageIndex + 1} of {pageOptions.length}
                             </strong>{''} */}
                             <strong>
-                              {pageIndex + 1} of 10
+                              {pageIndex + 1} of 3
                             </strong>{''}
                           </span>
                           <span className="table-index">
@@ -327,6 +327,14 @@ const UserList = () => {
 										defaultValue={RoleList[0]}
 										isSearchable={false}
 									/>
+								</div>
+								<div className="col-xl-12 mb-3">
+									<Form.Label>Password  <span className="text-danger">*</span> </Form.Label>
+									<Form.Control name='email' required type="text" onChange={handleChange} />
+								</div>
+								<div className="col-xl-12 mb-3">
+									<Form.Label>Confirm Password  <span className="text-danger">*</span> </Form.Label>
+									<Form.Control name='email' required type="text" onChange={handleChange} />
 								</div>
 							</div>
 							<div>
