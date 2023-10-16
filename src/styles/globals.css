@@ -28279,7 +28279,7 @@
       .login-account {
         padding: 20px; } }
     .login-account .account-info-area {
-      background-color: #452B90;
+      background-color:#b9b1d0;
       border-radius: 2.5rem;
       display: flex;
       align-items: center;
@@ -37351,4 +37351,52 @@ span.ant-progress-text {
         padding:8px 10px;
         font-size:14px;
     }
+}
+
+.form-wizard .nav-wizard .nav-link{
+ border: none !important;
+}
+.login-account .org-form{
+  padding: 0px 10px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.login-account .org-form .login-title {
+  text-align: center;
+  position: relative;
+  margin-bottom: 48px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+.login-account .org-form .login-title:before, .login-account .org-form .login-title:after {
+  content: "";
+  height: 1px;
+  flex: 1 1;
+  left: 0;
+  background-color: #E1E1F0;
+  top: 50%;
+  z-index: -1;
+  margin: 0;
+  padding: 0;
+}
+.login-account .org-form .login-title span {
+  padding: 0 18px;
+}
+.card.success-card {
+  border: 1px solid #E6E6E6 !important;
+}
+
+.content-body.show.menu-toggle.no-sidebar {
+  margin-left:  -22px;
+}
+.page-title-card{
+  margin-bottom: 10px !important;
+}
+.page-title-card > .page-titles {
+  border-radius: 7px !important;
+  border-bottom: none !important;
+}
+.page-titles .bc-title{
+  color: #241571 !important;
 }

@@ -41,7 +41,7 @@ export default function Login() {
                 if (!response?.data?.error) {
                     localStorage.setItem("userRole", 'admin')
                     localStorage.setItem("token", response.data.access_token)
-                    router.push("/admin/user");
+                    router.push("/admin/provider");
                     notification.success({
                         message: "Login Successful",
                     });

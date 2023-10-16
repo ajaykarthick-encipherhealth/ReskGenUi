@@ -41,11 +41,14 @@ const UserList = () => {
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
+	const [isStatus, setStatus] = useState(false);
 
 	const [formData, setFormData] = useState({
 		firstName: '',
 		lastName: '',
 		email: '',
+		password: '',
+		role: '',
 	});
 
 
@@ -97,14 +100,25 @@ const UserList = () => {
 		const form = event.currentTarget;
 		event.preventDefault();
 		if (form.checkValidity() === true) {
-			postPatient(formData);
+			console.log(formData)
+			// postPatient(formData);
 		}
 		setValidated(true);
 
 	};
 	const postPatient = async (data) => {
 		setIsLoading(true);
-		const response = await axios.post(ENDPOINTS.apiEndoint+ `patient`, data)
+		const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data)
+		if (response?.status == 200) {
+			setAddUser(false);
+			getAllList();
+		} else {
+
+		}
+	}
+	const roleUpdate = async (data) => {
+		setIsLoading(true);
+		const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data)
 		if (response?.status == 200) {
 			setAddUser(false);
 			getAllList();
@@ -119,60 +133,82 @@ const UserList = () => {
 		{ value: '3', label: 'Disabled' },
 	]
 	const RoleList = [
-		{ value: '1', label: 'Coder(Level 1)' },
-		{ value: '2', label: 'Coder(Level 2)' },
-		{ value: '3', label: 'Auditor' },
-		{ value: '4', label: 'Team Lead' },
+		{ value: 'Coder(Level 1)', label: 'Coder(Level 1)' },
+		{ value: 'Coder(Level 2)', label: 'Coder(Level 2)' },
+		{ value: 'Auditor', label: 'Auditor' },
+		{ value: 'Team Lead', label: 'Team Lead' },
 	];
 
 
 	function gotoPage(number) {
-		if(canMaxPage > number){
+		if (canMaxPage > number) {
+			setCanNextPage(true);
+			setPageIndex(number);
+			if (number > 0) {
+				setCanPreviousPage(true);
+			} else {
+				setCanPreviousPage(false);
+			}
+			setPageCount(number);
+		} else {
+			setCanNextPage(false);
+		}
+		var start = number * 10;
+		var end = start + 10;
+		const records = userListAll.slice(start, end);
+		setUserList(records);
+	}
+	function nextPage(number) {
+		if (canMaxPage > number) {
+			setPageCount(number);
+			setPageIndex(number);
+			setCanPreviousPage(true);
+		} else {
+			setCanNextPage(false);
+		}
+		var start = number * 10;
+		var end = start + 10;
+		const records = userListAll.slice(start, end);
+		setUserList(records);
+	}
+
+	function previousPage(number) {
 		setCanNextPage(true);
 		setPageIndex(number);
 		if (number > 0) {
-		  setCanPreviousPage(true);
+			setCanPreviousPage(true);
 		} else {
-		  setCanPreviousPage(false);
+			setCanPreviousPage(false);
 		}
 		setPageCount(number);
-	  }else{
-		setCanNextPage(false);
-	  }
-	  var start =  number * 10;
-	  var end =  start +  10;
-	  const records =userListAll.slice(start, end);
-	  setUserList(records);
-	  }
-	  function nextPage(number) {
-		if(canMaxPage > number){
-		setPageCount(number);
-		setPageIndex(number);
-		setCanPreviousPage(true);
-		}else{
-		  setCanNextPage(false);
-		}
-		var start =  number * 10;
-		var end =  start +  10;
-		const records =userListAll.slice(start, end);
+		var start = number * 10;
+		var end = start + 10;
+		const records = userListAll.slice(start, end);
 		setUserList(records);
-	  }
-	
-	  function previousPage(number) {
-		setCanNextPage(true);
-		setPageIndex(number);
-		if (number > 0) {
-		  setCanPreviousPage(true);
-		} else {
-		  setCanPreviousPage(false);
-		}
-		setPageCount(number);
-		var start =  number * 10;
-		var end =  start +  10;
-		const records =userListAll.slice(start, end);
-		setUserList(records);
-	  }
-	
+	}
+
+	const roleChange = async (e) => {
+		console.log(e.value);
+		var data = {};
+		data.role = e.value;
+		console.log(data);
+		// roleUpdate(data);
+	}
+
+	const switchHandler =  (event, id) => {
+
+		const isChecked = event;
+		setStatus(
+		  ({isStatus}) => ({
+			isStatus: {
+				  ...isStatus,
+				  [id]: isChecked,
+			  }
+		  })
+	  );  
+	  
+	  console.log(isStatus)
+	}
 
 
 
@@ -239,11 +275,12 @@ const UserList = () => {
 																<td><span>{item.lastName}</span></td>
 																<td><span>{item.email}</span></td>
 																<td><span>*****</span></td>
-																<td><span><Select options={RoleList} className="custom-react-select"
+																<td><span>
+																	<Select   onChange={(e) => roleChange(e)} options={RoleList} className="custom-react-select"
 																	defaultValue={RoleList[0]}
 																	isSearchable={false}
 																/></span></td>
-																<td><span>    <Switch checkedChildren="Enabled" unCheckedChildren="Disabled" defaultChecked /></span></td>
+																<td><span key={index}> <Switch id={index} onChange={event => switchHandler(event, index)} checked={isStatus[index]}  checkedChildren="Enabled" unCheckedChildren="Disabled" /></span></td>
 																<td><span>22/06/2022</span></td>
 
 															</tr>
@@ -251,41 +288,41 @@ const UserList = () => {
 													</tbody>
 												</table>
 												<div className="d-flex justify-content-between mrt-15">
-                          <span>
-                            Page{' '}
-                            {/* <strong>
+													<span>
+														Page{' '}
+														{/* <strong>
                               {pageIndex + 1} of {pageOptions.length}
                             </strong>{''} */}
-                            <strong>
-                              {pageIndex + 1} of 3
-                            </strong>{''}
-                          </span>
-                          <span className="table-index">
-                            Go to page : {' '}
-                            <input type="number" className="ml-2" defaultValue={pageIndex + 1} min="1" max={canMaxPage}
-                              onChange={e => {
-                                const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
-                                gotoPage(pageNumber)
-                              }}
-                            />
-                          </span>
-                        </div>
-                        <div className="text-center mb-3">
-                          <div className="filter-pagination  mt-3">
-                            <button className="previous-button" onClick={() => gotoPage(pageCount - 1)} disabled={!canPreviousPage}>
-                              <FontAwesomeIcon icon={faAngleLeft}  />
-                            </button>
-                            <button className="previous-button" onClick={() => previousPage(pageCount - 1)} disabled={!canPreviousPage}>
-                              Previous
-                            </button>
-                            <button className="next-button" onClick={() => nextPage(pageCount + 1)} disabled={!canNextPage}>
-                              Next
-                            </button>
-                            <button className="next-button" onClick={() => gotoPage(pageCount + 1)} disabled={!canNextPage}>
-                              <FontAwesomeIcon icon={faAngleRight} />
-                            </button>
-                          </div>
-                        </div>
+														<strong>
+															{pageIndex + 1} of 3
+														</strong>{''}
+													</span>
+													<span className="table-index">
+														Go to page : {' '}
+														<input type="number" className="ml-2" defaultValue={pageIndex + 1} min="1" max={canMaxPage}
+															onChange={e => {
+																const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
+																gotoPage(pageNumber)
+															}}
+														/>
+													</span>
+												</div>
+												<div className="text-center mb-3">
+													<div className="filter-pagination  mt-3">
+														<button className="previous-button" onClick={() => gotoPage(pageCount - 1)} disabled={!canPreviousPage}>
+															<FontAwesomeIcon icon={faAngleLeft} />
+														</button>
+														<button className="previous-button" onClick={() => previousPage(pageCount - 1)} disabled={!canPreviousPage}>
+															Previous
+														</button>
+														<button className="next-button" onClick={() => nextPage(pageCount + 1)} disabled={!canNextPage}>
+															Next
+														</button>
+														<button className="next-button" onClick={() => gotoPage(pageCount + 1)} disabled={!canNextPage}>
+															<FontAwesomeIcon icon={faAngleRight} />
+														</button>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -322,19 +359,18 @@ const UserList = () => {
 								</div>
 								<div className="col-xl-12 mb-3">
 									<Form.Label>Role  <span className="text-danger">*</span> </Form.Label>
-									{/* <Form.Control name='email' required type="email" onChange={handleChange} /> */}
-									<Select options={RoleList} className="custom-react-select"
-										defaultValue={RoleList[0]}
-										isSearchable={false}
-									/>
+									<Form.Control name='role' as="select" required onChange={handleChange} >
+										<option value="Coder(Level 1)">Coder(Level 1)</option>
+										<option value="Coder(Level 2)">Coder(Level 2)</option>
+									</Form.Control>
 								</div>
 								<div className="col-xl-12 mb-3">
 									<Form.Label>Password  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='email' required type="text" onChange={handleChange} />
+									<Form.Control name='password' required type="text" onChange={handleChange} />
 								</div>
 								<div className="col-xl-12 mb-3">
 									<Form.Label>Confirm Password  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='email' required type="text" onChange={handleChange} />
+									<Form.Control name='password' required type="text" onChange={handleChange} />
 								</div>
 							</div>
 							<div>
