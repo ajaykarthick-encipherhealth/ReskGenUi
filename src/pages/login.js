@@ -37,7 +37,7 @@ export default function Login() {
                     username: email,
                     password: password,
                 };
-                const response = await axios.post(ENDPOINTS.apiEndoint + `auth/login`, postData);
+                const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/auth/admin/login`, postData);
                 if (!response?.data?.error) {
                     localStorage.setItem("userRole", 'admin')
                     localStorage.setItem("token", response.data.access_token)
