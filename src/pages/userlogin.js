@@ -9,12 +9,12 @@ import { notification } from 'antd';
 
 
 
-export default function Login() {
+export default function UserLogin() {
     const router = useRouter();
-    const [email, setEmail] = useState('techie126437@encipherhealth.onmicrosoft.com');
+    const [email, setEmail] = useState('testuser@encipherhealth.onmicrosoft.com');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
-    const [password, setPassword] = useState('Test@1234566!2');
+    const [password, setPassword] = useState('Zoon6363');
     // const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -36,27 +36,28 @@ export default function Login() {
                     username: email,
                     password: password,
                 };
-                const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/auth/admin/login`, postData);
+                const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/auth/login`, postData);
                 var result = response.data;
                 console.log(result)
-                if (result.status === "SUCCESS") {
-                    localStorage.setItem("userRole", 'admin')
-                    localStorage.setItem("token", result.response.access_token);
-                    localStorage.setItem("tenantId", result.response.tenantId);
-                    router.push("/admin/provider");
+                if (result.access_token != null) {
+                    localStorage.setItem("userRole", 'physician')
+                    localStorage.setItem("token", result.access_token);
+                    localStorage.setItem("tenantId", result.tenantId);
+                    localStorage.setItem("userEmail", result.userEmail);
+                    router.push("/physician/dashboard");
                     notification.success({
-                        message: result.message,
+                        message: "Login Success"
                     });
                 } else {
                     setIsLoading(false);
                     notification.error({
-                        message: result.message,
+                        message: "Login Failed"
                     });
                 }
             } catch (e) {
                 setIsLoading(false);
                 notification.error({
-                    message: result.message,
+                    message: "Login Failed"
                 });
             }
     }

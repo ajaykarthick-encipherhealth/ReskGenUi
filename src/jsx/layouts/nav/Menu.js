@@ -29,10 +29,15 @@ export const PhysicanMenuList = [
         iconStyle: SVGICON.dashboardIcon,
         to: '/physician/dashboard',
     },
+    // {   
+    //     title:'Patient List1',
+    //     iconStyle:SVGICON.patientListIcon,
+    //     to: '/physician/patient',
+    // },
     {   
         title:'Patient List',
         iconStyle:SVGICON.patientListIcon,
-        to: '/physician/patient',
+        to: '/physician/patients',
     }
     
 ]

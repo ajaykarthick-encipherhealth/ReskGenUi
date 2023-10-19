@@ -137,6 +137,7 @@ export default function Patient() {
     setDataValidationList(datas);
     setIsLoading(false);
     getAllList();
+    fetchData();
   }, []);
 
   
@@ -210,7 +211,7 @@ export default function Patient() {
 
 
   const gotoPatientDetails = (data) => {
-    navigate.push('/admin/patient/details');
+    navigate.push('/physician/patients/details');
 
   };
 
@@ -265,6 +266,8 @@ export default function Patient() {
         },
       })
 
+      console.log(events)
+
       events.onmessage = event => {
         const parsedData = JSON.parse(event.data);
         console.log(event)
@@ -283,6 +286,20 @@ export default function Patient() {
     }
     setListening(!listening);
   };
+
+
+  const fetchData = async () => {
+    const data = await (await fetchDataApi()).data;
+    console.log(data);
+    // setNotifications(data);
+  };
+
+  const fetchDataApi = async () => {
+    return await axios.get(ENDPOINTS.apiEndoint + "aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09");
+     
+  };
+
+
 
 
 

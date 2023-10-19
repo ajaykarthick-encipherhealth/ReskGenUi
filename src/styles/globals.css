@@ -37236,6 +37236,10 @@ span.ant-progress-text {
     }
     .tableSyle>thead>tr>th {
   color: black !important;
+  text-align: left;
+    }
+    .tableSyle>tbody td{
+      text-align: left;
     }
 
     .menu-toggle .content-body {
@@ -37399,4 +37403,7 @@ span.ant-progress-text {
 }
 .page-titles .bc-title{
   color: #241571 !important;
+}
+i.ant-spin-dot-item {
+    background: white !important;
 }

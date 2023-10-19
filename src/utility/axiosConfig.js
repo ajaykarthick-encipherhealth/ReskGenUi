@@ -6,13 +6,12 @@ import ENDPOINTS from '../utility/enpoints';
 
 
   axios.interceptors.request.use((config) => {    
-    let _list = ['/admin/login','/securityservice/auth/organization/create']
+    let _list = ['/securityservice/auth/admin/login','/securityservice/auth/organization/create']
     const currentUrl = config?.url?.split('/secure')[1]
 
     console.log(currentUrl)
-    // if(!_list.includes(currentUrl)) {
-    //   config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    // }
+    if(!_list.includes(currentUrl)) {
+      config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;    }
     return config;
   }, (error) => {
         console.log(error)

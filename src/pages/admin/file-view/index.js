@@ -128,8 +128,13 @@ const FileView = () => {
       event.preventDefault();
       event.stopPropagation();
       const formData = new FormData();
-      formData.append("file", selectFile);
+     
       formData.append("dos", inputValue.year);
+      formData.append("file", selectFile);
+      formData.append("orgid", "677bd");
+      formData.append("tenantid", "677bd");
+      formData.append("userid", "677bd");
+      formData.append("patinetid", "677bd");
       const headers = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -137,11 +142,7 @@ const FileView = () => {
       };
       setSelectFile(formData);
       console.log(formData);
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUpload + `upload`,
-        formData,
-        headers
-      );
+      const response = await axios.post(ENDPOINTS.apiEndointFileUpload+ "upload",formData);
       if (response?.status == 200) {
         console.log(response.data);
         var result = response.data;
@@ -419,35 +420,39 @@ console.log(splitCodesArr);
                                             {invalidDiseasesList.length}
                                           </Badge>
                                         </span>
-                                        {invalidDiseasesList.map((data, i) => (
-                                          <li>
-                                            <div className="timeline-panel invalid-disease">
-                                              <div className="media-body">
-                                                <h5 className="mb-1 text-white">
-                                                  {data.name}
-                                                </h5>
-                                              </div>
-                                              <Popconfirm
-                                                title="You want move to valid?"
-                                                description={data.name}
-                                                onConfirm={confirmInvalid}
-                                                placement="leftTop"
-                                                okText="Yes"
-                                                cancelText="No"
-                                                onOpenChange={() =>
-                                                  onchangeValid(data.name)
-                                                }
-                                              >
-                                                <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                                  <FontAwesomeIcon
-                                                    icon={faCheck}
-                                                    style={{ color: "red" }}
-                                                  />
+                                        {invalidDiseasesList.map((data, i) => {
+                                          console.log(data, "test");
+                                          return( 
+
+                                            <li>
+                                              <div className="timeline-panel invalid-disease">
+                                                <div className="media-body">
+                                                  <h5 className="mb-1 text-white">
+                                                    {data.name}
+                                                  </h5>
                                                 </div>
-                                              </Popconfirm>
-                                            </div>
-                                          </li>
-                                        ))}
+                                                <Popconfirm
+                                                  title="You want move to valid?"
+                                                  description={data.name}
+                                                  onConfirm={confirmInvalid}
+                                                  placement="leftTop"
+                                                  okText="Yes"
+                                                  cancelText="No"
+                                                  onOpenChange={() =>
+                                                    onchangeValid(data.name)
+                                                  }
+                                                >
+                                                  <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                    <FontAwesomeIcon
+                                                      icon={faCheck}
+                                                      style={{ color: "red" }}
+                                                    />
+                                                  </div>
+                                                </Popconfirm>
+                                              </div>
+                                            </li>
+                                          )
+                                        })}
 
                                         {/* {validDiseasesList.map((data, i) => (
                                                                             <li>
