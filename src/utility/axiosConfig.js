@@ -6,7 +6,7 @@ import ENDPOINTS from '../utility/enpoints';
 
 
   axios.interceptors.request.use((config) => {    
-    let _list = ['/securityservice/auth/admin/login','/securityservice/auth/organization/create']
+    let _list = ['/securityservice/auth/admin/login','/securityservice/auth/organization/create','/securityservice/auth/login']
     const currentUrl = config?.url?.split('/secure')[1]
 
     console.log(currentUrl)

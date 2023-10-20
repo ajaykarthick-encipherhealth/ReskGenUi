@@ -37407,3 +37407,51 @@ span.ant-progress-text {
 i.ant-spin-dot-item {
     background: white !important;
 }
+
+.card.meat-head-card {
+  padding: 25px;
+  margin-bottom: 10px;
+  background: #241571 !important;
+}
+
+.card.meat-card {
+  padding: 25px;
+  margin-bottom: 10px;
+  border:1px solid #cdd2e3 !important;
+  /* background: #241571 !important; */
+}
+.meat-head-card label{
+ color: #ffff;
+ font-size: 14px !important;
+}
+.meatclose{
+    display: flex !important;
+    justify-content: center;
+    margin-top: 30px;
+    cursor: pointer;
+}
+.card.combo-head-card {
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #241571 !important;
+}
+.combo-head-card label{
+  color: #ffff;
+  font-size: 14px !important;
+ }
+
+.card.combo-card {
+  padding: 15px;
+  margin-bottom: 10px;
+  border:1px solid #cdd2e3 !important;
+}
+.combo-card label{
+  color: #000;
+  font-size: 14px !important;
+ }
+.comboclose{
+  display: flex !important;
+  justify-content: center;
+  /* margin-top: px; */
+  cursor: pointer;
+}

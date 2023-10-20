@@ -32,55 +32,55 @@ export default function PatientDetails() {
     formData.append("patientid", "12345");
     formData.append("orgid", "5678");
     var data = {};
-    data.patientid =  '12345';
+    data.patientid = '12345';
     data.orgid = '5678'
-		const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=12345&orgid=5678");
-		console.log(response.data);
-		if (response.data) {
-			const records = response.data;
+    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=12345&orgid=5678");
+    console.log(response.data);
+    if (response.data) {
+      const records = response.data;
       console.log(response.data);
-        var result = response.data;
-        var validDis = '';
-        var invalidDis ='';
-        var comboDis='';
-        var meatCri='';
+      var result = response.data;
+      var validDis = '';
+      var invalidDis = '';
+      var comboDis = '';
+      var meatCri = '';
 
 
-         for (var key in response.data.validDisease) {
-          validDis = response.data.validDisease[key];
-        }
-        for (var key in response.data.invalidDisease) {
-          invalidDis = response.data.invalidDisease[key];
-        }
-        for (var key in response.data.comboDisease) {
-          comboDis = response.data.comboDisease[key];
-        }
-        for (var key in response.data.meatCriteria) {
-          meatCri = response.data.meatCriteria[key];
-        }
+      for (var key in response.data.validDisease) {
+        validDis = response.data.validDisease[key];
+      }
+      for (var key in response.data.invalidDisease) {
+        invalidDis = response.data.invalidDisease[key];
+      }
+      for (var key in response.data.comboDisease) {
+        comboDis = response.data.comboDisease[key];
+      }
+      for (var key in response.data.meatCriteria) {
+        meatCri = response.data.meatCriteria[key];
+      }
 
-        var invalidDiseasesArray = [];
-        var validDiseasesArray = [];
+      var invalidDiseasesArray = [];
+      var validDiseasesArray = [];
 
-        for (var key in invalidDis) {
-          invalidDiseasesArray.push({ name: invalidDis[key] });
-        }
-        for (var key in validDis) {
-          validDiseasesArray.push({ name: validDis[key] });
-        }
+      for (var key in invalidDis) {
+        invalidDiseasesArray.push({ name: invalidDis[key] });
+      }
+      for (var key in validDis) {
+        validDiseasesArray.push({ name: validDis[key] });
+      }
 
-        console.log(meatCri)
+      console.log(meatCri)
 
-        setValidDiseasesList(validDiseasesArray);
-        setInvalidDiseasesList(invalidDiseasesArray);
-        setComboDiseaseCodesList(comboDis);
-        setMeatCriteriaList(meatCri);
-		
-		}
-	}
+      setValidDiseasesList(validDiseasesArray);
+      setInvalidDiseasesList(invalidDiseasesArray);
+      setComboDiseaseCodesList(comboDis);
+      setMeatCriteriaList(meatCri);
+
+    }
+  }
 
 
- 
+
 
   const confirmvalid = () =>
     new Promise((resolve) => {
@@ -125,35 +125,35 @@ export default function PatientDetails() {
     console.log(myArray)
     var splitCodes = [];
     var splitCodesArr = [];
-    myArray.map((res)=>{   
+    myArray.map((res) => {
       var split1 = res.split(":");
       // console.log(split1)
       splitCodes.push(split1);
-      
-  });  
-  
-  splitCodes.map((res)=>{   
-    console.log(res)
-    // res.map((res2)=>{   
+
+    });
+
+    splitCodes.map((res) => {
+      console.log(res)
+      // res.map((res2)=>{   
       // console.log(res2);
-      if(res.length > 1){
-      if(res[0] == 'AI'){
-      splitCodesArr.push({
-        name:res[1],
-        code:res[2]
-      })
-    }else{
-      splitCodesArr.push({
-        name:res[0],
-        code:res[1]
-      })
-    }
-  }
+      if (res.length > 1) {
+        if (res[0] == 'AI') {
+          splitCodesArr.push({
+            name: res[1],
+            code: res[2]
+          })
+        } else {
+          splitCodesArr.push({
+            name: res[0],
+            code: res[1]
+          })
+        }
+      }
 
-    
-});  
 
-console.log(splitCodesArr);
+    });
+
+    console.log(splitCodesArr);
 
 
     setComboDiseaseCodesList(splitCodesArr)
@@ -161,14 +161,14 @@ console.log(splitCodesArr);
 
   return (
     <>
-    <div className={`show ${ sideMenu ? "menu-toggle" : ""}`}> 
-       <NavBar />
-          <div class="content-body">
-      <div className="container-fluid">
-        <div className="row">         
-          <div className="col-xl-12">
+      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+        <NavBar />
+        <div class="content-body">
+          <div className="container-fluid">
             <div className="row">
-              {/* <div className="col-xl-6">
+              <div className="col-xl-12">
+                <div className="row">
+                  {/* <div className="col-xl-6">
                 <div className="card">
                   <div className="card-body p-0">
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -190,211 +190,254 @@ console.log(splitCodesArr);
                   </div>
                 </div>
               </div> */}
-              <div className="col-xl-12">
-                <div className="card">
-                  <div className="card-body">
-                    <div className="profile-tab">
-                      <div className="custom-tab-1">
-                        <Tab.Container defaultActiveKey="validDiseases">
-                          <Nav as="ul" className="nav nav-tabs">
-                            <Nav.Item as="li" className="nav-item">
-                              <Nav.Link to="#my-posts" eventKey="validDiseases">
-                                Diseases
-                              </Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item as="li" className="nav-item">
-                              <Nav.Link to="#my-posts" eventKey="comboDiseases">
-                                Combo Diseases
-                              </Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item as="li" className="nav-item">
-                              <Nav.Link to="#my-posts" eventKey="meatCriteria">
-                              Meat Criteria
-                              </Nav.Link>
-                            </Nav.Item>
-                          </Nav>
-                          <Tab.Content>
-                            <Tab.Pane id="my-posts" eventKey="validDiseases">
-                              <div className="my-post-content pt-3">
-                                <div className="widget-media   ps--active-y">
-                                  <div className="row">
-                                    <div className="col-xl-6">
-                                      <ul className="timeline">
-                                        <span
-                                          className={`dang d-block mb-2 text-warning valid-text`}
-                                        >
-                                          {" "}
-                                          Valid{" "}
-                                          <Badge
-                                            as="a"
-                                            href=""
-                                            bg="secondary badge-circle"
-                                          >
-                                            {validDiseasesList.length}
-                                          </Badge>
-                                        </span>
-                                        {validDiseasesList.map((data, i) => (
-                                          <li>
-                                            <div className="timeline-panel valid-disease">
-                                              <div className="media-body">
-                                                <h5 className="mb-1 text-white">
-                                                  {data.name}
-                                                </h5>
-                                              </div>
-                                              <Popconfirm
-                                                title="You want move to invalid?"
-                                                description={data.name}
-                                                onConfirm={confirmvalid}
-                                                placement="leftTop"
-                                                okText="Yes"
-                                                cancelText="No"
-                                                onOpenChange={() =>
-                                                  onchangeValid(data.name)
-                                                }
+                  <div className="col-xl-12">
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="profile-tab">
+                          <div className="custom-tab-1">
+                            <Tab.Container defaultActiveKey="validDiseases">
+                              <Nav as="ul" className="nav nav-tabs">
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link to="#my-posts" eventKey="validDiseases">
+                                    Diseases
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link to="#my-posts" eventKey="comboDiseases">
+                                    Combo Diseases
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link to="#my-posts" eventKey="meatCriteria">
+                                    Meat Criteria
+                                  </Nav.Link>
+                                </Nav.Item>
+                              </Nav>
+                              <Tab.Content>
+                                <Tab.Pane id="my-posts" eventKey="validDiseases">
+                                  <div className="my-post-content pt-3">
+                                    <div className="widget-media   ps--active-y">
+                                      <div className="row">
+                                        <div className="col-xl-6">
+                                          <ul className="timeline">
+                                            <span
+                                              className={`dang d-block mb-2 text-warning valid-text`}
+                                            >
+                                              {" "}
+                                              Valid{" "}
+                                              <Badge
+                                                as="a"
+                                                href=""
+                                                bg="secondary badge-circle"
                                               >
-                                                <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                                  <FontAwesomeIcon
-                                                    icon={faClose}
-                                                    style={{ color: "red" }}
-                                                  />
+                                                {validDiseasesList.length}
+                                              </Badge>
+                                            </span>
+                                            {validDiseasesList.map((data, i) => (
+                                              <li>
+                                                <div className="timeline-panel valid-disease">
+                                                  <div className="media-body">
+                                                    <h5 className="mb-1 text-white">
+                                                      {data.name}
+                                                    </h5>
+                                                  </div>
+                                                  <Popconfirm
+                                                    title="You want move to invalid?"
+                                                    description={data.name}
+                                                    onConfirm={confirmvalid}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeValid(data.name)
+                                                    }
+                                                  >
+                                                    <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                      <FontAwesomeIcon
+                                                        icon={faClose}
+                                                        style={{ color: "red" }}
+                                                      />
+                                                    </div>
+                                                  </Popconfirm>
                                                 </div>
-                                              </Popconfirm>
-                                            </div>
-                                          </li>
-                                        ))}
-                                      </ul>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                        <div className="col-xl-6">
+                                          <ul className="timeline">
+                                            <span
+                                              className={`dang d-block mb-2  invalid-text`}
+                                            >
+                                              {" "}
+                                              Invalid{" "}
+                                              <Badge
+                                                as="a"
+                                                href=""
+                                                bg="badge-circle invalid-bange"
+                                              >
+                                                {invalidDiseasesList.length}
+                                              </Badge>
+                                            </span>
+                                            {invalidDiseasesList.map((data, i) => (
+                                              <li>
+                                                <div className="timeline-panel invalid-disease">
+                                                  <div className="media-body">
+                                                    <h5 className="mb-1 text-white">
+                                                      {data.name}
+                                                    </h5>
+                                                  </div>
+                                                  <Popconfirm
+                                                    title="You want move to valid?"
+                                                    description={data.name}
+                                                    onConfirm={confirmInvalid}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeValid(data.name)
+                                                    }
+                                                  >
+                                                    <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                      <FontAwesomeIcon
+                                                        icon={faCheck}
+                                                        style={{ color: "red" }}
+                                                      />
+                                                    </div>
+                                                  </Popconfirm>
+                                                </div>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="col-xl-6">
+                                  </div>
+                                </Tab.Pane>
+                                <Tab.Pane id="my-posts" eventKey="invalidDiseases">
+                                  <div className="my-post-content pt-3">
+                                    <div className="widget-media   ps--active-y">
                                       <ul className="timeline">
-                                        <span
-                                          className={`dang d-block mb-2  invalid-text`}
-                                        >
-                                          {" "}
-                                          Invalid{" "}
-                                          <Badge
-                                            as="a"
-                                            href=""
-                                            bg="badge-circle invalid-bange"
-                                          >
-                                            {invalidDiseasesList.length}
-                                          </Badge>
-                                        </span>
                                         {invalidDiseasesList.map((data, i) => (
                                           <li>
-                                            <div className="timeline-panel invalid-disease">
+                                            <div className="timeline-panel">
                                               <div className="media-body">
-                                                <h5 className="mb-1 text-white">
+                                                <h5 className="mb-1">
                                                   {data.name}
                                                 </h5>
                                               </div>
-                                              <Popconfirm
-                                                title="You want move to valid?"
-                                                description={data.name}
-                                                onConfirm={confirmInvalid}
-                                                placement="leftTop"
-                                                okText="Yes"
-                                                cancelText="No"
-                                                onOpenChange={() =>
-                                                  onchangeValid(data.name)
-                                                }
-                                              >
-                                                <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                                  <FontAwesomeIcon
-                                                    icon={faCheck}
-                                                    style={{ color: "red" }}
-                                                  />
-                                                </div>
-                                              </Popconfirm>
+                                              <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                <FontAwesomeIcon
+                                                  icon={faCheck}
+                                                  style={{ color: "orange" }}
+                                                />
+                                              </div>
                                             </div>
                                           </li>
                                         ))}
                                       </ul>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane id="my-posts" eventKey="invalidDiseases">
-                              <div className="my-post-content pt-3">
-                                <div className="widget-media   ps--active-y">
-                                  <ul className="timeline">
-                                    {invalidDiseasesList.map((data, i) => (
-                                      <li>
-                                        <div className="timeline-panel">
-                                          <div className="media-body">
-                                            <h5 className="mb-1">
-                                              {data.name}
-                                            </h5>
-                                          </div>
-                                          <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                            <FontAwesomeIcon
-                                              icon={faCheck}
-                                              style={{ color: "orange" }}
-                                            />
-                                          </div>
-                                        </div>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane id="my-posts" eventKey="comboDiseases">
-                              <div className="my-post-content pt-3">
-                                <div className="widget-media  ps--active-y">
-                                  <ul className="timeline">
-                                    <li>
-                                     
+                                </Tab.Pane>
+                                <Tab.Pane id="my-posts" eventKey="comboDiseases">
+                                  <div className="my-post-content pt-3">
+                                    {/* <div className="widget-media  ps--active-y">
+                                      <ul className="timeline">
+                                        <li>
+
                                           <div className="tablecontainer">
-                                    <table
-                                      id="empoloyeestbl2"
-                                      className="dataTable no-footer mb-2 mb-sm-0 tableSyle fileView-table"
-                                      style={{
-                                        width: "100%",
+                                            <table
+                                              id="empoloyeestbl2"
+                                              className="dataTable no-footer mb-2 mb-sm-0 tableSyle fileView-table"
+                                              style={{
+                                                width: "100%",
 
-                                        margin: "auto",
-                                        marginTop: "10px",
-                                      }}
-                                    >
-                                      <thead>
-                                        <tr>
-                                        <th>Diagnosis Code Combo</th>
-                                          <th>Codes</th>
-                                          <th>DiseaseName</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {comboDiseaseCodesList?.map((item) => {
-                                          return (
-                                            <tr>
-                                                <td>
-                                                <span>{item.diagnosisCodeCombo}</span>
-                                              </td>
-                                              <td>
-                                                <span>{item.addOnCode}</span>
-                                              </td>
-                                            
+                                                margin: "auto",
+                                                marginTop: "10px",
+                                              }}
+                                            >
+                                              <thead>
+                                                <tr>
+                                                  <th>Diagnosis Code Combo</th>
+                                                  <th>Codes</th>
+                                                  <th>DiseaseName</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {comboDiseaseCodesList?.map((item) => {
+                                                  return (
+                                                    <tr>
+                                                      <td>
+                                                        <span>{item.diagnosisCodeCombo}</span>
+                                                      </td>
+                                                      <td>
+                                                        <span>{item.addOnCode}</span>
+                                                      </td>
 
-                                              <td>
-                                                <span>{item.diseaseName}</span>
-                                              </td>
-                                           
-                                            </tr>
-                                          );
-                                        })}
-                                      </tbody>
-                                    </table>
+
+                                                      <td>
+                                                        <span>{item.diseaseName}</span>
+                                                      </td>
+
+                                                    </tr>
+                                                  );
+                                                })}
+                                              </tbody>
+                                            </table>
+                                          </div>
+
+
+                                        </li>
+                                      </ul>
+                                    </div> */}
+                                       <div className="card combo-head-card">
+                                      <div className="row">
+                                        <div className="col-xl-3">
+                                          <label>Diagnosis Code Combo</label>
+                                        </div>
+                                        <div className="col-xl-3">
+                                          <label>Codes</label>
+                                        </div>
+                                        <div className="col-xl-5">
+                                          <label>Disease Name</label>
+                                        </div>                                       
+                                        <div className="col-xl-1">
+                                          <label></label>
+                                        </div>
+                                      </div>
                                     </div>
-											
-                                         
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                            <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                              <div className="my-post-content pt-3">
-                                <div className="widget-media  ps--active-y">
+                                    {comboDiseaseCodesList?.map((item) => {
+                                      return (
+                                        <div className="card combo-card">
+
+                                          <div className="row">
+                                            <div className="col-xl-3">
+                                              <span>{item.diagnosisCodeCombo}</span>
+                                            </div>
+                                            <div className="col-xl-3">
+                                              <span>{item.addOnCode}</span>
+                                            </div>
+                                            <div className="col-xl-5">
+                                              <span>{item.diseaseName}</span>
+                                            </div>                                            
+                                            <div className="col-xl-1 comboclose">
+                                              <div className="icon-box  bg-danger-light me-1">
+                                                <FontAwesomeIcon
+                                                  icon={faClose}
+                                                  style={{ color: "red" }}
+                                                />
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </Tab.Pane>
+                                <Tab.Pane id="my-posts" eventKey="meatCriteria">
+                                  <div className="my-post-content pt-3">
+                                    {/* <div className="widget-media  ps--active-y">
                                   <ul className="timeline">
                                     <li>
                                      
@@ -452,21 +495,83 @@ console.log(splitCodesArr);
                                          
                                     </li>
                                   </ul>
-                                </div>
-                              </div>
-                            </Tab.Pane>
-                          </Tab.Content>
-                        </Tab.Container>
+                                </div> */}
+                                    <div className="card meat-head-card">
+                                      <div className="row">
+                                        <div className="col-xl-1">
+                                          <label>Codes</label>
+                                        </div>
+                                        <div className="col-xl-2">
+                                          <label>Name</label>
+                                        </div>
+                                        <div className="col-xl-2">
+                                          <label>Assessment</label>
+                                        </div>
+                                        <div className="col-xl-2">
+                                          <label>Evaluation</label>
+                                        </div>
+                                        <div className="col-xl-2">
+                                          <label>Monitor</label>
+                                        </div>
+                                        <div className="col-xl-2">
+                                          <label>Treatment</label>
+                                        </div>
+                                        <div className="col-xl-1">
+                                          <label></label>
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                    {meatCriteriaList?.map((item) => {
+                                      return (
+                                        <div className="card meat-card">
+
+                                          <div className="row">
+                                            <div className="col-xl-1">
+                                              <span>{item.diseaseCode}</span>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <span>{item.diseaseName}</span>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <span>{item.assessment}</span>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <span>{item.evaluation}</span>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <span>{item.monitor}</span>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <span>{item.treatment}</span>
+                                            </div>
+                                            <div className="col-xl-1 meatclose">
+                                              <div className="icon-box  bg-danger-light me-1">
+                                                <FontAwesomeIcon
+                                                  icon={faClose}
+                                                  style={{ color: "red" }}
+                                                />
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </Tab.Pane>
+                              </Tab.Content>
+                            </Tab.Container>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>                 
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      </div>
       </div>
     </>
   );
