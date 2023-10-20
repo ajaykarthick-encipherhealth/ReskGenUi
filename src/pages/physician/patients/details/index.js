@@ -237,7 +237,7 @@ export default function PatientDetails() {
                                               <li>
                                                 <div className="timeline-panel valid-disease">
                                                   <div className="media-body">
-                                                    <h5 className="mb-1 text-white">
+                                                    <h5 className="mb-1">
                                                       {data.name}
                                                     </h5>
                                                   </div>
@@ -252,7 +252,7 @@ export default function PatientDetails() {
                                                       onchangeValid(data.name)
                                                     }
                                                   >
-                                                    <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                    <div className="icon-box  bg-danger-light me-1">
                                                       <FontAwesomeIcon
                                                         icon={faClose}
                                                         style={{ color: "red" }}
@@ -283,7 +283,7 @@ export default function PatientDetails() {
                                               <li>
                                                 <div className="timeline-panel invalid-disease">
                                                   <div className="media-body">
-                                                    <h5 className="mb-1 text-white">
+                                                    <h5 className="mb-1">
                                                       {data.name}
                                                     </h5>
                                                   </div>
@@ -298,7 +298,7 @@ export default function PatientDetails() {
                                                       onchangeValid(data.name)
                                                     }
                                                   >
-                                                    <div className="icon-box icon-box-sm bg-danger-light me-1">
+                                                    <div className="icon-box  bg-danger-light me-1">
                                                       <FontAwesomeIcon
                                                         icon={faCheck}
                                                         style={{ color: "red" }}
