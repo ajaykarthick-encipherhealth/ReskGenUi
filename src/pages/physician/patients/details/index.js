@@ -11,18 +11,32 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm } from "antd";
+import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
+import Select from 'react-select';
+import { Avatar } from "antd";
+
+
 
 export default function PatientDetails() {
   const sideMenu = useSelector(state => state.sideMenu);
+  const storePatientDetails = useSelector(state => state.patientDetails.patientDetails);
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [isLoading, setIsLoading] = useState(false);
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
+  const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] = useState([]);
+
   const [validDiseasesList, setValidDiseasesList] = useState([]);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
+  const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
+  const [selectCode, setSelectCode] = useState('');
+  const [dosYear, setDosYear] = useState('');
+
+
   useEffect(() => {
+    console.log(storePatientDetails)
     getPatientDetails();
 
   }, []);
@@ -33,8 +47,10 @@ export default function PatientDetails() {
     formData.append("orgid", "5678");
     var data = {};
     data.patientid = '12345';
-    data.orgid = '5678'
-    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=12345&orgid=5678");
+    data.orgid = '5678';
+    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
+    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${storePatientDetails.patientId}&orgid=${storePatientDetails.patientId}`);
+
     console.log(response.data);
     if (response.data) {
       const records = response.data;
@@ -44,9 +60,11 @@ export default function PatientDetails() {
       var invalidDis = '';
       var comboDis = '';
       var meatCri = '';
+      var dosYearArr = [];
 
 
       for (var key in response.data.validDisease) {
+        dosYearArr.push({ value: key, label: key })
         validDis = response.data.validDisease[key];
       }
       for (var key in response.data.invalidDisease) {
@@ -75,9 +93,27 @@ export default function PatientDetails() {
       setInvalidDiseasesList(invalidDiseasesArray);
       setComboDiseaseCodesList(comboDis);
       setMeatCriteriaList(meatCri);
+      setDosYear(dosYearArr);
+      setIsLoading(true);
 
     }
   }
+
+  const options = [
+    { value: '1', label: 'Novant Health' },
+    { value: '2', label: 'Enabled' },
+    { value: '3', label: 'Disabled' },
+  ];
+  const options2 = [
+    { value: '1', label: 'Home Health' },
+    { value: '2', label: 'Enabled' },
+    { value: '3', label: 'Disabled' },
+  ];
+  const options3 = [
+    { value: '1', label: 'Show Original' },
+    { value: '2', label: 'Enabled' },
+    { value: '3', label: 'Disabled' },
+  ];
 
 
 
@@ -93,9 +129,58 @@ export default function PatientDetails() {
       setTimeout(() => resolve(null), 1000);
     });
 
+  const confirmCombo = () =>
+    new Promise((resolve) => {
+      comboMoveConfirm();
+      setTimeout(() => resolve(null), 1000);
+    });
+
+  const confirmComboInvalid = () =>
+    new Promise((resolve) => {
+      comboMoveInvalidConfirm();
+      setTimeout(() => resolve(null), 1000);
+    });
+
+  const confirmComboValid = () =>
+    new Promise((resolve) => {
+      comboMoveValidConfirm();
+      setTimeout(() => resolve(null), 1000);
+    });
+
+
+  const confirmInvalidMeat = () =>
+    new Promise((resolve) => {
+      meatMoveInvalidConfirm();
+      setTimeout(() => resolve(null), 1000);
+    });
+
+  const confirmValidMeat = () =>
+    new Promise((resolve) => {
+      meatMoveValidConfirm();
+      setTimeout(() => resolve(null), 1000);
+    });
+
+
+
+  const confirmMeat = () =>
+    new Promise((resolve) => {
+      meatMoveConfirm();
+      setTimeout(() => resolve(null), 1000);
+    });
+
   const onchangeValid = (data) => {
     setSelectDiseasesName(data);
   };
+
+  const onchangeCombo = (data, code) => {
+    setSelectDiseasesName(data);
+    setSelectCode(code);
+  };
+  const onchangeMeat = (data, code) => {
+    setSelectDiseasesName(data);
+    setSelectCode(code);
+  };
+
   const validMoveConfirm = () => {
     const result = validDiseasesList.filter(
       (res) => res.name != selectDiseasesName
@@ -107,6 +192,8 @@ export default function PatientDetails() {
     newArray = [...invalidDiseasesList, ...namePush];
     setInvalidDiseasesList(newArray);
   };
+
+
   const invalidMoveConfirm = () => {
     const result = invalidDiseasesList.filter(
       (res) => res.name != selectDiseasesName
@@ -119,45 +206,80 @@ export default function PatientDetails() {
     setValidDiseasesList(newArray);
   };
 
-  const comboCodeSplit = (combo) => {
-    console.log(combo)
-    const myArray = combo.split("\n");
-    console.log(myArray)
-    var splitCodes = [];
-    var splitCodesArr = [];
-    myArray.map((res) => {
-      var split1 = res.split(":");
-      // console.log(split1)
-      splitCodes.push(split1);
-
-    });
-
-    splitCodes.map((res) => {
-      console.log(res)
-      // res.map((res2)=>{   
-      // console.log(res2);
-      if (res.length > 1) {
-        if (res[0] == 'AI') {
-          splitCodesArr.push({
-            name: res[1],
-            code: res[2]
-          })
-        } else {
-          splitCodesArr.push({
-            name: res[0],
-            code: res[1]
-          })
-        }
-      }
-
-
-    });
-
-    console.log(splitCodesArr);
-
-
-    setComboDiseaseCodesList(splitCodesArr)
+  const comboMoveInvalidConfirm = () => {
+    const result = comboDiseaseCodesList.filter(
+      (res) => res.diseaseName != selectDiseasesName
+    );
+    const result2 = comboDiseaseCodesList.filter(
+      (res) => res.diseaseName == selectDiseasesName
+    );
+    setComboDiseaseCodesList(result);
+    var namePush = [];
+    namePush.push({ name: selectCode + " - " + selectDiseasesName });
+    var newArray = [];
+    newArray = [...invalidComboDiseaseCodesList, ...result2];
+    setInvalidComboDiseaseCodesList(newArray);
   };
+
+
+  const comboMoveValidConfirm = () => {
+    const result = invalidComboDiseaseCodesList.filter(
+      (res) => res.diseaseName != selectDiseasesName
+    );
+    setInvalidComboDiseaseCodesList(result);
+    const result2 = invalidComboDiseaseCodesList.filter(
+      (res) => res.diseaseName == selectDiseasesName
+    );
+    var newArray = [];
+    newArray = [...comboDiseaseCodesList, ...result2];
+    setComboDiseaseCodesList(newArray);
+  };
+
+
+
+  const meatMoveInvalidConfirm = () => {
+    const result = meatCriteriaList.filter(
+      (res) => res.diseaseName != selectDiseasesName
+    );
+    const result2 = meatCriteriaList.filter(
+      (res) => res.diseaseName == selectDiseasesName
+    );
+    setMeatCriteriaList(result);
+    var newArray = [];
+    newArray = [...invalidMeatCriteriaList, ...result2];
+    setInvalidMeatCriteriaList(newArray);
+  };
+
+
+  const meatMoveValidConfirm = () => {
+    const result = invalidMeatCriteriaList.filter(
+      (res) => res.diseaseName != selectDiseasesName
+    );
+    setInvalidMeatCriteriaList(result);
+    const result2 = invalidMeatCriteriaList.filter(
+      (res) => res.diseaseName == selectDiseasesName
+    );
+    var newArray = [];
+    newArray = [...meatCriteriaList, ...result2];
+    setMeatCriteriaList(newArray);
+  };
+
+
+
+  const meatMoveConfirm = () => {
+    const result = meatCriteriaList.filter(
+      (res) => res.diseaseName != selectDiseasesName
+    );
+    setMeatCriteriaList(result);
+    var namePush = [];
+    namePush.push({ name: selectCode + " - " + selectDiseasesName });
+    var newArray = [];
+    newArray = [...invalidDiseasesList, ...namePush];
+    setInvalidMeatCriteriaList(newArray);
+    console.log(invalidDiseasesList)
+    console.log(result)
+  };
+
 
   return (
     <>
@@ -168,6 +290,61 @@ export default function PatientDetails() {
             <div className="row">
               <div className="col-xl-12">
                 <div className="row">
+                  <div className='col-xl-8 col-sm-12'>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="row">
+                          <div className='col-xl-3 col-sm-12'>
+                            <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
+                            <h6 className='ageDtails'>ARUN KUMAR</h6>
+                          </div>
+                          <div className='col-xl-2 col-sm-12'>
+                            <i>{SVGICON.AgeIcon}</i> <label>Age</label>
+                            <h6 className='ageDtails'>45</h6>
+                          </div>
+                          <div className='col-xl-3 col-sm-12'>
+                            <i>{SVGICON.GenerIcon}</i><label>Gender</label>
+                            <h6 className='ageDtails'>Male</h6>
+                          </div>
+                          <div className='col-xl-4 col-sm-12'>
+                            <i>{SVGICON.DatebirthIcon}</i> <label>Date of birth</label>
+                            <h6 className='ageDtails'>21/09/2025</h6>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='col-xl-4 col-sm-12'>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="row">
+                          <div className='col-xl-12 col-sm-12'>
+                            <label className="form-label">Date of Service</label>
+                            {isLoading ?
+                              <Select options={dosYear} className="custom-react-select"
+                                defaultValue={dosYear[0]}
+                                isSearchable={false}
+                              /> : null}
+                          </div>
+                          {/* <div className='col-xl-4 col-sm-12'>
+                                        <label className="form-label">Encounter Type</label>
+                                        <Select options={options2} className="custom-react-select"
+                                            defaultValue={options2[0]}
+                                            isSearchable={false}
+                                        />
+                                    </div>
+                                    <div className='col-xl-4 col-sm-12'>
+                                        <label className="form-label">Document Preference</label>
+                                        <Select options={options3} className="custom-react-select"
+                                            defaultValue={options3[0]}
+                                            isSearchable={false}
+                                        />
+                                    </div> */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   {/* <div className="col-xl-6">
                 <div className="card">
                   <div className="card-body p-0">
@@ -212,6 +389,11 @@ export default function PatientDetails() {
                                     Meat Criteria
                                   </Nav.Link>
                                 </Nav.Item>
+                                {/* <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link to="#my-posts" eventKey="RafScore">
+                                  Raf Score
+                                  </Nav.Link>
+                                </Nav.Item> */}
                               </Nav>
                               <Tab.Content>
                                 <Tab.Pane id="my-posts" eventKey="validDiseases">
@@ -224,7 +406,7 @@ export default function PatientDetails() {
                                               className={`dang d-block mb-2 text-warning valid-text`}
                                             >
                                               {" "}
-                                              Valid{" "}
+                                              HCC{" "}
                                               <Badge
                                                 as="a"
                                                 href=""
@@ -270,7 +452,7 @@ export default function PatientDetails() {
                                               className={`dang d-block mb-2  invalid-text`}
                                             >
                                               {" "}
-                                              Invalid{" "}
+                                              NON-HCC{" "}
                                               <Badge
                                                 as="a"
                                                 href=""
@@ -341,66 +523,17 @@ export default function PatientDetails() {
                                 </Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="comboDiseases">
                                   <div className="my-post-content pt-3">
-                                    {/* <div className="widget-media  ps--active-y">
-                                      <ul className="timeline">
-                                        <li>
-
-                                          <div className="tablecontainer">
-                                            <table
-                                              id="empoloyeestbl2"
-                                              className="dataTable no-footer mb-2 mb-sm-0 tableSyle fileView-table"
-                                              style={{
-                                                width: "100%",
-
-                                                margin: "auto",
-                                                marginTop: "10px",
-                                              }}
-                                            >
-                                              <thead>
-                                                <tr>
-                                                  <th>Diagnosis Code Combo</th>
-                                                  <th>Codes</th>
-                                                  <th>DiseaseName</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                {comboDiseaseCodesList?.map((item) => {
-                                                  return (
-                                                    <tr>
-                                                      <td>
-                                                        <span>{item.diagnosisCodeCombo}</span>
-                                                      </td>
-                                                      <td>
-                                                        <span>{item.addOnCode}</span>
-                                                      </td>
-
-
-                                                      <td>
-                                                        <span>{item.diseaseName}</span>
-                                                      </td>
-
-                                                    </tr>
-                                                  );
-                                                })}
-                                              </tbody>
-                                            </table>
-                                          </div>
-
-
-                                        </li>
-                                      </ul>
-                                    </div> */}
-                                       <div className="card combo-head-card">
+                                    <div className="card combo-head-card">
                                       <div className="row">
                                         <div className="col-xl-3">
                                           <label>Diagnosis Code Combo</label>
                                         </div>
                                         <div className="col-xl-3">
-                                          <label>Codes</label>
+                                          <label>AddOnCode</label>
                                         </div>
                                         <div className="col-xl-5">
                                           <label>Disease Name</label>
-                                        </div>                                       
+                                        </div>
                                         <div className="col-xl-1">
                                           <label></label>
                                         </div>
@@ -419,99 +552,100 @@ export default function PatientDetails() {
                                             </div>
                                             <div className="col-xl-5">
                                               <span>{item.diseaseName}</span>
-                                            </div>                                            
+                                            </div>
                                             <div className="col-xl-1 comboclose">
-                                              <div className="icon-box  bg-danger-light me-1">
-                                                <FontAwesomeIcon
-                                                  icon={faClose}
-                                                  style={{ color: "red" }}
-                                                />
-                                              </div>
+
+                                              <Popconfirm
+                                                title="You want move to InValid?"
+                                                description={item.diseaseName}
+                                                onConfirm={confirmComboInvalid}
+                                                placement="leftTop"
+                                                okText="Yes"
+                                                cancelText="No"
+                                                onOpenChange={() =>
+                                                  onchangeCombo(item.diseaseName, item.addOnCode)
+                                                }
+                                              >
+                                                <div className="icon-box  bg-danger-light me-1">
+                                                  <FontAwesomeIcon
+                                                    icon={faClose}
+                                                    style={{ color: "red" }}
+                                                  />
+                                                </div>
+                                              </Popconfirm>
                                             </div>
                                           </div>
 
                                         </div>
                                       );
                                     })}
+                                    {invalidComboDiseaseCodesList.length != 0 ?
+                                      <>
+                                        <div className="invalid-combo">
+                                          <span>Invalid Combo Diseases </span>
+                                        </div>
+
+                                        {invalidComboDiseaseCodesList?.map((item) => {
+                                          return (
+                                            <div className="card combo-card">
+                                              <div className="row">
+                                                <div className="col-xl-3">
+                                                  <span>{item.diagnosisCodeCombo}</span>
+                                                </div>
+                                                <div className="col-xl-3">
+                                                  <span>{item.addOnCode}</span>
+                                                </div>
+                                                <div className="col-xl-5">
+                                                  <span>{item.diseaseName}</span>
+                                                </div>
+                                                <div className="col-xl-1 comboclose">
+
+                                                  <Popconfirm
+                                                    title="You want move to InValid?"
+                                                    description={item.diseaseName}
+                                                    onConfirm={confirmComboValid}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeCombo(item.diseaseName, item.addOnCode)
+                                                    }
+                                                  >
+                                                    <div className="icon-box  bg-danger-light me-1">
+                                                      <FontAwesomeIcon
+                                                        icon={faCheck}
+                                                        style={{ color: "orange" }}
+                                                      />
+                                                    </div>
+                                                  </Popconfirm>
+                                                </div>
+                                              </div>
+
+                                            </div>
+                                          );
+                                        })}
+                                      </> : null}
                                   </div>
                                 </Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="meatCriteria">
                                   <div className="my-post-content pt-3">
-                                    {/* <div className="widget-media  ps--active-y">
-                                  <ul className="timeline">
-                                    <li>
-                                     
-                                          <div className="tablecontainer">
-                                    <table
-                                      id="empoloyeestbl2"
-                                      className="dataTable no-footer mb-2 mb-sm-0 tableSyle fileView-table"
-                                      style={{
-                                        width: "100%",
 
-                                        margin: "auto",
-                                        marginTop: "10px",
-                                      }}
-                                    >
-                                      <thead>
-                                        <tr>
-                                          <th>Codes</th>
-                                          <th>Name</th>
-                                          <th>assessment</th>
-                                          <th>evaluation</th>
-                                          <th>monitor</th>
-                                          <th>treatment</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {meatCriteriaList?.map((item) => {
-                                          return (
-                                            <tr>
-                                              <td>
-                                                <span>{item.diseaseCode}</span>
-                                              </td>
-                                              <td>
-                                                <span>{item.diseaseName}</span>
-                                              </td>
-                                              <td>
-                                                <span>{item.assessment}</span>
-                                              </td>
-                                              <td>
-                                                <span>{item.evaluation}</span>
-                                              </td>
-                                              <td>
-                                                <span>{item.monitor}</span>
-                                              </td>
-                                              <td>
-                                                <span>{item.treatment}</span>
-                                              </td>
-                                           
-                                            </tr>
-                                          );
-                                        })}
-                                      </tbody>
-                                    </table>
-                                    </div>
-											
-                                         
-                                    </li>
-                                  </ul>
-                                </div> */}
                                     <div className="card meat-head-card">
                                       <div className="row">
                                         <div className="col-xl-1">
                                           <label>Codes</label>
                                         </div>
                                         <div className="col-xl-2">
-                                          <label>Name</label>
-                                        </div>
-                                        <div className="col-xl-2">
-                                          <label>Assessment</label>
+                                          <label>Disease Name</label>
                                         </div>
                                         <div className="col-xl-2">
                                           <label>Evaluation</label>
                                         </div>
                                         <div className="col-xl-2">
                                           <label>Monitor</label>
+                                        </div>
+                                        <div className="col-xl-2">
+                                          <label>Assessment</label>
                                         </div>
                                         <div className="col-xl-2">
                                           <label>Treatment</label>
@@ -528,36 +662,118 @@ export default function PatientDetails() {
 
                                           <div className="row">
                                             <div className="col-xl-1">
-                                              <span>{item.diseaseCode}</span>
+                                              <span>{item.diagnosisCode}</span>
                                             </div>
                                             <div className="col-xl-2">
                                               <span>{item.diseaseName}</span>
                                             </div>
-                                            <div className="col-xl-2">
-                                              <span>{item.assessment}</span>
+                                            <div className="col-xl-2 d-grid">
+                                              <span>{item.evaluate}</span>
+                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
                                             </div>
-                                            <div className="col-xl-2">
-                                              <span>{item.evaluation}</span>
-                                            </div>
-                                            <div className="col-xl-2">
+                                            <div className="col-xl-2 d-grid">
                                               <span>{item.monitor}</span>
+                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
                                             </div>
-                                            <div className="col-xl-2">
+                                            <div className="col-xl-2 d-grid">
+                                              <span>{item.assessment}</span>
+                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
+                                            </div>
+                                            <div className="col-xl-2 d-grid">
                                               <span>{item.treatment}</span>
+                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-1 meatclose">
-                                              <div className="icon-box  bg-danger-light me-1">
-                                                <FontAwesomeIcon
-                                                  icon={faClose}
-                                                  style={{ color: "red" }}
-                                                />
-                                              </div>
+                                              {/* {item.isMeatCriteriaPresent === true ?
+                                             <span  className="badge badge-rounded badge-warning badge-meat">
+                                             True
+                                           </span>:
+                                            <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
+                                              <Popconfirm
+                                                title="You want move to InValid?"
+                                                description={item.diseaseName}
+                                                onConfirm={confirmInvalidMeat}
+                                                placement="leftTop"
+                                                okText="Yes"
+                                                cancelText="No"
+                                                onOpenChange={() =>
+                                                  onchangeMeat(item.diseaseName, item.diagnosisCode)
+                                                }
+                                              >
+                                                <div className="icon-box  bg-danger-light me-1">
+                                                  <FontAwesomeIcon
+                                                    icon={faClose}
+                                                    style={{ color: "red" }}
+                                                  />
+                                                </div>
+                                              </Popconfirm>
                                             </div>
                                           </div>
 
                                         </div>
                                       );
                                     })}
+                                    {invalidMeatCriteriaList.length != 0 ?
+                                      <>
+                                        <div className="invalid-combo">
+                                          <span>Invalid MeatCriteria</span>
+                                        </div>
+
+                                        {invalidMeatCriteriaList?.map((item) => {
+                                          return (
+                                            <div className="card meat-card">
+
+                                              <div className="row">
+                                                <div className="col-xl-1">
+                                                  <span>{item.diagnosisCode}</span>
+                                                </div>
+                                                <div className="col-xl-2">
+                                                  <span>{item.diseaseName}</span>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  <span>{item.evaluate}</span>
+                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  <span>{item.monitor}</span>
+                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  <span>{item.assessment}</span>
+                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  <span>{item.treatment}</span>
+                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-1 meatclose">
+
+
+                                                  <Popconfirm
+                                                    title="You want move to InValid?"
+                                                    description={item.diseaseName}
+                                                    onConfirm={confirmValidMeat}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeMeat(item.diseaseName, item.diagnosisCode)
+                                                    }
+                                                  >
+                                                    <div className="icon-box  bg-danger-light me-1">
+                                                      <FontAwesomeIcon
+                                                        icon={faCheck}
+                                                        style={{ color: "orange" }}
+                                                      />
+                                                    </div>
+                                                  </Popconfirm>
+                                                </div>
+                                              </div>
+
+                                            </div>
+                                          );
+                                        })}
+                                      </> : null}
                                   </div>
                                 </Tab.Pane>
                               </Tab.Content>

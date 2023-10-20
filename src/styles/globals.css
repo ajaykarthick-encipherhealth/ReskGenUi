@@ -37465,3 +37465,15 @@ i.ant-spin-dot-item {
   /* margin-top: px; */
   cursor: pointer;
 }
+.invalid-combo{
+  padding: 10px 5px 10px 5px;
+}
+.invalid-combo span{
+  border-bottom: 2px solid #241571;
+  color: #241571;
+  font-weight: 600;
+}
+span.badge-meat.badge {
+  height: 27px;
+  width: max-content;
+}

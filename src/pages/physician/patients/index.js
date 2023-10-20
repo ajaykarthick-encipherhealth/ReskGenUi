@@ -18,7 +18,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight,faSpinner,faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
-
+import { connect, useDispatch } from 'react-redux';
+import { patientDetails,
+} from '../../../store/actions/AuthActions';
 
 
 export default function Patient() {
@@ -26,8 +28,10 @@ export default function Patient() {
 
 
 
-
+  const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
+  const patientStoreDetails = useSelector((state) => state);
+
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
   const [dataValidationList, setDataValidationList] = useState([]);
@@ -62,6 +66,8 @@ export default function Patient() {
   const [listening, setListening] = useState(false);
 
   const [patinetList, setPatinetList] = useState([]);
+  const [tenantId, setTenantId] = useState('');
+
 
   const statusMessage = {
     subscribed: "Subscribed",
@@ -75,6 +81,9 @@ export default function Patient() {
 
 
   useEffect(() => {
+    var tenId= localStorage.getItem("tenantId");
+    setTenantId(tenId);
+    console.log(patientStoreDetails)
     const datas = [
       {
         patchJob: "Completed",
@@ -137,12 +146,12 @@ export default function Patient() {
     setDataValidationList(datas);
     setIsLoading(false);
     getAllList();
-    fetchData();
+    // fetchData();
   }, []);
 
   
 	const getAllList = async () => {
-		const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=12345");
+		const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=logesh056");
 		console.log(response.data);
 		if (response.data) {
 			const records = response.data;
@@ -179,11 +188,10 @@ export default function Patient() {
       const formData = new FormData();
       formData.append("file", selectFile);
       formData.append("dos", inputValue.year);
-      formData.append("patientName", inputValue.name);
-      formData.append("orgid", "abc");
-      formData.append("tenantid", "b4d34e42-79a6-478e-b3af-12ce7311fa09");
-      formData.append("userid", "logesh");
-      formData.append("patientId",inputValue.patientId);
+      formData.append("orgid", 'logesh056');
+      formData.append("tenantid", tenantId);
+      formData.append("userid", 'logesh056');
+      formData.append("patientid",inputValue.patientId);
       const headers = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -204,6 +212,7 @@ export default function Patient() {
       } else {
         setIsLoading(false);
       }
+      getAllList();
     }
 
     setValidated(true);
@@ -211,6 +220,7 @@ export default function Patient() {
 
 
   const gotoPatientDetails = (data) => {
+    dispatch(patientDetails(data));	
     navigate.push('/physician/patients/details');
 
   };
@@ -316,7 +326,7 @@ export default function Patient() {
 
               <div className="col-xl-12">
                 <div className="card">
-                <div>
+                {/* <div>
       <p>{listening ? statusMessage.subscribed : statusMessage.unsubscribed}</p>
       <p>{JSON.stringify(process)}</p>
       <button onClick={subscribe}>
@@ -324,7 +334,7 @@ export default function Patient() {
       </button>
       <br />
       <p>{JSON.stringify(message)}</p>
-    </div>
+    </div> */}
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
@@ -368,8 +378,13 @@ export default function Patient() {
                                 </td>
                                 <td className="td-backcolor">
                                   {item.computing == 2 ?
-                                  <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  /></span>
-                                  :   <span className='hold'>Processing   <Spin className='ml-2 text-white' size="small" /></span>}
+                                  <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  />
+                                  </span>
+                                  :  item.computing == 1 ?
+                                   <span className='hold'>Processing <Spin className='ml-2 text-white' size="small" /></span>
+                                   :
+                                   <span className='hold'>Not Started</span>
+                                  }
                                 </td>
                                 <td>
                                   <span>{item.createdAt}</span>

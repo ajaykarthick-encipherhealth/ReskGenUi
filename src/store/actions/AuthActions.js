@@ -18,6 +18,7 @@ export const LOGIN_FAILED_ACTION = '[login action] failed login';
 export const LOADING_TOGGLE_ACTION = '[Loading action] toggle loading';
 export const LOGOUT_ACTION = '[Logout action] logout action';
 export const NAVTOGGLE = 'NAVTOGGLE';
+export const PATIENT_DETAILS = '';
 
 
 
@@ -119,3 +120,10 @@ export const navtoggle = () => {
       type: 'NAVTOGGLE',
     };
   };
+
+  export function patientDetails(data) {
+    return {
+        type: PATIENT_DETAILS,
+        payload: data,
+    };
+}

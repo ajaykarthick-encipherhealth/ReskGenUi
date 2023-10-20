@@ -5,6 +5,7 @@ import {
     LOGOUT_ACTION,
     SIGNUP_CONFIRMED_ACTION,
     SIGNUP_FAILED_ACTION,
+    PATIENT_DETAILS
     
 } from '../actions/AuthActions';
 
@@ -82,6 +83,25 @@ export function AuthReducer(state = initialState, action) {
     //         count: !state.count,
     //     };
         
+    // if (action.type === PATIENT_DETAILS) {
+    //     return {
+    //         ...state,
+    //         auth: action.payload,
+    //         errorMessage: '',
+    //         successMessage: 'Patient Details Completed',
+    //         showLoading: false,
+    //     };
+    // }
+    // }
+    return state;
+}
+export function PatientStore(state = initialState, action) {   
+        
+    if (action.type === PATIENT_DETAILS) {
+        return {
+            patientDetails: action.payload,
+        };
+    }
     // }
     return state;
 }

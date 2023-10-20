@@ -13,7 +13,7 @@ const Screen = () => {
 
 
   const gotoPatientDetails = (data) => {	
-		navigate.push('/physician/patient');	
+		navigate.push('/physician/patients');	
 	};
 
   return (
