@@ -2,6 +2,8 @@ import axios from 'axios';
 import LoadingSpinner from "../jsx/components/spinner/spinner";
 
 import ENDPOINTS from '../utility/enpoints';
+import Swal from 'sweetalert2'
+
 // axios.defaults.baseURL = ENDPOINTS.apiEndoint;
 
 
@@ -20,13 +22,54 @@ import ENDPOINTS from '../utility/enpoints';
   axios.interceptors.response.use(function (response) { 
     return response;
   }, function (error) {
+    console.log(error)
     
-    const statusCode = error?.response?.status
+    const statusCode = error?.response?.status;
+    
 
     if(statusCode === 500) {
+      Swal.fire({
+        title: 'Internal Server Error!',
+        text: 'Please Contact Admin',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: "#DD6B55",
+        closeOnConfirm: false
+      }).then((result) => { 
+        if (result.isConfirmed) {
+         
+          } 
+      })
+ 
+    }
+    if(statusCode === 400) {
+      Swal.fire({
+        title: 'Bad Request!',
+        text: 'Please Contact Admin',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: "#DD6B55",
+        closeOnConfirm: false
+      }).then((result) => { 
+        if (result.isConfirmed) {
+         
+          } 
+      })
  
     }
     if(statusCode === 401) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Access Denied',
+        icon: 'error',
+        confirmButtonText: 'Logout',
+        confirmButtonColor: "#DD6B55",
+        closeOnConfirm: false
+      }).then((result) => { 
+        if (result.isConfirmed) {
+           window.location = "/userlogin"
+          } 
+      })
    
     }
     return Promise.reject(error);

@@ -5,6 +5,8 @@ export const IMAGES = {
     profileImage : require('../../images/profile/user-image.png'), 
     homeIcon1 : require('../../images/home/svgviewer-png-output.png'),
     hccLogo : require('../../images/logo/hcc-logo.png'),
+    hccWhiteLogo : require('../../images/logo/hcc-white-logo.png'),
+
    
 };
 export const SVGICON = {

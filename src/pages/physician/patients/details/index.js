@@ -13,9 +13,10 @@ import { faClose, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
-import { Avatar } from "antd";
+import { Modal } from "antd";
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
+import { Space, Spin } from 'antd';
 
 
 
@@ -23,11 +24,13 @@ import { Button } from 'react-bootstrap';
 
 export default function PatientDetails() {
   const sideMenu = useSelector(state => state.sideMenu);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const storePatientDetails = useSelector(state => state.patientDetails.patientDetails);
   const storeDetails = useSelector(state => state);
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSection, setIsLoadingSection] = useState(true);
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
@@ -40,6 +43,13 @@ export default function PatientDetails() {
   const [selectCode, setSelectCode] = useState('');
   const [dosYear, setDosYear] = useState('');
   const [localOrgId, setLocalOrgId] = useState('');
+  const [selectMeatFileId, setSelectMeatFileId] = useState('');
+  const [selectMeatName, setSelectMeatName] = useState('');
+  const [sectionList, setSectionList] = useState([]);
+
+
+
+
 
 
   useEffect(() => {
@@ -65,6 +75,7 @@ export default function PatientDetails() {
       var comboDis = '';
       var meatCri = '';
       var dosYearArr = [];
+      setSelectMeatFileId( response.data.fileId)
 
 
       for (var key in response.data.validDisease) {
@@ -285,13 +296,37 @@ export default function PatientDetails() {
   };
 
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleOpenModal = (value) => {
+    setSelectMeatName(value);
+    setIsLoadingSection(true);
+    setIsModalOpen(true);
+    getSectionResult(value.toLowerCase());
+  };
+
+  const getSectionResult = async (value) => {
+		var apiUrl = `dbservice/patient/compute/getsection?fileid=cbd48813-3f9c-4cc9-9882-1db87fdd1ffb&section=${value}`;
+		const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
+		console.log(response.data);
+		var result = response.data;
+		if (response.data) {
+      setSectionList(response.data);
+      setIsLoadingSection(false);
+		}
+	}
+
+
+
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div class="content-body">
           <div className="container-fluid">
-            <div className="row">
+            <div className="row patient-file-container">
               <div className="col-xl-12">
                 <div className="row">
                   <div className='col-xl-8 col-sm-12'>
@@ -385,12 +420,12 @@ export default function PatientDetails() {
                                 </Nav.Item>
                                 <Nav.Item as="li" className="nav-item">
                                   <Nav.Link to="#my-posts" eventKey="comboDiseases">
-                                    Combo Diseases
+                                  Combination Codes
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item as="li" className="nav-item">
                                   <Nav.Link to="#my-posts" eventKey="meatCriteria">
-                                    Meat Criteria
+                                    MEAT Criteria
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item as="li" className="nav-item">
@@ -679,19 +714,19 @@ export default function PatientDetails() {
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.monitor}</span>
-                                              <Badge className="badge-meat" bg="secondary badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg="secondary badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.evaluate}</span>
-                                              <Badge className="badge-meat" bg="third badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg="third badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.assessment}</span>
-                                              <Badge className="badge-meat" bg="warning badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg="warning badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.treatment}</span>
-                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg="success badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-1 meatclose">
                                               {/* {item.isMeatCriteriaPresent === true ?
@@ -932,7 +967,7 @@ export default function PatientDetails() {
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="">
+                                    {/* <div className="">
 
                                       <div className="compete-card">
                                         <Button
@@ -943,7 +978,7 @@ export default function PatientDetails() {
                                       </div>
 
 
-                                    </div>
+                                    </div> */}
                                   </div>
 
                                 </Tab.Pane>
@@ -962,7 +997,7 @@ export default function PatientDetails() {
                                           >
                                             {" "}
                                             <Viewer
-                                              fileUrl={selectFileURL}
+                                              fileUrl="https://cogentaifiles.blob.core.windows.net/congetaiocrpdf/01-01-20%20FLORENCE%20MAKHANI%20HORWITCH.pdf?sv=2020-10-02&se=2023-10-22T11%3A50%3A53Z&sr=b&sp=r&sig=8atd%2FZS4BpC3PxcXzCnbE2IUQzYmxOIJjVRDIdU8%2FOs%3D"
                                               plugins={[defaultLayoutPluginInstance]}
                                             />
                                           </div>
@@ -981,6 +1016,36 @@ export default function PatientDetails() {
                   </div>
                 </div>
               </div>
+              {isModalOpen && (
+        <Modal
+          title={selectMeatName}
+          centered
+          open={isModalOpen}
+          style={{ top: 5 }}
+          onOk={handleCloseModal}
+          onCancel={handleCloseModal}
+          width={1000}
+          height={400}
+        >
+             <div className="section-container">
+              {isLoadingSection ?
+               <Spin className='ml-2 ms-1 section-spin' size="medium" />
+             : <>
+              {sectionList?.map((item) => {
+                                      return (
+                                     
+<div className="card meat-card">
+             <span className="combodiseaseText">{item}</span>
+          </div>
+                                      
+           
+          );
+        })}
+              </>}
+            
+          </div>
+        </Modal>
+      )}
             </div>
           </div>
         </div>

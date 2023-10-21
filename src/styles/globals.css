@@ -35142,7 +35142,7 @@
 /* Header and SideNav Style */
 
 .header {
-  height: 70px !important;
+  height: 75px !important;
 }
 /* .nav-control{
     box-shadow: 0 0 40px 0 rgba(82,63,105,.1) !important;
@@ -35209,15 +35209,15 @@
     padding-left: 0 !important;
 }
 .header-logo{
-    /* padding-left: 55px; */
+    padding-left: 55px;
     text-align: center;
     /* padding-top: 8px ; */
 }
 .header-logo img{
-  width: 100px;
+  width: 70px;
   height: 70px;
-  background: #fff;
-  border-radius: 9px 0 0 9px;
+  /* background: #fff;
+  border-radius: 9px 0 0 9px; */
 }
 .deznav{
     border-radius: 10px !important;
@@ -37420,7 +37420,7 @@ span.ant-progress-text {
 .page-titles .bc-title{
   color: #241571 !important;
 }
-i.ant-spin-dot-item {
+.processingSpin  i.ant-spin-dot-item {
     background: white !important;
 }
 
@@ -37529,6 +37529,22 @@ img.login-logo {
     width: 300px;
     height: 300px;
 }
+.offcanvas-md-size{
+  width: 45% !important; 
+}
 
+.ant-modal-body{
+  min-height:100px !important;
+  max-height: 400px !important;
+  overflow: scroll !important;
+}
+.section-spin{
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+nextjs-portal {
+  display: none;
+}
 
 

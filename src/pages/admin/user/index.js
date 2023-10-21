@@ -22,6 +22,12 @@ const UserList = () => {
 
 	const sideMenu = useSelector(state => state.sideMenu);
 
+	const [localUserId, setLocalUserId] = useState('');
+	const [localOrgId, setLocalOrgId] = useState('');
+	const [localTenantId, setLocalTenantId] = useState('');
+	const [pageDataCount, setPageDataCount] = useState(0);
+	const [pageLimitCount, setPageLimitCount] = useState(10);
+
 
 	const [validated, setValidated] = useState(false);
 	const [userList, setUserList] = useState([]);
@@ -42,13 +48,16 @@ const UserList = () => {
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
 	const [isStatus, setStatus] = useState(false);
+	const [roleValue, setRoleValue] = useState(false);
 
 	const [formData, setFormData] = useState({
 		firstName: '',
 		lastName: '',
-		email: '',
+		emailId: '',
 		password: '',
-		role: '',
+		// role: '',
+		userName:'',
+		mobileNumber:''
 	});
 
 
@@ -62,24 +71,24 @@ const UserList = () => {
 
 
 	useEffect(() => {
-		console.log(sideMenu)
-		getAllList();
+		var tenId = localStorage.getItem("tenantId");
+		var uId = localStorage.getItem("userId");
+		var orgId = localStorage.getItem("orgId");
+		setLocalTenantId(tenId);
+		setLocalUserId(uId);
+		setLocalOrgId(orgId);
+		getAllList(tenId,orgId,pageDataCount,pageLimitCount,'');
 	}, []);
 
 
 
-	const getAllList = async () => {
-		const response = await axios.get(ENDPOINTS.apiEndoint + "/patient/getall");
+	const getAllList = async (tenId,orgId,page,limit,status) => {
+		var apiUrl = `management/admin/getusers?orgId=${orgId}&tenantId=${tenId}&status=${status}&page=${page}&limit=${limit}`;
+		const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
 		console.log(response.data);
+		var result = response.data;
 		if (response.data) {
-			const records = response.data.slice(firstIndex, lastIndex);
-			setUserListAll(response.data);
-			setUserList(records);
-			setRecords(records);
-			const npage = Math.ceil(response.data.length / recordsPage)
-			const number = [...Array(npage + 1).keys()].slice(1);
-			setNPage(npage);
-			setNumber(number);
+			setUserList(result.record != null ? result.record : []);
 			setIsDataLoading(false);
 			setIsLoading(false);
 		}
@@ -94,24 +103,29 @@ const UserList = () => {
 		const key = e.target.name;
 		const value = e.target.value;
 		setFormData({ ...formData, [key]: value })
+		if(key ==  'role'){
+			setRoleValue([value]);
+		}
 	}
 
 	const handleSubmit = (event) => {
 		const form = event.currentTarget;
 		event.preventDefault();
 		if (form.checkValidity() === true) {
+			formData.tenantId = localTenantId;
+			formData.role = roleValue;
 			console.log(formData)
-			// postPatient(formData);
+			createUser(formData);
 		}
 		setValidated(true);
 
 	};
-	const postPatient = async (data) => {
+	const createUser = async (data) => {
 		setIsLoading(true);
-		const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data)
+		const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/admin/getusers/createuser`, data)
 		if (response?.status == 200) {
 			setAddUser(false);
-			getAllList();
+			getAllList(tenId,orgId,pageDataCount,pageLimitCount,'');
 		} else {
 
 		}
@@ -121,7 +135,7 @@ const UserList = () => {
 		const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data)
 		if (response?.status == 200) {
 			setAddUser(false);
-			getAllList();
+			getAllList(tenId,orgId,pageDataCount,pageLimitCount,'');
 		} else {
 
 		}
@@ -157,6 +171,10 @@ const UserList = () => {
 		var end = start + 10;
 		const records = userListAll.slice(start, end);
 		setUserList(records);
+
+		getAllList(localTenantId,localTenantId,number,pageLimitCount,'');
+
+		
 	}
 	function nextPage(number) {
 		if (canMaxPage > number) {
@@ -166,10 +184,8 @@ const UserList = () => {
 		} else {
 			setCanNextPage(false);
 		}
-		var start = number * 10;
-		var end = start + 10;
-		const records = userListAll.slice(start, end);
-		setUserList(records);
+		getAllList(localTenantId,localTenantId,number,pageLimitCount,'');
+
 	}
 
 	function previousPage(number) {
@@ -181,10 +197,7 @@ const UserList = () => {
 			setCanPreviousPage(false);
 		}
 		setPageCount(number);
-		var start = number * 10;
-		var end = start + 10;
-		const records = userListAll.slice(start, end);
-		setUserList(records);
+		getAllList(localTenantId,localTenantId,number,pageLimitCount,'');
 	}
 
 	const roleChange = async (e) => {
@@ -195,19 +208,19 @@ const UserList = () => {
 		// roleUpdate(data);
 	}
 
-	const switchHandler =  (event, id) => {
+	const switchHandler = (event, id) => {
 
 		const isChecked = event;
 		setStatus(
-		  ({isStatus}) => ({
-			isStatus: {
-				  ...isStatus,
-				  [id]: isChecked,
-			  }
-		  })
-	  );  
-	  
-	  console.log(isStatus)
+			({ isStatus }) => ({
+				isStatus: {
+					...isStatus,
+					[id]: isChecked,
+				}
+			})
+		);
+
+		console.log(isStatus)
 	}
 
 
@@ -258,9 +271,9 @@ const UserList = () => {
 															{/* <th>Id</th> */}
 															<th>First Name</th>
 															<th>Last Name</th>
+															<th>User Name</th>
 															<th>Email</th>
-															<th>Password</th>
-															<th>Roles</th>
+															<th>Role</th>
 															<th>Status</th>
 															<th>Date Created</th>
 															{/* <th>Action</th> */}
@@ -273,14 +286,16 @@ const UserList = () => {
 																{/* <td><span>{item.id}</span></td> */}
 																<td><span>{item.firstName}</span></td>
 																<td><span>{item.lastName}</span></td>
+																<td><span>{item.userName}</span></td>
 																<td><span>{item.email}</span></td>
-																<td><span>*****</span></td>
 																<td><span>
-																	<Select   onChange={(e) => roleChange(e)} options={RoleList} className="custom-react-select"
-																	defaultValue={RoleList[0]}
-																	isSearchable={false}
-																/></span></td>
-																<td><span key={index}> <Switch id={index} onChange={event => switchHandler(event, index)} checked={isStatus[index]}  checkedChildren="Enabled" unCheckedChildren="Disabled" /></span></td>
+																{item.role[0]}
+																	{/* <Select onChange={(e) => roleChange(e)} options={RoleList} className="custom-react-select"
+																		defaultValue={RoleList[0]}
+																		isSearchable={false}
+																	/> */}
+																	</span></td>
+																<td><span key={index}> <Switch id={index} onChange={event => switchHandler(event, index)} checked={isStatus[index]} checkedChildren="Enabled" unCheckedChildren="Disabled" /></span></td>
 																<td><span>22/06/2022</span></td>
 
 															</tr>
@@ -332,9 +347,9 @@ const UserList = () => {
 					</div>
 				</div>
 			</div>
-			<Offcanvas show={addUser} onHide={setAddUser} className="offcanvas-end" placement='end'>
+			<Offcanvas show={addUser} onHide={setAddUser} className="offcanvas-end  offcanvas-md-size" placement='end'>
 				<div className="offcanvas-header">
-					<h5 className="modal-title" id="#gridSystemModal">Add File</h5>
+					<h5 className="modal-title" id="#gridSystemModal">Add User</h5>
 					<button type="button" className="btn-close"
 						onClick={() => setAddUser(false)}
 					>
@@ -345,30 +360,41 @@ const UserList = () => {
 					<div className="container-fluid">
 						<Form noValidate validated={validated} onSubmit={handleSubmit}>
 							<div className="row">
-								<div className="col-xl-12 mb-3">
+								<div className="col-xl-6 mb-3">
 									<Form.Label>First name  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='firstName' required type="text" onChange={handleChange} />
 								</div>
-								<div className="col-xl-12 mb-3">
+								<div className="col-xl-6 mb-3">
 									<Form.Label>Last Name  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='lastName' required type="text" onChange={handleChange} />
 								</div>
-								<div className="col-xl-12 mb-3">
+								<div className="col-xl-6 mb-3">
 									<Form.Label>Email  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='email' required type="email" onChange={handleChange} />
+									<Form.Control name='emailId' required type="email" onChange={handleChange} />
 								</div>
-								<div className="col-xl-12 mb-3">
+								<div className="col-xl-6 mb-3">
+								<Form.Label>User Name  <span className="text-danger">*</span> </Form.Label>
+								<div className="input-group mb-3">								
+								<Form.Control name='userName' required type="text" onChange={handleChange} />
+									<span className="input-group-text">@encipherhealth.com</span>
+								</div>
+								</div>
+								<div className="col-xl-6 mb-3">
+									<Form.Label>Mobile Number  <span className="text-danger">*</span> </Form.Label>
+									<Form.Control name='mobileNumber' required type="number" onChange={handleChange} />
+								</div>
+								<div className="col-xl-6 mb-3">
 									<Form.Label>Role  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='role' as="select" required onChange={handleChange} >
 										<option value="Coder(Level 1)">Coder(Level 1)</option>
 										<option value="Coder(Level 2)">Coder(Level 2)</option>
 									</Form.Control>
 								</div>
-								<div className="col-xl-12 mb-3">
+								<div className="col-xl-6 mb-3">
 									<Form.Label>Password  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='password' required type="text" onChange={handleChange} />
 								</div>
-								<div className="col-xl-12 mb-3">
+								<div className="col-xl-6 mb-3">
 									<Form.Label>Confirm Password  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='password' required type="text" onChange={handleChange} />
 								</div>

@@ -423,7 +423,7 @@ export default function Patient() {
                                     : item.computing == 1 ?
                                       <span className={`badge badge-primary`}>
                                         Processing
-                                        <Spin className='ml-2 ms-1 text-white' size="small" />
+                                        <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
                                       </span>
                                       :
                                       <span className={`badge badge-secondary`}>

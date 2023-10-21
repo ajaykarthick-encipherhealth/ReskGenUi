@@ -43,7 +43,9 @@ export default function Login() {
                     localStorage.setItem("userRole", 'admin')
                     localStorage.setItem("token", result.response.access_token);
                     localStorage.setItem("tenantId", result.response.tenantId);
-                    router.push("/admin/provider");
+                    localStorage.setItem("orgId", result.response.organizationId);
+                    localStorage.setItem("userId", result.response.userEmail);
+                    router.push("/admin/user");
                     notification.success({
                         message: result.message,
                     });
