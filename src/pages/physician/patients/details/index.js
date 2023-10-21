@@ -714,7 +714,7 @@ export default function PatientDetails() {
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.monitor}</span>
-                                              <Badge className="badge-meat cr-pointer" bg="secondary badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg="third badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.evaluate}</span>
@@ -722,11 +722,11 @@ export default function PatientDetails() {
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.assessment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg="warning badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg="third badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.treatment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg="success badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg="third badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-1 meatclose">
                                               {/* {item.isMeatCriteriaPresent === true ?
@@ -777,7 +777,7 @@ export default function PatientDetails() {
                                                 </div>
                                                 <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.monitor}</span>
-                                              <Badge className="badge-meat" bg="secondary badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat" bg="third badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.evaluate}</span>
@@ -785,11 +785,11 @@ export default function PatientDetails() {
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.assessment}</span>
-                                              <Badge className="badge-meat" bg="warning badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat" bg="third badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.treatment}</span>
-                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat" bg="third badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
                                             </div>
                                                 <div className="col-xl-1 meatclose">
 

@@ -4,17 +4,55 @@ import Link from 'next/link';
 
 import { IMAGES, SVGICON } from "../../constant/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
-import Image from 'next/image'
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { Logout } from "../../../store/actions/AuthActions";
+import Swal from 'sweetalert2'
+
 
 
 const Header = ({ onNote }) => {
 	const [headerFix, setheaderFix] = useState(false);
+	const router = useRouter();
+
 	useEffect(() => {
+		var loginCheck = localStorage.getItem("loginCheck");
+		if(loginCheck !=  "true"){			
+			Swal.fire({
+				title: 'Error!',
+				text: 'Access Denied',
+				icon: 'error',
+				confirmButtonText: 'Logout',
+				confirmButtonColor: "#DD6B55",
+				closeOnConfirm: false
+			  }).then((result) => { 
+				if (result.isConfirmed) {
+				   window.location = "/userlogin"
+				  } 
+			  })
+		}
+		console.log(loginCheck)
 		window.addEventListener("scroll", () => {
 			setheaderFix(window.scrollY > 50);
 		});
 	}, []); 
 	
+	const logoutFunction = () => {
+		Swal.fire({
+			title: 'Warning!',
+			text: 'Do you want Logout!',
+			icon: 'warning',
+			confirmButtonText: 'Logout',
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			closeOnConfirm: false
+		  }).then((result) => { 
+			if (result.isConfirmed) {
+				localStorage.removeItem("loginCheck");
+			   window.location = "/userlogin"
+			  } 
+		  })
+	}
   
   return ( 
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -34,10 +72,10 @@ const Header = ({ onNote }) => {
 											<Image src={IMAGES.profileImage}/>
 											<div>
 											<span className="text-dark-50 ms-2 text-white header-name font-weight-bolder font-size-base d-flex mr-3">Admin</span>
-											<Link href="/userlogin" className="ms-2 d-flex">
+											<span  onClick={logoutFunction} className="ms-2 d-flex">
 												{SVGICON.Logout}{" "}
 												<h6 className="logout-name">Logout </h6>
-											</Link>
+											</span>
 											</div>
 
 										</div>										
