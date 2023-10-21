@@ -154,12 +154,13 @@ export default function Patient() {
 
     setDataValidationList(datas);
     setIsLoading(false);
-    getAllList();
+    getAllList(uId);
     // fetchData();
   }, []);
 
   
-	const getAllList = async () => {
+	const getAllList = async (uId) => {
+    // logesh056
 		const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=logesh056");
 		if (response.data) {
       const records = response.data.slice(firstIndex, lastIndex);
@@ -228,7 +229,7 @@ export default function Patient() {
         setIsLoading(false);
       }
       setAddPatient(false);
-      getAllList();
+      getAllList(localUserId);
     }
 
     setValidated(true);
