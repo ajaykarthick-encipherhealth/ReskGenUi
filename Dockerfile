@@ -2,16 +2,13 @@
 FROM node:18
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /
 
 # Copy the package.json and package-lock.json files to the container
-COPY package*.json ./
+COPY * /
 
 # Install project dependencies
 RUN npm install
-
-# Copy the rest of your application code to the container
-COPY . .
 
 # Build your React.js application
 RUN npm run build
@@ -21,4 +18,3 @@ EXPOSE 3000
 
 # Start the application
 CMD ["npm", "start"]
-
