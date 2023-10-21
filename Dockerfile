@@ -1,11 +1,11 @@
-# Use an official Node.js runtime as the base image
+ Use an official Node.js runtime as the base image
 FROM node:18
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /
 
 # Copy the package.json and package-lock.json files to the container
-COPY * ./
+COPY * /
 
 # Install project dependencies
 RUN npm install
@@ -18,4 +18,3 @@ EXPOSE 3000
 
 # Start the application
 CMD ["npm", "start"]
-
