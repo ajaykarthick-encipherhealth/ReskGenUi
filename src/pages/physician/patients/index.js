@@ -21,6 +21,8 @@ import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
 import { patientDetails,
 } from '../../../store/actions/AuthActions';
+import { notification } from 'antd';
+
 
 
 export default function Patient() {
@@ -235,7 +237,13 @@ export default function Patient() {
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));	
+    if(data.computing == 2){
     navigate.push('/physician/patients/details');
+    }else{
+             notification.warning({
+                message: "Patient file not processed Please wait",
+            });
+    }
 
   };
 
