@@ -5,13 +5,10 @@ FROM node:18
 WORKDIR /app
 
 # Copy the package.json and package-lock.json files to the container
-COPY package*.json ./
+COPY * ./
 
 # Install project dependencies
 RUN npm install
-
-# Copy the rest of your application code to the container
-COPY . .
 
 # Build your React.js application
 RUN npm run build
