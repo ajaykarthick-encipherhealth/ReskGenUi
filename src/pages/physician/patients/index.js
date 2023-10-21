@@ -407,10 +407,10 @@ export default function Patient() {
                                   <span>{item.patientId}</span>
                                 </td>
                                 <td>
-                                  <span>Arun Kumar</span>
+                                  <span>{item.patientName}</span>
                                 </td>
                                 <td>
-                                  <span>01-01-20 FLORENCE MAKHANI PIETZ</span>
+                                  <span>{item.fileName}</span>
                                 </td>
                                 <td className='patient-status'>
                                   {item.computing == 2 ?
