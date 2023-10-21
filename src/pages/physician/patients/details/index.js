@@ -298,19 +298,19 @@ export default function PatientDetails() {
                         <div className="row">
                           <div className='col-xl-3 col-sm-12'>
                             <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
-                            <h6 className='ageDtails'>{storePatientDetails.patientName}</h6>
+                            {/* <h6 className='ageDtails'>{storePatientDetails.patientName}</h6> */}
                           </div>
                           <div className='col-xl-2 col-sm-12'>
                             <i>{SVGICON.AgeIcon}</i> <label>Age</label>
-                            <h6 className='ageDtails'>{storePatientDetails.age}</h6>
+                            {/* <h6 className='ageDtails'>{storePatientDetails.age}</h6> */}
                           </div>
                           <div className='col-xl-3 col-sm-12'>
                             <i>{SVGICON.GenerIcon}</i><label>Gender</label>
-                            <h6 className='ageDtails'>{storePatientDetails.gender}</h6>
+                            {/* <h6 className='ageDtails'>{storePatientDetails.gender}</h6> */}
                           </div>
                           <div className='col-xl-4 col-sm-12'>
                             <i>{SVGICON.DatebirthIcon}</i> <label>Date of birth</label>
-                            <h6 className='ageDtails'>{storePatientDetails.dob}</h6>
+                            {/* <h6 className='ageDtails'>{storePatientDetails.dob}</h6> */}
                           </div>
 
                         </div>
