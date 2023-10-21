@@ -43,7 +43,8 @@ export default function UserLogin() {
                     localStorage.setItem("userRole", 'physician')
                     localStorage.setItem("token", result.access_token);
                     localStorage.setItem("tenantId", result.tenantId);
-                    localStorage.setItem("userEmail", result.userEmail);
+                    localStorage.setItem("userId", result.userEmail);
+                    localStorage.setItem("orgId", 'intel');
                     router.push("/physician/dashboard");
                     notification.success({
                         message: "Login Success"

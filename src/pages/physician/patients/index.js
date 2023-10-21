@@ -66,7 +66,10 @@ export default function Patient() {
   const [listening, setListening] = useState(false);
 
   const [patinetList, setPatinetList] = useState([]);
+  const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState('');
+  const [localOrgId, setLocalOrgId] = useState('');
+  const [localUserId, setLocalUserId] = useState('');
 
 
   const statusMessage = {
@@ -82,7 +85,11 @@ export default function Patient() {
 
   useEffect(() => {
     var tenId= localStorage.getItem("tenantId");
+    var uId= localStorage.getItem("userId");
+    var orgId= localStorage.getItem("orgId");
     setTenantId(tenId);
+    setLocalOrgId(orgId);
+    setLocalUserId(uId);
     console.log(patientStoreDetails)
     const datas = [
       {
@@ -153,11 +160,14 @@ export default function Patient() {
 	const getAllList = async () => {
 		const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=logesh056");
 		if (response.data) {
-			const records = response.data;
-      setPatinetList(response.data);	
-      setTimeout(() => {
-        getAllList();
-      }, 5000);	
+      const records = response.data.slice(firstIndex, lastIndex);
+      setPatinetList(records);	
+			setPatinetListAll(response.data);
+      // setTimeout(() => {
+      //  setCanPreviousPage(false);
+      //   setCanNextPage(true);
+      //   getAllList();
+      // }, 5000);	
 		}
 	}
 
@@ -190,10 +200,11 @@ export default function Patient() {
       const formData = new FormData();
       formData.append("file", selectFile);
       formData.append("dos", inputValue.year);
-      formData.append("orgid", 'logesh056');
+      formData.append("orgid", localOrgId);
       formData.append("tenantid", tenantId);
-      formData.append("userid", 'logesh056');
+      formData.append("userid", localUserId);
       formData.append("patientid",inputValue.patientId);
+      formData.append("patientName",inputValue.name);
       const headers = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -230,39 +241,51 @@ export default function Patient() {
 
 
   function gotoPage(number) {
-    if(canMaxPage > number){
-    setCanNextPage(true);
-    setPageIndex(number);
-    if (number > 0) {
-      setCanPreviousPage(true);
-    } else {
-      setCanPreviousPage(false);
-    }
-    setPageCount(number);
-  }else{
-    setCanNextPage(false);
-  }
-  }
-  function nextPage(number) {
-    if(canMaxPage > number){
-    setPageCount(number);
-    setPageIndex(number);
-    setCanPreviousPage(true);
-    }else{
-      setCanNextPage(false);
-    }
-  }
+		if (canMaxPage > number) {
+			setCanNextPage(true);
+			setPageIndex(number);
+			if (number > 0) {
+				setCanPreviousPage(true);
+			} else {
+				setCanPreviousPage(false);
+			}
+			setPageCount(number);
+		} else {
+			setCanNextPage(false);
+		}
+		var start = number * 10;
+		var end = start + 10;
+		const records = patinetListAll.slice(start, end);
+		setPatinetList(records);
+	}
+	function nextPage(number) {
+		if (canMaxPage > number) {
+			setPageCount(number);
+			setPageIndex(number);
+			setCanPreviousPage(true);
+		} else {
+			setCanNextPage(false);
+		}
+		var start = number * 10;
+		var end = start + 10;
+		const records = patinetListAll.slice(start, end);
+		setPatinetList(records);
+	}
 
-  function previousPage(number) {
-    setCanNextPage(true);
-    setPageIndex(number);
-    if (number > 0) {
-      setCanPreviousPage(true);
-    } else {
-      setCanPreviousPage(false);
-    }
-    setPageCount(number);
-  }
+	function previousPage(number) {
+		setCanNextPage(true);
+		setPageIndex(number);
+		if (number > 0) {
+			setCanPreviousPage(true);
+		} else {
+			setCanPreviousPage(false);
+		}
+		setPageCount(number);
+		var start = number * 10;
+		var end = start + 10;
+		const records = patinetListAll.slice(start, end);
+		setPatinetList(records);
+	}
 
 
   const subscribe = async () => {
@@ -374,10 +397,10 @@ export default function Patient() {
                                   <span>{item.patientId}</span>
                                 </td>
                                 <td>
-                                  <span>{item.filename}</span>
+                                  <span>Arun Kumar</span>
                                 </td>
                                 <td>
-                                  <span>{item.name}</span>
+                                  <span>01-01-20 FLORENCE MAKHANI PIETZ</span>
                                 </td>
                                 <td className='patient-status'>
                                   {item.computing == 2 ?
