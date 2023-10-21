@@ -562,7 +562,7 @@ export default function PatientDetails() {
                                             <div className="col-xl-1 comboclose">
 
                                               <Popconfirm
-                                                title="You want move to InValid?"
+                                                title="You want move to Invalid?"
                                                 description={item.diseaseName}
                                                 onConfirm={confirmComboInvalid}
                                                 placement="leftTop"
@@ -607,7 +607,7 @@ export default function PatientDetails() {
                                                 <div className="col-xl-1 comboclose">
 
                                                   <Popconfirm
-                                                    title="You want move to InValid?"
+                                                    title="You want move to Valid?"
                                                     description={item.diseaseName}
                                                     onConfirm={confirmComboValid}
                                                     placement="leftTop"
@@ -645,11 +645,11 @@ export default function PatientDetails() {
                                           <label>Disease Name</label>
                                         </div>
                                         <div className="col-xl-2">
-                                          <label>Evaluation</label>
-                                        </div>
-                                        <div className="col-xl-2">
                                           <label>Monitor</label>
                                         </div>
+                                        <div className="col-xl-2">
+                                          <label>Evaluation</label>
+                                        </div>                                      
                                         <div className="col-xl-2">
                                           <label>Assessment</label>
                                         </div>
@@ -672,14 +672,14 @@ export default function PatientDetails() {
                                             </div>
                                             <div className="col-xl-2">
                                               <span>{item.diseaseName}</span>
+                                            </div>                                           
+                                            <div className="col-xl-2 d-grid">
+                                              <span>{item.monitor}</span>
+                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span>{item.evaluate}</span>
                                               <Badge className="badge-meat" bg="success badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                              <span>{item.monitor}</span>
-                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span>{item.assessment}</span>
@@ -696,7 +696,7 @@ export default function PatientDetails() {
                                            </span>:
                                             <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
                                               <Popconfirm
-                                                title="You want move to InValid?"
+                                                title="You want move to Invalid?"
                                                 description={item.diseaseName}
                                                 onConfirm={confirmInvalidMeat}
                                                 placement="leftTop"
@@ -737,13 +737,13 @@ export default function PatientDetails() {
                                                   <span>{item.diseaseName}</span>
                                                 </div>
                                                 <div className="col-xl-2 d-grid">
-                                                  <span>{item.evaluate}</span>
-                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
-                                                </div>
-                                                <div className="col-xl-2 d-grid">
                                                   <span>{item.monitor}</span>
                                                   <Badge className="badge-meat" bg="success badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
                                                 </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  <span>{item.evaluate}</span>
+                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
+                                                </div>                                               
                                                 <div className="col-xl-2 d-grid">
                                                   <span>{item.assessment}</span>
                                                   <Badge className="badge-meat" bg="success badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
@@ -756,7 +756,7 @@ export default function PatientDetails() {
 
 
                                                   <Popconfirm
-                                                    title="You want move to InValid?"
+                                                    title="You want move to Valid?"
                                                     description={item.diseaseName}
                                                     onConfirm={confirmValidMeat}
                                                     placement="leftTop"
