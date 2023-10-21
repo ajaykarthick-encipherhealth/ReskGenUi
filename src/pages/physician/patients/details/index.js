@@ -660,7 +660,8 @@ export default function PatientDetails() {
                                     </div>
                                     {meatCriteriaList?.map((item) => {
                                       return (
-                                        <div className="card meat-card">
+                                        <div className={item.isMeatCriteriaPresent === true
+                                        ? "card meat-card" : "card meat-card-false"}>
 
                                           <div className="row">
                                             <div className="col-xl-1">
@@ -924,7 +925,7 @@ export default function PatientDetails() {
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="card">
+                                    <div className="">
                                      
                                      <div className="compete-card"> 
                                      <Button

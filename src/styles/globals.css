@@ -37428,6 +37428,11 @@ i.ant-spin-dot-item {
   padding: 25px;
   margin-bottom: 10px;
   border:1px solid #cdd2e3 !important;
+}
+.meat-card-false {
+  padding: 25px;
+  margin-bottom: 10px;
+  border:1px solid red !important;
   /* background: #241571 !important; */
 }
 .meat-head-card label{

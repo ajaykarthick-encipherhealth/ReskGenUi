@@ -15,11 +15,12 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight,faSpinner,faCheck ,faBan} from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faSpinner, faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
-import { patientDetails,
+import {
+  patientDetails,
 } from '../../../store/actions/AuthActions';
 import { notification } from 'antd';
 
@@ -53,7 +54,7 @@ export default function Patient() {
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
-    patientId:"",
+    patientId: "",
   });
 
   const [pageCount, setPageCount] = useState(0);
@@ -86,9 +87,9 @@ export default function Patient() {
 
 
   useEffect(() => {
-    var tenId= localStorage.getItem("tenantId");
-    var uId= localStorage.getItem("userId");
-    var orgId= localStorage.getItem("orgId");
+    var tenId = localStorage.getItem("tenantId");
+    var uId = localStorage.getItem("userId");
+    var orgId = localStorage.getItem("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
@@ -158,21 +159,21 @@ export default function Patient() {
     // fetchData();
   }, []);
 
-  
-	const getAllList = async (uId) => {
+
+  const getAllList = async (uId) => {
     // logesh056
-		const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=logesh056");
-		if (response.data) {
+    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=logesh056");
+    if (response.data) {
       const records = response.data.slice(firstIndex, lastIndex);
-      setPatinetList(records);	
-			setPatinetListAll(response.data);
+      setPatinetList(records);
+      setPatinetListAll(response.data);
       // setTimeout(() => {
       //  setCanPreviousPage(false);
       //   setCanNextPage(true);
       //   getAllList();
       // }, 5000);	
-		}
-	}
+    }
+  }
 
 
 
@@ -206,8 +207,8 @@ export default function Patient() {
       formData.append("orgid", localOrgId);
       formData.append("tenantid", tenantId);
       formData.append("userid", localUserId);
-      formData.append("patientid",inputValue.patientId);
-      formData.append("patientName",inputValue.name);
+      formData.append("patientid", inputValue.patientId);
+      formData.append("patientName", inputValue.name);
       const headers = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -237,64 +238,64 @@ export default function Patient() {
 
 
   const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));	
-    if(data.computing == 2){
-    navigate.push('/physician/patients/details');
-    }else{
-             notification.warning({
-                message: "Patient file not processed Please wait",
-            });
+    dispatch(patientDetails(data));
+    if (data.computing == 2) {
+      navigate.push('/physician/patients/details');
+    } else {
+      notification.warning({
+        message: data.patientId + " file not processed Please wait",
+      });
     }
 
   };
 
 
   function gotoPage(number) {
-		if (canMaxPage > number) {
-			setCanNextPage(true);
-			setPageIndex(number);
-			if (number > 0) {
-				setCanPreviousPage(true);
-			} else {
-				setCanPreviousPage(false);
-			}
-			setPageCount(number);
-		} else {
-			setCanNextPage(false);
-		}
-		var start = number * 10;
-		var end = start + 10;
-		const records = patinetListAll.slice(start, end);
-		setPatinetList(records);
-	}
-	function nextPage(number) {
-		if (canMaxPage > number) {
-			setPageCount(number);
-			setPageIndex(number);
-			setCanPreviousPage(true);
-		} else {
-			setCanNextPage(false);
-		}
-		var start = number * 10;
-		var end = start + 10;
-		const records = patinetListAll.slice(start, end);
-		setPatinetList(records);
-	}
+    if (canMaxPage > number) {
+      setCanNextPage(true);
+      setPageIndex(number);
+      if (number > 0) {
+        setCanPreviousPage(true);
+      } else {
+        setCanPreviousPage(false);
+      }
+      setPageCount(number);
+    } else {
+      setCanNextPage(false);
+    }
+    var start = number * 10;
+    var end = start + 10;
+    const records = patinetListAll.slice(start, end);
+    setPatinetList(records);
+  }
+  function nextPage(number) {
+    if (canMaxPage > number) {
+      setPageCount(number);
+      setPageIndex(number);
+      setCanPreviousPage(true);
+    } else {
+      setCanNextPage(false);
+    }
+    var start = number * 10;
+    var end = start + 10;
+    const records = patinetListAll.slice(start, end);
+    setPatinetList(records);
+  }
 
-	function previousPage(number) {
-		setCanNextPage(true);
-		setPageIndex(number);
-		if (number > 0) {
-			setCanPreviousPage(true);
-		} else {
-			setCanPreviousPage(false);
-		}
-		setPageCount(number);
-		var start = number * 10;
-		var end = start + 10;
-		const records = patinetListAll.slice(start, end);
-		setPatinetList(records);
-	}
+  function previousPage(number) {
+    setCanNextPage(true);
+    setPageIndex(number);
+    if (number > 0) {
+      setCanPreviousPage(true);
+    } else {
+      setCanPreviousPage(false);
+    }
+    setPageCount(number);
+    var start = number * 10;
+    var end = start + 10;
+    const records = patinetListAll.slice(start, end);
+    setPatinetList(records);
+  }
 
 
   const subscribe = async () => {
@@ -304,10 +305,10 @@ export default function Patient() {
       const resoureUrl = "https://hcc.encipherhealth.com/secure/dbservice/events?userid=12345";
       const events = new EventSourcePolyfill("https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09", {
         headers: {
-          "Authorization": `Bearer `+ accessToken,
+          "Authorization": `Bearer ` + accessToken,
           'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive'
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive'
         },
       })
 
@@ -341,7 +342,7 @@ export default function Patient() {
 
   const fetchDataApi = async () => {
     return await axios.get(ENDPOINTS.apiEndoint + "aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09");
-     
+
   };
 
 
@@ -361,7 +362,7 @@ export default function Patient() {
 
               <div className="col-xl-12">
                 <div className="card">
-                {/* <div>
+                  {/* <div>
       <p>{listening ? statusMessage.subscribed : statusMessage.unsubscribed}</p>
       <p>{JSON.stringify(process)}</p>
       <button onClick={subscribe}>
@@ -413,22 +414,22 @@ export default function Patient() {
                                 </td>
                                 <td className='patient-status'>
                                   {item.computing == 2 ?
-                                  
-                                  // <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  />
-                                  <span className={`badge badge-success`}>
-                                 Processed
-                                  <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck}  />
-                                  </span>
-                                  :  item.computing == 1 ?
-                                  <span className={`badge badge-primary`}>
-                                 Processing
-                                 <Spin className='ml-2 ms-1 text-white' size="small" />
-                                 </span>
-                                   :
-                                   <span className={`badge badge-secondary`}>
-                                   Not Started
-                                   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan}  />
-                                   </span>
+
+                                    // <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  />
+                                    <span className={`badge badge-success`}>
+                                      Processed
+                                      <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
+                                    </span>
+                                    : item.computing == 1 ?
+                                      <span className={`badge badge-primary`}>
+                                        Processing
+                                        <Spin className='ml-2 ms-1 text-white' size="small" />
+                                      </span>
+                                      :
+                                      <span className={`badge badge-secondary`}>
+                                        Not Started
+                                        <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
+                                      </span>
                                   }
                                 </td>
                                 <td>
@@ -461,7 +462,7 @@ export default function Patient() {
                         <div className="text-center mb-3">
                           <div className="filter-pagination  mt-3">
                             <button className="previous-button" onClick={() => gotoPage(pageCount - 1)} disabled={!canPreviousPage}>
-                              <FontAwesomeIcon icon={faAngleLeft}  />
+                              <FontAwesomeIcon icon={faAngleLeft} />
                             </button>
                             <button className="previous-button" onClick={() => previousPage(pageCount - 1)} disabled={!canPreviousPage}>
                               Previous
@@ -501,7 +502,7 @@ export default function Patient() {
             <div className="container-fluid">
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <div className="row">
-                <div className="col-xl-12 mb-3">
+                  <div className="col-xl-12 mb-3">
                     <Form.Label>
                       Patient Name <span className="text-danger">*</span>{" "}
                     </Form.Label>
