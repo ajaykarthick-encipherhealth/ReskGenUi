@@ -37,10 +37,12 @@ export default function PatientDetails() {
   const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
   const [selectCode, setSelectCode] = useState('');
   const [dosYear, setDosYear] = useState('');
+  const [localOrgId, setLocalOrgId] = useState('');
 
 
   useEffect(() => {
-    console.log(storePatientDetails)
+    var orgId= localStorage.getItem("orgId");
+    setLocalOrgId(orgId);
     getPatientDetails();
 
   }, []);
@@ -53,7 +55,7 @@ export default function PatientDetails() {
     data.patientid = '12345';
     data.orgid = '5678';
     const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
-    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${storePatientDetails.patientId}&orgid=${storePatientDetails.patientId}`);
+    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${storePatientDetails.patientId}&orgid=${storePatientDetails.localOrgId}`);
 
     console.log(response.data);
     if (response.data) {
