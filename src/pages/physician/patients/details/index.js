@@ -46,6 +46,7 @@ export default function PatientDetails() {
   const [selectMeatFileId, setSelectMeatFileId] = useState('');
   const [selectMeatName, setSelectMeatName] = useState('');
   const [sectionList, setSectionList] = useState([]);
+  const [patientDocumentResult, setPatientDocumentResult] = useState([]);
 
 
 
@@ -76,6 +77,7 @@ export default function PatientDetails() {
       var meatCri = '';
       var dosYearArr = [];
       setSelectMeatFileId( response.data.fileId)
+      setPatientDocumentResult(result);
 
 
       for (var key in response.data.validDisease) {
@@ -335,19 +337,19 @@ export default function PatientDetails() {
                         <div className="row">
                           <div className='col-xl-3 col-sm-12'>
                             <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
-                            <h6 className='ageDtails'>{storePatientDetails.patientName}</h6>
+                            <h6 className='ageDtails'>{patientDocumentResult.patientName}</h6>
                           </div>
                           <div className='col-xl-2 col-sm-12'>
                             <i>{SVGICON.AgeIcon}</i> <label>Age</label>
-                            <h6 className='ageDtails'>{storePatientDetails.age}</h6>
+                            <h6 className='ageDtails'>{patientDocumentResult.age}</h6>
                           </div>
                           <div className='col-xl-3 col-sm-12'>
                             <i>{SVGICON.GenerIcon}</i><label>Gender</label>
-                            <h6 className='ageDtails'>{storePatientDetails.gender}</h6>
+                            <h6 className='ageDtails'>{patientDocumentResult.gender}</h6>
                           </div>
                           <div className='col-xl-4 col-sm-12'>
                             <i>{SVGICON.DatebirthIcon}</i> <label>Date of birth</label>
-                            <h6 className='ageDtails'>{storePatientDetails.dob}</h6>
+                            <h6 className='ageDtails'>{patientDocumentResult.dob}</h6>
                           </div>
 
                         </div>
@@ -714,19 +716,19 @@ export default function PatientDetails() {
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.monitor}</span>
-                                              <Badge className="badge-meat cr-pointer" bg="third badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : "primary badge-circle mt-2"}  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.evaluate}</span>
-                                              <Badge className="badge-meat cr-pointer" bg="third badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : "primary badge-circle mt-2"}  onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.assessment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg="third badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : "primary badge-circle mt-2"}  onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.treatment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg="third badge-circle mt-2"  onClick={() => handleOpenModal(item.monitorCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : "primary badge-circle mt-2"}  onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-1 meatclose">
                                               {/* {item.isMeatCriteriaPresent === true ?

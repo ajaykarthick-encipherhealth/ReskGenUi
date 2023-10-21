@@ -35226,6 +35226,7 @@
 .logout-name{
 margin-top: -3px;
 margin-left: 2px !important;
+color: #fff !important;
 }
 .content-body .container-fluid{
   padding-top: 103px !important;
@@ -36675,11 +36676,11 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
   }
   .valid-disease h5{
     font-size: 14px !important;
-    color: #888888 !important;
+    color: #000 !important;
   }
   .invalid-disease h5{
     font-size: 14px !important;
-    color: #888888 !important;
+    color: #000 !important;
   }
   .valid-text{
     border: 0.5px solid #FFA500;
@@ -36814,7 +36815,7 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
     align-items: center;
 }
 .valid-card h5 ,h6{
-    color: #888888 !important;
+    color: #000 !important;
     font-weight:normal !important;
     font-size: 14px !important;
 }
@@ -37470,6 +37471,9 @@ span.ant-progress-text {
   color: #000;
   font-size: 14px !important;
  }
+ .combo-card span  {
+  color: #000 !important;
+ }
 .comboclose{
   display: flex !important;
   justify-content: center;
@@ -37516,9 +37520,11 @@ span.badge-meat.badge {
 }
 .font-bold{
   font-weight: bold !important;
+  color:#000;
 }
 span.meat-name-details{
   height: 60px;
+  color: #000;
 }
 
 .bg-third {
