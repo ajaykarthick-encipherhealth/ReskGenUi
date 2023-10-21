@@ -42,20 +42,16 @@ export default function PatientDetails() {
 
   useEffect(() => {
     var orgId= localStorage.getItem("orgId");
+    console.log(orgId)
     setLocalOrgId(orgId);
-    getPatientDetails();
+    getPatientDetails(orgId);
 
   }, []);
 
-  const getPatientDetails = async () => {
-    const formData = new FormData();
-    formData.append("patientid", "12345");
-    formData.append("orgid", "5678");
-    var data = {};
-    data.patientid = '12345';
-    data.orgid = '5678';
-    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
-    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${storePatientDetails.patientId}&orgid=${storePatientDetails.localOrgId}`);
+  const getPatientDetails = async (orgId) => {
+
+    // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${storePatientDetails.patientId}&orgid=${orgId}`);
 
     console.log(response.data);
     if (response.data) {
