@@ -9,7 +9,7 @@ import ENDPOINTS from '../utility/enpoints';
     let _list = ['/securityservice/auth/admin/login','/securityservice/auth/organization/create','/securityservice/auth/login']
     const currentUrl = config?.url?.split('/secure')[1]
 
-    console.log(currentUrl)
+    // console.log(currentUrl)
     if(!_list.includes(currentUrl)) {
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;    }
     return config;

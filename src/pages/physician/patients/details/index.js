@@ -14,6 +14,10 @@ import { Popconfirm } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
 import { Avatar } from "antd";
+import Form from 'react-bootstrap/Form';
+import { Button } from 'react-bootstrap';
+
+
 
 
 
@@ -296,19 +300,19 @@ export default function PatientDetails() {
                         <div className="row">
                           <div className='col-xl-3 col-sm-12'>
                             <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
-                            <h6 className='ageDtails'>ARUN KUMAR</h6>
+                            <h6 className='ageDtails'>{storePatientDetails.patientName}</h6>
                           </div>
                           <div className='col-xl-2 col-sm-12'>
                             <i>{SVGICON.AgeIcon}</i> <label>Age</label>
-                            <h6 className='ageDtails'>45</h6>
+                            <h6 className='ageDtails'>{storePatientDetails.age}</h6>
                           </div>
                           <div className='col-xl-3 col-sm-12'>
                             <i>{SVGICON.GenerIcon}</i><label>Gender</label>
-                            <h6 className='ageDtails'>Male</h6>
+                            <h6 className='ageDtails'>{storePatientDetails.gender}</h6>
                           </div>
                           <div className='col-xl-4 col-sm-12'>
                             <i>{SVGICON.DatebirthIcon}</i> <label>Date of birth</label>
-                            <h6 className='ageDtails'>21/09/2025</h6>
+                            <h6 className='ageDtails'>{storePatientDetails.dob}</h6>
                           </div>
 
                         </div>
@@ -389,11 +393,11 @@ export default function PatientDetails() {
                                     Meat Criteria
                                   </Nav.Link>
                                 </Nav.Item>
-                                {/* <Nav.Item as="li" className="nav-item">
+                                <Nav.Item as="li" className="nav-item">
                                   <Nav.Link to="#my-posts" eventKey="RafScore">
-                                  Raf Score
+                                    Raf Score
                                   </Nav.Link>
-                                </Nav.Item> */}
+                                </Nav.Item>
                               </Nav>
                               <Tab.Content>
                                 <Tab.Pane id="my-posts" eventKey="validDiseases">
@@ -775,6 +779,167 @@ export default function PatientDetails() {
                                         })}
                                       </> : null}
                                   </div>
+                                </Tab.Pane>
+                                <Tab.Pane id="my-posts" eventKey="RafScore">
+                                  <div className="my-post-content pt-3">
+                                
+
+                                    <div className="row">
+                                      <div className="col-xl-3">
+                                        {/* <div className="card raf-file-head">
+
+                                          <div className="row">
+                                            <div className="col-xl-12 mb-3 text-center">
+                                              <Button
+                                                className="btn btn-primary btn-sm me-1"
+                                              >
+                                                Uplaod File
+                                              </Button>
+
+                                            </div>
+                                            <div className="col-xl-12 mb-3">
+                                              <Form.Control
+                                                required
+                                                type="file"
+                                                accept="application/pdf,text/plain"
+
+                                              />
+                                            </div>
+                                            <div className="col-xl-12 mb-3">
+                                              <Form.Control
+                                                required
+                                                type="date"
+
+                                              />
+                                            </div>
+                                          </div>
+
+                                        </div> */}
+
+                                      </div>
+                                      <div className="col-xl-12">
+                                        <div className="row">
+                                          <div className="col-xl-6">
+                                            <div className="card">
+                                              <div className="raf-card">
+
+
+                                                <div className="row raf-head text-center">
+                                                  <div className="col-xl-12">
+                                                    <label className="text-white">Summary</label>
+                                                  </div>
+                                                </div>
+                                                <div className="row raf-details">
+                                                  <div className="col-xl-6">
+                                                    <span>Demographic Risk Factor</span>
+                                                  </div>
+                                                  <div className="col-xl-6">
+                                                    <span>0:240</span>
+                                                  </div>
+
+                                                </div>
+
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                          <div className="col-xl-6">
+                                            <div className="card">
+                                              <div className="raf-card">
+                                                <div className="row raf-head">
+                                                  <div className="col-xl-6">
+                                                    <label className="text-white">DX Code</label>
+                                                  </div>
+                                                  <div className="col-xl-6">
+                                                    <label className="text-white">DX Description</label>
+                                                  </div>
+
+                                                </div>
+                                                <div className="row raf-details">
+                                                  <div className="col-xl-6">
+                                                    <span>T82399A</span>
+                                                  </div>
+                                                  <div className="col-xl-6">
+                                                    <span>Other mechanical complication of unspecified vascular grafts, initial encounter</span>
+                                                  </div>
+
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                          <div className="col-xl-6">
+                                            <div className="card">
+                                              <div className="raf-card">
+                                                <div className="row raf-head">
+                                                  <div className="col-xl-6">
+                                                    <label className="text-white">HCC</label>
+                                                  </div>
+                                                  <div className="col-xl-6">
+                                                    <label className="text-white">HCC Description</label>
+                                                  </div>
+
+                                                </div>
+                                                <div className="row raf-details">
+                                                  <div className="col-xl-6">
+                                                    <span>HCC176</span>
+                                                  </div>
+                                                  <div className="col-xl-6">
+                                                    <span>Complications of Specified Implanted Device or Graft</span>
+                                                  </div>
+
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                          <div className="col-xl-6">
+                                            <div className="card">
+                                              <div className="raf-card">
+                                                <div className="row raf-head">
+                                                  <div className="col-xl-4">
+                                                    <label className="text-white">Trumped By</label>
+                                                  </div>
+                                                  <div className="col-xl-4">
+                                                    <label className="text-white">RAF</label>
+                                                  </div>
+                                                  <div className="col-xl-4">
+                                                    <label className="text-white">Monthly Premium</label>
+                                                  </div>
+
+                                                </div>
+                                                <div className="row  raf-details">
+                                                  <div className="col-xl-4">
+                                                    <span>-</span>
+                                                  </div>
+                                                  <div className="col-xl-4">
+                                                    <span>0.761</span>
+                                                  </div>
+                                                  <div className="col-xl-4">
+                                                    <span>$609</span>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="card">
+                                     
+                                     <div className="compete-card"> 
+                                     <Button
+                                               className="btn btn-primary btn-sm me-1"
+                                             >
+                                              Compete
+                                             </Button>
+                                     </div>
+                                    
+                                    
+                                   </div>
+                                  </div>
+
                                 </Tab.Pane>
                               </Tab.Content>
                             </Tab.Container>

@@ -15,7 +15,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight,faSpinner,faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight,faSpinner,faCheck ,faBan} from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
@@ -152,10 +152,12 @@ export default function Patient() {
   
 	const getAllList = async () => {
 		const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=logesh056");
-		console.log(response.data);
 		if (response.data) {
 			const records = response.data;
-      setPatinetList(response.data);		
+      setPatinetList(response.data);	
+      setTimeout(() => {
+        getAllList();
+      }, 5000);	
 		}
 	}
 
@@ -212,6 +214,7 @@ export default function Patient() {
       } else {
         setIsLoading(false);
       }
+      setAddPatient(false);
       getAllList();
     }
 
@@ -376,14 +379,24 @@ export default function Patient() {
                                 <td>
                                   <span>{item.name}</span>
                                 </td>
-                                <td className="td-backcolor">
+                                <td className='patient-status'>
                                   {item.computing == 2 ?
-                                  <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  />
+                                  
+                                  // <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  />
+                                  <span className={`badge badge-success`}>
+                                 Processed
+                                  <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck}  />
                                   </span>
                                   :  item.computing == 1 ?
-                                   <span className='hold'>Processing <Spin className='ml-2 text-white' size="small" /></span>
+                                  <span className={`badge badge-primary`}>
+                                 Processing
+                                 <Spin className='ml-2 ms-1 text-white' size="small" />
+                                 </span>
                                    :
-                                   <span className='hold'>Not Started</span>
+                                   <span className={`badge badge-secondary`}>
+                                   Not Started
+                                   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan}  />
+                                   </span>
                                   }
                                 </td>
                                 <td>

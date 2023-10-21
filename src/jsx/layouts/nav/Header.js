@@ -34,7 +34,7 @@ const Header = ({ onNote }) => {
 											<Image src={IMAGES.profileImage}/>
 											<div>
 											<span className="text-dark-50 ms-2 text-white header-name font-weight-bolder font-size-base d-flex mr-3">Admin</span>
-											<Link href="/login" className="ms-2 d-flex">
+											<Link href="/userlogin" className="ms-2 d-flex">
 												{SVGICON.Logout}{" "}
 												<h6 className="logout-name">Logout </h6>
 											</Link>

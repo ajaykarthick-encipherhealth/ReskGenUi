@@ -37477,3 +37477,29 @@ span.badge-meat.badge {
   height: 27px;
   width: max-content;
 }
+.raf-card {
+    padding: 20px;
+}
+.raf-head {
+    background: #241571;
+    padding: 10px;
+    border-radius: 10px;
+}
+.raf-details {
+  margin-top: 15px;
+}
+.raf-file-head{
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.compete-card{
+  display: flex;
+  justify-content: end;
+  padding: 10px;
+
+}
+.patient-status > .badge{
+  width: 150px !important;
+}
