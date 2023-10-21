@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cogentai-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cogentai-ui
+  template:
+    metadata:
+      labels:
+        app: cogentai-ui
+    spec:
+      containers:
+        - name: cogentai-validator
+          image: hccregistry.azurecr.io/cogentai-ui
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: my-volume
+              mountPath: /mnt/data
+      volumes:
+      - name: my-volume
+        persistentVolumeClaim:
+              claimName: my-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cogentai-ui
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+  selector:
+    app: cogentai-ui
