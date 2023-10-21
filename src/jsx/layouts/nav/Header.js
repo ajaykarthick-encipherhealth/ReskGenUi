@@ -22,7 +22,7 @@ const Header = ({ onNote }) => {
         <nav className="navbar navbar-expand">
           	<div className="collapse navbar-collapse justify-content-between">
 				<div className="header-logo">	
-				  <h3 className="text-white">Logo</h3>				
+				<Image src={IMAGES.hccLogo}/>				
 				</div>
 				<div className="header-right d-flex align-items-center">				
 					<ul className="navbar-nav ">			

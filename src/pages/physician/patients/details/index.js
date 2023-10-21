@@ -24,6 +24,8 @@ import { Button } from 'react-bootstrap';
 export default function PatientDetails() {
   const sideMenu = useSelector(state => state.sideMenu);
   const storePatientDetails = useSelector(state => state.patientDetails.patientDetails);
+  const storeDetails = useSelector(state => state);
+
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [isLoading, setIsLoading] = useState(false);
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -41,8 +43,8 @@ export default function PatientDetails() {
 
 
   useEffect(() => {
-    var orgId= localStorage.getItem("orgId");
-    console.log(orgId)
+    var orgId = localStorage.getItem("orgId");
+    console.log(storeDetails)
     setLocalOrgId(orgId);
     getPatientDetails(orgId);
 
@@ -298,19 +300,19 @@ export default function PatientDetails() {
                         <div className="row">
                           <div className='col-xl-3 col-sm-12'>
                             <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
-                            {/* <h6 className='ageDtails'>{storePatientDetails.patientName}</h6> */}
+                            <h6 className='ageDtails'>{storePatientDetails.patientName}</h6>
                           </div>
                           <div className='col-xl-2 col-sm-12'>
                             <i>{SVGICON.AgeIcon}</i> <label>Age</label>
-                            {/* <h6 className='ageDtails'>{storePatientDetails.age}</h6> */}
+                            <h6 className='ageDtails'>{storePatientDetails.age}</h6>
                           </div>
                           <div className='col-xl-3 col-sm-12'>
                             <i>{SVGICON.GenerIcon}</i><label>Gender</label>
-                            {/* <h6 className='ageDtails'>{storePatientDetails.gender}</h6> */}
+                            <h6 className='ageDtails'>{storePatientDetails.gender}</h6>
                           </div>
                           <div className='col-xl-4 col-sm-12'>
                             <i>{SVGICON.DatebirthIcon}</i> <label>Date of birth</label>
-                            {/* <h6 className='ageDtails'>{storePatientDetails.dob}</h6> */}
+                            <h6 className='ageDtails'>{storePatientDetails.dob}</h6>
                           </div>
 
                         </div>
@@ -347,7 +349,7 @@ export default function PatientDetails() {
                       </div>
                     </div>
                   </div>
-                  {/* <div className="col-xl-6">
+                  {/* <div className="col-xl-5">
                 <div className="card">
                   <div className="card-body p-0">
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -393,7 +395,12 @@ export default function PatientDetails() {
                                 </Nav.Item>
                                 <Nav.Item as="li" className="nav-item">
                                   <Nav.Link to="#my-posts" eventKey="RafScore">
-                                    Raf Score
+                                    RAF Score
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link to="#my-posts" eventKey="file">
+                                    File
                                   </Nav.Link>
                                 </Nav.Item>
                               </Nav>
@@ -421,7 +428,7 @@ export default function PatientDetails() {
                                               <li>
                                                 <div className="timeline-panel valid-disease">
                                                   <div className="media-body">
-                                                    <h5 className="mb-1">
+                                                    <h5 className="mb-1" >
                                                       {data.name}
                                                     </h5>
                                                   </div>
@@ -485,7 +492,7 @@ export default function PatientDetails() {
                                                     <div className="icon-box  bg-danger-light me-1">
                                                       <FontAwesomeIcon
                                                         icon={faCheck}
-                                                        style={{ color: "red" }}
+                                                        style={{ color: "orange" }}
                                                       />
                                                     </div>
                                                   </Popconfirm>
@@ -547,10 +554,10 @@ export default function PatientDetails() {
 
                                           <div className="row">
                                             <div className="col-xl-3">
-                                              <span>{item.diagnosisCodeCombo}</span>
+                                              <span className="font-bold">{item.diagnosisCodeCombo}</span>
                                             </div>
                                             <div className="col-xl-3">
-                                              <span>{item.addOnCode}</span>
+                                              <span className="font-bold">{item.addOnCode}</span>
                                             </div>
                                             <div className="col-xl-5">
                                               <span>{item.diseaseName}</span>
@@ -592,10 +599,10 @@ export default function PatientDetails() {
                                             <div className="card combo-card">
                                               <div className="row">
                                                 <div className="col-xl-3">
-                                                  <span>{item.diagnosisCodeCombo}</span>
+                                                  <span className="font-bold">{item.diagnosisCodeCombo}</span>
                                                 </div>
                                                 <div className="col-xl-3">
-                                                  <span>{item.addOnCode}</span>
+                                                  <span className="font-bold">{item.addOnCode}</span>
                                                 </div>
                                                 <div className="col-xl-5">
                                                   <span>{item.diseaseName}</span>
@@ -645,7 +652,7 @@ export default function PatientDetails() {
                                         </div>
                                         <div className="col-xl-2">
                                           <label>Evaluation</label>
-                                        </div>                                      
+                                        </div>
                                         <div className="col-xl-2">
                                           <label>Assessment</label>
                                         </div>
@@ -661,29 +668,29 @@ export default function PatientDetails() {
                                     {meatCriteriaList?.map((item) => {
                                       return (
                                         <div className={item.isMeatCriteriaPresent === true
-                                        ? "card meat-card" : "card meat-card-false"}>
+                                          ? "card meat-card" : "card meat-card-false"}>
 
                                           <div className="row">
                                             <div className="col-xl-1">
-                                              <span>{item.diagnosisCode}</span>
+                                              <span className="font-bold">{item.diagnosisCode}</span>
                                             </div>
                                             <div className="col-xl-2">
-                                              <span>{item.diseaseName}</span>
-                                            </div>                                           
-                                            <div className="col-xl-2 d-grid">
-                                              <span>{item.monitor}</span>
-                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
+                                              <span className="meat-name-details">{item.diseaseName}</span>
                                             </div>
                                             <div className="col-xl-2 d-grid">
-                                              <span>{item.evaluate}</span>
-                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
+                                              <span className="meat-name-details">{item.monitor}</span>
+                                              <Badge className="badge-meat" bg="secondary badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
-                                              <span>{item.assessment}</span>
-                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
+                                              <span className="meat-name-details">{item.evaluate}</span>
+                                              <Badge className="badge-meat" bg="third badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
-                                              <span>{item.treatment}</span>
+                                              <span className="meat-name-details">{item.assessment}</span>
+                                              <Badge className="badge-meat" bg="warning badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
+                                            </div>
+                                            <div className="col-xl-2 d-grid">
+                                              <span className="meat-name-details">{item.treatment}</span>
                                               <Badge className="badge-meat" bg="success badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-1 meatclose">
@@ -728,27 +735,27 @@ export default function PatientDetails() {
 
                                               <div className="row">
                                                 <div className="col-xl-1">
-                                                  <span>{item.diagnosisCode}</span>
+                                                  <span className="font-bold">{item.diagnosisCode}</span>
                                                 </div>
                                                 <div className="col-xl-2">
                                                   <span>{item.diseaseName}</span>
                                                 </div>
                                                 <div className="col-xl-2 d-grid">
-                                                  <span>{item.monitor}</span>
-                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
-                                                </div>
-                                                <div className="col-xl-2 d-grid">
-                                                  <span>{item.evaluate}</span>
-                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
-                                                </div>                                               
-                                                <div className="col-xl-2 d-grid">
-                                                  <span>{item.assessment}</span>
-                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
-                                                </div>
-                                                <div className="col-xl-2 d-grid">
-                                                  <span>{item.treatment}</span>
-                                                  <Badge className="badge-meat" bg="success badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
-                                                </div>
+                                              <span className="meat-name-details">{item.monitor}</span>
+                                              <Badge className="badge-meat" bg="secondary badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
+                                            </div>
+                                            <div className="col-xl-2 d-grid">
+                                              <span className="meat-name-details">{item.evaluate}</span>
+                                              <Badge className="badge-meat" bg="third badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
+                                            </div>
+                                            <div className="col-xl-2 d-grid">
+                                              <span className="meat-name-details">{item.assessment}</span>
+                                              <Badge className="badge-meat" bg="warning badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
+                                            </div>
+                                            <div className="col-xl-2 d-grid">
+                                              <span className="meat-name-details">{item.treatment}</span>
+                                              <Badge className="badge-meat" bg="success badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
+                                            </div>
                                                 <div className="col-xl-1 meatclose">
 
 
@@ -781,7 +788,7 @@ export default function PatientDetails() {
                                 </Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="RafScore">
                                   <div className="my-post-content pt-3">
-                                
+
 
                                     <div className="row">
                                       <div className="col-xl-3">
@@ -926,17 +933,42 @@ export default function PatientDetails() {
                                       </div>
                                     </div>
                                     <div className="">
-                                     
-                                     <div className="compete-card"> 
-                                     <Button
-                                               className="btn btn-primary btn-sm me-1"
-                                             >
-                                              Compete
-                                             </Button>
-                                     </div>
-                                    
-                                    
-                                   </div>
+
+                                      <div className="compete-card">
+                                        <Button
+                                          className="btn btn-primary btn-sm me-1"
+                                        >
+                                          Compete
+                                        </Button>
+                                      </div>
+
+
+                                    </div>
+                                  </div>
+
+                                </Tab.Pane>
+                                <Tab.Pane id="my-posts" eventKey="file">
+                                  <div className="my-post-content pt-3">
+                                    <div className="card">
+                                      <div className="card-body p-0">
+                                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                                          <div
+                                            style={{
+                                              height: "600px",
+                                              maxWidth: "1300px",
+                                              marginLeft: "auto",
+                                              marginRight: "auto",
+                                            }}
+                                          >
+                                            {" "}
+                                            <Viewer
+                                              fileUrl={selectFileURL}
+                                              plugins={[defaultLayoutPluginInstance]}
+                                            />
+                                          </div>
+                                        </Worker>
+                                      </div>
+                                    </div>
                                   </div>
 
                                 </Tab.Pane>

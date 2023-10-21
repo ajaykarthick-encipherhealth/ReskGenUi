@@ -5,6 +5,9 @@ import axios from '../utility/axiosConfig';
 import { useRouter } from 'next/router';
 import LoginBack from '../images/logo/login-back.jpg';
 import { notification } from 'antd';
+import Image from 'next/image';
+import { IMAGES } from "../jsx/constant/theme";
+
 
 
 
@@ -71,7 +74,7 @@ export default function UserLogin() {
                         <div className="account-info-area"  style={{backgroundImage: "url("+ LoginBack +")"}}>
                             <div className="login-content">
                                 <p className="sub-title"></p>
-                                <h1 className="title">Logo</h1>
+                                <Image className='login-logo' src={IMAGES.hccLogo}/>
                             </div>
                         </div>
                     </div>

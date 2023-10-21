@@ -23,6 +23,10 @@ const initialState = {
     // count : false, 
 };
 
+const initialStatePatient = {
+    patientDetails: {},
+};
+
 export function AuthReducer(state = initialState, action) {
     if (action.type === SIGNUP_CONFIRMED_ACTION) {
         return {
@@ -95,7 +99,7 @@ export function AuthReducer(state = initialState, action) {
     // }
     return state;
 }
-export function PatientStore(state = initialState, action) {   
+export function PatientStore(state = initialStatePatient, action) {   
         
     if (action.type === PATIENT_DETAILS) {
         return {

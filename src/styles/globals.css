@@ -35209,9 +35209,15 @@
     padding-left: 0 !important;
 }
 .header-logo{
-    padding-left: 55px;
+    /* padding-left: 55px; */
     text-align: center;
-    padding-top: 8px ;
+    /* padding-top: 8px ; */
+}
+.header-logo img{
+  width: 100px;
+  height: 70px;
+  background: #fff;
+  border-radius: 9px 0 0 9px;
 }
 .deznav{
     border-radius: 10px !important;
@@ -37508,3 +37514,21 @@ span.badge-meat.badge {
 .patient-status > .badge{
   width: 150px !important;
 }
+.font-bold{
+  font-weight: bold !important;
+}
+span.meat-name-details{
+  height: 60px;
+}
+
+.bg-third {
+  background-color: #c0b3e5 !important;
+}
+
+img.login-logo {
+    width: 300px;
+    height: 300px;
+}
+
+
+
