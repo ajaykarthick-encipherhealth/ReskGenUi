@@ -13,7 +13,7 @@ spec:
         app: cogentai-ui
     spec:
       containers:
-        - name: cogentai-validator
+        - name: cogentai-ui
           image: hccregistry.azurecr.io/cogentai-ui
           ports:
             - containerPort: 3000
