@@ -15,7 +15,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faTrash, faPencilAlt , faCheck, faBan,faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faClose, faPencilAlt , faCheck, faBan,faAdd } from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
@@ -410,13 +410,14 @@ export default function Patient() {
                                         Processing
                                         <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
                                       </span>:
-                                      // item.computing == 3 ?
-                                      // <span className={`badge badge-danger`}>
-                                      //   Failed
-                                      //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
-                                      // </span>
+                                      item.computing == 3 ?
+                                      <span className={`badge badge-danger`}>
+                                        Failed
+                                        <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
+                                      </span>
                                       
-                                      // :
+                                      
+                                       :
                                       <span className={`badge badge-secondary`}>
                                         Not Started
                                         <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
