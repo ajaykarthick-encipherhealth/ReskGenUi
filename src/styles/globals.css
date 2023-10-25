@@ -37552,5 +37552,16 @@ img.login-logo {
 nextjs-portal {
   display: none;
 }
+.hegiht10{
+  height: 10px !important;
+}
+.action-btn{
+  height: 10px !important;
+  min-height: 25px !important;
+  min-width: 25px!important;
+  padding: 0.1175rem!important;
+  width: 1.625rem!important;
+  line-height: 10px!important;
+}
 
 

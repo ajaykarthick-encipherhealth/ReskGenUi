@@ -10,7 +10,9 @@ import { useSelector } from "react-redux";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { Switch } from 'antd';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import moment from 'moment';
+import Swal from 'sweetalert2';
 
 
 
@@ -56,8 +58,8 @@ const UserList = () => {
 		emailId: '',
 		password: '',
 		// role: '',
-		userName:'',
-		mobileNumber:''
+		userName: '',
+		mobileNumber: ''
 	});
 
 
@@ -77,12 +79,12 @@ const UserList = () => {
 		setLocalTenantId(tenId);
 		setLocalUserId(uId);
 		setLocalOrgId(orgId);
-		getAllList(tenId,orgId,pageDataCount,pageLimitCount,'');
+		getAllList(tenId, orgId, pageDataCount, pageLimitCount, '');
 	}, []);
 
 
 
-	const getAllList = async (tenId,orgId,page,limit,status) => {
+	const getAllList = async (tenId, orgId, page, limit, status) => {
 		var apiUrl = `management/admin/getusers?orgId=${orgId}&tenantId=${tenId}&status=${status}&page=${page}&limit=${limit}`;
 		const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
 		console.log(response.data);
@@ -91,6 +93,30 @@ const UserList = () => {
 			setUserList(result.record != null ? result.record : []);
 			setIsDataLoading(false);
 			setIsLoading(false);
+		}
+	}
+	const createUser = async (data) => {
+		setIsLoading(true);
+		const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/admin/getusers/createuser`, data);
+		console.log(response)
+		var result = response.data;
+		if (response?.status == 201) {
+			setAddUser(false);
+			getAllList(tenId, orgId, pageDataCount, pageLimitCount, '');
+		} else {
+			
+		}
+	}
+	const deletUser = async (userId) => {
+		var apiUrl = `management/admin/user?userId=${userId}&orgId=${localOrgId}&tenantId=${localTenantId}`;
+		const response = await axios.delete(ENDPOINTS.apiEndoint + apiUrl);
+		console.log(response.data);
+		var result = response.data;
+		if (response.data) {
+			setUserList(result.record != null ? result.record : []);
+			setIsDataLoading(false);
+			setIsLoading(false);
+			getAllList(tenId, orgId, pageDataCount, pageLimitCount, '');
 		}
 	}
 
@@ -103,7 +129,7 @@ const UserList = () => {
 		const key = e.target.name;
 		const value = e.target.value;
 		setFormData({ ...formData, [key]: value })
-		if(key ==  'role'){
+		if (key == 'role') {
 			setRoleValue([value]);
 		}
 	}
@@ -113,6 +139,7 @@ const UserList = () => {
 		event.preventDefault();
 		if (form.checkValidity() === true) {
 			formData.tenantId = localTenantId;
+			formData.orgId = localOrgId;
 			formData.role = roleValue;
 			console.log(formData)
 			createUser(formData);
@@ -120,22 +147,13 @@ const UserList = () => {
 		setValidated(true);
 
 	};
-	const createUser = async (data) => {
-		setIsLoading(true);
-		const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/admin/getusers/createuser`, data)
-		if (response?.status == 200) {
-			setAddUser(false);
-			getAllList(tenId,orgId,pageDataCount,pageLimitCount,'');
-		} else {
 
-		}
-	}
 	const roleUpdate = async (data) => {
 		setIsLoading(true);
 		const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data)
 		if (response?.status == 200) {
 			setAddUser(false);
-			getAllList(tenId,orgId,pageDataCount,pageLimitCount,'');
+			getAllList(tenId, orgId, pageDataCount, pageLimitCount, '');
 		} else {
 
 		}
@@ -172,9 +190,9 @@ const UserList = () => {
 		const records = userListAll.slice(start, end);
 		setUserList(records);
 
-		getAllList(localTenantId,localTenantId,number,pageLimitCount,'');
+		getAllList(localTenantId, localTenantId, number, pageLimitCount, '');
 
-		
+
 	}
 	function nextPage(number) {
 		if (canMaxPage > number) {
@@ -184,7 +202,7 @@ const UserList = () => {
 		} else {
 			setCanNextPage(false);
 		}
-		getAllList(localTenantId,localTenantId,number,pageLimitCount,'');
+		getAllList(localTenantId, localTenantId, number, pageLimitCount, '');
 
 	}
 
@@ -197,7 +215,7 @@ const UserList = () => {
 			setCanPreviousPage(false);
 		}
 		setPageCount(number);
-		getAllList(localTenantId,localTenantId,number,pageLimitCount,'');
+		getAllList(localTenantId, localTenantId, number, pageLimitCount, '');
 	}
 
 	const roleChange = async (e) => {
@@ -222,6 +240,38 @@ const UserList = () => {
 
 		console.log(isStatus)
 	}
+
+	const userEdit = (data) => {
+		setAddUser(true)
+
+	}
+	const userDelete = (data) => {
+		Swal.fire({
+			title: 'Do you want delete!',
+			text: data.firstName + data.lastName,
+			icon: 'warning',
+			confirmButtonText: 'Logout',
+			showCancelButton: true,
+			confirmButtonText: 'Yes',
+			confirmButtonColor: "#DD6B55",
+			closeOnConfirm: false
+		  }).then((result) => { 
+			if (result.isConfirmed) {
+				deletUser(data.userId)
+			  } 
+		  }) 
+
+	}
+
+	function validate_password(password) {
+		let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+		if (password.match(check)) {
+		   console.log("Your password is strong.");
+		} else {
+		  console.log("Meh, not so much.");
+		}
+	}
+
 
 
 
@@ -276,7 +326,7 @@ const UserList = () => {
 															<th>Role</th>
 															<th>Status</th>
 															<th>Date Created</th>
-															{/* <th>Action</th> */}
+															<th>Action</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -289,14 +339,24 @@ const UserList = () => {
 																<td><span>{item.userName}</span></td>
 																<td><span>{item.email}</span></td>
 																<td><span>
-																{item.role[0]}
+																	{item.role[0]}
 																	{/* <Select onChange={(e) => roleChange(e)} options={RoleList} className="custom-react-select"
 																		defaultValue={RoleList[0]}
 																		isSearchable={false}
 																	/> */}
-																	</span></td>
+																</span></td>
 																<td><span key={index}> <Switch id={index} onChange={event => switchHandler(event, index)} checked={isStatus[index]} checkedChildren="Enabled" unCheckedChildren="Disabled" /></span></td>
-																<td><span>22/06/2022</span></td>
+																<td><span>{moment(item.createdDate).format('DD/MM/YYYY hh:mm A')}</span></td>
+																<td>
+																	<div className="d-flex">
+																		<button onClick={() => userEdit(item)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+																			<FontAwesomeIcon icon={faPencilAlt} fontSize={11} />
+																		</button>
+																		<button onClick={() => userDelete(item)} className="btn hegiht10 btn-danger shadow  sharp me-1 action-btn">
+																			<FontAwesomeIcon icon={faTrash} fontSize={11} />
+																		</button>
+																	</div>
+																</td>
 
 															</tr>
 														))}
@@ -373,11 +433,11 @@ const UserList = () => {
 									<Form.Control name='emailId' required type="email" onChange={handleChange} />
 								</div>
 								<div className="col-xl-6 mb-3">
-								<Form.Label>User Name  <span className="text-danger">*</span> </Form.Label>
-								<div className="input-group mb-3">								
-								<Form.Control name='userName' required type="text" onChange={handleChange} />
-									<span className="input-group-text">@encipherhealth.com</span>
-								</div>
+									<Form.Label>User Name  <span className="text-danger">*</span> </Form.Label>
+									<div className="input-group mb-3">
+										<Form.Control name='userName' required type="text" onChange={handleChange} />
+										{/* <span className="input-group-text">@encipherhealth.com</span> */}
+									</div>
 								</div>
 								<div className="col-xl-6 mb-3">
 									<Form.Label>Mobile Number  <span className="text-danger">*</span> </Form.Label>
@@ -386,13 +446,14 @@ const UserList = () => {
 								<div className="col-xl-6 mb-3">
 									<Form.Label>Role  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='role' as="select" required onChange={handleChange} >
-										<option value="Coder(Level 1)">Coder(Level 1)</option>
-										<option value="Coder(Level 2)">Coder(Level 2)</option>
+										<option value="ADMIN">ADMIN</option>
+										<option value="CODER">CODER</option>
 									</Form.Control>
 								</div>
 								<div className="col-xl-6 mb-3">
 									<Form.Label>Password  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='password' required type="text" onChange={handleChange} />
+									<small id="emailHelp" class="form-text text-muted">Please enter an numeric, number with both lowercase and uppercase characters.</small>
 								</div>
 								<div className="col-xl-6 mb-3">
 									<Form.Label>Confirm Password  <span className="text-danger">*</span> </Form.Label>

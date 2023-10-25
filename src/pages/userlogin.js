@@ -62,9 +62,9 @@ export default function UserLogin() {
                 }
             } catch (e) {
                 setIsLoading(false);
-                notification.error({
-                    message: "Login Failed"
-                });
+                // notification.error({
+                //     message: "Login Failed"
+                // });
             }
     }
 

@@ -45,6 +45,7 @@ export default function Login() {
                     localStorage.setItem("tenantId", result.response.tenantId);
                     localStorage.setItem("orgId", result.response.organizationId);
                     localStorage.setItem("userId", result.response.userEmail);
+                    localStorage.setItem("loginCheck", true);
                     router.push("/admin/user");
                     notification.success({
                         message: result.message,
@@ -57,9 +58,9 @@ export default function Login() {
                 }
             } catch (e) {
                 setIsLoading(false);
-                notification.error({
-                    message: result.message,
-                });
+                // notification.error({
+                //     message: result.message,
+                // });
             }
     }
 

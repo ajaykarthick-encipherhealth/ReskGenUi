@@ -2,7 +2,9 @@ import axios from 'axios';
 import LoadingSpinner from "../jsx/components/spinner/spinner";
 
 import ENDPOINTS from '../utility/enpoints';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { notification } from 'antd';
+
 
 // axios.defaults.baseURL = ENDPOINTS.apiEndoint;
 
@@ -20,17 +22,25 @@ import Swal from 'sweetalert2'
   })
   
   axios.interceptors.response.use(function (response) { 
+    // console.log(response)
+    //  notification.success({
+    //   message: response.data.message,
+    // });
     return response;
   }, function (error) {
-    console.log(error)
+    
     
     const statusCode = error?.response?.status;
+       
+    const methodName = error?.config?.method;
+
+
     
 
     if(statusCode === 500) {
       Swal.fire({
         title: 'Internal Server Error!',
-        text: 'Please Contact Admin',
+        text: error?.response?.data.message,
         icon: 'error',
         confirmButtonText: 'OK',
         confirmButtonColor: "#DD6B55",
@@ -45,7 +55,7 @@ import Swal from 'sweetalert2'
     if(statusCode === 400) {
       Swal.fire({
         title: 'Bad Request!',
-        text: 'Please Contact Admin',
+        text: error?.response?.data.message,
         icon: 'error',
         confirmButtonText: 'OK',
         confirmButtonColor: "#DD6B55",
