@@ -14,10 +14,10 @@ import { IMAGES } from "../jsx/constant/theme";
 
 export default function UserLogin() {
     const router = useRouter();
-    const [email, setEmail] = useState('testuser@encipherhealth.onmicrosoft.com');
+    const [email, setEmail] = useState('dhineshtest@encipherhealth.onmicrosoft.com');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
-    const [password, setPassword] = useState('Zoon6363');
+    const [password, setPassword] = useState('@Asdf123');
     // const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -47,7 +47,7 @@ export default function UserLogin() {
                     localStorage.setItem("token", result.access_token);
                     localStorage.setItem("tenantId", result.tenantId);
                     localStorage.setItem("userId", result.userEmail);
-                    localStorage.setItem("orgId", 'intel');
+                    localStorage.setItem("orgId", result.organizationId);
                     localStorage.setItem("loginCheck", true);
 
                     router.push("/physician/dashboard");

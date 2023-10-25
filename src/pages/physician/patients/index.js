@@ -162,7 +162,7 @@ export default function Patient() {
 
   const getAllList = async (uId) => {
     // logesh056
-    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=logesh056");
+    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid="+uId);
     if (response.data) {
       const records = response.data.slice(firstIndex, lastIndex);
       setPatinetList(records);
@@ -208,7 +208,7 @@ export default function Patient() {
       formData.append("tenantid", tenantId);
       formData.append("userid", localUserId);
       formData.append("patientid", inputValue.patientId);
-      formData.append("patientName", inputValue.name);
+      formData.append("patientname", inputValue.name);
       const headers = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -239,7 +239,7 @@ export default function Patient() {
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
-    if (data.computing == 2) {
+    if (data.computing == 3) {
       navigate.push('/physician/patients/details');
     } else {
       notification.warning({
@@ -413,7 +413,7 @@ export default function Patient() {
                                   <span>{item.fileName}</span>
                                 </td>
                                 <td className='patient-status'>
-                                  {item.computing == 2 ?
+                                  {item.computing == 3 ?
 
                                     // <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  />
                                     <span className={`badge badge-success`}>
@@ -424,8 +424,14 @@ export default function Patient() {
                                       <span className={`badge badge-primary`}>
                                         Processing
                                         <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
-                                      </span>
-                                      :
+                                      </span>:
+                                      // item.computing == 3 ?
+                                      // <span className={`badge badge-danger`}>
+                                      //   Failed
+                                      //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
+                                      // </span>
+                                      
+                                      // :
                                       <span className={`badge badge-secondary`}>
                                         Not Started
                                         <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
