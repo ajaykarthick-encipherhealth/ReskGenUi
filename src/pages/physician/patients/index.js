@@ -15,7 +15,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faSpinner, faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faTrash, faPencilAlt , faCheck, faBan,faAdd } from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
@@ -50,10 +50,14 @@ export default function Patient() {
   const [number, setNumber] = useState([]);
   const [records, setRecords] = useState([]);
   const [addPatient, setAddPatient] = useState(false);
+  const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState([]);
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
+    patientId: "",
+  });
+  const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
   });
 
@@ -93,67 +97,6 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    console.log(patientStoreDetails)
-    const datas = [
-      {
-        patchJob: "Completed",
-        name: "Name 1",
-        status: "Completed",
-        date: "22 / 12 / 20",
-        filename: "test",
-      },
-      {
-        patchJob: "Started",
-        name: "Name 1",
-        status: "In-Progress",
-        date: "22 / 12 / 20",
-        filename: "test",
-      },
-      {
-        patchJob: "Completed",
-        name: "Name 1",
-        status: "Finished Validation",
-        date: "22 / 12 / 20",
-        filename: "test",
-      },
-      {
-        patchJob: "Patching",
-        name: "Name 1",
-        status: "In-Validation",
-        date: "22 / 12 / 20",
-        filename: "test",
-      },
-      {
-        patchJob: "Started",
-        name: "Name 1",
-        status: "Hold",
-        date: "22 / 12 / 20",
-        filename: "test",
-      },
-      {
-        patchJob: "Pending",
-        name: "Name 1",
-        status: "Finished Validation",
-        date: "22 / 12 / 20",
-        filename: "test",
-      },
-      {
-        patchJob: "Completed",
-        name: "Name 1",
-        status: "In-Validation",
-        date: "22 / 12 / 20",
-        filename: "test",
-      },
-      {
-        patchJob: "No Patching",
-        name: "Name 1",
-        status: "Hold",
-        date: "22 / 12 / 20",
-        filename: "test",
-      },
-    ];
-
-    setDataValidationList(datas);
     setIsLoading(false);
     getAllList(uId);
     // fetchData();
@@ -177,7 +120,13 @@ export default function Patient() {
 
 
 
-  const addPatientForm = () => {
+
+  const addPatientFormId = () => {
+    setValidated(false);
+    setAddPatientId(true);
+  };
+
+  const addPatientFile = () => {
     setValidated(false);
     setAddPatient(true);
   };
@@ -192,10 +141,15 @@ export default function Patient() {
     setInputValue({ ...inputValue, [key]: value });
   };
 
+  const handleChangePatientId = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setInputValuePatientId({ ...inputValuePatientId, [key]: value });
+  };
+
   const handleSubmit = async (event) => {
     console.log(inputValue);
     const form = event.currentTarget;
-    console.log(form);
     event.preventDefault();
     if (form.checkValidity() === true) {
       setIsLoading(true);
@@ -215,7 +169,6 @@ export default function Patient() {
         },
       };
       setSelectFile(formData);
-      console.log(formData);
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
         `,
@@ -223,7 +176,9 @@ export default function Patient() {
         headers
       );
       if (response?.status == 200) {
-        console.log(response.data);
+        notification.success({
+          message: "Patient File Upload Successfully!",
+        });
         setAddPatient(false);
         setIsLoading(false);
       } else {
@@ -235,11 +190,39 @@ export default function Patient() {
 
     setValidated(true);
   };
+  const handleSubmitPatientId = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    inputValuePatientId.patientAllocated = localUserId;
+    inputValuePatientId.computing = 0 ;
+    inputValuePatientId.allocatedUserId = localUserId;
+    console.log(inputValuePatientId);
+
+    if (form.checkValidity() === true) {   
+      setIsLoading(true);   
+      const response = await axios.post(
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,inputValuePatientId,
+      );
+      if (response?.status == 200) {
+        notification.success({
+          message: "Patient Id Created Successfully!",
+        });
+        setAddPatientId(false);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
+      setAddPatientId(false);
+      getAllList(localUserId);
+    }
+
+    setValidated(true);
+  };
 
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
-    if (data.computing == 3) {
+    if (data.computing == 2) {
       navigate.push('/physician/patients/details');
     } else {
       notification.warning({
@@ -344,6 +327,7 @@ export default function Patient() {
     return await axios.get(ENDPOINTS.apiEndoint + "aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09");
 
   };
+  
 
 
 
@@ -376,7 +360,7 @@ export default function Patient() {
                       <div className="tbl-caption  align-items-center">
                         <div className="row">
                           <div className="col-xl-12">
-                            <Button onClick={addPatientForm} className="btn btn-primary btn-sm ms-2 flr">+ Add Patient File</Button>
+                            <Button onClick={addPatientFormId} className="btn btn-primary btn-sm ms-2 flr">+ Add Patient Id</Button>
 
                           </div>
 
@@ -395,25 +379,26 @@ export default function Patient() {
                               <th>File Name</th>
                               <th>Status</th>
                               <th>Created Date</th>
+                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
                             {patinetList.map((item, index) => (
-                              <tr className='cr-pointer' key={index} onClick={() => { gotoPatientDetails(item) }}>
-                                <td>
+                              <tr className='cr-pointer' key={index}>
+                                <td  onClick={() => { gotoPatientDetails(item) }}>
                                   <span>{index + 1}</span>
                                 </td>
-                                <td>
+                                <td  onClick={() => { gotoPatientDetails(item) }}>
                                   <span>{item.patientId}</span>
                                 </td>
-                                <td>
+                                <td  onClick={() => { gotoPatientDetails(item) }}>
                                   <span>{item.patientName}</span>
                                 </td>
-                                <td>
+                                <td  onClick={() => { gotoPatientDetails(item) }}>
                                   <span>{item.fileName}</span>
                                 </td>
-                                <td className='patient-status'>
-                                  {item.computing == 3 ?
+                                <td  onClick={() => { gotoPatientDetails(item) }} className='patient-status'>
+                                  {item.computing == 2 ?
 
                                     // <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  />
                                     <span className={`badge badge-success`}>
@@ -438,9 +423,17 @@ export default function Patient() {
                                       </span>
                                   }
                                 </td>
-                                <td>
+                                <td  onClick={() => { gotoPatientDetails(item) }}>
                                   <span>{item.createdAt}</span>
                                 </td>
+                                <td>
+																	<div className="d-flex justify-content-center">
+																		<button onClick={() => addPatientFile(item)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+																			<FontAwesomeIcon icon={faAdd} fontSize={11} />
+																		</button>
+																	
+																	</div>
+																</td>
                               </tr>
                             ))}
                           </tbody>
@@ -560,6 +553,51 @@ export default function Patient() {
                   </Button>
                   <Button
                     onClick={() => setAddPatient(false)}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </div>
+        </Offcanvas>
+        <Offcanvas show={addPatientId} className="offcanvas-end" placement="end">
+          <div className="offcanvas-header">
+            <h5 className="modal-title" id="#gridSystemModal">
+              Add Patient Details
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setAddPatient(false)}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div className="offcanvas-body">
+            <div className="container-fluid">
+              <Form noValidate validated={validated} onSubmit={handleSubmitPatientId}>
+                <div className="row">
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Id <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientId"
+                      required
+                      type="text"
+                      onChange={handleChangePatientId}
+                    />
+                  </div>              
+                </div>
+
+                <div>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    {isLoading ? "Loding..." : "Submit"}
+                  </Button>
+                  <Button
+                    onClick={() => setAddPatientId(false)}
                     className="btn btn-danger btn-sm light ms-1"
                   >
                     Cancel
