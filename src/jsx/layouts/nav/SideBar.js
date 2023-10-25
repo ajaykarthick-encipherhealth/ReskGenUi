@@ -52,7 +52,7 @@ export default function SideBar() {
                 >
                   <Link href={data.to}>
                     <div className="menu-icon">{data.iconStyle}</div>{" "}
-                    <span className={`nav-text ${sideMenu ? "d-none" : ""}`}>
+                    <span className={`nav-text text-white ${sideMenu ? "d-none" : ""}`}>
                       {data.title}
                     </span>
                   </Link>
@@ -70,7 +70,7 @@ export default function SideBar() {
                 >
                   <Link href={data.to}>
                     <div className="menu-icon">{data.iconStyle}</div>{" "}
-                    <span className={`nav-text ${sideMenu ? "d-none" : ""}`}>
+                    <span className={`nav-text text-white ${sideMenu ? "d-none" : ""}`}>
                       {data.title}
                     </span>
                   </Link>

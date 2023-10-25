@@ -15,7 +15,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faClose, faPencilAlt , faCheck, faBan,faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faClose, faUpload , faCheck, faBan,faAdd } from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
@@ -23,6 +23,8 @@ import {
   patientDetails,
 } from '../../../store/actions/AuthActions';
 import { notification } from 'antd';
+import { UploadOutlined} from '@ant-design/icons';
+
 
 
 
@@ -97,7 +99,7 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    setIsLoading(false);
+    // setIsLoading(false);
     getAllList(uId);
     // fetchData();
   }, []);
@@ -110,6 +112,7 @@ export default function Patient() {
       const records = response.data.slice(firstIndex, lastIndex);
       setPatinetList(records);
       setPatinetListAll(response.data);
+      setIsLoading(false);
       // setTimeout(() => {
       //  setCanPreviousPage(false);
       //   setCanNextPage(true);
@@ -126,7 +129,8 @@ export default function Patient() {
     setAddPatientId(true);
   };
 
-  const addPatientFile = () => {
+  const addPatientFile = (data) => {
+    inputValue.patientId =  data.patientId;
     setValidated(false);
     setAddPatient(true);
   };
@@ -223,6 +227,7 @@ export default function Patient() {
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
     if (data.computing == 2) {
+      localStorage.setItem("patientId",data.patientId)
       navigate.push('/physician/patients/details');
     } else {
       notification.warning({
@@ -341,6 +346,7 @@ export default function Patient() {
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div class="content-body">
+        {isLoading ? <LoadingSpinner /> : 
           <div className="container-fluid">
             <div className="row">
 
@@ -430,7 +436,7 @@ export default function Patient() {
                                 <td>
 																	<div className="d-flex justify-content-center">
 																		<button onClick={() => addPatientFile(item)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-																			<FontAwesomeIcon icon={faAdd} fontSize={11} />
+																			<FontAwesomeIcon icon={faUpload} fontSize={11} />
 																		</button>
 																	
 																	</div>
@@ -484,6 +490,7 @@ export default function Patient() {
               </div>
             </div>
           </div>
+}
         </div>
         <Offcanvas show={addPatient} className="offcanvas-end" placement="end">
           <div className="offcanvas-header">
@@ -521,6 +528,7 @@ export default function Patient() {
                       name="patientId"
                       required
                       type="text"
+                      value = {inputValue.patientId}
                       onChange={handleChange}
                     />
                   </div>

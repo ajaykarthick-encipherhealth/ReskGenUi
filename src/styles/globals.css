@@ -37473,6 +37473,7 @@ span.ant-progress-text {
  }
  .combo-card span  {
   color: #000 !important;
+  font-size: 14px !important;
  }
 .comboclose{
   display: flex !important;
@@ -37491,6 +37492,9 @@ span.ant-progress-text {
 span.badge-meat.badge {
   height: 27px;
   width: max-content;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 150px;
 }
 .raf-card {
     padding: 20px;
@@ -37523,8 +37527,16 @@ span.badge-meat.badge {
   color:#000;
 }
 span.meat-name-details{
-  height: 60px;
+  /* height: 120px; */
   color: #000;
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 65px;
 }
 
 .bg-third {
@@ -37563,5 +37575,46 @@ nextjs-portal {
   width: 1.625rem!important;
   line-height: 10px!important;
 }
+span{
+  font-size: 14px ;
+  /* color: #000; */
+}
+span.mb-1.disease-name {
+  border: none !important;
+  font-size: 14px !important;
+  color: #000;
+}
+.bg-bgshodowcolor{
+  background-color: #538581 !important;
+}
 
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.spinner-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fffefe !important;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #383636; /* Black */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+  margin-bottom: 5px;
+  border-color: #241571 rgb(243, 243, 243) rgb(243, 243, 243) !important;
+}
 

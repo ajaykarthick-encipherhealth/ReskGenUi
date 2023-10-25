@@ -4,6 +4,7 @@ import NavBar from "../../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
+import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
 
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -26,6 +27,7 @@ import { NextIcon, PreviousIcon, RenderSearchProps, searchPlugin } from '@react-
 
 
 
+
 export default function PatientDetails() {
   const searchPluginInstance = searchPlugin({
     // keyword: 'Physical Examination',
@@ -41,7 +43,7 @@ export default function PatientDetails() {
   const storeDetails = useSelector(state => state);
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSection, setIsLoadingSection] = useState(true);
   const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
@@ -70,12 +72,12 @@ export default function PatientDetails() {
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const handleDocumentLoad = () => {
     setDocumentLoaded(true);
-    setTimeout(() => {
-      highlight({
-        keyword: 'Physical Examination',
-        matchCase: true,
-      });
-    }, 1000);
+    // setTimeout(() => {
+    //   highlight({
+    //     keyword: selectDiseasesName,
+    //     matchCase: true,
+    //   });
+    // }, 6000);
 
   }
 
@@ -116,9 +118,9 @@ export default function PatientDetails() {
   }, [isDocumentLoaded]);
 
   const getPatientDetails = async (orgId) => {
-
+      var patientId =  localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
-    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${storePatientDetails.patientId}&orgid=${orgId}`);
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
 
     console.log(response.data);
     if (response.data) {
@@ -165,7 +167,7 @@ export default function PatientDetails() {
       setComboDiseaseCodesList(comboDis);
       setMeatCriteriaList(meatCri);
       setDosYear(dosYearArr);
-      setIsLoading(true);
+      setIsLoading(false);
 
     }
   }
@@ -356,10 +358,17 @@ export default function PatientDetails() {
     setIsModalOpen(false);
   };
   const handleOpenModal = (value) => {
+    setTimeout(() => {
+      highlight({
+        keyword: value,
+        matchCase: true,
+      });
+    }, 1000);
+    setDocumentLoaded(true);
     setSelectMeatName(value);
     setIsLoadingSection(true);
     setIsModalOpen(true);
-    getSectionResult(value.toLowerCase());
+    // getSectionResult(value.toLowerCase());
   };
 
   const getSectionResult = async (value) => {
@@ -387,6 +396,7 @@ export default function PatientDetails() {
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div class="content-body">
+        {isLoading ? <LoadingSpinner /> : 
           <div className="container-fluid">
             <div className="row patient-file-container">
               <div className="col-xl-12">
@@ -422,7 +432,7 @@ export default function PatientDetails() {
                         <div className="row">
                           <div className='col-xl-12 col-sm-12'>
                             <label className="form-label">Date of Service</label>
-                            {isLoading ?
+                            {!isLoading ?
                               <Select options={dosYear} className="custom-react-select"
                                 defaultValue={dosYear[0]}
                                 isSearchable={false}
@@ -525,9 +535,9 @@ export default function PatientDetails() {
                                               <li>
                                                 <div className="timeline-panel valid-disease">
                                                   <div className="media-body">
-                                                    <h5 className="mb-1" >
+                                                    <span  className="mb-1 disease-name" >
                                                       {data.name}
-                                                    </h5>
+                                                    </span>
                                                   </div>
                                                   <Popconfirm
                                                     title="You want move to invalid?"
@@ -571,9 +581,9 @@ export default function PatientDetails() {
                                               <li>
                                                 <div className="timeline-panel invalid-disease">
                                                   <div className="media-body">
-                                                    <h5 className="mb-1">
+                                                    <span className="mb-1 disease-name">
                                                       {data.name}
-                                                    </h5>
+                                                    </span>
                                                   </div>
                                                   <Popconfirm
                                                     title="You want move to valid?"
@@ -776,19 +786,19 @@ export default function PatientDetails() {
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.monitor}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.evaluate}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2": "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.assessment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">{item.treatment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
+                                              <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
                                             </div>
                                             <div className="col-xl-1 meatclose">
                                               {/* {item.isMeatCriteriaPresent === true ?
@@ -838,21 +848,21 @@ export default function PatientDetails() {
                                                   <span>{item.diseaseName}</span>
                                                 </div>
                                                 <div className="col-xl-2 d-grid">
-                                                  <span className="meat-name-details">{item.monitor}</span>
-                                                  <Badge className="badge-meat" bg="third badge-circle mt-2">{item.monitorCapturedFromHeader}</Badge>
-                                                </div>
-                                                <div className="col-xl-2 d-grid">
-                                                  <span className="meat-name-details">{item.evaluate}</span>
-                                                  <Badge className="badge-meat" bg="third badge-circle mt-2">{item.evaluateCapturedFromHeader}</Badge>
-                                                </div>
-                                                <div className="col-xl-2 d-grid">
-                                                  <span className="meat-name-details">{item.assessment}</span>
-                                                  <Badge className="badge-meat" bg="third badge-circle mt-2">{item.assessmentCapturedFromHeader}</Badge>
-                                                </div>
-                                                <div className="col-xl-2 d-grid">
-                                                  <span className="meat-name-details">{item.treatment}</span>
-                                                  <Badge className="badge-meat" bg="third badge-circle mt-2">{item.treatmentCapturedFromHeader}</Badge>
-                                                </div>
+                                              <span className="meat-name-details">{item.monitor}</span>
+                                              <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
+                                            </div>
+                                            <div className="col-xl-2 d-grid">
+                                              <span className="meat-name-details">{item.evaluate}</span>
+                                              <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2": "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
+                                            </div>
+                                            <div className="col-xl-2 d-grid">
+                                              <span className="meat-name-details">{item.assessment}</span>
+                                              <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
+                                            </div>
+                                            <div className="col-xl-2 d-grid">
+                                              <span className="meat-name-details">{item.treatment}</span>
+                                              <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
+                                            </div>
                                                 <div className="col-xl-1 meatclose">
 
 
@@ -1053,9 +1063,7 @@ export default function PatientDetails() {
                                         accept="application/pdf,text/plain"
                                         onChange={(e) => onChangeFile(e.target.files)}
                                       />
-                                        <button onClick={changeSearch}>
-
-                                        </button>
+                                       
                                       </div>
                                       <div className="card-body p-0">
                                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -1091,8 +1099,8 @@ export default function PatientDetails() {
               </div>
               {isModalOpen && (
                 <Modal
-                  // title={selectMeatName}
-                  title="Pdf Test"
+                  title={selectMeatName}
+                  // title="Pdf Test"
                   centered
                   open={isModalOpen}
                   // style={{ top: 5 }}
@@ -1314,6 +1322,7 @@ export default function PatientDetails() {
               )}
             </div>
           </div>
+}
         </div>
       </div>
     </>
