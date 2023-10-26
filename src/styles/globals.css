@@ -37584,6 +37584,11 @@ span.mb-1.disease-name {
   font-size: 14px !important;
   color: #000;
 }
+
+.raf-details span{
+  font-size: 14px !important;
+  color: #000;
+}
 .bg-bgshodowcolor{
   background-color: #538581 !important;
 }
@@ -37616,5 +37621,10 @@ span.mb-1.disease-name {
   animation: spinner 1.5s linear infinite;
   margin-bottom: 5px;
   border-color: #241571 rgb(243, 243, 243) rgb(243, 243, 243) !important;
+}
+
+.valid-text {
+  margin-bottom: 10px;
+  padding: 10px !important;
 }
 

@@ -50,7 +50,7 @@ export default function UserLogin() {
                     localStorage.setItem("orgId", result.organizationId);
                     localStorage.setItem("loginCheck", true);
 
-                    router.push("/physician/dashboard");
+                    router.push("/physician/home");
                     notification.success({
                         message: "Login Success"
                     });

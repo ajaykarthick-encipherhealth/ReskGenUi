@@ -48,6 +48,7 @@ const Header = ({ onNote }) => {
 			closeOnConfirm: false
 		  }).then((result) => { 
 			if (result.isConfirmed) {
+				localStorage.clear();
 				localStorage.removeItem("loginCheck");
 			   window.location = "/userlogin"
 			  } 

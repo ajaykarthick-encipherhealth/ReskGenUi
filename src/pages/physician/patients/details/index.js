@@ -10,17 +10,17 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faCheck, faAdd } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
 import { Modal } from "antd";
-import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import { Space, Spin } from 'antd';
 // import { searchPlugin ,NextIcon, PreviousIcon, RenderSearchProps,} from '@react-pdf-viewer/search';
 import { Icon, MinimalButton, Position, Tooltip } from '@react-pdf-viewer/core';
 import { NextIcon, PreviousIcon, RenderSearchProps, searchPlugin } from '@react-pdf-viewer/search';
+import Form from 'react-bootstrap/Form';
 
 
 
@@ -39,6 +39,7 @@ export default function PatientDetails() {
 
   const sideMenu = useSelector(state => state.sideMenu);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenValid, setIsModalOpenValid] = useState(false);
   const storePatientDetails = useSelector(state => state.patientDetails.patientDetails);
   const storeDetails = useSelector(state => state);
 
@@ -56,11 +57,13 @@ export default function PatientDetails() {
   const [selectCode, setSelectCode] = useState('');
   const [dosYear, setDosYear] = useState('');
   const [localOrgId, setLocalOrgId] = useState('');
+  const [localTenantId, setLocalTenantId] = useState('');
   const [selectMeatFileId, setSelectMeatFileId] = useState('');
   const [selectMeatName, setSelectMeatName] = useState('');
   const [sectionList, setSectionList] = useState([]);
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
   const [selectFileURL, setSelectFileURL] = useState([]);
+  const [validated, setValidated] = useState(false);
   //   highlight([
   //     'document',
   //     {
@@ -105,9 +108,11 @@ export default function PatientDetails() {
   useEffect(() => {
 
     var orgId = localStorage.getItem("orgId");
-    console.log(storeDetails)
+    var tenId = localStorage.getItem("tenantId");
+    console.log(tenId)
     setLocalOrgId(orgId);
-    getPatientDetails(orgId);
+    getPatientDetails(orgId,tenId);
+    setLocalTenantId(tenId)
 
     //   if (isDocumentLoaded) {
     //     enableShortcuts({
@@ -117,21 +122,18 @@ export default function PatientDetails() {
     // }
   }, [isDocumentLoaded]);
 
-  const getPatientDetails = async (orgId) => {
-      var patientId =  localStorage.getItem("patientId");
+  const getPatientDetails = async (orgId,tenId) => {
+    var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
-
-    console.log(response.data);
     if (response.data) {
-      const records = response.data;
-      console.log(response.data);
       var result = response.data;
       var validDis = '';
       var invalidDis = '';
       var comboDis = '';
       var meatCri = '';
       var dosYearArr = [];
+      getPatientPdfFile(result.fileId,tenId)
       setSelectMeatFileId(response.data.fileId)
       setPatientDocumentResult(result);
 
@@ -169,6 +171,14 @@ export default function PatientDetails() {
       setDosYear(dosYearArr);
       setIsLoading(false);
 
+    }
+  }
+  const getPatientPdfFile = async (fileId,tenId) => {
+    const response = await axios.get(ENDPOINTS.apiEndoint + `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`);
+    if (response.data) {
+      var result = response.data;
+      console.log(response.data)
+      setSelectFileURL(response.data);
     }
   }
 
@@ -356,6 +366,7 @@ export default function PatientDetails() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setIsModalOpenValid(false)
   };
   const handleOpenModal = (value) => {
     setTimeout(() => {
@@ -368,6 +379,7 @@ export default function PatientDetails() {
     setSelectMeatName(value);
     setIsLoadingSection(true);
     setIsModalOpen(true);
+    // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
 
@@ -388,6 +400,20 @@ export default function PatientDetails() {
     setSelectFileURL(value);
   };
 
+  const addValidDiseases = () => {
+    console.log("test")
+    setIsModalOpenValid(true)
+  };
+
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+
+    }
+    setValidated(true)
+  }
+
 
 
 
@@ -396,49 +422,49 @@ export default function PatientDetails() {
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div class="content-body">
-        {isLoading ? <LoadingSpinner /> : 
-          <div className="container-fluid">
-            <div className="row patient-file-container">
-              <div className="col-xl-12">
-                <div className="row">
-                  <div className='col-xl-8 col-sm-12'>
-                    <div className="card">
-                      <div className="card-body">
-                        <div className="row">
-                          <div className='col-xl-3 col-sm-12'>
-                            <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
-                            <h6 className='ageDtails'>{patientDocumentResult.patientName}</h6>
-                          </div>
-                          <div className='col-xl-2 col-sm-12'>
-                            <i>{SVGICON.AgeIcon}</i> <label>Age</label>
-                            <h6 className='ageDtails'>{patientDocumentResult.age}</h6>
-                          </div>
-                          <div className='col-xl-3 col-sm-12'>
-                            <i>{SVGICON.GenerIcon}</i><label>Gender</label>
-                            <h6 className='ageDtails'>{patientDocumentResult.gender}</h6>
-                          </div>
-                          <div className='col-xl-4 col-sm-12'>
-                            <i>{SVGICON.DatebirthIcon}</i> <label>Date of birth</label>
-                            <h6 className='ageDtails'>{patientDocumentResult.dob}</h6>
-                          </div>
+          {isLoading ? <LoadingSpinner /> :
+            <div className="container-fluid">
+              <div className="row patient-file-container">
+                <div className="col-xl-12">
+                  <div className="row">
+                    <div className='col-xl-8 col-sm-12'>
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="row">
+                            <div className='col-xl-3 col-sm-12'>
+                              <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
+                              <h6 className='ageDtails'>{patientDocumentResult.patientName}</h6>
+                            </div>
+                            <div className='col-xl-2 col-sm-12'>
+                              <i>{SVGICON.AgeIcon}</i> <label>Age</label>
+                              <h6 className='ageDtails'>{patientDocumentResult.age}</h6>
+                            </div>
+                            <div className='col-xl-3 col-sm-12'>
+                              <i>{SVGICON.GenerIcon}</i><label>Gender</label>
+                              <h6 className='ageDtails'>{patientDocumentResult.gender}</h6>
+                            </div>
+                            <div className='col-xl-4 col-sm-12'>
+                              <i>{SVGICON.DatebirthIcon}</i> <label>Date of birth</label>
+                              <h6 className='ageDtails'>{patientDocumentResult.dob}</h6>
+                            </div>
 
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className='col-xl-4 col-sm-12'>
-                    <div className="card">
-                      <div className="card-body">
-                        <div className="row">
-                          <div className='col-xl-12 col-sm-12'>
-                            <label className="form-label">Date of Service</label>
-                            {!isLoading ?
-                              <Select options={dosYear} className="custom-react-select"
-                                defaultValue={dosYear[0]}
-                                isSearchable={false}
-                              /> : null}
-                          </div>
-                          {/* <div className='col-xl-4 col-sm-12'>
+                    <div className='col-xl-4 col-sm-12'>
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="row">
+                            <div className='col-xl-12 col-sm-12'>
+                              <label className="form-label">Date of Service</label>
+                              {!isLoading ?
+                                <Select options={dosYear} className="custom-react-select"
+                                  defaultValue={dosYear[0]}
+                                  isSearchable={false}
+                                /> : null}
+                            </div>
+                            {/* <div className='col-xl-4 col-sm-12'>
                                         <label className="form-label">Encounter Type</label>
                                         <Select options={options2} className="custom-react-select"
                                             defaultValue={options2[0]}
@@ -452,11 +478,11 @@ export default function PatientDetails() {
                                             isSearchable={false}
                                         />
                                     </div> */}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  {/* <div className="col-xl-5">
+                    {/* <div className="col-xl-5">
                 <div className="card">
                   <div className="card-body p-0">
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -478,91 +504,122 @@ export default function PatientDetails() {
                   </div>
                 </div>
               </div> */}
-                  <div className="col-xl-12">
-                    <div className="card">
-                      <div className="card-body">
-                        <div className="profile-tab">
-                          <div className="custom-tab-1">
-                            <Tab.Container defaultActiveKey="validDiseases">
-                              <Nav as="ul" className="nav nav-tabs">
-                                <Nav.Item as="li" className="nav-item">
-                                  <Nav.Link to="#my-posts" eventKey="validDiseases">
-                                    Diseases
-                                  </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item as="li" className="nav-item">
-                                  <Nav.Link to="#my-posts" eventKey="comboDiseases">
-                                    Combination Codes
-                                  </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item as="li" className="nav-item">
-                                  <Nav.Link to="#my-posts" eventKey="meatCriteria">
-                                    MEAT Criteria
-                                  </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item as="li" className="nav-item">
-                                  <Nav.Link to="#my-posts" eventKey="RafScore">
-                                    RAF Score
-                                  </Nav.Link>
-                                </Nav.Item>
-                                {/* <Nav.Item as="li" className="nav-item">
+                    <div className="col-xl-12">
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="profile-tab">
+                            <div className="custom-tab-1">
+                              <Tab.Container defaultActiveKey="validDiseases">
+                                <Nav as="ul" className="nav nav-tabs">
+                                  <Nav.Item as="li" className="nav-item">
+                                    <Nav.Link to="#my-posts" eventKey="validDiseases">
+                                      Diseases
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item as="li" className="nav-item">
+                                    <Nav.Link to="#my-posts" eventKey="comboDiseases">
+                                      Combination Codes
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item as="li" className="nav-item">
+                                    <Nav.Link to="#my-posts" eventKey="meatCriteria">
+                                      MEAT Criteria
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item as="li" className="nav-item">
+                                    <Nav.Link to="#my-posts" eventKey="RafScore">
+                                      RAF Score
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  {/* <Nav.Item as="li" className="nav-item">
                                   <Nav.Link to="#my-posts" eventKey="file">
                                     File
                                   </Nav.Link>
                                 </Nav.Item> */}
-                              </Nav>
-                              <Tab.Content>
-                                <Tab.Pane id="my-posts" eventKey="validDiseases">
-                                  <div className="my-post-content pt-3">
-                                    <div className="widget-media   ps--active-y">
-                                      <div className="row">
-                                        <div className="col-xl-6">
-                                          <ul className="timeline">
-                                            <span
-                                              className={`dang d-block mb-2 text-warning valid-text`}
-                                            >
-                                              {" "}
-                                              HCC{" "}
-                                              <Badge
-                                                as="a"
-                                                href=""
-                                                bg="secondary badge-circle"
-                                              >
-                                                {validDiseasesList.length}
-                                              </Badge>
-                                            </span>
-                                            {validDiseasesList.map((data, i) => (
-                                              <li>
-                                                <div className="timeline-panel valid-disease">
-                                                  <div className="media-body">
-                                                    <span  className="mb-1 disease-name" >
-                                                      {data.name}
-                                                    </span>
-                                                  </div>
-                                                  <Popconfirm
-                                                    title="You want move to invalid?"
-                                                    description={data.name}
-                                                    onConfirm={confirmvalid}
-                                                    placement="leftTop"
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                    onOpenChange={() =>
-                                                      onchangeValid(data.name)
-                                                    }
+                                </Nav>
+                                <Tab.Content>
+                                  <Tab.Pane id="my-posts" eventKey="validDiseases">
+                                    <div className="my-post-content pt-3">
+                                      <div className="widget-media   ps--active-y">
+                                        <div className="row">
+                                          <div className="col-xl-7">
+                                            <div className="card">
+                                              <div className="card-body p-0">
+                                                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                                                  <div
+                                                    style={{
+                                                      height: "600px",
+                                                      maxWidth: "1300px",
+                                                      marginLeft: "auto",
+                                                      marginRight: "auto",
+                                                    }}
                                                   >
-                                                    <div className="icon-box  bg-danger-light me-1">
-                                                      <FontAwesomeIcon
-                                                        icon={faClose}
-                                                        style={{ color: "red" }}
-                                                      />
+                                                    {" "}
+                                                    <Viewer
+                                                     fileUrl={selectFileURL}
+                                                      // fileUrl="https://cogentaifiles.blob.core.windows.net/congetaiocrpdf/991b60e1-f38c-42fb-b997-b67caae87c1d.pdf?sv=2022-11-02&se=2023-10-26T13%3A24%3A45Z&sr=b&sp=r&sig=qj5HC0vWGLcubOPlWXI7JjRUKh5sX4voG3ahL0RiNYA%3D"
+                                                      plugins={[defaultLayoutPluginInstance]}
+                                                    />
+                                                  </div>
+                                                </Worker>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div className="col-xl-5">
+                                            <ul className="timeline">
+                                              <div className="valid-text d-flex justify-content-sm-between">
+                                              <span
+                                                className={`dang d-block text-warning`}
+                                              >
+                                                {" "}
+                                                HCC{" "}
+                                                <Badge
+                                                  as="a"
+                                                  href=""
+                                                  bg="secondary badge-circle"
+                                                >
+                                                  {validDiseasesList.length}
+                                                </Badge>
+                                              </span>
+                                              <div className="d-flex justify-content-center">
+																		<button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+																			<FontAwesomeIcon icon={faAdd} fontSize={11} />
+																		</button>																	
+																	</div>
+                                              </div>
+                                            
+                                              {validDiseasesList.map((data, i) => (
+                                                <li>
+                                                  <div className="timeline-panel valid-disease">
+                                                    <div className="media-body">
+                                                      <span className="mb-1 disease-name" >
+                                                        {data.name}
+                                                      </span>
                                                     </div>
-                                                  </Popconfirm>
-                                                </div>
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div>
-                                        <div className="col-xl-6">
+                                                    <Popconfirm
+                                                      title="You want move to invalid?"
+                                                      description={data.name}
+                                                      onConfirm={confirmvalid}
+                                                      placement="leftTop"
+                                                      okText="Yes"
+                                                      cancelText="No"
+                                                      onOpenChange={() =>
+                                                        onchangeValid(data.name)
+                                                      }
+                                                    >
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faClose}
+                                                          style={{ color: "red" }}
+                                                        />
+                                                      </div>
+                                                    </Popconfirm>
+                                                  </div>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                          {/* <div className="col-xl-6">
                                           <ul className="timeline">
                                             <span
                                               className={`dang d-block mb-2  invalid-text`}
@@ -607,299 +664,299 @@ export default function PatientDetails() {
                                               </li>
                                             ))}
                                           </ul>
+                                        </div> */}
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </Tab.Pane>
-                                <Tab.Pane id="my-posts" eventKey="invalidDiseases">
-                                  <div className="my-post-content pt-3">
-                                    <div className="widget-media   ps--active-y">
-                                      <ul className="timeline">
-                                        {invalidDiseasesList.map((data, i) => (
-                                          <li>
-                                            <div className="timeline-panel">
-                                              <div className="media-body">
-                                                <h5 className="mb-1">
-                                                  {data.name}
-                                                </h5>
-                                              </div>
-                                              <div className="icon-box icon-box-sm bg-danger-light me-1">
-                                                <FontAwesomeIcon
-                                                  icon={faCheck}
-                                                  style={{ color: "orange" }}
-                                                />
-                                              </div>
-                                            </div>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </Tab.Pane>
-                                <Tab.Pane id="my-posts" eventKey="comboDiseases">
-                                  <div className="my-post-content pt-3">
-                                    <div className="card combo-head-card">
-                                      <div className="row">
-                                        <div className="col-xl-3">
-                                          <label>Diagnosis Code Combo</label>
-                                        </div>
-                                        <div className="col-xl-3">
-                                          <label>AddOnCode</label>
-                                        </div>
-                                        <div className="col-xl-5">
-                                          <label>Disease Name</label>
-                                        </div>
-                                        <div className="col-xl-1">
-                                          <label></label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    {comboDiseaseCodesList?.map((item) => {
-                                      return (
-                                        <div className="card combo-card">
-
-                                          <div className="row">
-                                            <div className="col-xl-3">
-                                              <span className="font-bold">{item.diagnosisCodeCombo}</span>
-                                            </div>
-                                            <div className="col-xl-3">
-                                              <span className="font-bold">{item.addOnCode}</span>
-                                            </div>
-                                            <div className="col-xl-5">
-                                              <span>{item.diseaseName}</span>
-                                            </div>
-                                            <div className="col-xl-1 comboclose">
-
-                                              <Popconfirm
-                                                title="You want move to Invalid?"
-                                                description={item.diseaseName}
-                                                onConfirm={confirmComboInvalid}
-                                                placement="leftTop"
-                                                okText="Yes"
-                                                cancelText="No"
-                                                onOpenChange={() =>
-                                                  onchangeCombo(item.diseaseName, item.addOnCode)
-                                                }
-                                              >
-                                                <div className="icon-box  bg-danger-light me-1">
+                                  </Tab.Pane>
+                                  <Tab.Pane id="my-posts" eventKey="invalidDiseases">
+                                    <div className="my-post-content pt-3">
+                                      <div className="widget-media   ps--active-y">
+                                        <ul className="timeline">
+                                          {invalidDiseasesList.map((data, i) => (
+                                            <li>
+                                              <div className="timeline-panel">
+                                                <div className="media-body">
+                                                  <h5 className="mb-1">
+                                                    {data.name}
+                                                  </h5>
+                                                </div>
+                                                <div className="icon-box icon-box-sm bg-danger-light me-1">
                                                   <FontAwesomeIcon
-                                                    icon={faClose}
-                                                    style={{ color: "red" }}
+                                                    icon={faCheck}
+                                                    style={{ color: "orange" }}
                                                   />
                                                 </div>
-                                              </Popconfirm>
-                                            </div>
-                                          </div>
-
-                                        </div>
-                                      );
-                                    })}
-                                    {invalidComboDiseaseCodesList.length != 0 ?
-                                      <>
-                                        <div className="invalid-combo">
-                                          <span>Invalid Combo Diseases </span>
-                                        </div>
-
-                                        {invalidComboDiseaseCodesList?.map((item) => {
-                                          return (
-                                            <div className="card combo-card">
-                                              <div className="row">
-                                                <div className="col-xl-3">
-                                                  <span className="font-bold">{item.diagnosisCodeCombo}</span>
-                                                </div>
-                                                <div className="col-xl-3">
-                                                  <span className="font-bold">{item.addOnCode}</span>
-                                                </div>
-                                                <div className="col-xl-5">
-                                                  <span>{item.diseaseName}</span>
-                                                </div>
-                                                <div className="col-xl-1 comboclose">
-
-                                                  <Popconfirm
-                                                    title="You want move to Valid?"
-                                                    description={item.diseaseName}
-                                                    onConfirm={confirmComboValid}
-                                                    placement="leftTop"
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                    onOpenChange={() =>
-                                                      onchangeCombo(item.diseaseName, item.addOnCode)
-                                                    }
-                                                  >
-                                                    <div className="icon-box  bg-danger-light me-1">
-                                                      <FontAwesomeIcon
-                                                        icon={faCheck}
-                                                        style={{ color: "orange" }}
-                                                      />
-                                                    </div>
-                                                  </Popconfirm>
-                                                </div>
                                               </div>
-
-                                            </div>
-                                          );
-                                        })}
-                                      </> : null}
-                                  </div>
-                                </Tab.Pane>
-                                <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                                  <div className="my-post-content pt-3">
-
-                                    <div className="card meat-head-card">
-                                      <div className="row">
-                                        <div className="col-xl-1">
-                                          <label>Codes</label>
-                                        </div>
-                                        <div className="col-xl-2">
-                                          <label>Disease Name</label>
-                                        </div>
-                                        <div className="col-xl-2">
-                                          <label>Monitor</label>
-                                        </div>
-                                        <div className="col-xl-2">
-                                          <label>Evaluation</label>
-                                        </div>
-                                        <div className="col-xl-2">
-                                          <label>Assessment</label>
-                                        </div>
-                                        <div className="col-xl-2">
-                                          <label>Treatment</label>
-                                        </div>
-                                        <div className="col-xl-1">
-                                          <label></label>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </Tab.Pane>
+                                  <Tab.Pane id="my-posts" eventKey="comboDiseases">
+                                    <div className="my-post-content pt-3">
+                                      <div className="card combo-head-card">
+                                        <div className="row">
+                                          <div className="col-xl-3">
+                                            <label>Diagnosis Code Combo</label>
+                                          </div>
+                                          <div className="col-xl-3">
+                                            <label>AddOnCode</label>
+                                          </div>
+                                          <div className="col-xl-5">
+                                            <label>Disease Name</label>
+                                          </div>
+                                          <div className="col-xl-1">
+                                            <label></label>
+                                          </div>
                                         </div>
                                       </div>
+                                      {comboDiseaseCodesList?.map((item) => {
+                                        return (
+                                          <div className="card combo-card">
 
+                                            <div className="row">
+                                              <div className="col-xl-3">
+                                                <span className="font-bold">{item.diagnosisCodeCombo}</span>
+                                              </div>
+                                              <div className="col-xl-3">
+                                                <span className="font-bold">{item.addOnCode}</span>
+                                              </div>
+                                              <div className="col-xl-5">
+                                                <span>{item.diseaseName}</span>
+                                              </div>
+                                              <div className="col-xl-1 comboclose">
+
+                                                <Popconfirm
+                                                  title="You want move to Invalid?"
+                                                  description={item.diseaseName}
+                                                  onConfirm={confirmComboInvalid}
+                                                  placement="leftTop"
+                                                  okText="Yes"
+                                                  cancelText="No"
+                                                  onOpenChange={() =>
+                                                    onchangeCombo(item.diseaseName, item.addOnCode)
+                                                  }
+                                                >
+                                                  <div className="icon-box  bg-danger-light me-1">
+                                                    <FontAwesomeIcon
+                                                      icon={faClose}
+                                                      style={{ color: "red" }}
+                                                    />
+                                                  </div>
+                                                </Popconfirm>
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                        );
+                                      })}
+                                      {invalidComboDiseaseCodesList.length != 0 ?
+                                        <>
+                                          <div className="invalid-combo">
+                                            <span>Invalid Combo Diseases </span>
+                                          </div>
+
+                                          {invalidComboDiseaseCodesList?.map((item) => {
+                                            return (
+                                              <div className="card combo-card">
+                                                <div className="row">
+                                                  <div className="col-xl-3">
+                                                    <span className="font-bold">{item.diagnosisCodeCombo}</span>
+                                                  </div>
+                                                  <div className="col-xl-3">
+                                                    <span className="font-bold">{item.addOnCode}</span>
+                                                  </div>
+                                                  <div className="col-xl-5">
+                                                    <span>{item.diseaseName}</span>
+                                                  </div>
+                                                  <div className="col-xl-1 comboclose">
+
+                                                    <Popconfirm
+                                                      title="You want move to Valid?"
+                                                      description={item.diseaseName}
+                                                      onConfirm={confirmComboValid}
+                                                      placement="leftTop"
+                                                      okText="Yes"
+                                                      cancelText="No"
+                                                      onOpenChange={() =>
+                                                        onchangeCombo(item.diseaseName, item.addOnCode)
+                                                      }
+                                                    >
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faCheck}
+                                                          style={{ color: "orange" }}
+                                                        />
+                                                      </div>
+                                                    </Popconfirm>
+                                                  </div>
+                                                </div>
+
+                                              </div>
+                                            );
+                                          })}
+                                        </> : null}
                                     </div>
-                                    {meatCriteriaList?.map((item) => {
-                                      return (
-                                        <div className={item.isMeatCriteriaPresent === true
-                                          ? "card meat-card" : "card meat-card-false"}>
+                                  </Tab.Pane>
+                                  <Tab.Pane id="my-posts" eventKey="meatCriteria">
+                                    <div className="my-post-content pt-3">
 
-                                          <div className="row">
-                                            <div className="col-xl-1">
-                                              <span className="font-bold">{item.diagnosisCode}</span>
-                                            </div>
-                                            <div className="col-xl-2">
-                                              <span className="meat-name-details">{item.diseaseName}</span>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                              <span className="meat-name-details">{item.monitor}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                              <span className="meat-name-details">{item.evaluate}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2": "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                              <span className="meat-name-details">{item.assessment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                              <span className="meat-name-details">{item.treatment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-1 meatclose">
-                                              {/* {item.isMeatCriteriaPresent === true ?
+                                      <div className="card meat-head-card">
+                                        <div className="row">
+                                          <div className="col-xl-1">
+                                            <label>Codes</label>
+                                          </div>
+                                          <div className="col-xl-2">
+                                            <label>Disease Name</label>
+                                          </div>
+                                          <div className="col-xl-2">
+                                            <label>Monitor</label>
+                                          </div>
+                                          <div className="col-xl-2">
+                                            <label>Evaluation</label>
+                                          </div>
+                                          <div className="col-xl-2">
+                                            <label>Assessment</label>
+                                          </div>
+                                          <div className="col-xl-2">
+                                            <label>Treatment</label>
+                                          </div>
+                                          <div className="col-xl-1">
+                                            <label></label>
+                                          </div>
+                                        </div>
+
+                                      </div>
+                                      {meatCriteriaList?.map((item) => {
+                                        return (
+                                          <div className={item.isMeatCriteriaPresent === true
+                                            ? "card meat-card" : "card meat-card-false"}>
+
+                                            <div className="row">
+                                              <div className="col-xl-1">
+                                                <span className="font-bold">{item.diagnosisCode}</span>
+                                              </div>
+                                              <div className="col-xl-2">
+                                                <span className="meat-name-details">{item.diseaseName}</span>
+                                              </div>
+                                              <div className="col-xl-2 d-grid">
+                                                <span className="meat-name-details">{item.monitor}</span>
+                                                <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
+                                              </div>
+                                              <div className="col-xl-2 d-grid">
+                                                <span className="meat-name-details">{item.evaluate}</span>
+                                                <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
+                                              </div>
+                                              <div className="col-xl-2 d-grid">
+                                                <span className="meat-name-details">{item.assessment}</span>
+                                                <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
+                                              </div>
+                                              <div className="col-xl-2 d-grid">
+                                                <span className="meat-name-details">{item.treatment}</span>
+                                                <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
+                                              </div>
+                                              <div className="col-xl-1 meatclose">
+                                                {/* {item.isMeatCriteriaPresent === true ?
                                              <span  className="badge badge-rounded badge-warning badge-meat">
                                              True
                                            </span>:
                                             <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
-                                              <Popconfirm
-                                                title="You want move to Invalid?"
-                                                description={item.diseaseName}
-                                                onConfirm={confirmInvalidMeat}
-                                                placement="leftTop"
-                                                okText="Yes"
-                                                cancelText="No"
-                                                onOpenChange={() =>
-                                                  onchangeMeat(item.diseaseName, item.diagnosisCode)
-                                                }
-                                              >
-                                                <div className="icon-box  bg-danger-light me-1">
-                                                  <FontAwesomeIcon
-                                                    icon={faClose}
-                                                    style={{ color: "red" }}
-                                                  />
-                                                </div>
-                                              </Popconfirm>
+                                                <Popconfirm
+                                                  title="You want move to Invalid?"
+                                                  description={item.diseaseName}
+                                                  onConfirm={confirmInvalidMeat}
+                                                  placement="leftTop"
+                                                  okText="Yes"
+                                                  cancelText="No"
+                                                  onOpenChange={() =>
+                                                    onchangeMeat(item.diseaseName, item.diagnosisCode)
+                                                  }
+                                                >
+                                                  <div className="icon-box  bg-danger-light me-1">
+                                                    <FontAwesomeIcon
+                                                      icon={faClose}
+                                                      style={{ color: "red" }}
+                                                    />
+                                                  </div>
+                                                </Popconfirm>
+                                              </div>
                                             </div>
+
+                                          </div>
+                                        );
+                                      })}
+                                      {invalidMeatCriteriaList.length != 0 ?
+                                        <>
+                                          <div className="invalid-combo">
+                                            <span>Invalid MeatCriteria</span>
                                           </div>
 
-                                        </div>
-                                      );
-                                    })}
-                                    {invalidMeatCriteriaList.length != 0 ?
-                                      <>
-                                        <div className="invalid-combo">
-                                          <span>Invalid MeatCriteria</span>
-                                        </div>
+                                          {invalidMeatCriteriaList?.map((item) => {
+                                            return (
+                                              <div className="card meat-card">
 
-                                        {invalidMeatCriteriaList?.map((item) => {
-                                          return (
-                                            <div className="card meat-card">
+                                                <div className="row">
+                                                  <div className="col-xl-1">
+                                                    <span className="font-bold">{item.diagnosisCode}</span>
+                                                  </div>
+                                                  <div className="col-xl-2">
+                                                    <span>{item.diseaseName}</span>
+                                                  </div>
+                                                  <div className="col-xl-2 d-grid">
+                                                    <span className="meat-name-details">{item.monitor}</span>
+                                                    <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
+                                                  </div>
+                                                  <div className="col-xl-2 d-grid">
+                                                    <span className="meat-name-details">{item.evaluate}</span>
+                                                    <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                  </div>
+                                                  <div className="col-xl-2 d-grid">
+                                                    <span className="meat-name-details">{item.assessment}</span>
+                                                    <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
+                                                  </div>
+                                                  <div className="col-xl-2 d-grid">
+                                                    <span className="meat-name-details">{item.treatment}</span>
+                                                    <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
+                                                  </div>
+                                                  <div className="col-xl-1 meatclose">
 
-                                              <div className="row">
-                                                <div className="col-xl-1">
-                                                  <span className="font-bold">{item.diagnosisCode}</span>
+
+                                                    <Popconfirm
+                                                      title="You want move to Valid?"
+                                                      description={item.diseaseName}
+                                                      onConfirm={confirmValidMeat}
+                                                      placement="leftTop"
+                                                      okText="Yes"
+                                                      cancelText="No"
+                                                      onOpenChange={() =>
+                                                        onchangeMeat(item.diseaseName, item.diagnosisCode)
+                                                      }
+                                                    >
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faCheck}
+                                                          style={{ color: "orange" }}
+                                                        />
+                                                      </div>
+                                                    </Popconfirm>
+                                                  </div>
                                                 </div>
-                                                <div className="col-xl-2">
-                                                  <span>{item.diseaseName}</span>
-                                                </div>
-                                                <div className="col-xl-2 d-grid">
-                                              <span className="meat-name-details">{item.monitor}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                              <span className="meat-name-details">{item.evaluate}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2": "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                              <span className="meat-name-details">{item.assessment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                              <span className="meat-name-details">{item.treatment}</span>
-                                              <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
-                                            </div>
-                                                <div className="col-xl-1 meatclose">
 
-
-                                                  <Popconfirm
-                                                    title="You want move to Valid?"
-                                                    description={item.diseaseName}
-                                                    onConfirm={confirmValidMeat}
-                                                    placement="leftTop"
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                    onOpenChange={() =>
-                                                      onchangeMeat(item.diseaseName, item.diagnosisCode)
-                                                    }
-                                                  >
-                                                    <div className="icon-box  bg-danger-light me-1">
-                                                      <FontAwesomeIcon
-                                                        icon={faCheck}
-                                                        style={{ color: "orange" }}
-                                                      />
-                                                    </div>
-                                                  </Popconfirm>
-                                                </div>
                                               </div>
-
-                                            </div>
-                                          );
-                                        })}
-                                      </> : null}
-                                  </div>
-                                </Tab.Pane>
-                                <Tab.Pane id="my-posts" eventKey="RafScore">
-                                  <div className="my-post-content pt-3">
+                                            );
+                                          })}
+                                        </> : null}
+                                    </div>
+                                  </Tab.Pane>
+                                  <Tab.Pane id="my-posts" eventKey="RafScore">
+                                    <div className="my-post-content pt-3">
 
 
-                                    <div className="row">
-                                      <div className="col-xl-3">
-                                        {/* <div className="card raf-file-head">
+                                      <div className="row">
+                                        <div className="col-xl-3">
+                                          {/* <div className="card raf-file-head">
 
                                           <div className="row">
                                             <div className="col-xl-12 mb-3 text-center">
@@ -929,117 +986,117 @@ export default function PatientDetails() {
 
                                         </div> */}
 
-                                      </div>
-                                      <div className="col-xl-12">
-                                        <div className="row">
-                                          <div className="col-xl-6">
-                                            <div className="card">
-                                              <div className="raf-card">
+                                        </div>
+                                        <div className="col-xl-12">
+                                          <div className="row">
+                                            <div className="col-xl-6">
+                                              <div className="card">
+                                                <div className="raf-card">
 
 
-                                                <div className="row raf-head text-center">
-                                                  <div className="col-xl-12">
-                                                    <label className="text-white">Summary</label>
+                                                  <div className="row raf-head text-center">
+                                                    <div className="col-xl-12">
+                                                      <label className="text-white">Summary</label>
+                                                    </div>
                                                   </div>
-                                                </div>
-                                                <div className="row raf-details">
-                                                  <div className="col-xl-6">
-                                                    <span>Demographic Risk Factor</span>
-                                                  </div>
-                                                  <div className="col-xl-6">
-                                                    <span>0:240</span>
-                                                  </div>
+                                                  <div className="row raf-details">
+                                                    <div className="col-xl-6">
+                                                      <span>Demographic Risk Factor</span>
+                                                    </div>
+                                                    <div className="col-xl-6">
+                                                      <span>0:240</span>
+                                                    </div>
 
-                                                </div>
-
-                                              </div>
-                                            </div>
-
-                                          </div>
-                                          <div className="col-xl-6">
-                                            <div className="card">
-                                              <div className="raf-card">
-                                                <div className="row raf-head">
-                                                  <div className="col-xl-6">
-                                                    <label className="text-white">DX Code</label>
-                                                  </div>
-                                                  <div className="col-xl-6">
-                                                    <label className="text-white">DX Description</label>
-                                                  </div>
-
-                                                </div>
-                                                <div className="row raf-details">
-                                                  <div className="col-xl-6">
-                                                    <span>T82399A</span>
-                                                  </div>
-                                                  <div className="col-xl-6">
-                                                    <span>Other mechanical complication of unspecified vascular grafts, initial encounter</span>
                                                   </div>
 
                                                 </div>
                                               </div>
+
                                             </div>
+                                            <div className="col-xl-6">
+                                              <div className="card">
+                                                <div className="raf-card">
+                                                  <div className="row raf-head">
+                                                    <div className="col-xl-6">
+                                                      <label className="text-white">DX Code</label>
+                                                    </div>
+                                                    <div className="col-xl-6">
+                                                      <label className="text-white">DX Description</label>
+                                                    </div>
 
-                                          </div>
-                                          <div className="col-xl-6">
-                                            <div className="card">
-                                              <div className="raf-card">
-                                                <div className="row raf-head">
-                                                  <div className="col-xl-6">
-                                                    <label className="text-white">HCC</label>
                                                   </div>
-                                                  <div className="col-xl-6">
-                                                    <label className="text-white">HCC Description</label>
-                                                  </div>
+                                                  <div className="row raf-details">
+                                                    <div className="col-xl-6">
+                                                      <span>T82399A</span>
+                                                    </div>
+                                                    <div className="col-xl-6">
+                                                      <span>Other mechanical complication of unspecified vascular grafts, initial encounter</span>
+                                                    </div>
 
-                                                </div>
-                                                <div className="row raf-details">
-                                                  <div className="col-xl-6">
-                                                    <span>HCC176</span>
-                                                  </div>
-                                                  <div className="col-xl-6">
-                                                    <span>Complications of Specified Implanted Device or Graft</span>
-                                                  </div>
-
-                                                </div>
-                                              </div>
-                                            </div>
-
-                                          </div>
-                                          <div className="col-xl-6">
-                                            <div className="card">
-                                              <div className="raf-card">
-                                                <div className="row raf-head">
-                                                  <div className="col-xl-4">
-                                                    <label className="text-white">Trumped By</label>
-                                                  </div>
-                                                  <div className="col-xl-4">
-                                                    <label className="text-white">RAF</label>
-                                                  </div>
-                                                  <div className="col-xl-4">
-                                                    <label className="text-white">Monthly Premium</label>
-                                                  </div>
-
-                                                </div>
-                                                <div className="row  raf-details">
-                                                  <div className="col-xl-4">
-                                                    <span>-</span>
-                                                  </div>
-                                                  <div className="col-xl-4">
-                                                    <span>0.761</span>
-                                                  </div>
-                                                  <div className="col-xl-4">
-                                                    <span>$609</span>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
 
+                                            </div>
+                                            <div className="col-xl-6">
+                                              <div className="card">
+                                                <div className="raf-card">
+                                                  <div className="row raf-head">
+                                                    <div className="col-xl-6">
+                                                      <label className="text-white">HCC</label>
+                                                    </div>
+                                                    <div className="col-xl-6">
+                                                      <label className="text-white">HCC Description</label>
+                                                    </div>
+
+                                                  </div>
+                                                  <div className="row raf-details">
+                                                    <div className="col-xl-6">
+                                                      <span>HCC176</span>
+                                                    </div>
+                                                    <div className="col-xl-6">
+                                                      <span>Complications of Specified Implanted Device or Graft</span>
+                                                    </div>
+
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                            </div>
+                                            <div className="col-xl-6">
+                                              <div className="card">
+                                                <div className="raf-card">
+                                                  <div className="row raf-head">
+                                                    <div className="col-xl-4">
+                                                      <label className="text-white">Trumped By</label>
+                                                    </div>
+                                                    <div className="col-xl-4">
+                                                      <label className="text-white">RAF</label>
+                                                    </div>
+                                                    <div className="col-xl-4">
+                                                      <label className="text-white">Monthly Premium</label>
+                                                    </div>
+
+                                                  </div>
+                                                  <div className="row  raf-details">
+                                                    <div className="col-xl-4">
+                                                      <span>-</span>
+                                                    </div>
+                                                    <div className="col-xl-4">
+                                                      <span>0.761</span>
+                                                    </div>
+                                                    <div className="col-xl-4">
+                                                      <span>$609</span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                    {/* <div className="">
+                                      {/* <div className="">
 
                                       <div className="compete-card">
                                         <Button
@@ -1051,69 +1108,69 @@ export default function PatientDetails() {
 
 
                                     </div> */}
-                                  </div>
+                                    </div>
 
-                                </Tab.Pane>
-                                <Tab.Pane id="my-posts" eventKey="file">
-                                  <div className="my-post-content pt-3">
-                                    <div className="card">
-                                      <div><input
-                                        required
-                                        type="file"
-                                        accept="application/pdf,text/plain"
-                                        onChange={(e) => onChangeFile(e.target.files)}
-                                      />
-                                       
-                                      </div>
-                                      <div className="card-body p-0">
-                                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                                          <div
-                                            style={{
-                                              height: "600px",
-                                              maxWidth: "1300px",
-                                              marginLeft: "auto",
-                                              marginRight: "auto",
-                                            }}
-                                          >
-                                            {" "}
-                                            <Viewer
-                                              fileUrl="https://cogentaifiles.blob.core.windows.net/congetaiocrpdf/991b60e1-f38c-42fb-b997-b67caae87c1d.pdf?sv=2022-11-02&se=2023-10-26T13%3A24%3A45Z&sr=b&sp=r&sig=qj5HC0vWGLcubOPlWXI7JjRUKh5sX4voG3ahL0RiNYA%3D"
-                                              plugins={[searchPluginInstance]}
-                                              onDocumentLoad={handleDocumentLoad}
-                                            />
-                                          </div>
-                                        </Worker>
+                                  </Tab.Pane>
+                                  <Tab.Pane id="my-posts" eventKey="file">
+                                    <div className="my-post-content pt-3">
+                                      <div className="card">
+                                        <div><input
+                                          required
+                                          type="file"
+                                          accept="application/pdf,text/plain"
+                                          onChange={(e) => onChangeFile(e.target.files)}
+                                        />
+
+                                        </div>
+                                        <div className="card-body p-0">
+                                          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                                            <div
+                                              style={{
+                                                height: "600px",
+                                                maxWidth: "1300px",
+                                                marginLeft: "auto",
+                                                marginRight: "auto",
+                                              }}
+                                            >
+                                              {" "}
+                                              <Viewer
+                                                fileUrl="https://cogentaifiles.blob.core.windows.net/congetaiocrpdf/991b60e1-f38c-42fb-b997-b67caae87c1d.pdf?sv=2022-11-02&se=2023-10-26T13%3A24%3A45Z&sr=b&sp=r&sig=qj5HC0vWGLcubOPlWXI7JjRUKh5sX4voG3ahL0RiNYA%3D"
+                                                plugins={[searchPluginInstance]}
+                                                onDocumentLoad={handleDocumentLoad}
+                                              />
+                                            </div>
+                                          </Worker>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
 
-                                </Tab.Pane>
-                              </Tab.Content>
-                            </Tab.Container>
+                                  </Tab.Pane>
+                                </Tab.Content>
+                              </Tab.Container>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              {isModalOpen && (
-                <Modal
-                  title={selectMeatName}
-                  // title="Pdf Test"
-                  centered
-                  open={isModalOpen}
-                  // style={{ top: 5 }}
-                  onOk={handleCloseModal}
-                  onCancel={handleCloseModal}
-                  width={1000}
-                  height={400}
-                >
-                  <div className="section-container">
-                    {/* <button onClick={changeSearch}>Check
+                {isModalOpen && (
+                  <Modal
+                    title={selectMeatName}
+                    // title="Pdf Test"
+                    centered
+                    open={isModalOpen}
+                    // style={{ top: 5 }}
+                    onOk={handleCloseModal}
+                    onCancel={handleCloseModal}
+                    width={1000}
+                    height={400}
+                  >
+                    <div className="section-container">
+                      {/* <button onClick={changeSearch}>Check
         
         </button> */}
-                    {/* {isLoadingSection ?
+                      {/* {isLoadingSection ?
                       <Spin className='ml-2 ms-1 section-spin' size="medium" />
                       : <>
                         {sectionList?.map((item) => {
@@ -1127,7 +1184,7 @@ export default function PatientDetails() {
                           );
                         })}
                       </>} */}
-                    {/* <div
+                      {/* <div
         className="rpv-core__viewer"
         style={{
             border: '1px solid rgba(0, 0, 0, 0.3)',
@@ -1149,180 +1206,235 @@ export default function PatientDetails() {
             <ShowSearchPopoverButton />
         </div>
         </div> */}
-                    <div
-                      className="rpv-core__viewer"
-                      style={{
-                        border: '1px solid rgba(0, 0, 0, 0.3)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: '100%',
-                        margin: "0 82px 10px 73px"
-                      }}
-                    >
-
                       <div
+                        className="rpv-core__viewer"
                         style={{
-                          alignItems: 'center',
-                          backgroundColor: '#eeeeee',
-                          borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                          border: '1px solid rgba(0, 0, 0, 0.3)',
                           display: 'flex',
-                          padding: '4px',
+                          flexDirection: 'column',
+                          height: '100%',
+                          margin: "0 82px 10px 73px"
                         }}
                       >
-                        <Search>
-                          {(renderSearchProps) => {
-                            const [readyToSearch, setReadyToSearch] = useState(false);
-                            return (
-                              <>
-                                <div
-                                  style={{
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    display: 'flex',
-                                    padding: '0 2px',
-                                  }}
-                                >
-                                  <input
-                                    style={{
-                                      border: 'none',
-                                      padding: '8px',
-                                      width: '200px',
-                                    }}
-                                    placeholder="Enter to search"
-                                    type="text"
-                                    value={renderSearchProps.keyword}
-                                    onChange={(e) => {
-                                      setReadyToSearch(false);
-                                      renderSearchProps.setKeyword(e.target.value);
-                                    }}
-                                    onKeyDown={(e) => {
-                                      if (e.keyCode === 13 && renderSearchProps.keyword) {
-                                        setReadyToSearch(true);
-                                        renderSearchProps.search();
-                                      }
-                                    }}
-                                  />
-                                  <Tooltip
-                                    position={Position.BottomCenter}
-                                    target={
-                                      <button
-                                        style={{
-                                          background: '#fff',
-                                          border: 'none',
-                                          borderBottom: `2px solid ${renderSearchProps.matchCase ? 'blue' : 'transparent'
-                                            }`,
-                                          height: '100%',
-                                          padding: '0 2px',
-                                        }}
-                                        onClick={() =>
-                                          renderSearchProps.changeMatchCase(!renderSearchProps.matchCase)
-                                        }
-                                      >
-                                        <Icon>
-                                          <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
-                                          <path d="M4.383 14.725L13.59 14.725" />
-                                          <path d="M0.5 21.725L3.52 21.725" />
-                                          <path d="M14.479 21.725L17.5 21.725" />
-                                          <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
-                                          <path d="M16.92 16.725L20.794 16.725" />
-                                          <path d="M21.516 21.725L23.5 21.725" />
-                                        </Icon>
-                                      </button>
-                                    }
-                                    content={() => 'Match case'}
-                                    offset={{ left: 0, top: 8 }}
-                                  />
-                                  <Tooltip
-                                    position={Position.BottomCenter}
-                                    target={
-                                      <button
-                                        style={{
-                                          background: '#fff',
-                                          border: 'none',
-                                          borderBottom: `2px solid ${renderSearchProps.wholeWords ? 'blue' : 'transparent'
-                                            }`,
-                                          height: '100%',
-                                          padding: '0 2px',
-                                        }}
-                                        onClick={() =>
-                                          renderSearchProps.changeWholeWords(!renderSearchProps.wholeWords)
-                                        }
-                                      >
-                                        <Icon>
-                                          <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
-                                          <path d="M3.5 9.498L3.5 14.498" />
-                                        </Icon>
-                                      </button>
-                                    }
-                                    content={() => 'Match whole word'}
-                                    offset={{ left: 0, top: 8 }}
-                                  />
-                                </div>
-                                {readyToSearch &&
-                                  renderSearchProps.keyword &&
-                                  renderSearchProps.numberOfMatches === 0 && (
-                                    <div style={{ padding: '0 8px' }}>Not found</div>
-                                  )}
-                                {readyToSearch &&
-                                  renderSearchProps.keyword &&
-                                  renderSearchProps.numberOfMatches > 0 && (
-                                    <div style={{ padding: '0 8px' }}>
-                                      {renderSearchProps.currentMatch} of {renderSearchProps.numberOfMatches}
-                                    </div>
-                                  )}
-                                <div style={{ padding: '0 2px' }}>
-                                  <Tooltip
-                                    position={Position.BottomCenter}
-                                    target={
-                                      <MinimalButton onClick={renderSearchProps.jumpToPreviousMatch}>
-                                        <PreviousIcon />
-                                      </MinimalButton>
-                                    }
-                                    content={() => 'Previous match'}
-                                    offset={{ left: 0, top: 8 }}
-                                  />
-                                </div>
-                                <div style={{ padding: '0 2px' }}>
-                                  <Tooltip
-                                    position={Position.BottomCenter}
-                                    target={
-                                      <MinimalButton onClick={renderSearchProps.jumpToNextMatch}>
-                                        <NextIcon />
-                                      </MinimalButton>
-                                    }
-                                    content={() => 'Next match'}
-                                    offset={{ left: 0, top: 8 }}
-                                  />
-                                </div>
-                              </>
-                            );
-                          }}
-                        </Search>
-                      </div>
-                    </div>
-                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                      <div
-                        style={{
-                          height: "400px",
-                          maxWidth: "1300px",
-                          marginLeft: "auto",
-                          marginRight: "auto",
-                        }}
-                      >
-                        {" "}
-                        <Viewer
-                          fileUrl="https://cogentaifiles.blob.core.windows.net/congetaiocrpdf/991b60e1-f38c-42fb-b997-b67caae87c1d.pdf?sv=2022-11-02&se=2023-10-26T13%3A24%3A45Z&sr=b&sp=r&sig=qj5HC0vWGLcubOPlWXI7JjRUKh5sX4voG3ahL0RiNYA%3D"
-                          plugins={[searchPluginInstance]}
-                          onDocumentLoad={handleDocumentLoad}
-                        />
-                      </div>
-                    </Worker>
 
-                  </div>
-                </Modal>
-              )}
+                        <div
+                          style={{
+                            alignItems: 'center',
+                            backgroundColor: '#eeeeee',
+                            borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                            display: 'flex',
+                            padding: '4px',
+                          }}
+                        >
+                          <Search>
+                            {(renderSearchProps) => {
+                              const [readyToSearch, setReadyToSearch] = useState(false);
+                              return (
+                                <>
+                                  <div
+                                    style={{
+                                      border: '1px solid rgba(0, 0, 0, 0.3)',
+                                      display: 'flex',
+                                      padding: '0 2px',
+                                    }}
+                                  >
+                                    <input
+                                      style={{
+                                        border: 'none',
+                                        padding: '8px',
+                                        width: '200px',
+                                      }}
+                                      placeholder="Enter to search"
+                                      type="text"
+                                      value={renderSearchProps.keyword}
+                                      onChange={(e) => {
+                                        setReadyToSearch(false);
+                                        renderSearchProps.setKeyword(e.target.value);
+                                      }}
+                                      onKeyDown={(e) => {
+                                        if (e.keyCode === 13 && renderSearchProps.keyword) {
+                                          setReadyToSearch(true);
+                                          renderSearchProps.search();
+                                        }
+                                      }}
+                                    />
+                                    <Tooltip
+                                      position={Position.BottomCenter}
+                                      target={
+                                        <button
+                                          style={{
+                                            background: '#fff',
+                                            border: 'none',
+                                            borderBottom: `2px solid ${renderSearchProps.matchCase ? 'blue' : 'transparent'
+                                              }`,
+                                            height: '100%',
+                                            padding: '0 2px',
+                                          }}
+                                          onClick={() =>
+                                            renderSearchProps.changeMatchCase(!renderSearchProps.matchCase)
+                                          }
+                                        >
+                                          <Icon>
+                                            <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
+                                            <path d="M4.383 14.725L13.59 14.725" />
+                                            <path d="M0.5 21.725L3.52 21.725" />
+                                            <path d="M14.479 21.725L17.5 21.725" />
+                                            <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
+                                            <path d="M16.92 16.725L20.794 16.725" />
+                                            <path d="M21.516 21.725L23.5 21.725" />
+                                          </Icon>
+                                        </button>
+                                      }
+                                      content={() => 'Match case'}
+                                      offset={{ left: 0, top: 8 }}
+                                    />
+                                    <Tooltip
+                                      position={Position.BottomCenter}
+                                      target={
+                                        <button
+                                          style={{
+                                            background: '#fff',
+                                            border: 'none',
+                                            borderBottom: `2px solid ${renderSearchProps.wholeWords ? 'blue' : 'transparent'
+                                              }`,
+                                            height: '100%',
+                                            padding: '0 2px',
+                                          }}
+                                          onClick={() =>
+                                            renderSearchProps.changeWholeWords(!renderSearchProps.wholeWords)
+                                          }
+                                        >
+                                          <Icon>
+                                            <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
+                                            <path d="M3.5 9.498L3.5 14.498" />
+                                          </Icon>
+                                        </button>
+                                      }
+                                      content={() => 'Match whole word'}
+                                      offset={{ left: 0, top: 8 }}
+                                    />
+                                  </div>
+                                  {readyToSearch &&
+                                    renderSearchProps.keyword &&
+                                    renderSearchProps.numberOfMatches === 0 && (
+                                      <div style={{ padding: '0 8px' }}>Not found</div>
+                                    )}
+                                  {readyToSearch &&
+                                    renderSearchProps.keyword &&
+                                    renderSearchProps.numberOfMatches > 0 && (
+                                      <div style={{ padding: '0 8px' }}>
+                                        {renderSearchProps.currentMatch} of {renderSearchProps.numberOfMatches}
+                                      </div>
+                                    )}
+                                  <div style={{ padding: '0 2px' }}>
+                                    <Tooltip
+                                      position={Position.BottomCenter}
+                                      target={
+                                        <MinimalButton onClick={renderSearchProps.jumpToPreviousMatch}>
+                                          <PreviousIcon />
+                                        </MinimalButton>
+                                      }
+                                      content={() => 'Previous match'}
+                                      offset={{ left: 0, top: 8 }}
+                                    />
+                                  </div>
+                                  <div style={{ padding: '0 2px' }}>
+                                    <Tooltip
+                                      position={Position.BottomCenter}
+                                      target={
+                                        <MinimalButton onClick={renderSearchProps.jumpToNextMatch}>
+                                          <NextIcon />
+                                        </MinimalButton>
+                                      }
+                                      content={() => 'Next match'}
+                                      offset={{ left: 0, top: 8 }}
+                                    />
+                                  </div>
+                                </>
+                              );
+                            }}
+                          </Search>
+                        </div>
+                      </div>
+                      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                        <div
+                          style={{
+                            height: "400px",
+                            maxWidth: "1300px",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                          }}
+                        >
+                          {" "}
+                          <Viewer
+                            fileUrl={selectFileURL}
+                            plugins={[searchPluginInstance]}
+                            onDocumentLoad={handleDocumentLoad}
+                          />
+                        </div>
+                      </Worker>
+
+                    </div>
+                  </Modal>
+                )}
+                  {isModalOpenValid && (
+                  <Modal
+                    title="Add Valid Code"
+                    centered
+                    open={isModalOpenValid}
+                    onOk={handleCloseModal}
+                    onCancel={handleCloseModal}
+                    footer={null}
+                  >
+                    <div className="offcanvas-body">
+                     
+                    <div className="container-fluid">
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <div className="row">
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Id <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientId"
+                      required
+                      type="text"
+                    />
+                  </div>      
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientName"
+                      required
+                      type="text"
+                    />
+                  </div>              
+                </div>
+
+                <div>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    {isLoading ? "Loding..." : "Submit"}
+                  </Button>
+                  <Button
+                    onClick={() => handleCloseModal()}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
             </div>
-          </div>
-}
+                 
+
+                    </div>
+                  </Modal>
+                )}
+                
+              </div>
+            </div>
+          }
         </div>
       </div>
     </>

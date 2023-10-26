@@ -41,6 +41,7 @@ export default function Patient() {
   const [validated, setValidated] = useState(false);
   const [dataValidationList, setDataValidationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [addUser, setAddUser] = useState(false);
 
@@ -61,6 +62,7 @@ export default function Patient() {
   });
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
+    patientName:""
   });
 
   const [pageCount, setPageCount] = useState(0);
@@ -131,6 +133,7 @@ export default function Patient() {
 
   const addPatientFile = (data) => {
     inputValue.patientId =  data.patientId;
+    inputValue.name= data.patientName;
     setValidated(false);
     setAddPatient(true);
   };
@@ -156,7 +159,7 @@ export default function Patient() {
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
-      setIsLoading(true);
+      setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
       const formData = new FormData();
@@ -184,9 +187,9 @@ export default function Patient() {
           message: "Patient File Upload Successfully!",
         });
         setAddPatient(false);
-        setIsLoading(false);
+        setIsLoadingBtn(false);
       } else {
-        setIsLoading(false);
+        setIsLoadingBtn(false);
       }
       setAddPatient(false);
       getAllList(localUserId);
@@ -203,7 +206,7 @@ export default function Patient() {
     console.log(inputValuePatientId);
 
     if (form.checkValidity() === true) {   
-      setIsLoading(true);   
+      setIsLoadingBtn(true);   
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,inputValuePatientId,
       );
@@ -212,9 +215,9 @@ export default function Patient() {
           message: "Patient Id Created Successfully!",
         });
         setAddPatientId(false);
-        setIsLoading(false);
+        setIsLoadingBtn(false);
       } else {
-        setIsLoading(false);
+        setIsLoadingBtn(false);
       }
       setAddPatientId(false);
       getAllList(localUserId);
@@ -437,8 +440,7 @@ export default function Patient() {
 																	<div className="d-flex justify-content-center">
 																		<button onClick={() => addPatientFile(item)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
 																			<FontAwesomeIcon icon={faUpload} fontSize={11} />
-																		</button>
-																	
+																		</button>																	
 																	</div>
 																</td>
                               </tr>
@@ -492,7 +494,7 @@ export default function Patient() {
           </div>
 }
         </div>
-        <Offcanvas show={addPatient} className="offcanvas-end" placement="end">
+        <Offcanvas onHide={setAddPatient} show={addPatient} className="offcanvas-end" placement="end">
           <div className="offcanvas-header">
             <h5 className="modal-title" id="#gridSystemModal">
               Add Patient Details
@@ -509,18 +511,7 @@ export default function Patient() {
             <div className="container-fluid">
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="name"
-                      required
-                      type="text"
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-xl-12 mb-3">
+                <div className="col-xl-12 mb-3">
                     <Form.Label>
                       Patient Id <span className="text-danger">*</span>{" "}
                     </Form.Label>
@@ -532,6 +523,20 @@ export default function Patient() {
                       onChange={handleChange}
                     />
                   </div>
+                  
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="name"
+                      required
+                      type="text"
+                      value = {inputValue.name}
+                      onChange={handleChange}
+                    />
+                  </div>
+                
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
                       File <span className="text-danger">*</span>{" "}
@@ -558,7 +563,7 @@ export default function Patient() {
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoading ? "Loding..." : "Submit"}
+                    {isLoadingBtn ? "Loding..." : "Submit"}
                   </Button>
                   <Button
                     onClick={() => setAddPatient(false)}
@@ -571,7 +576,7 @@ export default function Patient() {
             </div>
           </div>
         </Offcanvas>
-        <Offcanvas show={addPatientId} className="offcanvas-end" placement="end">
+        <Offcanvas onHide={setAddPatientId} show={addPatientId} className="offcanvas-end" placement="end">
           <div className="offcanvas-header">
             <h5 className="modal-title" id="#gridSystemModal">
               Add Patient Details
@@ -579,7 +584,7 @@ export default function Patient() {
             <button
               type="button"
               className="btn-close"
-              onClick={() => setAddPatient(false)}
+              onClick={() => setAddPatientId(false)}
             >
               <i className="fa-solid fa-xmark"></i>
             </button>
@@ -598,12 +603,23 @@ export default function Patient() {
                       type="text"
                       onChange={handleChangePatientId}
                     />
+                  </div>      
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientName"
+                      required
+                      type="text"
+                      onChange={handleChangePatientId}
+                    />
                   </div>              
                 </div>
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoading ? "Loding..." : "Submit"}
+                    {isLoadingBtn ? "Loding..." : "Submit"}
                   </Button>
                   <Button
                     onClick={() => setAddPatientId(false)}
