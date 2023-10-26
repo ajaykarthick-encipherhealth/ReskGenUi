@@ -37543,6 +37543,19 @@ span.meat-name-details{
   background-color: #c0b3e5 !important;
 }
 
+.bg-bg-four {
+  background-color:#8b8d4b !important;
+}
+
+.bg-bg-five {
+  background-color: #b8b45d !important;
+}
+
+.bg-bg-six {
+  background-color:#bababa !important;
+}
+
+
 img.login-logo {
     width: 300px;
     height: 300px;
@@ -37626,5 +37639,9 @@ span.mb-1.disease-name {
 .valid-text {
   margin-bottom: 10px;
   padding: 10px !important;
+}
+.ant-popover .ant-popover-content {
+  position: relative;
+  width: 350px;
 }
 

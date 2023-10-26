@@ -115,11 +115,11 @@ export default function Patient() {
       setPatinetList(records);
       setPatinetListAll(response.data);
       setIsLoading(false);
-      // setTimeout(() => {
-      //  setCanPreviousPage(false);
-      //   setCanNextPage(true);
-      //   getAllList();
-      // }, 5000);	
+      setTimeout(() => {
+       setCanPreviousPage(false);
+        setCanNextPage(true);
+        getAllList();
+      }, 8000);	
     }
   }
 

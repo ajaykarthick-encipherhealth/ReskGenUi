@@ -11,7 +11,7 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faCheck, faAdd } from "@fortawesome/free-solid-svg-icons";
-import { Popconfirm } from "antd";
+import { Popconfirm, Divider, Popover, } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
 import { Modal } from "antd";
@@ -30,12 +30,13 @@ import Form from 'react-bootstrap/Form';
 
 export default function PatientDetails() {
   const searchPluginInstance = searchPlugin({
-    // keyword: 'Physical Examination',
+    // keyword: 'Plan / Discussion',
     matchCase: true,
-    // wholeWords: true
+    wholeWords: true
   });
   const { highlight, Search } = searchPluginInstance;
   const { ShowSearchPopoverButton } = searchPluginInstance;
+  const [searchPluginInstanceLocal, setSearchPluginInstanceLocal] = useState(searchPluginInstance);
 
   const sideMenu = useSelector(state => state.sideMenu);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -109,9 +110,9 @@ export default function PatientDetails() {
 
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
-    console.log(tenId)
+    console.log(RenderSearchProps)
     setLocalOrgId(orgId);
-    getPatientDetails(orgId,tenId);
+    getPatientDetails(orgId, tenId);
     setLocalTenantId(tenId)
 
     //   if (isDocumentLoaded) {
@@ -122,7 +123,7 @@ export default function PatientDetails() {
     // }
   }, [isDocumentLoaded]);
 
-  const getPatientDetails = async (orgId,tenId) => {
+  const getPatientDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
@@ -133,7 +134,7 @@ export default function PatientDetails() {
       var comboDis = '';
       var meatCri = '';
       var dosYearArr = [];
-      getPatientPdfFile(result.fileId,tenId)
+      getPatientPdfFile(result.fileId, tenId)
       setSelectMeatFileId(response.data.fileId)
       setPatientDocumentResult(result);
 
@@ -173,7 +174,7 @@ export default function PatientDetails() {
 
     }
   }
-  const getPatientPdfFile = async (fileId,tenId) => {
+  const getPatientPdfFile = async (fileId, tenId) => {
     const response = await axios.get(ENDPOINTS.apiEndoint + `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`);
     if (response.data) {
       var result = response.data;
@@ -374,9 +375,10 @@ export default function PatientDetails() {
         keyword: value,
         matchCase: true,
       });
-    }, 1000);
+      setSelectMeatName(value);
+    }, 2000);
     setDocumentLoaded(true);
-    setSelectMeatName(value);
+    setSelectMeatName(value + " -  " + "Loading...");
     setIsLoadingSection(true);
     setIsModalOpen(true);
     // setIsModalOpenValid(true)
@@ -556,7 +558,7 @@ export default function PatientDetails() {
                                                   >
                                                     {" "}
                                                     <Viewer
-                                                     fileUrl={selectFileURL}
+                                                      fileUrl={selectFileURL}
                                                       // fileUrl="https://cogentaifiles.blob.core.windows.net/congetaiocrpdf/991b60e1-f38c-42fb-b997-b67caae87c1d.pdf?sv=2022-11-02&se=2023-10-26T13%3A24%3A45Z&sr=b&sp=r&sig=qj5HC0vWGLcubOPlWXI7JjRUKh5sX4voG3ahL0RiNYA%3D"
                                                       plugins={[defaultLayoutPluginInstance]}
                                                     />
@@ -568,26 +570,26 @@ export default function PatientDetails() {
                                           <div className="col-xl-5">
                                             <ul className="timeline">
                                               <div className="valid-text d-flex justify-content-sm-between">
-                                              <span
-                                                className={`dang d-block text-warning`}
-                                              >
-                                                {" "}
-                                                HCC{" "}
-                                                <Badge
-                                                  as="a"
-                                                  href=""
-                                                  bg="secondary badge-circle"
+                                                <span
+                                                  className={`dang d-block text-warning`}
                                                 >
-                                                  {validDiseasesList.length}
-                                                </Badge>
-                                              </span>
-                                              <div className="d-flex justify-content-center">
-																		<button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-																			<FontAwesomeIcon icon={faAdd} fontSize={11} />
-																		</button>																	
-																	</div>
+                                                  {" "}
+                                                  HCC{" "}
+                                                  <Badge
+                                                    as="a"
+                                                    href=""
+                                                    bg="secondary badge-circle"
+                                                  >
+                                                    {validDiseasesList.length}
+                                                  </Badge>
+                                                </span>
+                                                <div className="d-flex justify-content-center">
+                                                  <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                    <FontAwesomeIcon icon={faAdd} fontSize={11} />
+                                                  </button>
+                                                </div>
                                               </div>
-                                            
+
                                               {validDiseasesList.map((data, i) => (
                                                 <li>
                                                   <div className="timeline-panel valid-disease">
@@ -708,7 +710,11 @@ export default function PatientDetails() {
                                             <label>Disease Name</label>
                                           </div>
                                           <div className="col-xl-1">
-                                            <label></label>
+                                            <div className="d-flex justify-content-center">
+                                              <button onClick={() => addValidDiseases()} className="btn bg-white hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                <FontAwesomeIcon icon={faAdd} fontSize={11} color="blue" />
+                                              </button>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
@@ -839,23 +845,34 @@ export default function PatientDetails() {
                                                 <span className="font-bold">{item.diagnosisCode}</span>
                                               </div>
                                               <div className="col-xl-2">
-                                                <span className="meat-name-details">{item.diseaseName}</span>
+                                                <Popover placement="topLeft" title="Disease Name" content={item.diseaseName}>
+                                                  <span className="meat-name-details">{item.diseaseName}</span>
+                                                </Popover>
                                               </div>
                                               <div className="col-xl-2 d-grid">
-                                                <span className="meat-name-details">{item.monitor}</span>
-                                                <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
+                                                <Popover placement="topLeft" title="Monitor" content={item.monitor}>
+                                                  <span className="meat-name-details">{item.monitor}</span>
+                                                </Popover>
+                                                <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan / Discussion" ? "bg-four badge-circle mt-2" : item.monitorCapturedFromHeader === "Patient Instructions" ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-five badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
-                                                <span className="meat-name-details">{item.evaluate}</span>
-                                                <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
+                                                  <span className="meat-name-details">{item.evaluate}</span>
+                                                </Popover>
+                                                <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan / Discussion" ? "bg-four badge-circle mt-2" : item.evaluateCapturedFromHeader === "Patient Instructions" ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
-                                                <span className="meat-name-details">{item.assessment}</span>
-                                                <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
+                                                <Popover placement="topLeft" title="Assessment" content={item.assessment}>
+                                                  <span className="meat-name-details">{item.assessment}</span>
+                                                </Popover>
+                                                <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan / Discussion" ? "bg-four badge-circle mt-2" : item.assessmentCapturedFromHeader === "Patient Instructions" ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
-                                                <span className="meat-name-details">{item.treatment}</span>
-                                                <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
+                                                <Popover placement="topLeft" title="Treatment" content={item.treatment}>
+                                                  <span className="meat-name-details">{item.treatment}</span>
+                                                </Popover>
+
+                                                <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan / Discussion" ? "bg-four badge-circle mt-2" : item.treatmentCapturedFromHeader === "Patient Instructions" ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-1 meatclose">
                                                 {/* {item.isMeatCriteriaPresent === true ?
@@ -902,24 +919,35 @@ export default function PatientDetails() {
                                                     <span className="font-bold">{item.diagnosisCode}</span>
                                                   </div>
                                                   <div className="col-xl-2">
-                                                    <span>{item.diseaseName}</span>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <span className="meat-name-details">{item.monitor}</span>
-                                                    <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <span className="meat-name-details">{item.evaluate}</span>
-                                                    <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <span className="meat-name-details">{item.assessment}</span>
-                                                    <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <span className="meat-name-details">{item.treatment}</span>
-                                                    <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
-                                                  </div>
+                                                <Popover placement="topLeft" title="Disease Name" content={item.diseaseName}>
+                                                  <span className="meat-name-details">{item.diseaseName}</span>
+                                                </Popover>
+                                              </div>
+                                              <div className="col-xl-2 d-grid">
+                                                <Popover placement="topLeft" title="Monitor" content={item.monitor}>
+                                                  <span className="meat-name-details">{item.monitor}</span>
+                                                </Popover>
+                                                <Badge className="badge-meat cr-pointer" bg={item.monitorCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.monitorCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.monitorCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan / Discussion" ? "bg-four badge-circle mt-2" : item.monitorCapturedFromHeader === "Patient Instructions" ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-five badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader)}>{item.monitorCapturedFromHeader}</Badge>
+                                              </div>
+                                              <div className="col-xl-2 d-grid">
+                                                <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
+                                                  <span className="meat-name-details">{item.evaluate}</span>
+                                                </Popover>
+                                                <Badge className="badge-meat cr-pointer" bg={item.evaluateCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.evaluateCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.evaluateCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan / Discussion" ? "bg-four badge-circle mt-2" : item.evaluateCapturedFromHeader === "Patient Instructions" ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
+                                              </div>
+                                              <div className="col-xl-2 d-grid">
+                                                <Popover placement="topLeft" title="Assessment" content={item.assessment}>
+                                                  <span className="meat-name-details">{item.assessment}</span>
+                                                </Popover>
+                                                <Badge className="badge-meat cr-pointer" bg={item.assessmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.assessmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.assessmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan / Discussion" ? "bg-four badge-circle mt-2" : item.assessmentCapturedFromHeader === "Patient Instructions" ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader)}>{item.assessmentCapturedFromHeader}</Badge>
+                                              </div>
+                                              <div className="col-xl-2 d-grid">
+                                                <Popover placement="topLeft" title="Treatment" content={item.treatment}>
+                                                  <span className="meat-name-details">{item.treatment}</span>
+                                                </Popover>
+
+                                                <Badge className="badge-meat cr-pointer" bg={item.treatmentCapturedFromHeader === "HPI" ? "third badge-circle mt-2" : item.treatmentCapturedFromHeader === "Impression" ? "secondary badge-circle mt-2" : item.treatmentCapturedFromHeader === "Recommendations" ? "bgshodowcolor badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan / Discussion" ? "bg-four badge-circle mt-2" : item.treatmentCapturedFromHeader === "Patient Instructions" ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader)} >{item.treatmentCapturedFromHeader}</Badge>
+                                              </div>
                                                   <div className="col-xl-1 meatclose">
 
 
@@ -1377,7 +1405,7 @@ export default function PatientDetails() {
                     </div>
                   </Modal>
                 )}
-                  {isModalOpenValid && (
+                {isModalOpenValid && (
                   <Modal
                     title="Add Valid Code"
                     centered
@@ -1387,51 +1415,53 @@ export default function PatientDetails() {
                     footer={null}
                   >
                     <div className="offcanvas-body">
-                     
-                    <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                    />
-                  </div>      
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientName"
-                      required
-                      type="text"
-                    />
-                  </div>              
-                </div>
 
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoading ? "Loding..." : "Submit"}
-                  </Button>
-                  <Button
-                    onClick={() => handleCloseModal()}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-                 
+                      <div className="container-fluid">
+                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                          <div className="row">
+                            <div className="col-xl-12 mb-3">
+                              <Form.Label>
+                                Code <span className="text-danger">*</span>{" "}
+                              </Form.Label>
+                              <Form.Control
+                                name="code"
+                                required
+                                type="text"
+                              />
+                            </div>
+                            <div className="col-xl-12 mb-3">
+                              <Form.Label>
+                                Description <span className="text-danger">*</span>{" "}
+                              </Form.Label>
+
+                              <textarea
+                                className="form-control"
+                                id="val-suggestions"
+                                name="val-suggestions"
+                                rows="5"
+                              ></textarea>
+                            </div>
+                          </div>
+
+                          <div>
+                            <Button type="submit" className="btn btn-primary btn-sm me-1">
+                              {isLoading ? "Loding..." : "Submit"}
+                            </Button>
+                            <Button
+                              onClick={() => handleCloseModal()}
+                              className="btn btn-danger btn-sm light ms-1"
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </Form>
+                      </div>
+
 
                     </div>
                   </Modal>
                 )}
-                
+
               </div>
             </div>
           }
