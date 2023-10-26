@@ -30,6 +30,21 @@ import { Offcanvas } from "react-bootstrap";
 
 
 export default function PatientDetails() {
+
+  let searchKeywords = [];
+
+  // const searchPluginInstance = searchPlugin({
+  //   // keyword: [
+  //   //   'document',
+  //   //   {
+  //         keyword: 'Impression',
+  //         matchCase: true,
+  //     // },
+  // // ],
+  // })
+
+
+
   const searchPluginInstance = searchPlugin({
     // keyword: 'Plan / Discussion',
     matchCase: true,
@@ -66,6 +81,7 @@ export default function PatientDetails() {
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [validated, setValidated] = useState(false);
+  const [rafScore, setRAFScore] = useState([]);
   //   highlight([
   //     'document',
   //     {
@@ -130,11 +146,13 @@ export default function PatientDetails() {
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
       var result = response.data;
+      console.log(result.rafScore)
       var validDis = '';
       var invalidDis = '';
       var comboDis = '';
       var meatCri = '';
       var dosYearArr = [];
+      var rafScore = '';
       getPatientPdfFile(result.fileId, tenId)
       setSelectMeatFileId(response.data.fileId)
       setPatientDocumentResult(result);
@@ -143,6 +161,9 @@ export default function PatientDetails() {
       for (var key in response.data.validDisease) {
         dosYearArr.push({ value: key, label: key })
         validDis = response.data.validDisease[key];
+        if (result.rafScore != null) {
+          rafScore = response.data.rafScore[key]
+        }
       }
       for (var key in response.data.invalidDisease) {
         invalidDis = response.data.invalidDisease[key];
@@ -171,7 +192,9 @@ export default function PatientDetails() {
       setComboDiseaseCodesList(comboDis);
       setMeatCriteriaList(meatCri);
       setDosYear(dosYearArr);
+      setRAFScore(rafScore)
       setIsLoading(false);
+      console.log(rafScore)
 
     }
   }
@@ -373,7 +396,7 @@ export default function PatientDetails() {
   const handleOpenModal = (value) => {
     setTimeout(() => {
       highlight({
-        keyword: value,
+        keyword: value+":",
         matchCase: true,
       });
       setSelectMeatName(value);
@@ -512,8 +535,13 @@ export default function PatientDetails() {
                         <div className="card-body">
                           <div className="profile-tab">
                             <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey="validDiseases">
+                              <Tab.Container defaultActiveKey="file">
                                 <Nav as="ul" className="nav nav-tabs">
+                                  <Nav.Item as="li" className="nav-item">
+                                    <Nav.Link to="#my-posts" eventKey="file">
+                                      File
+                                    </Nav.Link>
+                                  </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
                                     <Nav.Link to="#my-posts" eventKey="validDiseases">
                                       Diseases
@@ -545,7 +573,7 @@ export default function PatientDetails() {
                                     <div className="my-post-content pt-3">
                                       <div className="widget-media   ps--active-y">
                                         <div className="row">
-                                          <div className="col-xl-7">
+                                          {/* <div className="col-xl-7">
                                             <div className="card">
                                               <div className="card-body p-0">
                                                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -560,15 +588,14 @@ export default function PatientDetails() {
                                                     {" "}
                                                     <Viewer
                                                       fileUrl={selectFileURL}
-                                                      // fileUrl="https://cogentaifiles.blob.core.windows.net/congetaiocrpdf/991b60e1-f38c-42fb-b997-b67caae87c1d.pdf?sv=2022-11-02&se=2023-10-26T13%3A24%3A45Z&sr=b&sp=r&sig=qj5HC0vWGLcubOPlWXI7JjRUKh5sX4voG3ahL0RiNYA%3D"
                                                       plugins={[defaultLayoutPluginInstance]}
                                                     />
                                                   </div>
                                                 </Worker>
                                               </div>
                                             </div>
-                                          </div>
-                                          <div className="col-xl-5">
+                                          </div> */}
+                                          <div className="col-xl-6">
                                             <ul className="timeline">
                                               <div className="valid-text d-flex justify-content-sm-between">
                                                 <span
@@ -622,10 +649,33 @@ export default function PatientDetails() {
                                               ))}
                                             </ul>
                                           </div>
-                                          {/* <div className="col-xl-6">
-                                          <ul className="timeline">
-                                            <span
-                                              className={`dang d-block mb-2  invalid-text`}
+                                          <div className="col-xl-6">
+                                            <ul className="timeline">
+
+                                              <div className="invalid-text d-flex justify-content-sm-between">
+                                                <span
+                                                  className={`dang d-block`}
+                                                >
+                                                  {" "}
+                                                  NON-HCC{" "}
+                                                  <Badge
+                                                    as="a"
+                                                    href=""
+                                                    bg="badge-circle invalid-bange"
+                                                  >
+                                                    {invalidDiseasesList.length}
+                                                  </Badge>
+                                                </span>
+                                                <div className="d-flex justify-content-center">
+                                                  <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                    <FontAwesomeIcon icon={faAdd} fontSize={11} />
+                                                  </button>
+                                                </div>
+                                              </div>
+
+
+                                              {/* <span
+                                              className={`dang d-block`}
                                             >
                                               {" "}
                                               NON-HCC{" "}
@@ -636,38 +686,38 @@ export default function PatientDetails() {
                                               >
                                                 {invalidDiseasesList.length}
                                               </Badge>
-                                            </span>
-                                            {invalidDiseasesList.map((data, i) => (
-                                              <li>
-                                                <div className="timeline-panel invalid-disease">
-                                                  <div className="media-body">
-                                                    <span className="mb-1 disease-name">
-                                                      {data.name}
-                                                    </span>
-                                                  </div>
-                                                  <Popconfirm
-                                                    title="You want move to valid?"
-                                                    description={data.name}
-                                                    onConfirm={confirmInvalid}
-                                                    placement="leftTop"
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                    onOpenChange={() =>
-                                                      onchangeValid(data.name)
-                                                    }
-                                                  >
-                                                    <div className="icon-box  bg-danger-light me-1">
-                                                      <FontAwesomeIcon
-                                                        icon={faCheck}
-                                                        style={{ color: "orange" }}
-                                                      />
+                                            </span> */}
+                                              {invalidDiseasesList.map((data, i) => (
+                                                <li>
+                                                  <div className="timeline-panel invalid-disease">
+                                                    <div className="media-body">
+                                                      <span className="mb-1 disease-name">
+                                                        {data.name}
+                                                      </span>
                                                     </div>
-                                                  </Popconfirm>
-                                                </div>
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div> */}
+                                                    <Popconfirm
+                                                      title="You want move to valid?"
+                                                      description={data.name}
+                                                      onConfirm={confirmInvalid}
+                                                      placement="leftTop"
+                                                      okText="Yes"
+                                                      cancelText="No"
+                                                      onOpenChange={() =>
+                                                        onchangeValid(data.name)
+                                                      }
+                                                    >
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faCheck}
+                                                          style={{ color: "orange" }}
+                                                        />
+                                                      </div>
+                                                    </Popconfirm>
+                                                  </div>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
@@ -1016,114 +1066,180 @@ export default function PatientDetails() {
                                         </div> */}
 
                                         </div>
-                                        <div className="col-xl-12">
-                                          <div className="row">
-                                            <div className="col-xl-6">
-                                              <div className="card">
-                                                <div className="raf-card">
-
-
-                                                  <div className="row raf-head text-center">
-                                                    <div className="col-xl-12">
-                                                      <label className="text-white">Summary</label>
-                                                    </div>
-                                                  </div>
-                                                  <div className="row raf-details">
-                                                    <div className="col-xl-6">
-                                                      <span>Demographic Risk Factor</span>
-                                                    </div>
-                                                    <div className="col-xl-6">
-                                                      <span>0:240</span>
-                                                    </div>
-
+                                        {rafScore != "" ?
+                                          <div className="col-xl-12">
+                                            {rafScore.scoreOutputDTOList.map((rafScoreMapResult) => {
+                                              return (
+                                                <div className="row raf-main-card">
+                                                  <div className="raf-name-head">
+                                                    <h5 className="raf-model-version">{rafScoreMapResult.hcc_model.model} - {rafScoreMapResult.hcc_model.version}</h5>
                                                   </div>
 
+                                                  <div className="col-xl-6">
+                                                    <div className="card">
+                                                      <div className="raf-card">
+
+                                                        <div className="row raf-head text-center">
+                                                          <div className="col-xl-12">
+                                                            <label className="text-white">Summary</label>
+                                                          </div>
+                                                        </div>
+                                                        <div className="row raf-details">
+                                                          <div className="col-xl-6">
+                                                            <span>Demographic Risk Factor</span>
+                                                          </div>
+                                                          <div className="col-xl-6">
+                                                            <span>0:240</span>
+                                                          </div>
+
+                                                        </div>
+
+                                                      </div>
+                                                    </div>
+
+                                                  </div>
+                                                  <div className="col-xl-6">
+                                                    <div className="card">
+                                                      <div className="raf-card">
+                                                        <div className="row raf-head">
+                                                          <div className="col-xl-6">
+                                                            <label className="text-white">DX Code</label>
+                                                          </div>
+                                                          <div className="col-xl-6">
+                                                            <label className="text-white">DX Description</label>
+                                                          </div>
+
+                                                        </div>
+
+                                                        {rafScoreMapResult.dx_hccs.map((item) => {
+                                                          return (
+                                                            <div className="row raf-details">
+                                                              <div className="col-xl-6">
+                                                                <span>{item.dx_name}</span>
+                                                              </div>
+                                                              <div className="col-xl-6">
+                                                                <span>{item.dx_desc}</span>
+                                                              </div>
+                                                            </div>
+                                                          );
+                                                        })}
+
+
+                                                      </div>
+                                                    </div>
+
+                                                  </div>
+                                                  <div className="col-xl-6">
+                                                    <div className="card">
+                                                      <div className="raf-card">
+                                                        <div className="row raf-head">
+                                                          <div className="col-xl-6">
+                                                            <label className="text-white">HCC</label>
+                                                          </div>
+                                                          <div className="col-xl-6">
+                                                            <label className="text-white">HCC Description</label>
+                                                          </div>
+
+                                                        </div>
+                                                        <div className="row raf-details">
+                                                          <div className="col-xl-6">
+                                                            <span>{rafScoreMapResult.hcc_model.model}</span>
+                                                          </div>
+                                                          <div className="col-xl-6">
+                                                            <span>{rafScoreMapResult.hcc_model.version}</span>
+                                                          </div>
+
+                                                        </div>
+                                                      </div>
+                                                    </div>
+
+                                                  </div>
+                                                  <div className="col-xl-6">
+                                                    <div className="card">
+                                                      <div className="raf-card">
+                                                        <div className="row raf-head">
+                                                          <div className="col-xl-4">
+                                                            <label className="text-white">Trumped By</label>
+                                                          </div>
+                                                          <div className="col-xl-4">
+                                                            <label className="text-white">RAF</label>
+                                                          </div>
+                                                          <div className="col-xl-4">
+                                                            <label className="text-white">Monthly Premium</label>
+                                                          </div>
+
+                                                        </div>
+                                                        <div className="row  raf-details">
+                                                          <div className="col-xl-4">
+                                                            <span>-</span>
+                                                          </div>
+                                                          <div className="col-xl-4">
+                                                            <span>{rafScoreMapResult.raf.hcc_score}</span>
+                                                          </div>
+                                                          <div className="col-xl-4">
+                                                            <span>${rafScoreMapResult.raf.premium}</span>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+
+                                                  </div>
                                                 </div>
+
+
+                                              );
+                                            })}
+
+                                            <div className="row raf-main-card">
+                                              <div className="raf-name-head">
+                                                <h5 className="raf-model-version">RAF SCORE DETAILS</h5>
                                               </div>
 
-                                            </div>
-                                            <div className="col-xl-6">
-                                              <div className="card">
-                                                <div className="raf-card">
-                                                  <div className="row raf-head">
-                                                    <div className="col-xl-6">
-                                                      <label className="text-white">DX Code</label>
-                                                    </div>
-                                                    <div className="col-xl-6">
-                                                      <label className="text-white">DX Description</label>
-                                                    </div>
+                                              <div className="col-xl-12">
+                                                <div className="card">
+                                                  <div className="raf-card">
+                                                    <div className="row raf-head">
+                                                      <div className="col-xl-2">
+                                                        <label className="text-white">v24Score</label>
+                                                      </div>
+                                                      <div className="col-xl-3">
+                                                        <label className="text-white">v24Score70Percent</label>
+                                                      </div>
+                                                      <div className="col-xl-2">
+                                                        <label className="text-white">v28Score</label>
+                                                      </div>
+                                                      <div className="col-xl-3">
+                                                        <label className="text-white">v28Score30Percent</label>
+                                                      </div>
+                                                      <div className="col-xl-2">
+                                                        <label className="text-white">Toatl Score</label>
+                                                      </div>
 
-                                                  </div>
-                                                  <div className="row raf-details">
-                                                    <div className="col-xl-6">
-                                                      <span>T82399A</span>
                                                     </div>
-                                                    <div className="col-xl-6">
-                                                      <span>Other mechanical complication of unspecified vascular grafts, initial encounter</span>
-                                                    </div>
-
-                                                  </div>
-                                                </div>
-                                              </div>
-
-                                            </div>
-                                            <div className="col-xl-6">
-                                              <div className="card">
-                                                <div className="raf-card">
-                                                  <div className="row raf-head">
-                                                    <div className="col-xl-6">
-                                                      <label className="text-white">HCC</label>
-                                                    </div>
-                                                    <div className="col-xl-6">
-                                                      <label className="text-white">HCC Description</label>
-                                                    </div>
-
-                                                  </div>
-                                                  <div className="row raf-details">
-                                                    <div className="col-xl-6">
-                                                      <span>HCC176</span>
-                                                    </div>
-                                                    <div className="col-xl-6">
-                                                      <span>Complications of Specified Implanted Device or Graft</span>
-                                                    </div>
-
-                                                  </div>
-                                                </div>
-                                              </div>
-
-                                            </div>
-                                            <div className="col-xl-6">
-                                              <div className="card">
-                                                <div className="raf-card">
-                                                  <div className="row raf-head">
-                                                    <div className="col-xl-4">
-                                                      <label className="text-white">Trumped By</label>
-                                                    </div>
-                                                    <div className="col-xl-4">
-                                                      <label className="text-white">RAF</label>
-                                                    </div>
-                                                    <div className="col-xl-4">
-                                                      <label className="text-white">Monthly Premium</label>
-                                                    </div>
-
-                                                  </div>
-                                                  <div className="row  raf-details">
-                                                    <div className="col-xl-4">
-                                                      <span>-</span>
-                                                    </div>
-                                                    <div className="col-xl-4">
-                                                      <span>0.761</span>
-                                                    </div>
-                                                    <div className="col-xl-4">
-                                                      <span>$609</span>
+                                                    <div className="row  raf-details">
+                                                      <div className="col-xl-2">
+                                                        <span>{rafScore.v24Score}</span>
+                                                      </div>
+                                                      <div className="col-xl-3">
+                                                        <span>{rafScore.v24Score70Percent}</span>
+                                                      </div>
+                                                      <div className="col-xl-2">
+                                                        <span>{rafScore.v28Score}</span>
+                                                      </div>
+                                                      <div className="col-xl-3">
+                                                        <span>{rafScore.v28Score30Percent}</span>
+                                                      </div>
+                                                      <div className="col-xl-2">
+                                                        <span>{rafScore.score}</span>
+                                                      </div>
                                                     </div>
                                                   </div>
                                                 </div>
-                                              </div>
 
+                                              </div>
                                             </div>
                                           </div>
-                                        </div>
+                                          : null}
                                       </div>
                                       {/* <div className="">
 
@@ -1143,14 +1259,14 @@ export default function PatientDetails() {
                                   <Tab.Pane id="my-posts" eventKey="file">
                                     <div className="my-post-content pt-3">
                                       <div className="card">
-                                        <div><input
+                                        {/* <div><input
                                           required
                                           type="file"
                                           accept="application/pdf,text/plain"
                                           onChange={(e) => onChangeFile(e.target.files)}
                                         />
 
-                                        </div>
+                                        </div> */}
                                         <div className="card-body p-0">
                                           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                             <div
@@ -1163,8 +1279,8 @@ export default function PatientDetails() {
                                             >
                                               {" "}
                                               <Viewer
-                                                fileUrl="https://cogentaifiles.blob.core.windows.net/congetaiocrpdf/991b60e1-f38c-42fb-b997-b67caae87c1d.pdf?sv=2022-11-02&se=2023-10-26T13%3A24%3A45Z&sr=b&sp=r&sig=qj5HC0vWGLcubOPlWXI7JjRUKh5sX4voG3ahL0RiNYA%3D"
-                                                plugins={[searchPluginInstance]}
+                                                fileUrl={selectFileURL}
+                                                plugins={[defaultLayoutPluginInstance]}
                                                 onDocumentLoad={handleDocumentLoad}
                                               />
                                             </div>

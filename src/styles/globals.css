@@ -37640,8 +37640,29 @@ span.mb-1.disease-name {
   margin-bottom: 10px;
   padding: 10px !important;
 }
+.invalid-text{
+  margin-bottom: 10px;
+  padding: 10px !important;
+}
+
 .ant-popover .ant-popover-content {
   position: relative;
   width: 350px;
+}
+.raf-main-card{
+  margin-bottom: 10px;
+  border: 1px solid #cdd2e3 !important;
+  margin: 20px;
+    border-radius: 10px;
+    padding: 25px;
+
+}
+
+.raf-model-version{
+  background: orange;
+  padding: 10px;
+  color: #fff;
+  border-radius: 10px;
+  width:max-content;
 }
 
