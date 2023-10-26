@@ -118,7 +118,8 @@ export default function Patient() {
       setTimeout(() => {
        setCanPreviousPage(false);
         setCanNextPage(true);
-        getAllList();
+        var uId = localStorage.getItem("userId");
+        getAllList(uId);
       }, 8000);	
     }
   }
