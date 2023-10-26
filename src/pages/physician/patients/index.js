@@ -115,12 +115,12 @@ export default function Patient() {
       setPatinetList(records);
       setPatinetListAll(response.data);
       setIsLoading(false);
-      setTimeout(() => {
-       setCanPreviousPage(false);
-        setCanNextPage(true);
-        var uId = localStorage.getItem("userId");
-        getAllList(uId);
-      }, 8000);	
+      // setTimeout(() => {
+      //  setCanPreviousPage(false);
+      //   setCanNextPage(true);
+      //   var uId = localStorage.getItem("userId");
+      //   getAllList(uId);
+      // }, 8000);	
     }
   }
 
