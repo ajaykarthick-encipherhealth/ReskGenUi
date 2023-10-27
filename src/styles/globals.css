@@ -37665,4 +37665,14 @@ span.mb-1.disease-name {
   border-radius: 10px;
   width:max-content;
 }
+.card.patient-tab-card{
+height: auto !important;
+}
+
+
+.card.patient-tab-card .nav-pills .nav-link {
+  border-radius: 25px !important;
+  width: 180px!important;
+  text-align: center!important;
+}
 
