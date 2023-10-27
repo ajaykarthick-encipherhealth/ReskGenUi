@@ -141,7 +141,7 @@ export default function PatientDetails() {
     //         matchCase: true,
     //     });
     // }
-  }, [isDocumentLoaded]);
+  }, [ ]);
 
   const getPatientDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
@@ -227,7 +227,6 @@ export default function PatientDetails() {
       setMeatCriteriaList(meatCri);
       setDosYear(dosYearArr);
       setRAFScore(rafScore)
-      setIsLoading(false);
       console.log(validDiseasesArray)
 
       // var hccListArr=[];
@@ -252,6 +251,8 @@ export default function PatientDetails() {
       var result = response.data;
       console.log(response.data)
       setSelectFileURL(response.data);
+      setIsLoading(false);
+
     }
   }
 
@@ -809,6 +810,15 @@ export default function PatientDetails() {
                                               ))}
                                             </ul>
                                           </div>
+                                          {validDiseasesList.length == 0 ?
+                                            <div className="card box-shadow-none">
+                                         <div className="card combo-card">
+                                          <div className="col-xl-12">
+                                        
+                                                <span className="no-patient-data">NO PATIENT DATA</span>
+                                              </div>
+                                          </div></div>
+                                          :null}
                                         </div>
                                       </div>
                                     </div>
@@ -900,6 +910,16 @@ export default function PatientDetails() {
                                           </div>
                                         );
                                       })}
+                                    
+                                       {validDiseasesList.length == 0 ?
+                                         <div className="card combo-card">
+                                          <div className="col-xl-12">
+                                          <div>
+                                                <span className="no-patient-data">NO PATIENT DATA</span>
+                                              </div>
+                                          </div></div>
+                                          :null}
+                                          
                                       {invalidComboDiseaseCodesList.length != 0 ?
                                         <>
                                           <div className="invalid-combo">
@@ -1046,6 +1066,14 @@ export default function PatientDetails() {
                                           </div>
                                         );
                                       })}
+                                      {validDiseasesList.length == 0 ?
+                                         <div className="card combo-card">
+                                          <div className="col-xl-12">
+                                          <div>
+                                                <span className="no-patient-data">NO PATIENT DATA</span>
+                                              </div>
+                                          </div></div>
+                                          :null}
                                       {invalidMeatCriteriaList.length != 0 ?
                                         <>
                                           <div className="invalid-combo">
@@ -1353,6 +1381,14 @@ export default function PatientDetails() {
                                             </div>
                                           </div>
                                           : null}
+                                           {rafScore == null ?
+                                           <div className="card box-shadow-none">
+                                         <div className="card combo-card">
+                                          <div className="col-xl-12">
+                                                <span className="no-patient-data">NO PATIENT DATA</span>
+                                              </div>
+                                          </div></div>
+                                          :null}
                                       </div>
                                       {/* <div className="">
 
@@ -1385,7 +1421,7 @@ export default function PatientDetails() {
                                             <div
                                               style={{
                                                 height: "600px",
-                                                maxWidth: "1300px",
+                                                maxWidth: "900px",
                                                 marginLeft: "auto",
                                                 marginRight: "auto",
                                               }}

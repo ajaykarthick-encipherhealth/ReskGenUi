@@ -15,7 +15,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faClose, faUpload , faCheck, faBan,faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faClose, faUpload, faCheck, faBan, faAdd } from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
@@ -23,7 +23,19 @@ import {
   patientDetails,
 } from '../../../store/actions/AuthActions';
 import { notification } from 'antd';
-import { UploadOutlined} from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
+import { DataTable } from 'primereact/datatable';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
+import { Tag } from 'primereact/tag';
+import {
+  EyeOutlined,EyeInvisibleOutlined
+} from '@ant-design/icons';
+
+
+
+
 
 
 
@@ -62,7 +74,7 @@ export default function Patient() {
   });
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
-    patientName:""
+    patientName: ""
   });
 
   const [pageCount, setPageCount] = useState(0);
@@ -83,11 +95,32 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState('');
 
 
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+
+
   const statusMessage = {
     subscribed: "Subscribed",
     unsubscribed: "Unsubscribed"
   };
 
+
+
+  const filterChangePatientId = (event) => {
+    const value = event.target.value;
+    let _filters = { ...filters };
+    _filters['patientId'].value = value;
+    setFilters(_filters);
+  };
+  const filterChangePatientName = (event) => {
+    const value = event.target.value;
+    let _filters = { ...filters };
+    _filters['patientName'].value = value;
+    setFilters(_filters);
+  };
 
 
 
@@ -109,7 +142,7 @@ export default function Patient() {
 
   const getAllList = async (uId) => {
     // logesh056
-    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid="+uId);
+    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=" + uId);
     if (response.data) {
       const records = response.data.slice(firstIndex, lastIndex);
       setPatinetList(records);
@@ -133,8 +166,8 @@ export default function Patient() {
   };
 
   const addPatientFile = (data) => {
-    inputValue.patientId =  data.patientId;
-    inputValue.name= data.patientName;
+    inputValue.patientId = data.patientId;
+    inputValue.name = data.patientName;
     setValidated(false);
     setAddPatient(true);
   };
@@ -202,14 +235,14 @@ export default function Patient() {
     const form = event.currentTarget;
     event.preventDefault();
     inputValuePatientId.patientAllocated = localUserId;
-    inputValuePatientId.computing = 0 ;
+    inputValuePatientId.computing = 0;
     inputValuePatientId.allocatedUserId = localUserId;
     console.log(inputValuePatientId);
 
-    if (form.checkValidity() === true) {   
-      setIsLoadingBtn(true);   
+    if (form.checkValidity() === true) {
+      setIsLoadingBtn(true);
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,inputValuePatientId,
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`, inputValuePatientId,
       );
       if (response?.status == 200) {
         notification.success({
@@ -231,7 +264,7 @@ export default function Patient() {
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
     if (data.computing == 2) {
-      localStorage.setItem("patientId",data.patientId)
+      localStorage.setItem("patientId", data.patientId)
       navigate.push('/physician/patients/details');
     } else {
       notification.warning({
@@ -336,7 +369,60 @@ export default function Patient() {
     return await axios.get(ENDPOINTS.apiEndoint + "aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09");
 
   };
-  
+
+  const statusBodyTemplate = (rowData) => {
+    //   console.log(rowData.computing)
+    //   return <span className={`badge badge-success`}>
+    //   Processed
+    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
+    // </span>;
+
+    switch (rowData.computing) {
+      case 2:
+        return <div className='patient-status'><span className={`badge badge-success`}>
+          Processed
+          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
+        </span></div>
+          ;
+
+      case 1:
+        return <div className='patient-status'><span className={`badge badge-primary`}>
+          Processing
+          <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
+        </span></div>;
+
+      case 3:
+        return <div className='patient-status'><span className={`badge badge-danger`}>
+          Failed
+          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
+        </span></div>;
+
+      case 0:
+        return <div className='patient-status'><span className={`badge badge-secondary`}>
+          Not Started
+          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
+        </span>
+        </div>;
+
+    }
+  };
+
+  const actionBodyTemplate = (rowData) => {   
+        return  <div className="d-flex justify-content-center">
+                  {rowData.computing == 2 ?
+        <button onClick={() => gotoPatientDetails(rowData)} className="btn hegiht10 btn-secondary shadow  sharp me-1 action-btn">
+          <EyeOutlined />
+        </button> :  <button disabled className="btn hegiht10 btn-secondary shadow  sharp me-1 action-btn">
+        <EyeInvisibleOutlined />
+        </button>}
+        <button onClick={() => addPatientFile(rowData)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+          <FontAwesomeIcon icon={faUpload} fontSize={11} />
+        </button>
+
+      </div>
+  };
+
+
 
 
 
@@ -350,13 +436,13 @@ export default function Patient() {
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div class="content-body">
-        {isLoading ? <LoadingSpinner /> : 
-          <div className="container-fluid">
-            <div className="row">
+          {isLoading ? <LoadingSpinner /> :
+            <div className="container-fluid">
+              <div className="row">
 
-              <div className="col-xl-12">
-                <div className="card">
-                  {/* <div>
+                <div className="col-xl-12">
+                  <div className="card">
+                    {/* <div>
       <p>{listening ? statusMessage.subscribed : statusMessage.unsubscribed}</p>
       <p>{JSON.stringify(process)}</p>
       <button onClick={subscribe}>
@@ -365,135 +451,150 @@ export default function Patient() {
       <br />
       <p>{JSON.stringify(message)}</p>
     </div> */}
-                  <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption  align-items-center">
-                        <div className="row">
-                          <div className="col-xl-12">
-                            <Button onClick={addPatientFormId} className="btn btn-primary btn-sm ms-2 flr">+ Add Patient Id</Button>
+                    <div className="card-body p-0">
+                      <div className="table-responsive active-projects task-table">
+                        <div className="tbl-caption  align-items-center">
+                          <div className="row">
+                            <div className='col-xl-3'>
+                              <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control" placeholder="Search Patient Id" />
+                            </div>
+                            <div className='col-xl-3'>
+                              <InputText type="text" onChange={(e) => filterChangePatientName(e)} className="form-control" placeholder="Search Patient Name" />
+                            </div>
+
+                            <div className='col-xl-6'>
+                              <Button onClick={addPatientFormId} className="btn btn-primary btn-sm ms-2 flr">+ Add Patient Id</Button>
+                            </div>
+
 
                           </div>
-
                         </div>
-                      </div>
-                      <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-                        <table
-                          id="empoloyeestbl2"
-                          className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0"
-                        >
-                          <thead>
-                            <tr>
-                              <th>SI.NO</th>
-                              <th>Patient Id</th>
-                              <th>Patient Name</th>
-                              <th>File Name</th>
-                              <th>Status</th>
-                              <th>Created Date</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {patinetList.map((item, index) => (
-                              <tr className='cr-pointer' key={index}>
-                                <td  onClick={() => { gotoPatientDetails(item) }}>
-                                  <span>{index + 1}</span>
-                                </td>
-                                <td  onClick={() => { gotoPatientDetails(item) }}>
-                                  <span>{item.patientId}</span>
-                                </td>
-                                <td  onClick={() => { gotoPatientDetails(item) }}>
-                                  <span>{item.patientName}</span>
-                                </td>
-                                <td  onClick={() => { gotoPatientDetails(item) }}>
-                                  <span>{item.fileName}</span>
-                                </td>
-                                <td  onClick={() => { gotoPatientDetails(item) }} className='patient-status'>
-                                  {item.computing == 2 ?
 
-                                    // <span className='completed'>Processed <FontAwesomeIcon className='ml-2' icon={faCheck}  />
-                                    <span className={`badge badge-success`}>
-                                      Processed
-                                      <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-                                    </span>
-                                    : item.computing == 1 ?
-                                      <span className={`badge badge-primary`}>
-                                        Processing
-                                        <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
-                                      </span>:
-                                      item.computing == 3 ?
-                                      <span className={`badge badge-danger`}>
-                                        Failed
-                                        <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
-                                      </span>
-                                      
-                                      
-                                       :
-                                      <span className={`badge badge-secondary`}>
-                                        Not Started
-                                        <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
-                                      </span>
-                                  }
-                                </td>
-                                <td  onClick={() => { gotoPatientDetails(item) }}>
-                                  <span>{item.createdAt}</span>
-                                </td>
-                                <td>
-																	<div className="d-flex justify-content-center">
-																		<button onClick={() => addPatientFile(item)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-																			<FontAwesomeIcon icon={faUpload} fontSize={11} />
-																		</button>																	
-																	</div>
-																</td>
+
+
+                        <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
+                          <DataTable value={patinetListAll} paginator rows={10} dataKey="id" filters={filters} filterDisplay="menu">
+                            <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
+                            <Column field="patientId" header="Patient Id"/>
+                            <Column field="patientName" header="Patient Name" />
+                            <Column field="fileName" header="File Name" />
+                            <Column field="status" body={statusBodyTemplate} header="Status" />
+                            <Column field="createdAt" header="Created Date" />
+                            <Column field="action"  body={actionBodyTemplate} header="Action" />
+                          </DataTable>
+                          {/* <table
+                            id="empoloyeestbl2"
+                            className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0"
+                          >
+                            <thead>
+                              <tr>
+                                <th>SI.NO</th>
+                                <th>Patient Id</th>
+                                <th>Patient Name</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th>Action</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                        <div className="d-flex justify-content-between mrt-15">
-                          <span>
-                            Page{' '}
-                            {/* <strong>
-                              {pageIndex + 1} of {pageOptions.length}
-                            </strong>{''} */}
-                            <strong>
-                              {pageIndex + 1} of 10
-                            </strong>{''}
-                          </span>
-                          <span className="table-index">
-                            Go to page : {' '}
-                            <input type="number" className="ml-2" defaultValue={pageIndex + 1} min="1" max={canMaxPage}
-                              onChange={e => {
-                                const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
-                                gotoPage(pageNumber)
-                              }}
-                            />
-                          </span>
-                        </div>
-                        <div className="text-center mb-3">
-                          <div className="filter-pagination  mt-3">
-                            <button className="previous-button" onClick={() => gotoPage(pageCount - 1)} disabled={!canPreviousPage}>
-                              <FontAwesomeIcon icon={faAngleLeft} />
-                            </button>
-                            <button className="previous-button" onClick={() => previousPage(pageCount - 1)} disabled={!canPreviousPage}>
-                              Previous
-                            </button>
-                            <button className="next-button" onClick={() => nextPage(pageCount + 1)} disabled={!canNextPage}>
-                              Next
-                            </button>
-                            <button className="next-button" onClick={() => gotoPage(pageCount + 1)} disabled={!canNextPage}>
-                              <FontAwesomeIcon icon={faAngleRight} />
-                            </button>
+                            </thead>
+                            <tbody>
+                              {patinetList.map((item, index) => (
+                                <tr className='cr-pointer' key={index}>
+                                  <td onClick={() => { gotoPatientDetails(item) }}>
+                                    <span>{index + 1}</span>
+                                  </td>
+                                  <td onClick={() => { gotoPatientDetails(item) }}>
+                                    <span>{item.patientId}</span>
+                                  </td>
+                                  <td onClick={() => { gotoPatientDetails(item) }}>
+                                    <span>{item.patientName}</span>
+                                  </td>
+                                  <td onClick={() => { gotoPatientDetails(item) }}>
+                                    <span>{item.fileName}</span>
+                                  </td>
+                                  <td onClick={() => { gotoPatientDetails(item) }} className='patient-status'>
+                                    {item.computing == 2 ?
+
+                                      <span className={`badge badge-success`}>
+                                        Processed
+                                        <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
+                                      </span>
+                                      : item.computing == 1 ?
+                                        <span className={`badge badge-primary`}>
+                                          Processing
+                                          <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
+                                        </span> :
+                                        item.computing == 3 ?
+                                          <span className={`badge badge-danger`}>
+                                            Failed
+                                            <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
+                                          </span>
+
+
+                                          :
+                                          <span className={`badge badge-secondary`}>
+                                            Not Started
+                                            <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
+                                          </span>
+                                    }
+                                  </td>
+                                  <td onClick={() => { gotoPatientDetails(item) }}>
+                                    <span>{item.createdAt}</span>
+                                  </td>
+                                  <td>
+                                    <div className="d-flex justify-content-center">
+                                      <button onClick={() => addPatientFile(item)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                        <FontAwesomeIcon icon={faUpload} fontSize={11} />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                          <div className="d-flex justify-content-between mrt-15">
+                            <span>
+                              Page{' '}
+                              <strong>
+                                {pageIndex + 1} of 10
+                              </strong>{''}
+                            </span>
+                            <span className="table-index">
+                              Go to page : {' '}
+                              <input type="number" className="ml-2" defaultValue={pageIndex + 1} min="1" max={canMaxPage}
+                                onChange={e => {
+                                  const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
+                                  gotoPage(pageNumber)
+                                }}
+                              />
+                            </span>
                           </div>
+                          <div className="text-center mb-3">
+                            <div className="filter-pagination  mt-3">
+                              <button className="previous-button" onClick={() => gotoPage(pageCount - 1)} disabled={!canPreviousPage}>
+                                <FontAwesomeIcon icon={faAngleLeft} />
+                              </button>
+                              <button className="previous-button" onClick={() => previousPage(pageCount - 1)} disabled={!canPreviousPage}>
+                                Previous
+                              </button>
+                              <button className="next-button" onClick={() => nextPage(pageCount + 1)} disabled={!canNextPage}>
+                                Next
+                              </button>
+                              <button className="next-button" onClick={() => gotoPage(pageCount + 1)} disabled={!canNextPage}>
+                                <FontAwesomeIcon icon={faAngleRight} />
+                              </button>
+                            </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
+
+
                   </div>
-
-
                 </div>
               </div>
             </div>
-          </div>
-}
+          }
         </div>
         <Offcanvas onHide={setAddPatient} show={addPatient} className="offcanvas-end" placement="end">
           <div className="offcanvas-header">
@@ -512,7 +613,7 @@ export default function Patient() {
             <div className="container-fluid">
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <div className="row">
-                <div className="col-xl-12 mb-3">
+                  <div className="col-xl-12 mb-3">
                     <Form.Label>
                       Patient Id <span className="text-danger">*</span>{" "}
                     </Form.Label>
@@ -520,11 +621,11 @@ export default function Patient() {
                       name="patientId"
                       required
                       type="text"
-                      value = {inputValue.patientId}
+                      value={inputValue.patientId}
                       onChange={handleChange}
                     />
                   </div>
-                  
+
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
                       Patient Name <span className="text-danger">*</span>{" "}
@@ -533,11 +634,11 @@ export default function Patient() {
                       name="name"
                       required
                       type="text"
-                      value = {inputValue.name}
+                      value={inputValue.name}
                       onChange={handleChange}
                     />
                   </div>
-                
+
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
                       File <span className="text-danger">*</span>{" "}
@@ -604,7 +705,7 @@ export default function Patient() {
                       type="text"
                       onChange={handleChangePatientId}
                     />
-                  </div>      
+                  </div>
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
                       Patient Name <span className="text-danger">*</span>{" "}
@@ -615,7 +716,7 @@ export default function Patient() {
                       type="text"
                       onChange={handleChangePatientId}
                     />
-                  </div>              
+                  </div>
                 </div>
 
                 <div>
