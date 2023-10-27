@@ -156,7 +156,7 @@ export default function PatientDetails() {
       var comboDis = '';
       var meatCri = '';
       var dosYearArr = [];
-      var rafScore = '';
+      var rafScore = null;
       getPatientPdfFile(result.fileId, tenId)
       setSelectMeatFileId(response.data.fileId)
       setPatientDocumentResult(result);
@@ -165,12 +165,9 @@ export default function PatientDetails() {
         dosYearArr.push({ value: key, label: key });
       }
 
-      console.log(dosYearArr)
       const highestDOS = Math.max(...dosYearArr.map(res => res.value));
-      console.log(highestDOS);
 
       const highestDosValue =  dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
-      console.log(highestDosValue)
       setDosYearDefalutSelect(highestDosValue)
       
 
@@ -223,7 +220,6 @@ export default function PatientDetails() {
       //   validDiseasesArray.push({ name: validDis[key] });
       // }
 
-      console.log(meatCri)
 
       setValidDiseasesList(validDiseasesArray);
       setInvalidDiseasesList(invalidDiseasesArray);
@@ -232,21 +228,21 @@ export default function PatientDetails() {
       setDosYear(dosYearArr);
       setRAFScore(rafScore)
       setIsLoading(false);
-      console.log(rafScore)
+      console.log(validDiseasesArray)
 
-      var hccListArr=[];
+      // var hccListArr=[];
 
-      rafScore.scoreOutputDTOList.map((res) => {
-        res.dx_hccs.map((res2) => {
-          res2.hcc_list.map((res3) => {
-            console.log(res3) 
-            hccListArr.push(res3)          
-          })
-        })
+      // rafScore.scoreOutputDTOList.map((res) => {
+      //   res.dx_hccs.map((res2) => {
+      //     res2.hcc_list.map((res3) => {
+      //       console.log(res3) 
+      //       hccListArr.push(res3)          
+      //     })
+      //   })
        
-      })
-      console.log(hccListArr)
-      setRafScoreHccList(hccListArr)
+      // })
+      // console.log(hccListArr)
+      // setRafScoreHccList(hccListArr)
 
     }
   }
@@ -500,7 +496,7 @@ export default function PatientDetails() {
     var invalidDis = '';
     var comboDis = '';
     var meatCri = '';
-    var rafScore = '';
+    var rafScore = null;
 
     var result =  patientDetails;
 
@@ -1161,8 +1157,10 @@ export default function PatientDetails() {
                                         </div> */}
 
                                         </div>
-                                        {rafScore != "" ?
+                                        {rafScore != null ?
                                           <div className="col-xl-12">
+                                             {rafScore.scoreOutputDTOList != null ?
+                                            <>
                                             {rafScore.scoreOutputDTOList.map((rafScoreMapResult) => {
                                               return (
                                                 <div className="row raf-main-card">
@@ -1302,6 +1300,8 @@ export default function PatientDetails() {
 
                                               );
                                             })}
+                                            </>:null}
+                                          
 
                                             <div className="row raf-main-card">
                                               <div className="raf-name-head">
