@@ -84,6 +84,7 @@ export default function PatientDetails() {
   const [validated, setValidated] = useState(false);
   const [rafScore, setRAFScore] = useState([]);
   const [patientDetails, setPatientDetails] = useState([]);
+  const [rafHccList, setRafScoreHccList] = useState([]);
   //   highlight([
   //     'document',
   //     {
@@ -232,6 +233,20 @@ export default function PatientDetails() {
       setRAFScore(rafScore)
       setIsLoading(false);
       console.log(rafScore)
+
+      var hccListArr=[];
+
+      rafScore.scoreOutputDTOList.map((res) => {
+        res.dx_hccs.map((res2) => {
+          res2.hcc_list.map((res3) => {
+            console.log(res3) 
+            hccListArr.push(res3)          
+          })
+        })
+       
+      })
+      console.log(hccListArr)
+      setRafScoreHccList(hccListArr)
 
     }
   }
@@ -1151,9 +1166,9 @@ export default function PatientDetails() {
                                             {rafScore.scoreOutputDTOList.map((rafScoreMapResult) => {
                                               return (
                                                 <div className="row raf-main-card">
-                                                  <div className="raf-name-head">
+                                                  {/* <div className="raf-name-head">
                                                     <h5 className="raf-model-version">{rafScoreMapResult.hcc_model.model} - {rafScoreMapResult.hcc_model.version}</h5>
-                                                  </div>
+                                                  </div> */}
 
                                                   <div className="col-xl-6">
                                                     <div className="card">
@@ -1166,12 +1181,11 @@ export default function PatientDetails() {
                                                         </div>
                                                         <div className="row raf-details">
                                                           <div className="col-xl-6">
-                                                            <span>Demographic Risk Factor</span>
+                                                            <span>{rafScoreMapResult.hcc_model.model}</span>
                                                           </div>
                                                           <div className="col-xl-6">
-                                                            <span>0:240</span>
+                                                            <span>{rafScoreMapResult.hcc_model.version}</span>
                                                           </div>
-
                                                         </div>
 
                                                       </div>
@@ -1221,15 +1235,25 @@ export default function PatientDetails() {
                                                           </div>
 
                                                         </div>
+                                                        {rafScoreMapResult.dx_hccs.map((res) => {
+                                                          return (
+                                                           
+                                                                res.hcc_list.map((res1) => {
+                                                                  return (
                                                         <div className="row raf-details">
                                                           <div className="col-xl-6">
-                                                            <span>{rafScoreMapResult.hcc_model.model}</span>
+                                                            <span>{res1.hcc_name}</span>
                                                           </div>
                                                           <div className="col-xl-6">
-                                                            <span>{rafScoreMapResult.hcc_model.version}</span>
+                                                            <span>{res1.hcc_desc}</span>
                                                           </div>
-
                                                         </div>
+                                                       
+                                                        );
+                                                      })
+                                                          );
+                                                        })}
+
                                                       </div>
                                                     </div>
 
@@ -1249,17 +1273,26 @@ export default function PatientDetails() {
                                                           </div>
 
                                                         </div>
+                                                        {rafScoreMapResult.dx_hccs.map((res) => {
+                                                          return (
+                                                           
+                                                                res.hcc_list.map((res1) => {
+                                                                  return (
                                                         <div className="row  raf-details">
                                                           <div className="col-xl-4">
                                                             <span>-</span>
                                                           </div>
                                                           <div className="col-xl-4">
-                                                            <span>{rafScoreMapResult.raf.hcc_score}</span>
+                                                            <span>{res1.hcc_raf}</span>
                                                           </div>
                                                           <div className="col-xl-4">
-                                                            <span>${rafScoreMapResult.raf.premium}</span>
+                                                            <span>${res1.premium}</span>
                                                           </div>
                                                         </div>
+                                                         );
+                                                        })
+                                                            );
+                                                          })}
                                                       </div>
                                                     </div>
 
@@ -1272,7 +1305,7 @@ export default function PatientDetails() {
 
                                             <div className="row raf-main-card">
                                               <div className="raf-name-head">
-                                                <h5 className="raf-model-version">RAF SCORE DETAILS</h5>
+                                                <h5 className="raf-model-version">SCORE DETAILS</h5>
                                               </div>
 
                                               <div className="col-xl-12">
