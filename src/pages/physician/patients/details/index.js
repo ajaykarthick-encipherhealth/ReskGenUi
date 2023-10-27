@@ -396,7 +396,7 @@ export default function PatientDetails() {
   const handleOpenModal = (value) => {
     setTimeout(() => {
       highlight({
-        keyword: value+":",
+        keyword: value,
         matchCase: true,
       });
       setSelectMeatName(value);
@@ -1212,7 +1212,7 @@ export default function PatientDetails() {
                                                         <label className="text-white">v28Score30Percent</label>
                                                       </div>
                                                       <div className="col-xl-2">
-                                                        <label className="text-white">Toatl Score</label>
+                                                        <label className="text-white">Score</label>
                                                       </div>
 
                                                     </div>
