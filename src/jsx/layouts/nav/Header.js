@@ -13,10 +13,13 @@ import Swal from 'sweetalert2'
 
 const Header = ({ onNote }) => {
 	const [headerFix, setheaderFix] = useState(false);
+	const [userName, setUserName] = useState('');
 	const router = useRouter();
 
 	useEffect(() => {
 		var loginCheck = localStorage.getItem("loginCheck");
+		var userName = localStorage.getItem("userName");
+		setUserName(userName);
 		if(loginCheck !=  "true"){			
 			Swal.fire({
 				title: 'Error!',
@@ -72,8 +75,8 @@ const Header = ({ onNote }) => {
 										<div className="header-media d-flex">
 											<Image src={IMAGES.profileImage}/>
 											<div>
-											<span className="text-dark-50 ms-2 text-white header-name font-weight-bolder font-size-base d-flex mr-3">Admin</span>
-											<span  onClick={logoutFunction} className="ms-2 d-flex">
+											<span className="text-dark-50 ms-2 text-white header-name font-weight-bolder font-size-base d-flex mr-3">{userName}</span>
+											<span  onClick={logoutFunction} className="ms-2 d-flex mt-1">
 												{SVGICON.Logout}{" "}
 												<h6 className="logout-name">Logout </h6>
 											</span>

@@ -15,7 +15,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faClose, faUpload, faCheck, faBan, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faClose, faUpload, faCheck, faBan, faAdd, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
@@ -30,7 +30,7 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
 import {
-  EyeOutlined,EyeInvisibleOutlined
+  EyeOutlined, EyeInvisibleOutlined
 } from '@ant-design/icons';
 
 
@@ -407,19 +407,19 @@ export default function Patient() {
     }
   };
 
-  const actionBodyTemplate = (rowData) => {   
-        return  <div className="d-flex justify-content-center">
-                  {rowData.computing == 2 ?
+  const actionBodyTemplate = (rowData) => {
+    return <div className="d-flex justify-content-center">
+      {rowData.computing == 2 ?
         <button onClick={() => gotoPatientDetails(rowData)} className="btn hegiht10 btn-secondary shadow  sharp me-1 action-btn">
           <EyeOutlined />
-        </button> :  <button disabled className="btn hegiht10 btn-secondary shadow  sharp me-1 action-btn">
-        <EyeInvisibleOutlined />
+        </button> : <button disabled className="btn hegiht10 btn-secondary shadow  sharp me-1 action-btn">
+          <EyeInvisibleOutlined />
         </button>}
-        <button onClick={() => addPatientFile(rowData)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-          <FontAwesomeIcon icon={faUpload} fontSize={11} />
-        </button>
+      <button onClick={() => addPatientFile(rowData)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+        <FontAwesomeIcon icon={faUpload} fontSize={11} />
+      </button>
 
-      </div>
+    </div>
   };
 
 
@@ -456,10 +456,17 @@ export default function Patient() {
                         <div className="tbl-caption  align-items-center">
                           <div className="row">
                             <div className='col-xl-3'>
-                              <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control" placeholder="Search Patient Id" />
+                            <div class="form-group has-search">
+                                <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
+                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control" placeholder="Patient Id" />
+                              </div>
+
                             </div>
                             <div className='col-xl-3'>
-                              <InputText type="text" onChange={(e) => filterChangePatientName(e)} className="form-control" placeholder="Search Patient Name" />
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
+                                <InputText type="text" onChange={(e) => filterChangePatientName(e)} className="form-control" placeholder="Patient Name" />
+                              </div>
                             </div>
 
                             <div className='col-xl-6'>
@@ -473,14 +480,14 @@ export default function Patient() {
 
 
                         <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-                          <DataTable value={patinetListAll} paginator rows={10} dataKey="id" filters={filters} filterDisplay="menu">
+                          <DataTable value={patinetListAll} paginator rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
                             <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
-                            <Column field="patientId" header="Patient Id"/>
+                            <Column field="patientId" header="Patient Id" />
                             <Column field="patientName" header="Patient Name" />
                             <Column field="fileName" header="File Name" />
                             <Column field="status" body={statusBodyTemplate} header="Status" />
                             <Column field="createdAt" header="Created Date" />
-                            <Column field="action"  body={actionBodyTemplate} header="Action" />
+                            <Column field="action" body={actionBodyTemplate} header="Action" />
                           </DataTable>
                           {/* <table
                             id="empoloyeestbl2"

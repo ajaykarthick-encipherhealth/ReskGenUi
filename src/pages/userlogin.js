@@ -25,6 +25,8 @@ export default function UserLogin() {
     const onLogin = async (e) => {
         setIsLoading(true);
         e.preventDefault();
+        let emailSplit = email.split("@");
+        console.log(emailSplit[0])
 
         // if (email == "physician@gmail.com") {
         //     localStorage.setItem("userRole", 'physician')
@@ -36,7 +38,7 @@ export default function UserLogin() {
         // }
             try {
                 const postData = {
-                    username: email,
+                username: email,
                     password: password,
                 };
                 const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/auth/login`, postData);
@@ -48,6 +50,7 @@ export default function UserLogin() {
                     localStorage.setItem("tenantId", result.tenantId);
                     localStorage.setItem("userId", result.userEmail);
                     localStorage.setItem("orgId", result.organizationId);
+                    localStorage.setItem("userName", emailSplit[0]);
                     localStorage.setItem("loginCheck", true);
 
                     router.push("/physician/home");
