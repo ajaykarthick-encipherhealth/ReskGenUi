@@ -22,6 +22,8 @@ export default function Login() {
     const onLogin = async (e) => {
         setIsLoading(true);
         e.preventDefault();
+        let emailSplit = email.split("@");
+        console.log(emailSplit[0])
 
         // if (email == "physician@gmail.com") {
         //     localStorage.setItem("userRole", 'physician')
@@ -46,6 +48,7 @@ export default function Login() {
                     localStorage.setItem("orgId", result.response.organizationId);
                     localStorage.setItem("userId", result.response.userEmail);
                     localStorage.setItem("loginCheck", true);
+                    localStorage.setItem("userName", emailSplit[0]);
                     router.push("/admin/user");
                     notification.success({
                         message: result.message,

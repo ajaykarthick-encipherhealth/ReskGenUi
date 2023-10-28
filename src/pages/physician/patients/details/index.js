@@ -57,6 +57,8 @@ export default function PatientDetails() {
   const sideMenu = useSelector(state => state.sideMenu);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
+  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
+
   const storePatientDetails = useSelector(state => state.patientDetails.patientDetails);
   const storeDetails = useSelector(state => state);
 
@@ -64,6 +66,7 @@ export default function PatientDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSection, setIsLoadingSection] = useState(true);
   const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
+  const [invalidMoveDiseasesList, setInvalidMoveDiseasesList] = useState([]);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
   const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] = useState([]);
 
@@ -85,6 +88,8 @@ export default function PatientDetails() {
   const [rafScore, setRAFScore] = useState([]);
   const [patientDetails, setPatientDetails] = useState([]);
   const [rafHccList, setRafScoreHccList] = useState([]);
+  const [isMatchBtn, setIsMatchBtn] = useState(false);
+  const [matchHccList, setMatchHccList] = useState([]);
   //   highlight([
   //     'document',
   //     {
@@ -141,7 +146,7 @@ export default function PatientDetails() {
     //         matchCase: true,
     //     });
     // }
-  }, [ ]);
+  }, []);
 
   const getPatientDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
@@ -167,9 +172,9 @@ export default function PatientDetails() {
 
       const highestDOS = Math.max(...dosYearArr.map(res => res.value));
 
-      const highestDosValue =  dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
+      const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
       setDosYearDefalutSelect(highestDosValue)
-      
+
 
 
       if (result.rafScore != null) {
@@ -185,12 +190,21 @@ export default function PatientDetails() {
       var invalidDiseasesArray = [];
       var validDiseasesArray = [];
 
-     for (var key in invalidDis) {
+      for (var key in invalidDis) {
         invalidDiseasesArray.push({ name: invalidDis[key] });
       }
       for (var key in validDis) {
         validDiseasesArray.push({ name: validDis[key] });
       }
+
+      for (var key in validDis) {
+        // console.log(validDis[key])
+        var keySplit = validDis[key];
+        console.log(keySplit)
+        for (var key2 in keySplit) {
+          console.log(keySplit[key2])
+         }
+       }
 
 
 
@@ -227,7 +241,7 @@ export default function PatientDetails() {
       setMeatCriteriaList(meatCri);
       setDosYear(dosYearArr);
       setRAFScore(rafScore)
-      console.log(validDiseasesArray)
+      // console.log(validDiseasesArray)
 
       // var hccListArr=[];
 
@@ -238,7 +252,7 @@ export default function PatientDetails() {
       //       hccListArr.push(res3)          
       //     })
       //   })
-       
+
       // })
       // console.log(hccListArr)
       // setRafScoreHccList(hccListArr)
@@ -277,12 +291,22 @@ export default function PatientDetails() {
 
   const confirmvalid = () =>
     new Promise((resolve) => {
-      validMoveConfirm();
-      setTimeout(() => resolve(null), 1000);
+      // validMoveConfirm();
+
+      setTimeout(() => resolve(
+        setConfirmNotesModalValid(true)
+      ),
+        1000);
     });
   const confirmInvalid = () =>
     new Promise((resolve) => {
       invalidMoveConfirm();
+      setTimeout(() => resolve(null), 1000);
+    });
+
+  const confirmInvalidMoveDis = () =>
+    new Promise((resolve) => {
+      validMoveConfirmDis();
       setTimeout(() => resolve(null), 1000);
     });
 
@@ -339,6 +363,7 @@ export default function PatientDetails() {
   };
 
   const validMoveConfirm = () => {
+
     const result = validDiseasesList.filter(
       (res) => res.name != selectDiseasesName
     );
@@ -346,8 +371,19 @@ export default function PatientDetails() {
     var namePush = [];
     namePush.push({ name: selectDiseasesName });
     var newArray = [];
-    newArray = [...invalidDiseasesList, ...namePush];
-    setInvalidDiseasesList(newArray);
+    newArray = [...invalidMoveDiseasesList, ...namePush];
+    setInvalidMoveDiseasesList(newArray);
+
+
+    // const result = validDiseasesList.filter(
+    //   (res) => res.name != selectDiseasesName
+    // );
+    // setValidDiseasesList(result);
+    // var namePush = [];
+    // namePush.push({ name: selectDiseasesName });
+    // var newArray = [];
+    // newArray = [...invalidDiseasesList, ...namePush];
+    // setInvalidDiseasesList(newArray);
   };
 
 
@@ -356,6 +392,18 @@ export default function PatientDetails() {
       (res) => res.name != selectDiseasesName
     );
     setInvalidDiseasesList(result);
+    var namePush = [];
+    namePush.push({ name: selectDiseasesName });
+    var newArray = [];
+    newArray = [...validDiseasesList, ...namePush];
+    setValidDiseasesList(newArray);
+  };
+
+  const validMoveConfirmDis = () => {
+    const result = invalidMoveDiseasesList.filter(
+      (res) => res.name != selectDiseasesName
+    );
+    setInvalidMoveDiseasesList(result);
     var namePush = [];
     namePush.push({ name: selectDiseasesName });
     var newArray = [];
@@ -440,7 +488,8 @@ export default function PatientDetails() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setIsModalOpenValid(false)
+    setIsModalOpenValid(false);
+    setConfirmNotesModalValid(false);
   };
   const handleOpenModal = (value) => {
     setTimeout(() => {
@@ -489,17 +538,30 @@ export default function PatientDetails() {
     setValidated(true)
   }
 
+  const handleSubmitValidNotes = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+      setConfirmNotesModalValid(false)
+      validMoveConfirm();
 
-  
-	const dosOnChange = async (e) => {
-    var dosKeyValue =  e.value;
+    }
+    setValidated(true)
+  }
+
+
+
+
+
+  const dosOnChange = async (e) => {
+    var dosKeyValue = e.value;
     var validDis = '';
     var invalidDis = '';
     var comboDis = '';
     var meatCri = '';
     var rafScore = null;
 
-    var result =  patientDetails;
+    var result = patientDetails;
 
     console.log(result);
 
@@ -516,7 +578,7 @@ export default function PatientDetails() {
     var invalidDiseasesArray = [];
     var validDiseasesArray = [];
 
-   for (var key in invalidDis) {
+    for (var key in invalidDis) {
       invalidDiseasesArray.push({ name: invalidDis[key] });
     }
     for (var key in validDis) {
@@ -530,7 +592,32 @@ export default function PatientDetails() {
     setRAFScore(rafScore)
     setIsLoading(false);
 
-	}
+  }
+
+  const handleMatchHcc =(event,value) => {    
+    console.log(event.target.checked);
+    var checked = event.target.checked;
+    if(checked == true){    
+    var newArray = [];
+    var namePush = [];
+    namePush.push({ name: value });
+    newArray = [...matchHccList, ...namePush];
+    setMatchHccList(newArray);
+    }else{
+      const removeArr = matchHccList.filter((i) => i.name != value);
+      setMatchHccList(removeArr);
+    }
+    if(newArray.length != 0){
+      setIsMatchBtn(true);
+    }
+    console.log(matchHccList)
+  }
+
+  const handleSubmitMatchHcc =() => {    
+   
+    console.log(matchHccList)
+  }
+
 
 
 
@@ -687,7 +774,7 @@ export default function PatientDetails() {
                                               </div>
                                             </div>
                                           </div> */}
-                                          <div className="col-xl-6">
+                                          <div className="col-xl-4">
                                             <ul className="timeline">
                                               <div className="valid-text d-flex justify-content-sm-between">
                                                 <span
@@ -740,8 +827,55 @@ export default function PatientDetails() {
                                                 </li>
                                               ))}
                                             </ul>
+                                            <ul className="timeline">
+
+                                              <div className="invalid-text d-flex justify-content-sm-between">
+                                                <span
+                                                  className={`dang d-block`}
+                                                >
+                                                  {" "}
+                                                  INVALID-HCC{" "}
+                                                  <Badge
+                                                    as="a"
+                                                    href=""
+                                                    bg="badge-circle invalid-bange"
+                                                  >
+                                                    {invalidMoveDiseasesList.length}
+                                                  </Badge>
+                                                </span>
+                                              </div>
+                                              {invalidMoveDiseasesList.map((data, i) => (
+                                                <li>
+                                                  <div className="timeline-panel invalid-disease">
+                                                    <div className="media-body">
+                                                      <span className="mb-1 disease-name">
+                                                        {data.name}
+                                                      </span>
+                                                    </div>
+                                                    <Popconfirm
+                                                      title="You want move to valid?"
+                                                      description={data.name}
+                                                      onConfirm={confirmInvalidMoveDis}
+                                                      placement="leftTop"
+                                                      okText="Yes"
+                                                      cancelText="No"
+                                                      onOpenChange={() =>
+                                                        onchangeValid(data.name)
+                                                      }
+                                                    >
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faCheck}
+                                                          style={{ color: "orange" }}
+                                                        />
+                                                      </div>
+                                                    </Popconfirm>
+                                                  </div>
+                                                </li>
+                                              ))}
+                                            </ul>
                                           </div>
-                                          <div className="col-xl-6">
+                                          <div className="col-xl-4">
                                             <ul className="timeline">
 
                                               <div className="invalid-text d-flex justify-content-sm-between">
@@ -810,15 +944,48 @@ export default function PatientDetails() {
                                               ))}
                                             </ul>
                                           </div>
+                                          <div className="col-xl-4">
+                                            <ul className="timeline">
+
+                                              <div className="invalid-text d-flex justify-content-sm-between">
+                                                <span
+                                                  className={`dang d-block`}
+                                                >
+                                                  {" "}
+                                                  MATCH-HCC{" "}
+                                                </span>
+                                                {isMatchBtn ?
+                                                <div className="d-flex justify-content-center">
+                                                  <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn">
+                                                   Match
+                                                  </button>
+                                                </div>:null}
+                                              </div>
+                                              {invalidDiseasesList.map((data, i) => (
+                                                <li>
+                                                  <div className="timeline-panel invalid-disease">
+                                                    <div className="media-body">
+                                                      <span className="mb-1 disease-name">
+                                                        {data.name}
+                                                      </span>
+                                                    </div>
+                                                    <div className="form-check custom-checkbox">
+                                                      <input onChange={(e) =>{handleMatchHcc(e,data.name)}} type="checkbox" id={`customCheckBox ${data.name}`} className="form-check-input" required />
+                                                    </div>
+                                                  </div>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
                                           {validDiseasesList.length == 0 ?
                                             <div className="card box-shadow-none">
-                                         <div className="card combo-card">
-                                          <div className="col-xl-12">
-                                        
-                                                <span className="no-patient-data">NO PATIENT DATA</span>
-                                              </div>
-                                          </div></div>
-                                          :null}
+                                              <div className="card combo-card">
+                                                <div className="col-xl-12">
+
+                                                  <span className="no-patient-data">NO PATIENT DATA</span>
+                                                </div>
+                                              </div></div>
+                                            : null}
                                         </div>
                                       </div>
                                     </div>
@@ -910,16 +1077,16 @@ export default function PatientDetails() {
                                           </div>
                                         );
                                       })}
-                                    
-                                       {validDiseasesList.length == 0 ?
-                                         <div className="card combo-card">
+
+                                      {validDiseasesList.length == 0 ?
+                                        <div className="card combo-card">
                                           <div className="col-xl-12">
-                                          <div>
-                                                <span className="no-patient-data">NO PATIENT DATA</span>
-                                              </div>
+                                            <div>
+                                              <span className="no-patient-data">NO PATIENT DATA</span>
+                                            </div>
                                           </div></div>
-                                          :null}
-                                          
+                                        : null}
+
                                       {invalidComboDiseaseCodesList.length != 0 ?
                                         <>
                                           <div className="invalid-combo">
@@ -1067,13 +1234,13 @@ export default function PatientDetails() {
                                         );
                                       })}
                                       {validDiseasesList.length == 0 ?
-                                         <div className="card combo-card">
+                                        <div className="card combo-card">
                                           <div className="col-xl-12">
-                                          <div>
-                                                <span className="no-patient-data">NO PATIENT DATA</span>
-                                              </div>
+                                            <div>
+                                              <span className="no-patient-data">NO PATIENT DATA</span>
+                                            </div>
                                           </div></div>
-                                          :null}
+                                        : null}
                                       {invalidMeatCriteriaList.length != 0 ?
                                         <>
                                           <div className="invalid-combo">
@@ -1187,149 +1354,149 @@ export default function PatientDetails() {
                                         </div>
                                         {rafScore != null ?
                                           <div className="col-xl-12">
-                                             {rafScore.scoreOutputDTOList != null ?
-                                            <>
-                                            {rafScore.scoreOutputDTOList.map((rafScoreMapResult) => {
-                                              return (
-                                                <div className="row raf-main-card">
-                                                  {/* <div className="raf-name-head">
+                                            {rafScore.scoreOutputDTOList != null ?
+                                              <>
+                                                {rafScore.scoreOutputDTOList.map((rafScoreMapResult) => {
+                                                  return (
+                                                    <div className="row raf-main-card">
+                                                      {/* <div className="raf-name-head">
                                                     <h5 className="raf-model-version">{rafScoreMapResult.hcc_model.model} - {rafScoreMapResult.hcc_model.version}</h5>
                                                   </div> */}
 
-                                                  <div className="col-xl-6">
-                                                    <div className="card">
-                                                      <div className="raf-card">
+                                                      <div className="col-xl-6">
+                                                        <div className="card">
+                                                          <div className="raf-card">
 
-                                                        <div className="row raf-head text-center">
-                                                          <div className="col-xl-12">
-                                                            <label className="text-white">Summary</label>
-                                                          </div>
-                                                        </div>
-                                                        <div className="row raf-details">
-                                                          <div className="col-xl-6">
-                                                            <span>{rafScoreMapResult.hcc_model.model}</span>
-                                                          </div>
-                                                          <div className="col-xl-6">
-                                                            <span>{rafScoreMapResult.hcc_model.version}</span>
-                                                          </div>
-                                                        </div>
-
-                                                      </div>
-                                                    </div>
-
-                                                  </div>
-                                                  <div className="col-xl-6">
-                                                    <div className="card">
-                                                      <div className="raf-card">
-                                                        <div className="row raf-head">
-                                                          <div className="col-xl-6">
-                                                            <label className="text-white">DX Code</label>
-                                                          </div>
-                                                          <div className="col-xl-6">
-                                                            <label className="text-white">DX Description</label>
-                                                          </div>
-
-                                                        </div>
-
-                                                        {rafScoreMapResult.dx_hccs.map((item) => {
-                                                          return (
-                                                            <div className="row raf-details">
-                                                              <div className="col-xl-6">
-                                                                <span>{item.dx_name}</span>
-                                                              </div>
-                                                              <div className="col-xl-6">
-                                                                <span>{item.dx_desc}</span>
+                                                            <div className="row raf-head text-center">
+                                                              <div className="col-xl-12">
+                                                                <label className="text-white">Summary</label>
                                                               </div>
                                                             </div>
-                                                          );
-                                                        })}
+                                                            <div className="row raf-details">
+                                                              <div className="col-xl-6">
+                                                                <span>{rafScoreMapResult.hcc_model.model}</span>
+                                                              </div>
+                                                              <div className="col-xl-6">
+                                                                <span>{rafScoreMapResult.hcc_model.version}</span>
+                                                              </div>
+                                                            </div>
 
+                                                          </div>
+                                                        </div>
 
                                                       </div>
-                                                    </div>
+                                                      <div className="col-xl-6">
+                                                        <div className="card">
+                                                          <div className="raf-card">
+                                                            <div className="row raf-head">
+                                                              <div className="col-xl-6">
+                                                                <label className="text-white">DX Code</label>
+                                                              </div>
+                                                              <div className="col-xl-6">
+                                                                <label className="text-white">DX Description</label>
+                                                              </div>
 
-                                                  </div>
-                                                  <div className="col-xl-6">
-                                                    <div className="card">
-                                                      <div className="raf-card">
-                                                        <div className="row raf-head">
-                                                          <div className="col-xl-6">
-                                                            <label className="text-white">HCC</label>
-                                                          </div>
-                                                          <div className="col-xl-6">
-                                                            <label className="text-white">HCC Description</label>
-                                                          </div>
+                                                            </div>
 
+                                                            {rafScoreMapResult.dx_hccs.map((item) => {
+                                                              return (
+                                                                <div className="row raf-details">
+                                                                  <div className="col-xl-6">
+                                                                    <span>{item.dx_name}</span>
+                                                                  </div>
+                                                                  <div className="col-xl-6">
+                                                                    <span>{item.dx_desc}</span>
+                                                                  </div>
+                                                                </div>
+                                                              );
+                                                            })}
+
+
+                                                          </div>
                                                         </div>
-                                                        {rafScoreMapResult.dx_hccs.map((res) => {
-                                                          return (
-                                                           
+
+                                                      </div>
+                                                      <div className="col-xl-6">
+                                                        <div className="card">
+                                                          <div className="raf-card">
+                                                            <div className="row raf-head">
+                                                              <div className="col-xl-6">
+                                                                <label className="text-white">HCC</label>
+                                                              </div>
+                                                              <div className="col-xl-6">
+                                                                <label className="text-white">HCC Description</label>
+                                                              </div>
+
+                                                            </div>
+                                                            {rafScoreMapResult.dx_hccs.map((res) => {
+                                                              return (
+
                                                                 res.hcc_list.map((res1) => {
                                                                   return (
-                                                        <div className="row raf-details">
-                                                          <div className="col-xl-6">
-                                                            <span>{res1.hcc_name}</span>
-                                                          </div>
-                                                          <div className="col-xl-6">
-                                                            <span>{res1.hcc_desc}</span>
+                                                                    <div className="row raf-details">
+                                                                      <div className="col-xl-6">
+                                                                        <span>{res1.hcc_name}</span>
+                                                                      </div>
+                                                                      <div className="col-xl-6">
+                                                                        <span>{res1.hcc_desc}</span>
+                                                                      </div>
+                                                                    </div>
+
+                                                                  );
+                                                                })
+                                                              );
+                                                            })}
+
                                                           </div>
                                                         </div>
-                                                       
-                                                        );
-                                                      })
-                                                          );
-                                                        })}
 
                                                       </div>
-                                                    </div>
+                                                      <div className="col-xl-6">
+                                                        <div className="card">
+                                                          <div className="raf-card">
+                                                            <div className="row raf-head">
+                                                              <div className="col-xl-4">
+                                                                <label className="text-white">Trumped By</label>
+                                                              </div>
+                                                              <div className="col-xl-4">
+                                                                <label className="text-white">RAF</label>
+                                                              </div>
+                                                              <div className="col-xl-4">
+                                                                <label className="text-white">Monthly Premium</label>
+                                                              </div>
 
-                                                  </div>
-                                                  <div className="col-xl-6">
-                                                    <div className="card">
-                                                      <div className="raf-card">
-                                                        <div className="row raf-head">
-                                                          <div className="col-xl-4">
-                                                            <label className="text-white">Trumped By</label>
-                                                          </div>
-                                                          <div className="col-xl-4">
-                                                            <label className="text-white">RAF</label>
-                                                          </div>
-                                                          <div className="col-xl-4">
-                                                            <label className="text-white">Monthly Premium</label>
-                                                          </div>
+                                                            </div>
+                                                            {rafScoreMapResult.dx_hccs.map((res) => {
+                                                              return (
 
-                                                        </div>
-                                                        {rafScoreMapResult.dx_hccs.map((res) => {
-                                                          return (
-                                                           
                                                                 res.hcc_list.map((res1) => {
                                                                   return (
-                                                        <div className="row  raf-details">
-                                                          <div className="col-xl-4">
-                                                            <span>-</span>
-                                                          </div>
-                                                          <div className="col-xl-4">
-                                                            <span>{res1.hcc_raf}</span>
-                                                          </div>
-                                                          <div className="col-xl-4">
-                                                            <span>${res1.premium}</span>
+                                                                    <div className="row  raf-details">
+                                                                      <div className="col-xl-4">
+                                                                        <span>-</span>
+                                                                      </div>
+                                                                      <div className="col-xl-4">
+                                                                        <span>{res1.hcc_raf}</span>
+                                                                      </div>
+                                                                      <div className="col-xl-4">
+                                                                        <span>${res1.premium}</span>
+                                                                      </div>
+                                                                    </div>
+                                                                  );
+                                                                })
+                                                              );
+                                                            })}
                                                           </div>
                                                         </div>
-                                                         );
-                                                        })
-                                                            );
-                                                          })}
+
                                                       </div>
                                                     </div>
 
-                                                  </div>
-                                                </div>
 
+                                                  );
+                                                })}
+                                              </> : null}
 
-                                              );
-                                            })}
-                                            </>:null}
-                                          
 
                                             <div className="row raf-main-card">
                                               <div className="raf-name-head">
@@ -1381,14 +1548,14 @@ export default function PatientDetails() {
                                             </div>
                                           </div>
                                           : null}
-                                           {rafScore == null ?
-                                           <div className="card box-shadow-none">
-                                         <div className="card combo-card">
-                                          <div className="col-xl-12">
+                                        {rafScore == null ?
+                                          <div className="card box-shadow-none">
+                                            <div className="card combo-card">
+                                              <div className="col-xl-12">
                                                 <span className="no-patient-data">NO PATIENT DATA</span>
                                               </div>
-                                          </div></div>
-                                          :null}
+                                            </div></div>
+                                          : null}
                                       </div>
                                       {/* <div className="">
 
@@ -1671,11 +1838,11 @@ export default function PatientDetails() {
                     </div>
                   </Modal>
                 )}
-                {/* {isModalOpenValid && (
+                {confirmNotesModalValid && (
                   <Modal
-                    title="Add Valid Code"
+                    title={selectDiseasesName}
                     centered
-                    open={isModalOpenValid}
+                    open={confirmNotesModalValid}
                     onOk={handleCloseModal}
                     onCancel={handleCloseModal}
                     footer={null}
@@ -1683,23 +1850,12 @@ export default function PatientDetails() {
                     <div className="offcanvas-body">
 
                       <div className="container-fluid">
-                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Form noValidate validated={validated} onSubmit={handleSubmitValidNotes}>
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Code <span className="text-danger">*</span>{" "}
+                                Notes <span className="text-danger">*</span>{" "}
                               </Form.Label>
-                              <Form.Control
-                                name="code"
-                                required
-                                type="text"
-                              />
-                            </div>
-                            <div className="col-xl-12 mb-3">
-                              <Form.Label>
-                                Description <span className="text-danger">*</span>{" "}
-                              </Form.Label>
-
                               <textarea
                                 className="form-control"
                                 id="val-suggestions"
@@ -1726,7 +1882,7 @@ export default function PatientDetails() {
 
                     </div>
                   </Modal>
-                )} */}
+                )}
                 <Offcanvas onHide={handleCloseModal} show={isModalOpenValid} className="offcanvas-end" placement="end">
                   <div className="offcanvas-header">
                     <h5 className="modal-title" id="#gridSystemModal">

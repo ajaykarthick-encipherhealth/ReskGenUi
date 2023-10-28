@@ -37707,7 +37707,7 @@ button.p-column-filter-menu-button.p-link {
 button.p-paginator-element.p-link {
   background: aqua;
   border-radius: 50px;
-  color: #241571;
+  color: #000;
 }
 button.p-highlight {
   background: #241571 !important;
@@ -37753,4 +37753,7 @@ li.p-dropdown-item {
   pointer-events: none;
   color: #aaa;
   padding-left: 9px;
+}
+.match-btn{
+ width: 60px !important;
 }

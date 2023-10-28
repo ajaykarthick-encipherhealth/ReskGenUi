@@ -13,6 +13,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight, faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import moment from 'moment';
 import Swal from 'sweetalert2';
+import { DataTable } from 'primereact/datatable';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
 
 
 
@@ -28,7 +32,7 @@ const UserList = () => {
 	const [localOrgId, setLocalOrgId] = useState('');
 	const [localTenantId, setLocalTenantId] = useState('');
 	const [pageDataCount, setPageDataCount] = useState(0);
-	const [pageLimitCount, setPageLimitCount] = useState(10);
+	const [pageLimitCount, setPageLimitCount] = useState(1000);
 
 
 	const [validated, setValidated] = useState(false);
@@ -53,8 +57,7 @@ const UserList = () => {
 	const [roleValue, setRoleValue] = useState(false);
 
 	const [formData, setFormData] = useState({
-		firstName: '',
-		lastName: '',
+		name: '',
 		emailId: '',
 		password: '',
 		// role: '',
@@ -69,6 +72,12 @@ const UserList = () => {
 	const [canPreviousPage, setCanPreviousPage] = useState(false);
 	const [canNextPage, setCanNextPage] = useState(true);
 	const [canMaxPage, setCanMaxPage] = useState(10);
+
+	const [filters, setFilters] = useState({
+		global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+		patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
+		patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+	});
 
 
 
@@ -102,9 +111,9 @@ const UserList = () => {
 		var result = response.data;
 		if (response?.status == 201) {
 			setAddUser(false);
-			getAllList(tenId, orgId, pageDataCount, pageLimitCount, '');
+			getAllList(localTenantId, localOrgId, pageDataCount, pageLimitCount, '');
 		} else {
-			
+
 		}
 	}
 	const deletUser = async (userId) => {
@@ -248,29 +257,54 @@ const UserList = () => {
 	const userDelete = (data) => {
 		Swal.fire({
 			title: 'Do you want delete!',
-			text: data.firstName + data.lastName,
+			text: data.name,
 			icon: 'warning',
 			confirmButtonText: 'Logout',
 			showCancelButton: true,
 			confirmButtonText: 'Yes',
 			confirmButtonColor: "#DD6B55",
 			closeOnConfirm: false
-		  }).then((result) => { 
+		}).then((result) => {
 			if (result.isConfirmed) {
 				deletUser(data.userId)
-			  } 
-		  }) 
+			}
+		})
 
 	}
 
 	function validate_password(password) {
 		let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
 		if (password.match(check)) {
-		   console.log("Your password is strong.");
+			console.log("Your password is strong.");
 		} else {
-		  console.log("Meh, not so much.");
+			console.log("Meh, not so much.");
 		}
 	}
+
+	const statusBodyTemplate = (rowData) => {
+	
+		switch (rowData.accountStatus) {
+		  case true:
+			return <span key={rowData.userId}> <Switch id={rowData.userId} onChange={event => switchHandler(event, rowData.userId)} checked checkedChildren="Enabled" unCheckedChildren="Disabled" /></span>
+			  ;
+	
+		  case false:
+			return<span key={rowData.userId}> <Switch id={rowData.userId} onChange={event => switchHandler(event, rowData.userId)} checked={false} checkedChildren="Enabled" unCheckedChildren="Disabled" /></span>;
+	
+		}
+	  };
+
+	const actionBodyTemplate = (rowData) => {
+		return <div className="d-flex">
+			<button onClick={() => userEdit(rowData)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+				<FontAwesomeIcon icon={faPencilAlt} fontSize={11} />
+			</button>
+			<button onClick={() => userDelete(rowData)} className="btn hegiht10 btn-danger shadow  sharp me-1 action-btn">
+				<FontAwesomeIcon icon={faTrash} fontSize={11} />
+			</button>
+
+		</div>
+	};
 
 
 
@@ -314,11 +348,20 @@ const UserList = () => {
 
 											</div>
 											<div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-												<table id="empoloyeestbl2" className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0">
+												<DataTable value={userList} paginator rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
+													<Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
+													<Column field="name" header="Name" />
+													<Column field="userName" header="User Name" />
+													<Column field="email" header="Email" />
+													<Column field="role" header="Role" />
+													<Column field="status" body={statusBodyTemplate} header="Status" />
+													<Column field="createdDate" header="Created Date" />
+													<Column field="action" body={actionBodyTemplate} header="Action" />
+												</DataTable>
+												{/* <table id="empoloyeestbl2" className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0">
 													<thead>
 														<tr>
 															<th>SI.NO</th>
-															{/* <th>Id</th> */}
 															<th>First Name</th>
 															<th>Last Name</th>
 															<th>User Name</th>
@@ -333,19 +376,17 @@ const UserList = () => {
 														{userList.map((item, index) => (
 															<tr key={index}>
 																<td><span>{index + 1}</span></td>
-																{/* <td><span>{item.id}</span></td> */}
 																<td><span>{item.firstName}</span></td>
 																<td><span>{item.lastName}</span></td>
 																<td><span>{item.userName}</span></td>
 																<td><span>{item.email}</span></td>
 																<td><span>
 																	{item.role[0]}
-																	{/* <Select onChange={(e) => roleChange(e)} options={RoleList} className="custom-react-select"
-																		defaultValue={RoleList[0]}
-																		isSearchable={false}
-																	/> */}
+																	
 																</span></td>
-																<td><span key={index}> <Switch id={index} onChange={event => switchHandler(event, index)} checked={isStatus[index]} checkedChildren="Enabled" unCheckedChildren="Disabled" /></span></td>
+																<td>
+																<span key={index}> <Switch id={index} onChange={event => switchHandler(event, index)} checked={isStatus[index]} checkedChildren="Enabled" unCheckedChildren="Disabled" /></span
+																></td>
 																<td><span>{moment(item.createdDate).format('DD/MM/YYYY hh:mm A')}</span></td>
 																<td>
 																	<div className="d-flex">
@@ -365,9 +406,6 @@ const UserList = () => {
 												<div className="d-flex justify-content-between mrt-15">
 													<span>
 														Page{' '}
-														{/* <strong>
-                              {pageIndex + 1} of {pageOptions.length}
-                            </strong>{''} */}
 														<strong>
 															{pageIndex + 1} of 3
 														</strong>{''}
@@ -397,7 +435,7 @@ const UserList = () => {
 															<FontAwesomeIcon icon={faAngleRight} />
 														</button>
 													</div>
-												</div>
+												</div> */}
 											</div>
 										</div>
 									</div>
@@ -420,13 +458,17 @@ const UserList = () => {
 					<div className="container-fluid">
 						<Form noValidate validated={validated} onSubmit={handleSubmit}>
 							<div className="row">
-								<div className="col-xl-6 mb-3">
+								{/* <div className="col-xl-6 mb-3">
 									<Form.Label>First name  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='firstName' required type="text" onChange={handleChange} />
 								</div>
 								<div className="col-xl-6 mb-3">
 									<Form.Label>Last Name  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='lastName' required type="text" onChange={handleChange} />
+								</div> */}
+								<div className="col-xl-6 mb-3">
+									<Form.Label>Name  <span className="text-danger">*</span> </Form.Label>
+									<Form.Control name='name' required type="text" onChange={handleChange} />
 								</div>
 								<div className="col-xl-6 mb-3">
 									<Form.Label>Email  <span className="text-danger">*</span> </Form.Label>
