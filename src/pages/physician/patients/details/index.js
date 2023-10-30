@@ -177,7 +177,7 @@ export default function PatientDetails() {
       var dosYearArr = [];
       var rafScore = null;
       var validDiseaseNewRes = '';
-      getPatientPdfFile(result.fileId, tenId)
+      getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
       setSelectMeatFileId(response.data.fileId)
       setPatientDocumentResult(result);
 
