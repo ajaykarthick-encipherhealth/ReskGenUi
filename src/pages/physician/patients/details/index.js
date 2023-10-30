@@ -449,15 +449,19 @@ export default function PatientDetails() {
 
 
   const invalidMoveConfirm = () => {
-    const result = invalidDiseasesList.filter(
-      (res) => res.name != selectDiseasesName
+    const result = newInValidDiseaseList.filter(
+      (res) => res.diagnosisCode != selectDiseasesName
     );
-    setInvalidDiseasesList(result);
+    setInNewValidDiseaseList(result);
+
+    const result2 = newInValidDiseaseList.filter(
+      (res2) => res2.diagnosisCode == selectDiseasesName
+    );
     var namePush = [];
     namePush.push({ name: selectDiseasesName });
     var newArray = [];
-    newArray = [...validDiseasesList, ...namePush];
-    setValidDiseasesList(newArray);
+    newArray = [...newValidDiseaseList, ...result2];
+    setNewValidDiseaseList(newArray);
   };
 
   const validMoveConfirmDis = () => {
