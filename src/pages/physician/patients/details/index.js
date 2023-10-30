@@ -10,7 +10,7 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCheck, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faCheck, faAdd, faInfo } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm, Divider, Popover, } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
@@ -37,7 +37,7 @@ export default function PatientDetails() {
   //   // keyword: [
   //   //   'document',
   //   //   {
-  //         keyword: 'Impression',
+  //         keyword: 'Assessment',
   //         matchCase: true,
   //     // },
   // // ],
@@ -90,6 +90,20 @@ export default function PatientDetails() {
   const [rafHccList, setRafScoreHccList] = useState([]);
   const [isMatchBtn, setIsMatchBtn] = useState(false);
   const [matchHccList, setMatchHccList] = useState([]);
+  const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
+  const [dbDescriptionRes, setDbDescriptionRes] = useState([]);
+
+  const [openPopover, setOpenPopover] = useState(false);
+
+  const hidePopover = () => {
+    setOpenPopover(false);
+  };
+
+  const handleOpenChangePopover = (newOpen) => {
+    setOpenPopover(newOpen);
+  };
+
+
   //   highlight([
   //     'document',
   //     {
@@ -162,6 +176,7 @@ export default function PatientDetails() {
       var meatCri = '';
       var dosYearArr = [];
       var rafScore = null;
+      var validDiseaseNewRes = '';
       getPatientPdfFile(result.fileId, tenId)
       setSelectMeatFileId(response.data.fileId)
       setPatientDocumentResult(result);
@@ -173,7 +188,35 @@ export default function PatientDetails() {
       const highestDOS = Math.max(...dosYearArr.map(res => res.value));
 
       const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
-      setDosYearDefalutSelect(highestDosValue)
+      setDosYearDefalutSelect(highestDosValue);
+
+
+
+      var validDiseaseNew = {
+        "2019": [
+          {
+            "diagnosisCode": "I6523",
+            "actualDescription": "Occlusion and stenosis of bilateral carotid arteries",
+            "dbDescription": "Occlusion and stenosis of bilateral carotid arteries - DB"
+          },
+          {
+            "diagnosisCode": "I70209",
+            "actualDescription": "Unspecified atherosclerosis of native arteries of extremities, unspecified extremity",
+            "dbDescription": "Unspecified atherosclerosis of native arteries of extremities, unspecified extremity- DB"
+          },
+          {
+            "diagnosisCode": "I712",
+            "actualDescription": "Thoracic aortic aneurysm, without rupture",
+            "dbDescription": "Thoracic aortic aneurysm, without rupture- DB"
+          },
+          {
+            "diagnosisCode": "I119",
+            "actualDescription": "Hypertensive heart disease without heart failure",
+            "dbDescription": 'Hypertensive heart disease without heart failure -DB'
+          }
+        ]
+      }
+
 
 
 
@@ -182,10 +225,13 @@ export default function PatientDetails() {
       }
 
       validDis = result.validDisease[highestDOS];
+      validDiseaseNewRes = result.validDisease[highestDOS]
 
       invalidDis = result.invalidDisease[highestDOS];
       comboDis = result.comboDisease[highestDOS];
       meatCri = result.meatCriteria[highestDOS];
+
+      // validDiseaseNewRes = validDiseaseNew[2019]
 
       var invalidDiseasesArray = [];
       var validDiseasesArray = [];
@@ -197,14 +243,9 @@ export default function PatientDetails() {
         validDiseasesArray.push({ name: validDis[key] });
       }
 
-      for (var key in validDis) {
-        // console.log(validDis[key])
-        var keySplit = validDis[key];
-        console.log(keySplit)
-        for (var key2 in keySplit) {
-          console.log(keySplit[key2])
-         }
-       }
+
+
+
 
 
 
@@ -235,6 +276,8 @@ export default function PatientDetails() {
       // }
 
 
+
+      setNewValidDiseaseList(validDiseaseNewRes);
       setValidDiseasesList(validDiseasesArray);
       setInvalidDiseasesList(invalidDiseasesArray);
       setComboDiseaseCodesList(comboDis);
@@ -364,14 +407,20 @@ export default function PatientDetails() {
 
   const validMoveConfirm = () => {
 
-    const result = validDiseasesList.filter(
-      (res) => res.name != selectDiseasesName
+    const result = newValidDiseaseList.filter(
+      (res) => res.diagnosisCode != selectDiseasesName
     );
-    setValidDiseasesList(result);
-    var namePush = [];
-    namePush.push({ name: selectDiseasesName });
+    setNewValidDiseaseList(result);
+    const result2 = newValidDiseaseList.filter(
+      (res2) => res2.diagnosisCode == selectDiseasesName
+    );
+
+    console.log(result)
+    console.log(result2)
+    // var namePush = [];
+    // namePush.push({ name: selectDiseasesName });
     var newArray = [];
-    newArray = [...invalidMoveDiseasesList, ...namePush];
+    newArray = [...invalidMoveDiseasesList, ...result2];
     setInvalidMoveDiseasesList(newArray);
 
 
@@ -401,14 +450,17 @@ export default function PatientDetails() {
 
   const validMoveConfirmDis = () => {
     const result = invalidMoveDiseasesList.filter(
-      (res) => res.name != selectDiseasesName
+      (res) => res.diagnosisCode != selectDiseasesName
     );
     setInvalidMoveDiseasesList(result);
-    var namePush = [];
-    namePush.push({ name: selectDiseasesName });
+    const result2 = invalidMoveDiseasesList.filter(
+      (res2) => res2.diagnosisCode == selectDiseasesName
+    );
+    // var namePush = [];
+    // namePush.push({ name: selectDiseasesName });
     var newArray = [];
-    newArray = [...validDiseasesList, ...namePush];
-    setValidDiseasesList(newArray);
+    newArray = [...newValidDiseaseList, ...result2];
+    setNewValidDiseaseList(newArray);
   };
 
   const comboMoveInvalidConfirm = () => {
@@ -492,6 +544,7 @@ export default function PatientDetails() {
     setConfirmNotesModalValid(false);
   };
   const handleOpenModal = (value) => {
+    console.log()
     setTimeout(() => {
       highlight({
         keyword: value,
@@ -560,6 +613,7 @@ export default function PatientDetails() {
     var comboDis = '';
     var meatCri = '';
     var rafScore = null;
+    var validDiseaseNewRes = '';
 
     var result = patientDetails;
 
@@ -570,6 +624,7 @@ export default function PatientDetails() {
     }
 
     validDis = result.validDisease[dosKeyValue];
+    validDiseaseNewRes = result.validDisease[dosKeyValue]
 
     invalidDis = result.invalidDisease[dosKeyValue];
     comboDis = result.comboDisease[dosKeyValue];
@@ -585,6 +640,7 @@ export default function PatientDetails() {
       validDiseasesArray.push({ name: validDis[key] });
     }
 
+    setNewValidDiseaseList(validDiseaseNewRes);
     setValidDiseasesList(validDiseasesArray);
     setInvalidDiseasesList(invalidDiseasesArray);
     setComboDiseaseCodesList(comboDis);
@@ -594,30 +650,34 @@ export default function PatientDetails() {
 
   }
 
-  const handleMatchHcc =(event,value) => {    
+  const handleMatchHcc = (event, value) => {
     console.log(event.target.checked);
     var checked = event.target.checked;
-    if(checked == true){    
-    var newArray = [];
-    var namePush = [];
-    namePush.push({ name: value });
-    newArray = [...matchHccList, ...namePush];
-    setMatchHccList(newArray);
-    }else{
+    if (checked == true) {
+      var newArray = [];
+      var namePush = [];
+      namePush.push({ name: value });
+      newArray = [...matchHccList, ...namePush];
+      setMatchHccList(newArray);
+    } else {
       const removeArr = matchHccList.filter((i) => i.name != value);
       setMatchHccList(removeArr);
     }
-    if(newArray.length != 0){
+    if (newArray.length != 0) {
       setIsMatchBtn(true);
     }
     console.log(matchHccList)
   }
 
-  const handleSubmitMatchHcc =() => {    
-   
+  const handleSubmitMatchHcc = () => {
+
     console.log(matchHccList)
   }
 
+
+  const openModelDbDescription = () => {
+
+  };
 
 
 
@@ -787,7 +847,7 @@ export default function PatientDetails() {
                                                     href=""
                                                     bg="secondary badge-circle"
                                                   >
-                                                    {validDiseasesList.length}
+                                                    {newValidDiseaseList.length}
                                                   </Badge>
                                                 </span>
                                                 <div className="d-flex justify-content-center">
@@ -797,23 +857,35 @@ export default function PatientDetails() {
                                                 </div>
                                               </div>
 
-                                              {validDiseasesList.map((data, i) => (
+                                              {newValidDiseaseList.map((data, i) => (
                                                 <li>
                                                   <div className="timeline-panel valid-disease">
                                                     <div className="media-body">
                                                       <span className="mb-1 disease-name" >
-                                                        {data.name}
+                                                        {data.diagnosisCode} -  {data.actualDescription}
                                                       </span>
                                                     </div>
+
+                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faInfo}
+                                                          style={{ color: "blue" }}
+                                                        />
+                                                      </div>
+                                                    </Popover>
+
+
                                                     <Popconfirm
                                                       title="You want move to invalid?"
-                                                      description={data.name}
+                                                      description={data.diagnosisCode}
                                                       onConfirm={confirmvalid}
                                                       placement="leftTop"
                                                       okText="Yes"
                                                       cancelText="No"
                                                       onOpenChange={() =>
-                                                        onchangeValid(data.name)
+                                                        onchangeValid(data.diagnosisCode)
                                                       }
                                                     >
                                                       <div className="icon-box  bg-danger-light me-1">
@@ -849,18 +921,26 @@ export default function PatientDetails() {
                                                   <div className="timeline-panel invalid-disease">
                                                     <div className="media-body">
                                                       <span className="mb-1 disease-name">
-                                                        {data.name}
+                                                        {data.diagnosisCode} -  {data.actualDescription}
                                                       </span>
                                                     </div>
-                                                    <Popconfirm
+                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faInfo}
+                                                          style={{ color: "blue" }}
+                                                        />
+                                                      </div>
+                                                    </Popover>                                                    <Popconfirm
                                                       title="You want move to valid?"
-                                                      description={data.name}
+                                                      description={data.diagnosisCode}
                                                       onConfirm={confirmInvalidMoveDis}
                                                       placement="leftTop"
                                                       okText="Yes"
                                                       cancelText="No"
                                                       onOpenChange={() =>
-                                                        onchangeValid(data.name)
+                                                        onchangeValid(data.diagnosisCode)
                                                       }
                                                     >
                                                       <div className="icon-box  bg-danger-light me-1">
@@ -952,16 +1032,16 @@ export default function PatientDetails() {
                                                   className={`dang d-block`}
                                                 >
                                                   {" "}
-                                                  MATCH-HCC{" "}
+                                                  UN MATCH{" "}
                                                 </span>
                                                 {isMatchBtn ?
-                                                <div className="d-flex justify-content-center">
-                                                  <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn">
-                                                   Match
-                                                  </button>
-                                                </div>:null}
+                                                  <div className="d-flex justify-content-center">
+                                                    <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn">
+                                                      Match
+                                                    </button>
+                                                  </div> : null}
                                               </div>
-                                              {invalidDiseasesList.map((data, i) => (
+                                              {matchHccList.map((data, i) => (
                                                 <li>
                                                   <div className="timeline-panel invalid-disease">
                                                     <div className="media-body">
@@ -970,7 +1050,7 @@ export default function PatientDetails() {
                                                       </span>
                                                     </div>
                                                     <div className="form-check custom-checkbox">
-                                                      <input onChange={(e) =>{handleMatchHcc(e,data.name)}} type="checkbox" id={`customCheckBox ${data.name}`} className="form-check-input" required />
+                                                      <input onChange={(e) => { handleMatchHcc(e, data.name) }} type="checkbox" id={`customCheckBox ${data.name}`} className="form-check-input" required />
                                                     </div>
                                                   </div>
                                                 </li>
@@ -1078,7 +1158,7 @@ export default function PatientDetails() {
                                         );
                                       })}
 
-                                      {validDiseasesList.length == 0 ?
+                                      {comboDiseaseCodesList.length == 0 ?
                                         <div className="card combo-card">
                                           <div className="col-xl-12">
                                             <div>
@@ -1233,7 +1313,7 @@ export default function PatientDetails() {
                                           </div>
                                         );
                                       })}
-                                      {validDiseasesList.length == 0 ?
+                                      {meatCriteriaList.length == 0 ?
                                         <div className="card combo-card">
                                           <div className="col-xl-12">
                                             <div>
