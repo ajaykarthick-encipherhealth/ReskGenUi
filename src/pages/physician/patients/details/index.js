@@ -91,6 +91,9 @@ export default function PatientDetails() {
   const [isMatchBtn, setIsMatchBtn] = useState(false);
   const [matchHccList, setMatchHccList] = useState([]);
   const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
+  const [newInValidDiseaseList, setInNewValidDiseaseList] = useState([]);
+  const [unMatchResList, setNewUnMatchHccList] = useState([]);
+
   const [dbDescriptionRes, setDbDescriptionRes] = useState([]);
 
   const [openPopover, setOpenPopover] = useState(false);
@@ -169,136 +172,145 @@ export default function PatientDetails() {
     if (response.data) {
       var result = response.data;
       setPatientDetails(result);
-      console.log(result)
-      var validDis = '';
-      var invalidDis = '';
-      var comboDis = '';
-      var meatCri = '';
-      var dosYearArr = [];
-      var rafScore = null;
-      var validDiseaseNewRes = '';
-      getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
-      setSelectMeatFileId(response.data.fileId)
-      setPatientDocumentResult(result);
+      if (result.validDisease != null) {
+        console.log(result)
+        var validDis = '';
+        var invalidDis = '';
+        var comboDis = '';
+        var meatCri = '';
+        var dosYearArr = [];
+        var rafScore = null;
+        var validDiseaseNewRes = [];
+        var invalidDiseaseNewRes = [];
+        var unMatchRes = [];
+        getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
+        setSelectMeatFileId(response.data.fileId)
+        setPatientDocumentResult(result);
 
-      for (var key in response.data.validDisease) {
-        dosYearArr.push({ value: key, label: key });
+        for (var key in response.data.validDisease) {
+          dosYearArr.push({ value: key, label: key });
+        }
+
+        const highestDOS = Math.max(...dosYearArr.map(res => res.value));
+
+        const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
+        setDosYearDefalutSelect(highestDosValue);
+
+
+
+        var validDiseaseNew = {
+          "2019": [
+            {
+              "diagnosisCode": "I6523",
+              "actualDescription": "Occlusion and stenosis of bilateral carotid arteries",
+              "dbDescription": "Occlusion and stenosis of bilateral carotid arteries - DB"
+            },
+            {
+              "diagnosisCode": "I70209",
+              "actualDescription": "Unspecified atherosclerosis of native arteries of extremities, unspecified extremity",
+              "dbDescription": "Unspecified atherosclerosis of native arteries of extremities, unspecified extremity- DB"
+            },
+            {
+              "diagnosisCode": "I712",
+              "actualDescription": "Thoracic aortic aneurysm, without rupture",
+              "dbDescription": "Thoracic aortic aneurysm, without rupture- DB"
+            },
+            {
+              "diagnosisCode": "I119",
+              "actualDescription": "Hypertensive heart disease without heart failure",
+              "dbDescription": 'Hypertensive heart disease without heart failure -DB'
+            }
+          ]
+        }
+
+
+
+
+        if (result.rafScore != null) {
+          rafScore = result.rafScore[highestDOS]
+        }
+
+        validDis = result.validDisease[highestDOS];
+        validDiseaseNewRes = result.validDisease[highestDOS];
+        invalidDiseaseNewRes = result.invalidDisease[highestDOS];
+        unMatchRes = result.unmatchedDisease[highestDOS]
+
+
+        invalidDis = result.invalidDisease[highestDOS];
+        comboDis = result.comboDisease[highestDOS];
+        meatCri = result.meatCriteria[highestDOS];
+
+        // validDiseaseNewRes = validDiseaseNew[2019]
+
+        var invalidDiseasesArray = [];
+        var validDiseasesArray = [];
+
+        for (var key in invalidDis) {
+          invalidDiseasesArray.push({ name: invalidDis[key] });
+        }
+        for (var key in validDis) {
+          validDiseasesArray.push({ name: validDis[key] });
+        }
+
+
+
+
+
+
+
+        // for (var key in result.validDisease) {
+        //   validDis = result.validDisease[key];
+        //   if (result.rafScore != null) {
+        //     rafScore = result.rafScore[key]
+        //   }
+        // }
+        // for (var key in result.invalidDisease) {
+        //   invalidDis = result.invalidDisease[key];
+        // }
+        // for (var key in result.comboDisease) {
+        //   comboDis = result.comboDisease[key];
+        // }
+        // for (var key in result.meatCriteria) {
+        //   meatCri = result.meatCriteria[key];
+        // }
+
+        // var invalidDiseasesArray = [];
+        // var validDiseasesArray = [];
+
+        // for (var key in invalidDis) {
+        //   invalidDiseasesArray.push({ name: invalidDis[key] });
+        // }
+        // for (var key in validDis) {
+        //   validDiseasesArray.push({ name: validDis[key] });
+        // }
+
+
+
+        setNewValidDiseaseList(validDiseaseNewRes);
+        setInNewValidDiseaseList(invalidDiseaseNewRes);
+        setNewUnMatchHccList(unMatchRes)
+        setValidDiseasesList(validDiseasesArray);
+        setInvalidDiseasesList(invalidDiseasesArray);
+        setComboDiseaseCodesList(comboDis);
+        setMeatCriteriaList(meatCri);
+        setDosYear(dosYearArr);
+        setRAFScore(rafScore)
+        // console.log(validDiseasesArray)
+
+        // var hccListArr=[];
+
+        // rafScore.scoreOutputDTOList.map((res) => {
+        //   res.dx_hccs.map((res2) => {
+        //     res2.hcc_list.map((res3) => {
+        //       console.log(res3) 
+        //       hccListArr.push(res3)          
+        //     })
+        //   })
+
+        // })
+        // console.log(hccListArr)
+        // setRafScoreHccList(hccListArr)
       }
-
-      const highestDOS = Math.max(...dosYearArr.map(res => res.value));
-
-      const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
-      setDosYearDefalutSelect(highestDosValue);
-
-
-
-      var validDiseaseNew = {
-        "2019": [
-          {
-            "diagnosisCode": "I6523",
-            "actualDescription": "Occlusion and stenosis of bilateral carotid arteries",
-            "dbDescription": "Occlusion and stenosis of bilateral carotid arteries - DB"
-          },
-          {
-            "diagnosisCode": "I70209",
-            "actualDescription": "Unspecified atherosclerosis of native arteries of extremities, unspecified extremity",
-            "dbDescription": "Unspecified atherosclerosis of native arteries of extremities, unspecified extremity- DB"
-          },
-          {
-            "diagnosisCode": "I712",
-            "actualDescription": "Thoracic aortic aneurysm, without rupture",
-            "dbDescription": "Thoracic aortic aneurysm, without rupture- DB"
-          },
-          {
-            "diagnosisCode": "I119",
-            "actualDescription": "Hypertensive heart disease without heart failure",
-            "dbDescription": 'Hypertensive heart disease without heart failure -DB'
-          }
-        ]
-      }
-
-
-
-
-      if (result.rafScore != null) {
-        rafScore = result.rafScore[highestDOS]
-      }
-
-      validDis = result.validDisease[highestDOS];
-      validDiseaseNewRes = result.validDisease[highestDOS]
-
-      invalidDis = result.invalidDisease[highestDOS];
-      comboDis = result.comboDisease[highestDOS];
-      meatCri = result.meatCriteria[highestDOS];
-
-      // validDiseaseNewRes = validDiseaseNew[2019]
-
-      var invalidDiseasesArray = [];
-      var validDiseasesArray = [];
-
-      for (var key in invalidDis) {
-        invalidDiseasesArray.push({ name: invalidDis[key] });
-      }
-      for (var key in validDis) {
-        validDiseasesArray.push({ name: validDis[key] });
-      }
-
-
-
-
-
-
-
-      // for (var key in result.validDisease) {
-      //   validDis = result.validDisease[key];
-      //   if (result.rafScore != null) {
-      //     rafScore = result.rafScore[key]
-      //   }
-      // }
-      // for (var key in result.invalidDisease) {
-      //   invalidDis = result.invalidDisease[key];
-      // }
-      // for (var key in result.comboDisease) {
-      //   comboDis = result.comboDisease[key];
-      // }
-      // for (var key in result.meatCriteria) {
-      //   meatCri = result.meatCriteria[key];
-      // }
-
-      // var invalidDiseasesArray = [];
-      // var validDiseasesArray = [];
-
-      // for (var key in invalidDis) {
-      //   invalidDiseasesArray.push({ name: invalidDis[key] });
-      // }
-      // for (var key in validDis) {
-      //   validDiseasesArray.push({ name: validDis[key] });
-      // }
-
-
-
-      setNewValidDiseaseList(validDiseaseNewRes);
-      setValidDiseasesList(validDiseasesArray);
-      setInvalidDiseasesList(invalidDiseasesArray);
-      setComboDiseaseCodesList(comboDis);
-      setMeatCriteriaList(meatCri);
-      setDosYear(dosYearArr);
-      setRAFScore(rafScore)
-      // console.log(validDiseasesArray)
-
-      // var hccListArr=[];
-
-      // rafScore.scoreOutputDTOList.map((res) => {
-      //   res.dx_hccs.map((res2) => {
-      //     res2.hcc_list.map((res3) => {
-      //       console.log(res3) 
-      //       hccListArr.push(res3)          
-      //     })
-      //   })
-
-      // })
-      // console.log(hccListArr)
-      // setRafScoreHccList(hccListArr)
 
     }
   }
@@ -932,6 +944,7 @@ export default function PatientDetails() {
                                                           style={{ color: "blue" }}
                                                         />
                                                       </div>
+
                                                     </Popover>                                                    <Popconfirm
                                                       title="You want move to valid?"
                                                       description={data.diagnosisCode}
@@ -969,7 +982,7 @@ export default function PatientDetails() {
                                                     href=""
                                                     bg="badge-circle invalid-bange"
                                                   >
-                                                    {invalidDiseasesList.length}
+                                                    {newInValidDiseaseList.length}
                                                   </Badge>
                                                 </span>
                                                 <div className="d-flex justify-content-center">
@@ -993,23 +1006,32 @@ export default function PatientDetails() {
                                                 {invalidDiseasesList.length}
                                               </Badge>
                                             </span> */}
-                                              {invalidDiseasesList.map((data, i) => (
+                                              {newInValidDiseaseList.map((data, i) => (
                                                 <li>
                                                   <div className="timeline-panel invalid-disease">
                                                     <div className="media-body">
                                                       <span className="mb-1 disease-name">
-                                                        {data.name}
+                                                        {data.diagnosisCode} -  {data.actualDescription}
                                                       </span>
                                                     </div>
+                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faInfo}
+                                                          style={{ color: "blue" }}
+                                                        />
+                                                      </div>
+                                                    </Popover>
                                                     <Popconfirm
                                                       title="You want move to valid?"
-                                                      description={data.name}
+                                                      description={data.diagnosisCode}
                                                       onConfirm={confirmInvalid}
                                                       placement="leftTop"
                                                       okText="Yes"
                                                       cancelText="No"
                                                       onOpenChange={() =>
-                                                        onchangeValid(data.name)
+                                                        onchangeValid(data.diagnosisCode)
                                                       }
                                                     >
                                                       <div className="icon-box  bg-danger-light me-1">
@@ -1041,16 +1063,16 @@ export default function PatientDetails() {
                                                     </button>
                                                   </div> : null}
                                               </div>
-                                              {matchHccList.map((data, i) => (
+                                              {unMatchResList.map((data, i) => (
                                                 <li>
                                                   <div className="timeline-panel invalid-disease">
                                                     <div className="media-body">
                                                       <span className="mb-1 disease-name">
-                                                        {data.name}
+                                                        {data.diagnosisCodeFinding} -  {data.actualDescription}
                                                       </span>
                                                     </div>
                                                     <div className="form-check custom-checkbox">
-                                                      <input onChange={(e) => { handleMatchHcc(e, data.name) }} type="checkbox" id={`customCheckBox ${data.name}`} className="form-check-input" required />
+                                                      <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div>
                                                   </div>
                                                 </li>
@@ -1070,7 +1092,7 @@ export default function PatientDetails() {
                                       </div>
                                     </div>
                                   </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="invalidDiseases">
+                                  {/* <Tab.Pane id="my-posts" eventKey="invalidDiseases">
                                     <div className="my-post-content pt-3">
                                       <div className="widget-media   ps--active-y">
                                         <ul className="timeline">
@@ -1094,7 +1116,7 @@ export default function PatientDetails() {
                                         </ul>
                                       </div>
                                     </div>
-                                  </Tab.Pane>
+                                  </Tab.Pane> */}
                                   <Tab.Pane id="my-posts" eventKey="comboDiseases">
                                     <div className="my-post-content pt-3">
                                       <div className="card combo-head-card">
