@@ -744,19 +744,23 @@ export default function PatientDetails() {
                       <div className="card">
                         <div className="card-body">
                           <div className="row">
+                          <div className='col-xl-3 col-sm-12'>
+                              <i>{SVGICON.DatebirthIcon}</i> <label>Patient Id</label>
+                              <h6 className='ageDtails'>{patientDocumentResult.patientId}</h6>
+                            </div>
                             <div className='col-xl-3 col-sm-12'>
                               <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
                               <h6 className='ageDtails'>{patientDocumentResult.patientName}</h6>
                             </div>
-                            <div className='col-xl-2 col-sm-12'>
+                            <div className='col-xl-1 col-sm-12'>
                               <i>{SVGICON.AgeIcon}</i> <label>Age</label>
                               <h6 className='ageDtails'>{patientDocumentResult.age}</h6>
                             </div>
-                            <div className='col-xl-3 col-sm-12'>
+                            <div className='col-xl-2 col-sm-12'>
                               <i>{SVGICON.GenerIcon}</i><label>Gender</label>
                               <h6 className='ageDtails'>{patientDocumentResult.gender}</h6>
                             </div>
-                            <div className='col-xl-4 col-sm-12'>
+                            <div className='col-xl-3 col-sm-12'>
                               <i>{SVGICON.DatebirthIcon}</i> <label>Date of birth</label>
                               <h6 className='ageDtails'>{patientDocumentResult.dob}</h6>
                             </div>
@@ -831,7 +835,7 @@ export default function PatientDetails() {
                                   </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
                                     <Nav.Link to="#my-posts" eventKey="validDiseases">
-                                      Diseases
+                                     Visit Data
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
@@ -947,14 +951,14 @@ export default function PatientDetails() {
                                                 </li>
                                               ))}
                                             </ul>
-                                            <ul className="timeline">
+                                            {/* <ul className="timeline">
 
                                               <div className="invalid-text d-flex justify-content-sm-between">
                                                 <span
                                                   className={`dang d-block`}
                                                 >
                                                   {" "}
-                                                  INVALID-HCC{" "}
+                                                  Deleted Codes{" "}
                                                   <Badge
                                                     as="a"
                                                     href=""
@@ -981,7 +985,8 @@ export default function PatientDetails() {
                                                         />
                                                       </div>
 
-                                                    </Popover>                                                    <Popconfirm
+                                                    </Popover>   
+                                                     <Popconfirm
                                                       title="You want move to valid?"
                                                       description={data.diagnosisCode}
                                                       onConfirm={confirmInvalidMoveDis}
@@ -1002,9 +1007,10 @@ export default function PatientDetails() {
                                                   </div>
                                                 </li>
                                               ))}
-                                            </ul>
+                                            </ul> */}
                                           </div>
-                                          <div className="col-xl-4">
+                                        
+                                          {/* <div className="col-xl-4">
                                             <ul className="timeline">
 
                                               <div className="invalid-text d-flex justify-content-sm-between">
@@ -1027,21 +1033,6 @@ export default function PatientDetails() {
                                                   </button>
                                                 </div>
                                               </div>
-
-
-                                              {/* <span
-                                              className={`dang d-block`}
-                                            >
-                                              {" "}
-                                              NON-HCC{" "}
-                                              <Badge
-                                                as="a"
-                                                href=""
-                                                bg="badge-circle invalid-bange"
-                                              >
-                                                {invalidDiseasesList.length}
-                                              </Badge>
-                                            </span> */}
                                               {newInValidDiseaseList.map((data, i) => (
                                                 <li>
                                                   <div className="timeline-panel invalid-disease">
@@ -1050,15 +1041,6 @@ export default function PatientDetails() {
                                                         <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
                                                       </span>
                                                     </div>
-                                                    {/* <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faInfo}
-                                                          style={{ color: "blue" }}
-                                                        />
-                                                      </div>
-                                                    </Popover> */}
                                                     <Popconfirm
                                                       title="You want move to valid?"
                                                       description={data.diagnosisCode}
@@ -1081,7 +1063,7 @@ export default function PatientDetails() {
                                                 </li>
                                               ))}
                                             </ul>
-                                          </div>
+                                          </div> */}
                                           <div className="col-xl-4">
                                             <ul className="timeline">
 
@@ -1090,12 +1072,12 @@ export default function PatientDetails() {
                                                   className={`dang d-block`}
                                                 >
                                                   {" "}
-                                                  UN MATCH{" "}
+                                                  Suggested Codes{" "}
                                                 </span>
                                                 {isMatchBtn ?
                                                   <div className="d-flex justify-content-center">
                                                     <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn">
-                                                      Match
+                                                      Add
                                                     </button>
                                                   </div> : null}
                                               </div>
@@ -1138,6 +1120,66 @@ export default function PatientDetails() {
                                                 </li>
                                               ))}
                                             </ul>
+                                          </div>
+                                          <div className="col-xl-4">
+                                          <ul className="timeline">
+
+<div className="invalid-text d-flex justify-content-sm-between">
+  <span
+    className={`dang d-block`}
+  >
+    {" "}
+    Deleted Codes{" "}
+    <Badge
+      as="a"
+      href=""
+      bg="badge-circle invalid-bange"
+    >
+      {invalidMoveDiseasesList.length}
+    </Badge>
+  </span>
+</div>
+{invalidMoveDiseasesList.map((data, i) => (
+  <li>
+    <div className="timeline-panel invalid-disease">
+      <div className="media-body">
+        <span className="mb-1 disease-name d-flex" >
+          <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+        </span>
+      </div>
+      <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+        <div className="icon-box  bg-danger-light me-1">
+          <FontAwesomeIcon
+            icon={faInfo}
+            style={{ color: "blue" }}
+          />
+        </div>
+
+      </Popover>   
+       <Popconfirm
+        title="You want move to valid?"
+        description={data.diagnosisCode}
+        onConfirm={confirmInvalidMoveDis}
+        placement="leftTop"
+        okText="Yes"
+        cancelText="No"
+        onOpenChange={() =>
+          onchangeValid(data.diagnosisCode)
+        }
+      >
+        <div className="icon-box  bg-danger-light me-1">
+          <FontAwesomeIcon
+            icon={faCheck}
+            style={{ color: "orange" }}
+          />
+        </div>
+      </Popconfirm>
+    </div>
+  </li>
+))}
+</ul>
+
                                           </div>
                                           {validDiseasesList.length == 0 ?
                                             <div className="card box-shadow-none">
@@ -1182,13 +1224,13 @@ export default function PatientDetails() {
                                       <div className="card combo-head-card">
                                         <div className="row">
                                           <div className="col-xl-3">
-                                            <label>Diagnosis Code Combo</label>
+                                            <label>Combo Codes</label>
                                           </div>
                                           <div className="col-xl-3">
-                                            <label>AddOnCode</label>
+                                            <label>Additional Codes</label>
                                           </div>
                                           <div className="col-xl-5">
-                                            <label>Disease Name</label>
+                                            <label>Description</label>
                                           </div>
                                           <div className="col-xl-1">
                                             <div className="d-flex justify-content-center">
@@ -1306,7 +1348,7 @@ export default function PatientDetails() {
                                             <label>Codes</label>
                                           </div>
                                           <div className="col-xl-2">
-                                            <label>Disease Name</label>
+                                            <label>Description</label>
                                           </div>
                                           <div className="col-xl-2">
                                             <label>Monitor</label>
@@ -1336,7 +1378,7 @@ export default function PatientDetails() {
                                                 <span className="font-bold">{item.diagnosisCode}</span>
                                               </div>
                                               <div className="col-xl-2">
-                                                <Popover placement="topLeft" title="Disease Name" content={item.diseaseName}>
+                                                <Popover placement="topLeft" title="Description" content={item.diseaseName}>
                                                   <span className="meat-name-details">{item.diseaseName}</span>
                                                 </Popover>
                                               </div>
@@ -1443,7 +1485,7 @@ export default function PatientDetails() {
                                                     <span className="font-bold">{item.diagnosisCode}</span>
                                                   </div>
                                                   <div className="col-xl-2">
-                                                    <Popover placement="topLeft" title="Disease Name" content={item.diseaseName}>
+                                                    <Popover placement="topLeft" title="Description" content={item.diseaseName}>
                                                       <span className="meat-name-details">{item.diseaseName}</span>
                                                     </Popover>
                                                   </div>

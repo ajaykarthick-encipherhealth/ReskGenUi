@@ -33,6 +33,8 @@ import {
   EyeOutlined, EyeInvisibleOutlined
 } from '@ant-design/icons';
 import moment from 'moment';
+import { fetchEventSource } from "@microsoft/fetch-event-source";
+
 
 
 
@@ -157,6 +159,7 @@ export default function Patient() {
       //   var uId = localStorage.getItem("userId");
       //   getAllList(uId);
       // }, 8000);	
+      // subscribe();
     }
   }
 
@@ -333,38 +336,122 @@ export default function Patient() {
 
 
   const subscribe = async () => {
-    const status = listening;
-    if (!status) {
-      const accessToken = localStorage.getItem("token")
-      const resoureUrl = "https://hcc.encipherhealth.com/secure/dbservice/events?userid=12345";
-      const events = new EventSourcePolyfill("https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09", {
+    const accessToken = localStorage.getItem("token");
+    const fetchData = async () => {
+      await fetchEventSource("https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=dhineshtest@encipherhealth.onmicrosoft.com&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09", {
+        method: "get",
         headers: {
+          Accept: "text/event-stream",
           "Authorization": `Bearer ` + accessToken,
-          'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
-          'Connection': 'keep-alive'
+          'Connection': 'keep-alive',
+          'Accept': "text/event-stream",
         },
-      })
+        onopen(res) {
+          if (res.ok && res.status === 200) {
+            console.log("Connection made ", res);
+          } else if (
+            res.status >= 400 &&
+            res.status < 500 &&
+            res.status !== 429
+          ) {
+            console.log("Client side error ", res);
+          }
+        },
+        onmessage(event) {
+          console.log(event.data);
+          const parsedData = JSON.parse(event.data);
+          console.log(parsedData)
 
-      console.log(events)
 
-      events.onmessage = event => {
-        const parsedData = JSON.parse(event.data);
-        console.log(event)
-        switch (parsedData.type) {
-          case "init-connection":
-            setProcess(parsedData.processId);
-            break;
-          case "message":
-            setMessage(parsedData.message);
-            break;
-        }
-      };
-    } else {
-      setProcess({});
-      setMessage({});
-    }
-    setListening(!listening);
+          let result = patinetListAll.filter(o1 => !parsedData.some(o2 => o1.patientId === o2));
+
+          console.log(result)
+          
+
+
+        //   patinetListAll.keys(myObject).forEach((item) => {
+        //     if(typeof myObject[item] == "number" && myObject[item] >= 4) {
+        //         myObject[item] = 10
+        //     }
+        // })
+          // setData((data) => [...data, parsedData]);
+        },
+        onclose() {
+          console.log("Connection closed by the server");
+        },
+        onerror(err) {
+          console.log("There was an error from server", err);
+        },
+      });
+    };
+    fetchData();
+    
+
+    // const accessToken = localStorage.getItem("x-access-token");
+    // const accessToken = localStorage.getItem("token");
+    // var apiUrl = "https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=dhineshtest@encipherhealth.onmicrosoft.com&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09"
+    // const eventSource = new EventSourcePolyfill("https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=dhineshtest@encipherhealth.onmicrosoft.com&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09", {
+    //   headers: {
+    //     "Authorization": `Bearer ` + accessToken,
+    //     'Content-Type': 'text/event-stream',
+    //     'Cache-Control': 'no-cache',
+    //     'Connection': 'keep-alive',
+    //     'Accept': "text/event-stream",
+    //   },
+    // })
+
+    // eventSource.onopen = (e) => {
+    //   console.log("onopen....");
+    //   console.log(e.data)
+    // }
+    // eventSource.onerror = (error) => {
+    //   console.log("onerror",error)
+    //   if(eventSource){
+    //     eventSource.close();
+    //   }
+    // }
+    // eventSource.onmessage = e => {
+    //   onSseMessage(e.data);
+    // };
+  
+    // eventSource.addEventListener('complete', () => {
+    //   console.log('Transfer of data is complete');
+    // });
+
+
+    // const status = listening;
+    // if (!status) {
+    //   const accessToken = localStorage.getItem("token")
+    //   const resoureUrl = "https://hcc.encipherhealth.com/secure/dbservice/events?userid=dhineshtest@encipherhealth.onmicrosoft.com";
+    //   const events = new EventSourcePolyfill("https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=dhineshtest@encipherhealth.onmicrosoft.com&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09", {
+    //     headers: {
+    //       "Authorization": `Bearer ` + accessToken,
+    //       'Content-Type': 'text/event-stream',
+    //       'Cache-Control': 'no-cache',
+    //       'Connection': 'keep-alive'
+    //     },
+    //   })
+
+    //   console.log(events)
+
+    //   events.onmessage = event => {
+    //     const parsedData = JSON.parse(event.data);
+    //     console.log(event)
+    //     switch (parsedData.type) {
+    //       case "init-connection":
+    //         setProcess(parsedData.processId);
+    //         break;
+    //       case "message":
+    //         setMessage(parsedData.message);
+    //         break;
+    //     }
+    //   };
+    // } else {
+    //   setProcess({});
+    //   setMessage({});
+    // }
+    // setListening(!listening);
   };
 
 
@@ -407,7 +494,7 @@ export default function Patient() {
         </span></div>;
 
       case 0:
-        return <div className='patient-status'><span className={`badge badge-secondary`}>
+        return <div className='patient-status'><span className={`badge btn-notstarted`}>
           Not Started
           <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
         </span>
@@ -419,10 +506,10 @@ export default function Patient() {
   const actionBodyTemplate = (rowData) => {
     return <div className="d-flex justify-content-center">
       {rowData.computing == 2 ?
-        <button onClick={() => gotoPatientDetails(rowData)} className="btn hegiht10 btn-secondary shadow  sharp me-1 action-btn">
-          <EyeOutlined />
-        </button> : <button disabled className="btn hegiht10 btn-secondary shadow  sharp me-1 action-btn">
-          <EyeInvisibleOutlined />
+        <button onClick={() => gotoPatientDetails(rowData)} className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn">
+          <EyeOutlined className='text-white' />
+        </button> : <button disabled className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn">
+          <EyeInvisibleOutlined className='text-white'/>
         </button>}
       <button onClick={() => addPatientFile(rowData)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
         <FontAwesomeIcon icon={faUpload} fontSize={11} />

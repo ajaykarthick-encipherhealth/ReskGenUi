@@ -37708,7 +37708,7 @@ button.p-column-filter-menu-button.p-link {
 }
 
 button.p-paginator-element.p-link {
-  background: aqua;
+  background: #b0cbcb;
   border-radius: 50px;
   color: #000;
 }
@@ -37794,4 +37794,8 @@ span.disease-name {
     font-size: 13px!important;
     font-weight: bold!important;
     padding: 1px 5px 0px 0px!important;
+}
+.btn-notstarted{
+  background-color: #339dff !important;
+  border: none;
 }
