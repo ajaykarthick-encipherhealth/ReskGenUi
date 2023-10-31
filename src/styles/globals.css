@@ -37757,3 +37757,30 @@ li.p-dropdown-item {
 .match-btn{
  width: 60px !important;
 }
+.unmatch-check{
+    border: 1px solid #E6E6E6;
+    border-radius: 0.625rem;
+    padding: 0.313rem 0.625rem;
+    width: max-content;
+    margin-top: 10px;
+
+}
+.unmatch-check > span{
+  border: none !important;
+  margin-left: 20px !important;
+}
+
+.unmatach-checkbox{
+  margin-left: 5px!important;
+  margin-top: 5px;
+
+  /* width: 14px!important;
+  height: 15px!important; */
+
+}
+
+span.disease-name {
+  /* border: none !important; */
+  /* font-size: 12px !important; */
+  color: #000;
+}

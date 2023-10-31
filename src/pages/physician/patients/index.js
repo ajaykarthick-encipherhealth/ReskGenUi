@@ -32,6 +32,7 @@ import { Tag } from 'primereact/tag';
 import {
   EyeOutlined, EyeInvisibleOutlined
 } from '@ant-design/icons';
+import moment from 'moment';
 
 
 
@@ -146,6 +147,8 @@ export default function Patient() {
     if (response.data) {
       const records = response.data.slice(firstIndex, lastIndex);
       setPatinetList(records);
+      var sortRes = arrSort(response.data)
+      // console.log(sortRes)
       setPatinetListAll(response.data);
       setIsLoading(false);
       // setTimeout(() => {
@@ -156,6 +159,12 @@ export default function Patient() {
       // }, 8000);	
     }
   }
+
+
+  function arrSort(arr) { 
+    arr.sort((a, b) => moment(a.updatedAt) - moment(b.updatedAt));
+    return arr;
+} 
 
 
 
