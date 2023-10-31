@@ -909,8 +909,8 @@ export default function PatientDetails() {
                                                 <li>
                                                   <div className="timeline-panel valid-disease">
                                                     <div className="media-body">
-                                                      <span className="mb-1 disease-name" >
-                                                        {data.diagnosisCode} -  {data.actualDescription}
+                                                      <span className="mb-1 disease-name d-flex" >
+                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
                                                       </span>
                                                     </div>
 
@@ -968,8 +968,8 @@ export default function PatientDetails() {
                                                 <li>
                                                   <div className="timeline-panel invalid-disease">
                                                     <div className="media-body">
-                                                      <span className="mb-1 disease-name">
-                                                        {data.diagnosisCode} -  {data.actualDescription}
+                                                    <span className="mb-1 disease-name d-flex" >
+                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
                                                       </span>
                                                     </div>
                                                     <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
@@ -1046,8 +1046,8 @@ export default function PatientDetails() {
                                                 <li>
                                                   <div className="timeline-panel invalid-disease">
                                                     <div className="media-body">
-                                                      <span className="mb-1 disease-name">
-                                                        {data.diagnosisCode} -  {data.actualDescription}
+                                                    <span className="mb-1 disease-name d-flex" >
+                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
                                                       </span>
                                                     </div>
                                                     {/* <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">

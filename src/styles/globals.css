@@ -37768,6 +37768,8 @@ li.p-dropdown-item {
 .unmatch-check > span{
   border: none !important;
   margin-left: 20px !important;
+  font-size: 12px!important;
+  font-weight: bold!important;
 }
 
 .unmatach-checkbox{
@@ -37783,4 +37785,10 @@ span.disease-name {
   /* border: none !important; */
   /* font-size: 12px !important; */
   color: #000;
+}
+.valid-dis-name{
+  border: none!important;
+    font-size: 13px!important;
+    font-weight: bold!important;
+    padding: 1px 5px 0px 0px!important;
 }
