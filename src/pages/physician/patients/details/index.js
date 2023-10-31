@@ -583,11 +583,13 @@ export default function PatientDetails() {
     setConfirmNotesModalInValid(false);
   };
   const handleOpenModal = (value,disDescription) => {
-    console.log(disDescription)
+    // console.log(disDescription)
+    var splitPoint = disDescription.substring(' ',40);
     setTimeout(() => {
       highlight({
-        keyword: disDescription,
+        keyword: splitPoint,
         matchCase: true,
+        // wholeWords:true
       });
       var dataset = value + " - (" +  disDescription +  ")" 
       setSelectMeatName(dataset);
