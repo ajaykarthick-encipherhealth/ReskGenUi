@@ -751,6 +751,7 @@ export default function Patient() {
                       type="file"
                       accept="application/pdf,text/plain"
                       onChange={(e) => onChangeFile(e.target.files)}
+                       disabled={isLoadingBtn ? true : false}
                     />
                   </div>
                   <div className="col-xl-12 mb-3">

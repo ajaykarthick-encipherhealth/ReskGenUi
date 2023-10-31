@@ -383,7 +383,7 @@ export default function PatientDetails() {
           })
         })
         setMeatCriteriaList(meatListArr);
-        setIsLoading(false);
+        // setIsLoading(false);
 
       }
 
