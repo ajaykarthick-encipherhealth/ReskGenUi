@@ -10,7 +10,7 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCheck, faAdd, faInfo ,faIdBadge} from "@fortawesome/free-solid-svg-icons";
+import { faClose, faCheck, faAdd, faInfo, faIdBadge } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm, Divider, Popover, } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
@@ -97,6 +97,7 @@ export default function PatientDetails() {
   const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
   const [newInValidDiseaseList, setInNewValidDiseaseList] = useState([]);
   const [unMatchResList, setNewUnMatchHccList] = useState([]);
+  const [meatColorCodeList, setMeatColorCodeList] = useState([]);
 
   const [dbDescriptionRes, setDbDescriptionRes] = useState([]);
 
@@ -239,9 +240,9 @@ export default function PatientDetails() {
         validDiseaseNewRes = result.validDisease[highestDOS];
         invalidDiseaseNewRes = result.invalidDisease[highestDOS];
         if (result.unmatchedDisease != null) {
-         var unMatchResCheck = result.unmatchedDisease[highestDOS]
+          var unMatchResCheck = result.unmatchedDisease[highestDOS]
 
-          if(unMatchResCheck != null){
+          if (unMatchResCheck != null) {
             unMatchRes = result.unmatchedDisease[highestDOS]
 
           }
@@ -308,15 +309,59 @@ export default function PatientDetails() {
         setDosYear(dosYearArr);
         setRAFScore(rafScore)
 
-        const COLORS = ['pink', 'purple', 'indigo', 'blue', 'orange', 'red', 'yellow', 'black', 'whitesmoke']
-
-        // console.log(validDiseasesArray)
+        const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight','bg-bg-nine'];
 
         var meatListArr = [];
-        var colorSetSingle
+        var meatMoniterHead = [];
+        var meatEvaluteHead = [];
+        var meatAssesmentHead = [];
+        var meatTreatMentHead = [];
+        var allMeatHead = [];
+        var allMeatHeadColorArr = [];
+        var allMeatHeadColor = [];
+        var dublicateRemoveSecondArr = [];
+
+
 
         meatCri.map((res, index) => {
-          console.log(res)
+          if (res.monitorCapturedFromHeader != "") {
+            meatMoniterHead.push({
+              header: res.monitorCapturedFromHeader,
+            })
+          }
+          if (res.evaluateCapturedFromHeader != "") {
+            meatEvaluteHead.push({
+              header: res.evaluateCapturedFromHeader
+            })
+          }
+          if (res.assessmentCapturedFromHeader != "") {
+            meatAssesmentHead.push({
+              header: res.assessmentCapturedFromHeader
+            })
+          }
+          if (res.treatmentCapturedFromHeader != "") {
+            meatTreatMentHead.push({
+              header: res.treatmentCapturedFromHeader
+            });
+          }
+          var newArray = [];
+          newArray = [...allMeatHead, ...meatMoniterHead, ...meatEvaluteHead, ...meatAssesmentHead, ...meatTreatMentHead];
+          var dublicateRemoveArr = getUniqueListBy(newArray, 'header');
+          dublicateRemoveArr.map((res3, index) => {
+            console.log(index)
+            allMeatHeadColor.push({
+              header: res3.header,
+              color: COLORS[index]
+            })
+          })
+          allMeatHeadColorArr = allMeatHeadColor;
+
+          dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, 'header');
+          setMeatColorCodeList(dublicateRemoveSecondArr)
+        })
+
+
+        meatCri.map((res, index) => {
           meatListArr.push({
             diagnosisCode: res.diagnosisCode,
             diseaseName: res.diseaseName,
@@ -324,23 +369,55 @@ export default function PatientDetails() {
             assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
             evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
             treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+            monitorCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.monitorCapturedFromHeader),
+            assessmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.assessmentCapturedFromHeader),
+            evaluateCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.evaluateCapturedFromHeader),
+            treatmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.treatmentCapturedFromHeader),
             monitorColor: COLORS[index],
-            meatColor: (res.monitorCapturedFromHeader == res.assessmentCapturedFromHeader == res.evaluateCapturedFromHeader == res.treatmentCapturedFromHeader) ? COLORS[2] : COLORS[index + 1],
+            meatColor: COLORS[index],
             assessment: res.assessment,
             monitor: res.monitor,
             evaluate: res.evaluate,
             treatment: res.treatment,
             isMeatCriteriaPresent: res.isMeatCriteriaPresent,
           })
-
         })
         setMeatCriteriaList(meatListArr);
+        setIsLoading(false);
 
-        console.log(meatListArr)
       }
 
     }
   }
+  function getUniqueListBy(arr, key) {
+    return [...new Map(arr.map(item => [item[key], item])).values()]
+  }
+
+  function colorCodeMatch(arrList, key) {
+    var colorReturnValue = null;
+    const result = arrList.filter(
+      (res) => res.header == key
+    );
+    if (result[0] != undefined) {
+      colorReturnValue = result[0].color
+    }
+
+
+    return colorReturnValue;
+  }
+
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+
+    }
+    console.log(color)
+    return color;
+  }
+
+
   const getPatientPdfFile = async (fileId, tenId) => {
     const response = await axios.get(ENDPOINTS.apiEndoint + `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`);
     if (response.data) {
@@ -587,20 +664,20 @@ export default function PatientDetails() {
     setConfirmNotesModalValid(false);
     setConfirmNotesModalInValid(false);
   };
-  const handleOpenModal = (value,disDescription) => {
+  const handleOpenModal = (value, disDescription) => {
     // console.log(disDescription)
-    var splitPoint = disDescription.substring(' ',40);
+    var splitPoint = disDescription.substring(' ', 40);
     setTimeout(() => {
       highlight({
         keyword: splitPoint,
         matchCase: true,
         // wholeWords:true
       });
-      var dataset = value + " - (" +  disDescription +  ")" 
+      var dataset = value + " - (" + disDescription + ")"
       setSelectMeatName(dataset);
     }, 2000);
     setDocumentLoaded(true);
-    var dataset = value + " - (" +  disDescription +  ")" 
+    var dataset = value + " - (" + disDescription + ")"
     // setSelectMeatName(dataset);
     setSelectMeatName(dataset + " -  " + "Loading...");
     setIsLoadingSection(true);
@@ -674,18 +751,22 @@ export default function PatientDetails() {
     var comboDis = '';
     var meatCri = '';
     var rafScore = null;
-    var validDiseaseNewRes = '';
+    var validDiseaseNewRes = [];
+    var invalidDiseaseNewRes = [];
 
     var result = patientDetails;
 
     console.log(result);
+
+
 
     if (result.rafScore != null) {
       rafScore = result.rafScore[dosKeyValue]
     }
 
     validDis = result.validDisease[dosKeyValue];
-    validDiseaseNewRes = result.validDisease[dosKeyValue]
+    validDiseaseNewRes = result.validDisease[dosKeyValue];
+    invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
 
     invalidDis = result.invalidDisease[dosKeyValue];
     comboDis = result.comboDisease[dosKeyValue];
@@ -702,11 +783,87 @@ export default function PatientDetails() {
     }
 
     setNewValidDiseaseList(validDiseaseNewRes);
+    setInNewValidDiseaseList(invalidDiseaseNewRes);
     setValidDiseasesList(validDiseasesArray);
     setInvalidDiseasesList(invalidDiseasesArray);
     setComboDiseaseCodesList(comboDis);
-    setMeatCriteriaList(meatCri);
+    // setMeatCriteriaList(meatCri);
     setRAFScore(rafScore)
+
+    const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight','bg-bg-nine'];
+
+    var meatListArr = [];
+    var meatMoniterHead = [];
+    var meatEvaluteHead = [];
+    var meatAssesmentHead = [];
+    var meatTreatMentHead = [];
+    var allMeatHead = [];
+    var allMeatHeadColorArr = [];
+    var allMeatHeadColor = [];
+    var dublicateRemoveSecondArr = [];
+
+
+
+    meatCri.map((res, index) => {
+      if (res.monitorCapturedFromHeader != "") {
+        meatMoniterHead.push({
+          header: res.monitorCapturedFromHeader,
+        })
+      }
+      if (res.evaluateCapturedFromHeader != "") {
+        meatEvaluteHead.push({
+          header: res.evaluateCapturedFromHeader
+        })
+      }
+      if (res.assessmentCapturedFromHeader != "") {
+        meatAssesmentHead.push({
+          header: res.assessmentCapturedFromHeader
+        })
+      }
+      if (res.treatmentCapturedFromHeader != "") {
+        meatTreatMentHead.push({
+          header: res.treatmentCapturedFromHeader
+        });
+      }
+      var newArray = [];
+      newArray = [...allMeatHead, ...meatMoniterHead, ...meatEvaluteHead, ...meatAssesmentHead, ...meatTreatMentHead];
+      var dublicateRemoveArr = getUniqueListBy(newArray, 'header');
+      dublicateRemoveArr.map((res3, index) => {
+        console.log(index)
+        allMeatHeadColor.push({
+          header: res3.header,
+          color: COLORS[index]
+        })
+      })
+      allMeatHeadColorArr = allMeatHeadColor;
+
+      dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, 'header');
+      setMeatColorCodeList(dublicateRemoveSecondArr)
+    })
+
+
+    meatCri.map((res, index) => {
+      meatListArr.push({
+        diagnosisCode: res.diagnosisCode,
+        diseaseName: res.diseaseName,
+        monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+        assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+        evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+        treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+        monitorCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.monitorCapturedFromHeader),
+        assessmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.assessmentCapturedFromHeader),
+        evaluateCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.evaluateCapturedFromHeader),
+        treatmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.treatmentCapturedFromHeader),
+        monitorColor: COLORS[index],
+        meatColor: COLORS[index],
+        assessment: res.assessment,
+        monitor: res.monitor,
+        evaluate: res.evaluate,
+        treatment: res.treatment,
+        isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+      })
+    })
+    setMeatCriteriaList(meatListArr);
     setIsLoading(false);
 
   }
@@ -757,8 +914,8 @@ export default function PatientDetails() {
                       <div className="card">
                         <div className="card-body">
                           <div className="row">
-                          <div className='col-xl-2 col-sm-12'>
-                          <FontAwesomeIcon icon={faIdBadge} className="patientDetails-Icon" fontSize={14} color="blue" /><label>Patient Id</label>
+                            <div className='col-xl-2 col-sm-12'>
+                              <FontAwesomeIcon icon={faIdBadge} className="patientDetails-Icon" fontSize={14} color="blue" /><label>Patient Id</label>
                               <h6 className='ageDtails'>{patientDocumentResult.patientId}</h6>
                             </div>
                             <div className='col-xl-3 col-sm-12'>
@@ -848,7 +1005,7 @@ export default function PatientDetails() {
                                   </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
                                     <Nav.Link to="#my-posts" eventKey="validDiseases">
-                                     Visit Data
+                                      Visit Data
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
@@ -1022,7 +1179,7 @@ export default function PatientDetails() {
                                               ))}
                                             </ul> */}
                                           </div>
-                                        
+
                                           {/* <div className="col-xl-4">
                                             <ul className="timeline">
 
@@ -1135,63 +1292,63 @@ export default function PatientDetails() {
                                             </ul>
                                           </div>
                                           <div className="col-xl-4">
-                                          <ul className="timeline">
+                                            <ul className="timeline">
 
-<div className="invalid-text d-flex justify-content-sm-between">
-  <span
-    className={`dang d-block`}
-  >
-    {" "}
-    Deleted Codes{" "}
-    <Badge
-      as="a"
-      href=""
-      bg="badge-circle invalid-bange"
-    >
-      {invalidMoveDiseasesList.length}
-    </Badge>
-  </span>
-</div>
-{invalidMoveDiseasesList.map((data, i) => (
-  <li>
-    <div className="timeline-panel invalid-disease">
-      <div className="media-body">
-        <span className="mb-1 disease-name d-flex" >
-          <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-        </span>
-      </div>
-      <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+                                              <div className="invalid-text d-flex justify-content-sm-between">
+                                                <span
+                                                  className={`dang d-block`}
+                                                >
+                                                  {" "}
+                                                  Deleted Codes{" "}
+                                                  <Badge
+                                                    as="a"
+                                                    href=""
+                                                    bg="badge-circle invalid-bange"
+                                                  >
+                                                    {invalidMoveDiseasesList.length}
+                                                  </Badge>
+                                                </span>
+                                              </div>
+                                              {invalidMoveDiseasesList.map((data, i) => (
+                                                <li>
+                                                  <div className="timeline-panel invalid-disease">
+                                                    <div className="media-body">
+                                                      <span className="mb-1 disease-name d-flex" >
+                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                      </span>
+                                                    </div>
+                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
 
-        <div className="icon-box  bg-danger-light me-1">
-          <FontAwesomeIcon
-            icon={faInfo}
-            style={{ color: "blue" }}
-          />
-        </div>
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faInfo}
+                                                          style={{ color: "blue" }}
+                                                        />
+                                                      </div>
 
-      </Popover>   
-       <Popconfirm
-        title="You want move to valid?"
-        description={data.diagnosisCode}
-        onConfirm={confirmInvalidMoveDis}
-        placement="leftTop"
-        okText="Yes"
-        cancelText="No"
-        onOpenChange={() =>
-          onchangeValid(data.diagnosisCode)
-        }
-      >
-        <div className="icon-box  bg-danger-light me-1">
-          <FontAwesomeIcon
-            icon={faCheck}
-            style={{ color: "orange" }}
-          />
-        </div>
-      </Popconfirm>
-    </div>
-  </li>
-))}
-</ul>
+                                                    </Popover>
+                                                    <Popconfirm
+                                                      title="You want move to valid?"
+                                                      description={data.diagnosisCode}
+                                                      onConfirm={confirmInvalidMoveDis}
+                                                      placement="leftTop"
+                                                      okText="Yes"
+                                                      cancelText="No"
+                                                      onOpenChange={() =>
+                                                        onchangeValid(data.diagnosisCode)
+                                                      }
+                                                    >
+                                                      <div className="icon-box  bg-danger-light me-1">
+                                                        <FontAwesomeIcon
+                                                          icon={faCheck}
+                                                          style={{ color: "orange" }}
+                                                        />
+                                                      </div>
+                                                    </Popconfirm>
+                                                  </div>
+                                                </li>
+                                              ))}
+                                            </ul>
 
                                           </div>
                                           {validDiseasesList.length == 0 ?
@@ -1395,37 +1552,41 @@ export default function PatientDetails() {
                                                   <span className="meat-name-details">{item.diseaseName}</span>
                                                 </Popover>
                                               </div>
-                                              {/* <div className="col-xl-2 d-grid">
+                                              <div className="col-xl-2 d-grid">
+                                              {item.monitor != "" ?                                 
                                                 <Popover placement="topLeft" title="Monitor" content={item.monitor}>
                                                   <span className="meat-name-details">{item.monitor}</span>
-                                                </Popover>
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={item.meatColor}>{item.monitorCapturedFromHeader}</Badge>
+                                                </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
+                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
+                                              {item.evaluate != "" ?        
                                                 <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
-                                                  <span className="meat-name-details badge-circle mt-2">{item.evaluate}</span>
-                                                </Popover>
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={item.meatColor}  onClick={() => handleOpenModal(item.evaluateCapturedFromHeader)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                  <span className="meat-name-details">{item.evaluate}</span>
+                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
+                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
+                                              {item.assessment != "" ?     
                                                 <Popover placement="topLeft" title="Assessment" content={item.assessment}>
                                                   <span className="meat-name-details">{item.assessment}</span>
-                                                </Popover>
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={item.meatColor} >{item.assessmentCapturedFromHeader}</Badge>
+                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
+                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
+                                              {item.treatment != "" ?     
                                                 <Popover placement="topLeft" title="Treatment" content={item.treatment}>
                                                   <span className="meat-name-details">{item.treatment}</span>
-                                                </Popover>
+                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
 
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={item.meatColor} >{item.treatmentCapturedFromHeader}</Badge>
-                                              </div> */}
-                                              <div className="col-xl-2 d-grid">
+                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)}>{item.treatmentCapturedFromHeader}</Badge>
+                                              </div>
+                                              {/* <div className="col-xl-2 d-grid">
                                                 {item.monitor != "" ?                                 
                                                 <Popover placement="topLeft" title="Monitor" content={item.monitor}>
                                                   <span className="meat-name-details">{item.monitor}</span>
                                                 </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader,item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
+                                                <Badge  className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader,item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
                                               {item.evaluate != "" ?        
@@ -1448,7 +1609,7 @@ export default function PatientDetails() {
                                                   </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
 
                                                 <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader,item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
-                                              </div>
+                                              </div> */}
                                               <div className="col-xl-1 meatclose">
                                                 {/* {item.isMeatCriteriaPresent === true ?
                                              <span  className="badge badge-rounded badge-warning badge-meat">
@@ -1507,30 +1668,30 @@ export default function PatientDetails() {
                                                     </Popover>
                                                   </div>
                                                   <div className="col-xl-2 d-grid">
-                                                <Popover placement="topLeft" title="Monitor" content={item.monitor}>
-                                                  <span className="meat-name-details">{item.monitor}</span>
-                                                </Popover>
-                                                <Badge className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader,item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                                <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
-                                                  <span className="meat-name-details">{item.evaluate}</span>
-                                                </Popover>
-                                                <Badge className="badge-meat cr-pointer" bg={(item.evaluateCapturedFromHeader === "HPI" || item.evaluateCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.evaluateCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Impression" || item.evaluateCapturedFromHeader === "Plan: COPD" || item.evaluateCapturedFromHeader === "Assessments" || item.evaluateCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Recommendations" || item.evaluateCapturedFromHeader === "Plan: GERD without esophagitis" || item.evaluateCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Plan / Discussion" || item.evaluateCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Patient Instructions" || item.evaluateCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader,item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                                <Popover placement="topLeft" title="Assessment" content={item.assessment}>
-                                                  <span className="meat-name-details">{item.assessment}</span>
-                                                </Popover>
-                                                <Badge className="badge-meat cr-pointer" bg={(item.assessmentCapturedFromHeader === "HPI" || item.assessmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.assessmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Impression" || item.assessmentCapturedFromHeader === "Plan: COPD" || item.assessmentCapturedFromHeader === "Assessments" || item.assessmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Recommendations" || item.assessmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.assessmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Plan / Discussion" || item.assessmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Patient Instructions" || item.assessmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader,item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                                <Popover placement="topLeft" title="Treatment" content={item.treatment}>
-                                                  <span className="meat-name-details">{item.treatment}</span>
-                                                </Popover>
+                                                    <Popover placement="topLeft" title="Monitor" content={item.monitor}>
+                                                      <span className="meat-name-details">{item.monitor}</span>
+                                                    </Popover>
+                                                    <Badge className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
+                                                  </div>
+                                                  <div className="col-xl-2 d-grid">
+                                                    <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
+                                                      <span className="meat-name-details">{item.evaluate}</span>
+                                                    </Popover>
+                                                    <Badge className="badge-meat cr-pointer" bg={(item.evaluateCapturedFromHeader === "HPI" || item.evaluateCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.evaluateCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Impression" || item.evaluateCapturedFromHeader === "Plan: COPD" || item.evaluateCapturedFromHeader === "Assessments" || item.evaluateCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Recommendations" || item.evaluateCapturedFromHeader === "Plan: GERD without esophagitis" || item.evaluateCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Plan / Discussion" || item.evaluateCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Patient Instructions" || item.evaluateCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                  </div>
+                                                  <div className="col-xl-2 d-grid">
+                                                    <Popover placement="topLeft" title="Assessment" content={item.assessment}>
+                                                      <span className="meat-name-details">{item.assessment}</span>
+                                                    </Popover>
+                                                    <Badge className="badge-meat cr-pointer" bg={(item.assessmentCapturedFromHeader === "HPI" || item.assessmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.assessmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Impression" || item.assessmentCapturedFromHeader === "Plan: COPD" || item.assessmentCapturedFromHeader === "Assessments" || item.assessmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Recommendations" || item.assessmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.assessmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Plan / Discussion" || item.assessmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Patient Instructions" || item.assessmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
+                                                  </div>
+                                                  <div className="col-xl-2 d-grid">
+                                                    <Popover placement="topLeft" title="Treatment" content={item.treatment}>
+                                                      <span className="meat-name-details">{item.treatment}</span>
+                                                    </Popover>
 
-                                                <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader,item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
-                                              </div>
+                                                    <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
+                                                  </div>
                                                   <div className="col-xl-1 meatclose">
 
 
