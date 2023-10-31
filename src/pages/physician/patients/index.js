@@ -582,7 +582,7 @@ export default function Patient() {
                             <Column field="patientName" header="Patient Name" />
                             <Column field="fileName" header="File Name" />
                             <Column field="status" body={statusBodyTemplate} header="Status" />
-                            <Column field="createdAt" header="Created Date" />
+                            <Column field="createdAt" sortable header="Created Date" />
                             <Column field="action" body={actionBodyTemplate} header="Action" />
                           </DataTable>
                           {/* <table

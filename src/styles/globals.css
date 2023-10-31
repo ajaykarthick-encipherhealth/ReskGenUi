@@ -37805,3 +37805,7 @@ span.disease-name {
   margin-top: 8px;
 
 }
+
+svg.p-icon.p-sortable-column-icon {
+    color: #fff;
+}
