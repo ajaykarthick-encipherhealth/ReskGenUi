@@ -37799,3 +37799,9 @@ span.disease-name {
   background-color: #339dff !important;
   border: none;
 }
+.patientDetails-Icon{
+  color: #241571;
+  margin-right: 6px;
+  margin-top: 8px;
+
+}
