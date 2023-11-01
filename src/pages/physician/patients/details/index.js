@@ -440,9 +440,16 @@ export default function PatientDetails() {
       setRadiologyResCheck(true);
       var result = response.data;
       console.log(result.validDisease)
-      getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId)
-      setNewValidDiseaseListRadiology(result.validDisease);
-      setInNewValidDiseaseListRadiology(result.invalidDisease);
+      if(result.radiologyFileDetail != null){
+        getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
+      }
+      if(result.validDisease != null){
+        setNewValidDiseaseListRadiology(result.validDisease);
+      }
+      if(result.invalidDisease != null){
+        setInNewValidDiseaseListRadiology(result.invalidDisease);
+      }    
+     
       if(result.comboDisease != null){
         setComboDiseaseCodesListRadiology(result.comboDisease)
       }
