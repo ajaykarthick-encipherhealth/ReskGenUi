@@ -59,7 +59,7 @@ export default function PatientDetails() {
 
   const sideMenu = useSelector(state => state.sideMenu);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [confirmNotesModalInValid, setConfirmNotesModalInValid] = useState(false);
@@ -352,7 +352,7 @@ export default function PatientDetails() {
         setDosYear(dosYearArr);
         setRAFScore(rafScore)
 
-        const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight','bg-bg-nine','bg-bg-ten','bg-bg-leven'];
+        const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
 
         var meatListArr = [];
         var meatMoniterHead = [];
@@ -428,7 +428,7 @@ export default function PatientDetails() {
         setMeatCriteriaList(meatListArr);
         // setIsLoading(false);
 
-      }else{
+      } else {
         setIsLoading(false);
       }
 
@@ -442,23 +442,23 @@ export default function PatientDetails() {
       setRadiologyResCheck(true);
       var result = response.data;
       console.log(result.validDisease)
-      if(result.radiologyFileDetail != null){
+      if (result.radiologyFileDetail != null) {
         getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
       }
-      if(result.validDisease != null){
+      if (result.validDisease != null) {
         setNewValidDiseaseListRadiology(result.validDisease);
       }
-      if(result.invalidDisease != null){
+      if (result.invalidDisease != null) {
         setInNewValidDiseaseListRadiology(result.invalidDisease);
-      }    
-     
-      if(result.comboDisease != null){
+      }
+
+      if (result.comboDisease != null) {
         setComboDiseaseCodesListRadiology(result.comboDisease)
       }
-      if(result.meatCriteria != null){
+      if (result.meatCriteria != null) {
         var meatCri = result.meatCriteria;
 
-        const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight','bg-bg-nine','bg-bg-ten','bg-bg-leven'];
+        const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
 
         var meatListArr = [];
         var meatMoniterHead = [];
@@ -534,11 +534,11 @@ export default function PatientDetails() {
 
         // setMeatCriteriaListRadiology(result.meatCriteria)
       }
-      if(result.unmatchedDisease != null){
+      if (result.unmatchedDisease != null) {
         setUnMatchHccListRadiology(result.unmatchedDisease)
       }
       // setPatientDetails(result);
-      
+
 
     }
   }
@@ -693,7 +693,7 @@ export default function PatientDetails() {
       (res2) => res2.diagnosisCode == selectDiseasesName
     );
 
-    
+
     // var namePush = [];
     // namePush.push({ name: selectDiseasesName });
     var newArray = [];
@@ -814,7 +814,7 @@ export default function PatientDetails() {
     var newArray = [];
     newArray = [...invalidDiseasesList, ...namePush];
     setInvalidMeatCriteriaList(newArray);
-  
+
   };
 
 
@@ -967,7 +967,7 @@ export default function PatientDetails() {
     // setMeatCriteriaList(meatCri);
     setRAFScore(rafScore)
 
-    const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight','bg-bg-nine'];
+    const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine'];
 
     var meatListArr = [];
     var meatMoniterHead = [];
@@ -1085,8 +1085,8 @@ export default function PatientDetails() {
     }
     if (pageTitle == "Radiology") {
       setActiveTab(2)
-      if(radiologyResCheck == false){
-      getPatientDetailsRadiology(localOrgId, localTenantId);
+      if (radiologyResCheck == false) {
+        getPatientDetailsRadiology(localOrgId, localTenantId);
       }
 
     }
@@ -1101,9 +1101,9 @@ export default function PatientDetails() {
       setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
-    
+
       submitRadiology();
-     
+
     }
 
     setValidated(true);
@@ -1140,7 +1140,7 @@ export default function PatientDetails() {
       formData,
       headers
     );
-    if (response?.status == 202) {  
+    if (response?.status == 202) {
       setAddPatient(false);
       setIsLoadingBtn(false);
       getPatientDetailsRadiology(localOrgId, localTenantId);
@@ -1148,8 +1148,8 @@ export default function PatientDetails() {
       setIsLoadingBtn(false);
     }
     setAddPatient(false);
-  
-  
+
+
   };
 
 
@@ -1223,78 +1223,81 @@ export default function PatientDetails() {
                       </div>
                     </div>
                     <div className="col-xl-12">
-                    <div className="card height80 file-management">
-                  <div className="card-body p-0">
-                    <Tab.Container defaultActiveKey={"Patient Data"}>
-                      <div className="card-header border-0 flex-wrap">
-                      <Nav as="ul" className="nav nav-pills mix-chart-tab">
-                          {tabList.map((item, index) => (
-                            <Nav.Item as="li" className="nav-item" key={index}>
-                              <Nav.Link
-                                onClick={() => navigetPageDetails(item.type)}
-                                eventKey={item.title}
-                              >
-                                {item.title}
-                              </Nav.Link>
-                            </Nav.Item>
-                            
-                          ))}
-                        </Nav>
+                      <div className="card height80 file-management">
+                        <div className="card-body p-0">
+                          <Tab.Container defaultActiveKey={"Patient Data"}>
+                            <div className="card-header border-0 flex-wrap">
+                              <Nav as="ul" className="nav nav-pills mix-chart-tab">
+                                {tabList.map((item, index) => (
+                                  <Nav.Item as="li" className="nav-item" key={index}>
+                                    <Nav.Link
+                                      onClick={() => navigetPageDetails(item.type)}
+                                      eventKey={item.title}
+                                    >
+                                      {item.title}
+                                    </Nav.Link>
+                                  </Nav.Item>
+
+                                ))}
+                              </Nav>
+                              {activeTab == 2 ?
+                                <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
+                                : null}
+                            </div>
+                          </Tab.Container>
+                        </div>
                       </div>
-                    </Tab.Container>
-                  </div>
-                </div>
-                </div>
-              {activeTab == 1 ?
-                    <div className="col-xl-12">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="profile-tab">
-                            <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey={activeTabHead}>
-                                <Nav as="ul" className="nav nav-tabs">
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="file">
-                                      File
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="validDiseases">
-                                      Visit Data
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="comboDiseases">
-                                      Combination Codes
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="meatCriteria">
-                                      MEAT Criteria
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="RafScore">
-                                      RAF Score
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="nonhcc">
-                                      NON HCC
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  {/* <Nav.Item as="li" className="nav-item">
+                    </div>
+                    {activeTab == 1 ?
+                      <div className="col-xl-12">
+                        <div className="card">
+                          <div className="card-body">
+                            <div className="profile-tab">
+                              <div className="custom-tab-1">
+                                <Tab.Container defaultActiveKey={activeTabHead}>
+                                  <Nav as="ul" className="nav nav-tabs">
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="file">
+                                        File
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="validDiseases">
+                                        Visit Data
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="comboDiseases">
+                                        Combination Codes
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="meatCriteria">
+                                        MEAT Criteria
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="RafScore">
+                                        RAF Score
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="nonhcc">
+                                        NON HCC
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    {/* <Nav.Item as="li" className="nav-item">
                                   <Nav.Link to="#my-posts" eventKey="file">
                                     File
                                   </Nav.Link>
                                 </Nav.Item> */}
-                                </Nav>
-                                <Tab.Content>
-                                  <Tab.Pane id="my-posts" eventKey="validDiseases">
-                                    <div className="my-post-content pt-3">
-                                      <div className="widget-media   ps--active-y">
-                                        <div className="row">
-                                          {/* <div className="col-xl-7">
+                                  </Nav>
+                                  <Tab.Content>
+                                    <Tab.Pane id="my-posts" eventKey="validDiseases">
+                                      <div className="my-post-content pt-3">
+                                        <div className="widget-media   ps--active-y">
+                                          <div className="row">
+                                            {/* <div className="col-xl-7">
                                             <div className="card">
                                               <div className="card-body p-0">
                                                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -1316,72 +1319,72 @@ export default function PatientDetails() {
                                               </div>
                                             </div>
                                           </div> */}
-                                          <div className="col-xl-4">
-                                            <ul className="timeline">
-                                              <div className="valid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block text-warning`}
-                                                >
-                                                  {" "}
-                                                  HCC{" "}
-                                                  <Badge
-                                                    as="a"
-                                                    href=""
-                                                    bg="secondary badge-circle"
+                                            <div className="col-xl-4">
+                                              <ul className="timeline">
+                                                <div className="valid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block text-warning`}
                                                   >
-                                                    {newValidDiseaseList.length}
-                                                  </Badge>
-                                                </span>
-                                                <div className="d-flex justify-content-center">
-                                                  <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                                    <FontAwesomeIcon icon={faAdd} fontSize={11} />
-                                                  </button>
-                                                </div>
-                                              </div>
-
-                                              {newValidDiseaseList.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel valid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name d-flex" >
-                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                      </span>
-                                                    </div>
-
-                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faInfo}
-                                                          style={{ color: "blue" }}
-                                                        />
-                                                      </div>
-                                                    </Popover>
-
-
-                                                    <Popconfirm
-                                                      title="You want move to invalid?"
-                                                      description={data.diagnosisCode}
-                                                      onConfirm={confirmvalid}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeValid(data.diagnosisCode)
-                                                      }
+                                                    {" "}
+                                                    HCC{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="secondary badge-circle"
                                                     >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faClose}
-                                                          style={{ color: "red" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
+                                                      {newValidDiseaseList.length}
+                                                    </Badge>
+                                                  </span>
+                                                  <div className="d-flex justify-content-center">
+                                                    <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                      <FontAwesomeIcon icon={faAdd} fontSize={11} />
+                                                    </button>
                                                   </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                            {/* <ul className="timeline">
+                                                </div>
+
+                                                {newValidDiseaseList.map((data, i) => (
+                                                  <li>
+                                                    <div className="timeline-panel valid-disease">
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name d-flex" >
+                                                          <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                        </span>
+                                                      </div>
+
+                                                      <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faInfo}
+                                                            style={{ color: "blue" }}
+                                                          />
+                                                        </div>
+                                                      </Popover>
+
+
+                                                      <Popconfirm
+                                                        title="You want move to invalid?"
+                                                        description={data.diagnosisCode}
+                                                        onConfirm={confirmvalid}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeValid(data.diagnosisCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faClose}
+                                                            style={{ color: "red" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </li>
+                                                ))}
+                                              </ul>
+                                              {/* <ul className="timeline">
 
                                               <div className="invalid-text d-flex justify-content-sm-between">
                                                 <span
@@ -1438,9 +1441,9 @@ export default function PatientDetails() {
                                                 </li>
                                               ))}
                                             </ul> */}
-                                          </div>
+                                            </div>
 
-                                          {/* <div className="col-xl-4">
+                                            {/* <div className="col-xl-4">
                                             <ul className="timeline">
 
                                               <div className="invalid-text d-flex justify-content-sm-between">
@@ -1494,217 +1497,217 @@ export default function PatientDetails() {
                                               ))}
                                             </ul>
                                           </div> */}
-                                          <div className="col-xl-4">
-                                            <ul className="timeline">
+                                            <div className="col-xl-4">
+                                              <ul className="timeline">
 
-                                              <div className="invalid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block`}
-                                                >
-                                                  {" "}
-                                                  Suggested Codes{" "}
-                                                </span>
-                                                {isMatchBtn ?
-                                                  <div className="d-flex justify-content-center">
-                                                    <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn">
-                                                      Add
-                                                    </button>
-                                                  </div> : null}
-                                              </div>
-                                              {unMatchResList.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel d-block invalid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name">
-                                                        {data.actualDescription}
-                                                      </span>
-                                                    </div>
-                                                    {/* <div className="form-check custom-checkbox">
+                                                <div className="invalid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block`}
+                                                  >
+                                                    {" "}
+                                                    Suggested Codes{" "}
+                                                  </span>
+                                                  {isMatchBtn ?
+                                                    <div className="d-flex justify-content-center">
+                                                      <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn">
+                                                        Add
+                                                      </button>
+                                                    </div> : null}
+                                                </div>
+                                                {unMatchResList.map((data, i) => (
+                                                  <li>
+                                                    <div className="timeline-panel d-block invalid-disease">
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name">
+                                                          {data.actualDescription}
+                                                        </span>
+                                                      </div>
+                                                      {/* <div className="form-check custom-checkbox">
                                                       <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div> */}
-                                                    <div className="media-body d-flex">
-                                                      {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
-                                                        <div className="form-check custom-checkbox unmatch-check">
-                                                          <div>
-                                                            <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
+                                                      <div className="media-body d-flex">
+                                                        {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
+                                                          <div className="form-check custom-checkbox unmatch-check">
+                                                            <div>
+                                                              <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
 
-                                                          </div>
-                                                          <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
-                                                          <span className="disease-name">
-                                                            {data.diagnosisCodeDocument}
-                                                          </span>
-                                                          </Popover>
-                                                          {/* <span className="disease-name">
+                                                            </div>
+                                                            <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
+                                                              <span className="disease-name">
+                                                                {data.diagnosisCodeDocument}
+                                                              </span>
+                                                            </Popover>
+                                                            {/* <span className="disease-name">
                                                             {data.diagnosisCodeDocument}
                                                           </span> */}
 
-                                                        </div> : null}
-                                                      {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
-                                                        <div className="form-check custom-checkbox unmatch-check ms-3">
-                                                          <div>
-                                                            <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
+                                                          </div> : null}
+                                                        {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
+                                                          <div className="form-check custom-checkbox unmatch-check ms-3">
+                                                            <div>
+                                                              <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
 
-                                                          </div>
-                                                          <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
-                                                          <span className="disease-name">
-                                                            {data.diagnosisCodeFinding}
-                                                          </span>
-                                                          </Popover>
+                                                            </div>
+                                                            <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
+                                                              <span className="disease-name">
+                                                                {data.diagnosisCodeFinding}
+                                                              </span>
+                                                            </Popover>
 
-                                                        </div> : null}
+                                                          </div> : null}
+                                                      </div>
                                                     </div>
-                                                  </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          </div>
-                                          <div className="col-xl-4">
-                                            <ul className="timeline">
+                                                  </li>
+                                                ))}
+                                              </ul>
+                                            </div>
+                                            <div className="col-xl-4">
+                                              <ul className="timeline">
 
-                                              <div className="invalid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block`}
-                                                >
-                                                  {" "}
-                                                  Deleted Codes{" "}
-                                                  <Badge
-                                                    as="a"
-                                                    href=""
-                                                    bg="badge-circle invalid-bange"
+                                                <div className="invalid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block`}
                                                   >
-                                                    {invalidMoveDiseasesList.length}
-                                                  </Badge>
-                                                </span>
-                                              </div>
-                                              {invalidMoveDiseasesList.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel invalid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name d-flex" >
-                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                      </span>
-                                                    </div>
-                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faInfo}
-                                                          style={{ color: "blue" }}
-                                                        />
-                                                      </div>
-
-                                                    </Popover>
-                                                    <Popconfirm
-                                                      title="You want move to valid?"
-                                                      description={data.diagnosisCode}
-                                                      onConfirm={confirmInvalidMoveDis}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeValid(data.diagnosisCode)
-                                                      }
+                                                    {" "}
+                                                    Deleted Codes{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="badge-circle invalid-bange"
                                                     >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
-                                                  </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-
-                                          </div>
-                                          {validDiseasesList.length == 0 ?
-                                            <div className="card box-shadow-none">
-                                              <div className="card combo-card">
-                                                <div className="col-xl-12">
-
-                                                  <span className="no-patient-data">NO PATIENT DATA</span>
+                                                      {invalidMoveDiseasesList.length}
+                                                    </Badge>
+                                                  </span>
                                                 </div>
-                                              </div></div>
-                                            : null}
+                                                {invalidMoveDiseasesList.map((data, i) => (
+                                                  <li>
+                                                    <div className="timeline-panel invalid-disease">
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name d-flex" >
+                                                          <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                        </span>
+                                                      </div>
+                                                      <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faInfo}
+                                                            style={{ color: "blue" }}
+                                                          />
+                                                        </div>
+
+                                                      </Popover>
+                                                      <Popconfirm
+                                                        title="You want move to valid?"
+                                                        description={data.diagnosisCode}
+                                                        onConfirm={confirmInvalidMoveDis}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeValid(data.diagnosisCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faCheck}
+                                                            style={{ color: "orange" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </li>
+                                                ))}
+                                              </ul>
+
+                                            </div>
+                                            {validDiseasesList.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="nonhcc">
-                                    <div className="my-post-content pt-3">
-                                      <div className="widget-media   ps--active-y">
-                                        <div className="row">
-                                         
-                                        
-                                          <div className="col-xl-6">
-                                            <ul className="timeline">
+                                    </Tab.Pane>
+                                    <Tab.Pane id="my-posts" eventKey="nonhcc">
+                                      <div className="my-post-content pt-3">
+                                        <div className="widget-media   ps--active-y">
+                                          <div className="row">
 
-                                              <div className="invalid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block`}
-                                                >
-                                                  {" "}
-                                                  NON-HCC{" "}
-                                                  <Badge
-                                                    as="a"
-                                                    href=""
-                                                    bg="badge-circle invalid-bange"
+
+                                            <div className="col-xl-6">
+                                              <ul className="timeline">
+
+                                                <div className="invalid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block`}
                                                   >
-                                                    {newInValidDiseaseList.length}
-                                                  </Badge>
-                                                </span>
-                                                <div className="d-flex justify-content-center">
-                                                  <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                                    <FontAwesomeIcon icon={faAdd} fontSize={11} />
-                                                  </button>
-                                                </div>
-                                              </div>
-                                              {newInValidDiseaseList.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel invalid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name d-flex" >
-                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                      </span>
-                                                    </div>
-                                                    <Popconfirm
-                                                      title="You want move to valid?"
-                                                      description={data.diagnosisCode}
-                                                      onConfirm={confirmInvalid}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeValid(data.diagnosisCode)
-                                                      }
+                                                    {" "}
+                                                    NON-HCC{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="badge-circle invalid-bange"
                                                     >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
+                                                      {newInValidDiseaseList.length}
+                                                    </Badge>
+                                                  </span>
+                                                  <div className="d-flex justify-content-center">
+                                                    <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                      <FontAwesomeIcon icon={faAdd} fontSize={11} />
+                                                    </button>
                                                   </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          </div>                                        
-                                          {validDiseasesList.length == 0 ?
-                                            <div className="card box-shadow-none">
-                                              <div className="card combo-card">
-                                                <div className="col-xl-12">
-
-                                                  <span className="no-patient-data">NO PATIENT DATA</span>
                                                 </div>
-                                              </div></div>
-                                            : null}
+                                                {newInValidDiseaseList.map((data, i) => (
+                                                  <li>
+                                                    <div className="timeline-panel invalid-disease">
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name d-flex" >
+                                                          <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                        </span>
+                                                      </div>
+                                                      <Popconfirm
+                                                        title="You want move to valid?"
+                                                        description={data.diagnosisCode}
+                                                        onConfirm={confirmInvalid}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeValid(data.diagnosisCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faCheck}
+                                                            style={{ color: "orange" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </li>
+                                                ))}
+                                              </ul>
+                                            </div>
+                                            {validDiseasesList.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  </Tab.Pane>
-                                  {/* <Tab.Pane id="my-posts" eventKey="invalidDiseases">
+                                    </Tab.Pane>
+                                    {/* <Tab.Pane id="my-posts" eventKey="invalidDiseases">
                                     <div className="my-post-content pt-3">
                                       <div className="widget-media   ps--active-y">
                                         <ul className="timeline">
@@ -1729,199 +1732,199 @@ export default function PatientDetails() {
                                       </div>
                                     </div>
                                   </Tab.Pane> */}
-                                  <Tab.Pane id="my-posts" eventKey="comboDiseases">
-                                    <div className="my-post-content pt-3">
-                                      <div className="card combo-head-card">
-                                        <div className="row">
-                                          <div className="col-xl-3">
-                                            <label>Combo Codes</label>
-                                          </div>
-                                          <div className="col-xl-3">
-                                            <label>Additional Codes</label>
-                                          </div>
-                                          <div className="col-xl-5">
-                                            <label>Description</label>
-                                          </div>
-                                          <div className="col-xl-1">
-                                            <div className="d-flex justify-content-center">
-                                              <button onClick={() => addValidDiseases()} className="btn bg-white hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                                <FontAwesomeIcon icon={faAdd} fontSize={11} color="blue" />
-                                              </button>
+                                    <Tab.Pane id="my-posts" eventKey="comboDiseases">
+                                      <div className="my-post-content pt-3">
+                                        <div className="card combo-head-card">
+                                          <div className="row">
+                                            <div className="col-xl-3">
+                                              <label>Combo Codes</label>
+                                            </div>
+                                            <div className="col-xl-3">
+                                              <label>Additional Codes</label>
+                                            </div>
+                                            <div className="col-xl-5">
+                                              <label>Description</label>
+                                            </div>
+                                            <div className="col-xl-1">
+                                              <div className="d-flex justify-content-center">
+                                                <button onClick={() => addValidDiseases()} className="btn bg-white hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                  <FontAwesomeIcon icon={faAdd} fontSize={11} color="blue" />
+                                                </button>
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      {comboDiseaseCodesList?.map((item) => {
-                                        return (
-                                          <div className="card combo-card">
+                                        {comboDiseaseCodesList?.map((item) => {
+                                          return (
+                                            <div className="card combo-card">
 
-                                            <div className="row">
-                                              <div className="col-xl-3">
-                                                <span className="font-bold">{item.diagnosisCodeCombo}</span>
-                                              </div>
-                                              <div className="col-xl-3">
-                                                <span className="font-bold">{item.addOnCode}</span>
-                                              </div>
-                                              <div className="col-xl-5">
-                                                <span>{item.diseaseName}</span>
-                                              </div>
-                                              <div className="col-xl-1 comboclose">
-
-                                                <Popconfirm
-                                                  title="You want move to Invalid?"
-                                                  description={item.diseaseName}
-                                                  onConfirm={confirmComboInvalid}
-                                                  placement="leftTop"
-                                                  okText="Yes"
-                                                  cancelText="No"
-                                                  onOpenChange={() =>
-                                                    onchangeCombo(item.diseaseName, item.addOnCode)
-                                                  }
-                                                >
-                                                  <div className="icon-box  bg-danger-light me-1">
-                                                    <FontAwesomeIcon
-                                                      icon={faClose}
-                                                      style={{ color: "red" }}
-                                                    />
-                                                  </div>
-                                                </Popconfirm>
-                                              </div>
-                                            </div>
-
-                                          </div>
-                                        );
-                                      })}
-
-                                      {comboDiseaseCodesList.length == 0 ?
-                                        <div className="card combo-card">
-                                          <div className="col-xl-12">
-                                            <div>
-                                              <span className="no-patient-data">NO PATIENT DATA</span>
-                                            </div>
-                                          </div></div>
-                                        : null}
-
-                                      {invalidComboDiseaseCodesList.length != 0 ?
-                                        <>
-                                          <div className="invalid-combo">
-                                            <span>Invalid Combo Diseases </span>
-                                          </div>
-
-                                          {invalidComboDiseaseCodesList?.map((item) => {
-                                            return (
-                                              <div className="card combo-card">
-                                                <div className="row">
-                                                  <div className="col-xl-3">
-                                                    <span className="font-bold">{item.diagnosisCodeCombo}</span>
-                                                  </div>
-                                                  <div className="col-xl-3">
-                                                    <span className="font-bold">{item.addOnCode}</span>
-                                                  </div>
-                                                  <div className="col-xl-5">
-                                                    <span>{item.diseaseName}</span>
-                                                  </div>
-                                                  <div className="col-xl-1 comboclose">
-
-                                                    <Popconfirm
-                                                      title="You want move to Valid?"
-                                                      description={item.diseaseName}
-                                                      onConfirm={confirmComboValid}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeCombo(item.diseaseName, item.addOnCode)
-                                                      }
-                                                    >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
-                                                  </div>
+                                              <div className="row">
+                                                <div className="col-xl-3">
+                                                  <span className="font-bold">{item.diagnosisCodeCombo}</span>
                                                 </div>
+                                                <div className="col-xl-3">
+                                                  <span className="font-bold">{item.addOnCode}</span>
+                                                </div>
+                                                <div className="col-xl-5">
+                                                  <span>{item.diseaseName}</span>
+                                                </div>
+                                                <div className="col-xl-1 comboclose">
 
+                                                  <Popconfirm
+                                                    title="You want move to Invalid?"
+                                                    description={item.diseaseName}
+                                                    onConfirm={confirmComboInvalid}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeCombo(item.diseaseName, item.addOnCode)
+                                                    }
+                                                  >
+                                                    <div className="icon-box  bg-danger-light me-1">
+                                                      <FontAwesomeIcon
+                                                        icon={faClose}
+                                                        style={{ color: "red" }}
+                                                      />
+                                                    </div>
+                                                  </Popconfirm>
+                                                </div>
                                               </div>
-                                            );
-                                          })}
-                                        </> : null}
-                                    </div>
-                                  </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                                    <div className="my-post-content pt-3">
 
-                                      <div className="card meat-head-card">
-                                        <div className="row">
-                                          <div className="col-xl-1">
-                                            <label>Codes</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Description</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Monitor</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Evaluation</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Assessment</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Treatment</label>
-                                          </div>
-                                          <div className="col-xl-1">
-                                            <label></label>
-                                          </div>
-                                        </div>
+                                            </div>
+                                          );
+                                        })}
 
+                                        {comboDiseaseCodesList.length == 0 ?
+                                          <div className="card combo-card">
+                                            <div className="col-xl-12">
+                                              <div>
+                                                <span className="no-patient-data">NO PATIENT DATA</span>
+                                              </div>
+                                            </div></div>
+                                          : null}
+
+                                        {invalidComboDiseaseCodesList.length != 0 ?
+                                          <>
+                                            <div className="invalid-combo">
+                                              <span>Invalid Combo Diseases </span>
+                                            </div>
+
+                                            {invalidComboDiseaseCodesList?.map((item) => {
+                                              return (
+                                                <div className="card combo-card">
+                                                  <div className="row">
+                                                    <div className="col-xl-3">
+                                                      <span className="font-bold">{item.diagnosisCodeCombo}</span>
+                                                    </div>
+                                                    <div className="col-xl-3">
+                                                      <span className="font-bold">{item.addOnCode}</span>
+                                                    </div>
+                                                    <div className="col-xl-5">
+                                                      <span>{item.diseaseName}</span>
+                                                    </div>
+                                                    <div className="col-xl-1 comboclose">
+
+                                                      <Popconfirm
+                                                        title="You want move to Valid?"
+                                                        description={item.diseaseName}
+                                                        onConfirm={confirmComboValid}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeCombo(item.diseaseName, item.addOnCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faCheck}
+                                                            style={{ color: "orange" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </div>
+
+                                                </div>
+                                              );
+                                            })}
+                                          </> : null}
                                       </div>
-                                      {meatCriteriaList?.map((item) => {
-                                        return (
-                                          <div className={item.isMeatCriteriaPresent === true
-                                            ? "card meat-card" : "card meat-card-false"}>
+                                    </Tab.Pane>
+                                    <Tab.Pane id="my-posts" eventKey="meatCriteria">
+                                      <div className="my-post-content pt-3">
 
-                                            <div className="row">
-                                              <div className="col-xl-1">
-                                                <span className="font-bold">{item.diagnosisCode}</span>
-                                              </div>
-                                              <div className="col-xl-2">
-                                                <Popover placement="topLeft" title="Description" content={item.diseaseName}>
-                                                  <span className="meat-name-details">{item.diseaseName}</span>
-                                                </Popover>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.monitor != "" ?                                 
-                                                <Popover placement="topLeft" title="Monitor" content={item.monitor}>
-                                                  <span className="meat-name-details">{item.monitor}</span>
-                                                </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.evaluate != "" ?        
-                                                <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
-                                                  <span className="meat-name-details">{item.evaluate}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.assessment != "" ?     
-                                                <Popover placement="topLeft" title="Assessment" content={item.assessment}>
-                                                  <span className="meat-name-details">{item.assessment}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.treatment != "" ?     
-                                                <Popover placement="topLeft" title="Treatment" content={item.treatment}>
-                                                  <span className="meat-name-details">{item.treatment}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
+                                        <div className="card meat-head-card">
+                                          <div className="row">
+                                            <div className="col-xl-1">
+                                              <label>Codes</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Description</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Monitor</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Evaluation</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Assessment</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Treatment</label>
+                                            </div>
+                                            <div className="col-xl-1">
+                                              <label></label>
+                                            </div>
+                                          </div>
 
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)}>{item.treatmentCapturedFromHeader}</Badge>
-                                              </div>
-                                              {/* <div className="col-xl-2 d-grid">
+                                        </div>
+                                        {meatCriteriaList?.map((item) => {
+                                          return (
+                                            <div className={item.isMeatCriteriaPresent === true
+                                              ? "card meat-card" : "card meat-card-false"}>
+
+                                              <div className="row">
+                                                <div className="col-xl-1">
+                                                  <span className="font-bold">{item.diagnosisCode}</span>
+                                                </div>
+                                                <div className="col-xl-2">
+                                                  <Popover placement="topLeft" title="Description" content={item.diseaseName}>
+                                                    <span className="meat-name-details">{item.diseaseName}</span>
+                                                  </Popover>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.monitor != "" ?
+                                                    <Popover placement="topLeft" title="Monitor" content={item.monitor}>
+                                                      <span className="meat-name-details">{item.monitor}</span>
+                                                    </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
+                                                  <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.evaluate != "" ?
+                                                    <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
+                                                      <span className="meat-name-details">{item.evaluate}</span>
+                                                    </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
+                                                  <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.assessment != "" ?
+                                                    <Popover placement="topLeft" title="Assessment" content={item.assessment}>
+                                                      <span className="meat-name-details">{item.assessment}</span>
+                                                    </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
+                                                  <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.treatment != "" ?
+                                                    <Popover placement="topLeft" title="Treatment" content={item.treatment}>
+                                                      <span className="meat-name-details">{item.treatment}</span>
+                                                    </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
+
+                                                  <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)}>{item.treatmentCapturedFromHeader}</Badge>
+                                                </div>
+                                                {/* <div className="col-xl-2 d-grid">
                                                 {item.monitor != "" ?                                 
                                                 <Popover placement="topLeft" title="Monitor" content={item.monitor}>
                                                   <span className="meat-name-details">{item.monitor}</span>
@@ -1950,125 +1953,125 @@ export default function PatientDetails() {
 
                                                 <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader,item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
                                               </div> */}
-                                              <div className="col-xl-1 meatclose">
-                                                {/* {item.isMeatCriteriaPresent === true ?
+                                                <div className="col-xl-1 meatclose">
+                                                  {/* {item.isMeatCriteriaPresent === true ?
                                              <span  className="badge badge-rounded badge-warning badge-meat">
                                              True
                                            </span>:
                                             <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
-                                                <Popconfirm
-                                                  title="You want move to Invalid?"
-                                                  description={item.diseaseName}
-                                                  onConfirm={confirmInvalidMeat}
-                                                  placement="leftTop"
-                                                  okText="Yes"
-                                                  cancelText="No"
-                                                  onOpenChange={() =>
-                                                    onchangeMeat(item.diseaseName, item.diagnosisCode)
-                                                  }
-                                                >
-                                                  <div className="icon-box  bg-danger-light me-1">
-                                                    <FontAwesomeIcon
-                                                      icon={faClose}
-                                                      style={{ color: "red" }}
-                                                    />
-                                                  </div>
-                                                </Popconfirm>
-                                              </div>
-                                            </div>
-
-                                          </div>
-                                        );
-                                      })}
-                                      {meatCriteriaList.length == 0 ?
-                                        <div className="card combo-card">
-                                          <div className="col-xl-12">
-                                            <div>
-                                              <span className="no-patient-data">NO PATIENT DATA</span>
-                                            </div>
-                                          </div></div>
-                                        : null}
-                                      {invalidMeatCriteriaList.length != 0 ?
-                                        <>
-                                          <div className="invalid-combo">
-                                            <span>Invalid MeatCriteria</span>
-                                          </div>
-
-                                          {invalidMeatCriteriaList?.map((item) => {
-                                            return (
-                                              <div className="card meat-card">
-
-                                                <div className="row">
-                                                  <div className="col-xl-1">
-                                                    <span className="font-bold">{item.diagnosisCode}</span>
-                                                  </div>
-                                                  <div className="col-xl-2">
-                                                    <Popover placement="topLeft" title="Description" content={item.diseaseName}>
-                                                      <span className="meat-name-details">{item.diseaseName}</span>
-                                                    </Popover>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <Popover placement="topLeft" title="Monitor" content={item.monitor}>
-                                                      <span className="meat-name-details">{item.monitor}</span>
-                                                    </Popover>
-                                                    <Badge className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
-                                                      <span className="meat-name-details">{item.evaluate}</span>
-                                                    </Popover>
-                                                    <Badge className="badge-meat cr-pointer" bg={(item.evaluateCapturedFromHeader === "HPI" || item.evaluateCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.evaluateCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Impression" || item.evaluateCapturedFromHeader === "Plan: COPD" || item.evaluateCapturedFromHeader === "Assessments" || item.evaluateCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Recommendations" || item.evaluateCapturedFromHeader === "Plan: GERD without esophagitis" || item.evaluateCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Plan / Discussion" || item.evaluateCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Patient Instructions" || item.evaluateCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <Popover placement="topLeft" title="Assessment" content={item.assessment}>
-                                                      <span className="meat-name-details">{item.assessment}</span>
-                                                    </Popover>
-                                                    <Badge className="badge-meat cr-pointer" bg={(item.assessmentCapturedFromHeader === "HPI" || item.assessmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.assessmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Impression" || item.assessmentCapturedFromHeader === "Plan: COPD" || item.assessmentCapturedFromHeader === "Assessments" || item.assessmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Recommendations" || item.assessmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.assessmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Plan / Discussion" || item.assessmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Patient Instructions" || item.assessmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <Popover placement="topLeft" title="Treatment" content={item.treatment}>
-                                                      <span className="meat-name-details">{item.treatment}</span>
-                                                    </Popover>
-
-                                                    <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-1 meatclose">
-
-
-                                                    <Popconfirm
-                                                      title="You want move to Valid?"
-                                                      description={item.diseaseName}
-                                                      onConfirm={confirmValidMeat}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeMeat(item.diseaseName, item.diagnosisCode)
-                                                      }
-                                                    >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
-                                                  </div>
+                                                  <Popconfirm
+                                                    title="You want move to Invalid?"
+                                                    description={item.diseaseName}
+                                                    onConfirm={confirmInvalidMeat}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeMeat(item.diseaseName, item.diagnosisCode)
+                                                    }
+                                                  >
+                                                    <div className="icon-box  bg-danger-light me-1">
+                                                      <FontAwesomeIcon
+                                                        icon={faClose}
+                                                        style={{ color: "red" }}
+                                                      />
+                                                    </div>
+                                                  </Popconfirm>
                                                 </div>
-
                                               </div>
-                                            );
-                                          })}
-                                        </> : null}
-                                    </div>
-                                  </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="RafScore">
-                                    <div className="my-post-content pt-3">
+
+                                            </div>
+                                          );
+                                        })}
+                                        {meatCriteriaList.length == 0 ?
+                                          <div className="card combo-card">
+                                            <div className="col-xl-12">
+                                              <div>
+                                                <span className="no-patient-data">NO PATIENT DATA</span>
+                                              </div>
+                                            </div></div>
+                                          : null}
+                                        {invalidMeatCriteriaList.length != 0 ?
+                                          <>
+                                            <div className="invalid-combo">
+                                              <span>Invalid MeatCriteria</span>
+                                            </div>
+
+                                            {invalidMeatCriteriaList?.map((item) => {
+                                              return (
+                                                <div className="card meat-card">
+
+                                                  <div className="row">
+                                                    <div className="col-xl-1">
+                                                      <span className="font-bold">{item.diagnosisCode}</span>
+                                                    </div>
+                                                    <div className="col-xl-2">
+                                                      <Popover placement="topLeft" title="Description" content={item.diseaseName}>
+                                                        <span className="meat-name-details">{item.diseaseName}</span>
+                                                      </Popover>
+                                                    </div>
+                                                    <div className="col-xl-2 d-grid">
+                                                      <Popover placement="topLeft" title="Monitor" content={item.monitor}>
+                                                        <span className="meat-name-details">{item.monitor}</span>
+                                                      </Popover>
+                                                      <Badge className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
+                                                    </div>
+                                                    <div className="col-xl-2 d-grid">
+                                                      <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
+                                                        <span className="meat-name-details">{item.evaluate}</span>
+                                                      </Popover>
+                                                      <Badge className="badge-meat cr-pointer" bg={(item.evaluateCapturedFromHeader === "HPI" || item.evaluateCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.evaluateCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Impression" || item.evaluateCapturedFromHeader === "Plan: COPD" || item.evaluateCapturedFromHeader === "Assessments" || item.evaluateCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Recommendations" || item.evaluateCapturedFromHeader === "Plan: GERD without esophagitis" || item.evaluateCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Plan / Discussion" || item.evaluateCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Patient Instructions" || item.evaluateCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                    </div>
+                                                    <div className="col-xl-2 d-grid">
+                                                      <Popover placement="topLeft" title="Assessment" content={item.assessment}>
+                                                        <span className="meat-name-details">{item.assessment}</span>
+                                                      </Popover>
+                                                      <Badge className="badge-meat cr-pointer" bg={(item.assessmentCapturedFromHeader === "HPI" || item.assessmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.assessmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Impression" || item.assessmentCapturedFromHeader === "Plan: COPD" || item.assessmentCapturedFromHeader === "Assessments" || item.assessmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Recommendations" || item.assessmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.assessmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Plan / Discussion" || item.assessmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Patient Instructions" || item.assessmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
+                                                    </div>
+                                                    <div className="col-xl-2 d-grid">
+                                                      <Popover placement="topLeft" title="Treatment" content={item.treatment}>
+                                                        <span className="meat-name-details">{item.treatment}</span>
+                                                      </Popover>
+
+                                                      <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
+                                                    </div>
+                                                    <div className="col-xl-1 meatclose">
 
 
-                                      <div className="row">
-                                        <div className="col-xl-3">
-                                          {/* <div className="card raf-file-head">
+                                                      <Popconfirm
+                                                        title="You want move to Valid?"
+                                                        description={item.diseaseName}
+                                                        onConfirm={confirmValidMeat}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeMeat(item.diseaseName, item.diagnosisCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faCheck}
+                                                            style={{ color: "orange" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </div>
+
+                                                </div>
+                                              );
+                                            })}
+                                          </> : null}
+                                      </div>
+                                    </Tab.Pane>
+                                    <Tab.Pane id="my-posts" eventKey="RafScore">
+                                      <div className="my-post-content pt-3">
+
+
+                                        <div className="row">
+                                          <div className="col-xl-3">
+                                            {/* <div className="card raf-file-head">
 
                                           <div className="row">
                                             <div className="col-xl-12 mb-3 text-center">
@@ -2098,213 +2101,213 @@ export default function PatientDetails() {
 
                                         </div> */}
 
-                                        </div>
-                                        {rafScore != null ?
-                                          <div className="col-xl-12">
-                                            {rafScore.scoreOutputDTOList != null ?
-                                              <>
-                                                {rafScore.scoreOutputDTOList.map((rafScoreMapResult) => {
-                                                  return (
-                                                    <div className="row raf-main-card">
-                                                      {/* <div className="raf-name-head">
+                                          </div>
+                                          {rafScore != null ?
+                                            <div className="col-xl-12">
+                                              {rafScore.scoreOutputDTOList != null ?
+                                                <>
+                                                  {rafScore.scoreOutputDTOList.map((rafScoreMapResult) => {
+                                                    return (
+                                                      <div className="row raf-main-card">
+                                                        {/* <div className="raf-name-head">
                                                     <h5 className="raf-model-version">{rafScoreMapResult.hcc_model.model} - {rafScoreMapResult.hcc_model.version}</h5>
                                                   </div> */}
 
-                                                      <div className="col-xl-6">
-                                                        <div className="card">
-                                                          <div className="raf-card">
+                                                        <div className="col-xl-6">
+                                                          <div className="card">
+                                                            <div className="raf-card">
 
-                                                            <div className="row raf-head text-center">
-                                                              <div className="col-xl-12">
-                                                                <label className="text-white">Summary</label>
-                                                              </div>
-                                                            </div>
-                                                            <div className="row raf-details">
-                                                              <div className="col-xl-6">
-                                                                <span>{rafScoreMapResult.hcc_model.model}</span>
-                                                              </div>
-                                                              <div className="col-xl-6">
-                                                                <span>{rafScoreMapResult.hcc_model.version}</span>
-                                                              </div>
-                                                            </div>
-
-                                                          </div>
-                                                        </div>
-
-                                                      </div>
-                                                      <div className="col-xl-6">
-                                                        <div className="card">
-                                                          <div className="raf-card">
-                                                            <div className="row raf-head">
-                                                              <div className="col-xl-6">
-                                                                <label className="text-white">DX Code</label>
-                                                              </div>
-                                                              <div className="col-xl-6">
-                                                                <label className="text-white">DX Description</label>
-                                                              </div>
-
-                                                            </div>
-
-                                                            {rafScoreMapResult.dx_hccs.map((item) => {
-                                                              return (
-                                                                <div className="row raf-details">
-                                                                  <div className="col-xl-6">
-                                                                    <span>{item.dx_name}</span>
-                                                                  </div>
-                                                                  <div className="col-xl-6">
-                                                                    <span>{item.dx_desc}</span>
-                                                                  </div>
+                                                              <div className="row raf-head text-center">
+                                                                <div className="col-xl-12">
+                                                                  <label className="text-white">Summary</label>
                                                                 </div>
-                                                              );
-                                                            })}
-
-
-                                                          </div>
-                                                        </div>
-
-                                                      </div>
-                                                      <div className="col-xl-6">
-                                                        <div className="card">
-                                                          <div className="raf-card">
-                                                            <div className="row raf-head">
-                                                              <div className="col-xl-6">
-                                                                <label className="text-white">HCC</label>
                                                               </div>
-                                                              <div className="col-xl-6">
-                                                                <label className="text-white">HCC Description</label>
+                                                              <div className="row raf-details">
+                                                                <div className="col-xl-6">
+                                                                  <span>{rafScoreMapResult.hcc_model.model}</span>
+                                                                </div>
+                                                                <div className="col-xl-6">
+                                                                  <span>{rafScoreMapResult.hcc_model.version}</span>
+                                                                </div>
                                                               </div>
 
                                                             </div>
-                                                            {rafScoreMapResult.dx_hccs.map((res) => {
-                                                              return (
-
-                                                                res.hcc_list.map((res1) => {
-                                                                  return (
-                                                                    <div className="row raf-details">
-                                                                      <div className="col-xl-6">
-                                                                        <span>{res1.hcc_name}</span>
-                                                                      </div>
-                                                                      <div className="col-xl-6">
-                                                                        <span>{res1.hcc_desc}</span>
-                                                                      </div>
-                                                                    </div>
-
-                                                                  );
-                                                                })
-                                                              );
-                                                            })}
-
                                                           </div>
-                                                        </div>
 
-                                                      </div>
-                                                      <div className="col-xl-6">
-                                                        <div className="card">
-                                                          <div className="raf-card">
-                                                            <div className="row raf-head">
-                                                              <div className="col-xl-4">
-                                                                <label className="text-white">Trumped By</label>
+                                                        </div>
+                                                        <div className="col-xl-6">
+                                                          <div className="card">
+                                                            <div className="raf-card">
+                                                              <div className="row raf-head">
+                                                                <div className="col-xl-6">
+                                                                  <label className="text-white">DX Code</label>
+                                                                </div>
+                                                                <div className="col-xl-6">
+                                                                  <label className="text-white">DX Description</label>
+                                                                </div>
+
                                                               </div>
-                                                              <div className="col-xl-4">
-                                                                <label className="text-white">RAF</label>
-                                                              </div>
-                                                              <div className="col-xl-4">
-                                                                <label className="text-white">Monthly Premium</label>
-                                                              </div>
+
+                                                              {rafScoreMapResult.dx_hccs.map((item) => {
+                                                                return (
+                                                                  <div className="row raf-details">
+                                                                    <div className="col-xl-6">
+                                                                      <span>{item.dx_name}</span>
+                                                                    </div>
+                                                                    <div className="col-xl-6">
+                                                                      <span>{item.dx_desc}</span>
+                                                                    </div>
+                                                                  </div>
+                                                                );
+                                                              })}
+
 
                                                             </div>
-                                                            {rafScoreMapResult.dx_hccs.map((res) => {
-                                                              return (
-
-                                                                res.hcc_list.map((res1) => {
-                                                                  return (
-                                                                    <div className="row  raf-details">
-                                                                      <div className="col-xl-4">
-                                                                        <span>-</span>
-                                                                      </div>
-                                                                      <div className="col-xl-4">
-                                                                        <span>{res1.hcc_raf}</span>
-                                                                      </div>
-                                                                      <div className="col-xl-4">
-                                                                        <span>${res1.premium}</span>
-                                                                      </div>
-                                                                    </div>
-                                                                  );
-                                                                })
-                                                              );
-                                                            })}
                                                           </div>
+
+                                                        </div>
+                                                        <div className="col-xl-6">
+                                                          <div className="card">
+                                                            <div className="raf-card">
+                                                              <div className="row raf-head">
+                                                                <div className="col-xl-6">
+                                                                  <label className="text-white">HCC</label>
+                                                                </div>
+                                                                <div className="col-xl-6">
+                                                                  <label className="text-white">HCC Description</label>
+                                                                </div>
+
+                                                              </div>
+                                                              {rafScoreMapResult.dx_hccs.map((res) => {
+                                                                return (
+
+                                                                  res.hcc_list.map((res1) => {
+                                                                    return (
+                                                                      <div className="row raf-details">
+                                                                        <div className="col-xl-6">
+                                                                          <span>{res1.hcc_name}</span>
+                                                                        </div>
+                                                                        <div className="col-xl-6">
+                                                                          <span>{res1.hcc_desc}</span>
+                                                                        </div>
+                                                                      </div>
+
+                                                                    );
+                                                                  })
+                                                                );
+                                                              })}
+
+                                                            </div>
+                                                          </div>
+
+                                                        </div>
+                                                        <div className="col-xl-6">
+                                                          <div className="card">
+                                                            <div className="raf-card">
+                                                              <div className="row raf-head">
+                                                                <div className="col-xl-4">
+                                                                  <label className="text-white">Trumped By</label>
+                                                                </div>
+                                                                <div className="col-xl-4">
+                                                                  <label className="text-white">RAF</label>
+                                                                </div>
+                                                                <div className="col-xl-4">
+                                                                  <label className="text-white">Monthly Premium</label>
+                                                                </div>
+
+                                                              </div>
+                                                              {rafScoreMapResult.dx_hccs.map((res) => {
+                                                                return (
+
+                                                                  res.hcc_list.map((res1) => {
+                                                                    return (
+                                                                      <div className="row  raf-details">
+                                                                        <div className="col-xl-4">
+                                                                          <span>-</span>
+                                                                        </div>
+                                                                        <div className="col-xl-4">
+                                                                          <span>{res1.hcc_raf}</span>
+                                                                        </div>
+                                                                        <div className="col-xl-4">
+                                                                          <span>${res1.premium}</span>
+                                                                        </div>
+                                                                      </div>
+                                                                    );
+                                                                  })
+                                                                );
+                                                              })}
+                                                            </div>
+                                                          </div>
+
+                                                        </div>
+                                                      </div>
+
+
+                                                    );
+                                                  })}
+                                                </> : null}
+
+
+                                              <div className="row raf-main-card">
+                                                <div className="raf-name-head">
+                                                  <h5 className="raf-model-version">SCORE DETAILS</h5>
+                                                </div>
+
+                                                <div className="col-xl-12">
+                                                  <div className="card">
+                                                    <div className="raf-card">
+                                                      <div className="row raf-head">
+                                                        <div className="col-xl-2">
+                                                          <label className="text-white">v24Score</label>
+                                                        </div>
+                                                        <div className="col-xl-3">
+                                                          <label className="text-white">v24Score70Percent</label>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <label className="text-white">v28Score</label>
+                                                        </div>
+                                                        <div className="col-xl-3">
+                                                          <label className="text-white">v28Score30Percent</label>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <label className="text-white">Score</label>
                                                         </div>
 
                                                       </div>
-                                                    </div>
-
-
-                                                  );
-                                                })}
-                                              </> : null}
-
-
-                                            <div className="row raf-main-card">
-                                              <div className="raf-name-head">
-                                                <h5 className="raf-model-version">SCORE DETAILS</h5>
-                                              </div>
-
-                                              <div className="col-xl-12">
-                                                <div className="card">
-                                                  <div className="raf-card">
-                                                    <div className="row raf-head">
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">v24Score</label>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <label className="text-white">v24Score70Percent</label>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">v28Score</label>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <label className="text-white">v28Score30Percent</label>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">Score</label>
-                                                      </div>
-
-                                                    </div>
-                                                    <div className="row  raf-details">
-                                                      <div className="col-xl-2">
-                                                        <span>{rafScore.v24Score}</span>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <span>{rafScore.v24Score70Percent}</span>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <span>{rafScore.v28Score}</span>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <span>{rafScore.v28Score30Percent}</span>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <span>{rafScore.score}</span>
+                                                      <div className="row  raf-details">
+                                                        <div className="col-xl-2">
+                                                          <span>{rafScore.v24Score}</span>
+                                                        </div>
+                                                        <div className="col-xl-3">
+                                                          <span>{rafScore.v24Score70Percent}</span>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <span>{rafScore.v28Score}</span>
+                                                        </div>
+                                                        <div className="col-xl-3">
+                                                          <span>{rafScore.v28Score30Percent}</span>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <span>{rafScore.score}</span>
+                                                        </div>
                                                       </div>
                                                     </div>
                                                   </div>
-                                                </div>
 
+                                                </div>
                                               </div>
                                             </div>
-                                          </div>
-                                          : null}
-                                        {rafScore == null ?
-                                          <div className="card box-shadow-none">
-                                            <div className="card combo-card">
-                                              <div className="col-xl-12">
-                                                <span className="no-patient-data">NO PATIENT DATA</span>
-                                              </div>
-                                            </div></div>
-                                          : null}
-                                      </div>
-                                      {/* <div className="">
+                                            : null}
+                                          {rafScore == null ?
+                                            <div className="card box-shadow-none">
+                                              <div className="card combo-card">
+                                                <div className="col-xl-12">
+                                                  <span className="no-patient-data">NO PATIENT DATA</span>
+                                                </div>
+                                              </div></div>
+                                            : null}
+                                        </div>
+                                        {/* <div className="">
 
                                       <div className="compete-card">
                                         <Button
@@ -2316,13 +2319,13 @@ export default function PatientDetails() {
 
 
                                     </div> */}
-                                    </div>
+                                      </div>
 
-                                  </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="file">
-                                    <div className="my-post-content pt-3">
-                                      <div className="card">
-                                        {/* <div><input
+                                    </Tab.Pane>
+                                    <Tab.Pane id="my-posts" eventKey="file">
+                                      <div className="my-post-content pt-3">
+                                        <div className="card">
+                                          {/* <div><input
                                           required
                                           type="file"
                                           accept="application/pdf,text/plain"
@@ -2330,150 +2333,150 @@ export default function PatientDetails() {
                                         />
 
                                         </div> */}
-                                        <div className="card-body p-0">
-                                          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                                            <div
-                                              style={{
-                                                height: "600px",
-                                                maxWidth: "900px",
-                                                marginLeft: "auto",
-                                                marginRight: "auto",
-                                              }}
-                                            >
-                                              {" "}
-                                              <Viewer
-                                                fileUrl={selectFileURL}
-                                                plugins={[defaultLayoutPluginInstance]}
-                                                onDocumentLoad={handleDocumentLoad}
-                                              />
-                                            </div>
-                                          </Worker>
+                                          <div className="card-body p-0">
+                                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                                              <div
+                                                style={{
+                                                  height: "600px",
+                                                  maxWidth: "900px",
+                                                  marginLeft: "auto",
+                                                  marginRight: "auto",
+                                                }}
+                                              >
+                                                {" "}
+                                                <Viewer
+                                                  fileUrl={selectFileURL}
+                                                  plugins={[defaultLayoutPluginInstance]}
+                                                  onDocumentLoad={handleDocumentLoad}
+                                                />
+                                              </div>
+                                            </Worker>
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
 
-                                  </Tab.Pane>
-                                </Tab.Content>
-                              </Tab.Container>
+                                    </Tab.Pane>
+                                  </Tab.Content>
+                                </Tab.Container>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div> : 
-                    <div className="col-xl-12">
-                      {/* {newValidDiseaseListRadiology.length == 0 ? */}
+                      </div> :
+                      <div className="col-xl-12">
+                        {/* {newValidDiseaseListRadiology.length == 0 ?
                     <div className="card height80 file-management">
                   <div className="card-body p-0">
                   <div className='col-xl-12'>
-                  {/* <span className="fileprocessing-name">{radiologyFileProcessing}</span> */}
+                  <span className="fileprocessing-name">{radiologyFileProcessing}</span>
                               <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
                     </div>
                   </div>
                 </div>
-                {/* :null} */}
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="profile-tab">
-                            <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey={activeTabHead}>
-                                <Nav as="ul" className="nav nav-tabs">
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="file">
-                                      File
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="validDiseases">
-                                      Visit Data
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="comboDiseases">
-                                      Combination Codes
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="meatCriteria">
-                                      MEAT Criteria
-                                    </Nav.Link>
-                                  </Nav.Item>                                
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="nonhcc">
-                                      NON HCC
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                </Nav>
-                                <Tab.Content>
-                                  <Tab.Pane id="my-posts" eventKey="validDiseases">
-                                    <div className="my-post-content pt-3">
-                                      <div className="widget-media   ps--active-y">
-                                        <div className="row">                                         
-                                          <div className="col-xl-4">
-                                            <ul className="timeline">
-                                              <div className="valid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block text-warning`}
-                                                >
-                                                  {" "}
-                                                  HCC{" "}
-                                                  <Badge
-                                                    as="a"
-                                                    href=""
-                                                    bg="secondary badge-circle"
+                 :null} */}
+                        <div className="card">
+                          <div className="card-body">
+                            <div className="profile-tab">
+                              <div className="custom-tab-1">
+                                <Tab.Container defaultActiveKey={activeTabHead}>
+                                  <Nav as="ul" className="nav nav-tabs">
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="file">
+                                        File
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="validDiseases">
+                                        Visit Data
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="comboDiseases">
+                                        Combination Codes
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="meatCriteria">
+                                        MEAT Criteria
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="nonhcc">
+                                        NON HCC
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                  </Nav>
+                                  <Tab.Content>
+                                    <Tab.Pane id="my-posts" eventKey="validDiseases">
+                                      <div className="my-post-content pt-3">
+                                        <div className="widget-media   ps--active-y">
+                                          <div className="row">
+                                            <div className="col-xl-4">
+                                              <ul className="timeline">
+                                                <div className="valid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block text-warning`}
                                                   >
-                                                    {newValidDiseaseListRadiology.length}
-                                                  </Badge>
-                                                </span>
-                                                <div className="d-flex justify-content-center">
-                                                  <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                                    <FontAwesomeIcon icon={faAdd} fontSize={11} />
-                                                  </button>
-                                                </div>
-                                              </div>
-
-                                              {newValidDiseaseListRadiology.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel valid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name d-flex" >
-                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                      </span>
-                                                    </div>
-
-                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faInfo}
-                                                          style={{ color: "blue" }}
-                                                        />
-                                                      </div>
-                                                    </Popover>
-
-
-                                                    <Popconfirm
-                                                      title="You want move to invalid?"
-                                                      description={data.diagnosisCode}
-                                                      onConfirm={confirmvalid}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeValid(data.diagnosisCode)
-                                                      }
+                                                    {" "}
+                                                    HCC{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="secondary badge-circle"
                                                     >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faClose}
-                                                          style={{ color: "red" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
+                                                      {newValidDiseaseListRadiology.length}
+                                                    </Badge>
+                                                  </span>
+                                                  <div className="d-flex justify-content-center">
+                                                    <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                      <FontAwesomeIcon icon={faAdd} fontSize={11} />
+                                                    </button>
                                                   </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                            {/* <ul className="timeline">
+                                                </div>
+
+                                                {newValidDiseaseListRadiology.map((data, i) => (
+                                                  <li>
+                                                    <div className="timeline-panel valid-disease">
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name d-flex" >
+                                                          <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                        </span>
+                                                      </div>
+
+                                                      <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faInfo}
+                                                            style={{ color: "blue" }}
+                                                          />
+                                                        </div>
+                                                      </Popover>
+
+
+                                                      <Popconfirm
+                                                        title="You want move to invalid?"
+                                                        description={data.diagnosisCode}
+                                                        onConfirm={confirmvalid}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeValid(data.diagnosisCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faClose}
+                                                            style={{ color: "red" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </li>
+                                                ))}
+                                              </ul>
+                                              {/* <ul className="timeline">
 
                                               <div className="invalid-text d-flex justify-content-sm-between">
                                                 <span
@@ -2530,9 +2533,9 @@ export default function PatientDetails() {
                                                 </li>
                                               ))}
                                             </ul> */}
-                                          </div>
+                                            </div>
 
-                                          {/* <div className="col-xl-4">
+                                            {/* <div className="col-xl-4">
                                             <ul className="timeline">
 
                                               <div className="invalid-text d-flex justify-content-sm-between">
@@ -2586,217 +2589,217 @@ export default function PatientDetails() {
                                               ))}
                                             </ul>
                                           </div> */}
-                                          <div className="col-xl-4">
-                                            <ul className="timeline">
+                                            <div className="col-xl-4">
+                                              <ul className="timeline">
 
-                                              <div className="invalid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block`}
-                                                >
-                                                  {" "}
-                                                  Suggested Codes{" "}
-                                                </span>
-                                                {isMatchBtn ?
-                                                  <div className="d-flex justify-content-center">
-                                                    <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn">
-                                                      Add
-                                                    </button>
-                                                  </div> : null}
-                                              </div>
-                                              {unmatchHccListRadiology.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel d-block invalid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name">
-                                                        {data.actualDescription}
-                                                      </span>
-                                                    </div>
-                                                    {/* <div className="form-check custom-checkbox">
+                                                <div className="invalid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block`}
+                                                  >
+                                                    {" "}
+                                                    Suggested Codes{" "}
+                                                  </span>
+                                                  {isMatchBtn ?
+                                                    <div className="d-flex justify-content-center">
+                                                      <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn">
+                                                        Add
+                                                      </button>
+                                                    </div> : null}
+                                                </div>
+                                                {unmatchHccListRadiology.map((data, i) => (
+                                                  <li>
+                                                    <div className="timeline-panel d-block invalid-disease">
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name">
+                                                          {data.actualDescription}
+                                                        </span>
+                                                      </div>
+                                                      {/* <div className="form-check custom-checkbox">
                                                       <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div> */}
-                                                  <div className="media-body d-flex">
-                                                      {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
-                                                        <div className="form-check custom-checkbox unmatch-check">
-                                                          <div>
-                                                            <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
+                                                      <div className="media-body d-flex">
+                                                        {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
+                                                          <div className="form-check custom-checkbox unmatch-check">
+                                                            <div>
+                                                              <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
 
-                                                          </div>
-                                                          <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
-                                                          <span className="disease-name">
-                                                            {data.diagnosisCodeDocument}
-                                                          </span>
-                                                          </Popover>
-                                                          {/* <span className="disease-name">
+                                                            </div>
+                                                            <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
+                                                              <span className="disease-name">
+                                                                {data.diagnosisCodeDocument}
+                                                              </span>
+                                                            </Popover>
+                                                            {/* <span className="disease-name">
                                                             {data.diagnosisCodeDocument}
                                                           </span> */}
 
-                                                        </div> : null}
-                                                      {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
-                                                        <div className="form-check custom-checkbox unmatch-check ms-3">
-                                                          <div>
-                                                            <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
+                                                          </div> : null}
+                                                        {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
+                                                          <div className="form-check custom-checkbox unmatch-check ms-3">
+                                                            <div>
+                                                              <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
 
-                                                          </div>
-                                                          <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
-                                                          <span className="disease-name">
-                                                            {data.diagnosisCodeFinding}
-                                                          </span>
-                                                          </Popover>
+                                                            </div>
+                                                            <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
+                                                              <span className="disease-name">
+                                                                {data.diagnosisCodeFinding}
+                                                              </span>
+                                                            </Popover>
 
-                                                        </div> : null}
+                                                          </div> : null}
+                                                      </div>
                                                     </div>
-                                                  </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          </div>
-                                          <div className="col-xl-4">
-                                            <ul className="timeline">
+                                                  </li>
+                                                ))}
+                                              </ul>
+                                            </div>
+                                            <div className="col-xl-4">
+                                              <ul className="timeline">
 
-                                              <div className="invalid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block`}
-                                                >
-                                                  {" "}
-                                                  Deleted Codes{" "}
-                                                  <Badge
-                                                    as="a"
-                                                    href=""
-                                                    bg="badge-circle invalid-bange"
+                                                <div className="invalid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block`}
                                                   >
-                                                    {invalidMoveDiseasesList.length}
-                                                  </Badge>
-                                                </span>
-                                              </div>
-                                              {invalidMoveDiseasesList.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel invalid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name d-flex" >
-                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                      </span>
-                                                    </div>
-                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faInfo}
-                                                          style={{ color: "blue" }}
-                                                        />
-                                                      </div>
-
-                                                    </Popover>
-                                                    <Popconfirm
-                                                      title="You want move to valid?"
-                                                      description={data.diagnosisCode}
-                                                      onConfirm={confirmInvalidMoveDis}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeValid(data.diagnosisCode)
-                                                      }
+                                                    {" "}
+                                                    Deleted Codes{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="badge-circle invalid-bange"
                                                     >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
-                                                  </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-
-                                          </div>
-                                          {newValidDiseaseListRadiology.length == 0 ?
-                                            <div className="card box-shadow-none">
-                                              <div className="card combo-card">
-                                                <div className="col-xl-12">
-
-                                                  <span className="no-patient-data">NO PATIENT DATA</span>
+                                                      {invalidMoveDiseasesList.length}
+                                                    </Badge>
+                                                  </span>
                                                 </div>
-                                              </div></div>
-                                            : null}
+                                                {invalidMoveDiseasesList.map((data, i) => (
+                                                  <li>
+                                                    <div className="timeline-panel invalid-disease">
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name d-flex" >
+                                                          <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                        </span>
+                                                      </div>
+                                                      <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faInfo}
+                                                            style={{ color: "blue" }}
+                                                          />
+                                                        </div>
+
+                                                      </Popover>
+                                                      <Popconfirm
+                                                        title="You want move to valid?"
+                                                        description={data.diagnosisCode}
+                                                        onConfirm={confirmInvalidMoveDis}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeValid(data.diagnosisCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faCheck}
+                                                            style={{ color: "orange" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </li>
+                                                ))}
+                                              </ul>
+
+                                            </div>
+                                            {newValidDiseaseListRadiology.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="nonhcc">
-                                    <div className="my-post-content pt-3">
-                                      <div className="widget-media   ps--active-y">
-                                        <div className="row">
-                                         
-                                        
-                                          <div className="col-xl-6">
-                                            <ul className="timeline">
+                                    </Tab.Pane>
+                                    <Tab.Pane id="my-posts" eventKey="nonhcc">
+                                      <div className="my-post-content pt-3">
+                                        <div className="widget-media   ps--active-y">
+                                          <div className="row">
 
-                                              <div className="invalid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block`}
-                                                >
-                                                  {" "}
-                                                  NON-HCC{" "}
-                                                  <Badge
-                                                    as="a"
-                                                    href=""
-                                                    bg="badge-circle invalid-bange"
+
+                                            <div className="col-xl-6">
+                                              <ul className="timeline">
+
+                                                <div className="invalid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block`}
                                                   >
-                                                    {newInValidDiseaseListRadiology.length}
-                                                  </Badge>
-                                                </span>
-                                                <div className="d-flex justify-content-center">
-                                                  <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                                    <FontAwesomeIcon icon={faAdd} fontSize={11} />
-                                                  </button>
-                                                </div>
-                                              </div>
-                                              {newInValidDiseaseListRadiology.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel invalid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name d-flex" >
-                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                      </span>
-                                                    </div>
-                                                    <Popconfirm
-                                                      title="You want move to valid?"
-                                                      description={data.diagnosisCode}
-                                                      onConfirm={confirmInvalid}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeValid(data.diagnosisCode)
-                                                      }
+                                                    {" "}
+                                                    NON-HCC{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="badge-circle invalid-bange"
                                                     >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
+                                                      {newInValidDiseaseListRadiology.length}
+                                                    </Badge>
+                                                  </span>
+                                                  <div className="d-flex justify-content-center">
+                                                    <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                      <FontAwesomeIcon icon={faAdd} fontSize={11} />
+                                                    </button>
                                                   </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          </div>                                        
-                                          {newInValidDiseaseListRadiology.length == 0 ?
-                                            <div className="card box-shadow-none">
-                                              <div className="card combo-card">
-                                                <div className="col-xl-12">
-
-                                                  <span className="no-patient-data">NO PATIENT DATA</span>
                                                 </div>
-                                              </div></div>
-                                            : null}
+                                                {newInValidDiseaseListRadiology.map((data, i) => (
+                                                  <li>
+                                                    <div className="timeline-panel invalid-disease">
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name d-flex" >
+                                                          <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                        </span>
+                                                      </div>
+                                                      <Popconfirm
+                                                        title="You want move to valid?"
+                                                        description={data.diagnosisCode}
+                                                        onConfirm={confirmInvalid}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeValid(data.diagnosisCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faCheck}
+                                                            style={{ color: "orange" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </li>
+                                                ))}
+                                              </ul>
+                                            </div>
+                                            {newInValidDiseaseListRadiology.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  </Tab.Pane>
-                                  {/* <Tab.Pane id="my-posts" eventKey="invalidDiseases">
+                                    </Tab.Pane>
+                                    {/* <Tab.Pane id="my-posts" eventKey="invalidDiseases">
                                     <div className="my-post-content pt-3">
                                       <div className="widget-media   ps--active-y">
                                         <ul className="timeline">
@@ -2821,199 +2824,199 @@ export default function PatientDetails() {
                                       </div>
                                     </div>
                                   </Tab.Pane> */}
-                                  <Tab.Pane id="my-posts" eventKey="comboDiseases">
-                                    <div className="my-post-content pt-3">
-                                      <div className="card combo-head-card">
-                                        <div className="row">
-                                          <div className="col-xl-3">
-                                            <label>Combo Codes</label>
-                                          </div>
-                                          <div className="col-xl-3">
-                                            <label>Additional Codes</label>
-                                          </div>
-                                          <div className="col-xl-5">
-                                            <label>Description</label>
-                                          </div>
-                                          <div className="col-xl-1">
-                                            <div className="d-flex justify-content-center">
-                                              <button onClick={() => addValidDiseases()} className="btn bg-white hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                                <FontAwesomeIcon icon={faAdd} fontSize={11} color="blue" />
-                                              </button>
+                                    <Tab.Pane id="my-posts" eventKey="comboDiseases">
+                                      <div className="my-post-content pt-3">
+                                        <div className="card combo-head-card">
+                                          <div className="row">
+                                            <div className="col-xl-3">
+                                              <label>Combo Codes</label>
+                                            </div>
+                                            <div className="col-xl-3">
+                                              <label>Additional Codes</label>
+                                            </div>
+                                            <div className="col-xl-5">
+                                              <label>Description</label>
+                                            </div>
+                                            <div className="col-xl-1">
+                                              <div className="d-flex justify-content-center">
+                                                <button onClick={() => addValidDiseases()} className="btn bg-white hegiht10 btn-primary shadow  sharp me-1 action-btn">
+                                                  <FontAwesomeIcon icon={faAdd} fontSize={11} color="blue" />
+                                                </button>
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      {comboDiseaseCodesListRadiology?.map((item) => {
-                                        return (
-                                          <div className="card combo-card">
+                                        {comboDiseaseCodesListRadiology?.map((item) => {
+                                          return (
+                                            <div className="card combo-card">
 
-                                            <div className="row">
-                                              <div className="col-xl-3">
-                                                <span className="font-bold">{item.diagnosisCodeCombo}</span>
-                                              </div>
-                                              <div className="col-xl-3">
-                                                <span className="font-bold">{item.addOnCode}</span>
-                                              </div>
-                                              <div className="col-xl-5">
-                                                <span>{item.diseaseName}</span>
-                                              </div>
-                                              <div className="col-xl-1 comboclose">
-
-                                                <Popconfirm
-                                                  title="You want move to Invalid?"
-                                                  description={item.diseaseName}
-                                                  onConfirm={confirmComboInvalid}
-                                                  placement="leftTop"
-                                                  okText="Yes"
-                                                  cancelText="No"
-                                                  onOpenChange={() =>
-                                                    onchangeCombo(item.diseaseName, item.addOnCode)
-                                                  }
-                                                >
-                                                  <div className="icon-box  bg-danger-light me-1">
-                                                    <FontAwesomeIcon
-                                                      icon={faClose}
-                                                      style={{ color: "red" }}
-                                                    />
-                                                  </div>
-                                                </Popconfirm>
-                                              </div>
-                                            </div>
-
-                                          </div>
-                                        );
-                                      })}
-
-                                      {comboDiseaseCodesListRadiology.length == 0 ?
-                                        <div className="card combo-card">
-                                          <div className="col-xl-12">
-                                            <div>
-                                              <span className="no-patient-data">NO PATIENT DATA</span>
-                                            </div>
-                                          </div></div>
-                                        : null}
-
-                                      {invalidComboDiseaseCodesList.length != 0 ?
-                                        <>
-                                          <div className="invalid-combo">
-                                            <span>Invalid Combo Diseases </span>
-                                          </div>
-
-                                          {invalidComboDiseaseCodesList?.map((item) => {
-                                            return (
-                                              <div className="card combo-card">
-                                                <div className="row">
-                                                  <div className="col-xl-3">
-                                                    <span className="font-bold">{item.diagnosisCodeCombo}</span>
-                                                  </div>
-                                                  <div className="col-xl-3">
-                                                    <span className="font-bold">{item.addOnCode}</span>
-                                                  </div>
-                                                  <div className="col-xl-5">
-                                                    <span>{item.diseaseName}</span>
-                                                  </div>
-                                                  <div className="col-xl-1 comboclose">
-
-                                                    <Popconfirm
-                                                      title="You want move to Valid?"
-                                                      description={item.diseaseName}
-                                                      onConfirm={confirmComboValid}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeCombo(item.diseaseName, item.addOnCode)
-                                                      }
-                                                    >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
-                                                  </div>
+                                              <div className="row">
+                                                <div className="col-xl-3">
+                                                  <span className="font-bold">{item.diagnosisCodeCombo}</span>
                                                 </div>
+                                                <div className="col-xl-3">
+                                                  <span className="font-bold">{item.addOnCode}</span>
+                                                </div>
+                                                <div className="col-xl-5">
+                                                  <span>{item.diseaseName}</span>
+                                                </div>
+                                                <div className="col-xl-1 comboclose">
 
+                                                  <Popconfirm
+                                                    title="You want move to Invalid?"
+                                                    description={item.diseaseName}
+                                                    onConfirm={confirmComboInvalid}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeCombo(item.diseaseName, item.addOnCode)
+                                                    }
+                                                  >
+                                                    <div className="icon-box  bg-danger-light me-1">
+                                                      <FontAwesomeIcon
+                                                        icon={faClose}
+                                                        style={{ color: "red" }}
+                                                      />
+                                                    </div>
+                                                  </Popconfirm>
+                                                </div>
                                               </div>
-                                            );
-                                          })}
-                                        </> : null}
-                                    </div>
-                                  </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                                    <div className="my-post-content pt-3">
 
-                                      <div className="card meat-head-card">
-                                        <div className="row">
-                                          <div className="col-xl-1">
-                                            <label>Codes</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Description</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Monitor</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Evaluation</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Assessment</label>
-                                          </div>
-                                          <div className="col-xl-2">
-                                            <label>Treatment</label>
-                                          </div>
-                                          <div className="col-xl-1">
-                                            <label></label>
-                                          </div>
-                                        </div>
+                                            </div>
+                                          );
+                                        })}
 
+                                        {comboDiseaseCodesListRadiology.length == 0 ?
+                                          <div className="card combo-card">
+                                            <div className="col-xl-12">
+                                              <div>
+                                                <span className="no-patient-data">NO PATIENT DATA</span>
+                                              </div>
+                                            </div></div>
+                                          : null}
+
+                                        {invalidComboDiseaseCodesList.length != 0 ?
+                                          <>
+                                            <div className="invalid-combo">
+                                              <span>Invalid Combo Diseases </span>
+                                            </div>
+
+                                            {invalidComboDiseaseCodesList?.map((item) => {
+                                              return (
+                                                <div className="card combo-card">
+                                                  <div className="row">
+                                                    <div className="col-xl-3">
+                                                      <span className="font-bold">{item.diagnosisCodeCombo}</span>
+                                                    </div>
+                                                    <div className="col-xl-3">
+                                                      <span className="font-bold">{item.addOnCode}</span>
+                                                    </div>
+                                                    <div className="col-xl-5">
+                                                      <span>{item.diseaseName}</span>
+                                                    </div>
+                                                    <div className="col-xl-1 comboclose">
+
+                                                      <Popconfirm
+                                                        title="You want move to Valid?"
+                                                        description={item.diseaseName}
+                                                        onConfirm={confirmComboValid}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeCombo(item.diseaseName, item.addOnCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faCheck}
+                                                            style={{ color: "orange" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </div>
+
+                                                </div>
+                                              );
+                                            })}
+                                          </> : null}
                                       </div>
-                                      {meatCriteriaListRadiology?.map((item) => {
-                                        return (
-                                          <div className={item.isMeatCriteriaPresent === true
-                                            ? "card meat-card" : "card meat-card-false"}>
+                                    </Tab.Pane>
+                                    <Tab.Pane id="my-posts" eventKey="meatCriteria">
+                                      <div className="my-post-content pt-3">
 
-                                            <div className="row">
-                                              <div className="col-xl-1">
-                                                <span className="font-bold">{item.diagnosisCode}</span>
-                                              </div>
-                                              <div className="col-xl-2">
-                                                <Popover placement="topLeft" title="Description" content={item.diseaseName}>
-                                                  <span className="meat-name-details">{item.diseaseName}</span>
-                                                </Popover>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.monitor != "" ?                                 
-                                                <Popover placement="topLeft" title="Monitor" content={item.monitor}>
-                                                  <span className="meat-name-details">{item.monitor}</span>
-                                                </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.evaluate != "" ?        
-                                                <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
-                                                  <span className="meat-name-details">{item.evaluate}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.assessment != "" ?     
-                                                <Popover placement="topLeft" title="Assessment" content={item.assessment}>
-                                                  <span className="meat-name-details">{item.assessment}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.treatment != "" ?     
-                                                <Popover placement="topLeft" title="Treatment" content={item.treatment}>
-                                                  <span className="meat-name-details">{item.treatment}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
+                                        <div className="card meat-head-card">
+                                          <div className="row">
+                                            <div className="col-xl-1">
+                                              <label>Codes</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Description</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Monitor</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Evaluation</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Assessment</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Treatment</label>
+                                            </div>
+                                            <div className="col-xl-1">
+                                              <label></label>
+                                            </div>
+                                          </div>
 
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.treatmentCapturedFromHeader, item.treatment)}>{item.treatmentCapturedFromHeader}</Badge>
-                                              </div>
-                                              {/* <div className="col-xl-2 d-grid">
+                                        </div>
+                                        {meatCriteriaListRadiology?.map((item) => {
+                                          return (
+                                            <div className={item.isMeatCriteriaPresent === true
+                                              ? "card meat-card" : "card meat-card-false"}>
+
+                                              <div className="row">
+                                                <div className="col-xl-1">
+                                                  <span className="font-bold">{item.diagnosisCode}</span>
+                                                </div>
+                                                <div className="col-xl-2">
+                                                  <Popover placement="topLeft" title="Description" content={item.diseaseName}>
+                                                    <span className="meat-name-details">{item.diseaseName}</span>
+                                                  </Popover>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.monitor != "" ?
+                                                    <Popover placement="topLeft" title="Monitor" content={item.monitor}>
+                                                      <span className="meat-name-details">{item.monitor}</span>
+                                                    </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
+                                                  <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.evaluate != "" ?
+                                                    <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
+                                                      <span className="meat-name-details">{item.evaluate}</span>
+                                                    </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
+                                                  <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.assessment != "" ?
+                                                    <Popover placement="topLeft" title="Assessment" content={item.assessment}>
+                                                      <span className="meat-name-details">{item.assessment}</span>
+                                                    </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
+                                                  <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.treatment != "" ?
+                                                    <Popover placement="topLeft" title="Treatment" content={item.treatment}>
+                                                      <span className="meat-name-details">{item.treatment}</span>
+                                                    </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
+
+                                                  <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.treatmentCapturedFromHeader, item.treatment)}>{item.treatmentCapturedFromHeader}</Badge>
+                                                </div>
+                                                {/* <div className="col-xl-2 d-grid">
                                                 {item.monitor != "" ?                                 
                                                 <Popover placement="topLeft" title="Monitor" content={item.monitor}>
                                                   <span className="meat-name-details">{item.monitor}</span>
@@ -3042,122 +3045,122 @@ export default function PatientDetails() {
 
                                                 <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader,item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
                                               </div> */}
-                                              <div className="col-xl-1 meatclose">
-                                                {/* {item.isMeatCriteriaPresent === true ?
+                                                <div className="col-xl-1 meatclose">
+                                                  {/* {item.isMeatCriteriaPresent === true ?
                                              <span  className="badge badge-rounded badge-warning badge-meat">
                                              True
                                            </span>:
                                             <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
-                                                <Popconfirm
-                                                  title="You want move to Invalid?"
-                                                  description={item.diseaseName}
-                                                  onConfirm={confirmInvalidMeat}
-                                                  placement="leftTop"
-                                                  okText="Yes"
-                                                  cancelText="No"
-                                                  onOpenChange={() =>
-                                                    onchangeMeat(item.diseaseName, item.diagnosisCode)
-                                                  }
-                                                >
-                                                  <div className="icon-box  bg-danger-light me-1">
-                                                    <FontAwesomeIcon
-                                                      icon={faClose}
-                                                      style={{ color: "red" }}
-                                                    />
-                                                  </div>
-                                                </Popconfirm>
-                                              </div>
-                                            </div>
-
-                                          </div>
-                                        );
-                                      })}
-                                      {meatCriteriaListRadiology.length == 0 ?
-                                        <div className="card combo-card">
-                                          <div className="col-xl-12">
-                                            <div>
-                                              <span className="no-patient-data">NO PATIENT DATA</span>
-                                            </div>
-                                          </div></div>
-                                        : null}
-                                      {invalidMeatCriteriaList.length != 0 ?
-                                        <>
-                                          <div className="invalid-combo">
-                                            <span>Invalid MeatCriteria</span>
-                                          </div>
-
-                                          {invalidMeatCriteriaList?.map((item) => {
-                                            return (
-                                              <div className="card meat-card">
-
-                                                <div className="row">
-                                                  <div className="col-xl-1">
-                                                    <span className="font-bold">{item.diagnosisCode}</span>
-                                                  </div>
-                                                  <div className="col-xl-2">
-                                                    <Popover placement="topLeft" title="Description" content={item.diseaseName}>
-                                                      <span className="meat-name-details">{item.diseaseName}</span>
-                                                    </Popover>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <Popover placement="topLeft" title="Monitor" content={item.monitor}>
-                                                      <span className="meat-name-details">{item.monitor}</span>
-                                                    </Popover>
-                                                    <Badge className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
-                                                      <span className="meat-name-details">{item.evaluate}</span>
-                                                    </Popover>
-                                                    <Badge className="badge-meat cr-pointer" bg={(item.evaluateCapturedFromHeader === "HPI" || item.evaluateCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.evaluateCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Impression" || item.evaluateCapturedFromHeader === "Plan: COPD" || item.evaluateCapturedFromHeader === "Assessments" || item.evaluateCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Recommendations" || item.evaluateCapturedFromHeader === "Plan: GERD without esophagitis" || item.evaluateCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Plan / Discussion" || item.evaluateCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Patient Instructions" || item.evaluateCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <Popover placement="topLeft" title="Assessment" content={item.assessment}>
-                                                      <span className="meat-name-details">{item.assessment}</span>
-                                                    </Popover>
-                                                    <Badge className="badge-meat cr-pointer" bg={(item.assessmentCapturedFromHeader === "HPI" || item.assessmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.assessmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Impression" || item.assessmentCapturedFromHeader === "Plan: COPD" || item.assessmentCapturedFromHeader === "Assessments" || item.assessmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Recommendations" || item.assessmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.assessmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Plan / Discussion" || item.assessmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Patient Instructions" || item.assessmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-2 d-grid">
-                                                    <Popover placement="topLeft" title="Treatment" content={item.treatment}>
-                                                      <span className="meat-name-details">{item.treatment}</span>
-                                                    </Popover>
-
-                                                    <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  <div className="col-xl-1 meatclose">
-
-
-                                                    <Popconfirm
-                                                      title="You want move to Valid?"
-                                                      description={item.diseaseName}
-                                                      onConfirm={confirmValidMeat}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeMeat(item.diseaseName, item.diagnosisCode)
-                                                      }
-                                                    >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
-                                                  </div>
+                                                  <Popconfirm
+                                                    title="You want move to Invalid?"
+                                                    description={item.diseaseName}
+                                                    onConfirm={confirmInvalidMeat}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeMeat(item.diseaseName, item.diagnosisCode)
+                                                    }
+                                                  >
+                                                    <div className="icon-box  bg-danger-light me-1">
+                                                      <FontAwesomeIcon
+                                                        icon={faClose}
+                                                        style={{ color: "red" }}
+                                                      />
+                                                    </div>
+                                                  </Popconfirm>
                                                 </div>
-
                                               </div>
-                                            );
-                                          })}
-                                        </> : null}
-                                    </div>
-                                  </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="file">
-                                    <div className="my-post-content pt-3">
-                                      <div className="card">
-                                        {/* <div><input
+
+                                            </div>
+                                          );
+                                        })}
+                                        {meatCriteriaListRadiology.length == 0 ?
+                                          <div className="card combo-card">
+                                            <div className="col-xl-12">
+                                              <div>
+                                                <span className="no-patient-data">NO PATIENT DATA</span>
+                                              </div>
+                                            </div></div>
+                                          : null}
+                                        {invalidMeatCriteriaList.length != 0 ?
+                                          <>
+                                            <div className="invalid-combo">
+                                              <span>Invalid MeatCriteria</span>
+                                            </div>
+
+                                            {invalidMeatCriteriaList?.map((item) => {
+                                              return (
+                                                <div className="card meat-card">
+
+                                                  <div className="row">
+                                                    <div className="col-xl-1">
+                                                      <span className="font-bold">{item.diagnosisCode}</span>
+                                                    </div>
+                                                    <div className="col-xl-2">
+                                                      <Popover placement="topLeft" title="Description" content={item.diseaseName}>
+                                                        <span className="meat-name-details">{item.diseaseName}</span>
+                                                      </Popover>
+                                                    </div>
+                                                    <div className="col-xl-2 d-grid">
+                                                      <Popover placement="topLeft" title="Monitor" content={item.monitor}>
+                                                        <span className="meat-name-details">{item.monitor}</span>
+                                                      </Popover>
+                                                      <Badge className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
+                                                    </div>
+                                                    <div className="col-xl-2 d-grid">
+                                                      <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
+                                                        <span className="meat-name-details">{item.evaluate}</span>
+                                                      </Popover>
+                                                      <Badge className="badge-meat cr-pointer" bg={(item.evaluateCapturedFromHeader === "HPI" || item.evaluateCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.evaluateCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Impression" || item.evaluateCapturedFromHeader === "Plan: COPD" || item.evaluateCapturedFromHeader === "Assessments" || item.evaluateCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Recommendations" || item.evaluateCapturedFromHeader === "Plan: GERD without esophagitis" || item.evaluateCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Plan / Discussion" || item.evaluateCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Patient Instructions" || item.evaluateCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                    </div>
+                                                    <div className="col-xl-2 d-grid">
+                                                      <Popover placement="topLeft" title="Assessment" content={item.assessment}>
+                                                        <span className="meat-name-details">{item.assessment}</span>
+                                                      </Popover>
+                                                      <Badge className="badge-meat cr-pointer" bg={(item.assessmentCapturedFromHeader === "HPI" || item.assessmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.assessmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Impression" || item.assessmentCapturedFromHeader === "Plan: COPD" || item.assessmentCapturedFromHeader === "Assessments" || item.assessmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Recommendations" || item.assessmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.assessmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Plan / Discussion" || item.assessmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Patient Instructions" || item.assessmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
+                                                    </div>
+                                                    <div className="col-xl-2 d-grid">
+                                                      <Popover placement="topLeft" title="Treatment" content={item.treatment}>
+                                                        <span className="meat-name-details">{item.treatment}</span>
+                                                      </Popover>
+
+                                                      <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
+                                                    </div>
+                                                    <div className="col-xl-1 meatclose">
+
+
+                                                      <Popconfirm
+                                                        title="You want move to Valid?"
+                                                        description={item.diseaseName}
+                                                        onConfirm={confirmValidMeat}
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeMeat(item.diseaseName, item.diagnosisCode)
+                                                        }
+                                                      >
+                                                        <div className="icon-box  bg-danger-light me-1">
+                                                          <FontAwesomeIcon
+                                                            icon={faCheck}
+                                                            style={{ color: "orange" }}
+                                                          />
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
+                                                  </div>
+
+                                                </div>
+                                              );
+                                            })}
+                                          </> : null}
+                                      </div>
+                                    </Tab.Pane>
+                                    <Tab.Pane id="my-posts" eventKey="file">
+                                      <div className="my-post-content pt-3">
+                                        <div className="card">
+                                          {/* <div><input
                                           required
                                           type="file"
                                           accept="application/pdf,text/plain"
@@ -3165,36 +3168,36 @@ export default function PatientDetails() {
                                         />
 
                                         </div> */}
-                                        <div className="card-body p-0">
-                                          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                                            <div
-                                              style={{
-                                                height: "600px",
-                                                maxWidth: "900px",
-                                                marginLeft: "auto",
-                                                marginRight: "auto",
-                                              }}
-                                            >
-                                              {" "}
-                                              <Viewer
-                                                fileUrl={selectFileURLRadiology}
-                                                plugins={[defaultLayoutPluginInstance]}
-                                                onDocumentLoad={handleDocumentLoad}
-                                              />
-                                            </div>
-                                          </Worker>
+                                          <div className="card-body p-0">
+                                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                                              <div
+                                                style={{
+                                                  height: "600px",
+                                                  maxWidth: "900px",
+                                                  marginLeft: "auto",
+                                                  marginRight: "auto",
+                                                }}
+                                              >
+                                                {" "}
+                                                <Viewer
+                                                  fileUrl={selectFileURLRadiology}
+                                                  plugins={[defaultLayoutPluginInstance]}
+                                                  onDocumentLoad={handleDocumentLoad}
+                                                />
+                                              </div>
+                                            </Worker>
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
 
-                                  </Tab.Pane>
-                                </Tab.Content>
-                              </Tab.Container>
+                                    </Tab.Pane>
+                                  </Tab.Content>
+                                </Tab.Container>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div> }
+                      </div>}
                   </div>
                 </div>
                 {isModalOpen && (
@@ -3791,78 +3794,78 @@ export default function PatientDetails() {
                 </Offcanvas>
 
                 <Offcanvas onHide={setAddPatient} show={addPatient} className="offcanvas-end" placement="end">
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Radiology
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setAddPatient(false)}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmitPatientFile}>
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                      value={inputValue.patientId}
-                      onChange={handleChange}
-                    />
+                  <div className="offcanvas-header">
+                    <h5 className="modal-title" id="#gridSystemModal">
+                      Add Patient Radiology
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => setAddPatient(false)}
+                    >
+                      <i className="fa-solid fa-xmark"></i>
+                    </button>
                   </div>
+                  <div className="offcanvas-body">
+                    <div className="container-fluid">
+                      <Form noValidate validated={validated} onSubmit={handleSubmitPatientFile}>
+                        <div className="row">
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              Patient Id <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              name="patientId"
+                              required
+                              type="text"
+                              value={inputValue.patientId}
+                              onChange={handleChange}
+                            />
+                          </div>
 
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="name"
-                      required
-                      type="text"
-                      value={inputValue.name}
-                      onChange={handleChange}
-                    />
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              Patient Name <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              name="name"
+                              required
+                              type="text"
+                              value={inputValue.name}
+                              onChange={handleChange}
+                            />
+                          </div>
+
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              File
+                            </Form.Label>
+                            <Form.Control
+
+                              type="file"
+                              accept="application/pdf,text/plain"
+                              onChange={(e) => onChangeFileRadiology(e.target.files)}
+                              disabled={isLoadingBtn ? true : false}
+                            />
+                          </div>
+
+                        </div>
+
+                        <div>
+                          <Button type="submit" className="btn btn-primary btn-sm me-1">
+                            {isLoadingBtn ? "Loading..." : "Submit"}
+                          </Button>
+                          <Button
+                            onClick={() => setAddPatient(false)}
+                            className="btn btn-danger btn-sm light ms-1"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </Form>
+                    </div>
                   </div>
-
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      File
-                    </Form.Label>
-                    <Form.Control
-                      
-                      type="file"
-                      accept="application/pdf,text/plain"
-                      onChange={(e) => onChangeFileRadiology(e.target.files)}
-                       disabled={isLoadingBtn ? true : false}
-                    />
-                  </div>                
-                  
-                </div>
-
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loading..." : "Submit"}
-                  </Button>
-                  <Button
-                    onClick={() => setAddPatient(false)}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
+                </Offcanvas>
 
               </div>
             </div>
