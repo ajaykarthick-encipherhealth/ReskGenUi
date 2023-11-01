@@ -2346,13 +2346,14 @@ export default function PatientDetails() {
                       </div>
                     </div> : 
                     <div className="col-xl-12">
+                      {newValidDiseaseListRadiology.length == 0 ?
                     <div className="card height80 file-management">
                   <div className="card-body p-0">
                   <div className='col-xl-12'>
                               <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
                             </div>
                   </div>
-                </div>
+                </div>:null}
                       <div className="card">
                         <div className="card-body">
                           <div className="profile-tab">
