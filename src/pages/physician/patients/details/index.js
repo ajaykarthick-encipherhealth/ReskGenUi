@@ -117,6 +117,8 @@ export default function PatientDetails() {
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [radiologyResCheck, setRadiologyResCheck] = useState(false);
+  const [radiologyFileProcessing, setRadiologyFileProcessing] = useState("Please wait file processing...");
+
 
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [addPatient, setAddPatient] = useState(false);
@@ -2359,14 +2361,16 @@ export default function PatientDetails() {
                       </div>
                     </div> : 
                     <div className="col-xl-12">
-                      {newValidDiseaseListRadiology.length == 0 ?
+                      {/* {newValidDiseaseListRadiology.length == 0 ? */}
                     <div className="card height80 file-management">
                   <div className="card-body p-0">
                   <div className='col-xl-12'>
+                  {/* <span className="fileprocessing-name">{radiologyFileProcessing}</span> */}
                               <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
-                            </div>
+                    </div>
                   </div>
-                </div>:null}
+                </div>
+                {/* :null} */}
                       <div className="card">
                         <div className="card-body">
                           <div className="profile-tab">
