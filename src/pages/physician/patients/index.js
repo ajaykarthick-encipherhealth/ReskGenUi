@@ -70,6 +70,8 @@ export default function Patient() {
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState([]);
+  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
+
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -187,6 +189,9 @@ export default function Patient() {
   const onChangeFile = (e) => {
     setSelectFile(e[0]);
   };
+  const onChangeFileRadiology = (e) => {
+    setSelectFileRadiology(e[0]);
+  };
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -208,37 +213,39 @@ export default function Patient() {
       setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
-      const formData = new FormData();
-      formData.append("file", selectFile);
-      formData.append("dos", inputValue.year);
-      formData.append("orgid", localOrgId);
-      formData.append("tenantid", tenantId);
-      formData.append("userid", localUserId);
-      formData.append("patientid", inputValue.patientId);
-      formData.append("patientname", inputValue.name);
-      const headers = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      setSelectFile(formData);
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
-        `,
-        formData,
-        headers
-      );
-      if (response?.status == 200) {
-        notification.success({
-          message: "Patient File Upload Successfully!",
-        });
-        setAddPatient(false);
-        setIsLoadingBtn(false);
-      } else {
-        setIsLoadingBtn(false);
-      }
-      setAddPatient(false);
-      getAllList(localUserId);
+      submitPatientFile();
+      submitRadiology();
+      // const formData = new FormData();
+      // formData.append("file", selectFile);
+      // formData.append("dos", inputValue.year);
+      // formData.append("orgid", localOrgId);
+      // formData.append("tenantid", tenantId);
+      // formData.append("userid", localUserId);
+      // formData.append("patientid", inputValue.patientId);
+      // formData.append("patientname", inputValue.name);
+      // const headers = {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // };
+      // setSelectFile(formData);
+      // const response = await axios.post(
+      //   ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
+      //   `,
+      //   formData,
+      //   headers
+      // );
+      // if (response?.status == 200) {
+      //   notification.success({
+      //     message: "Patient File Upload Successfully!",
+      //   });
+      //   setAddPatient(false);
+      //   setIsLoadingBtn(false);
+      // } else {
+      //   setIsLoadingBtn(false);
+      // }
+      // setAddPatient(false);
+      // getAllList(localUserId);
     }
 
     setValidated(true);
@@ -520,6 +527,79 @@ export default function Patient() {
 
 
 
+  
+  const submitPatientFile = async () => {
+  
+    const formData = new FormData();
+    formData.append("file", selectFile);
+    formData.append("dos", inputValue.year);
+    formData.append("orgid", localOrgId);
+    formData.append("tenantid", tenantId);
+    formData.append("userid", localUserId);
+    formData.append("patientid", inputValue.patientId);
+    formData.append("patientname", inputValue.name);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    setSelectFile(formData);
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
+      `,
+      formData,
+      headers
+    );
+    if (response?.status == 200) {
+      notification.success({
+        message: "Patient File Upload Successfully!",
+      });
+      setAddPatient(false);
+      setIsLoadingBtn(false);
+    } else {
+      setIsLoadingBtn(false);
+    }
+    setAddPatient(false);
+    getAllList(localUserId);
+
+    // console.log("1");
+  
+
+};
+const submitRadiology = async () => {
+  const formData = new FormData();
+  formData.append("file", selectFileRadiology);
+  formData.append("orgid", localOrgId);
+  formData.append("tenantid", tenantId);
+  formData.append("userid", localUserId);
+  formData.append("patientid", inputValue.patientId);
+  formData.append("patientname", inputValue.name);
+  const headers = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+  setSelectFile(formData);
+  const response = await axios.post(
+    ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload/radiology
+    `,
+    formData,
+    headers
+  );
+  if (response?.status == 200) {    
+    setAddPatient(false);
+    setIsLoadingBtn(false);
+  } else {
+    setIsLoadingBtn(false);
+  }
+  setAddPatient(false);
+  setSelectFileRadiology(null);
+
+
+};
+
+
+
 
 
 
@@ -756,7 +836,17 @@ export default function Patient() {
                   </div>
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      Date of Service <span className="text-danger">*</span>{" "}
+                      Radiology
+                    </Form.Label>
+                    <Form.Control
+                      type="file"
+                      accept="application/pdf,text/plain"
+                      onChange={(e) => onChangeFileRadiology(e.target.files)}
+                    />
+                  </div>
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Year of Service <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
                       name="year"
