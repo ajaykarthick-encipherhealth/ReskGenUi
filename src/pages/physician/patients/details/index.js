@@ -59,6 +59,7 @@ export default function PatientDetails() {
 
   const sideMenu = useSelector(state => state.sideMenu);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [confirmNotesModalInValid, setConfirmNotesModalInValid] = useState(false);
@@ -114,9 +115,28 @@ export default function PatientDetails() {
   const [comboDiseaseCodesListRadiology, setComboDiseaseCodesListRadiology] = useState([]);
   const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState([]);
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
+  const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
+
+  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
+  const [addPatient, setAddPatient] = useState(false);
+  const [inputValue, setInputValue] = useState({
+    year: "",
+    name: "",
+    patientId: "",
+  });
+
+  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
+  const [localUserId, setLocalUserId] = useState('');
 
 
 
+
+
+  const handleChange = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setInputValue({ ...inputValue, [key]: value });
+  };
 
 
 
@@ -176,8 +196,11 @@ export default function PatientDetails() {
     var tenId = localStorage.getItem("tenantId");
     setLocalOrgId(orgId);
     getPatientDetails(orgId, tenId);
-    getPatientDetailsRadiology(orgId, tenId);
-    setLocalTenantId(tenId)
+    // getPatientDetailsRadiology(orgId, tenId);
+    setLocalTenantId(tenId);
+
+    var uId = localStorage.getItem("userId");
+    setLocalUserId(uId);
 
     //   if (isDocumentLoaded) {
     //     enableShortcuts({
@@ -787,6 +810,7 @@ export default function PatientDetails() {
     setIsModalOpenValid(false);
     setConfirmNotesModalValid(false);
     setConfirmNotesModalInValid(false);
+    setIsModalOpenRadiology(false);
   };
   const handleOpenModal = (value, disDescription) => {
     var splitPoint = disDescription.substring(' ', 40);
@@ -805,6 +829,26 @@ export default function PatientDetails() {
     setSelectMeatName(dataset + " -  " + "Loading...");
     setIsLoadingSection(true);
     setIsModalOpen(true);
+    // setIsModalOpenValid(true)
+    // getSectionResult(value.toLowerCase());
+  };
+  const handleOpenModalRadiology = (value, disDescription) => {
+    var splitPoint = disDescription.substring(' ', 40);
+    setTimeout(() => {
+      highlight({
+        keyword: splitPoint,
+        matchCase: true,
+        // wholeWords:true
+      });
+      var dataset = value + " - (" + disDescription + ")"
+      setSelectMeatName(dataset);
+    }, 2000);
+    setDocumentLoaded(true);
+    var dataset = value + " - (" + disDescription + ")"
+    // setSelectMeatName(dataset);
+    setSelectMeatName(dataset + " -  " + "Loading...");
+    setIsLoadingSection(true);
+    setIsModalOpenRadiology(true);
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
@@ -1028,10 +1072,70 @@ export default function PatientDetails() {
     }
     if (pageTitle == "Radiology") {
       setActiveTab(2)
+      getPatientDetailsRadiology(localOrgId, localTenantId);
+
     }
     setIsLoading(false);
   };
 
+  const handleSubmitPatientFile = async (event) => {
+    console.log(inputValue);
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+      setIsLoadingBtn(true);
+      event.preventDefault();
+      event.stopPropagation();
+    
+      submitRadiology();
+     
+    }
+
+    setValidated(true);
+  };
+
+  const addPatientFile = (data) => {
+    inputValue.patientId = patientDocumentResult.patientId;
+    inputValue.name = patientDocumentResult.patientName;
+    setValidated(false);
+    setAddPatient(true);
+    setIsLoadingBtn(false);
+  };
+
+  const onChangeFileRadiology = (e) => {
+    setSelectFileRadiology(e[0]);
+  };
+
+  const submitRadiology = async () => {
+    const formData = new FormData();
+    formData.append("file", selectFileRadiology);
+    formData.append("orgid", localOrgId);
+    formData.append("tenantid", localTenantId);
+    formData.append("userid", localUserId);
+    formData.append("patientid", inputValue.patientId);
+    formData.append("patientname", inputValue.name);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload/radiology
+      `,
+      formData,
+      headers
+    );
+    if (response?.status == 202) {  
+      setAddPatient(false);
+      setIsLoadingBtn(false);
+      getPatientDetailsRadiology(localOrgId, localTenantId);
+    } else {
+      setIsLoadingBtn(false);
+    }
+    setAddPatient(false);
+  
+  
+  };
 
 
   return (
@@ -1118,6 +1222,7 @@ export default function PatientDetails() {
                                 {item.title}
                               </Nav.Link>
                             </Nav.Item>
+                            
                           ))}
                         </Nav>
                       </div>
@@ -2239,7 +2344,15 @@ export default function PatientDetails() {
                           </div>
                         </div>
                       </div>
-                    </div> : <div className="col-xl-12">
+                    </div> : 
+                    <div className="col-xl-12">
+                    <div className="card height80 file-management">
+                  <div className="card-body p-0">
+                  <div className='col-xl-12'>
+                              <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
+                            </div>
+                  </div>
+                </div>
                       <div className="card">
                         <div className="card-body">
                           <div className="profile-tab">
@@ -2858,21 +2971,21 @@ export default function PatientDetails() {
                                                 <Popover placement="topLeft" title="Monitor" content={item.monitor}>
                                                   <span className="meat-name-details">{item.monitor}</span>
                                                 </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
+                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.monitorCapturedFromHeader, item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
                                               {item.evaluate != "" ?        
                                                 <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
                                                   <span className="meat-name-details">{item.evaluate}</span>
                                                   </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
+                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.evaluateCapturedFromHeader, item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
                                               {item.assessment != "" ?     
                                                 <Popover placement="topLeft" title="Assessment" content={item.assessment}>
                                                   <span className="meat-name-details">{item.assessment}</span>
                                                   </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
+                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.assessmentCapturedFromHeader, item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
                                               </div>
                                               <div className="col-xl-2 d-grid">
                                               {item.treatment != "" ?     
@@ -2880,7 +2993,7 @@ export default function PatientDetails() {
                                                   <span className="meat-name-details">{item.treatment}</span>
                                                   </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
 
-                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)}>{item.treatmentCapturedFromHeader}</Badge>
+                                                <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `} onClick={() => handleOpenModalRadiology(item.treatmentCapturedFromHeader, item.treatment)}>{item.treatmentCapturedFromHeader}</Badge>
                                               </div>
                                               {/* <div className="col-xl-2 d-grid">
                                                 {item.monitor != "" ?                                 
@@ -3289,6 +3402,229 @@ export default function PatientDetails() {
                     </div>
                   </Modal>
                 )}
+                {isModalOpenRadiology && (
+                  <Modal
+                    title={selectMeatName}
+                    // title="Pdf Test"
+                    centered
+                    open={isModalOpenRadiology}
+                    // style={{ top: 5 }}
+                    onOk={handleCloseModal}
+                    onCancel={handleCloseModal}
+                    width={1000}
+                    height={400}
+                  >
+                    <div className="section-container">
+                      {/* <button onClick={changeSearch}>Check
+        
+        </button> */}
+                      {/* {isLoadingSection ?
+                      <Spin className='ml-2 ms-1 section-spin' size="medium" />
+                      : <>
+                        {sectionList?.map((item) => {
+                          return (
+
+                            <div className="card meat-card">
+                              <span className="combodiseaseText">{item}</span>
+                            </div>
+
+
+                          );
+                        })}
+                      </>} */}
+                      {/* <div
+        className="rpv-core__viewer"
+        style={{
+            border: '1px solid rgba(0, 0, 0, 0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            marginBottom:"50px"
+        }}
+    >
+        <div
+            style={{
+                alignItems: 'center',
+                backgroundColor: '#eeeeee',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                padding: '4px',
+            }}
+        >
+            <ShowSearchPopoverButton />
+        </div>
+        </div> */}
+                      <div
+                        className="rpv-core__viewer"
+                        style={{
+                          border: '1px solid rgba(0, 0, 0, 0.3)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          height: '100%',
+                          margin: "0 82px 10px 73px"
+                        }}
+                      >
+
+                        <div
+                          style={{
+                            alignItems: 'center',
+                            backgroundColor: '#eeeeee',
+                            borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                            display: 'flex',
+                            padding: '4px',
+                          }}
+                        >
+                          <Search>
+                            {(renderSearchProps) => {
+                              const [readyToSearch, setReadyToSearch] = useState(false);
+                              return (
+                                <>
+                                  <div
+                                    style={{
+                                      border: '1px solid rgba(0, 0, 0, 0.3)',
+                                      display: 'flex',
+                                      padding: '0 2px',
+                                    }}
+                                  >
+                                    <input
+                                      style={{
+                                        border: 'none',
+                                        padding: '8px',
+                                        width: '200px',
+                                      }}
+                                      placeholder="Enter to search"
+                                      type="text"
+                                      value={renderSearchProps.keyword}
+                                      onChange={(e) => {
+                                        setReadyToSearch(false);
+                                        renderSearchProps.setKeyword(e.target.value);
+                                      }}
+                                      onKeyDown={(e) => {
+                                        if (e.keyCode === 13 && renderSearchProps.keyword) {
+                                          setReadyToSearch(true);
+                                          renderSearchProps.search();
+                                        }
+                                      }}
+                                    />
+                                    <Tooltip
+                                      position={Position.BottomCenter}
+                                      target={
+                                        <button
+                                          style={{
+                                            background: '#fff',
+                                            border: 'none',
+                                            borderBottom: `2px solid ${renderSearchProps.matchCase ? 'blue' : 'transparent'
+                                              }`,
+                                            height: '100%',
+                                            padding: '0 2px',
+                                          }}
+                                          onClick={() =>
+                                            renderSearchProps.changeMatchCase(!renderSearchProps.matchCase)
+                                          }
+                                        >
+                                          <Icon>
+                                            <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
+                                            <path d="M4.383 14.725L13.59 14.725" />
+                                            <path d="M0.5 21.725L3.52 21.725" />
+                                            <path d="M14.479 21.725L17.5 21.725" />
+                                            <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
+                                            <path d="M16.92 16.725L20.794 16.725" />
+                                            <path d="M21.516 21.725L23.5 21.725" />
+                                          </Icon>
+                                        </button>
+                                      }
+                                      content={() => 'Match case'}
+                                      offset={{ left: 0, top: 8 }}
+                                    />
+                                    <Tooltip
+                                      position={Position.BottomCenter}
+                                      target={
+                                        <button
+                                          style={{
+                                            background: '#fff',
+                                            border: 'none',
+                                            borderBottom: `2px solid ${renderSearchProps.wholeWords ? 'blue' : 'transparent'
+                                              }`,
+                                            height: '100%',
+                                            padding: '0 2px',
+                                          }}
+                                          onClick={() =>
+                                            renderSearchProps.changeWholeWords(!renderSearchProps.wholeWords)
+                                          }
+                                        >
+                                          <Icon>
+                                            <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
+                                            <path d="M3.5 9.498L3.5 14.498" />
+                                          </Icon>
+                                        </button>
+                                      }
+                                      content={() => 'Match whole word'}
+                                      offset={{ left: 0, top: 8 }}
+                                    />
+                                  </div>
+                                  {readyToSearch &&
+                                    renderSearchProps.keyword &&
+                                    renderSearchProps.numberOfMatches === 0 && (
+                                      <div style={{ padding: '0 8px' }}>Not found</div>
+                                    )}
+                                  {readyToSearch &&
+                                    renderSearchProps.keyword &&
+                                    renderSearchProps.numberOfMatches > 0 && (
+                                      <div style={{ padding: '0 8px' }}>
+                                        {renderSearchProps.currentMatch} of {renderSearchProps.numberOfMatches}
+                                      </div>
+                                    )}
+                                  <div style={{ padding: '0 2px' }}>
+                                    <Tooltip
+                                      position={Position.BottomCenter}
+                                      target={
+                                        <MinimalButton onClick={renderSearchProps.jumpToPreviousMatch}>
+                                          <PreviousIcon />
+                                        </MinimalButton>
+                                      }
+                                      content={() => 'Previous match'}
+                                      offset={{ left: 0, top: 8 }}
+                                    />
+                                  </div>
+                                  <div style={{ padding: '0 2px' }}>
+                                    <Tooltip
+                                      position={Position.BottomCenter}
+                                      target={
+                                        <MinimalButton onClick={renderSearchProps.jumpToNextMatch}>
+                                          <NextIcon />
+                                        </MinimalButton>
+                                      }
+                                      content={() => 'Next match'}
+                                      offset={{ left: 0, top: 8 }}
+                                    />
+                                  </div>
+                                </>
+                              );
+                            }}
+                          </Search>
+                        </div>
+                      </div>
+                      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                        <div
+                          style={{
+                            height: "400px",
+                            maxWidth: "1300px",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                          }}
+                        >
+                          {" "}
+                          <Viewer
+                            fileUrl={selectFileURLRadiology}
+                            plugins={[searchPluginInstance]}
+                            onDocumentLoad={handleDocumentLoad}
+                          />
+                        </div>
+                      </Worker>
+
+                    </div>
+                  </Modal>
+                )}
                 {confirmNotesModalValid && (
                   <Modal
                     title={selectDiseasesName}
@@ -3435,6 +3771,80 @@ export default function PatientDetails() {
                     </div>
                   </div>
                 </Offcanvas>
+
+                <Offcanvas onHide={setAddPatient} show={addPatient} className="offcanvas-end" placement="end">
+          <div className="offcanvas-header">
+            <h5 className="modal-title" id="#gridSystemModal">
+              Add Patient Radiology
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setAddPatient(false)}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div className="offcanvas-body">
+            <div className="container-fluid">
+              <Form noValidate validated={validated} onSubmit={handleSubmitPatientFile}>
+                <div className="row">
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Id <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientId"
+                      required
+                      type="text"
+                      value={inputValue.patientId}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="name"
+                      required
+                      type="text"
+                      value={inputValue.name}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      File
+                    </Form.Label>
+                    <Form.Control
+                      
+                      type="file"
+                      accept="application/pdf,text/plain"
+                      onChange={(e) => onChangeFileRadiology(e.target.files)}
+                       disabled={isLoadingBtn ? true : false}
+                    />
+                  </div>                
+                  
+                </div>
+
+                <div>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    {isLoadingBtn ? "Loading..." : "Submit"}
+                  </Button>
+                  <Button
+                    onClick={() => setAddPatient(false)}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </div>
+        </Offcanvas>
 
               </div>
             </div>

@@ -838,17 +838,17 @@ const submitRadiology = async () => {
 
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      File
+                      File <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
-                      
+                       required
                       type="file"
                       accept="application/pdf,text/plain"
                       onChange={(e) => onChangeFile(e.target.files)}
                        disabled={isLoadingBtn ? true : false}
                     />
                   </div>
-                  <div className="col-xl-12 mb-3">
+                  {/* <div className="col-xl-12 mb-3">
                     <Form.Label>
                       Radiology
                     </Form.Label>
@@ -858,7 +858,7 @@ const submitRadiology = async () => {
                       onChange={(e) => onChangeFileRadiology(e.target.files)}
                       disabled={isLoadingBtn ? true : false}
                     />
-                  </div>
+                  </div> */}
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
                       Year of Service <span className="text-danger">*</span>{" "}
