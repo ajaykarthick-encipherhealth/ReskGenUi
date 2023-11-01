@@ -69,7 +69,7 @@ export default function Patient() {
   const [records, setRecords] = useState([]);
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
-  const [selectFile, setSelectFile] = useState([]);
+  const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
 
   const [inputValue, setInputValue] = useState({
@@ -184,6 +184,7 @@ export default function Patient() {
     inputValue.name = data.patientName;
     setValidated(false);
     setAddPatient(true);
+    setIsLoadingBtn(false);
   };
 
   const onChangeFile = (e) => {
@@ -213,8 +214,12 @@ export default function Patient() {
       setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
-      submitPatientFile();
+      if(selectFile != null){
+        submitPatientFile();
+        }
+      if(selectFileRadiology != null){
       submitRadiology();
+      }
       // const formData = new FormData();
       // formData.append("file", selectFile);
       // formData.append("dos", inputValue.year);
@@ -550,20 +555,23 @@ export default function Patient() {
       formData,
       headers
     );
+    console.log(response?.status)
     if (response?.status == 202) {
+      getAllList(localUserId);
+
       notification.success({
         message: "Patient File Upload Successfully!",
       });
       setAddPatient(false);
       setIsLoadingBtn(false);
+
     } else {
       setIsLoadingBtn(false);
     }
     setAddPatient(false);
     setIsLoadingBtn(false);
-    selectFile([]);
 
-    getAllList(localUserId);
+    // getAllList(localUserId);
 
     // console.log("1");
   
@@ -589,7 +597,9 @@ const submitRadiology = async () => {
     formData,
     headers
   );
-  if (response?.status == 200) {    
+  console.log(response?.status)
+  if (response?.status == 202) {  
+    getAllList(localUserId);  
     setAddPatient(false);
     setIsLoadingBtn(false);
   } else {
@@ -828,10 +838,10 @@ const submitRadiology = async () => {
 
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      File <span className="text-danger">*</span>{" "}
+                      File
                     </Form.Label>
                     <Form.Control
-                      required
+                      
                       type="file"
                       accept="application/pdf,text/plain"
                       onChange={(e) => onChangeFile(e.target.files)}
@@ -864,7 +874,7 @@ const submitRadiology = async () => {
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loding..." : "Submit"}
+                    {isLoadingBtn ? "Loading..." : "Submit"}
                   </Button>
                   <Button
                     onClick={() => setAddPatient(false)}
