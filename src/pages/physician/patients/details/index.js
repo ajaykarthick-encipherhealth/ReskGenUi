@@ -104,6 +104,8 @@ export default function PatientDetails() {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
+  const [activeTabHead, setActiveTabHead] = useState("file");
+
 
 
   const [unmatchHccListRadiology, setUnMatchHccListRadiology] = useState([]);
@@ -1019,13 +1021,15 @@ export default function PatientDetails() {
   ];
 
   const navigetPageDetails = (pageTitle) => {
-    console.log(pageTitle);
+    setActiveTabHead("file")
+    setIsLoading(true);
     if (pageTitle == "Patient Data") {
       setActiveTab(1)
     }
     if (pageTitle == "Radiology") {
       setActiveTab(2)
     }
+    setIsLoading(false);
   };
 
 
@@ -1127,7 +1131,7 @@ export default function PatientDetails() {
                         <div className="card-body">
                           <div className="profile-tab">
                             <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey="file">
+                              <Tab.Container defaultActiveKey={activeTabHead}>
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item as="li" className="nav-item">
                                     <Nav.Link to="#my-posts" eventKey="file">
@@ -1405,9 +1409,14 @@ export default function PatientDetails() {
                                                             <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
 
                                                           </div>
+                                                          <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
                                                           <span className="disease-name">
                                                             {data.diagnosisCodeDocument}
                                                           </span>
+                                                          </Popover>
+                                                          {/* <span className="disease-name">
+                                                            {data.diagnosisCodeDocument}
+                                                          </span> */}
 
                                                         </div> : null}
                                                       {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
@@ -1416,9 +1425,11 @@ export default function PatientDetails() {
                                                             <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
 
                                                           </div>
+                                                          <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
                                                           <span className="disease-name">
                                                             {data.diagnosisCodeFinding}
                                                           </span>
+                                                          </Popover>
 
                                                         </div> : null}
                                                     </div>
@@ -2233,7 +2244,7 @@ export default function PatientDetails() {
                         <div className="card-body">
                           <div className="profile-tab">
                             <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey="file">
+                              <Tab.Container defaultActiveKey={activeTabHead}>
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item as="li" className="nav-item">
                                     <Nav.Link to="#my-posts" eventKey="file">
@@ -2472,16 +2483,21 @@ export default function PatientDetails() {
                                                     {/* <div className="form-check custom-checkbox">
                                                       <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div> */}
-                                                    <div className="media-body d-flex">
+                                                  <div className="media-body d-flex">
                                                       {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
                                                         <div className="form-check custom-checkbox unmatch-check">
                                                           <div>
                                                             <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
 
                                                           </div>
+                                                          <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
                                                           <span className="disease-name">
                                                             {data.diagnosisCodeDocument}
                                                           </span>
+                                                          </Popover>
+                                                          {/* <span className="disease-name">
+                                                            {data.diagnosisCodeDocument}
+                                                          </span> */}
 
                                                         </div> : null}
                                                       {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
@@ -2490,9 +2506,11 @@ export default function PatientDetails() {
                                                             <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
 
                                                           </div>
+                                                          <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
                                                           <span className="disease-name">
                                                             {data.diagnosisCodeFinding}
                                                           </span>
+                                                          </Popover>
 
                                                         </div> : null}
                                                     </div>
@@ -3004,263 +3022,6 @@ export default function PatientDetails() {
                                           })}
                                         </> : null}
                                     </div>
-                                  </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="RafScore">
-                                    <div className="my-post-content pt-3">
-
-
-                                      <div className="row">
-                                        <div className="col-xl-3">
-                                          {/* <div className="card raf-file-head">
-
-                                          <div className="row">
-                                            <div className="col-xl-12 mb-3 text-center">
-                                              <Button
-                                                className="btn btn-primary btn-sm me-1"
-                                              >
-                                                Uplaod File
-                                              </Button>
-
-                                            </div>
-                                            <div className="col-xl-12 mb-3">
-                                              <Form.Control
-                                                required
-                                                type="file"
-                                                accept="application/pdf,text/plain"
-
-                                              />
-                                            </div>
-                                            <div className="col-xl-12 mb-3">
-                                              <Form.Control
-                                                required
-                                                type="date"
-
-                                              />
-                                            </div>
-                                          </div>
-
-                                        </div> */}
-
-                                        </div>
-                                        {rafScore != null ?
-                                          <div className="col-xl-12">
-                                            {rafScore.scoreOutputDTOList != null ?
-                                              <>
-                                                {rafScore.scoreOutputDTOList.map((rafScoreMapResult) => {
-                                                  return (
-                                                    <div className="row raf-main-card">
-                                                      {/* <div className="raf-name-head">
-                                                    <h5 className="raf-model-version">{rafScoreMapResult.hcc_model.model} - {rafScoreMapResult.hcc_model.version}</h5>
-                                                  </div> */}
-
-                                                      <div className="col-xl-6">
-                                                        <div className="card">
-                                                          <div className="raf-card">
-
-                                                            <div className="row raf-head text-center">
-                                                              <div className="col-xl-12">
-                                                                <label className="text-white">Summary</label>
-                                                              </div>
-                                                            </div>
-                                                            <div className="row raf-details">
-                                                              <div className="col-xl-6">
-                                                                <span>{rafScoreMapResult.hcc_model.model}</span>
-                                                              </div>
-                                                              <div className="col-xl-6">
-                                                                <span>{rafScoreMapResult.hcc_model.version}</span>
-                                                              </div>
-                                                            </div>
-
-                                                          </div>
-                                                        </div>
-
-                                                      </div>
-                                                      <div className="col-xl-6">
-                                                        <div className="card">
-                                                          <div className="raf-card">
-                                                            <div className="row raf-head">
-                                                              <div className="col-xl-6">
-                                                                <label className="text-white">DX Code</label>
-                                                              </div>
-                                                              <div className="col-xl-6">
-                                                                <label className="text-white">DX Description</label>
-                                                              </div>
-
-                                                            </div>
-
-                                                            {rafScoreMapResult.dx_hccs.map((item) => {
-                                                              return (
-                                                                <div className="row raf-details">
-                                                                  <div className="col-xl-6">
-                                                                    <span>{item.dx_name}</span>
-                                                                  </div>
-                                                                  <div className="col-xl-6">
-                                                                    <span>{item.dx_desc}</span>
-                                                                  </div>
-                                                                </div>
-                                                              );
-                                                            })}
-
-
-                                                          </div>
-                                                        </div>
-
-                                                      </div>
-                                                      <div className="col-xl-6">
-                                                        <div className="card">
-                                                          <div className="raf-card">
-                                                            <div className="row raf-head">
-                                                              <div className="col-xl-6">
-                                                                <label className="text-white">HCC</label>
-                                                              </div>
-                                                              <div className="col-xl-6">
-                                                                <label className="text-white">HCC Description</label>
-                                                              </div>
-
-                                                            </div>
-                                                            {rafScoreMapResult.dx_hccs.map((res) => {
-                                                              return (
-
-                                                                res.hcc_list.map((res1) => {
-                                                                  return (
-                                                                    <div className="row raf-details">
-                                                                      <div className="col-xl-6">
-                                                                        <span>{res1.hcc_name}</span>
-                                                                      </div>
-                                                                      <div className="col-xl-6">
-                                                                        <span>{res1.hcc_desc}</span>
-                                                                      </div>
-                                                                    </div>
-
-                                                                  );
-                                                                })
-                                                              );
-                                                            })}
-
-                                                          </div>
-                                                        </div>
-
-                                                      </div>
-                                                      <div className="col-xl-6">
-                                                        <div className="card">
-                                                          <div className="raf-card">
-                                                            <div className="row raf-head">
-                                                              <div className="col-xl-4">
-                                                                <label className="text-white">Trumped By</label>
-                                                              </div>
-                                                              <div className="col-xl-4">
-                                                                <label className="text-white">RAF</label>
-                                                              </div>
-                                                              <div className="col-xl-4">
-                                                                <label className="text-white">Monthly Premium</label>
-                                                              </div>
-
-                                                            </div>
-                                                            {rafScoreMapResult.dx_hccs.map((res) => {
-                                                              return (
-
-                                                                res.hcc_list.map((res1) => {
-                                                                  return (
-                                                                    <div className="row  raf-details">
-                                                                      <div className="col-xl-4">
-                                                                        <span>-</span>
-                                                                      </div>
-                                                                      <div className="col-xl-4">
-                                                                        <span>{res1.hcc_raf}</span>
-                                                                      </div>
-                                                                      <div className="col-xl-4">
-                                                                        <span>${res1.premium}</span>
-                                                                      </div>
-                                                                    </div>
-                                                                  );
-                                                                })
-                                                              );
-                                                            })}
-                                                          </div>
-                                                        </div>
-
-                                                      </div>
-                                                    </div>
-
-
-                                                  );
-                                                })}
-                                              </> : null}
-
-
-                                            <div className="row raf-main-card">
-                                              <div className="raf-name-head">
-                                                <h5 className="raf-model-version">SCORE DETAILS</h5>
-                                              </div>
-
-                                              <div className="col-xl-12">
-                                                <div className="card">
-                                                  <div className="raf-card">
-                                                    <div className="row raf-head">
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">v24Score</label>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <label className="text-white">v24Score70Percent</label>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">v28Score</label>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <label className="text-white">v28Score30Percent</label>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">Score</label>
-                                                      </div>
-
-                                                    </div>
-                                                    <div className="row  raf-details">
-                                                      <div className="col-xl-2">
-                                                        <span>{rafScore.v24Score}</span>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <span>{rafScore.v24Score70Percent}</span>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <span>{rafScore.v28Score}</span>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <span>{rafScore.v28Score30Percent}</span>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <span>{rafScore.score}</span>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-
-                                              </div>
-                                            </div>
-                                          </div>
-                                          : null}
-                                        {rafScore == null ?
-                                          <div className="card box-shadow-none">
-                                            <div className="card combo-card">
-                                              <div className="col-xl-12">
-                                                <span className="no-patient-data">NO PATIENT DATA</span>
-                                              </div>
-                                            </div></div>
-                                          : null}
-                                      </div>
-                                      {/* <div className="">
-
-                                      <div className="compete-card">
-                                        <Button
-                                          className="btn btn-primary btn-sm me-1"
-                                        >
-                                          Compete
-                                        </Button>
-                                      </div>
-
-
-                                    </div> */}
-                                    </div>
-
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="file">
                                     <div className="my-post-content pt-3">

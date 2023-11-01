@@ -37559,7 +37559,7 @@ span.meat-name-details{
 }
 
 .bg-bg-six {
-  background-color:#bababa !important;
+  background-color:#4f409e !important;
 }
 .bg-bg-seven {
   background-color:#9e80ff !important;
@@ -37568,7 +37568,7 @@ span.meat-name-details{
   background-color:#da8bc1 !important
 }
 .bg-bg-nine {
-  background-color:#c09595 !important;
+  background-color:#f6ac25 !important;
 }
 
 .bg-bg-ten {
@@ -37598,9 +37598,9 @@ img.login-logo {
   justify-content: center;
   margin-top: 30px;
 }
-nextjs-portal {
+/* nextjs-portal {
   display: none;
-}
+} */
 .hegiht10{
   height: 10px !important;
 }

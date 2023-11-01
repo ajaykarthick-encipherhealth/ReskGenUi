@@ -529,7 +529,7 @@ export default function Patient() {
 
   
   const submitPatientFile = async () => {
-  
+    // setIsLoadingBtn(false);
     const formData = new FormData();
     formData.append("file", selectFile);
     formData.append("dos", inputValue.year);
@@ -550,7 +550,7 @@ export default function Patient() {
       formData,
       headers
     );
-    if (response?.status == 200) {
+    if (response?.status == 202) {
       notification.success({
         message: "Patient File Upload Successfully!",
       });
@@ -560,6 +560,9 @@ export default function Patient() {
       setIsLoadingBtn(false);
     }
     setAddPatient(false);
+    setIsLoadingBtn(false);
+    selectFile([]);
+
     getAllList(localUserId);
 
     // console.log("1");
@@ -593,6 +596,7 @@ const submitRadiology = async () => {
     setIsLoadingBtn(false);
   }
   setAddPatient(false);
+  // setIsLoadingBtn(false);
   setSelectFileRadiology(null);
 
 
@@ -842,6 +846,7 @@ const submitRadiology = async () => {
                       type="file"
                       accept="application/pdf,text/plain"
                       onChange={(e) => onChangeFileRadiology(e.target.files)}
+                      disabled={isLoadingBtn ? true : false}
                     />
                   </div>
                   <div className="col-xl-12 mb-3">
@@ -915,7 +920,7 @@ const submitRadiology = async () => {
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loding..." : "Submit"}
+                    {isLoadingBtn ? "Loading..." : "Submit"}
                   </Button>
                   <Button
                     onClick={() => setAddPatientId(false)}
