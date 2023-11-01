@@ -116,6 +116,7 @@ export default function PatientDetails() {
   const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState([]);
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
+  const [radiologyResCheck, setRadiologyResCheck] = useState(false);
 
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [addPatient, setAddPatient] = useState(false);
@@ -425,6 +426,8 @@ export default function PatientDetails() {
         setMeatCriteriaList(meatListArr);
         // setIsLoading(false);
 
+      }else{
+        setIsLoading(false);
       }
 
     }
@@ -434,6 +437,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
+      setRadiologyResCheck(true);
       var result = response.data;
       console.log(result.validDisease)
       getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId)
@@ -1072,7 +1076,9 @@ export default function PatientDetails() {
     }
     if (pageTitle == "Radiology") {
       setActiveTab(2)
+      if(radiologyResCheck == false){
       getPatientDetailsRadiology(localOrgId, localTenantId);
+      }
 
     }
     setIsLoading(false);
