@@ -1152,6 +1152,21 @@ export default function PatientDetails() {
 
   };
 
+  const openNewTabDownloadPdf =  async () =>{
+     fetch(selectFileURL).then(resp => resp.arrayBuffer()).then(resp => {
+
+      // set the blog type to final pdf
+      const file = new Blob([resp], {type: 'application/pdf'});
+
+      // process to auto download it
+      const fileURL = URL.createObjectURL(file);
+
+      // Open new Tab
+      window.open(fileURL)
+     
+  });    
+  }
+
 
   return (
     <>
@@ -1163,6 +1178,7 @@ export default function PatientDetails() {
               <div className="row patient-file-container">
                 <div className="col-xl-12">
                   <div className="row">
+
                     <div className='col-xl-8 col-sm-12'>
                       <div className="card">
                         <div className="card-body">
@@ -2325,14 +2341,11 @@ export default function PatientDetails() {
                                     <Tab.Pane id="my-posts" eventKey="file">
                                       <div className="my-post-content pt-3">
                                         <div className="card">
-                                          {/* <div><input
-                                          required
-                                          type="file"
-                                          accept="application/pdf,text/plain"
-                                          onChange={(e) => onChangeFile(e.target.files)}
-                                        />
-
-                                        </div> */}
+                                          <div>
+                                            <button onClick={() => openNewTabDownloadPdf()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
+                                                        Open New Tab
+                                              </button>
+                                        </div>
                                           <div className="card-body p-0">
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                               <div
