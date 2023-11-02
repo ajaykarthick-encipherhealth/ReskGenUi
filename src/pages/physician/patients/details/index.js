@@ -1167,6 +1167,21 @@ export default function PatientDetails() {
   });    
   }
 
+  const openNewTabDownloadPdfradiology =  async () =>{
+    fetch(selectFileURLRadiology).then(resp => resp.arrayBuffer()).then(resp => {
+
+     // set the blog type to final pdf
+     const file = new Blob([resp], {type: 'application/pdf'});
+
+     // process to auto download it
+     const fileURL = URL.createObjectURL(file);
+
+     // Open new Tab
+     window.open(fileURL)
+    
+ });    
+ }
+
 
   return (
     <>
@@ -3173,6 +3188,11 @@ export default function PatientDetails() {
                                     <Tab.Pane id="my-posts" eventKey="file">
                                       <div className="my-post-content pt-3">
                                         <div className="card">
+                                           <div>
+                                            <button onClick={() => openNewTabDownloadPdfradiology()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
+                                                        Open New Tab
+                                              </button>
+                                        </div>
                                           {/* <div><input
                                           required
                                           type="file"
