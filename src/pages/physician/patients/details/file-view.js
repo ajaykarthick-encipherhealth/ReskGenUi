@@ -1201,7 +1201,7 @@ export default function PatientDetails() {
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                                 <div
                                                     style={{
-                                                        height: "650px",
+                                                        height: "100vh",
                                                         maxWidth: "1100px",
                                                         marginLeft: "auto",
                                                         marginRight: "auto",
