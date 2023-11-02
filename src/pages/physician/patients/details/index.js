@@ -846,6 +846,27 @@ export default function PatientDetails() {
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
+  const handleOpenModalCombinationCode = (value, disDescription) => {
+    var splitPoint = disDescription.substring(' ', 20);
+    // console.log(splitPoint)
+    setTimeout(() => {
+      highlight({
+        keyword: splitPoint,
+        matchCase: true,
+        // wholeWords:true
+      });
+      var dataset = value + " - (" + disDescription + ")"
+      setSelectMeatName(dataset);
+    }, 2000);
+    setDocumentLoaded(true);
+    var dataset = value + " - (" + disDescription + ")"
+    // setSelectMeatName(dataset);
+    setSelectMeatName(dataset + " -  " + "Loading...");
+    setIsLoadingSection(true);
+    setIsModalOpen(true);
+    // setIsModalOpenValid(true)
+    // getSectionResult(value.toLowerCase());
+  };
   const handleOpenModalRadiology = (value, disDescription) => {
     var splitPoint = disDescription.substring(' ', 40);
     setTimeout(() => {
@@ -1803,7 +1824,7 @@ export default function PatientDetails() {
                                                 <div className="col-xl-3">
                                                   <span className="font-bold">{item.addOnCode}</span>
                                                 </div>
-                                                <div className="col-xl-5">
+                                                <div className="col-xl-5 cr-pointer" onClick={() => handleOpenModalCombinationCode(item.diagnosisCodeCombo, item.diseaseName)}>
                                                   <span>{item.diseaseName}</span>
                                                 </div>
                                                 <div className="col-xl-1 comboclose">
@@ -1858,7 +1879,7 @@ export default function PatientDetails() {
                                                     <div className="col-xl-3">
                                                       <span className="font-bold">{item.addOnCode}</span>
                                                     </div>
-                                                    <div className="col-xl-5">
+                                                    <div className="col-xl-5 cr-pointer" onClick={() => handleOpenModalCombinationCode(item.diagnosisCodeCombo, item.diseaseName)}>
                                                       <span>{item.diseaseName}</span>
                                                     </div>
                                                     <div className="col-xl-1 comboclose">
