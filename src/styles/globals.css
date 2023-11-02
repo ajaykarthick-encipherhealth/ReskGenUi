@@ -54974,3 +54974,12 @@ svg.p-icon.p-sortable-column-icon {
   border-radius: 100px !important;
   font-size: 14px !important;
 }
+
+#rpv-core__tooltip-body-print {
+    display: none;
+}
+
+div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-2"],div[aria-describedby="rpv-core__tooltip-body-print"] , div[aria-describedby="rpv-core__tooltip-body-open"],div[aria-describedby="rpv-core__tooltip-body-get-file"]  {
+ 
+  display: none;
+}

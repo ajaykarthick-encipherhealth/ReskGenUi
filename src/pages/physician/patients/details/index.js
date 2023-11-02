@@ -25,6 +25,7 @@ import { Offcanvas } from "react-bootstrap";
 import {
   InfoCircleOutlined, EyeInvisibleOutlined
 } from '@ant-design/icons';
+import Link from 'next/link';
 
 
 
@@ -1153,19 +1154,24 @@ export default function PatientDetails() {
   };
 
   const openNewTabDownloadPdf =  async () =>{
-     fetch(selectFileURL).then(resp => resp.arrayBuffer()).then(resp => {
+  //    fetch(selectFileURL).then(resp => resp.arrayBuffer()).then(resp => {
 
-      // set the blog type to final pdf
-      const file = new Blob([resp], {type: 'application/pdf'});
+  //     // set the blog type to final pdf
+  //     const file = new Blob([resp], {type: 'application/pdf'});
 
-      // process to auto download it
-      const fileURL = URL.createObjectURL(file);
+  //     // process to auto download it
+  //     const fileURL = URL.createObjectURL(file);
 
-      // Open new Tab
-      window.open(fileURL)
+  //     // Open new Tab
+  //     window.open(fileURL)
      
-  });    
-  }
+  // }); 
+  
+    window.open('details/file-view',  "_blank", "width=4000, height=4000");
+
+
+
+}
 
   const openNewTabDownloadPdfradiology =  async () =>{
     fetch(selectFileURLRadiology).then(resp => resp.arrayBuffer()).then(resp => {
