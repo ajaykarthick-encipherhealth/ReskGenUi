@@ -27,37 +27,32 @@ export default function PatientDetails() {
     useEffect(() => {
         var orgId = localStorage.getItem("orgId");
         var tenId = localStorage.getItem("tenantId");
-        getPatientDetails(orgId, tenId);
+        getPatientDetailsRadiology(orgId, tenId);
     }, []);
 
 
-    const getPatientDetails = async (orgId, tenId) => {
+    const getPatientDetailsRadiology = async (orgId, tenId) => {
         var patientId = localStorage.getItem("patientId");
-        // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
-        const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+        const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`);
         if (response.data) {
             var result = response.data;
-            getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
-
-           
-    
-          } else {
-            setIsLoading(false);
+            if (result.radiologyFileDetail != null) {
+                getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
+            }
           }
-    
-        
-      }
+    }
+ 
 
 
-      const getPatientPdfFile = async (fileId, tenId) => {
+
+    const getPatientPdfFileRadiology = async (fileId, tenId) => {
         const response = await axios.get(ENDPOINTS.apiEndoint + `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`);
         if (response.data) {
-          var result = response.data;
-          setSelectFileURL(response.data);
-          setIsLoading(false);
-    
+            setSelectFileURL(response.data);
+            setIsLoading(false);
+
         }
-      }
+    }
 
 
 
