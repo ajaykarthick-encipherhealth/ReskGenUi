@@ -6,7 +6,7 @@ import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
 
-import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { Viewer, Worker,ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -2467,6 +2467,11 @@ export default function PatientDetails() {
                                                   fileUrl={selectFileURL}
                                                   plugins={[defaultLayoutPluginInstance]}
                                                   onDocumentLoad={handleDocumentLoad}
+                                                  renderLoader={(percentages) => (
+                                                    <div style={{ width: '240px' }}>
+                                                        <ProgressBar progress={Math.round(percentages)} />
+                                                    </div>
+                                                )}
                                                 />
                                               </div>
                                             </Worker>
@@ -3448,6 +3453,11 @@ export default function PatientDetails() {
                                                     fileUrl={selectFileURL}
                                                     plugins={[defaultLayoutPluginInstance]}
                                                     onDocumentLoad={handleDocumentLoad}
+                                                    renderLoader={(percentages) => (
+                                                      <div style={{ width: '240px' }}>
+                                                          <ProgressBar progress={Math.round(percentages)} />
+                                                      </div>
+                                                  )}
                                                   />
                                                 </div>
                                               </Worker>
@@ -3499,7 +3509,8 @@ export default function PatientDetails() {
                                         <Nav.Link to="#my-posts" eventKey="meatCriteria">
                                           MEAT Criteria
                                         </Nav.Link>
-                                      </Nav.Item>                                    
+                                      </Nav.Item>
+                                    
                                     </Nav>
                                     <Tab.Content>
                                       <Tab.Pane id="my-posts" eventKey="validDiseases">
@@ -4283,6 +4294,11 @@ export default function PatientDetails() {
                                                     fileUrl={selectFileURLRadiology}
                                                     plugins={[defaultLayoutPluginInstance]}
                                                     onDocumentLoad={handleDocumentLoad}
+                                                    renderLoader={(percentages) => (
+                                                      <div style={{ width: '240px' }}>
+                                                          <ProgressBar progress={Math.round(percentages)} />
+                                                      </div>
+                                                  )}
                                                   />
                                                 </div>
                                               </Worker>
