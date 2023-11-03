@@ -1393,16 +1393,8 @@ export default function PatientDetails() {
                                         RAF Score
                                       </Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item as="li" className="nav-item">
-                                      <Nav.Link to="#my-posts" eventKey="nonhcc">
-                                        NON HCC
-                                      </Nav.Link>
-                                    </Nav.Item>
-                                    {/* <Nav.Item as="li" className="nav-item">
-                                  <Nav.Link to="#my-posts" eventKey="file">
-                                    File
-                                  </Nav.Link>
-                                </Nav.Item> */}
+                                   
+                                   
                                   </Nav>
                                   <Tab.Content>
                                     <Tab.Pane id="my-posts" eventKey="validDiseases">
@@ -3507,12 +3499,7 @@ export default function PatientDetails() {
                                         <Nav.Link to="#my-posts" eventKey="meatCriteria">
                                           MEAT Criteria
                                         </Nav.Link>
-                                      </Nav.Item>
-                                      <Nav.Item as="li" className="nav-item">
-                                        <Nav.Link to="#my-posts" eventKey="nonhcc">
-                                          NON HCC
-                                        </Nav.Link>
-                                      </Nav.Item>
+                                      </Nav.Item>                                    
                                     </Nav>
                                     <Tab.Content>
                                       <Tab.Pane id="my-posts" eventKey="validDiseases">
