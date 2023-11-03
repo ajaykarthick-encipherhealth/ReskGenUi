@@ -54983,3 +54983,28 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
  
   display: none;
 }
+.new_valid-dis{
+  border: 1px solid #cdd2e3 !important;
+  /* padding: 0.8rem 0.75rem; */
+    margin: 0 -5px;
+    border-radius: 0.625rem;
+    position: relative;
+    transition: all 0.5s;
+}
+.valid-providerdocument {
+  margin: 0 10px 10px 10px;
+}
+.valid-providerdocument span{
+ color: #000;
+}
+.valid-providerdocument svg{
+  padding: 2px 5px 0px 0px;
+}
+.validhcc-details {
+  border: 1px solid #cdd2e3 !important;
+  padding: 10px;
+  border-radius: 10px;
+}
+.validhcc-details span{
+  font-size: 13px !important;
+}
