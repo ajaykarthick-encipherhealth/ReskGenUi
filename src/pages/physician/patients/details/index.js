@@ -578,7 +578,8 @@ export default function PatientDetails() {
     const response = await axios.get(ENDPOINTS.apiEndoint + `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`);
     if (response.data) {
       var result = response.data;
-      // setSelectFileURL(response.data);
+      setSelectFileURL(response.data);
+      setIsLoading(false);
            fetch(response.data).then(resp => resp.arrayBuffer()).then(resp => {
 
          // set the blog type to final pdf
@@ -587,14 +588,16 @@ export default function PatientDetails() {
          // process to auto download it
          const fileURL = URL.createObjectURL(file);
          setValidLocalFileDownloadAndView(fileURL);
-         setSelectFileURL(fileURL);
-         setIsLoading(false);
+        //  setSelectFileURL(fileURL);
+        //  setIsLoading(false);
 
 
          // Open new Tab
         //  window.open(fileURL)
 
-     });   
+     });  
+    //  setIsLoading(false);
+ 
 
     }
   }
@@ -2469,7 +2472,7 @@ export default function PatientDetails() {
                                               >
                                                 {" "}
                                                 <Viewer
-                                                  fileUrl={validLocalFileDownloadAndView}
+                                                  fileUrl={selectFileURL}
                                                   plugins={[defaultLayoutPluginInstance]}
                                                   onDocumentLoad={handleDocumentLoad}
                                                 />
