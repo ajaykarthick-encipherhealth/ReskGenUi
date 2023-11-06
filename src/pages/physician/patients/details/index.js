@@ -10,7 +10,7 @@ import { Viewer, Worker,ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCheck, faAdd, faInfo, faIdBadge ,faUser,faSearch} from "@fortawesome/free-solid-svg-icons";
+import { faClose, faCheck, faAdd, faInfo, faIdBadge ,faUser,faSearch,faCalendar} from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm, Divider, Popover, } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
@@ -93,6 +93,8 @@ export default function PatientDetails() {
   const [validated, setValidated] = useState(false);
   const [rafScore, setRAFScore] = useState([]);
   const [patientDetails, setPatientDetails] = useState([]);
+  const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
+
   const [rafHccList, setRafScoreHccList] = useState([]);
   const [isMatchBtn, setIsMatchBtn] = useState(false);
   const [matchHccList, setMatchHccList] = useState([]);
@@ -133,6 +135,13 @@ export default function PatientDetails() {
   const [localUserId, setLocalUserId] = useState('');
   const [validHccDetails, setvalidHccDetails] = useState('');
   const [validLocalFileDownloadAndView, setValidLocalFileDownloadAndView] = useState([]);
+
+
+  const [unMatchListNonHcc, setUnmatchListNonHcc] = useState([]);
+  const [comboDiseaseCodesListNonHcc, setComboDiseaseCodesListNonHcc] = useState([]);
+  const [meatCriteriaListNonHcc, setMeatCriteriaLisNonHcc] = useState([]);
+  const [yearOfServiceList, setYearOfServiceList] = useState([]);
+
 
 
 
@@ -215,6 +224,38 @@ export default function PatientDetails() {
     //     });
     // }
   }, []);
+
+  const getYearOfService = async (orgId, tenId) => {
+    var patientId = localStorage.getItem("patientId");
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+    if (response.data) {
+
+    }
+  }
+
+  const submitYearOfService = async (year) => {
+    var data = {
+      "yearOfService":year
+    }
+ 
+    const response = await axios.post(ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload`,data);
+    console.log(response)
+   
+  
+
+};
+
+  const getYearOfServiceDetails = async (year) => {
+    console.log(year);
+    var patientId = localStorage.getItem("patientId");
+    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+    // if (response.data) {
+    //   if(response.data != null){
+    //   }else{
+    //    submitYearOfService(year)
+    //   }
+    // }
+  }
 
   const getPatientDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
@@ -542,6 +583,162 @@ export default function PatientDetails() {
       }
       // setPatientDetails(result);
 
+
+    }
+  }
+  const getPatientDetailsRadiologyYear = async (orgId, tenId) => {
+    var patientId = localStorage.getItem("patientId");
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`);
+    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+    if (response.data) {
+      var result = response.data;
+      setPatientDetailsRadiology(result);
+      if (result.validDisease != null) {
+        console.log(result)
+        var validDis = '';
+        var invalidDis = '';
+        var comboDis = '';
+        var meatCri = '';
+        var dosYearArr = [];
+        var validDiseaseNewRes = [];
+        var invalidDiseaseNewRes = [];
+        var unMatchRes = [];
+        // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
+        // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
+
+        for (var key in response.data.validDisease) {
+          dosYearArr.push({ value: key, label: key });
+        }
+
+        const highestDOS = Math.max(...dosYearArr.map(res => res.value));
+
+        const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
+        setDosYearDefalutSelect(highestDosValue);
+
+
+        if( result.radiologyFileDetail != null){
+        var fileDetails =  result.radiologyFileDetail[highestDOS];
+        console.log(fileDetails);
+        getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
+        }
+
+
+        validDis = result.validDisease[highestDOS];
+        validDiseaseNewRes = result.validDisease[highestDOS];
+        invalidDiseaseNewRes = result.invalidDisease[highestDOS];
+        if (result.unmatchedDisease != null) {
+          var unMatchResCheck = result.unmatchedDisease[highestDOS]
+
+          if (unMatchResCheck != null) {
+            unMatchRes = result.unmatchedDisease[highestDOS]
+
+          }
+        }
+
+
+        invalidDis = result.invalidDisease[highestDOS];
+        comboDis = result.comboDisease[highestDOS];
+        meatCri = result.meatCriteria[highestDOS];
+
+        // validDiseaseNewRes = validDiseaseNew[2019]
+
+        var invalidDiseasesArray = [];
+        var validDiseasesArray = [];
+
+        for (var key in invalidDis) {
+          invalidDiseasesArray.push({ name: invalidDis[key] });
+        }
+        for (var key in validDis) {
+          validDiseasesArray.push({ name: validDis[key] });
+        }
+
+
+    
+
+
+
+
+        setNewValidDiseaseListRadiology(validDiseaseNewRes);
+        setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
+        setUnMatchHccListRadiology(unMatchRes)
+        setComboDiseaseCodesListRadiology(comboDis);
+        setDosYear(dosYearArr);
+
+        const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
+
+        var meatListArr = [];
+        var meatMoniterHead = [];
+        var meatEvaluteHead = [];
+        var meatAssesmentHead = [];
+        var meatTreatMentHead = [];
+        var allMeatHead = [];
+        var allMeatHeadColorArr = [];
+        var allMeatHeadColor = [];
+        var dublicateRemoveSecondArr = [];
+
+        meatCri.map((res, index) => {
+          if (res.monitorCapturedFromHeader != "") {
+            meatMoniterHead.push({
+              header: res.monitorCapturedFromHeader,
+            })
+          }
+          if (res.evaluateCapturedFromHeader != "") {
+            meatEvaluteHead.push({
+              header: res.evaluateCapturedFromHeader
+            })
+          }
+          if (res.assessmentCapturedFromHeader != "") {
+            meatAssesmentHead.push({
+              header: res.assessmentCapturedFromHeader
+            })
+          }
+          if (res.treatmentCapturedFromHeader != "") {
+            meatTreatMentHead.push({
+              header: res.treatmentCapturedFromHeader
+            });
+          }
+          var newArray = [];
+          newArray = [...allMeatHead, ...meatMoniterHead, ...meatEvaluteHead, ...meatAssesmentHead, ...meatTreatMentHead];
+          var dublicateRemoveArr = getUniqueListBy(newArray, 'header');
+          dublicateRemoveArr.map((res3, index) => {
+
+            allMeatHeadColor.push({
+              header: res3.header,
+              color: COLORS[index]
+            })
+          })
+          allMeatHeadColorArr = allMeatHeadColor;
+
+          dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, 'header');
+          setMeatColorCodeList(dublicateRemoveSecondArr)
+        })
+
+        meatCri.map((res, index) => {
+          meatListArr.push({
+            diagnosisCode: res.diagnosisCode,
+            diseaseName: res.diseaseName,
+            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+            monitorCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.monitorCapturedFromHeader),
+            assessmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.assessmentCapturedFromHeader),
+            evaluateCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.evaluateCapturedFromHeader),
+            treatmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.treatmentCapturedFromHeader),
+            monitorColor: COLORS[index],
+            meatColor: COLORS[index],
+            assessment: res.assessment,
+            monitor: res.monitor,
+            evaluate: res.evaluate,
+            treatment: res.treatment,
+            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+          })
+        })
+        setMeatCriteriaListRadiology(meatListArr);
+
+      } else {
+        setIsLoading(false);
+      }
 
     }
   }
@@ -975,47 +1172,31 @@ export default function PatientDetails() {
 
   const dosOnChange = async (e) => {
     var dosKeyValue = e.value;
-    var validDis = '';
-    var invalidDis = '';
+    getYearOfServiceDetails(e.value);
+    if(activeTab == 1 || activeTab == 2){  
+    var validDiseaseNewRes = [];
+    var invalidDiseaseNewRes = [];
     var comboDis = '';
     var meatCri = '';
     var rafScore = null;
-    var validDiseaseNewRes = [];
-    var invalidDiseaseNewRes = [];
-
     var result = patientDetails;
 
 
 
 
+   
+
+    validDiseaseNewRes = result.validDisease[dosKeyValue];
+    invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
+    comboDis = result.comboDisease[dosKeyValue];
+    meatCri = result.meatCriteria[dosKeyValue];
     if (result.rafScore != null) {
       rafScore = result.rafScore[dosKeyValue]
     }
 
-    validDis = result.validDisease[dosKeyValue];
-    validDiseaseNewRes = result.validDisease[dosKeyValue];
-    invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
-
-    invalidDis = result.invalidDisease[dosKeyValue];
-    comboDis = result.comboDisease[dosKeyValue];
-    meatCri = result.meatCriteria[dosKeyValue];
-
-    var invalidDiseasesArray = [];
-    var validDiseasesArray = [];
-
-    for (var key in invalidDis) {
-      invalidDiseasesArray.push({ name: invalidDis[key] });
-    }
-    for (var key in validDis) {
-      validDiseasesArray.push({ name: validDis[key] });
-    }
-
     setNewValidDiseaseList(validDiseaseNewRes);
     setInNewValidDiseaseList(invalidDiseaseNewRes);
-    setValidDiseasesList(validDiseasesArray);
-    setInvalidDiseasesList(invalidDiseasesArray);
     setComboDiseaseCodesList(comboDis);
-    // setMeatCriteriaList(meatCri);
     setRAFScore(rafScore)
 
     const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine'];
@@ -1093,6 +1274,111 @@ export default function PatientDetails() {
     setMeatCriteriaList(meatListArr);
     setIsLoading(false);
 
+  }  
+
+  if(activeTab == 3){  
+    var validDiseaseNewRes = [];
+    var invalidDiseaseNewRes = [];
+    var comboDis = '';
+    var meatCri = '';
+    var result = patientDetailsRadiology;
+
+
+
+
+   
+
+    validDiseaseNewRes = result.validDisease[dosKeyValue];
+    invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
+    comboDis = result.comboDisease[dosKeyValue];
+    meatCri = result.meatCriteria[dosKeyValue];
+    if( result.radiologyFileDetail != null){
+      var fileDetails =  result.radiologyFileDetail[dosKeyValue];
+      console.log(fileDetails);
+      getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, localTenantId);
+      }
+
+    setNewValidDiseaseListRadiology(validDiseaseNewRes);
+    setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
+    setComboDiseaseCodesListRadiology(comboDis);
+
+    const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine'];
+
+    var meatListArr = [];
+    var meatMoniterHead = [];
+    var meatEvaluteHead = [];
+    var meatAssesmentHead = [];
+    var meatTreatMentHead = [];
+    var allMeatHead = [];
+    var allMeatHeadColorArr = [];
+    var allMeatHeadColor = [];
+    var dublicateRemoveSecondArr = [];
+
+
+
+    meatCri.map((res, index) => {
+      if (res.monitorCapturedFromHeader != "") {
+        meatMoniterHead.push({
+          header: res.monitorCapturedFromHeader,
+        })
+      }
+      if (res.evaluateCapturedFromHeader != "") {
+        meatEvaluteHead.push({
+          header: res.evaluateCapturedFromHeader
+        })
+      }
+      if (res.assessmentCapturedFromHeader != "") {
+        meatAssesmentHead.push({
+          header: res.assessmentCapturedFromHeader
+        })
+      }
+      if (res.treatmentCapturedFromHeader != "") {
+        meatTreatMentHead.push({
+          header: res.treatmentCapturedFromHeader
+        });
+      }
+      var newArray = [];
+      newArray = [...allMeatHead, ...meatMoniterHead, ...meatEvaluteHead, ...meatAssesmentHead, ...meatTreatMentHead];
+      var dublicateRemoveArr = getUniqueListBy(newArray, 'header');
+      dublicateRemoveArr.map((res3, index) => {
+        allMeatHeadColor.push({
+          header: res3.header,
+          color: COLORS[index]
+        })
+      })
+      allMeatHeadColorArr = allMeatHeadColor;
+
+      dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, 'header');
+      setMeatColorCodeList(dublicateRemoveSecondArr)
+    })
+
+
+    meatCri.map((res, index) => {
+      meatListArr.push({
+        diagnosisCode: res.diagnosisCode,
+        diseaseName: res.diseaseName,
+        monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+        assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+        evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+        treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+        monitorCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.monitorCapturedFromHeader),
+        assessmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.assessmentCapturedFromHeader),
+        evaluateCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.evaluateCapturedFromHeader),
+        treatmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.treatmentCapturedFromHeader),
+        monitorColor: COLORS[index],
+        meatColor: COLORS[index],
+        assessment: res.assessment,
+        monitor: res.monitor,
+        evaluate: res.evaluate,
+        treatment: res.treatment,
+        isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+      })
+    })
+    setMeatCriteriaListRadiology(meatListArr);
+    setIsLoading(false);
+
+  }  
+
   }
 
   const handleMatchHcc = (event, value) => {
@@ -1137,15 +1423,13 @@ export default function PatientDetails() {
     }
     if (pageTitle == "NON HCC") {
       setActiveTab(2)
-      if (radiologyResCheck == false) {
-        getPatientDetailsRadiology(localOrgId, localTenantId);
-      }
+     
 
     }
     if (pageTitle == "Radiology") {
       setActiveTab(3)
       if (radiologyResCheck == false) {
-        getPatientDetailsRadiology(localOrgId, localTenantId);
+        getPatientDetailsRadiologyYear(localOrgId, localTenantId);
       }
 
     }
@@ -1248,8 +1532,13 @@ export default function PatientDetails() {
   }
 
 
-  const getValidHccDetails = (value) => {
-    console.log(value)
+  const getValidHccDetails = async (value,code) => {
+    // console.log(value)
+    var patientId = localStorage.getItem("patientId");
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/hccdisease?diagnosisCode=${code}`);
+    if (response.data) {
+
+    }
    var data=  <div className='validhcc-details'>
      {/* <Spin className='ml-2 ms-1' size="small" /> */}
     <span>{value}</span>
@@ -1456,7 +1745,7 @@ export default function PatientDetails() {
                                                         </span>
                                                       </div>
 
-                                                      <Popover  onClick={() => getValidHccDetails(data.dbDescription)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
+                                                      <Popover  onClick={() => getValidHccDetails(data.dbDescription,data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
 
                                                         <div className="icon-box  bg-danger-light me-1">
                                                           <FontAwesomeIcon
@@ -1487,138 +1776,47 @@ export default function PatientDetails() {
                                                       </Popconfirm>
                                                     </div>
                                                     <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                      <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                    {/* <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
+                                                      <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
                                                       <FontAwesomeIcon
                                                           icon={faUser}
                                                           style={{ color: "#918585" }}
                                                         />
-                                                        Provider Name
+                                                       { patientDocumentResult.patientName}
                                                       </Badge>
-                                                      <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer'onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
+                                                      </Popover> */}
+                                                      <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                      <FontAwesomeIcon
+                                                          icon={faCalendar}
+                                                          style={{ color: "#918585" }}
+                                                        />
+                                                        22/05/2023
+                                                      </Badge>
+                                                      <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                      <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer'  onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
+                                                      {/* <FontAwesomeIcon
+                                                          icon={faSearch}
+                                                          style={{ color: "#fff" }}
+                                                        /> */}
+                                                        HPI
+                                                      </Badge>
+                                                      </Popover>
+                                                      {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                      <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
                                                           icon={faSearch}
-                                                          style={{ color: "#918585" }}
-                                                        />Goto Document
+                                                          style={{ color: "#fff" }}
+                                                        />
+                                                        HPI Test Urlplan
                                                       </Badge>
+                                                      </Popover> */}
                                                     </div>
                                                     </div>
 
                                                   </li>
                                                 ))}
-                                              </ul>
-                                              {/* <ul className="timeline">
-
-                                              <div className="invalid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block`}
-                                                >
-                                                  {" "}
-                                                  Deleted Codes{" "}
-                                                  <Badge
-                                                    as="a"
-                                                    href=""
-                                                    bg="badge-circle invalid-bange"
-                                                  >
-                                                    {invalidMoveDiseasesList.length}
-                                                  </Badge>
-                                                </span>
-                                              </div>
-                                              {invalidMoveDiseasesList.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel invalid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name d-flex" >
-                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                      </span>
-                                                    </div>
-                                                    <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faInfo}
-                                                          style={{ color: "blue" }}
-                                                        />
-                                                      </div>
-
-                                                    </Popover>   
-                                                     <Popconfirm
-                                                      title="You want move to valid?"
-                                                      description={data.diagnosisCode}
-                                                      onConfirm={confirmInvalidMoveDis}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeValid(data.diagnosisCode)
-                                                      }
-                                                    >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
-                                                  </div>
-                                                </li>
-                                              ))}
-                                            </ul> */}
+                                              </ul>                                             
                                             </div>
-
-                                            {/* <div className="col-xl-4">
-                                            <ul className="timeline">
-
-                                              <div className="invalid-text d-flex justify-content-sm-between">
-                                                <span
-                                                  className={`dang d-block`}
-                                                >
-                                                  {" "}
-                                                  NON-HCC{" "}
-                                                  <Badge
-                                                    as="a"
-                                                    href=""
-                                                    bg="badge-circle invalid-bange"
-                                                  >
-                                                    {newInValidDiseaseList.length}
-                                                  </Badge>
-                                                </span>
-                                                <div className="d-flex justify-content-center">
-                                                  <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                                    <FontAwesomeIcon icon={faAdd} fontSize={11} />
-                                                  </button>
-                                                </div>
-                                              </div>
-                                              {newInValidDiseaseList.map((data, i) => (
-                                                <li>
-                                                  <div className="timeline-panel invalid-disease">
-                                                    <div className="media-body">
-                                                      <span className="mb-1 disease-name d-flex" >
-                                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                      </span>
-                                                    </div>
-                                                    <Popconfirm
-                                                      title="You want move to valid?"
-                                                      description={data.diagnosisCode}
-                                                      onConfirm={confirmInvalid}
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeValid(data.diagnosisCode)
-                                                      }
-                                                    >
-                                                      <div className="icon-box  bg-danger-light me-1">
-                                                        <FontAwesomeIcon
-                                                          icon={faCheck}
-                                                          style={{ color: "orange" }}
-                                                        />
-                                                      </div>
-                                                    </Popconfirm>
-                                                  </div>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          </div> */}
                                             <div className="col-xl-4">
                                               <ul className="timeline">
 
@@ -2575,61 +2773,7 @@ export default function PatientDetails() {
                                                 </ul>
 
                                               </div>
-
-                                              {/* <div className="col-xl-4">
-                                          <ul className="timeline">
-
-                                            <div className="invalid-text d-flex justify-content-sm-between">
-                                              <span
-                                                className={`dang d-block`}
-                                              >
-                                                {" "}
-                                                NON-HCC{" "}
-                                                <Badge
-                                                  as="a"
-                                                  href=""
-                                                  bg="badge-circle invalid-bange"
-                                                >
-                                                  {newInValidDiseaseList.length}
-                                                </Badge>
-                                              </span>
-                                              <div className="d-flex justify-content-center">
-                                                <button onClick={() => addValidDiseases()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                                  <FontAwesomeIcon icon={faAdd} fontSize={11} />
-                                                </button>
-                                              </div>
-                                            </div>
-                                            {newInValidDiseaseList.map((data, i) => (
-                                              <li>
-                                                <div className="timeline-panel invalid-disease">
-                                                  <div className="media-body">
-                                                    <span className="mb-1 disease-name d-flex" >
-                                                      <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                    </span>
-                                                  </div>
-                                                  <Popconfirm
-                                                    title="You want move to valid?"
-                                                    description={data.diagnosisCode}
-                                                    onConfirm={confirmInvalid}
-                                                    placement="leftTop"
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                    onOpenChange={() =>
-                                                      onchangeValid(data.diagnosisCode)
-                                                    }
-                                                  >
-                                                    <div className="icon-box  bg-danger-light me-1">
-                                                      <FontAwesomeIcon
-                                                        icon={faCheck}
-                                                        style={{ color: "orange" }}
-                                                      />
-                                                    </div>
-                                                  </Popconfirm>
-                                                </div>
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div> */}
+                                             
                                               <div className="col-xl-4">
                                                 <ul className="timeline">
 
@@ -2647,7 +2791,7 @@ export default function PatientDetails() {
                                                         </button>
                                                       </div> : null}
                                                   </div>
-                                                  {unMatchResList.map((data, i) => (
+                                                  {unMatchListNonHcc.map((data, i) => (
                                                     <li>
                                                       <div className="timeline-panel d-block invalid-disease">
                                                         <div className="media-body">
@@ -2862,7 +3006,7 @@ export default function PatientDetails() {
                                               </div>
                                             </div>
                                           </div>
-                                          {comboDiseaseCodesList?.map((item) => {
+                                          {comboDiseaseCodesListNonHcc?.map((item) => {
                                             return (
                                               <div className="card combo-card">
 
@@ -2903,7 +3047,7 @@ export default function PatientDetails() {
                                             );
                                           })}
 
-                                          {comboDiseaseCodesList.length == 0 ?
+                                          {comboDiseaseCodesListNonHcc.length == 0 ?
                                             <div className="card combo-card">
                                               <div className="col-xl-12">
                                                 <div>
@@ -2989,7 +3133,7 @@ export default function PatientDetails() {
                                             </div>
 
                                           </div>
-                                          {meatCriteriaList?.map((item) => {
+                                          {meatCriteriaListNonHcc?.map((item) => {
                                             return (
                                               <div className={item.isMeatCriteriaPresent === true
                                                 ? "card meat-card" : "card meat-card-false"}>
@@ -3031,42 +3175,8 @@ export default function PatientDetails() {
                                                       </Popover> : <span className="meat-name-details text-center font-bold">-</span>}
 
                                                     <Badge className="badge-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader, item.treatment)}>{item.treatmentCapturedFromHeader}</Badge>
-                                                  </div>
-                                                  {/* <div className="col-xl-2 d-grid">
-                                              {item.monitor != "" ?                                 
-                                              <Popover placement="topLeft" title="Monitor" content={item.monitor}>
-                                                <span className="meat-name-details">{item.monitor}</span>
-                                              </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                              <Badge  className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader,item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                            {item.evaluate != "" ?        
-                                              <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
-                                                <span className="meat-name-details">{item.evaluate}</span>
-                                                </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                              <Badge className="badge-meat cr-pointer" bg={(item.evaluateCapturedFromHeader === "HPI" || item.evaluateCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.evaluateCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Impression" || item.evaluateCapturedFromHeader === "Plan: COPD" || item.evaluateCapturedFromHeader === "Assessments" || item.evaluateCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Recommendations" || item.evaluateCapturedFromHeader === "Plan: GERD without esophagitis" || item.evaluateCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Plan / Discussion" || item.evaluateCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Patient Instructions" || item.evaluateCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader,item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                            {item.assessment != "" ?     
-                                              <Popover placement="topLeft" title="Assessment" content={item.assessment}>
-                                                <span className="meat-name-details">{item.assessment}</span>
-                                                </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                              <Badge className="badge-meat cr-pointer" bg={(item.assessmentCapturedFromHeader === "HPI" || item.assessmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.assessmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Impression" || item.assessmentCapturedFromHeader === "Plan: COPD" || item.assessmentCapturedFromHeader === "Assessments" || item.assessmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Recommendations" || item.assessmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.assessmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Plan / Discussion" || item.assessmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Patient Instructions" || item.assessmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader,item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
-                                            </div>
-                                            <div className="col-xl-2 d-grid">
-                                                {item.treatment != "" ?     
-                                              <Popover placement="topLeft" title="Treatment" content={item.treatment}>
-                                                <span className="meat-name-details">{item.treatment}</span>
-                                                </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-
-                                              <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader,item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
-                                            </div> */}
-                                                  <div className="col-xl-1 meatclose">
-                                                    {/* {item.isMeatCriteriaPresent === true ?
-                                           <span  className="badge badge-rounded badge-warning badge-meat">
-                                           True
-                                         </span>:
-                                          <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
+                                                  </div>                                                  
+                                                  <div className="col-xl-1 meatclose">                                                   
                                                     <Popconfirm
                                                       title="You want move to Invalid?"
                                                       description={item.diseaseName}
@@ -3091,7 +3201,7 @@ export default function PatientDetails() {
                                               </div>
                                             );
                                           })}
-                                          {meatCriteriaList.length == 0 ?
+                                          {meatCriteriaListNonHcc.length == 0 ?
                                             <div className="card combo-card">
                                               <div className="col-xl-12">
                                                 <div>

@@ -54996,6 +54996,11 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
 }
 .valid-providerdocument span{
  color: #000;
+ width: 120px !important;
+ display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
 }
 .valid-providerdocument svg{
   padding: 2px 5px 0px 0px;
