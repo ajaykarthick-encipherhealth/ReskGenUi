@@ -1486,6 +1486,7 @@ export default function PatientDetails() {
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
+    formData.append("dos", inputValue.year);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -5082,6 +5083,17 @@ export default function PatientDetails() {
                               onChange={handleChange}
                             />
                           </div>
+                          <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Year of Service <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="year"
+                      required
+                      type="number"
+                      onChange={handleChange}
+                    />
+                  </div>
 
                           <div className="col-xl-12 mb-3">
                             <Form.Label>
