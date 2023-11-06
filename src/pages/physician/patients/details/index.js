@@ -82,7 +82,9 @@ export default function PatientDetails() {
   const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
   const [selectCode, setSelectCode] = useState('');
   const [dosYear, setDosYear] = useState('');
+  const [dosYearRadiology, setDosYearRadiology] = useState('');
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState('');
+  const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] = useState('');
   const [localOrgId, setLocalOrgId] = useState('');
   const [localTenantId, setLocalTenantId] = useState('');
   const [selectMeatFileId, setSelectMeatFileId] = useState('');
@@ -141,6 +143,7 @@ export default function PatientDetails() {
   const [comboDiseaseCodesListNonHcc, setComboDiseaseCodesListNonHcc] = useState([]);
   const [meatCriteriaListNonHcc, setMeatCriteriaLisNonHcc] = useState([]);
   const [yearOfServiceList, setYearOfServiceList] = useState([]);
+  const [isLoadingDos, setIsLoadingDos] = useState(true);
 
 
 
@@ -470,7 +473,7 @@ export default function PatientDetails() {
           })
         })
         setMeatCriteriaList(meatListArr);
-        // setIsLoading(false);
+        setIsLoadingDos(false);
 
       } else {
         setIsLoading(false);
@@ -480,6 +483,7 @@ export default function PatientDetails() {
   }
 
   const getPatientDetailsRadiology = async (orgId, tenId) => {
+    setIsLoadingDos(true);
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
@@ -575,6 +579,7 @@ export default function PatientDetails() {
           })
         })
         setMeatCriteriaListRadiology(meatListArr);
+        setIsLoadingDos(false);
 
         // setMeatCriteriaListRadiology(result.meatCriteria)
       }
@@ -613,7 +618,7 @@ export default function PatientDetails() {
         const highestDOS = Math.max(...dosYearArr.map(res => res.value));
 
         const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
-        setDosYearDefalutSelect(highestDosValue);
+        setDosYearDefalutSelectRadiology(highestDosValue);
 
 
         if( result.radiologyFileDetail != null){
@@ -662,7 +667,8 @@ export default function PatientDetails() {
         setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
         setUnMatchHccListRadiology(unMatchRes)
         setComboDiseaseCodesListRadiology(comboDis);
-        setDosYear(dosYearArr);
+        setDosYearRadiology(dosYearArr);
+
 
         const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
 
@@ -735,6 +741,7 @@ export default function PatientDetails() {
           })
         })
         setMeatCriteriaListRadiology(meatListArr);
+        setIsLoadingDos(false);
 
       } else {
         setIsLoading(false);
@@ -777,6 +784,7 @@ export default function PatientDetails() {
       var result = response.data;
       setSelectFileURL(response.data);
       setIsLoading(false);
+      setIsLoadingDos(false);
            fetch(response.data).then(resp => resp.arrayBuffer()).then(resp => {
 
          // set the blog type to final pdf
@@ -1173,6 +1181,7 @@ export default function PatientDetails() {
   const dosOnChange = async (e) => {
     var dosKeyValue = e.value;
     getYearOfServiceDetails(e.value);
+
     if(activeTab == 1 || activeTab == 2){  
     var validDiseaseNewRes = [];
     var invalidDiseaseNewRes = [];
@@ -1180,6 +1189,7 @@ export default function PatientDetails() {
     var meatCri = '';
     var rafScore = null;
     var result = patientDetails;
+    console.log(patientDetails);
 
 
 
@@ -1193,6 +1203,8 @@ export default function PatientDetails() {
     if (result.rafScore != null) {
       rafScore = result.rafScore[dosKeyValue]
     }
+
+    console.log(validDiseaseNewRes)
 
     setNewValidDiseaseList(validDiseaseNewRes);
     setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -1416,14 +1428,16 @@ export default function PatientDetails() {
   ];
 
   const navigetPageDetails = (pageTitle) => {
+    setIsLoadingDos(true);
     setActiveTabHead("file")
     setIsLoading(true);
     if (pageTitle == "Patient Data") {
       setActiveTab(1)
+      setIsLoadingDos(false);
     }
     if (pageTitle == "NON HCC") {
       setActiveTab(2)
-     
+      setIsLoadingDos(false);
 
     }
     if (pageTitle == "Radiology") {
@@ -1599,11 +1613,18 @@ export default function PatientDetails() {
                           <div className="row">
                             <div className='col-xl-12 col-sm-12'>
                               <label className="form-label">Date of Service</label>
-                              {!isLoading ?
-                                <Select onChange={(e) => dosOnChange(e)} options={dosYear} className="custom-react-select"
-                                  defaultValue={dosYearDefalutSelect}
+                              {!isLoadingDos ?
+                              <>
+                              {activeTab == 3  ?
+                               <Select onChange={(e) => dosOnChange(e)} options={dosYearRadiology} className="custom-react-select"
+                                  defaultValue={dosYearDefalutSelectRadiology}
                                   isSearchable={false}
-                                /> : null}
+                                /> : <Select onChange={(e) => dosOnChange(e)} options={dosYear} className="custom-react-select"
+                                defaultValue={dosYearDefalutSelect}
+                                isSearchable={false}
+                              />}
+                                 </>
+                               : null}
                             </div>
                             {/* <div className='col-xl-4 col-sm-12'>
                                         <label className="form-label">Encounter Type</label>
