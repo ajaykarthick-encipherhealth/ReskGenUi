@@ -141,7 +141,7 @@ export default function PatientDetails() {
 
   const [unMatchListNonHcc, setUnmatchListNonHcc] = useState([]);
   const [comboDiseaseCodesListNonHcc, setComboDiseaseCodesListNonHcc] = useState([]);
-  const [meatCriteriaListNonHcc, setMeatCriteriaLisNonHcc] = useState([]);
+  const [meatCriteriaListNonHcc, setMeatCriteriaListNonHcc] = useState([]);
   const [yearOfServiceList, setYearOfServiceList] = useState([]);
   const [isLoadingDos, setIsLoadingDos] = useState(true);
 
@@ -410,10 +410,12 @@ export default function PatientDetails() {
         var allMeatHeadColorArr = [];
         var allMeatHeadColor = [];
         var dublicateRemoveSecondArr = [];
+        var nonHccMeatListArr = [];
 
 
 
         meatCri.map((res, index) => {
+          
           if (res.monitorCapturedFromHeader != "") {
             meatMoniterHead.push({
               header: res.monitorCapturedFromHeader,
@@ -452,6 +454,28 @@ export default function PatientDetails() {
 
 
         meatCri.map((res, index) => {
+          if(res.category == "Invalid"){
+            nonHccMeatListArr.push({
+            diagnosisCode: res.diagnosisCode,
+            diseaseName: res.diseaseName,
+            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+            monitorCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.monitorCapturedFromHeader),
+            assessmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.assessmentCapturedFromHeader),
+            evaluateCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.evaluateCapturedFromHeader),
+            treatmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.treatmentCapturedFromHeader),
+            monitorColor: COLORS[index],
+            meatColor: COLORS[index],
+            assessment: res.assessment,
+            monitor: res.monitor,
+            evaluate: res.evaluate,
+            treatment: res.treatment,
+            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+            category: res.category,
+          })
+        }else{
           meatListArr.push({
             diagnosisCode: res.diagnosisCode,
             diseaseName: res.diseaseName,
@@ -470,9 +494,12 @@ export default function PatientDetails() {
             evaluate: res.evaluate,
             treatment: res.treatment,
             isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-          })
+            category: res.category,
+          });        
+        }
         })
         setMeatCriteriaList(meatListArr);
+        setMeatCriteriaListNonHcc(nonHccMeatListArr);
         setIsLoadingDos(false);
 
       } else {
@@ -1214,6 +1241,7 @@ export default function PatientDetails() {
     const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine'];
 
     var meatListArr = [];
+    var nonHccMeatListArr =[];
     var meatMoniterHead = [];
     var meatEvaluteHead = [];
     var meatAssesmentHead = [];
@@ -1263,6 +1291,28 @@ export default function PatientDetails() {
 
 
     meatCri.map((res, index) => {
+      if(res.category == "Invalid"){
+        nonHccMeatListArr.push({
+        diagnosisCode: res.diagnosisCode,
+        diseaseName: res.diseaseName,
+        monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+        assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+        evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+        treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+        monitorCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.monitorCapturedFromHeader),
+        assessmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.assessmentCapturedFromHeader),
+        evaluateCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.evaluateCapturedFromHeader),
+        treatmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.treatmentCapturedFromHeader),
+        monitorColor: COLORS[index],
+        meatColor: COLORS[index],
+        assessment: res.assessment,
+        monitor: res.monitor,
+        evaluate: res.evaluate,
+        treatment: res.treatment,
+        isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+        category: res.category,
+      })
+    }else{
       meatListArr.push({
         diagnosisCode: res.diagnosisCode,
         diseaseName: res.diseaseName,
@@ -1281,9 +1331,12 @@ export default function PatientDetails() {
         evaluate: res.evaluate,
         treatment: res.treatment,
         isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+        category: res.category,
       })
+    }
     })
     setMeatCriteriaList(meatListArr);
+    setMeatCriteriaListNonHcc(nonHccMeatListArr);
     setIsLoading(false);
 
   }  
@@ -2229,8 +2282,15 @@ export default function PatientDetails() {
                                               ? "card meat-card" : "card meat-card-false"}>
 
                                               <div className="row">
-                                                <div className="col-xl-1">
+                                                {/* <div className="col-xl-1">
                                                   <span className="font-bold">{item.diagnosisCode}</span>
+                                                </div> */}
+                                                <div className="col-xl-1 d-grid">
+                                                <span className="font-bold meat-name-details">{item.diagnosisCode}</span>
+                                                {item.category == "Valid" ?
+                                                <Badge className="valid-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-validmeat`} >{item.category}</Badge> :
+
+                                                <Badge className="valid-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-validUnmatch`}>{item.category}</Badge> }
                                                 </div>
                                                 <div className="col-xl-2">
                                                   <Popover placement="topLeft" title="Description" content={item.diseaseName}>

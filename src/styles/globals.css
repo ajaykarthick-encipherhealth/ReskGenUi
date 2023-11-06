@@ -55013,3 +55013,11 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
 .validhcc-details span{
   font-size: 13px !important;
 }
+.bg-validmeat{
+  background: #228f22 !important;
+  width: 100px;
+}
+.bg-validUnmatch{
+  background: #df4949 !important;
+  width: 100px;
+}
