@@ -1865,14 +1865,16 @@ export default function PatientDetails() {
                                                           icon={faCalendar}
                                                           style={{ color: "#918585" }}
                                                         />
+                                                        {/* {data.encounterDate} */}
                                                         22/05/2023
                                                       </Badge>
-                                                      <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                      <Popover placement="topLeft" content={ patientDocumentResult.capturedSections}>
                                                       <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer'  onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       {/* <FontAwesomeIcon
                                                           icon={faSearch}
                                                           style={{ color: "#fff" }}
                                                         /> */}
+                                                        {/* {data.capturedSections} */}
                                                         HPI
                                                       </Badge>
                                                       </Popover>
@@ -2288,9 +2290,9 @@ export default function PatientDetails() {
                                                 <div className="col-xl-1 d-grid">
                                                 <span className="font-bold meat-name-details">{item.diagnosisCode}</span>
                                                 {item.category == "Valid" ?
-                                                <Badge className="valid-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-validmeat`} >{item.category}</Badge> :
+                                                <Badge className="valid-meat badge-circle mt-2" bg={` badge-circle mt-2 bg-validmeat`} >{item.category}</Badge> :
 
-                                                <Badge className="valid-meat cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-validUnmatch`}>{item.category}</Badge> }
+                                                <Badge className="valid-meat badge-circle mt-2" bg={` badge-circle mt-2 bg-validUnmatch`}>{item.category}</Badge> }
                                                 </div>
                                                 <div className="col-xl-2">
                                                   <Popover placement="topLeft" title="Description" content={item.diseaseName}>
