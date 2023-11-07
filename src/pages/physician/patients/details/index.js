@@ -1609,11 +1609,11 @@ export default function PatientDetails() {
     }
     var data = <div className='validhcc-details'>
       {/* <Spin className='ml-2 ms-1' size="small" /> */}
-      <span>{value}</span>
-      <span>CMSHCC_ESRD_Model_Category_V21 : 115</span>
-      <span>CMSHCC_ESRD_Model_Category_V21 : 115</span>
-      <span>CMSHCC_ESRD_Model_Category_V21 : 115</span>
-      <span>CMSHCC_ESRD_Model_Category_V21 : 115</span>
+      <div>{value}</div>
+      <div>CMSHCC_ESRD_Model_Category_V21 : 115</div>
+      <div>CMSHCC_ESRD_Model_Category_V21 : 115</div>
+      <div>CMSHCC_ESRD_Model_Category_V21 : 115</div>
+      <div>CMSHCC_ESRD_Model_Category_V21 : 115</div>
 
     </div>
     setvalidHccDetails(data)
