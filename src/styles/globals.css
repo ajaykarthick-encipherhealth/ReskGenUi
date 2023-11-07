@@ -55026,3 +55026,6 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
   background: #df4949 !important;
   width: 100px;
 }
+.width-fit-content{
+  width: fit-content !important;
+}
