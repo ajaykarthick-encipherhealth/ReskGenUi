@@ -10,7 +10,7 @@ import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCheck, faAdd, faInfo, faIdBadge, faUser, faSearch, faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faCheck, faAdd, faInfo, faIdBadge, faUser, faSearch, faCalendar ,faCheckCircle} from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm, Divider, Popover, } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
@@ -1533,13 +1533,13 @@ export default function PatientDetails() {
     const response = await axios.put(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestions`,matchHccList);
    console.log(response)
      if (response?.status == 202) {
-      setSuggestedBtnTitle("add")
+      setSuggestedBtnTitle("Add")
         notification.success({
           message: "Moved suggested code to valid diseases Successfully!",
         });
         getPatientDetails(localOrgId, localTenantId);
       }else{
-        setSuggestedBtnTitle("add")
+        setSuggestedBtnTitle("Add")
       }
     console.log(matchHccList)
   }
@@ -1844,9 +1844,18 @@ export default function PatientDetails() {
                                 {activeTab == 3 ?
                                   <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
                                   : null}
-                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn">Decline</Button>
-                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn">Complete</Button>
-                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn">Save</Button>
+                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-red">
+                                <FontAwesomeIcon icon={faClose} className="me-2 mt-1" fontSize={14} />
+                                  Decline
+                                  </Button>
+                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-seven">
+                                <FontAwesomeIcon icon={faCheckCircle} className="me-2 mt-1" fontSize={14} />
+                                Complete
+                                  </Button>
+                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-five">
+                                <FontAwesomeIcon icon={faCheck} className="me-2 mt-1" fontSize={14} />
+                                Save
+                                  </Button>
 
                               </div>
 
@@ -2037,7 +2046,7 @@ export default function PatientDetails() {
                                                   </span>
                                                   {isMatchBtn ?
                                                     <div className="d-flex justify-content-center">
-                                                      <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 custom-input-group btn-primary shadow  sharp me-1 action-btn match-btn">
+                                                      <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 custom-input-group btn-primary shadow  sharp me-1 action-btn match-btn width-fit-content">
                                                         {suggestedBtnTitle}
                                                       </button>
                                                     </div> : null}

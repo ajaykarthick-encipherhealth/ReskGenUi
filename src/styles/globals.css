@@ -54684,6 +54684,9 @@ span.meat-name-details {
 .bg-bg-leven {
   background-color: #758e29 !important
 }
+.bg-bg-red {
+  background-color: red !important
+}
 
 
 img.login-logo {
@@ -54977,7 +54980,9 @@ svg.p-icon.p-sortable-column-icon {
 .saveBtn {
   border-radius: 100px !important;
   font-size: 14px !important;
-  width: 100px !important;
+  width: 120px !important;
+  height: 35px !important;
+  border: none !important;
 }
 
 #rpv-core__tooltip-body-print {
