@@ -55034,3 +55034,16 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
 .width-fit-content{
   width: fit-content !important;
 }
+.new_valid-dis.modal-valid {
+    padding: 0.8rem 0.75rem !important;
+}
+.modal-valid-active{
+  padding: 0.8rem 0.75rem !important;
+  background: #8ed2ce;
+}
+.modal-valid-container {
+  border: 1px solid #cdd2e3;
+  padding: 10px;
+  border-radius: 10px;
+  margin-right: 10px;
+}

@@ -10,7 +10,7 @@ import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCheck, faAdd, faInfo, faIdBadge, faUser, faSearch, faCalendar ,faCheckCircle} from "@fortawesome/free-solid-svg-icons";
+import { faClose, faCheck, faAdd, faInfo, faIdBadge, faUser, faSearch, faCalendar, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm, Divider, Popover, } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
@@ -64,6 +64,8 @@ export default function PatientDetails() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
+  const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
+
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [confirmNotesModalInValid, setConfirmNotesModalInValid] = useState(false);
 
@@ -133,7 +135,7 @@ export default function PatientDetails() {
     year: "",
     name: "",
     patientId: "",
-    notes:""
+    notes: ""
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -155,6 +157,9 @@ export default function PatientDetails() {
   const [selectedDosValue, setSelectedDosValue] = useState('');
   const [suggestedBtnTitle, setSuggestedBtnTitle] = useState('Add');
   const [selectInvalidDetails, setSelectInvalidDetails] = useState(false);
+  const [selectActiveCode, setSelectActiveCode] = useState('');
+
+
 
 
 
@@ -950,7 +955,7 @@ export default function PatientDetails() {
       setTimeout(() => resolve(null), 1000);
     });
 
-  const onchangeValid = (code,data) => {
+  const onchangeValid = (code, data) => {
     setSelectDiseasesName(code);
     setSelectInvalidDetails(data)
   };
@@ -1106,6 +1111,7 @@ export default function PatientDetails() {
     setConfirmNotesModalInValid(false);
     setIsModalOpenRadiology(false);
     setSuggestedModal(false);
+    setIsModalOpenValidCodes(false);
   };
   const handleOpenModal = (value, disDescription) => {
     var splitPoint = disDescription.substring(' ', 40);
@@ -1127,25 +1133,45 @@ export default function PatientDetails() {
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
-  const handleOpenModalCombinationCode = (value, disDescription) => {
-    // console.log(value)
-    var splitPoint = disDescription.substring(' ', 20);
-    // console.log(splitPoint)
-    setTimeout(() => {
-      highlight({
-        keyword: splitPoint,
-        matchCase: true,
-        // wholeWords:true
-      });
+  const handleOpenModalCombinationCode = (value, disDescription,check) => {
+    console.log(check)
+    if(check === "valid"){
+      setSelectActiveCode(value);
+      var splitPoint = '';
+         splitPoint = disDescription;
+      setTimeout(() => {
+        highlight({
+          keyword: splitPoint,
+          matchCase: true,
+          wholeWords:true
+        });
+        var dataset = value + " - (" + disDescription + ")"
+        setSelectMeatName(dataset);
+      }, 2000);
+      setDocumentLoaded(true);
       var dataset = value + " - (" + disDescription + ")"
-      setSelectMeatName(dataset);
-    }, 2000);
-    setDocumentLoaded(true);
-    var dataset = value + " - (" + disDescription + ")"
-    // setSelectMeatName(dataset);
-    setSelectMeatName(dataset + " -  " + "Loading...");
-    setIsLoadingSection(true);
+      setSelectMeatName(dataset + " -  " + "Loading...");
+      setIsLoadingSection(true);
+      setIsModalOpenValidCodes(true);
+   }else{
+    setSelectActiveCode(value);
+      var splitPoint = '';
+      splitPoint = disDescription.substring(' ', 20);
+      setTimeout(() => {
+        highlight({
+          keyword: splitPoint,
+          matchCase: true,
+          // wholeWords:true
+        });
+        var dataset = value + " - (" + disDescription + ")"
+        setSelectMeatName(dataset);
+      }, 2000);
+      setDocumentLoaded(true);
+      var dataset = value + " - (" + disDescription + ")"
+      setSelectMeatName(dataset + " -  " + "Loading...");
+      setIsLoadingSection(true);
     setIsModalOpen(true);
+   }
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
@@ -1221,7 +1247,7 @@ export default function PatientDetails() {
     setValidated(true)
   }
 
-  
+
   const handleSubmitSuggestedNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -1491,7 +1517,7 @@ export default function PatientDetails() {
         1000);
     });
 
-  const handleMatchHcc = (event, value,code) => {
+  const handleMatchHcc = (event, value, code) => {
     var checked = event.target.checked;
     setSuggestedSelectValue(value);
     setSuggestedSelectCode(code)
@@ -1499,7 +1525,7 @@ export default function PatientDetails() {
     // setSuggestedModal(true);
     if (checked == true) {
       console.log(value)
-          // setSuggestedModal(true);
+      // setSuggestedModal(true);
 
       // var newArray = [];
       // var namePush = [];
@@ -1524,23 +1550,23 @@ export default function PatientDetails() {
       setMatchHccList(removeArr);
     }
     // if (newArray.length != 0) {
-      setIsMatchBtn(true);
+    setIsMatchBtn(true);
     // }
   }
 
   const handleSubmitMatchHcc = async () => {
     setSuggestedBtnTitle("Loading")
-    const response = await axios.put(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestions`,matchHccList);
-   console.log(response)
-     if (response?.status == 202) {
+    const response = await axios.put(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestions`, matchHccList);
+    console.log(response)
+    if (response?.status == 202) {
       setSuggestedBtnTitle("Add")
-        notification.success({
-          message: "Moved suggested code to valid diseases Successfully!",
-        });
-        getPatientDetails(localOrgId, localTenantId);
-      }else{
-        setSuggestedBtnTitle("Add")
-      }
+      notification.success({
+        message: "Moved suggested code to valid diseases Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+      setSuggestedBtnTitle("Add")
+    }
     console.log(matchHccList)
   }
 
@@ -1733,16 +1759,49 @@ export default function PatientDetails() {
       "notes": inputValue.notes,
       "dos": selectedDosValue
     }
-    const response = await axios.post(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/valid`,dataFormatSuggested);
-   console.log(response)
-     if (response?.status == 202) {
-        notification.success({
-          message: "Moved valid diseases Successfully!",
-        });
-        getPatientDetails(localOrgId, localTenantId);
-      }else{
-      }
+    const response = await axios.post(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/valid`, dataFormatSuggested);
+    console.log(response)
+    if (response?.status == 202) {
+      notification.success({
+        message: "Moved valid diseases Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
   }
+
+  const activeValidDisCode = async (code,disDescription) => {
+    setSelectActiveCode(code)
+    var splitPoint = disDescription.substring(' ', 20);
+    
+    setTimeout(() => {
+      highlight({
+        keyword: disDescription,
+        matchCase: true,
+        wholeWords:true
+      });
+      var dataset = code + " - (" + disDescription + ")"
+      setSelectMeatName(dataset);
+    }, 2000);
+    setDocumentLoaded(true);
+    var dataset = code + " - (" + disDescription + ")"
+    setSelectMeatName(dataset + " -  " + "Loading...");
+   
+  }
+
+  const replaceString = (value) => {
+    console.log(value)
+    var removeComma = null;
+    if(value != null){
+     removeComma=  value.replace(/,/g, "");
+    console.log(removeComma)
+    }
+    return removeComma
+
+  }
+
+
+ 
 
 
   return (
@@ -1845,17 +1904,17 @@ export default function PatientDetails() {
                                   <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
                                   : null}
                                 <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-red">
-                                <FontAwesomeIcon icon={faClose} className="me-2 mt-1" fontSize={14} />
+                                  <FontAwesomeIcon icon={faClose} className="me-2 mt-1" fontSize={14} />
                                   Decline
-                                  </Button>
+                                </Button>
                                 <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-seven">
-                                <FontAwesomeIcon icon={faCheckCircle} className="me-2 mt-1" fontSize={14} />
-                                Complete
-                                  </Button>
+                                  <FontAwesomeIcon icon={faCheckCircle} className="me-2 mt-1" fontSize={14} />
+                                  Complete
+                                </Button>
                                 <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-five">
-                                <FontAwesomeIcon icon={faCheck} className="me-2 mt-1" fontSize={14} />
-                                Save
-                                  </Button>
+                                  <FontAwesomeIcon icon={faCheck} className="me-2 mt-1" fontSize={14} />
+                                  Save
+                                </Button>
 
                               </div>
 
@@ -1991,25 +2050,26 @@ export default function PatientDetails() {
                                                         </Popconfirm>
                                                       </div>
                                                       <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                        {/* <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
+                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
                                                       <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
                                                       <FontAwesomeIcon
                                                           icon={faUser}
                                                           style={{ color: "#918585" }}
                                                         />
-                                                       { patientDocumentResult.patientName}
+                                                       {patientDocumentResult.patientName}
                                                       </Badge>
-                                                      </Popover> */}
+                                                      </Popover>
                                                         <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
                                                           <FontAwesomeIcon
                                                             icon={faCalendar}
                                                             style={{ color: "#918585" }}
                                                           />
-                                                          {data.encounterDate}
+                                                          {/* {data.encounterDate} */}
+                                                          {replaceString(data.encounterDate)}
                                                           {/* 22/05/2023 */}
                                                         </Badge>
                                                         <Popover placement="topLeft" content={data.capturedSections}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription,"valid")}>
                                                             {/* <FontAwesomeIcon
                                                           icon={faSearch}
                                                           style={{ color: "#fff" }}
@@ -2052,74 +2112,74 @@ export default function PatientDetails() {
                                                     </div> : null}
                                                 </div>
                                                 {unMatchResList?.map((data) => {
-                                          return (
-                                            <>
-                                                { data.isHccValid == true  ?
-                                                  <li>
-                                                    <div className="timeline-panel d-block invalid-disease">
-                                                      <div className="media-body">
-                                                        <span className="mb-1 disease-name">
-                                                          {data.actualDescription}
-                                                        </span>
-                                                      </div>
-                                                      {/* <div className="form-check custom-checkbox">
+                                                  return (
+                                                    <>
+                                                      {data.isHccValid == true ?
+                                                        <li>
+                                                          <div className="timeline-panel d-block invalid-disease">
+                                                            <div className="media-body">
+                                                              <span className="mb-1 disease-name">
+                                                                {data.actualDescription}
+                                                              </span>
+                                                            </div>
+                                                            {/* <div className="form-check custom-checkbox">
                                                       <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div> */}
-                                                      <div className="media-body d-flex">
-                                                        {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
-                                                          <div className="form-check custom-checkbox unmatch-check">
-                                                            <div>
-                                                            <Popconfirm
-                                                          title="You want move to valid?"
-                                                          description={data.diagnosisCodeDocument}
-                                                          onConfirm={onchangeSuggested}
-                                                          placement="rightTop"
-                                                          okText="Yes"
-                                                          cancelText="No"                                                         
-                                                        >
-                                                        <input onChange={(e) => { handleMatchHcc(e, data,data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
+                                                            <div className="media-body d-flex">
+                                                              {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
+                                                                <div className="form-check custom-checkbox unmatch-check">
+                                                                  <div>
+                                                                    <Popconfirm
+                                                                      title="You want move to valid?"
+                                                                      description={data.diagnosisCodeDocument}
+                                                                      onConfirm={onchangeSuggested}
+                                                                      placement="rightTop"
+                                                                      okText="Yes"
+                                                                      cancelText="No"
+                                                                    >
+                                                                      <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
 
-                                                        </Popconfirm>
+                                                                    </Popconfirm>
 
-                                                            </div>
-                                                            <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
-                                                              <span className="disease-name">
-                                                                {data.diagnosisCodeDocument}
-                                                              </span>
-                                                            </Popover>
-                                                            {/* <span className="disease-name">
+                                                                  </div>
+                                                                  <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
+                                                                    <span className="disease-name">
+                                                                      {data.diagnosisCodeDocument}
+                                                                    </span>
+                                                                  </Popover>
+                                                                  {/* <span className="disease-name">
                                                             {data.diagnosisCodeDocument}
                                                           </span> */}
 
-                                                          </div> : null}
-                                                        {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
-                                                          <div className="form-check custom-checkbox unmatch-check ms-3">
-                                                            <div>
-                                                            <Popconfirm
-                                                          title="You want move to valid?"
-                                                          description={data.diagnosisCodeDocument}
-                                                          onConfirm={onchangeSuggested}
-                                                          placement="rightTop"
-                                                          okText="Yes"
-                                                          cancelText="No"                                                         
-                                                        >
-                                                              <input onChange={(e) => { handleMatchHcc(e, data,data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
-                                                              </Popconfirm>
-                                                            </div>
-                                                            <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
-                                                              <span className="disease-name">
-                                                                {data.diagnosisCodeFinding}
-                                                              </span>
-                                                            </Popover>
+                                                                </div> : null}
+                                                              {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
+                                                                <div className="form-check custom-checkbox unmatch-check ms-3">
+                                                                  <div>
+                                                                    <Popconfirm
+                                                                      title="You want move to valid?"
+                                                                      description={data.diagnosisCodeDocument}
+                                                                      onConfirm={onchangeSuggested}
+                                                                      placement="rightTop"
+                                                                      okText="Yes"
+                                                                      cancelText="No"
+                                                                    >
+                                                                      <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
+                                                                    </Popconfirm>
+                                                                  </div>
+                                                                  <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
+                                                                    <span className="disease-name">
+                                                                      {data.diagnosisCodeFinding}
+                                                                    </span>
+                                                                  </Popover>
 
-                                                          </div> : null}
-                                                      </div>
-                                                    </div>
-                                                  </li>
-                                                 :null}
-                                                  
-                                                  
-                                                   </>
+                                                                </div> : null}
+                                                            </div>
+                                                          </div>
+                                                        </li>
+                                                        : null}
+
+
+                                                    </>
                                                   );
                                                 })}
                                               </ul>
@@ -3018,58 +3078,58 @@ export default function PatientDetails() {
                                                     //       </div>
                                                     //     </Popconfirm>
                                                     //   </div>
-                                                      
+
                                                     // </li>
                                                     <li>
-                                                    <div className="new_valid-dis">
-                                                      <div className="timeline-panel">
-                                                        <div className="media-body">
-                                                          <span className="mb-1 disease-name d-flex" >
-                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                          </span>
-                                                        </div>
-
-
-                                                        <Popconfirm
-                                                          title="You want move to valid?"
-                                                          description={data.diagnosisCode}
-                                                          onConfirm={confirmInvalid}
-                                                          placement="leftTop"
-                                                          okText="Yes"
-                                                          cancelText="No"
-                                                          onOpenChange={() =>
-                                                            onchangeValid(data.diagnosisCode,data)
-                                                          }
-                                                        >
-                                                          <div className="icon-box  bg-danger-light me-1">
-                                                            <FontAwesomeIcon
-                                                              icon={faCheck}
-                                                              style={{ color: "orange" }}
-                                                            />
+                                                      <div className="new_valid-dis">
+                                                        <div className="timeline-panel">
+                                                          <div className="media-body">
+                                                            <span className="mb-1 disease-name d-flex" >
+                                                              <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                            </span>
                                                           </div>
-                                                        </Popconfirm>
-                                                      </div>
-                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                       
-                                                        <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
-                                                          <FontAwesomeIcon
-                                                            icon={faCalendar}
-                                                            style={{ color: "#918585" }}
-                                                          />
-                                                          {data.encounterDate}
-                                                        </Badge>
-                                                        <Popover placement="topLeft" content={data.capturedSections}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
-                                                           
-                                                            {data.capturedSections}
+
+
+                                                          <Popconfirm
+                                                            title="You want move to valid?"
+                                                            description={data.diagnosisCode}
+                                                            onConfirm={confirmInvalid}
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(data.diagnosisCode, data)
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faCheck}
+                                                                style={{ color: "orange" }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
+                                                        </div>
+                                                        <div className="d-flex justify-content-sm-between valid-providerdocument ">
+
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                            <FontAwesomeIcon
+                                                              icon={faCalendar}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {data.encounterDate}
                                                           </Badge>
-                                                        </Popover>
+                                                          <Popover placement="topLeft" content={data.capturedSections}>
+                                                            <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
+
+                                                              {data.capturedSections}
+                                                            </Badge>
+                                                          </Popover>
+                                                        </div>
                                                       </div>
-                                                    </div>
 
-                                                  </li>
+                                                    </li>
 
-                                                    
+
                                                   ))}
                                                 </ul>
 
@@ -3093,75 +3153,75 @@ export default function PatientDetails() {
                                                       </div> : null}
                                                   </div>
                                                   {unMatchResList?.map((data) => {
-                                          return (
-                                            <>
-                                                  { data.isHccValid == false ||  data.isHccValid == null  ?
-                                                  <li>
-                                                    <div className="timeline-panel d-block invalid-disease">
-                                                      <div className="media-body">
-                                                        <span className="mb-1 disease-name">
-                                                          {data.actualDescription}
-                                                        </span>
-                                                      </div>
-                                                      {/* <div className="form-check custom-checkbox">
+                                                    return (
+                                                      <>
+                                                        {data.isHccValid == false || data.isHccValid == null ?
+                                                          <li>
+                                                            <div className="timeline-panel d-block invalid-disease">
+                                                              <div className="media-body">
+                                                                <span className="mb-1 disease-name">
+                                                                  {data.actualDescription}
+                                                                </span>
+                                                              </div>
+                                                              {/* <div className="form-check custom-checkbox">
                                                       <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div> */}
-                                                      <div className="media-body d-flex">
-                                                        {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
-                                                          <div className="form-check custom-checkbox unmatch-check">
-                                                            <div>
-                                                            <Popconfirm
-                                                          title="You want move to valid?"
-                                                          description={data.diagnosisCodeDocument}
-                                                          onConfirm={onchangeSuggested}
-                                                          placement="rightTop"
-                                                          okText="Yes"
-                                                          cancelText="No"                                                         
-                                                        >
-                                                        <input onChange={(e) => { handleMatchHcc(e, data,data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
+                                                              <div className="media-body d-flex">
+                                                                {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
+                                                                  <div className="form-check custom-checkbox unmatch-check">
+                                                                    <div>
+                                                                      <Popconfirm
+                                                                        title="You want move to valid?"
+                                                                        description={data.diagnosisCodeDocument}
+                                                                        onConfirm={onchangeSuggested}
+                                                                        placement="rightTop"
+                                                                        okText="Yes"
+                                                                        cancelText="No"
+                                                                      >
+                                                                        <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
 
-                                                        </Popconfirm>
+                                                                      </Popconfirm>
 
-                                                            </div>
-                                                            <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
-                                                              <span className="disease-name">
-                                                                {data.diagnosisCodeDocument}
-                                                              </span>
-                                                            </Popover>
-                                                            {/* <span className="disease-name">
+                                                                    </div>
+                                                                    <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
+                                                                      <span className="disease-name">
+                                                                        {data.diagnosisCodeDocument}
+                                                                      </span>
+                                                                    </Popover>
+                                                                    {/* <span className="disease-name">
                                                             {data.diagnosisCodeDocument}
                                                           </span> */}
 
-                                                          </div> : null}
-                                                        {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
-                                                          <div className="form-check custom-checkbox unmatch-check ms-3">
-                                                            <div>
-                                                            <Popconfirm
-                                                          title="You want move to valid?"
-                                                          description={data.diagnosisCodeDocument}
-                                                          onConfirm={onchangeSuggested}
-                                                          placement="rightTop"
-                                                          okText="Yes"
-                                                          cancelText="No"                                                         
-                                                        >
-                                                              <input onChange={(e) => { handleMatchHcc(e,data, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
-                                                              </Popconfirm>
-                                                            </div>
-                                                            <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
-                                                              <span className="disease-name">
-                                                                {data.diagnosisCodeFinding}
-                                                              </span>
-                                                            </Popover>
+                                                                  </div> : null}
+                                                                {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
+                                                                  <div className="form-check custom-checkbox unmatch-check ms-3">
+                                                                    <div>
+                                                                      <Popconfirm
+                                                                        title="You want move to valid?"
+                                                                        description={data.diagnosisCodeDocument}
+                                                                        onConfirm={onchangeSuggested}
+                                                                        placement="rightTop"
+                                                                        okText="Yes"
+                                                                        cancelText="No"
+                                                                      >
+                                                                        <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
+                                                                      </Popconfirm>
+                                                                    </div>
+                                                                    <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
+                                                                      <span className="disease-name">
+                                                                        {data.diagnosisCodeFinding}
+                                                                      </span>
+                                                                    </Popover>
 
-                                                          </div> : null}
-                                                      </div>
-                                                    </div>
-                                                  </li>
-                                                  
-                                                   :null}
-                                                   </>
-                                                  );
-                                                })}
+                                                                  </div> : null}
+                                                              </div>
+                                                            </div>
+                                                          </li>
+
+                                                          : null}
+                                                      </>
+                                                    );
+                                                  })}
                                                 </ul>
                                               </div>
                                               <div className="col-xl-4">
@@ -4765,6 +4825,201 @@ export default function PatientDetails() {
                     height={400}
                   >
                     <div className="section-container">
+                      <div className="row">
+                        <div className="col-xl-12">
+                          <div
+                            className="rpv-core__viewer"
+                            style={{
+                              border: '1px solid rgba(0, 0, 0, 0.3)',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              margin: "0 82px 10px 73px"
+                            }}
+                          >
+
+                            <div
+                              style={{
+                                alignItems: 'center',
+                                backgroundColor: '#eeeeee',
+                                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                padding: '4px',
+                              }}
+                            >
+                              <Search>
+                                {(renderSearchProps) => {
+                                  const [readyToSearch, setReadyToSearch] = useState(false);
+                                  return (
+                                    <>
+                                      <div
+                                        style={{
+                                          border: '1px solid rgba(0, 0, 0, 0.3)',
+                                          display: 'flex',
+                                          padding: '0 2px',
+                                        }}
+                                      >
+                                        <input
+                                          style={{
+                                            border: 'none',
+                                            padding: '8px',
+                                            width: '200px',
+                                          }}
+                                          placeholder="Enter to search"
+                                          type="text"
+                                          value={renderSearchProps.keyword}
+                                          onChange={(e) => {
+                                            setReadyToSearch(false);
+                                            renderSearchProps.setKeyword(e.target.value);
+                                          }}
+                                          onKeyDown={(e) => {
+                                            if (e.keyCode === 13 && renderSearchProps.keyword) {
+                                              setReadyToSearch(true);
+                                              renderSearchProps.search();
+                                            }
+                                          }}
+                                        />
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <button
+                                              style={{
+                                                background: '#fff',
+                                                border: 'none',
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase ? 'blue' : 'transparent'
+                                                  }`,
+                                                height: '100%',
+                                                padding: '0 2px',
+                                              }}
+                                              onClick={() =>
+                                                renderSearchProps.changeMatchCase(!renderSearchProps.matchCase)
+                                              }
+                                            >
+                                              <Icon>
+                                                <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
+                                                <path d="M4.383 14.725L13.59 14.725" />
+                                                <path d="M0.5 21.725L3.52 21.725" />
+                                                <path d="M14.479 21.725L17.5 21.725" />
+                                                <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
+                                                <path d="M16.92 16.725L20.794 16.725" />
+                                                <path d="M21.516 21.725L23.5 21.725" />
+                                              </Icon>
+                                            </button>
+                                          }
+                                          content={() => 'Match case'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <button
+                                              style={{
+                                                background: '#fff',
+                                                border: 'none',
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords ? 'blue' : 'transparent'
+                                                  }`,
+                                                height: '100%',
+                                                padding: '0 2px',
+                                              }}
+                                              onClick={() =>
+                                                renderSearchProps.changeWholeWords(!renderSearchProps.wholeWords)
+                                              }
+                                            >
+                                              <Icon>
+                                                <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
+                                                <path d="M3.5 9.498L3.5 14.498" />
+                                              </Icon>
+                                            </button>
+                                          }
+                                          content={() => 'Match whole word'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                      {readyToSearch &&
+                                        renderSearchProps.keyword &&
+                                        renderSearchProps.numberOfMatches === 0 && (
+                                          <div style={{ padding: '0 8px' }}>Not found</div>
+                                        )}
+                                      {readyToSearch &&
+                                        renderSearchProps.keyword &&
+                                        renderSearchProps.numberOfMatches > 0 && (
+                                          <div style={{ padding: '0 8px' }}>
+                                            {renderSearchProps.currentMatch} of {renderSearchProps.numberOfMatches}
+                                          </div>
+                                        )}
+                                      <div style={{ padding: '0 2px' }}>
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <MinimalButton onClick={renderSearchProps.jumpToPreviousMatch}>
+                                              <PreviousIcon />
+                                            </MinimalButton>
+                                          }
+                                          content={() => 'Previous match'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                      <div style={{ padding: '0 2px' }}>
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <MinimalButton onClick={renderSearchProps.jumpToNextMatch}>
+                                              <NextIcon />
+                                            </MinimalButton>
+                                          }
+                                          content={() => 'Next match'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                    </>
+                                  );
+                                }}
+                              </Search>
+                            </div>
+                          </div>
+                          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                            <div
+                              style={{
+                                height: "400px",
+                                // width: "1000px",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                              }}
+                            >
+                              {" "}
+                              <Viewer
+                                fileUrl={selectFileURL}
+                                plugins={[searchPluginInstance]}
+                                onDocumentLoad={handleDocumentLoad}
+                              />
+                            </div>
+                          </Worker>
+                        </div>
+                        {/* <div className="col-xl-4">
+                          <ul className="timeline">
+                          <div className="modal-valid-container">
+                            {newValidDiseaseList.map((data, i) => (
+                              <li>
+                              
+
+                                
+                                <div onClick={() => activeValidDisCode(data.diagnosisCode, data.actualDescription)} className={selectActiveCode == data.diagnosisCode ? "new_valid-dis cr-pointer modal-valid-active" : "new_valid-dis cr-pointer modal-valid" }>
+                                  <div className="timeline-panel">
+                                    <div className="media-body">
+                                      <span className="mb-1 disease-name d-flex" >
+                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                              </li>
+                            ))}
+                                                            </div>
+                          </ul>
+                        </div> */}
+
+                      </div>
                       {/* <button onClick={changeSearch}>Check
         
         </button> */}
@@ -4804,173 +5059,220 @@ export default function PatientDetails() {
             <ShowSearchPopoverButton />
         </div>
         </div> */}
-                      <div
-                        className="rpv-core__viewer"
-                        style={{
-                          border: '1px solid rgba(0, 0, 0, 0.3)',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          height: '100%',
-                          margin: "0 82px 10px 73px"
-                        }}
-                      >
 
-                        <div
-                          style={{
-                            alignItems: 'center',
-                            backgroundColor: '#eeeeee',
-                            borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-                            display: 'flex',
-                            padding: '4px',
-                          }}
-                        >
-                          <Search>
-                            {(renderSearchProps) => {
-                              const [readyToSearch, setReadyToSearch] = useState(false);
-                              return (
-                                <>
-                                  <div
-                                    style={{
-                                      border: '1px solid rgba(0, 0, 0, 0.3)',
-                                      display: 'flex',
-                                      padding: '0 2px',
-                                    }}
-                                  >
-                                    <input
-                                      style={{
-                                        border: 'none',
-                                        padding: '8px',
-                                        width: '200px',
-                                      }}
-                                      placeholder="Enter to search"
-                                      type="text"
-                                      value={renderSearchProps.keyword}
-                                      onChange={(e) => {
-                                        setReadyToSearch(false);
-                                        renderSearchProps.setKeyword(e.target.value);
-                                      }}
-                                      onKeyDown={(e) => {
-                                        if (e.keyCode === 13 && renderSearchProps.keyword) {
-                                          setReadyToSearch(true);
-                                          renderSearchProps.search();
-                                        }
-                                      }}
-                                    />
-                                    <Tooltip
-                                      position={Position.BottomCenter}
-                                      target={
-                                        <button
-                                          style={{
-                                            background: '#fff',
-                                            border: 'none',
-                                            borderBottom: `2px solid ${renderSearchProps.matchCase ? 'blue' : 'transparent'
-                                              }`,
-                                            height: '100%',
-                                            padding: '0 2px',
-                                          }}
-                                          onClick={() =>
-                                            renderSearchProps.changeMatchCase(!renderSearchProps.matchCase)
-                                          }
-                                        >
-                                          <Icon>
-                                            <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
-                                            <path d="M4.383 14.725L13.59 14.725" />
-                                            <path d="M0.5 21.725L3.52 21.725" />
-                                            <path d="M14.479 21.725L17.5 21.725" />
-                                            <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
-                                            <path d="M16.92 16.725L20.794 16.725" />
-                                            <path d="M21.516 21.725L23.5 21.725" />
-                                          </Icon>
-                                        </button>
-                                      }
-                                      content={() => 'Match case'}
-                                      offset={{ left: 0, top: 8 }}
-                                    />
-                                    <Tooltip
-                                      position={Position.BottomCenter}
-                                      target={
-                                        <button
-                                          style={{
-                                            background: '#fff',
-                                            border: 'none',
-                                            borderBottom: `2px solid ${renderSearchProps.wholeWords ? 'blue' : 'transparent'
-                                              }`,
-                                            height: '100%',
-                                            padding: '0 2px',
-                                          }}
-                                          onClick={() =>
-                                            renderSearchProps.changeWholeWords(!renderSearchProps.wholeWords)
-                                          }
-                                        >
-                                          <Icon>
-                                            <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
-                                            <path d="M3.5 9.498L3.5 14.498" />
-                                          </Icon>
-                                        </button>
-                                      }
-                                      content={() => 'Match whole word'}
-                                      offset={{ left: 0, top: 8 }}
-                                    />
-                                  </div>
-                                  {readyToSearch &&
-                                    renderSearchProps.keyword &&
-                                    renderSearchProps.numberOfMatches === 0 && (
-                                      <div style={{ padding: '0 8px' }}>Not found</div>
-                                    )}
-                                  {readyToSearch &&
-                                    renderSearchProps.keyword &&
-                                    renderSearchProps.numberOfMatches > 0 && (
-                                      <div style={{ padding: '0 8px' }}>
-                                        {renderSearchProps.currentMatch} of {renderSearchProps.numberOfMatches}
-                                      </div>
-                                    )}
-                                  <div style={{ padding: '0 2px' }}>
-                                    <Tooltip
-                                      position={Position.BottomCenter}
-                                      target={
-                                        <MinimalButton onClick={renderSearchProps.jumpToPreviousMatch}>
-                                          <PreviousIcon />
-                                        </MinimalButton>
-                                      }
-                                      content={() => 'Previous match'}
-                                      offset={{ left: 0, top: 8 }}
-                                    />
-                                  </div>
-                                  <div style={{ padding: '0 2px' }}>
-                                    <Tooltip
-                                      position={Position.BottomCenter}
-                                      target={
-                                        <MinimalButton onClick={renderSearchProps.jumpToNextMatch}>
-                                          <NextIcon />
-                                        </MinimalButton>
-                                      }
-                                      content={() => 'Next match'}
-                                      offset={{ left: 0, top: 8 }}
-                                    />
-                                  </div>
-                                </>
-                              );
+
+                    </div>
+                  </Modal>
+                )}
+                 {isModalOpenValidCodes && (
+                  <Modal
+                    title={selectMeatName}
+                    // title="Pdf Test"
+                    centered
+                    open={isModalOpenValidCodes}
+                    // style={{ top: 5 }}
+                    onOk={handleCloseModal}
+                    onCancel={handleCloseModal}
+                    width={1300}
+                    height={400}
+                  >
+                    <div className="section-container">
+                      <div className="row">
+                        <div className="col-xl-8">
+                          <div
+                            className="rpv-core__viewer"
+                            style={{
+                              border: '1px solid rgba(0, 0, 0, 0.3)',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              margin: "0 82px 10px 73px"
                             }}
-                          </Search>
+                          >
+
+                            <div
+                              style={{
+                                alignItems: 'center',
+                                backgroundColor: '#eeeeee',
+                                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                padding: '4px',
+                              }}
+                            >
+                              <Search>
+                                {(renderSearchProps) => {
+                                  const [readyToSearch, setReadyToSearch] = useState(false);
+                                  return (
+                                    <>
+                                      <div
+                                        style={{
+                                          border: '1px solid rgba(0, 0, 0, 0.3)',
+                                          display: 'flex',
+                                          padding: '0 2px',
+                                        }}
+                                      >
+                                        <input
+                                          style={{
+                                            border: 'none',
+                                            padding: '8px',
+                                            width: '200px',
+                                          }}
+                                          placeholder="Enter to search"
+                                          type="text"
+                                          value={renderSearchProps.keyword}
+                                          onChange={(e) => {
+                                            setReadyToSearch(false);
+                                            renderSearchProps.setKeyword(e.target.value);
+                                          }}
+                                          onKeyDown={(e) => {
+                                            if (e.keyCode === 13 && renderSearchProps.keyword) {
+                                              setReadyToSearch(true);
+                                              renderSearchProps.search();
+                                            }
+                                          }}
+                                        />
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <button
+                                              style={{
+                                                background: '#fff',
+                                                border: 'none',
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase ? 'blue' : 'transparent'
+                                                  }`,
+                                                height: '100%',
+                                                padding: '0 2px',
+                                              }}
+                                              onClick={() =>
+                                                renderSearchProps.changeMatchCase(!renderSearchProps.matchCase)
+                                              }
+                                            >
+                                              <Icon>
+                                                <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
+                                                <path d="M4.383 14.725L13.59 14.725" />
+                                                <path d="M0.5 21.725L3.52 21.725" />
+                                                <path d="M14.479 21.725L17.5 21.725" />
+                                                <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
+                                                <path d="M16.92 16.725L20.794 16.725" />
+                                                <path d="M21.516 21.725L23.5 21.725" />
+                                              </Icon>
+                                            </button>
+                                          }
+                                          content={() => 'Match case'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <button
+                                              style={{
+                                                background: '#fff',
+                                                border: 'none',
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords ? 'blue' : 'transparent'
+                                                  }`,
+                                                height: '100%',
+                                                padding: '0 2px',
+                                              }}
+                                              onClick={() =>
+                                                renderSearchProps.changeWholeWords(!renderSearchProps.wholeWords)
+                                              }
+                                            >
+                                              <Icon>
+                                                <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
+                                                <path d="M3.5 9.498L3.5 14.498" />
+                                              </Icon>
+                                            </button>
+                                          }
+                                          content={() => 'Match whole word'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                      {readyToSearch &&
+                                        renderSearchProps.keyword &&
+                                        renderSearchProps.numberOfMatches === 0 && (
+                                          <div style={{ padding: '0 8px' }}>Not found</div>
+                                        )}
+                                      {readyToSearch &&
+                                        renderSearchProps.keyword &&
+                                        renderSearchProps.numberOfMatches > 0 && (
+                                          <div style={{ padding: '0 8px' }}>
+                                            {renderSearchProps.currentMatch} of {renderSearchProps.numberOfMatches}
+                                          </div>
+                                        )}
+                                      <div style={{ padding: '0 2px' }}>
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <MinimalButton onClick={renderSearchProps.jumpToPreviousMatch}>
+                                              <PreviousIcon />
+                                            </MinimalButton>
+                                          }
+                                          content={() => 'Previous match'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                      <div style={{ padding: '0 2px' }}>
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <MinimalButton onClick={renderSearchProps.jumpToNextMatch}>
+                                              <NextIcon />
+                                            </MinimalButton>
+                                          }
+                                          content={() => 'Next match'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                    </>
+                                  );
+                                }}
+                              </Search>
+                            </div>
+                          </div>
+                          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                            <div
+                              style={{
+                                height: "400px",
+                                // width: "1000px",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                              }}
+                            >
+                              {" "}
+                              <Viewer
+                                fileUrl={selectFileURL}
+                                plugins={[searchPluginInstance]}
+                                onDocumentLoad={handleDocumentLoad}
+                              />
+                            </div>
+                          </Worker>
                         </div>
+                        <div className="col-xl-4">
+                          <ul className="timeline">
+                          <div className="modal-valid-container">
+                            {newValidDiseaseList.map((data, i) => (
+                              <li>
+                              
+
+                                
+                                <div onClick={() => activeValidDisCode(data.diagnosisCode, data.actualDescription)} className={selectActiveCode == data.diagnosisCode ? "new_valid-dis cr-pointer modal-valid-active" : "new_valid-dis cr-pointer modal-valid" }>
+                                  <div className="timeline-panel">
+                                    <div className="media-body">
+                                      <span className="mb-1 disease-name d-flex" >
+                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                              </li>
+                            ))}
+                                                            </div>
+                          </ul>
+                        </div>
+
                       </div>
-                      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                        <div
-                          style={{
-                            height: "400px",
-                            maxWidth: "1300px",
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                          }}
-                        >
-                          {" "}
-                          <Viewer
-                            fileUrl={selectFileURL}
-                            plugins={[searchPluginInstance]}
-                            onDocumentLoad={handleDocumentLoad}
-                          />
-                        </div>
-                      </Worker>
+
 
                     </div>
                   </Modal>
