@@ -54985,8 +54985,25 @@ svg.p-icon.p-sortable-column-icon {
   width: 120px !important;
   height: 35px !important;
   border: none !important;
+  background-color:#4338ca !important;
+}
+.decline-btn{
+  border-radius: 100px !important;
+  font-size: 14px !important;
+  width: 120px !important;
+  height: 35px !important;
+  border: none !important;
+  background-color:red !important;
 }
 
+.complted-btn {
+  border-radius: 100px !important;
+  font-size: 14px !important;
+  width: 120px !important;
+  height: 35px !important;
+  border: none !important;
+  background-color:#2b7671 !important;
+}
 #rpv-core__tooltip-body-print {
     display: none;
 }

@@ -163,6 +163,8 @@ export default function PatientDetails() {
   const [selectActiveCode, setSelectActiveCode] = useState('');
   const [labReportValidList, setLabReportValidList] = useState([]);
   const [labReportFile, setLabReportFile] = useState([]);
+  const [suggestedHccList, setSuggestedHccList] = useState([]);
+  const [suggestedNonHccList, setSuggestedNonHccList] = useState([]);
 
 
 
@@ -305,6 +307,8 @@ export default function PatientDetails() {
         var validDiseaseNewRes = [];
         var invalidDiseaseNewRes = [];
         var unMatchRes = [];
+        var unMatchResHcc = [];
+        var unMatchResNonHcc = [];
         var meatCriColorTagList = [];
         getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
         setSelectMeatFileId(response.data.fileId)
@@ -321,31 +325,6 @@ export default function PatientDetails() {
         setDosYearDefalutSelect(highestDosValue);
 
 
-
-        var validDiseaseNew = {
-          "2019": [
-            {
-              "diagnosisCode": "I6523",
-              "actualDescription": "Occlusion and stenosis of bilateral carotid arteries",
-              "dbDescription": "Occlusion and stenosis of bilateral carotid arteries - DB"
-            },
-            {
-              "diagnosisCode": "I70209",
-              "actualDescription": "Unspecified atherosclerosis of native arteries of extremities, unspecified extremity",
-              "dbDescription": "Unspecified atherosclerosis of native arteries of extremities, unspecified extremity- DB"
-            },
-            {
-              "diagnosisCode": "I712",
-              "actualDescription": "Thoracic aortic aneurysm, without rupture",
-              "dbDescription": "Thoracic aortic aneurysm, without rupture- DB"
-            },
-            {
-              "diagnosisCode": "I119",
-              "actualDescription": "Hypertensive heart disease without heart failure",
-              "dbDescription": 'Hypertensive heart disease without heart failure -DB'
-            }
-          ]
-        }
 
 
 
@@ -364,6 +343,23 @@ export default function PatientDetails() {
 
           if (unMatchResCheck != null) {
             unMatchRes = result.unmatchedDisease[highestDOS]
+            unMatchRes.map((res, index) => {
+              console.log(res)
+              if(res.isHccValid == true){
+                unMatchResHcc.push({
+                  actualDescription:res.actualDescription,
+                  diagnosisCodeFinding:res.diagnosisCodeFinding,
+                  isHccValid:res.isHccValid
+                })
+              }else{
+                unMatchResNonHcc.push({
+                  actualDescription:res.actualDescription,
+                  diagnosisCodeFinding:res.diagnosisCodeFinding,
+                  isHccValid:res.isHccValid
+                })
+              }
+
+            })
 
           }
         }
@@ -427,7 +423,9 @@ export default function PatientDetails() {
         setComboDiseaseCodesList(comboDis);
         // setMeatCriteriaList(meatCri);
         setDosYear(dosYearArr);
-        setRAFScore(rafScore)
+        setRAFScore(rafScore);
+        setSuggestedNonHccList(unMatchResNonHcc);
+        setSuggestedHccList(unMatchResHcc)
 
         const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
 
@@ -808,9 +806,7 @@ export default function PatientDetails() {
   }
   const getLabReportDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
-    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`);
-    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
-   
+
     var testresult = {
       "patientId": "gayathiri-07",
       "patientName": "gayathiri",
@@ -850,6 +846,46 @@ export default function PatientDetails() {
           ]
       }
   }
+
+  var result = testresult;
+  var dosYearArr = [];
+  var validDiseaseNewRes = [];
+
+
+  for (var key in result.validDisease) {
+    dosYearArr.push({ value: key, label: key });
+  }
+
+  const highestDOS = Math.max(...dosYearArr.map(res => res.value));
+  console.log(highestDOS)
+
+  const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+
+  console.log(highestDosValue)
+  if(dosYearArr.length != 0){
+    validDiseaseNewRes = result.validDisease[dosYearArr[0].value];
+    setDosYearDefalutSelectRadiology(dosYearArr[0]);
+  
+    
+    if (result.labFileDetail != null) {
+      var fileDetails = result.labFileDetail[dosYearArr[0].value];
+      console.log(fileDetails);
+      getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+    }
+  }
+
+
+
+  
+  console.log(dosYearArr)
+  console.log(validDiseaseNewRes)
+  setLabReportValidList(validDiseaseNewRes);
+
+
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`);
+    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+   
+  
 
   // console.log(result)
   
@@ -1835,7 +1871,6 @@ export default function PatientDetails() {
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
-    formData.append("dos", inputValue.year);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -2068,15 +2103,15 @@ export default function PatientDetails() {
                                 {/* {activeTab == 3 ?
                                   <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
                                   : null} */}
-                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-red">
+                                <Button className="btn btn-primary btn-sm ms-2 flr decline-btn">
                                   <FontAwesomeIcon icon={faClose} className="me-2 mt-1" fontSize={14} />
                                   Decline
                                 </Button>
-                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-seven">
+                                <Button className="btn btn-primary btn-sm ms-2 flr complted-btn">
                                   <FontAwesomeIcon icon={faCheckCircle} className="me-2 mt-1" fontSize={14} />
                                   Complete
                                 </Button>
-                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-five">
+                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn">
                                   <FontAwesomeIcon icon={faCheck} className="me-2 mt-1" fontSize={14} />
                                   Save
                                 </Button>
@@ -2184,7 +2219,7 @@ export default function PatientDetails() {
                                                           </span>
                                                         </div>
 
-                                                        <Popover onClick={() => getValidHccDetails(data.dbDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
+                                                        <Popover onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
 
                                                           <div className="icon-box  bg-danger-light me-1">
                                                             <FontAwesomeIcon
@@ -2268,6 +2303,13 @@ export default function PatientDetails() {
                                                   >
                                                     {" "}
                                                     Suggested Codes{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="secondary badge-circle"
+                                                    >
+                                                      {suggestedHccList.length}
+                                                    </Badge>
                                                   </span>
                                                   {isMatchBtn ?
                                                     <div className="d-flex justify-content-center">
@@ -2276,7 +2318,7 @@ export default function PatientDetails() {
                                                       </button>
                                                     </div> : null}
                                                 </div>
-                                                {unMatchResList?.map((data) => {
+                                                {suggestedHccList?.map((data) => {
                                                   return (
                                                     <>
                                                       {data.isHccValid == true ?
@@ -2291,7 +2333,7 @@ export default function PatientDetails() {
                                                       <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div> */}
                                                             <div className="media-body d-flex">
-                                                              {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
+                                                              {/* {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
                                                                 <div className="form-check custom-checkbox unmatch-check">
                                                                   <div>
                                                                     <Popconfirm
@@ -2312,11 +2354,9 @@ export default function PatientDetails() {
                                                                       {data.diagnosisCodeDocument}
                                                                     </span>
                                                                   </Popover>
-                                                                  {/* <span className="disease-name">
-                                                            {data.diagnosisCodeDocument}
-                                                          </span> */}
+                                                                  
 
-                                                                </div> : null}
+                                                                </div> : null} */}
                                                               {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
                                                                 <div className="form-check custom-checkbox unmatch-check ms-3">
                                                                   <div>
@@ -3310,7 +3350,16 @@ export default function PatientDetails() {
                                                     >
                                                       {" "}
                                                       Suggested Codes{" "}
+                                                      <Badge
+                                                        as="a"
+                                                        href=""
+                                                        bg="badge-circle invalid-bange"
+                                                      >
+                                                        {suggestedNonHccList.length}
+                                                      </Badge>
                                                     </span>
+                                                    
+                                                    
                                                     {isMatchBtn ?
                                                       <div className="d-flex justify-content-center">
                                                         <button onClick={() => handleSubmitMatchHcc()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn width-fit-content">
@@ -3318,7 +3367,7 @@ export default function PatientDetails() {
                                                         </button>
                                                       </div> : null}
                                                   </div>
-                                                  {unMatchResList?.map((data) => {
+                                                  {suggestedNonHccList?.map((data) => {
                                                     return (
                                                       <>
                                                         {data.isHccValid == false || data.isHccValid == null ?
@@ -3333,7 +3382,7 @@ export default function PatientDetails() {
                                                       <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div> */}
                                                               <div className="media-body d-flex">
-                                                                {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
+                                                                {/* {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
                                                                   <div className="form-check custom-checkbox unmatch-check">
                                                                     <div>
                                                                       <Popconfirm
@@ -3354,11 +3403,9 @@ export default function PatientDetails() {
                                                                         {data.diagnosisCodeDocument}
                                                                       </span>
                                                                     </Popover>
-                                                                    {/* <span className="disease-name">
-                                                            {data.diagnosisCodeDocument}
-                                                          </span> */}
+                                                                   
 
-                                                                  </div> : null}
+                                                                  </div> : null} */}
                                                                 {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
                                                                   <div className="form-check custom-checkbox unmatch-check ms-3">
                                                                     <div>
@@ -3389,67 +3436,7 @@ export default function PatientDetails() {
                                                     );
                                                   })}
                                                 </ul>
-                                              </div>
-                                              <div className="col-xl-4">
-                                                <ul className="timeline">
-
-                                                  <div className="invalid-text d-flex justify-content-sm-between">
-                                                    <span
-                                                      className={`dang d-block`}
-                                                    >
-                                                      {" "}
-                                                      Deleted Codes{" "}
-                                                      <Badge
-                                                        as="a"
-                                                        href=""
-                                                        bg="badge-circle invalid-bange"
-                                                      >
-                                                        {invalidMoveDiseasesList.length}
-                                                      </Badge>
-                                                    </span>
-                                                  </div>
-                                                  {invalidMoveDiseasesList.map((data, i) => (
-                                                    <li>
-                                                      <div className="timeline-panel invalid-disease">
-                                                        <div className="media-body">
-                                                          <span className="mb-1 disease-name d-flex" >
-                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                          </span>
-                                                        </div>
-                                                        <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                          <div className="icon-box  bg-danger-light me-1">
-                                                            <FontAwesomeIcon
-                                                              icon={faInfo}
-                                                              style={{ color: "blue" }}
-                                                            />
-                                                          </div>
-
-                                                        </Popover>
-                                                        <Popconfirm
-                                                          title="You want move to valid?"
-                                                          description={data.diagnosisCode}
-                                                          onConfirm={confirmInvalidMoveDis}
-                                                          placement="leftTop"
-                                                          okText="Yes"
-                                                          cancelText="No"
-                                                          onOpenChange={() =>
-                                                            onchangeValid(data.diagnosisCode)
-                                                          }
-                                                        >
-                                                          <div className="icon-box  bg-danger-light me-1">
-                                                            <FontAwesomeIcon
-                                                              icon={faCheck}
-                                                              style={{ color: "orange" }}
-                                                            />
-                                                          </div>
-                                                        </Popconfirm>
-                                                      </div>
-                                                    </li>
-                                                  ))}
-                                                </ul>
-
-                                              </div>
+                                              </div>                                             
                                               {validDiseasesList.length == 0 ?
                                                 <div className="card box-shadow-none">
                                                   <div className="card combo-card">
@@ -4373,6 +4360,13 @@ export default function PatientDetails() {
                                                     >
                                                       {" "}
                                                       Suggested Codes{" "}
+                                                      <Badge
+                                                        as="a"
+                                                        href=""
+                                                        bg="badge-circle invalid-bange"
+                                                      >
+                                                        {unmatchHccListRadiology.length}
+                                                      </Badge>
                                                     </span>
                                                     {isMatchBtn ?
                                                       <div className="d-flex justify-content-center">

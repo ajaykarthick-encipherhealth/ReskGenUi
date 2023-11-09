@@ -14,7 +14,7 @@ import { IMAGES } from "../jsx/constant/theme";
 
 export default function UserLogin() {
     const router = useRouter();
-    const [email, setEmail] = useState('dhineshtest@encipherhealth.onmicrosoft.com');
+    const [email, setEmail] = useState('ajith01@encipherhealth.onmicrosoft.com');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
     const [password, setPassword] = useState('@Asdf123');
