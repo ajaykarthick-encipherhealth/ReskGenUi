@@ -38,6 +38,11 @@ export const PhysicanMenuList = [
         title:'Patient List',
         iconStyle:SVGICON.patientListIcon,
         to: '/physician/patients',
-    }
+    },
+    //  {   
+    //     title:'User',
+    //     iconStyle:SVGICON.Usermanagement,
+    //     to: '/physician/user',
+    // },
     
 ]

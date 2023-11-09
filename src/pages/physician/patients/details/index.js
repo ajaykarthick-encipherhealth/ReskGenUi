@@ -65,6 +65,8 @@ export default function PatientDetails() {
 
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
   const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
+  const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] = useState(false);
+
 
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [confirmNotesModalInValid, setConfirmNotesModalInValid] = useState(false);
@@ -165,6 +167,8 @@ export default function PatientDetails() {
   const [labReportFile, setLabReportFile] = useState([]);
   const [suggestedHccList, setSuggestedHccList] = useState([]);
   const [suggestedNonHccList, setSuggestedNonHccList] = useState([]);
+  const [nonHccActiveCodes, setNonHccActiveCodes] = useState(false);
+
 
 
 
@@ -1343,6 +1347,7 @@ export default function PatientDetails() {
     setIsModalOpenRadiology(false);
     setSuggestedModal(false);
     setIsModalOpenValidCodes(false);
+    setIsModalOpenCaptureSection(false);
   };
   const handleOpenModal = (value, disDescription) => {
     var splitPoint = disDescription.substring(' ', 40);
@@ -1364,27 +1369,50 @@ export default function PatientDetails() {
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
-  const handleOpenModalCombinationCode = (value, disDescription,check) => {
+  const handleOpenModalCombinationCode = (value, disDescription,check,whereCome) => {
     console.log(check)
+    if(whereCome == "nonHcc"){
+      setNonHccActiveCodes(true);
+    } else{
+      setNonHccActiveCodes(false);
+    }
     if(check === "valid"){
       setSelectActiveCode(value);
       var splitPoint = '';
-         splitPoint = disDescription;
+         splitPoint = disDescription[0];
+         console.log(splitPoint)
       setTimeout(() => {
         highlight({
           keyword: splitPoint,
-          matchCase: true,
-          wholeWords:true
         });
-        var dataset = value + " - (" + disDescription + ")"
+        var dataset = value + " - (" + splitPoint + ")"
         setSelectMeatName(dataset);
       }, 2000);
       setDocumentLoaded(true);
-      var dataset = value + " - (" + disDescription + ")"
+      var dataset = value + " - (" + splitPoint + ")"
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
-      setIsModalOpenValidCodes(true);
-   }else{
+      setIsModalOpenCaptureSection(true);
+   }else if (check == "valid2"){
+    setSelectActiveCode(value);
+    var splitPoint = '';
+       splitPoint = disDescription;
+    setTimeout(() => {
+      highlight({
+        keyword: splitPoint,
+        matchCase: true,
+      });
+      var dataset = value + " - (" + disDescription + ")"
+      setSelectMeatName(dataset);
+    }, 2000);
+    setDocumentLoaded(true);
+    var dataset = value + " - (" + disDescription + ")"
+    setSelectMeatName(dataset + " -  " + "Loading...");
+    setIsLoadingSection(true);
+    setIsModalOpenValidCodes(true);
+  }
+
+   else{
     setSelectActiveCode(value);
       var splitPoint = '';
       splitPoint = disDescription.substring(' ', 20);
@@ -2065,17 +2093,19 @@ export default function PatientDetails() {
 
   const activeValidDisCode = async (code,disDescription) => {
     setSelectActiveCode(code)
+    console.log(disDescription)
     var splitPoint = disDescription.substring(' ', 20);
     
     setTimeout(() => {
       highlight({
         keyword: disDescription,
         matchCase: true,
-        wholeWords:true
+      
       });
       var dataset = code + " - (" + disDescription + ")"
       setSelectMeatName(dataset);
     }, 2000);
+ 
     setDocumentLoaded(true);
     var dataset = code + " - (" + disDescription + ")"
     setSelectMeatName(dataset + " -  " + "Loading...");
@@ -2304,7 +2334,7 @@ export default function PatientDetails() {
                                                   <li>
                                                     <div className="new_valid-dis">
                                                       <div className="timeline-panel">
-                                                        <div className="media-body">
+                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription,"valid2")}>
                                                           <span className="mb-1 disease-name d-flex" >
                                                             <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
                                                           </span>
@@ -2350,6 +2380,7 @@ export default function PatientDetails() {
                                                        {patientDocumentResult.patientName}
                                                       </Badge>
                                                       </Popover>
+                                                      <Popover placement="topLeft" content={data.encounterDate}>
                                                         <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
                                                           <FontAwesomeIcon
                                                             icon={faCalendar}
@@ -2359,8 +2390,9 @@ export default function PatientDetails() {
                                                           {replaceString(data.encounterDate)}
                                                           {/* 22/05/2023 */}
                                                         </Badge>
+                                                        </Popover>
                                                         <Popover placement="topLeft" content={data.capturedSections}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription,"valid")}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections,"valid")}>
                                                             {/* <FontAwesomeIcon
                                                           icon={faSearch}
                                                           style={{ color: "#fff" }}
@@ -2415,7 +2447,7 @@ export default function PatientDetails() {
                                                       {data.isHccValid == true ?
                                                         <li>
                                                           <div className="timeline-panel d-block invalid-disease">
-                                                            <div className="media-body">
+                                                            <div className="media-body"  onClick={() => handleOpenModalCombinationCode(data.diagnosisCodeFinding, data.actualDescription)}>
                                                               <span className="mb-1 disease-name">
                                                                 {data.actualDescription}
                                                               </span>
@@ -2470,6 +2502,8 @@ export default function PatientDetails() {
 
                                                                 </div> : null}
                                                             </div>
+                                                           
+
                                                           </div>
                                                         </li>
                                                         : null}
@@ -3380,7 +3414,7 @@ export default function PatientDetails() {
                                                     <li>
                                                       <div className="new_valid-dis">
                                                         <div className="timeline-panel">
-                                                          <div className="media-body">
+                                                          <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription,"valid2","nonHcc")}>
                                                             <span className="mb-1 disease-name d-flex" >
                                                               <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
                                                             </span>
@@ -3407,16 +3441,17 @@ export default function PatientDetails() {
                                                           </Popconfirm>
                                                         </div>
                                                         <div className="d-flex justify-content-sm-between valid-providerdocument ">
-
+                                                        <Popover placement="topLeft" content={data.encounterDate}>
                                                           <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
                                                             <FontAwesomeIcon
                                                               icon={faCalendar}
                                                               style={{ color: "#918585" }}
                                                             />
-                                                            {data.encounterDate}
+                                                             {replaceString(data.encounterDate)}
                                                           </Badge>
+                                                          </Popover>
                                                           <Popover placement="topLeft" content={data.capturedSections}>
-                                                            <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
+                                                            <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections,"valid")}>
 
                                                               {data.capturedSections}
                                                             </Badge>
@@ -3464,7 +3499,7 @@ export default function PatientDetails() {
                                                         {data.isHccValid == false || data.isHccValid == null ?
                                                           <li>
                                                             <div className="timeline-panel d-block invalid-disease">
-                                                              <div className="media-body">
+                                                              <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCodeFinding, data.actualDescription)}>
                                                                 <span className="mb-1 disease-name">
                                                                   {data.actualDescription}
                                                                 </span>
@@ -5623,6 +5658,7 @@ export default function PatientDetails() {
                             </div>
                           </Worker>
                         </div>
+                        {nonHccActiveCodes == false ?
                         <div className="col-xl-4">
                           <ul className="timeline">
                           <div className="modal-valid-container">
@@ -5646,7 +5682,249 @@ export default function PatientDetails() {
                             ))}
                                                             </div>
                           </ul>
-                        </div>
+                        </div>:<div className="col-xl-4">
+                          <ul className="timeline">
+                          <div className="modal-valid-container">
+                            {newInValidDiseaseList.map((data, i) => (
+                              <li>
+                              
+
+                                
+                                <div onClick={() => activeValidDisCode(data.diagnosisCode, data.actualDescription)} className={selectActiveCode == data.diagnosisCode ? "new_valid-dis cr-pointer modal-valid-active" : "new_valid-dis cr-pointer modal-valid" }>
+                                  <div className="timeline-panel">
+                                    <div className="media-body">
+                                      <span className="mb-1 disease-name d-flex" >
+                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                              </li>
+                            ))}
+                                                            </div>
+                          </ul>
+                        </div>}
+
+                      </div>
+
+
+                    </div>
+                  </Modal>
+                )}
+                   {isModalOpenCaptureSection && (
+                  <Modal
+                    title={selectMeatName}
+                    // title="Pdf Test"
+                    centered
+                    open={isModalOpenCaptureSection}
+                    // style={{ top: 5 }}
+                    onOk={handleCloseModal}
+                    onCancel={handleCloseModal}
+                    width={1000}
+                    height={400}
+                  >
+                    <div className="section-container">
+                      <div className="row">
+                       
+                        <div className="col-xl-12">
+                          <div
+                            className="rpv-core__viewer"
+                            style={{
+                              border: '1px solid rgba(0, 0, 0, 0.3)',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              margin: "0 82px 10px 73px"
+                            }}
+                          >
+
+                            <div
+                              style={{
+                                alignItems: 'center',
+                                backgroundColor: '#eeeeee',
+                                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                padding: '4px',
+                              }}
+                            >
+                              <Search>
+                                {(renderSearchProps) => {
+                                  const [readyToSearch, setReadyToSearch] = useState(false);
+                                  return (
+                                    <>
+                                      <div
+                                        style={{
+                                          border: '1px solid rgba(0, 0, 0, 0.3)',
+                                          display: 'flex',
+                                          padding: '0 2px',
+                                        }}
+                                      >
+                                        <input
+                                          style={{
+                                            border: 'none',
+                                            padding: '8px',
+                                            width: '200px',
+                                          }}
+                                          placeholder="Enter to search"
+                                          type="text"
+                                          value={renderSearchProps.keyword}
+                                          onChange={(e) => {
+                                            setReadyToSearch(false);
+                                            renderSearchProps.setKeyword(e.target.value);
+                                          }}
+                                          onKeyDown={(e) => {
+                                            if (e.keyCode === 13 && renderSearchProps.keyword) {
+                                              setReadyToSearch(true);
+                                              renderSearchProps.search();
+                                            }
+                                          }}
+                                        />
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <button
+                                              style={{
+                                                background: '#fff',
+                                                border: 'none',
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase ? 'blue' : 'transparent'
+                                                  }`,
+                                                height: '100%',
+                                                padding: '0 2px',
+                                              }}
+                                              onClick={() =>
+                                                renderSearchProps.changeMatchCase(!renderSearchProps.matchCase)
+                                              }
+                                            >
+                                              <Icon>
+                                                <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
+                                                <path d="M4.383 14.725L13.59 14.725" />
+                                                <path d="M0.5 21.725L3.52 21.725" />
+                                                <path d="M14.479 21.725L17.5 21.725" />
+                                                <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
+                                                <path d="M16.92 16.725L20.794 16.725" />
+                                                <path d="M21.516 21.725L23.5 21.725" />
+                                              </Icon>
+                                            </button>
+                                          }
+                                          content={() => 'Match case'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <button
+                                              style={{
+                                                background: '#fff',
+                                                border: 'none',
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords ? 'blue' : 'transparent'
+                                                  }`,
+                                                height: '100%',
+                                                padding: '0 2px',
+                                              }}
+                                              onClick={() =>
+                                                renderSearchProps.changeWholeWords(!renderSearchProps.wholeWords)
+                                              }
+                                            >
+                                              <Icon>
+                                                <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
+                                                <path d="M3.5 9.498L3.5 14.498" />
+                                              </Icon>
+                                            </button>
+                                          }
+                                          content={() => 'Match whole word'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                      {readyToSearch &&
+                                        renderSearchProps.keyword &&
+                                        renderSearchProps.numberOfMatches === 0 && (
+                                          <div style={{ padding: '0 8px' }}>Not found</div>
+                                        )}
+                                      {readyToSearch &&
+                                        renderSearchProps.keyword &&
+                                        renderSearchProps.numberOfMatches > 0 && (
+                                          <div style={{ padding: '0 8px' }}>
+                                            {renderSearchProps.currentMatch} of {renderSearchProps.numberOfMatches}
+                                          </div>
+                                        )}
+                                      <div style={{ padding: '0 2px' }}>
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <MinimalButton onClick={renderSearchProps.jumpToPreviousMatch}>
+                                              <PreviousIcon />
+                                            </MinimalButton>
+                                          }
+                                          content={() => 'Previous match'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                      <div style={{ padding: '0 2px' }}>
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <MinimalButton onClick={renderSearchProps.jumpToNextMatch}>
+                                              <NextIcon />
+                                            </MinimalButton>
+                                          }
+                                          content={() => 'Next match'}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                    </>
+                                  );
+                                }}
+                              </Search>
+                            </div>
+                          </div>
+                          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                            <div
+                              style={{
+                                height: "400px",
+                                // width: "1000px",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                              }}
+                            >
+                              {" "}
+                              <Viewer
+                                fileUrl={selectFileURL}
+                                plugins={[searchPluginInstance]}
+                                onDocumentLoad={handleDocumentLoad}
+                              />
+                            </div>
+                          </Worker>
+                        </div> 
+                        {/* <div className="col-xl-4">
+                          <ul className="timeline">
+                          <div className="modal-valid-container">
+                            {newValidDiseaseList.map((data, i) => (
+                              <li>
+                              
+
+                                
+                                <div >
+                                  <div className="timeline-panel">
+                                    <div className="media-body">
+                                      <span className="mb-1 disease-name d-flex" >
+                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                      </span>
+                                      {data.capturedSections.map((data2, i) => (
+                                      <span className="mb-1 disease-name"  onClick={() => activeValidDisCode(data.diagnosisCode, data2)} >
+                                        <span className={selectActiveCode == data2 ? " valid-dis-name d-flex new_valid-dis cr-pointer modal-valid-active" : "valid-dis-name d-flex new_valid-dis cr-pointer modal-valid" }>{data2}</span>
+                                      </span>
+                                         ))}
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                              </li>
+                            ))}
+                                                            </div>
+                          </ul>
+                        </div> */}
 
                       </div>
 
