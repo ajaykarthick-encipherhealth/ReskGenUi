@@ -131,6 +131,7 @@ export default function PatientDetails() {
 
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [addPatient, setAddPatient] = useState(false);
+  const [labReportSlider, setLapReportSlider] = useState(false);
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -139,6 +140,8 @@ export default function PatientDetails() {
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
+  const [selectLabReportFile, setSelectLabReportFile] = useState(null);
+
   const [localUserId, setLocalUserId] = useState('');
   const [localPatientId, setLocalPatientId] = useState('');
 
@@ -158,6 +161,9 @@ export default function PatientDetails() {
   const [suggestedBtnTitle, setSuggestedBtnTitle] = useState('Add');
   const [selectInvalidDetails, setSelectInvalidDetails] = useState(false);
   const [selectActiveCode, setSelectActiveCode] = useState('');
+  const [labReportValidList, setLabReportValidList] = useState([]);
+  const [labReportFile, setLabReportFile] = useState([]);
+
 
 
 
@@ -800,6 +806,95 @@ export default function PatientDetails() {
 
     }
   }
+  const getLabReportDetails = async (orgId, tenId) => {
+    var patientId = localStorage.getItem("patientId");
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`);
+    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+   
+    var testresult = {
+      "patientId": "gayathiri-07",
+      "patientName": "gayathiri",
+      "fileId": "[48f01354-2566-41e0-bf3d-5bb578cf6d2a]",
+      "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+      "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+      "validDisease": {
+          "04/12/2023": [
+              {
+                  "diagnosisCode": "N18.32",
+                  "actualDescription": "Stage 3B Moderate Chronic Kidney Disease"
+              }
+          ]
+      },
+      "labFileDetail": {
+          "04/12/2023": [
+              {
+                  "fileId": "ed032837-ced4-4f09-9dc0-c1bddb2a1970",
+                  "patientId": "gayathiri-07",
+                  "userId": "dhineshtest@encipherhealth.onmicrosoft.com",
+                  "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+                  "dos": "04/12/2023",
+                  "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+                  "fileName": "cASE 2.pdf",
+                  "azureBlobPath": "ed032837-ced4-4f09-9dc0-c1bddb2a1970.pdf"
+              },
+              {
+                  "fileId": "48f01354-2566-41e0-bf3d-5bb578cf6d2a",
+                  "patientId": "gayathiri-07",
+                  "userId": "dhineshtest@encipherhealth.onmicrosoft.com",
+                  "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+                  "dos": "04/12/2023",
+                  "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+                  "fileName": "cASE 2.pdf",
+                  "azureBlobPath": "48f01354-2566-41e0-bf3d-5bb578cf6d2a.pdf"
+              }
+          ]
+      }
+  }
+
+  // console.log(result)
+  
+
+  
+   
+   
+    if (response.data) {
+      console.log(response.data)
+      var result = response.data;
+      var dosYearArr = [];
+      var validDiseaseNewRes = [];
+    
+    
+      for (var key in result.validDisease) {
+        dosYearArr.push({ value: key, label: key });
+      }
+    
+      const highestDOS = Math.max(...dosYearArr.map(res => res.value));
+      console.log(highestDOS)
+    
+      const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+    
+      console.log(highestDosValue)
+      if(dosYearArr.length != 0){
+        validDiseaseNewRes = result.validDisease[dosYearArr[0].value];
+        setDosYearDefalutSelectRadiology(dosYearArr[0]);
+      
+        
+        if (result.labFileDetail != null) {
+          var fileDetails = result.labFileDetail[dosYearArr[0].value];
+          console.log(fileDetails);
+          getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+        }
+      }
+    
+    
+    
+      
+      console.log(dosYearArr)
+      console.log(validDiseaseNewRes)
+      setLabReportValidList(validDiseaseNewRes);
+    }
+    
+  }
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map(item => [item[key], item])).values()]
   }
@@ -872,6 +967,15 @@ export default function PatientDetails() {
         //  window.open(fileURL)
 
       });
+
+    }
+  }
+
+  const getLabReportFiles = async (fileId, tenId) => {
+    const response = await axios.get(ENDPOINTS.apiEndoint + `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`);
+    if (response.data) {
+      var result = response.data;
+      setLabReportFile(response.data);     
 
     }
   }
@@ -1607,6 +1711,7 @@ export default function PatientDetails() {
     { title: "Patient Data", type: "Patient Data" },
     { title: "NON HCC", type: "NON HCC" },
     { title: "Radiology", type: "Radiology" },
+    { title: "Lab Report", type: "Lab Report" },
   ];
 
   const navigetPageDetails = (pageTitle) => {
@@ -1629,6 +1734,12 @@ export default function PatientDetails() {
       }
 
     }
+    if (pageTitle == "Lab Report") {
+      setActiveTab(4)
+      getLabReportDetails(localOrgId, localTenantId);
+     
+
+    }
     setIsLoading(false);
   };
 
@@ -1648,6 +1759,21 @@ export default function PatientDetails() {
     setValidated(true);
   };
 
+  const handleSubmitLabReport = async (event) => {
+    console.log(inputValue);
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+      setIsLoadingBtn(true);
+      event.preventDefault();
+      event.stopPropagation();
+      submitLabReport();
+
+    }
+
+    setValidated(true);
+  };
+
   const addPatientFile = (data) => {
     inputValue.patientId = patientDocumentResult.patientId;
     inputValue.name = patientDocumentResult.patientName;
@@ -1655,9 +1781,19 @@ export default function PatientDetails() {
     setAddPatient(true);
     setIsLoadingBtn(false);
   };
+  const addLabReport = (data) => {
+    inputValue.patientId = patientDocumentResult.patientId;
+    inputValue.name = patientDocumentResult.patientName;
+    setValidated(false);
+    setLapReportSlider(true);
+    setIsLoadingBtn(false);
+  };
 
   const onChangeFileRadiology = (e) => {
     setSelectFileRadiology(e[0]);
+  };
+  const onChangeLabReportFile = (e) => {
+    setSelectLabReportFile(e[0]);
   };
 
   const submitRadiology = async () => {
@@ -1676,6 +1812,37 @@ export default function PatientDetails() {
     };
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload/radiology
+      `,
+      formData,
+      headers
+    );
+    if (response?.status == 202) {
+      setAddPatient(false);
+      setIsLoadingBtn(false);
+      getPatientDetailsRadiology(localOrgId, localTenantId);
+    } else {
+      setIsLoadingBtn(false);
+    }
+    setAddPatient(false);
+
+
+  };
+  const submitLabReport = async () => {
+    const formData = new FormData();
+    formData.append("file", selectLabReportFile);
+    formData.append("orgid", localOrgId);
+    formData.append("tenantid", localTenantId);
+    formData.append("userid", localUserId);
+    formData.append("patientid", inputValue.patientId);
+    formData.append("patientname", inputValue.name);
+    formData.append("dos", inputValue.year);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload/lab
       `,
       formData,
       headers
@@ -1790,11 +1957,9 @@ export default function PatientDetails() {
   }
 
   const replaceString = (value) => {
-    console.log(value)
     var removeComma = null;
     if(value != null){
      removeComma=  value.replace(/,/g, "");
-    console.log(removeComma)
     }
     return removeComma
 
@@ -1852,7 +2017,7 @@ export default function PatientDetails() {
                               <label className="form-label">Date of Service</label>
                               {!isLoadingDos ?
                                 <>
-                                  {activeTab == 3 ?
+                                  {activeTab == 3 || activeTab== 4 ?
                                     <Select onChange={(e) => dosOnChange(e)} options={dosYearRadiology} className="custom-react-select"
                                       defaultValue={dosYearDefalutSelectRadiology}
                                       isSearchable={false}
@@ -1900,9 +2065,9 @@ export default function PatientDetails() {
                                 ))}
                               </Nav>
                               <div>
-                                {activeTab == 3 ?
+                                {/* {activeTab == 3 ?
                                   <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
-                                  : null}
+                                  : null} */}
                                 <Button className="btn btn-primary btn-sm ms-2 flr saveBtn bg-bg-red">
                                   <FontAwesomeIcon icon={faClose} className="me-2 mt-1" fontSize={14} />
                                   Decline
@@ -2994,7 +3159,8 @@ export default function PatientDetails() {
                             </div>
                           </div>
                         </div>
-                      </div> : activeTab == 2 ?
+                      </div>
+                       : activeTab == 2 ?
                         <div className="col-xl-12">
                           <div className="card">
                             <div className="card-body">
@@ -3968,7 +4134,7 @@ export default function PatientDetails() {
                               </div>
                             </div>
                           </div>
-                        </div> :
+                        </div> : activeTab == 3 ?
                         <div className="col-xl-12">
                           {/* {newValidDiseaseListRadiology.length == 0 ?
                     <div className="card height80 file-management">
@@ -4006,7 +4172,14 @@ export default function PatientDetails() {
                                           MEAT Criteria
                                         </Nav.Link>
                                       </Nav.Item>
+                                     
+                                  
+                                    {activeTab == 3 ?
+                                      <div>
+                                  <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
 
+                                      </div>
+                                  : null}
                                     </Nav>
                                     <Tab.Content>
                                       <Tab.Pane id="my-posts" eventKey="validDiseases">
@@ -4809,7 +4982,126 @@ export default function PatientDetails() {
                               </div>
                             </div>
                           </div>
-                        </div>}
+                        </div> 
+                          : 
+                          <div className="col-xl-12">
+                            <div className="card">
+                              <div className="card-body">
+                                <div className="profile-tab">
+                                  <div className="custom-tab-1">
+                                    <Tab.Container defaultActiveKey={activeTabHead}>
+                                      <Nav as="ul" className="nav nav-tabs">
+                                        <Nav.Item as="li" className="nav-item">
+                                          <Nav.Link to="#my-posts" eventKey="file">
+                                            File
+                                          </Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item as="li" className="nav-item">
+                                          <Nav.Link to="#my-posts" eventKey="validDiseases">
+                                            Visit Data
+                                          </Nav.Link>
+                                        </Nav.Item>  
+                                      <div>
+                                      <Button onClick={addLabReport} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Lab Report</Button>
+                                      </div>
+                                      </Nav>
+                                      <Tab.Content>
+                                      <Tab.Pane id="my-posts" eventKey="validDiseases">
+                                      <div className="my-post-content pt-3">
+                                        <div className="widget-media   ps--active-y">
+                                          <div className="row">
+                                            <div className="col-xl-4">
+                                              <ul className="timeline">
+                                                <div className="valid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block text-warning`}
+                                                  >
+                                                    {" "}
+                                                    HCC{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="secondary badge-circle"
+                                                    >
+                                                      {labReportValidList.length}
+                                                    </Badge>
+                                                  </span>
+                                                </div>
+
+                                                {labReportValidList.map((data, i) => (
+                                                  <li>
+                                                    <div className="new_valid-dis">
+                                                      <div className="timeline-panel">
+                                                        <div className="media-body">
+                                                          <span className="mb-1 disease-name d-flex" >
+                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                          </span>
+                                                        </div>
+                                                      </div>
+                                                   
+                                                    </div>
+
+                                                  </li>
+                                                ))}
+                                              </ul>
+                                            </div>
+                                            {validDiseasesList.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </Tab.Pane>                                    
+                                        <Tab.Pane id="my-posts" eventKey="file">
+                                          <div className="my-post-content pt-3">
+                                            <div className="card">
+                                              <div>
+                                                <button onClick={() => openNewTabDownloadPdf()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
+                                                  Open New Tab
+                                                </button>
+                                              </div>
+                                              <div className="card-body p-0">
+                                                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                                                  <div
+                                                    style={{
+                                                      height: "600px",
+                                                      maxWidth: "900px",
+                                                      marginLeft: "auto",
+                                                      marginRight: "auto",
+                                                    }}
+                                                  >
+                                                    {" "}
+                                                    <Viewer
+                                                      fileUrl={labReportFile}
+                                                      plugins={[defaultLayoutPluginInstance]}
+                                                      onDocumentLoad={handleDocumentLoad}
+                                                      renderLoader={(percentages) => (
+                                                        <div style={{ width: '240px' }}>
+                                                          <ProgressBar progress={Math.round(percentages)} />
+                                                        </div>
+                                                      )}
+                                                    />
+                                                  </div>
+                                                </Worker>
+                                              </div>
+                                            </div>
+                                          </div>
+  
+                                        </Tab.Pane>
+                                      </Tab.Content>
+                                    </Tab.Container>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        }
                   </div>
                 </div>
                 {isModalOpen && (
@@ -5769,6 +6061,90 @@ export default function PatientDetails() {
                           </Button>
                           <Button
                             onClick={() => setAddPatient(false)}
+                            className="btn btn-danger btn-sm light ms-1"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </Form>
+                    </div>
+                  </div>
+                </Offcanvas>
+                <Offcanvas onHide={setLapReportSlider} show={labReportSlider} className="offcanvas-end" placement="end">
+                  <div className="offcanvas-header">
+                    <h5 className="modal-title" id="#gridSystemModal">
+                      Add Patient Lab Report
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => setLapReportSlider(false)}
+                    >
+                      <i className="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                  <div className="offcanvas-body">
+                    <div className="container-fluid">
+                      <Form noValidate validated={validated} onSubmit={handleSubmitLabReport}>
+                        <div className="row">
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              Patient Id <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              name="patientId"
+                              required
+                              type="text"
+                              value={inputValue.patientId}
+                              onChange={handleChange}
+                            />
+                          </div>
+
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              Patient Name <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              name="name"
+                              required
+                              type="text"
+                              value={inputValue.name}
+                              onChange={handleChange}
+                            />
+                          </div>
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              Year of Service <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              name="year"
+                              required
+                              type="number"
+                              onChange={handleChange}
+                            />
+                          </div>
+
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              File
+                            </Form.Label>
+                            <Form.Control
+
+                              type="file"
+                              accept="application/pdf,text/plain"
+                              onChange={(e) => onChangeLabReportFile(e.target.files)}
+                              disabled={isLoadingBtn ? true : false}
+                            />
+                          </div>
+
+                        </div>
+
+                        <div>
+                          <Button type="submit" className="btn btn-primary btn-sm me-1">
+                            {isLoadingBtn ? "Loading..." : "Submit"}
+                          </Button>
+                          <Button
+                            onClick={() => setLapReportSlider(false)}
                             className="btn btn-danger btn-sm light ms-1"
                           >
                             Cancel
