@@ -673,7 +673,7 @@ export default function PatientDetails() {
         const highestDOS = Math.max(...dosYearArr.map(res => res.value));
 
         const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
-        setDosYearDefalutSelectRadiology(highestDosValue);
+        setDosYearDefalutSelectRadiology(dosYearArr[0]);
 
 
         if (result.radiologyFileDetail != null) {
@@ -683,22 +683,22 @@ export default function PatientDetails() {
         }
 
 
-        validDis = result.validDisease[highestDOS];
-        validDiseaseNewRes = result.validDisease[highestDOS];
-        invalidDiseaseNewRes = result.invalidDisease[highestDOS];
+        validDis = result.validDisease[dosYearArr[0]];
+        validDiseaseNewRes = result.validDisease[dosYearArr[0]];
+        invalidDiseaseNewRes = result.invalidDisease[dosYearArr[0]];
         if (result.unmatchedDisease != null) {
-          var unMatchResCheck = result.unmatchedDisease[highestDOS]
+          var unMatchResCheck = result.unmatchedDisease[dosYearArr[0]]
 
           if (unMatchResCheck != null) {
-            unMatchRes = result.unmatchedDisease[highestDOS]
+            unMatchRes = result.unmatchedDisease[dosYearArr[0]]
 
           }
         }
 
 
-        invalidDis = result.invalidDisease[highestDOS];
-        comboDis = result.comboDisease[highestDOS];
-        meatCri = result.meatCriteria[highestDOS];
+        invalidDis = result.invalidDisease[dosYearArr[0]];
+        comboDis = result.comboDisease[dosYearArr[0]];
+        meatCri = result.meatCriteria[dosYearArr[0]];
 
         // validDiseaseNewRes = validDiseaseNew[2019]
 
