@@ -648,10 +648,103 @@ export default function PatientDetails() {
   }
   const getPatientDetailsRadiologyYear = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
+    var testresult = {
+      "patientId": "uvais-10",
+      "patientName": "uvais",
+      "fileId": "[fe5e4bcc-e61d-49ee-9292-8c5d9e3293e8]",
+      "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+      "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+      "validDisease": {
+          "06/03/2023": [
+              {
+                  "diagnosisCode": "I65.23",
+                  "actualDescription": "Mild stenosis in the right internal carotid artery",
+                  "dbDescription": "Occlusion and stenosis of bilateral carotid arteries",
+                  "notes": null,
+                  "capturedSections": [
+                      "Right Findings"
+                  ],
+                  "encounterDate": "05/09/2023"
+              },
+              {
+                  "diagnosisCode": "I65.23",
+                  "actualDescription": "Mild stenosis in the left internal carotid artery",
+                  "dbDescription": "Occlusion and stenosis of bilateral carotid arteries",
+                  "notes": null,
+                  "capturedSections": [
+                      "Left Findings"
+                  ],
+                  "encounterDate": "05/09/2023"
+              }
+          ]
+      },
+      "invalidDisease": {
+          "06/03/2023": []
+      },
+      "unmatchedDisease": {
+          "06/03/2023": []
+      },
+      "comboDisease": {
+          "06/03/2023": []
+      },
+      "meatCriteria": {
+          "06/03/2023": [
+              {
+                  "diseaseName": "Mild stenosis in the right internal carotid artery",
+                  "diagnosisCode": "I65.23",
+                  "isMeatCriteriaPresent": true,
+                  "monitorCapturedFromHeader": "Right Findings",
+                  "monitor": "Doppler flow velocities in the right internal carotid artery (ICA)",
+                  "evaluateCapturedFromHeader": "Right Findings",
+                  "evaluate": "Stenosis in the range of 1-39% with mild plaque",
+                  "assessmentCapturedFromHeader": "Right Findings",
+                  "assessment": "Mild stenosis in the right internal carotid artery",
+                  "treatmentCapturedFromHeader": "Not specified",
+                  "treatment": "Not specified",
+                  "category": null
+              },
+              {
+                  "diseaseName": "Mild stenosis in the left internal carotid artery",
+                  "diagnosisCode": "I65.23",
+                  "isMeatCriteriaPresent": true,
+                  "monitorCapturedFromHeader": "Left Findings",
+                  "monitor": "Doppler flow velocities in the left internal carotid artery (ICA)",
+                  "evaluateCapturedFromHeader": "Left Findings",
+                  "evaluate": "Stenosis in the range of 1-39% with mild plaque",
+                  "assessmentCapturedFromHeader": "Left Findings",
+                  "assessment": "Mild stenosis in the left internal carotid artery",
+                  "treatmentCapturedFromHeader": "Not specified",
+                  "treatment": "Not specified",
+                  "category": null
+              }
+          ]
+      },
+      "radiologyFileDetail": {
+          "06/03/2023": [
+              {
+                  "createdAt": "11/9/23, 10:29 AM",
+                  "version": 0,
+                  "updatedAt": "11/9/23, 10:29 AM",
+                  "createdBy": null,
+                  "updatedBy": null,
+                  "active": false,
+                  "fileId": "fe5e4bcc-e61d-49ee-9292-8c5d9e3293e8",
+                  "patientId": "uvais-10",
+                  "userId": "uvais01@encipherhealth.onmicrosoft.com",
+                  "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+                  "dos": "06/03/2023",
+                  "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+                  "fileName": "consult.pdf",
+                  "azureBlobPath": "fe5e4bcc-e61d-49ee-9292-8c5d9e3293e8.pdf"
+              }
+          ]
+      }
+  }
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`);
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
       var result = response.data;
+      console.log(result)
       setPatientDetailsRadiology(result);
       if (result.validDisease != null) {
         console.log(result)
@@ -666,9 +759,11 @@ export default function PatientDetails() {
         // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
         // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
 
-        for (var key in response.data.validDisease) {
+        for (var key in result.validDisease) {
           dosYearArr.push({ value: key, label: key });
         }
+
+        var dateofService = dosYearArr[0].value;
 
         const highestDOS = Math.max(...dosYearArr.map(res => res.value));
 
@@ -677,40 +772,29 @@ export default function PatientDetails() {
 
 
         if (result.radiologyFileDetail != null) {
-          var fileDetails = result.radiologyFileDetail[highestDOS];
+          var fileDetails = result.radiologyFileDetail[dateofService];
           console.log(fileDetails);
           getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
         }
 
 
-        validDis = result.validDisease[dosYearArr[0]];
-        validDiseaseNewRes = result.validDisease[dosYearArr[0]];
-        invalidDiseaseNewRes = result.invalidDisease[dosYearArr[0]];
+        validDis = result.validDisease[dateofService];
+        validDiseaseNewRes = result.validDisease[dateofService];
+        invalidDiseaseNewRes = result.invalidDisease[dateofService];
         if (result.unmatchedDisease != null) {
-          var unMatchResCheck = result.unmatchedDisease[dosYearArr[0]]
+          var unMatchResCheck = result.unmatchedDisease[dateofService]
 
           if (unMatchResCheck != null) {
-            unMatchRes = result.unmatchedDisease[dosYearArr[0]]
+            unMatchRes = result.unmatchedDisease[dateofService]
 
           }
         }
 
 
-        invalidDis = result.invalidDisease[dosYearArr[0]];
-        comboDis = result.comboDisease[dosYearArr[0]];
-        meatCri = result.meatCriteria[dosYearArr[0]];
+        invalidDis = result.invalidDisease[dateofService];
+        comboDis = result.comboDisease[dateofService];
+        meatCri = result.meatCriteria[dateofService];
 
-        // validDiseaseNewRes = validDiseaseNew[2019]
-
-        var invalidDiseasesArray = [];
-        var validDiseasesArray = [];
-
-        for (var key in invalidDis) {
-          invalidDiseasesArray.push({ name: invalidDis[key] });
-        }
-        for (var key in validDis) {
-          validDiseasesArray.push({ name: validDis[key] });
-        }
 
 
 
@@ -847,39 +931,43 @@ export default function PatientDetails() {
       }
   }
 
-  var result = testresult;
-  var dosYearArr = [];
-  var validDiseaseNewRes = [];
+  // var result = testresult;
+  // var dosYearArr = [];
+  // var validDiseaseNewRes = [];
 
 
-  for (var key in result.validDisease) {
-    dosYearArr.push({ value: key, label: key });
-  }
+  // for (var key in result.validDisease) {
+  //   dosYearArr.push({ value: key, label: key });
+  // }
 
-  const highestDOS = Math.max(...dosYearArr.map(res => res.value));
-  console.log(highestDOS)
+  // var dateofService = dosYearArr[0].value;
 
-  const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+  // const highestDOS = Math.max(...dosYearArr.map(res => res.value));
+  // console.log(highestDOS)
 
-  console.log(highestDosValue)
-  if(dosYearArr.length != 0){
-    validDiseaseNewRes = result.validDisease[dosYearArr[0].value];
-    setDosYearDefalutSelectRadiology(dosYearArr[0]);
+  // const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+
+  // console.log(highestDosValue)
+  // if(dosYearArr.length != 0){
+  //   validDiseaseNewRes = result.validDisease[dateofService];
+  //   setDosYearDefalutSelectRadiology(dosYearArr[0]);
   
     
-    if (result.labFileDetail != null) {
-      var fileDetails = result.labFileDetail[dosYearArr[0].value];
-      console.log(fileDetails);
-      getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-    }
-  }
+  //   if (result.labFileDetail != null) {
+  //     var fileDetails = result.labFileDetail[dateofService];
+  //     console.log(fileDetails);
+  //     getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+  //   }
+  // }
+
+  // console.log(testresult)
 
 
 
   
-  console.log(dosYearArr)
-  console.log(validDiseaseNewRes)
-  setLabReportValidList(validDiseaseNewRes);
+  // console.log(dosYearArr)
+  // console.log(validDiseaseNewRes)
+  // setLabReportValidList(validDiseaseNewRes);
 
 
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`);
@@ -894,7 +982,6 @@ export default function PatientDetails() {
    
    
     if (response.data) {
-      console.log(response.data)
       var result = response.data;
       var dosYearArr = [];
       var validDiseaseNewRes = [];
@@ -904,6 +991,8 @@ export default function PatientDetails() {
         dosYearArr.push({ value: key, label: key });
       }
     
+      var dateofService = dosYearArr[0].value;
+    
       const highestDOS = Math.max(...dosYearArr.map(res => res.value));
       console.log(highestDOS)
     
@@ -911,16 +1000,18 @@ export default function PatientDetails() {
     
       console.log(highestDosValue)
       if(dosYearArr.length != 0){
-        validDiseaseNewRes = result.validDisease[dosYearArr[0].value];
+        validDiseaseNewRes = result.validDisease[dateofService];
         setDosYearDefalutSelectRadiology(dosYearArr[0]);
       
         
         if (result.labFileDetail != null) {
-          var fileDetails = result.labFileDetail[dosYearArr[0].value];
+          var fileDetails = result.labFileDetail[dateofService];
           console.log(fileDetails);
           getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
         }
       }
+    
+      console.log(testresult)
     
     
     
@@ -5039,7 +5130,7 @@ export default function PatientDetails() {
                                                 ))}
                                               </ul>
                                             </div>
-                                            {validDiseasesList.length == 0 ?
+                                            {labReportValidList.length == 0 ?
                                               <div className="card box-shadow-none">
                                                 <div className="card combo-card">
                                                   <div className="col-xl-12">
