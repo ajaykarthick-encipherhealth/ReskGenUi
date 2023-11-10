@@ -14,10 +14,10 @@ import { IMAGES } from "../jsx/constant/theme";
 
 export default function UserLogin() {
     const router = useRouter();
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('uvais01@encipherhealth.onmicrosoft.com');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState('@Asdf123');
     // const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 

@@ -1106,9 +1106,11 @@ export default function PatientDetails() {
       }
       console.log(dosYearArrFile)
       setFileLabDateofServiceList(dosYearArrFile);
+      setLabFileDateDefaulteSelect(dosYearArrFile[0])
       var fileDetails = result.labFileDetail[dateofService];
       getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
     }
+
 
    
   }
@@ -1774,6 +1776,7 @@ export default function PatientDetails() {
       console.log(e)
       var validDiseaseNewRes = [];
       var invalidDiseaseNewRes = [];
+      var unmatchedDiseaseRes =[];
       var comboDis = '';
       var meatCri = '';
       var result = patientDetailsRadiology;
@@ -1785,12 +1788,17 @@ export default function PatientDetails() {
 
       validDiseaseNewRes = result.validDisease[dosKeyValue];
       invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
+      unmatchedDiseaseRes = result.unmatchedDisease[dosKeyValue];
       comboDis = result.comboDisease[dosKeyValue];
       meatCri = result.meatCriteria[dosKeyValue];
       if (result.radiologyFileDetail != null) {
         var fileDetails = result.radiologyFileDetail[dosKeyValue];
         console.log(fileDetails);
         getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, localTenantId);
+      }
+
+      if (result.unmatchedDisease != null) {
+        setUnMatchHccListRadiology(unmatchedDiseaseRes)
       }
 
       setNewValidDiseaseListRadiology(validDiseaseNewRes);
