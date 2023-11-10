@@ -1884,7 +1884,7 @@ export default function PatientDetails() {
       
       if (result.labFileDetail != null) {
         var fileDetails = result.labFileDetail[dosKeyValue];
-        getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+        getLabReportFiles(fileDetails[0].azureBlobPath, localTenantId);
       }
   
      
