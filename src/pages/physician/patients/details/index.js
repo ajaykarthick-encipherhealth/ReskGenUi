@@ -176,6 +176,10 @@ export default function PatientDetails() {
   const [labFileDateofServieList, setFileLabDateofServiceList] = useState([]);
   const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] = useState('');
   const [labResult, setLabResult] = useState('');
+  const [labFileDosList, setLabFileDosList] = useState([]);
+  const [labFileDosListDefaultSelect, setLabFileDosListDefaultSelect] = useState([]);
+
+
 
 
 
@@ -1065,99 +1069,12 @@ export default function PatientDetails() {
   }
   const getLabReportDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
-
-    var testresult = {
-      "patientId": "gayathiri-07",
-      "patientName": "gayathiri",
-      "fileId": "[48f01354-2566-41e0-bf3d-5bb578cf6d2a]",
-      "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-      "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-      "validDisease": {
-          "04/12/2023": [
-              {
-                  "diagnosisCode": "N18.32",
-                  "actualDescription": "Stage 3B Moderate Chronic Kidney Disease"
-              }
-          ]
-      },
-      "labFileDetail": {
-          "04/12/2023": [
-              {
-                  "fileId": "ed032837-ced4-4f09-9dc0-c1bddb2a1970",
-                  "patientId": "gayathiri-07",
-                  "userId": "dhineshtest@encipherhealth.onmicrosoft.com",
-                  "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-                  "dos": "04/12/2023",
-                  "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-                  "fileName": "cASE 2.pdf",
-                  "azureBlobPath": "ed032837-ced4-4f09-9dc0-c1bddb2a1970.pdf"
-              },
-              {
-                  "fileId": "48f01354-2566-41e0-bf3d-5bb578cf6d2a",
-                  "patientId": "gayathiri-07",
-                  "userId": "dhineshtest@encipherhealth.onmicrosoft.com",
-                  "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-                  "dos": "04/12/2023",
-                  "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-                  "fileName": "cASE 2.pdf",
-                  "azureBlobPath": "48f01354-2566-41e0-bf3d-5bb578cf6d2a.pdf"
-              }
-          ]
-      }
-  }
-
-  // var result = testresult;
-  // var dosYearArr = [];
-  // var dosYearArrFile =[];
-  // var validDiseaseNewRes = [];
-
-
-  // for (var key in result.validDisease) {
-  //   dosYearArr.push({ value: key, label: key });
-  // }
-
-  // var dateofService = dosYearArr[0].value;
-
-  // const highestDOS = Math.max(...dosYearArr.map(res => res.value));
-  // console.log(highestDOS)
-
-  // const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
-
-  // console.log(highestDosValue)
-  // if(dosYearArr.length != 0){
-  //   validDiseaseNewRes = result.validDisease[dateofService];
-  //   setDosYearDefalutSelectRadiology(dosYearArr[0]);
-  
-    
-  //   if (result.labFileDetail != null) {
-  //     for (var key in result.labFileDetail) {
-  //       dosYearArrFile.push({ value: key, label: key });
-  //     }
-  //     console.log(dosYearArrFile)
-  //     setFileLabDateofServiceList(dosYearArrFile);
-  //     setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-  //     var fileDetails = result.labFileDetail[dateofService];
-  //     getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-  //   }
-
-   
-  // }
-  // setLabReportValidList(validDiseaseNewRes);
-
-
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`);
-    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
-   
   
-
-  // console.log(result)
-  
-
-  
-   
-   
     if (response.data.labFileDetail != null) {
+      
       var result = response.data;
+      setLabResult(result);
   var dosYearArr = [];
   var dosYearArrFile =[];
   var validDiseaseNewRes = [];
@@ -1166,6 +1083,12 @@ export default function PatientDetails() {
   for (var key in result.validDisease) {
     dosYearArr.push({ value: key, label: key });
   }
+  console.log(result.validDisease)
+
+  console.log(dosYear)
+  setLabFileDosList(dosYearArr);
+
+
 
   var dateofService = dosYearArr[0].value;
 
@@ -1176,17 +1099,13 @@ export default function PatientDetails() {
 
   console.log(highestDosValue)
   if(dosYearArr.length != 0){
-    validDiseaseNewRes = result.validDisease[dateofService];
-    setDosYearDefalutSelectRadiology(dosYearArr[0]);
-  
-    
+    validDiseaseNewRes = result.validDisease[dateofService];    
     if (result.labFileDetail != null) {
       for (var key in result.labFileDetail) {
         dosYearArrFile.push({ value: key, label: key });
       }
       console.log(dosYearArrFile)
       setFileLabDateofServiceList(dosYearArrFile);
-      setLabFileDateDefaulteSelect(dosYearArrFile[0]);
       var fileDetails = result.labFileDetail[dateofService];
       getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
     }
@@ -1194,7 +1113,9 @@ export default function PatientDetails() {
    
   }
   setLabReportValidList(validDiseaseNewRes);
+  setLabFileDosListDefaultSelect(dosYearArr[0]);
   setLabResultStatus(true)
+  setIsLoadingDos(false);
     }
     
   }
@@ -1850,6 +1771,7 @@ export default function PatientDetails() {
     }
 
     if (activeTab == 3) {
+      console.log(e)
       var validDiseaseNewRes = [];
       var invalidDiseaseNewRes = [];
       var comboDis = '';
@@ -1949,6 +1871,25 @@ export default function PatientDetails() {
       })
       setMeatCriteriaListRadiology(meatListArr);
       setIsLoading(false);
+
+    }
+    if(activeTab == 4){
+
+      
+        var result = labResult;
+          var validDiseaseNewRes = [];
+  
+      validDiseaseNewRes = result.validDisease[dosKeyValue];
+    
+      
+      if (result.labFileDetail != null) {
+        var fileDetails = result.labFileDetail[dosKeyValue];
+        getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+      }
+  
+     
+    setLabReportValidList(validDiseaseNewRes);
+    setLabResultStatus(true)
 
     }
 
@@ -2359,11 +2300,16 @@ export default function PatientDetails() {
                               <label className="form-label">Date of Service</label>
                               {!isLoadingDos ?
                                 <>
-                                  {activeTab == 3 || activeTab== 4 ?
+                                  {activeTab == 3 ?
                                     <Select onChange={(e) => dosOnChange(e)} options={dosYearRadiology} className="custom-react-select"
                                       defaultValue={dosYearDefalutSelectRadiology}
                                       isSearchable={false}
-                                    /> : <Select onChange={(e) => dosOnChange(e)} options={dosYear} className="custom-react-select"
+                                    /> : activeTab == 4 ?
+                                    <Select onChange={(e) => dosOnChange(e)} options={labFileDosList} className="custom-react-select"
+                                      defaultValue={labFileDosListDefaultSelect}
+                                      isSearchable={false}
+                                    />                                     
+                                     : <Select onChange={(e) => dosOnChange(e)} options={dosYear} className="custom-react-select"
                                       defaultValue={dosYearDefalutSelect}
                                       isSearchable={false}
                                     />}
