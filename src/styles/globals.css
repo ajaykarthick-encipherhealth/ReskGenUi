@@ -52002,6 +52002,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   left: 0px !important;
   margin-left: 20px !important;
   padding-left: 0 !important;
+  z-index: 9999;
 }
 
 .nav-header {
@@ -55065,4 +55066,17 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
   padding: 10px;
   border-radius: 10px;
   margin-right: 10px;
+}
+.radiology-select-dos{
+  display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+.z-index-low{
+  z-index: 9;
+}
+
+.radiology-select-dos > .custom-react-select{
+  width: 20%;
+  z-index: 99;
 }

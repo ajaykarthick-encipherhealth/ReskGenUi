@@ -168,6 +168,15 @@ export default function PatientDetails() {
   const [suggestedHccList, setSuggestedHccList] = useState([]);
   const [suggestedNonHccList, setSuggestedNonHccList] = useState([]);
   const [nonHccActiveCodes, setNonHccActiveCodes] = useState(false);
+  const [radiologyFileDateofServieList, setFileRadiologyDateofServiceList] = useState([]);
+  const [radiologyFileDateDefaulteSelect, setRadiologyFileDateDefaulteSelect] = useState('');
+  const [radiologyResult, setRadiologyResult] = useState('');
+  const [labFileDateofServieList, setFileLabDateofServiceList] = useState([]);
+  const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] = useState('');
+  const [labResult, setLabResult] = useState('');
+
+
+
 
 
 
@@ -744,12 +753,161 @@ export default function PatientDetails() {
           ]
       }
   }
+  // setRadiologyResult(testresult);
+  // var result = testresult;
+  // if (result.validDisease != null) {
+  //   console.log(result)
+  //   var validDis = '';
+  //   var invalidDis = '';
+  //   var comboDis = '';
+  //   var meatCri = '';
+  //   var dosYearArr = [];
+  //   var dosYearArrFile = [];
+  //   var validDiseaseNewRes = [];
+  //   var invalidDiseaseNewRes = [];
+  //   var unMatchRes = [];
+  //   // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
+  //   // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
+
+  //   for (var key in result.validDisease) {
+  //     dosYearArr.push({ value: key, label: key });
+  //   }
+   
+
+  //   var dateofService = dosYearArr[0].value;
+
+  //   const highestDOS = Math.max(...dosYearArr.map(res => res.value));
+
+  //   const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
+  //   setDosYearDefalutSelectRadiology(dosYearArr[0]);
+
+
+  //   if (result.radiologyFileDetail != null) {
+  //     for (var key in result.radiologyFileDetail) {
+  //       dosYearArrFile.push({ value: key, label: key });
+  //     }
+  //     var fileDetails = result.radiologyFileDetail[dateofService];
+  //     setRadiologyFileDateDefaulteSelect(dosYearArrFile[0])
+  //     console.log(fileDetails);
+  //     getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
+  //   }
+
+  //   console.log(dosYearArrFile)
+
+
+  //   validDis = result.validDisease[dateofService];
+  //   validDiseaseNewRes = result.validDisease[dateofService];
+  //   invalidDiseaseNewRes = result.invalidDisease[dateofService];
+  //   if (result.unmatchedDisease != null) {
+  //     var unMatchResCheck = result.unmatchedDisease[dateofService]
+
+  //     if (unMatchResCheck != null) {
+  //       unMatchRes = result.unmatchedDisease[dateofService]
+
+  //     }
+  //   }
+
+
+  //   invalidDis = result.invalidDisease[dateofService];
+  //   comboDis = result.comboDisease[dateofService];
+  //   meatCri = result.meatCriteria[dateofService];
+
+
+
+
+
+
+
+
+  //   setNewValidDiseaseListRadiology(validDiseaseNewRes);
+  //   setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
+  //   setUnMatchHccListRadiology(unMatchRes)
+  //   setComboDiseaseCodesListRadiology(comboDis);
+  //   setDosYearRadiology(dosYearArr);
+  //   setFileRadiologyDateofServiceList(dosYearArrFile)
+
+
+  //   const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
+
+  //   var meatListArr = [];
+  //   var meatMoniterHead = [];
+  //   var meatEvaluteHead = [];
+  //   var meatAssesmentHead = [];
+  //   var meatTreatMentHead = [];
+  //   var allMeatHead = [];
+  //   var allMeatHeadColorArr = [];
+  //   var allMeatHeadColor = [];
+  //   var dublicateRemoveSecondArr = [];
+
+  //   meatCri.map((res, index) => {
+  //     if (res.monitorCapturedFromHeader != "") {
+  //       meatMoniterHead.push({
+  //         header: res.monitorCapturedFromHeader,
+  //       })
+  //     }
+  //     if (res.evaluateCapturedFromHeader != "") {
+  //       meatEvaluteHead.push({
+  //         header: res.evaluateCapturedFromHeader
+  //       })
+  //     }
+  //     if (res.assessmentCapturedFromHeader != "") {
+  //       meatAssesmentHead.push({
+  //         header: res.assessmentCapturedFromHeader
+  //       })
+  //     }
+  //     if (res.treatmentCapturedFromHeader != "") {
+  //       meatTreatMentHead.push({
+  //         header: res.treatmentCapturedFromHeader
+  //       });
+  //     }
+  //     var newArray = [];
+  //     newArray = [...allMeatHead, ...meatMoniterHead, ...meatEvaluteHead, ...meatAssesmentHead, ...meatTreatMentHead];
+  //     var dublicateRemoveArr = getUniqueListBy(newArray, 'header');
+  //     dublicateRemoveArr.map((res3, index) => {
+
+  //       allMeatHeadColor.push({
+  //         header: res3.header,
+  //         color: COLORS[index]
+  //       })
+  //     })
+  //     allMeatHeadColorArr = allMeatHeadColor;
+
+  //     dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, 'header');
+  //     setMeatColorCodeList(dublicateRemoveSecondArr)
+  //   })
+
+  //   meatCri.map((res, index) => {
+  //     meatListArr.push({
+  //       diagnosisCode: res.diagnosisCode,
+  //       diseaseName: res.diseaseName,
+  //       monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+  //       assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+  //       evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+  //       treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+  //       monitorCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.monitorCapturedFromHeader),
+  //       assessmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.assessmentCapturedFromHeader),
+  //       evaluateCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.evaluateCapturedFromHeader),
+  //       treatmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.treatmentCapturedFromHeader),
+  //       monitorColor: COLORS[index],
+  //       meatColor: COLORS[index],
+  //       assessment: res.assessment,
+  //       monitor: res.monitor,
+  //       evaluate: res.evaluate,
+  //       treatment: res.treatment,
+  //       isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+  //     })
+  //   })
+  //   setMeatCriteriaListRadiology(meatListArr);
+  //   setIsLoadingDos(false);
+
+  // }
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`);
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
       var result = response.data;
-      console.log(result)
+      // console.log(result)
       setPatientDetailsRadiology(result);
+      setRadiologyResult(result);
       if (result.validDisease != null) {
         console.log(result)
         var validDis = '';
@@ -757,64 +915,73 @@ export default function PatientDetails() {
         var comboDis = '';
         var meatCri = '';
         var dosYearArr = [];
+        var dosYearArrFile = [];
         var validDiseaseNewRes = [];
         var invalidDiseaseNewRes = [];
         var unMatchRes = [];
         // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
         // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
-
+    
         for (var key in result.validDisease) {
           dosYearArr.push({ value: key, label: key });
         }
-
+       
+    
         var dateofService = dosYearArr[0].value;
-
+    
         const highestDOS = Math.max(...dosYearArr.map(res => res.value));
-
+    
         const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
         setDosYearDefalutSelectRadiology(dosYearArr[0]);
-
-
+    
+    
         if (result.radiologyFileDetail != null) {
+          for (var key in result.radiologyFileDetail) {
+            dosYearArrFile.push({ value: key, label: key });
+          }
           var fileDetails = result.radiologyFileDetail[dateofService];
+          setRadiologyFileDateDefaulteSelect(dosYearArrFile[0])
           console.log(fileDetails);
           getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
         }
-
-
+    
+        console.log(dosYearArrFile)
+    
+    
         validDis = result.validDisease[dateofService];
         validDiseaseNewRes = result.validDisease[dateofService];
         invalidDiseaseNewRes = result.invalidDisease[dateofService];
         if (result.unmatchedDisease != null) {
           var unMatchResCheck = result.unmatchedDisease[dateofService]
-
+    
           if (unMatchResCheck != null) {
             unMatchRes = result.unmatchedDisease[dateofService]
-
+    
           }
         }
-
-
+    
+    
         invalidDis = result.invalidDisease[dateofService];
         comboDis = result.comboDisease[dateofService];
         meatCri = result.meatCriteria[dateofService];
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
         setNewValidDiseaseListRadiology(validDiseaseNewRes);
         setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
         setUnMatchHccListRadiology(unMatchRes)
         setComboDiseaseCodesListRadiology(comboDis);
         setDosYearRadiology(dosYearArr);
-
-
+        setFileRadiologyDateofServiceList(dosYearArrFile)
+    
+    
         const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
-
+    
         var meatListArr = [];
         var meatMoniterHead = [];
         var meatEvaluteHead = [];
@@ -824,7 +991,7 @@ export default function PatientDetails() {
         var allMeatHeadColorArr = [];
         var allMeatHeadColor = [];
         var dublicateRemoveSecondArr = [];
-
+    
         meatCri.map((res, index) => {
           if (res.monitorCapturedFromHeader != "") {
             meatMoniterHead.push({
@@ -850,18 +1017,18 @@ export default function PatientDetails() {
           newArray = [...allMeatHead, ...meatMoniterHead, ...meatEvaluteHead, ...meatAssesmentHead, ...meatTreatMentHead];
           var dublicateRemoveArr = getUniqueListBy(newArray, 'header');
           dublicateRemoveArr.map((res3, index) => {
-
+    
             allMeatHeadColor.push({
               header: res3.header,
               color: COLORS[index]
             })
           })
           allMeatHeadColorArr = allMeatHeadColor;
-
+    
           dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, 'header');
           setMeatColorCodeList(dublicateRemoveSecondArr)
         })
-
+    
         meatCri.map((res, index) => {
           meatListArr.push({
             diagnosisCode: res.diagnosisCode,
@@ -885,8 +1052,9 @@ export default function PatientDetails() {
         })
         setMeatCriteriaListRadiology(meatListArr);
         setIsLoadingDos(false);
-
-      } else {
+    
+      }
+       else {
         setIsLoading(false);
       }
 
@@ -937,6 +1105,7 @@ export default function PatientDetails() {
 
   // var result = testresult;
   // var dosYearArr = [];
+  // var dosYearArrFile =[];
   // var validDiseaseNewRes = [];
 
 
@@ -958,19 +1127,18 @@ export default function PatientDetails() {
   
     
   //   if (result.labFileDetail != null) {
+  //     for (var key in result.labFileDetail) {
+  //       dosYearArrFile.push({ value: key, label: key });
+  //     }
+  //     console.log(dosYearArrFile)
+  //     setFileLabDateofServiceList(dosYearArrFile);
+  //     setLabFileDateDefaulteSelect(dosYearArrFile[0]);
   //     var fileDetails = result.labFileDetail[dateofService];
-  //     console.log(fileDetails);
   //     getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
   //   }
+
+   
   // }
-
-  // console.log(testresult)
-
-
-
-  
-  // console.log(dosYearArr)
-  // console.log(validDiseaseNewRes)
   // setLabReportValidList(validDiseaseNewRes);
 
 
@@ -985,44 +1153,44 @@ export default function PatientDetails() {
   
    
    
-    if (response.data) {
+    if (response.data.labFileDetail != null) {
       var result = response.data;
-      var dosYearArr = [];
-      var validDiseaseNewRes = [];
+  var dosYearArr = [];
+  var dosYearArrFile =[];
+  var validDiseaseNewRes = [];
+
+
+  for (var key in result.validDisease) {
+    dosYearArr.push({ value: key, label: key });
+  }
+
+  var dateofService = dosYearArr[0].value;
+
+  const highestDOS = Math.max(...dosYearArr.map(res => res.value));
+  console.log(highestDOS)
+
+  const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+
+  console.log(highestDosValue)
+  if(dosYearArr.length != 0){
+    validDiseaseNewRes = result.validDisease[dateofService];
+    setDosYearDefalutSelectRadiology(dosYearArr[0]);
+  
     
-    
-      for (var key in result.validDisease) {
-        dosYearArr.push({ value: key, label: key });
+    if (result.labFileDetail != null) {
+      for (var key in result.labFileDetail) {
+        dosYearArrFile.push({ value: key, label: key });
       }
-    
-      var dateofService = dosYearArr[0].value;
-    
-      const highestDOS = Math.max(...dosYearArr.map(res => res.value));
-      console.log(highestDOS)
-    
-      const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
-    
-      console.log(highestDosValue)
-      if(dosYearArr.length != 0){
-        validDiseaseNewRes = result.validDisease[dateofService];
-        setDosYearDefalutSelectRadiology(dosYearArr[0]);
-      
-        
-        if (result.labFileDetail != null) {
-          var fileDetails = result.labFileDetail[dateofService];
-          console.log(fileDetails);
-          getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-        }
-      }
-    
-      console.log(testresult)
-    
-    
-    
-      
-      console.log(dosYearArr)
-      console.log(validDiseaseNewRes)
-      setLabReportValidList(validDiseaseNewRes);
+      console.log(dosYearArrFile)
+      setFileLabDateofServiceList(dosYearArrFile);
+      setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+      var fileDetails = result.labFileDetail[dateofService];
+      getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+    }
+
+   
+  }
+  setLabReportValidList(validDiseaseNewRes);
     }
     
   }
@@ -1519,6 +1687,20 @@ export default function PatientDetails() {
     setValidated(true)
   }
 
+  const dosOnChangeRadiologyFile = async (e) => {
+    var dosKeyValue = e.value;
+    var fileDetails = radiologyResult.radiologyFileDetail[dosKeyValue];
+    console.log(fileDetails); 
+    getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, localTenantId);
+
+  }
+
+  const dosOnChangeLabFile = async (e) => {
+    var dosKeyValue = e.value;
+    var fileDetails = labResult.labFileDetail[dosKeyValue];
+    getLabReportFiles(fileDetails[0].azureBlobPath, localTenantId);
+
+  }
 
 
 
@@ -5055,20 +5237,16 @@ export default function PatientDetails() {
                                       <Tab.Pane id="my-posts" eventKey="file">
                                         <div className="my-post-content pt-3">
                                           <div className="card">
-                                            <div>
+                                          <div className="radiology-select-dos">
+                                            <Select onChange={(e) => dosOnChangeRadiologyFile(e)} options={radiologyFileDateofServieList} className="custom-react-select"
+                                      defaultValue={radiologyFileDateDefaulteSelect}
+                                      isSearchable={false}
+                                    />
                                               <button onClick={() => openNewTabDownloadPdfradiology()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
                                                 Open New Tab
                                               </button>
                                             </div>
-                                            {/* <div><input
-                                          required
-                                          type="file"
-                                          accept="application/pdf,text/plain"
-                                          onChange={(e) => onChangeFile(e.target.files)}
-                                        />
-
-                                        </div> */}
-                                            <div className="card-body p-0">
+                                            <div className="card-body p-0 z-index-low">
                                               <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                                 <div
                                                   style={{
@@ -5180,13 +5358,17 @@ export default function PatientDetails() {
                                     </Tab.Pane>                                    
                                         <Tab.Pane id="my-posts" eventKey="file">
                                           <div className="my-post-content pt-3">
-                                            <div className="card">
-                                              <div>
-                                                <button onClick={() => openNewTabDownloadPdf()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
-                                                  Open New Tab
-                                                </button>
-                                              </div>
-                                              <div className="card-body p-0">
+                                          <div className="card">
+                                          <div className="radiology-select-dos">
+                                            <Select onChange={(e) => dosOnChangeLabFile(e)} options={labFileDateofServieList} className="custom-react-select"
+                                      defaultValue={labFileDateDefaulteSelect}
+                                      isSearchable={false}
+                                    />
+                                              <button onClick={() => openNewTabDownloadPdfradiology()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
+                                                Open New Tab
+                                              </button>
+                                            </div>
+                                            <div className="card-body p-0 z-index-low">
                                                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                                   <div
                                                     style={{
