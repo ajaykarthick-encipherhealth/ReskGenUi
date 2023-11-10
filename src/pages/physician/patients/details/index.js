@@ -171,6 +171,8 @@ export default function PatientDetails() {
   const [radiologyFileDateofServieList, setFileRadiologyDateofServiceList] = useState([]);
   const [radiologyFileDateDefaulteSelect, setRadiologyFileDateDefaulteSelect] = useState('');
   const [radiologyResult, setRadiologyResult] = useState('');
+  const [radiologyResultStatus, setRadiologyResultStatus] = useState(false);
+  const [labResultStatus, setLabResultStatus] = useState(false);
   const [labFileDateofServieList, setFileLabDateofServiceList] = useState([]);
   const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] = useState('');
   const [labResult, setLabResult] = useState('');
@@ -361,13 +363,13 @@ export default function PatientDetails() {
               if(res.isHccValid == true){
                 unMatchResHcc.push({
                   actualDescription:res.actualDescription,
-                  diagnosisCodeFinding:res.diagnosisCodeFinding,
+                  diagnosisCodeFinding:res.diagnosisCodeDocument,
                   isHccValid:res.isHccValid
                 })
               }else{
                 unMatchResNonHcc.push({
                   actualDescription:res.actualDescription,
-                  diagnosisCodeFinding:res.diagnosisCodeFinding,
+                  diagnosisCodeFinding:res.diagnosisCodeDocument,
                   isHccValid:res.isHccValid
                 })
               }
@@ -1051,6 +1053,7 @@ export default function PatientDetails() {
           })
         })
         setMeatCriteriaListRadiology(meatListArr);
+        setRadiologyResultStatus(true)
         setIsLoadingDos(false);
     
       }
@@ -1191,6 +1194,7 @@ export default function PatientDetails() {
    
   }
   setLabReportValidList(validDiseaseNewRes);
+  setLabResultStatus(true)
     }
     
   }
@@ -2511,6 +2515,15 @@ export default function PatientDetails() {
                                                     </button>
                                                   </div>
                                                 </div>
+                                                {validDiseasesList.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
 
                                                 {newValidDiseaseList.map((data, i) => (
                                                   <li>
@@ -2534,7 +2547,7 @@ export default function PatientDetails() {
 
 
                                                         <Popconfirm
-                                                          title="You want move to invalid?"
+                                                          title="You want to delete?"
                                                           description={data.diagnosisCode}
                                                           onConfirm={confirmvalid}
                                                           placement="leftTop"
@@ -2623,13 +2636,22 @@ export default function PatientDetails() {
                                                       </button>
                                                     </div> : null}
                                                 </div>
+                                                {suggestedHccList.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
                                                 {suggestedHccList?.map((data) => {
                                                   return (
                                                     <>
                                                       {data.isHccValid == true ?
                                                         <li>
                                                           <div className="timeline-panel d-block invalid-disease">
-                                                            <div className="media-body"  onClick={() => handleOpenModalCombinationCode(data.diagnosisCodeFinding, data.actualDescription)}>
+                                                            <div className="media-body"  onClick={() => handleOpenModalCombinationCode(data.diagnosisCodeDocument, data.actualDescription)}>
                                                               <span className="mb-1 disease-name">
                                                                 {data.actualDescription}
                                                               </span>
@@ -2755,16 +2777,7 @@ export default function PatientDetails() {
                                                 ))}
                                               </ul>
 
-                                            </div>
-                                            {validDiseasesList.length == 0 ?
-                                              <div className="card box-shadow-none">
-                                                <div className="card combo-card">
-                                                  <div className="col-xl-12">
-
-                                                    <span className="no-patient-data">NO PATIENT DATA</span>
-                                                  </div>
-                                                </div></div>
-                                              : null}
+                                            </div>                                           
                                           </div>
                                         </div>
                                       </div>
@@ -3564,6 +3577,15 @@ export default function PatientDetails() {
                                                       </button>
                                                     </div>
                                                   </div>
+                                                  {newInValidDiseaseList.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
                                                   {newInValidDiseaseList.map((data, i) => (
                                                     // <li>
                                                     //   <div className="timeline-panel invalid-disease">
@@ -3675,6 +3697,15 @@ export default function PatientDetails() {
                                                         </button>
                                                       </div> : null}
                                                   </div>
+                                                  {suggestedNonHccList.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
                                                   {suggestedNonHccList?.map((data) => {
                                                     return (
                                                       <>
@@ -3744,16 +3775,7 @@ export default function PatientDetails() {
                                                     );
                                                   })}
                                                 </ul>
-                                              </div>                                             
-                                              {validDiseasesList.length == 0 ?
-                                                <div className="card box-shadow-none">
-                                                  <div className="card combo-card">
-                                                    <div className="col-xl-12">
-
-                                                      <span className="no-patient-data">NO PATIENT DATA</span>
-                                                    </div>
-                                                  </div></div>
-                                                : null}
+                                              </div> 
                                             </div>
                                           </div>
                                         </div>
@@ -4431,16 +4453,7 @@ export default function PatientDetails() {
                           </div>
                         </div> : activeTab == 3 ?
                         <div className="col-xl-12">
-                          {/* {newValidDiseaseListRadiology.length == 0 ?
-                    <div className="card height80 file-management">
-                  <div className="card-body p-0">
-                  <div className='col-xl-12'>
-                  <span className="fileprocessing-name">{radiologyFileProcessing}</span>
-                              <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
-                    </div>
-                  </div>
-                </div>
-                 :null} */}
+                        
                           <div className="card">
                             <div className="card-body">
                               <div className="profile-tab">
@@ -4503,6 +4516,15 @@ export default function PatientDetails() {
                                                       </button>
                                                     </div>
                                                   </div>
+                                                  {newValidDiseaseListRadiology.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
 
                                                   {newValidDiseaseListRadiology.map((data, i) => (
                                                     <li>
@@ -4525,7 +4547,7 @@ export default function PatientDetails() {
 
 
                                                         <Popconfirm
-                                                          title="You want move to invalid?"
+                                                         title="You want to delete?"
                                                           description={data.diagnosisCode}
                                                           onConfirm={confirmvalid}
                                                           placement="leftTop"
@@ -4683,6 +4705,16 @@ export default function PatientDetails() {
                                                         </button>
                                                       </div> : null}
                                                   </div>
+                                                  {unmatchHccListRadiology.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
+
                                                   {unmatchHccListRadiology.map((data, i) => (
                                                     <li>
                                                       <div className="timeline-panel d-block invalid-disease">
@@ -4790,15 +4822,7 @@ export default function PatientDetails() {
                                                 </ul>
 
                                               </div>
-                                              {newValidDiseaseListRadiology.length == 0 ?
-                                                <div className="card box-shadow-none">
-                                                  <div className="card combo-card">
-                                                    <div className="col-xl-12">
-
-                                                      <span className="no-patient-data">NO PATIENT DATA</span>
-                                                    </div>
-                                                  </div></div>
-                                                : null}
+                                             
                                             </div>
                                           </div>
                                         </div>
@@ -5238,10 +5262,11 @@ export default function PatientDetails() {
                                         <div className="my-post-content pt-3">
                                           <div className="card">
                                           <div className="radiology-select-dos">
+                                            {radiologyResultStatus ?
                                             <Select onChange={(e) => dosOnChangeRadiologyFile(e)} options={radiologyFileDateofServieList} className="custom-react-select"
                                       defaultValue={radiologyFileDateDefaulteSelect}
                                       isSearchable={false}
-                                    />
+                                    /> :null}
                                               <button onClick={() => openNewTabDownloadPdfradiology()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
                                                 Open New Tab
                                               </button>
@@ -5325,6 +5350,15 @@ export default function PatientDetails() {
                                                     </Badge>
                                                   </span>
                                                 </div>
+                                                {labReportValidList.length == 0 ?
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+
+                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                  </div>
+                                                </div></div>
+                                              : null}
 
                                                 {labReportValidList.map((data, i) => (
                                                   <li>
@@ -5342,16 +5376,7 @@ export default function PatientDetails() {
                                                   </li>
                                                 ))}
                                               </ul>
-                                            </div>
-                                            {labReportValidList.length == 0 ?
-                                              <div className="card box-shadow-none">
-                                                <div className="card combo-card">
-                                                  <div className="col-xl-12">
-
-                                                    <span className="no-patient-data">NO PATIENT DATA</span>
-                                                  </div>
-                                                </div></div>
-                                              : null}
+                                            </div>                                            
                                           </div>
                                         </div>
                                       </div>
@@ -5360,10 +5385,11 @@ export default function PatientDetails() {
                                           <div className="my-post-content pt-3">
                                           <div className="card">
                                           <div className="radiology-select-dos">
+                                            {labResultStatus ?
                                             <Select onChange={(e) => dosOnChangeLabFile(e)} options={labFileDateofServieList} className="custom-react-select"
                                       defaultValue={labFileDateDefaulteSelect}
                                       isSearchable={false}
-                                    />
+                                    /> :null}
                                               <button onClick={() => openNewTabDownloadPdfradiology()} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
                                                 Open New Tab
                                               </button>
