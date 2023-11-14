@@ -52,6 +52,21 @@ import { notification } from 'antd';
       })
  
     }
+    if(statusCode === 503) {
+      Swal.fire({
+        title: 'Service Unavailable!',
+        text: error?.response?.data.message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: "#DD6B55",
+        closeOnConfirm: false
+      }).then((result) => { 
+        if (result.isConfirmed) {
+         
+          } 
+      })
+ 
+    }
     if(statusCode === 400) {
       Swal.fire({
         title: 'Bad Request!',

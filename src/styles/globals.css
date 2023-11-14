@@ -52002,7 +52002,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   left: 0px !important;
   margin-left: 20px !important;
   padding-left: 0 !important;
-  z-index: 9999;
+  /* z-index: 9999; */
 }
 
 .nav-header {
@@ -55073,10 +55073,10 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
     margin: 20px;
 }
 .z-index-low{
-  z-index: 9;
+  /* z-index: 9; */
 }
 
 .radiology-select-dos > .custom-react-select{
   width: 20%;
-  z-index: 99;
+  /* z-index: 99; */
 }
