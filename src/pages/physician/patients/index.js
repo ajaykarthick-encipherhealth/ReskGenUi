@@ -146,30 +146,26 @@ export default function Patient() {
 
 
   const getAllList = async (uId) => {
-    // logesh056
     const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=" + uId);
     if (response.data) {
-      const records = response.data.slice(firstIndex, lastIndex);
-      setPatinetList(records);
-      var sortRes = arrSort(response.data)
-      // console.log(sortRes)
-      setPatinetListAll(response.data);
+      var resultMap = [];
+
+      response.data.map((res) => {
+        resultMap.push({
+          "patientId": res.patientId,
+          "patientName": res.patientName,
+          "fileName": res.fileName,
+          "computing": res.computing,
+          "createdAt": res.createdAt
+        })
+
+      }
+      )
+      setPatinetListAll(resultMap);
       setIsLoading(false);
-      // setTimeout(() => {
-      //  setCanPreviousPage(false);
-      //   setCanNextPage(true);
-      //   var uId = localStorage.getItem("userId");
-      //   getAllList(uId);
-      // }, 8000);	
-      // subscribe();
+      subscribe(resultMap);
     }
   }
-
-
-  function arrSort(arr) { 
-    arr.sort((a, b) => moment(a.updatedAt) - moment(b.updatedAt));
-    return arr;
-} 
 
 
 
@@ -207,18 +203,17 @@ export default function Patient() {
   };
 
   const handleSubmit = async (event) => {
-    console.log(inputValue);
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
-      if(selectFile != null){
+      if (selectFile != null) {
         submitPatientFile();
-        }
-      if(selectFileRadiology != null){
-      submitRadiology();
+      }
+      if (selectFileRadiology != null) {
+        submitRadiology();
       }
       // const formData = new FormData();
       // formData.append("file", selectFile);
@@ -261,7 +256,6 @@ export default function Patient() {
     inputValuePatientId.patientAllocated = localUserId;
     inputValuePatientId.computing = 0;
     inputValuePatientId.allocatedUserId = localUserId;
-    console.log(inputValuePatientId);
 
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
@@ -288,6 +282,9 @@ export default function Patient() {
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
     if (data.computing == 2) {
+      const controller = new AbortController()
+      const { signal } = controller
+      controller.abort()
       localStorage.setItem("patientId", data.patientId)
       navigate.push('/physician/patients/details');
     } else {
@@ -347,136 +344,97 @@ export default function Patient() {
   }
 
 
-  const subscribe = async () => {
+  const subscribe = async (patientResult) => {
     const accessToken = localStorage.getItem("token");
+    var uId = localStorage.getItem("userId");
+    var tenId = localStorage.getItem("tenantId");
+    var processedList = [];
+    const controller = new AbortController()
+    const { signal } = controller
+
+    var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`
     const fetchData = async () => {
-      await fetchEventSource("https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=dhineshtest@encipherhealth.onmicrosoft.com&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09", {
+     let eventSource = await fetchEventSource(resoureUrl, {
         method: "get",
+        mode: 'cors',
         headers: {
-          Accept: "text/event-stream",
+          // Accept: "text/event-stream",
           "Authorization": `Bearer ` + accessToken,
-          'Cache-Control': 'no-cache',
-          'Connection': 'keep-alive',
-          'Accept': "text/event-stream",
+          // 'Cache-Control': 'no-cache',
+          // 'Connection': 'keep-alive',
+          // 'Accept': "text/event-stream",
+          // 'Access-Control-Allow-Origin':"*"
         },
-        onopen(res) {
-          if (res.ok && res.status === 200) {
-            console.log("Connection made ", res);
-          } else if (
-            res.status >= 400 &&
-            res.status < 500 &&
-            res.status !== 429
-          ) {
+        signal: controller.signal,
+        withCredentials: true,
+        onopen(res) {        
             console.log("Client side error ", res);
-          }
         },
         onmessage(event) {
-          console.log(event.data);
+          console.log("Client Events Trigger ");
           const parsedData = JSON.parse(event.data);
-          console.log(parsedData)
+          processedList = parsedData;
+          var checkProcessedValue =[];
+          processedList.map((res) => {
+            checkProcessedValue.push({
+              "patientId":res,             
+            })
+          }
+          )
 
 
-          let result = patinetListAll.filter(o1 => !parsedData.some(o2 => o1.patientId === o2));
 
-          console.log(result)
-          
+          const array1 = patientResult;
+          const array2 = checkProcessedValue;
 
-
-        //   patinetListAll.keys(myObject).forEach((item) => {
-        //     if(typeof myObject[item] == "number" && myObject[item] >= 4) {
-        //         myObject[item] = 10
-        //     }
-        // })
-          // setData((data) => [...data, parsedData]);
+    
+          const hashMap2 = array2.reduce((carry, item) => {
+            const { patientId } = item;
+            if (!carry[patientId]) {
+              carry[patientId] = item;
+            }
+            return carry;
+          }, {});
+    
+    
+          const output = array1.map(item => {
+            const newName = hashMap2[item.patientId];
+            if (newName) {
+              item.computing = 2;
+            }
+            return item;
+          });
+    
+          setPatinetListAll(output);
         },
         onclose() {
           console.log("Connection closed by the server");
         },
         onerror(err) {
+          controller.abort()
           console.log("There was an error from server", err);
         },
       });
     };
-    fetchData();
-    
-
-    // const accessToken = localStorage.getItem("x-access-token");
-    // const accessToken = localStorage.getItem("token");
-    // var apiUrl = "https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=dhineshtest@encipherhealth.onmicrosoft.com&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09"
-    // const eventSource = new EventSourcePolyfill("https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=dhineshtest@encipherhealth.onmicrosoft.com&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09", {
-    //   headers: {
-    //     "Authorization": `Bearer ` + accessToken,
-    //     'Content-Type': 'text/event-stream',
-    //     'Cache-Control': 'no-cache',
-    //     'Connection': 'keep-alive',
-    //     'Accept': "text/event-stream",
-    //   },
-    // })
-
-    // eventSource.onopen = (e) => {
-    //   console.log("onopen....");
-    //   console.log(e.data)
-    // }
-    // eventSource.onerror = (error) => {
-    //   console.log("onerror",error)
-    //   if(eventSource){
-    //     eventSource.close();
-    //   }
-    // }
-    // eventSource.onmessage = e => {
-    //   onSseMessage(e.data);
-    // };
-  
-    // eventSource.addEventListener('complete', () => {
-    //   console.log('Transfer of data is complete');
-    // });
 
 
-    // const status = listening;
-    // if (!status) {
-    //   const accessToken = localStorage.getItem("token")
-    //   const resoureUrl = "https://hcc.encipherhealth.com/secure/dbservice/events?userid=dhineshtest@encipherhealth.onmicrosoft.com";
-    //   const events = new EventSourcePolyfill("https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=dhineshtest@encipherhealth.onmicrosoft.com&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09", {
-    //     headers: {
-    //       "Authorization": `Bearer ` + accessToken,
-    //       'Content-Type': 'text/event-stream',
-    //       'Cache-Control': 'no-cache',
-    //       'Connection': 'keep-alive'
-    //     },
-    //   })
+ 
 
-    //   console.log(events)
 
-    //   events.onmessage = event => {
-    //     const parsedData = JSON.parse(event.data);
-    //     console.log(event)
-    //     switch (parsedData.type) {
-    //       case "init-connection":
-    //         setProcess(parsedData.processId);
-    //         break;
-    //       case "message":
-    //         setMessage(parsedData.message);
-    //         break;
-    //     }
-    //   };
-    // } else {
-    //   setProcess({});
-    //   setMessage({});
-    // }
-    // setListening(!listening);
+    fetchData();  
   };
 
 
-  const fetchData = async () => {
-    const data = await (await fetchDataApi()).data;
-    console.log(data);
-    // setNotifications(data);
-  };
+  // const fetchData = async () => {
+  //   const data = await (await fetchDataApi()).data;
+  //   console.log(data);
+  //   // setNotifications(data);
+  // };
 
-  const fetchDataApi = async () => {
-    return await axios.get(ENDPOINTS.apiEndoint + "aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09");
+  // const fetchDataApi = async () => {
+  //   return await axios.get(ENDPOINTS.apiEndoint + "aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09");
 
-  };
+  // };
 
   const statusBodyTemplate = (rowData) => {
     //   console.log(rowData.computing)
@@ -521,7 +479,7 @@ export default function Patient() {
         <button onClick={() => gotoPatientDetails(rowData)} className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn">
           <EyeOutlined className='text-white' />
         </button> : <button disabled className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn">
-          <EyeInvisibleOutlined className='text-white'/>
+          <EyeInvisibleOutlined className='text-white' />
         </button>}
       <button onClick={() => addPatientFile(rowData)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
         <FontAwesomeIcon icon={faUpload} fontSize={11} />
@@ -532,7 +490,7 @@ export default function Patient() {
 
 
 
-  
+
   const submitPatientFile = async () => {
     // setIsLoadingBtn(false);
     const formData = new FormData();
@@ -555,7 +513,6 @@ export default function Patient() {
       formData,
       headers
     );
-    console.log(response?.status)
     if (response?.status == 202) {
       getAllList(localUserId);
 
@@ -574,43 +531,42 @@ export default function Patient() {
     // getAllList(localUserId);
 
     // console.log("1");
-  
 
-};
-const submitRadiology = async () => {
-  const formData = new FormData();
-  formData.append("file", selectFileRadiology);
-  formData.append("orgid", localOrgId);
-  formData.append("tenantid", tenantId);
-  formData.append("userid", localUserId);
-  formData.append("patientid", inputValue.patientId);
-  formData.append("patientname", inputValue.name);
-  const headers = {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+
   };
-  setSelectFile(formData);
-  const response = await axios.post(
-    ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload/radiology
+  const submitRadiology = async () => {
+    const formData = new FormData();
+    formData.append("file", selectFileRadiology);
+    formData.append("orgid", localOrgId);
+    formData.append("tenantid", tenantId);
+    formData.append("userid", localUserId);
+    formData.append("patientid", inputValue.patientId);
+    formData.append("patientname", inputValue.name);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    setSelectFile(formData);
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload/radiology
     `,
-    formData,
-    headers
-  );
-  console.log(response?.status)
-  if (response?.status == 202) {  
-    getAllList(localUserId);  
+      formData,
+      headers
+    );
+    if (response?.status == 202) {
+      getAllList(localUserId);
+      setAddPatient(false);
+      setIsLoadingBtn(false);
+    } else {
+      setIsLoadingBtn(false);
+    }
     setAddPatient(false);
-    setIsLoadingBtn(false);
-  } else {
-    setIsLoadingBtn(false);
-  }
-  setAddPatient(false);
-  // setIsLoadingBtn(false);
-  setSelectFileRadiology(null);
+    // setIsLoadingBtn(false);
+    setSelectFileRadiology(null);
 
 
-};
+  };
 
 
 
@@ -646,7 +602,7 @@ const submitRadiology = async () => {
                         <div className="tbl-caption  align-items-center">
                           <div className="row">
                             <div className='col-xl-3'>
-                            <div class="form-group has-search">
+                              <div class="form-group has-search">
                                 <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
                                 <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control" placeholder="Patient Id" />
                               </div>
@@ -841,11 +797,11 @@ const submitRadiology = async () => {
                       File <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
-                       required
+                      required
                       type="file"
                       accept="application/pdf,text/plain"
                       onChange={(e) => onChangeFile(e.target.files)}
-                       disabled={isLoadingBtn ? true : false}
+                      disabled={isLoadingBtn ? true : false}
                     />
                   </div>
                   {/* <div className="col-xl-12 mb-3">
