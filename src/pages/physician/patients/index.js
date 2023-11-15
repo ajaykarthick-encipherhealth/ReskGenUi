@@ -51,6 +51,8 @@ export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientStoreDetails = useSelector((state) => state);
+  const controller = new AbortController()
+  const signal = controller.signal
 
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -163,7 +165,9 @@ export default function Patient() {
       )
       setPatinetListAll(resultMap);
       setIsLoading(false);
-      subscribe(resultMap);
+    //     setTimeout(() => {
+    //     subscribe(resultMap);
+    // }, 3000);
     }
   }
 
@@ -349,14 +353,15 @@ export default function Patient() {
     var uId = localStorage.getItem("userId");
     var tenId = localStorage.getItem("tenantId");
     var processedList = [];
-    const controller = new AbortController()
-    const { signal } = controller
+
+
 
     var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`
     const fetchData = async () => {
      let eventSource = await fetchEventSource(resoureUrl, {
         method: "get",
         mode: 'cors',
+        signal: signal,
         headers: {
           // Accept: "text/event-stream",
           "Authorization": `Bearer ` + accessToken,
@@ -365,7 +370,6 @@ export default function Patient() {
           // 'Accept': "text/event-stream",
           // 'Access-Control-Allow-Origin':"*"
         },
-        signal: controller.signal,
         withCredentials: true,
         onopen(res) {        
             console.log("Client side error ", res);
@@ -386,6 +390,8 @@ export default function Patient() {
 
           const array1 = patientResult;
           const array2 = checkProcessedValue;
+          console.log(array2)
+          console.log(patientResult)
 
     
           const hashMap2 = array2.reduce((carry, item) => {
@@ -408,6 +414,7 @@ export default function Patient() {
           setPatinetListAll(output);
         },
         onclose() {
+          controller.abort();
           console.log("Connection closed by the server");
         },
         onerror(err) {
@@ -423,6 +430,12 @@ export default function Patient() {
 
     fetchData();  
   };
+
+  function abortFetching() {
+    console.log('Now aborting');
+    // Abort.
+    controller.abort()
+}
 
 
   // const fetchData = async () => {

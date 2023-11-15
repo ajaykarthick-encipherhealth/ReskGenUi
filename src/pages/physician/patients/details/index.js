@@ -178,6 +178,9 @@ export default function PatientDetails() {
   const [labResult, setLabResult] = useState('');
   const [labFileDosList, setLabFileDosList] = useState([]);
   const [labFileDosListDefaultSelect, setLabFileDosListDefaultSelect] = useState([]);
+  const [saveBtnTitle, setSaveBtnTitle] = useState("Save");
+  const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
+  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
 
 
 
@@ -290,14 +293,13 @@ export default function PatientDetails() {
     }
 
     const response = await axios.post(ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload`, data);
-    console.log(response)
+
 
 
 
   };
 
   const getYearOfServiceDetails = async (year) => {
-    console.log(year);
     var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     // if (response.data) {
@@ -316,7 +318,6 @@ export default function PatientDetails() {
       var result = response.data;
       setPatientDetails(result);
       if (result.validDisease != null) {
-        console.log(result)
         var validDis = '';
         var invalidDis = '';
         var comboDis = '';
@@ -363,7 +364,6 @@ export default function PatientDetails() {
           if (unMatchResCheck != null) {
             unMatchRes = result.unmatchedDisease[highestDOS]
             unMatchRes.map((res, index) => {
-              console.log(res)
               if (res.isHccValid == true) {
                 unMatchResHcc.push({
                   actualDescription: res.actualDescription,
@@ -563,7 +563,6 @@ export default function PatientDetails() {
     if (response.data) {
       setRadiologyResCheck(true);
       var result = response.data;
-      console.log(result.validDisease)
       if (result.radiologyFileDetail != null) {
         getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
       }
@@ -762,7 +761,6 @@ export default function PatientDetails() {
     // setRadiologyResult(testresult);
     // var result = testresult;
     // if (result.validDisease != null) {
-    //   console.log(result)
     //   var validDis = '';
     //   var invalidDis = '';
     //   var comboDis = '';
@@ -794,11 +792,9 @@ export default function PatientDetails() {
     //     }
     //     var fileDetails = result.radiologyFileDetail[dateofService];
     //     setRadiologyFileDateDefaulteSelect(dosYearArrFile[0])
-    //     console.log(fileDetails);
     //     getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
     //   }
 
-    //   console.log(dosYearArrFile)
 
 
     //   validDis = result.validDisease[dateofService];
@@ -911,11 +907,9 @@ export default function PatientDetails() {
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
       var result = response.data;
-      // console.log(result)
       setPatientDetailsRadiology(result);
       setRadiologyResult(result);
       if (result.validDisease != null) {
-        console.log(result)
         var validDis = '';
         var invalidDis = '';
         var comboDis = '';
@@ -947,11 +941,9 @@ export default function PatientDetails() {
           }
           var fileDetails = result.radiologyFileDetail[dateofService];
           setRadiologyFileDateDefaulteSelect(dosYearArrFile[0])
-          console.log(fileDetails);
           getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
         }
 
-        console.log(dosYearArrFile)
 
 
         validDis = result.validDisease[dateofService];
@@ -1083,9 +1075,7 @@ export default function PatientDetails() {
       for (var key in result.validDisease) {
         dosYearArr.push({ value: key, label: key });
       }
-      console.log(result.validDisease)
 
-      console.log(dosYear)
       setLabFileDosList(dosYearArr);
 
 
@@ -1093,18 +1083,15 @@ export default function PatientDetails() {
       var dateofService = dosYearArr[0].value;
 
       const highestDOS = Math.max(...dosYearArr.map(res => res.value));
-      console.log(highestDOS)
 
       const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
 
-      console.log(highestDosValue)
       if (dosYearArr.length != 0) {
         validDiseaseNewRes = result.validDisease[dateofService];
         if (result.labFileDetail != null) {
           for (var key in result.labFileDetail) {
             dosYearArrFile.push({ value: key, label: key });
           }
-          console.log(dosYearArrFile)
           setFileLabDateofServiceList(dosYearArrFile);
           setLabFileDateDefaulteSelect(dosYearArrFile[0])
           var fileDetails = result.labFileDetail[dateofService];
@@ -1145,7 +1132,6 @@ export default function PatientDetails() {
       color += letters[Math.floor(Math.random() * 16)];
 
     }
-    console.log(color)
     return color;
   }
 
@@ -1465,7 +1451,6 @@ export default function PatientDetails() {
     // getSectionResult(value.toLowerCase());
   };
   const handleOpenModalCombinationCode = (value, disDescription, check, whereCome) => {
-    console.log(check)
     if (whereCome == "nonHcc") {
       setNonHccActiveCodes(true);
     } else {
@@ -1475,7 +1460,6 @@ export default function PatientDetails() {
       setSelectActiveCode(value);
       var splitPoint = '';
       splitPoint = disDescription[0];
-      console.log(splitPoint)
       setTimeout(() => {
         highlight({
           keyword: splitPoint,
@@ -1617,7 +1601,6 @@ export default function PatientDetails() {
   const dosOnChangeRadiologyFile = async (e) => {
     var dosKeyValue = e.value;
     var fileDetails = radiologyResult.radiologyFileDetail[dosKeyValue];
-    console.log(fileDetails);
     getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, localTenantId);
 
   }
@@ -1647,7 +1630,6 @@ export default function PatientDetails() {
       var meatCri = '';
       var rafScore = null;
       var result = patientDetails;
-      console.log(patientDetails);
 
 
 
@@ -1662,7 +1644,6 @@ export default function PatientDetails() {
         rafScore = result.rafScore[dosKeyValue]
       }
 
-      console.log(validDiseaseNewRes)
 
       setNewValidDiseaseList(validDiseaseNewRes);
       setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -1773,7 +1754,6 @@ export default function PatientDetails() {
     }
 
     if (activeTab == 3) {
-      console.log(e)
       var validDiseaseNewRes = [];
       var invalidDiseaseNewRes = [];
       var unmatchedDiseaseRes = [];
@@ -1793,7 +1773,6 @@ export default function PatientDetails() {
       meatCri = result.meatCriteria[dosKeyValue];
       if (result.radiologyFileDetail != null) {
         var fileDetails = result.radiologyFileDetail[dosKeyValue];
-        console.log(fileDetails);
         getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, localTenantId);
       }
 
@@ -1915,10 +1894,8 @@ export default function PatientDetails() {
     var checked = event.target.checked;
     setSuggestedSelectValue(value);
     setSuggestedSelectCode(code)
-    console.log(code)
     // setSuggestedModal(true);
     if (checked == true) {
-      console.log(value)
       // setSuggestedModal(true);
 
       // var newArray = [];
@@ -1933,11 +1910,9 @@ export default function PatientDetails() {
       //   "dos": 2017
       // }
       // namePush.push(dataFormatSuggested);
-      // console.log(namePush)
-      // console.log(matchHccList)
+
       // newArray = [...matchHccList, ...namePush];
       // setMatchHccList(newArray);
-      // console.log(matchHccList)
 
     } else {
       const removeArr = matchHccList.filter((i) => i.name != value);
@@ -1950,22 +1925,25 @@ export default function PatientDetails() {
 
   const handleSubmitMatchHcc = async () => {
     setSuggestedBtnTitle("Loading")
-    const response = await axios.put(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestions`, matchHccList);
-    console.log(response)
-    if (response?.status == 202) {
-      setSuggestedBtnTitle("Add")
-      notification.success({
-        message: "Moved suggested code to valid diseases Successfully!",
-      });
-      getPatientDetails(localOrgId, localTenantId);
-    } else {
+    try {
+      const response = await axios.put(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestions`, matchHccList);
+      if (response?.status == 202) {
+        setSuggestedBtnTitle("Add")
+        notification.success({
+          message: "Moved suggested code to valid diseases Successfully!",
+        });
+        getPatientDetails(localOrgId, localTenantId);
+      } else {
+        setSuggestedBtnTitle("Add")
+      }
+
+    }
+    catch (e) {
       setSuggestedBtnTitle("Add")
     }
-    console.log(matchHccList)
   }
 
   const submitSuggestedHcc = async (notes) => {
-    console.log(suggesteSelectValue)
     var newArray = [];
     var namePush = [];
     var dataFormatSuggested = {
@@ -1978,11 +1956,8 @@ export default function PatientDetails() {
       "dos": selectedDosValue
     }
     namePush.push(dataFormatSuggested);
-    console.log(namePush)
-    console.log(matchHccList)
     newArray = [...matchHccList, ...namePush];
     setMatchHccList(newArray);
-    console.log(matchHccList)
   }
 
   const handleChangeSuggested = async (e) => {
@@ -2034,7 +2009,6 @@ export default function PatientDetails() {
   };
 
   const handleSubmitPatientFile = async (event) => {
-    console.log(inputValue);
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -2050,7 +2024,6 @@ export default function PatientDetails() {
   };
 
   const handleSubmitLabReport = async (event) => {
-    console.log(inputValue);
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -2186,7 +2159,6 @@ export default function PatientDetails() {
 
 
   const getValidHccDetails = async (value, code) => {
-    // console.log(value)
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/hccdisease?diagnosisCode=${code}`);
     if (response.data) {
@@ -2216,7 +2188,6 @@ export default function PatientDetails() {
       "dos": selectedDosValue
     }
     const response = await axios.post(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/valid`, dataFormatSuggested);
-    console.log(response)
     if (response?.status == 202) {
       notification.success({
         message: "Moved valid diseases Successfully!",
@@ -2228,7 +2199,6 @@ export default function PatientDetails() {
 
   const activeValidDisCode = async (code, disDescription) => {
     setSelectActiveCode(code)
-    console.log(disDescription)
     var splitPoint = disDescription.substring(' ', 20);
 
     setTimeout(() => {
@@ -2255,6 +2225,128 @@ export default function PatientDetails() {
     return removeComma
 
   }
+
+
+
+  const handleSubmitHccSave = async () => {
+    setSaveBtnTitle("Loading...")
+    var dos = dosYearDefalutSelect[0].label;
+    var validObject = {};
+    var inValidObject = {};
+    var unmatachObject = {};
+    var comoboObject = {};
+    var meatObject = {};
+    validObject[dos] = newValidDiseaseList;
+    inValidObject[dos] = newInValidDiseaseList;
+    unmatachObject[dos] = suggestedHccList;
+    comoboObject[dos] = comboDiseaseCodesList;
+    meatObject[dos] = meatCriteriaList;
+
+    var postData = {
+      "userId": localUserId,
+      "patientId": localPatientId,
+      "patientName": patientDocumentResult.patientName,
+      "fileId": patientDocumentResult.patientName,
+      "orgId": patientDocumentResult.orgId,
+      "tenantId": patientDocumentResult.tenantId,
+      "validDisease": validObject,
+      "invalidDisease": inValidObject,
+      "unmatchedDisease": unmatachObject,
+      "comboDisease": comoboObject,
+      "meatCriteria": meatObject,
+      "rafScore": patientDocumentResult.rafScore,
+      "dosFiltered": patientDocumentResult.dosFiltered,
+      "fileDetailDTO": patientDocumentResult.fileDetailDTO
+
+    }
+
+    console.log(postData)
+    try {
+      const response = await axios.post(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/save`, postData);
+      if (response?.status == 202) {
+        notification.success({
+          message: "Saved Successfully!",
+        });
+        setSaveBtnTitle("Save")
+        getPatientDetails(localOrgId, localTenantId);
+      } else {
+      }
+    }
+    catch (e) {
+      setSaveBtnTitle("Save")
+    }
+  }
+
+  const handleSubmitHccComplete = async () => {
+    setCompleteBtnTitle("Loading...");
+    var dos = dosYearDefalutSelect[0].label;
+    var validObject = {};
+    var inValidObject = {};
+    var unmatachObject = {};
+    var comoboObject = {};
+    var meatObject = {};
+    validObject[dos] = newValidDiseaseList;
+    inValidObject[dos] = newInValidDiseaseList;
+    unmatachObject[dos] = suggestedHccList;
+    comoboObject[dos] = comboDiseaseCodesList;
+    meatObject[dos] = meatCriteriaList;
+
+    var postData = {
+      "userId": localUserId,
+      "patientId": localPatientId,
+      "patientName": patientDocumentResult.patientName,
+      "fileId": patientDocumentResult.patientName,
+      "orgId": patientDocumentResult.orgId,
+      "tenantId": patientDocumentResult.tenantId,
+      "validDisease": validObject,
+      "invalidDisease": inValidObject,
+      "unmatchedDisease": unmatachObject,
+      "comboDisease": comoboObject,
+      "meatCriteria": meatObject,
+      "rafScore": patientDocumentResult.rafScore,
+      "dosFiltered": patientDocumentResult.dosFiltered,
+      "fileDetailDTO": patientDocumentResult.fileDetailDTO
+
+    }
+
+    console.log(postData)
+    try {
+      const response = await axios.post(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`, postData);
+      if (response?.status == 202) {
+        notification.success({
+          message: "Completed Successfully!",
+        });
+        setCompleteBtnTitle("Complete");
+        getPatientDetails(localOrgId, localTenantId);
+      } else {
+      }
+    }
+    catch (e) {
+      setCompleteBtnTitle("Complete");
+    }
+  }
+
+  const handleSubmitHccDecline = async () => {
+    setDeclineBtnTitle("Loading...")
+    var postData = {
+      "orgid": localOrgId,
+      "patientId": localPatientId,
+    }
+    try {
+      const response = await axios.post(ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/decline`, postData);
+      if (response?.status == 202) {
+        notification.success({
+          message: "Decline Successfully!",
+        });
+        setDeclineBtnTitle("Decline")
+      } else {
+      }
+    }
+    catch (e) {
+      setDeclineBtnTitle("Decline")
+    }
+  }
+
 
 
 
@@ -2364,17 +2456,17 @@ export default function PatientDetails() {
                                 {/* {activeTab == 3 ?
                                   <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
                                   : null} */}
-                                <Button className="btn btn-primary btn-sm ms-2 flr decline-btn">
+                                <Button onClick={handleSubmitHccDecline} className="btn btn-primary btn-sm ms-2 flr decline-btn">
                                   <FontAwesomeIcon icon={faClose} className="me-2 mt-1" fontSize={14} />
-                                  Decline
+                                  {declineBtnTitle}
                                 </Button>
-                                <Button className="btn btn-primary btn-sm ms-2 flr complted-btn">
+                                <Button onClick={handleSubmitHccComplete} className="btn btn-primary btn-sm ms-2 flr complted-btn">
                                   <FontAwesomeIcon icon={faCheckCircle} className="me-2 mt-1" fontSize={14} />
-                                  Complete
+                                  {completedBtnTitle}
                                 </Button>
-                                <Button className="btn btn-primary btn-sm ms-2 flr saveBtn">
+                                <Button onClick={handleSubmitHccSave} className="btn btn-primary btn-sm ms-2 flr saveBtn">
                                   <FontAwesomeIcon icon={faCheck} className="me-2 mt-1" fontSize={14} />
-                                  Save
+                                  {saveBtnTitle}
                                 </Button>
 
                               </div>
@@ -2469,7 +2561,7 @@ export default function PatientDetails() {
                                                     </button>
                                                   </div>
                                                 </div>
-                                                {validDiseasesList.length == 0 ?
+                                                {/* {validDiseasesList.length == 0 ?
                                                   <div className="card box-shadow-none">
                                                     <div className="card combo-card">
                                                       <div className="col-xl-12">
@@ -2477,7 +2569,7 @@ export default function PatientDetails() {
                                                         <span className="no-patient-data">NO PATIENT DATA</span>
                                                       </div>
                                                     </div></div>
-                                                  : null}
+                                                  : null} */}
 
                                                 {newValidDiseaseList.map((data, i) => (
                                                   <li>
@@ -2590,7 +2682,7 @@ export default function PatientDetails() {
                                                       </button>
                                                     </div> : null}
                                                 </div>
-                                                {suggestedHccList.length == 0 ?
+                                                {/* {suggestedHccList.length == 0 ?
                                                   <div className="card box-shadow-none">
                                                     <div className="card combo-card">
                                                       <div className="col-xl-12">
@@ -2598,7 +2690,7 @@ export default function PatientDetails() {
                                                         <span className="no-patient-data">NO PATIENT DATA</span>
                                                       </div>
                                                     </div></div>
-                                                  : null}
+                                                  : null} */}
                                                 {suggestedHccList?.map((data) => {
                                                   return (
                                                     <>
@@ -2606,22 +2698,22 @@ export default function PatientDetails() {
                                                         <li>
                                                           <div className="timeline-panel d-block invalid-disease">
                                                             <div className="d-flex">
-                                                            <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCodeDocument, data.actualDescription)}>
-                                                              <span className="mb-1 disease-name">
-                                                                {data.actualDescription}
-                                                              </span>
-                                                            </div>
-                                                            <Popover onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                              <div className="icon-box  bg-danger-light me-1">
-                                                                <FontAwesomeIcon
-                                                                  icon={faInfo}
-                                                                  style={{ color: "blue" }}
-                                                                />
+                                                              <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCodeDocument, data.actualDescription)}>
+                                                                <span className="mb-1 disease-name">
+                                                                  {data.actualDescription}
+                                                                </span>
                                                               </div>
-                                                            </Popover>
+                                                              <Popover onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                                <div className="icon-box  bg-danger-light me-1">
+                                                                  <FontAwesomeIcon
+                                                                    icon={faInfo}
+                                                                    style={{ color: "blue" }}
+                                                                  />
+                                                                </div>
+                                                              </Popover>
                                                             </div>
-                                                           
+
                                                             {/* <div className="form-check custom-checkbox">
                                                       <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
                                                     </div> */}
@@ -2808,7 +2900,7 @@ export default function PatientDetails() {
                                                 ))}
                                               </ul>
                                             </div>
-                                            {validDiseasesList.length == 0 ?
+                                            {/* {validDiseasesList.length == 0 ?
                                               <div className="card box-shadow-none">
                                                 <div className="card combo-card">
                                                   <div className="col-xl-12">
@@ -2816,7 +2908,7 @@ export default function PatientDetails() {
                                                     <span className="no-patient-data">NO PATIENT DATA</span>
                                                   </div>
                                                 </div></div>
-                                              : null}
+                                              : null} */}
                                           </div>
                                         </div>
                                       </div>
@@ -3543,7 +3635,7 @@ export default function PatientDetails() {
                                                       </button>
                                                     </div>
                                                   </div>
-                                                  {newInValidDiseaseList.length == 0 ?
+                                                  {/* {newInValidDiseaseList.length == 0 ?
                                                     <div className="card box-shadow-none">
                                                       <div className="card combo-card">
                                                         <div className="col-xl-12">
@@ -3551,7 +3643,7 @@ export default function PatientDetails() {
                                                           <span className="no-patient-data">NO PATIENT DATA</span>
                                                         </div>
                                                       </div></div>
-                                                    : null}
+                                                    : null} */}
                                                   {newInValidDiseaseList.map((data, i) => (
                                                     // <li>
                                                     //   <div className="timeline-panel invalid-disease">
@@ -3663,7 +3755,7 @@ export default function PatientDetails() {
                                                         </button>
                                                       </div> : null}
                                                   </div>
-                                                  {suggestedNonHccList.length == 0 ?
+                                                  {/* {suggestedNonHccList.length == 0 ?
                                                     <div className="card box-shadow-none">
                                                       <div className="card combo-card">
                                                         <div className="col-xl-12">
@@ -3671,7 +3763,7 @@ export default function PatientDetails() {
                                                           <span className="no-patient-data">NO PATIENT DATA</span>
                                                         </div>
                                                       </div></div>
-                                                    : null}
+                                                    : null} */}
                                                   {suggestedNonHccList?.map((data) => {
                                                     return (
                                                       <>
@@ -4482,7 +4574,7 @@ export default function PatientDetails() {
                                                         </button>
                                                       </div>
                                                     </div>
-                                                    {newValidDiseaseListRadiology.length == 0 ?
+                                                    {/* {newValidDiseaseListRadiology.length == 0 ?
                                                       <div className="card box-shadow-none">
                                                         <div className="card combo-card">
                                                           <div className="col-xl-12">
@@ -4490,47 +4582,90 @@ export default function PatientDetails() {
                                                             <span className="no-patient-data">NO PATIENT DATA</span>
                                                           </div>
                                                         </div></div>
-                                                      : null}
+                                                      : null} */}
 
                                                     {newValidDiseaseListRadiology.map((data, i) => (
                                                       <li>
-                                                        <div className="timeline-panel valid-disease">
-                                                          <div className="media-body">
-                                                            <span className="mb-1 disease-name d-flex" >
-                                                              <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                            </span>
-                                                          </div>
-
-                                                          <Popover content={data.dbDescription} title={data.diagnosisCode} placement="bottom" trigger="click">
-
-                                                            <div className="icon-box  bg-danger-light me-1">
-                                                              <FontAwesomeIcon
-                                                                icon={faInfo}
-                                                                style={{ color: "blue" }}
-                                                              />
-                                                            </div>
-                                                          </Popover>
-
-
-                                                          <Popconfirm
-                                                            title="You want to delete?"
-                                                            description={data.diagnosisCode}
-                                                            onConfirm={confirmvalid}
-                                                            placement="leftTop"
-                                                            okText="Yes"
-                                                            cancelText="No"
-                                                            onOpenChange={() =>
-                                                              onchangeValid(data.diagnosisCode)
-                                                            }
-                                                          >
-                                                            <div className="icon-box  bg-danger-light me-1">
-                                                              <FontAwesomeIcon
-                                                                icon={faClose}
-                                                                style={{ color: "red" }}
-                                                              />
-                                                            </div>
-                                                          </Popconfirm>
+                                                         <div className="new_valid-dis">
+                                                      <div className="timeline-panel">
+                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
+                                                          <span className="mb-1 disease-name d-flex" >
+                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                          </span>
                                                         </div>
+
+                                                        <Popover onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                          <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                              icon={faInfo}
+                                                              style={{ color: "blue" }}
+                                                            />
+                                                          </div>
+                                                        </Popover>
+
+
+                                                        <Popconfirm
+                                                          title="You want to delete?"
+                                                          description={data.diagnosisCode}
+                                                          onConfirm={confirmvalid}
+                                                          placement="leftTop"
+                                                          okText="Yes"
+                                                          cancelText="No"
+                                                          onOpenChange={() =>
+                                                            onchangeValid(data.diagnosisCode)
+                                                          }
+                                                        >
+                                                          <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                              icon={faClose}
+                                                              style={{ color: "red" }}
+                                                            />
+                                                          </div>
+                                                        </Popconfirm>
+                                                      </div>
+                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
+                                                            <FontAwesomeIcon
+                                                              icon={faUser}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {patientDocumentResult.patientName}
+                                                          </Badge>
+                                                        </Popover>
+                                                        <Popover placement="topLeft" content={data.encounterDate}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                            <FontAwesomeIcon
+                                                              icon={faCalendar}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {/* {data.encounterDate} */}
+                                                            {replaceString(data.encounterDate)}
+                                                            {/* 22/05/2023 */}
+                                                          </Badge>
+                                                        </Popover>
+                                                        <Popover placement="topLeft" content={data.capturedSections}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalRadiology(data.diagnosisCode, data.capturedSections[0], "valid")}>
+                                                            {/* <FontAwesomeIcon
+                                                          icon={faSearch}
+                                                          style={{ color: "#fff" }}
+                                                        /> */}
+                                                            {data.capturedSections}
+                                                            {/* HPI */}
+                                                          </Badge>
+                                                        </Popover>
+                                                        {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                      <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
+                                                      <FontAwesomeIcon
+                                                          icon={faSearch}
+                                                          style={{ color: "#fff" }}
+                                                        />
+                                                        HPI Test Urlplan
+                                                      </Badge>
+                                                      </Popover> */}
+                                                      </div>
+                                                    </div>
                                                       </li>
                                                     ))}
                                                   </ul>
@@ -4671,7 +4806,7 @@ export default function PatientDetails() {
                                                           </button>
                                                         </div> : null}
                                                     </div>
-                                                    {unmatchHccListRadiology.length == 0 ?
+                                                    {/* {unmatchHccListRadiology.length == 0 ?
                                                       <div className="card box-shadow-none">
                                                         <div className="card combo-card">
                                                           <div className="col-xl-12">
@@ -4679,7 +4814,7 @@ export default function PatientDetails() {
                                                             <span className="no-patient-data">NO PATIENT DATA</span>
                                                           </div>
                                                         </div></div>
-                                                      : null}
+                                                      : null} */}
 
                                                     {unmatchHccListRadiology.map((data, i) => (
                                                       <li>
@@ -5316,7 +5451,7 @@ export default function PatientDetails() {
                                                         </Badge>
                                                       </span>
                                                     </div>
-                                                    {labReportValidList.length == 0 ?
+                                                    {/* {labReportValidList.length == 0 ?
                                                       <div className="card box-shadow-none">
                                                         <div className="card combo-card">
                                                           <div className="col-xl-12">
@@ -5324,7 +5459,7 @@ export default function PatientDetails() {
                                                             <span className="no-patient-data">NO PATIENT DATA</span>
                                                           </div>
                                                         </div></div>
-                                                      : null}
+                                                      : null} */}
 
                                                     {labReportValidList.map((data, i) => (
                                                       <li>
