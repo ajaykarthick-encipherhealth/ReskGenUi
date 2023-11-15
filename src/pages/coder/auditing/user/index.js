@@ -678,9 +678,9 @@ export default function Patient() {
                               </div>
                             </div>
 
-                            <div className='col-xl-5'>
+                            {/* <div className='col-xl-5'>
                               <Button onClick={addPatientFormId} className="btn btn-primary btn-sm ms-2 flr">+ Add Patient Id</Button>
-                            </div>
+                            </div> */}
 
 
                           </div>

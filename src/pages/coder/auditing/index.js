@@ -841,7 +841,7 @@ export default function Patient() {
                             <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
                             <Column field="patientId"  body={patientDetailsBody} header="User Id" />
                             <Column field="patientName" header="User Name" />
-                            <Column field="fileName" header="File Name" />
+                            <Column field="fileName" header="Allocated File" />
                             <Column field="status" body={statusBodyTemplate} header="Status" />
                             <Column field="createdAt" sortable header="Process Date" />
                             <Column field="createdAt" sortable header="Allocate Date" />
