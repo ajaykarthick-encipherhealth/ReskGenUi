@@ -46,3 +46,23 @@ export const PhysicanMenuList = [
     // },
     
 ]
+
+export const L2AuditMenuList = [
+    {   
+        title:'Dashboard',
+        iconStyle: SVGICON.dashboardIcon,
+        to: '/coder/dashboard',
+    },
+ 
+    {   
+        title:'My Works',
+        iconStyle:SVGICON.patientListIcon,
+        to: '/coder/patients',
+    },
+     {   
+        title:'Auditing Window',
+        iconStyle:SVGICON.Usermanagement,
+        to: '/coder/user',
+    },
+    
+]

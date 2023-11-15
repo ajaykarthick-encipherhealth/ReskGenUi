@@ -12,6 +12,10 @@ const Screen = () => {
     navigate.push("/physician/dashboard");
   };
 
+  const handleDashboardCoder = () => {
+    navigate.push("/coder/dashboard");
+  };
+
   return (
     <>
       <Header />
@@ -50,7 +54,7 @@ const Screen = () => {
 						</div>  
             </div>  
             <div className="col-xl-6 col-sm-12">
-         <div className="card cr-pointer">
+         <div className="card cr-pointer" onClick={handleDashboardCoder}>
 							<div className="card-body py-0">				
 								<div className="text-center">
                 <div className="text-screen">Patients - HRC</div>		

@@ -182,6 +182,11 @@ export default function PatientDetails() {
   const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
   const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
 
+  const [suggestRadiology, setSuggestRadiology] = useState([]);
+  const [suggestLab, setSuggestLab] = useState([]);
+
+
+
 
 
 
@@ -330,6 +335,11 @@ export default function PatientDetails() {
         var unMatchResHcc = [];
         var unMatchResNonHcc = [];
         var meatCriColorTagList = [];
+
+        var suggestRadiologyList = [];
+        var suggestLabList = [];
+
+
         getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
         setSelectMeatFileId(response.data.fileId)
         setPatientDocumentResult(result);
@@ -358,6 +368,13 @@ export default function PatientDetails() {
         validDis = result.validDisease[highestDOS];
         validDiseaseNewRes = result.validDisease[highestDOS];
         invalidDiseaseNewRes = result.invalidDisease[highestDOS];
+        if(result.suggestRadiology != null){
+        suggestRadiologyList = result.suggestRadiology[highestDOS];
+        }
+        if(result.suggestLab != null){
+        suggestLabList = result.suggestLab[highestDOS];
+        }
+
         if (result.unmatchedDisease != null) {
           var unMatchResCheck = result.unmatchedDisease[highestDOS]
 
@@ -2781,6 +2798,166 @@ export default function PatientDetails() {
                                                     </>
                                                   );
                                                 })}
+                                              </ul>
+                                            </div>
+                                              <div className="col-xl-4">
+                                              <ul className="timeline">
+                                                <div className="valid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block text-warning`}
+                                                  >
+                                                    {" "}
+                                                    Suggested Radiology Codes{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="secondary badge-circle"
+                                                    >
+                                                      {suggestRadiology.length}
+                                                    </Badge>
+                                                  </span>
+                                                </div>
+                                               
+
+                                                {suggestRadiology.map((data, i) => (
+                                                  <li>
+                                                    <div className="new_valid-dis">
+                                                      <div className="timeline-panel">
+                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
+                                                          <span className="mb-1 disease-name d-flex" >
+                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                          </span>
+                                                        </div>                                        
+
+
+                                                        <Popconfirm
+                                                          title="You want to delete?"
+                                                          description={data.diagnosisCode}
+                                                          onConfirm={confirmvalid}
+                                                          placement="leftTop"
+                                                          okText="Yes"
+                                                          cancelText="No"
+                                                          onOpenChange={() =>
+                                                            onchangeValid(data.diagnosisCode)                                                          }
+                                                        >
+                                                          <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                              icon={faCheck}
+                                                              style={{ color: "green" }}
+                                                            />
+                                                          </div>
+                                                        </Popconfirm>
+                                                      </div>
+                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
+                                                            <FontAwesomeIcon
+                                                              icon={faUser}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {patientDocumentResult.patientName}
+                                                          </Badge>
+                                                        </Popover>
+                                                        <Popover placement="topLeft" content={data.encounterDate}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                            <FontAwesomeIcon
+                                                              icon={faCalendar}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {replaceString(data.encounterDate)}
+                                                          </Badge>
+                                                        </Popover>
+                                                        <Popover placement="topLeft" content={data.capturedSections}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections, "valid")}>
+                                                           
+                                                            {data.capturedSections}
+                                                          </Badge>
+                                                        </Popover>
+                                                      </div>
+                                                    </div>
+
+                                                  </li>
+                                                ))}
+                                              </ul>
+                                            </div>
+                                            <div className="col-xl-4">
+                                              <ul className="timeline">
+                                                <div className="valid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block text-warning`}
+                                                  >
+                                                    {" "}
+                                                    Suggested Lab Codes{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="secondary badge-circle"
+                                                    >
+                                                      {suggestLab.length}
+                                                    </Badge>
+                                                  </span>
+                                                </div>
+                                               
+
+                                                {suggestLab.map((data, i) => (
+                                                  <li>
+                                                    <div className="new_valid-dis">
+                                                      <div className="timeline-panel">
+                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
+                                                          <span className="mb-1 disease-name d-flex" >
+                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                          </span>
+                                                        </div>                                        
+
+
+                                                        <Popconfirm
+                                                          title="You want to delete?"
+                                                          description={data.diagnosisCode}
+                                                          onConfirm={confirmvalid}
+                                                          placement="leftTop"
+                                                          okText="Yes"
+                                                          cancelText="No"
+                                                          onOpenChange={() =>
+                                                            onchangeValid(data.diagnosisCode)                                                          }
+                                                        >
+                                                          <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                              icon={faCheck}
+                                                              style={{ color: "green" }}
+                                                            />
+                                                          </div>
+                                                        </Popconfirm>
+                                                      </div>
+                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
+                                                            <FontAwesomeIcon
+                                                              icon={faUser}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {patientDocumentResult.patientName}
+                                                          </Badge>
+                                                        </Popover>
+                                                        <Popover placement="topLeft" content={data.encounterDate}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                            <FontAwesomeIcon
+                                                              icon={faCalendar}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {replaceString(data.encounterDate)}
+                                                          </Badge>
+                                                        </Popover>
+                                                        <Popover placement="topLeft" content={data.capturedSections}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections, "valid")}>
+                                                           
+                                                            {data.capturedSections}
+                                                          </Badge>
+                                                        </Popover>
+                                                      </div>
+                                                    </div>
+
+                                                  </li>
+                                                ))}
                                               </ul>
                                             </div>
                                             <div className="col-xl-4">
@@ -5469,21 +5646,46 @@ export default function PatientDetails() {
                                                         </div></div>
                                                       : null} */}
 
-                                                    {labReportValidList.map((data, i) => (
-                                                      <li>
-                                                        <div className="new_valid-dis">
-                                                          <div className="timeline-panel">
-                                                            <div className="media-body">
-                                                              <span className="mb-1 disease-name d-flex" >
-                                                                <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                              </span>
-                                                            </div>
-                                                          </div>
+{labReportValidList.map((data, i) => (
+                                                  <li>
+                                                    <div className="new_valid-dis">
+                                                      <div className="timeline-panel">
+                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
+                                                          <span className="mb-1 disease-name d-flex" >
+                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                          </span>
+                                                        </div> 
+                                                      </div>
+                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
+                                                            <FontAwesomeIcon
+                                                              icon={faUser}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {patientDocumentResult.patientName}
+                                                          </Badge>
+                                                        </Popover>
+                                                        <Popover placement="topLeft" content={data.encounterDate}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                            <FontAwesomeIcon
+                                                              icon={faCalendar}
+                                                              style={{ color: "#918585" }}
+                                                            />
+                                                            {replaceString(data.encounterDate)}
+                                                          </Badge>
+                                                        </Popover>
+                                                        <Popover placement="topLeft" content={data.capturedSections}>
+                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections, "valid")}>
+                                                           
+                                                            {data.capturedSections}
+                                                          </Badge>
+                                                        </Popover>
+                                                      </div>
+                                                    </div>
 
-                                                        </div>
-
-                                                      </li>
-                                                    ))}
+                                                  </li>
+                                                ))}
                                                   </ul>
                                                 </div>
                                               </div>

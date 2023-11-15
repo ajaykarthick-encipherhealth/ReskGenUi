@@ -55080,3 +55080,9 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
   width: 20%;
   /* z-index: 99; */
 }
+
+.dashboard-icon-bac{
+  border-radius: 50px;}
+  .card.dashboard-card {
+    border: 1px solid #dad8e4 !important;
+}
