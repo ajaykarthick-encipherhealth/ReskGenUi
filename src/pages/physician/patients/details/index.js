@@ -10,7 +10,7 @@ import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCheck, faAdd, faInfo, faIdBadge, faUser, faSearch, faCalendar, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faCheck, faAdd, faInfo, faIdBadge, faUser, faSearch, faCalendar, faCheckCircle ,faCog} from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm, Divider, Popover, } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
@@ -339,6 +339,8 @@ export default function PatientDetails() {
         var suggestRadiologyList = [];
         var suggestLabList = [];
 
+        var suggestListAll = [];
+
 
         getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
         setSelectMeatFileId(response.data.fileId)
@@ -368,11 +370,38 @@ export default function PatientDetails() {
         validDis = result.validDisease[highestDOS];
         validDiseaseNewRes = result.validDisease[highestDOS];
         invalidDiseaseNewRes = result.invalidDisease[highestDOS];
-        if(result.suggestRadiology != null){
-        suggestRadiologyList = result.suggestRadiology[highestDOS];
+        if (result.suggestRadiology != null) {
+          var checkDosRadio = [];
+          for (var key in result.suggestRadiology) {
+            checkDosRadio.push({ value: key, label: key });
+          }
+          suggestRadiologyList = result.suggestRadiology[checkDosRadio[0].value];
+          suggestRadiologyList.map((res, index) => {
+            suggestListAll.push({
+              "actualDescription": res.actualDescription,
+              "capturedSections": res.capturedSections,
+              "diagnosisCode": res.diagnosisCode,
+              "encounterDate": res.encounterDate,
+              "getPlace": "Radio",
+              "isHccValid": true
+            })
+          }
+          )
         }
-        if(result.suggestLab != null){
-        suggestLabList = result.suggestLab[highestDOS];
+
+        if (result.suggestLab != null) {
+          suggestLabList = result.suggestLab[highestDOS];
+          suggestLabList.map((res, index) => {
+            suggestListAll.push({
+              "actualDescription": res.actualDescription,
+              "capturedSections": res.capturedSections,
+              "diagnosisCode": res.diagnosisCode,
+              "encounterDate": res.encounterDate,
+              "getPlace": "Lab",
+              "isHccValid": true
+            })
+          }
+          )
         }
 
         if (result.unmatchedDisease != null) {
@@ -382,16 +411,24 @@ export default function PatientDetails() {
             unMatchRes = result.unmatchedDisease[highestDOS]
             unMatchRes.map((res, index) => {
               if (res.isHccValid == true) {
-                unMatchResHcc.push({
+                suggestListAll.push({
                   actualDescription: res.actualDescription,
                   diagnosisCodeFinding: res.diagnosisCodeFinding,
-                  isHccValid: res.isHccValid
+                  isHccValid: res.isHccValid,
+                  "capturedSections": res.capturedSections,
+                  "diagnosisCode": res.diagnosisCodeFinding,
+                  "encounterDate": res.encounterDate,
+                  "getPlace": "Hcc",
                 })
               } else {
-                unMatchResNonHcc.push({
+                suggestListAll.push({
                   actualDescription: res.actualDescription,
                   diagnosisCodeFinding: res.diagnosisCodeFinding,
-                  isHccValid: res.isHccValid
+                  isHccValid: res.isHccValid,
+                  "capturedSections": res.capturedSections,
+                  "diagnosisCode": res.diagnosisCodeFinding,
+                  "encounterDate": res.encounterDate,
+                  "getPlace": "Hcc",
                 })
               }
 
@@ -399,6 +436,10 @@ export default function PatientDetails() {
 
           }
         }
+
+
+
+        console.log(suggestListAll)
 
 
         invalidDis = result.invalidDisease[highestDOS];
@@ -461,7 +502,7 @@ export default function PatientDetails() {
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
         setSuggestedNonHccList(unMatchResNonHcc);
-        setSuggestedHccList(unMatchResHcc)
+        setSuggestedHccList(suggestListAll)
 
         const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
 
@@ -1238,6 +1279,12 @@ export default function PatientDetails() {
         1000);
     });
   const confirmInvalid = () =>
+    new Promise((resolve) => {
+      // invalidMoveConfirm();
+      setTimeout(() => resolve(setConfirmNotesModalInValid(true)), 1000);
+    });
+
+  const confirmInvalidSuggested = () =>
     new Promise((resolve) => {
       // invalidMoveConfirm();
       setTimeout(() => resolve(setConfirmNotesModalInValid(true)), 1000);
@@ -2115,6 +2162,7 @@ export default function PatientDetails() {
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
     formData.append("patientname", inputValue.name);
+    formData.append("dos", inputValue.year);
     const headers = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -2194,7 +2242,7 @@ export default function PatientDetails() {
       <div>rxHcc_V08_for_2023_payment_year : {result.rxHcc_model_category_V08_for_2023_payment_year}</div>
       <div>rxHcc_V05 : {result.rxHcc_model_category_V05}</div>
       <div>rxHcc_V08 : {result.rxHcc_model_category_V08}</div>
-      
+
 
     </div>
     setvalidHccDetails(data)
@@ -2247,6 +2295,12 @@ export default function PatientDetails() {
       removeComma = value.replace(/,/g, "");
     }
     return removeComma
+
+  }
+
+  const replaceCaptureSection = (value) => {
+   
+    return value
 
   }
 
@@ -2662,7 +2716,8 @@ export default function PatientDetails() {
                                                           icon={faSearch}
                                                           style={{ color: "#fff" }}
                                                         /> */}
-                                                            {data.capturedSections}
+                                                         {/* {replaceString(data.encounterDate)} */}
+                                                            {replaceCaptureSection(data.capturedSections)}
                                                             {/* HPI */}
                                                           </Badge>
                                                         </Popover>
@@ -2720,11 +2775,11 @@ export default function PatientDetails() {
                                                     <>
                                                       {data.isHccValid == true ?
                                                         <li>
-                                                          <div className="timeline-panel d-block invalid-disease">
-                                                            <div className="d-flex">
-                                                              <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCodeDocument, data.actualDescription)}>
-                                                                <span className="mb-1 disease-name">
-                                                                  {data.actualDescription}
+                                                          <div className="new_valid-dis">
+                                                            <div className="timeline-panel">
+                                                              <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
+                                                                <span className="mb-1 disease-name d-flex" >
+                                                                  <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
                                                                 </span>
                                                               </div>
                                                               <Popover onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
@@ -2736,61 +2791,109 @@ export default function PatientDetails() {
                                                                   />
                                                                 </div>
                                                               </Popover>
+
+
+
+                                                              <div className="icon-box  bg-danger-light me-1">
+                                                                <Popconfirm
+                                                                  title="You want move to valid?"
+                                                                  description={data.diagnosisCode}
+                                                                  onConfirm={onchangeSuggested}
+                                                                  placement="rightTop"
+                                                                  okText="Yes"
+                                                                  cancelText="No"
+                                                                >
+                                                                  <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input unmatach-checkbox" required />
+                                                                </Popconfirm>
+                                                              </div>
+                                                            </div>
+                                                            <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                              
+                                                                {data.getPlace == "Lab" ?  <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-seven `} >Lab</Badge> : 
+                                                                data.getPlace == "Radio" ?  <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-five `} >Radiology</Badge>
+                                                                 :  <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-five `} >Hcc</Badge>
+                                                                }                                                 
+                                                                
+
+
+                                                              <Popover placement="topLeft" content={data.encounterDate}>
+                                                                <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                                  <FontAwesomeIcon
+                                                                    icon={faCalendar}
+                                                                    style={{ color: "#918585" }}
+                                                                  />
+                                                                  {replaceString(data.encounterDate)}
+                                                                </Badge>
+                                                              </Popover>
+                                                              <Popover placement="topLeft" content={data.capturedSections}>
+                                                                <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections, "valid")}>
+                                                                  {data.capturedSections}
+                                                                </Badge>
+                                                              </Popover>
+                                                            </div>
+                                                          </div>
+                                                          {/* <div className="timeline-panel d-block invalid-disease">
+                                                            <div className="d-flex">
+                                                              <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCodeDocument, data.actualDescription)}>
+                                                              <span className="mb-1 disease-name d-flex" >
+                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                          </span>
+                                                              </div>
+                                                              <Popover onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                                <div className="icon-box  bg-danger-light me-1">
+                                                                  <FontAwesomeIcon
+                                                                    icon={faInfo}
+                                                                    style={{ color: "blue" }}
+                                                                  />
+                                                                </div>
+                                                              </Popover>
+                                                              <Popconfirm
+                                                            title="You want move to valid?"
+                                                            description={data.diagnosisCode}
+                                                            onConfirm={confirmInvalid}
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(data.diagnosisCode, data)
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faCheck}
+                                                                style={{ color: "orange" }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
                                                             </div>
 
-                                                            {/* <div className="form-check custom-checkbox">
-                                                      <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
-                                                    </div> */}
                                                             <div className="media-body d-flex">
-                                                              {/* {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
-                                                                <div className="form-check custom-checkbox unmatch-check">
-                                                                  <div>
-                                                                    <Popconfirm
-                                                                      title="You want move to valid?"
-                                                                      description={data.diagnosisCodeDocument}
-                                                                      onConfirm={onchangeSuggested}
-                                                                      placement="rightTop"
-                                                                      okText="Yes"
-                                                                      cancelText="No"
-                                                                    >
-                                                                      <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
-
-                                                                    </Popconfirm>
-
-                                                                  </div>
-                                                                  <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
-                                                                    <span className="disease-name">
-                                                                      {data.diagnosisCodeDocument}
-                                                                    </span>
-                                                                  </Popover>
-                                                                  
-
-                                                                </div> : null} */}
-                                                              {data.diagnosisCodeFinding != null && data.diagnosisCodeFinding != "" ?
+                                                              {data.diagnosisCode != null && data.diagnosisCode != "" ?
                                                                 <div className="form-check custom-checkbox unmatch-check ms-3">
                                                                   <div>
                                                                     <Popconfirm
                                                                       title="You want move to valid?"
-                                                                      description={data.diagnosisCodeDocument}
+                                                                      description={data.diagnosisCode}
                                                                       onConfirm={onchangeSuggested}
                                                                       placement="rightTop"
                                                                       okText="Yes"
                                                                       cancelText="No"
                                                                     >
-                                                                      <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCodeFinding) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeFinding}`} className="form-check-input unmatach-checkbox" required />
+                                                                      <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input unmatach-checkbox" required />
                                                                     </Popconfirm>
                                                                   </div>
-                                                                  <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCodeFinding}>
+                                                                  <Popover placement="topLeft" title="Finding Code" content={data.diagnosisCode}>
                                                                     <span className="disease-name">
-                                                                      {data.diagnosisCodeFinding}
+                                                                      {data.diagnosisCode}
                                                                     </span>
                                                                   </Popover>
 
                                                                 </div> : null}
                                                             </div>
+                                                        
 
-
-                                                          </div>
+                                                          </div> */}
                                                         </li>
                                                         : null}
 
@@ -2800,166 +2903,7 @@ export default function PatientDetails() {
                                                 })}
                                               </ul>
                                             </div>
-                                              <div className="col-xl-4">
-                                              <ul className="timeline">
-                                                <div className="valid-text d-flex justify-content-sm-between">
-                                                  <span
-                                                    className={`dang d-block text-warning`}
-                                                  >
-                                                    {" "}
-                                                    Suggested Radiology Codes{" "}
-                                                    <Badge
-                                                      as="a"
-                                                      href=""
-                                                      bg="secondary badge-circle"
-                                                    >
-                                                      {suggestRadiology.length}
-                                                    </Badge>
-                                                  </span>
-                                                </div>
-                                               
 
-                                                {suggestRadiology.map((data, i) => (
-                                                  <li>
-                                                    <div className="new_valid-dis">
-                                                      <div className="timeline-panel">
-                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
-                                                          <span className="mb-1 disease-name d-flex" >
-                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                          </span>
-                                                        </div>                                        
-
-
-                                                        <Popconfirm
-                                                          title="You want to delete?"
-                                                          description={data.diagnosisCode}
-                                                          onConfirm={confirmvalid}
-                                                          placement="leftTop"
-                                                          okText="Yes"
-                                                          cancelText="No"
-                                                          onOpenChange={() =>
-                                                            onchangeValid(data.diagnosisCode)                                                          }
-                                                        >
-                                                          <div className="icon-box  bg-danger-light me-1">
-                                                            <FontAwesomeIcon
-                                                              icon={faCheck}
-                                                              style={{ color: "green" }}
-                                                            />
-                                                          </div>
-                                                        </Popconfirm>
-                                                      </div>
-                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
-                                                            <FontAwesomeIcon
-                                                              icon={faUser}
-                                                              style={{ color: "#918585" }}
-                                                            />
-                                                            {patientDocumentResult.patientName}
-                                                          </Badge>
-                                                        </Popover>
-                                                        <Popover placement="topLeft" content={data.encounterDate}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
-                                                            <FontAwesomeIcon
-                                                              icon={faCalendar}
-                                                              style={{ color: "#918585" }}
-                                                            />
-                                                            {replaceString(data.encounterDate)}
-                                                          </Badge>
-                                                        </Popover>
-                                                        <Popover placement="topLeft" content={data.capturedSections}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections, "valid")}>
-                                                           
-                                                            {data.capturedSections}
-                                                          </Badge>
-                                                        </Popover>
-                                                      </div>
-                                                    </div>
-
-                                                  </li>
-                                                ))}
-                                              </ul>
-                                            </div>
-                                            <div className="col-xl-4">
-                                              <ul className="timeline">
-                                                <div className="valid-text d-flex justify-content-sm-between">
-                                                  <span
-                                                    className={`dang d-block text-warning`}
-                                                  >
-                                                    {" "}
-                                                    Suggested Lab Codes{" "}
-                                                    <Badge
-                                                      as="a"
-                                                      href=""
-                                                      bg="secondary badge-circle"
-                                                    >
-                                                      {suggestLab.length}
-                                                    </Badge>
-                                                  </span>
-                                                </div>
-                                               
-
-                                                {suggestLab.map((data, i) => (
-                                                  <li>
-                                                    <div className="new_valid-dis">
-                                                      <div className="timeline-panel">
-                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
-                                                          <span className="mb-1 disease-name d-flex" >
-                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                          </span>
-                                                        </div>                                        
-
-
-                                                        <Popconfirm
-                                                          title="You want to delete?"
-                                                          description={data.diagnosisCode}
-                                                          onConfirm={confirmvalid}
-                                                          placement="leftTop"
-                                                          okText="Yes"
-                                                          cancelText="No"
-                                                          onOpenChange={() =>
-                                                            onchangeValid(data.diagnosisCode)                                                          }
-                                                        >
-                                                          <div className="icon-box  bg-danger-light me-1">
-                                                            <FontAwesomeIcon
-                                                              icon={faCheck}
-                                                              style={{ color: "green" }}
-                                                            />
-                                                          </div>
-                                                        </Popconfirm>
-                                                      </div>
-                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
-                                                            <FontAwesomeIcon
-                                                              icon={faUser}
-                                                              style={{ color: "#918585" }}
-                                                            />
-                                                            {patientDocumentResult.patientName}
-                                                          </Badge>
-                                                        </Popover>
-                                                        <Popover placement="topLeft" content={data.encounterDate}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
-                                                            <FontAwesomeIcon
-                                                              icon={faCalendar}
-                                                              style={{ color: "#918585" }}
-                                                            />
-                                                            {replaceString(data.encounterDate)}
-                                                          </Badge>
-                                                        </Popover>
-                                                        <Popover placement="topLeft" content={data.capturedSections}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections, "valid")}>
-                                                           
-                                                            {data.capturedSections}
-                                                          </Badge>
-                                                        </Popover>
-                                                      </div>
-                                                    </div>
-
-                                                  </li>
-                                                ))}
-                                              </ul>
-                                            </div>
                                             <div className="col-xl-4">
                                               <ul className="timeline">
 
@@ -4770,77 +4714,77 @@ export default function PatientDetails() {
 
                                                     {newValidDiseaseListRadiology.map((data, i) => (
                                                       <li>
-                                                         <div className="new_valid-dis">
-                                                      <div className="timeline-panel">
-                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
-                                                          <span className="mb-1 disease-name d-flex" >
-                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                          </span>
-                                                        </div>
-                                                        
+                                                        <div className="new_valid-dis">
+                                                          <div className="timeline-panel">
+                                                            <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
+                                                              <span className="mb-1 disease-name d-flex" >
+                                                                <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                              </span>
+                                                            </div>
 
-                                                        <Popover className="info-hcc-details" onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
 
-                                                          <div className="icon-box  bg-danger-light me-1">
-                                                            <FontAwesomeIcon
-                                                              icon={faInfo}
-                                                              style={{ color: "blue" }}
-                                                            />
+                                                            <Popover className="info-hcc-details" onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
+
+                                                              <div className="icon-box  bg-danger-light me-1">
+                                                                <FontAwesomeIcon
+                                                                  icon={faInfo}
+                                                                  style={{ color: "blue" }}
+                                                                />
+                                                              </div>
+                                                            </Popover>
+
+
+                                                            <Popconfirm
+                                                              title="You want to delete?"
+                                                              description={data.diagnosisCode}
+                                                              onConfirm={confirmvalid}
+                                                              placement="leftTop"
+                                                              okText="Yes"
+                                                              cancelText="No"
+                                                              onOpenChange={() =>
+                                                                onchangeValid(data.diagnosisCode)
+                                                              }
+                                                            >
+                                                              <div className="icon-box  bg-danger-light me-1">
+                                                                <FontAwesomeIcon
+                                                                  icon={faClose}
+                                                                  style={{ color: "red" }}
+                                                                />
+                                                              </div>
+                                                            </Popconfirm>
                                                           </div>
-                                                        </Popover>
-
-
-                                                        <Popconfirm
-                                                          title="You want to delete?"
-                                                          description={data.diagnosisCode}
-                                                          onConfirm={confirmvalid}
-                                                          placement="leftTop"
-                                                          okText="Yes"
-                                                          cancelText="No"
-                                                          onOpenChange={() =>
-                                                            onchangeValid(data.diagnosisCode)
-                                                          }
-                                                        >
-                                                          <div className="icon-box  bg-danger-light me-1">
-                                                            <FontAwesomeIcon
-                                                              icon={faClose}
-                                                              style={{ color: "red" }}
-                                                            />
-                                                          </div>
-                                                        </Popconfirm>
-                                                      </div>
-                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
-                                                            <FontAwesomeIcon
-                                                              icon={faUser}
-                                                              style={{ color: "#918585" }}
-                                                            />
-                                                            {patientDocumentResult.patientName}
-                                                          </Badge>
-                                                        </Popover>
-                                                        <Popover placement="topLeft" content={data.encounterDate}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
-                                                            <FontAwesomeIcon
-                                                              icon={faCalendar}
-                                                              style={{ color: "#918585" }}
-                                                            />
-                                                            {/* {data.encounterDate} */}
-                                                            {replaceString(data.encounterDate)}
-                                                            {/* 22/05/2023 */}
-                                                          </Badge>
-                                                        </Popover>
-                                                        <Popover placement="topLeft" content={data.capturedSections}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalRadiology(data.diagnosisCode, data.capturedSections[0], "valid")}>
-                                                            {/* <FontAwesomeIcon
+                                                          <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                            <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
+                                                              <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
+                                                                <FontAwesomeIcon
+                                                                  icon={faUser}
+                                                                  style={{ color: "#918585" }}
+                                                                />
+                                                                {patientDocumentResult.patientName}
+                                                              </Badge>
+                                                            </Popover>
+                                                            <Popover placement="topLeft" content={data.encounterDate}>
+                                                              <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                                <FontAwesomeIcon
+                                                                  icon={faCalendar}
+                                                                  style={{ color: "#918585" }}
+                                                                />
+                                                                {/* {data.encounterDate} */}
+                                                                {replaceString(data.encounterDate)}
+                                                                {/* 22/05/2023 */}
+                                                              </Badge>
+                                                            </Popover>
+                                                            <Popover placement="topLeft" content={data.capturedSections}>
+                                                              <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalRadiology(data.diagnosisCode, data.capturedSections[0], "valid")}>
+                                                                {/* <FontAwesomeIcon
                                                           icon={faSearch}
                                                           style={{ color: "#fff" }}
                                                         /> */}
-                                                            {data.capturedSections}
-                                                            {/* HPI */}
-                                                          </Badge>
-                                                        </Popover>
-                                                        {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                                {data.capturedSections}
+                                                                {/* HPI */}
+                                                              </Badge>
+                                                            </Popover>
+                                                            {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
                                                       <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
                                                           icon={faSearch}
@@ -4849,8 +4793,8 @@ export default function PatientDetails() {
                                                         HPI Test Urlplan
                                                       </Badge>
                                                       </Popover> */}
-                                                      </div>
-                                                    </div>
+                                                          </div>
+                                                        </div>
                                                       </li>
                                                     ))}
                                                   </ul>
@@ -5646,46 +5590,46 @@ export default function PatientDetails() {
                                                         </div></div>
                                                       : null} */}
 
-{labReportValidList.map((data, i) => (
-                                                  <li>
-                                                    <div className="new_valid-dis">
-                                                      <div className="timeline-panel">
-                                                        <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
-                                                          <span className="mb-1 disease-name d-flex" >
-                                                            <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
-                                                          </span>
-                                                        </div> 
-                                                      </div>
-                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                        <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
-                                                            <FontAwesomeIcon
-                                                              icon={faUser}
-                                                              style={{ color: "#918585" }}
-                                                            />
-                                                            {patientDocumentResult.patientName}
-                                                          </Badge>
-                                                        </Popover>
-                                                        <Popover placement="topLeft" content={data.encounterDate}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
-                                                            <FontAwesomeIcon
-                                                              icon={faCalendar}
-                                                              style={{ color: "#918585" }}
-                                                            />
-                                                            {replaceString(data.encounterDate)}
-                                                          </Badge>
-                                                        </Popover>
-                                                        <Popover placement="topLeft" content={data.capturedSections}>
-                                                          <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections, "valid")}>
-                                                           
-                                                            {data.capturedSections}
-                                                          </Badge>
-                                                        </Popover>
-                                                      </div>
-                                                    </div>
+                                                    {labReportValidList.map((data, i) => (
+                                                      <li>
+                                                        <div className="new_valid-dis">
+                                                          <div className="timeline-panel">
+                                                            <div className="media-body" onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription, "valid2")}>
+                                                              <span className="mb-1 disease-name d-flex" >
+                                                                <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                          <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                            <Popover placement="topLeft" title="" content={patientDocumentResult.patientName}>
+                                                              <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 text-start '>
+                                                                <FontAwesomeIcon
+                                                                  icon={faUser}
+                                                                  style={{ color: "#918585" }}
+                                                                />
+                                                                {patientDocumentResult.patientName}
+                                                              </Badge>
+                                                            </Popover>
+                                                            <Popover placement="topLeft" content={data.encounterDate}>
+                                                              <Badge bg=" badge-rounded" className='badge-outline-info  mt-2'>
+                                                                <FontAwesomeIcon
+                                                                  icon={faCalendar}
+                                                                  style={{ color: "#918585" }}
+                                                                />
+                                                                {replaceString(data.encounterDate)}
+                                                              </Badge>
+                                                            </Popover>
+                                                            <Popover placement="topLeft" content={data.capturedSections}>
+                                                              <Badge bg=" badge-rounded" className='badge-outline-info  mt-2 cr-pointer' onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.capturedSections, "valid")}>
 
-                                                  </li>
-                                                ))}
+                                                                {data.capturedSections}
+                                                              </Badge>
+                                                            </Popover>
+                                                          </div>
+                                                        </div>
+
+                                                      </li>
+                                                    ))}
                                                   </ul>
                                                 </div>
                                               </div>
