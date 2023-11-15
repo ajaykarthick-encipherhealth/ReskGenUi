@@ -2160,17 +2160,24 @@ export default function PatientDetails() {
 
   const getValidHccDetails = async (value, code) => {
     var patientId = localStorage.getItem("patientId");
+    var result = '';
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/hccdisease?diagnosisCode=${code}`);
     if (response.data) {
+      result = response.data;
 
     }
     var data = <div className='validhcc-details'>
       {/* <Spin className='ml-2 ms-1' size="small" /> */}
-      <div>{value}</div>
-      <div>CMSHCC_ESRD_Model_Category_V21 : 115</div>
-      <div>CMSHCC_ESRD_Model_Category_V21 : 115</div>
-      <div>CMSHCC_ESRD_Model_Category_V21 : 115</div>
-      <div>CMSHCC_ESRD_Model_Category_V21 : 115</div>
+      {/* <div>{value}</div> */}
+      <div>cmsHcc_V22_for_2023_payment_year : {result.cmsHcc_Model_Category_V22_for_2023_payment_year}</div>
+      <div>cmsHcc_V24_for_2023_payment_year : {result.cmsHcc_Model_Category_V24_for_2023_payment_year}</div>
+      <div>cmsHcc_V22 : {result.cmsHcc_model_category_V22}</div>
+      <div>cmsHcc_V24 : {result.cmsHcc_model_category_V24}</div>
+      <div>rxHcc_V05_for_2023_payment_year : {result.rxHcc_Model_Category_V05_for_2023_payment_year}</div>
+      <div>rxHcc_V08_for_2023_payment_year : {result.rxHcc_model_category_V08_for_2023_payment_year}</div>
+      <div>rxHcc_V05 : {result.rxHcc_model_category_V05}</div>
+      <div>rxHcc_V08 : {result.rxHcc_model_category_V08}</div>
+      
 
     </div>
     setvalidHccDetails(data)
@@ -4593,8 +4600,9 @@ export default function PatientDetails() {
                                                             <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
                                                           </span>
                                                         </div>
+                                                        
 
-                                                        <Popover onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
+                                                        <Popover className="info-hcc-details" onClick={() => getValidHccDetails(data.actualDescription, data.diagnosisCode)} content={validHccDetails} title={data.diagnosisCode} placement="bottom" trigger="click">
 
                                                           <div className="icon-box  bg-danger-light me-1">
                                                             <FontAwesomeIcon
