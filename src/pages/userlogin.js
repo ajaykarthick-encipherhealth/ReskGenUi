@@ -45,7 +45,13 @@ export default function UserLogin() {
                 var result = response.data;
                 console.log(result)
                 if (result.access_token != null) {
-                    localStorage.setItem("userRole", 'physician')
+                    if(emailSplit[0] === "ajith01"){
+                        localStorage.setItem("userRole", 'Coder-L2')
+
+                    }else{
+                        localStorage.setItem("userRole", 'physician')
+
+                    }
                     localStorage.setItem("token", result.access_token);
                     localStorage.setItem("tenantId", result.tenantId);
                     localStorage.setItem("userId", result.userEmail);

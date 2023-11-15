@@ -57,12 +57,12 @@ export const L2AuditMenuList = [
     {   
         title:'My Works',
         iconStyle:SVGICON.patientListIcon,
-        to: '/coder/patients',
+        to: '/coder/myworks',
     },
      {   
         title:'Auditing Window',
         iconStyle:SVGICON.Usermanagement,
-        to: '/coder/user',
+        to: '/coder/auditing',
     },
     
 ]

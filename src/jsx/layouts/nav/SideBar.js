@@ -60,8 +60,25 @@ export default function SideBar() {
               );
             })}
           </ul>
-        ) : (
+        ) : userRole === "Coder-L2" ? (
           <ul className="metismenu" id="menu">
+            {L2AuditMenuList.map((data, index) => {
+              return (
+                <li
+                  className={` ${stateActive === data.to ? "mm-active" : ""}`}
+                  key={index}
+                >
+                  <Link href={data.to}>
+                    <div className="menu-icon">{data.iconStyle}</div>{" "}
+                    <span className={`nav-text text-white ${sideMenu ? "d-none" : ""}`}>
+                      {data.title}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>)
+          : <ul className="metismenu" id="menu">
             {PhysicanMenuList.map((data, index) => {
               return (
                 <li
@@ -78,7 +95,7 @@ export default function SideBar() {
               );
             })}
           </ul>
-        )}
+        }
       </div>
     </div>
   );
