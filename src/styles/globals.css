@@ -55100,3 +55100,13 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
   .card.dashboard-card {
     border: 1px solid #dad8e4 !important;
 }
+li.file-complete-list {
+    padding: 10px;
+    margin-left: 15px !important;
+}
+.file-complete-badge {
+  width: 20px;
+  height: 20px;
+  padding: 0px 2px 1px 3px !important;
+  margin-left: 12px;
+}

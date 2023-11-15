@@ -5,16 +5,16 @@ import { Button } from 'react-bootstrap';
 import { Badge } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select';
-import { SVGICON } from "../../../jsx/constant/theme";
-import LoadingSpinner from "../../../jsx/components/spinner/spinner";
-import Header from "../../../jsx/layouts/nav/Header";
-import SideBar from "../../../jsx/layouts/nav/SideBar";
+import { SVGICON } from "../../../../jsx/constant/theme";
+import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
+import Header from "../../../../jsx/layouts/nav/Header";
+import SideBar from "../../../../jsx/layouts/nav/SideBar";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
+import axios from "../../../../utility/axiosConfig";
+import ENDPOINTS from "../../../../utility/enpoints";
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight, faClose, faUpload, faCheck, faBan, faAdd, faSearch,faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +23,7 @@ import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
 import {
   patientDetails,
-} from '../../../store/actions/AuthActions';
+} from '../../../../store/actions/AuthActions';
 import { notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { DataTable } from 'primereact/datatable';
@@ -104,7 +104,7 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState('');
   const [sideBarOpen, setSideBarOpen] = useState(true);
   const [userList, setUserList] = useState([]);
-  const [openPationList, setOpenPationList] = useState(false);
+  const [openPationList, setOpenPationList] = useState(true);
 
 
 
@@ -301,26 +301,26 @@ export default function Patient() {
 
   const gotoPatientDetails = (data) => {
     // dispatch(patientDetails(data));
-    // if (data.computing == 2) {
-    //   const controller = new AbortController()
-    //   const { signal } = controller
-    //   controller.abort()
-    //   localStorage.setItem("patientId", data.patientId)
-      navigate.push('/coder/auditing/user');
-    // } else {
-    //   notification.warning({
-    //     message: data.patientId + " file not processed Please wait",
-    //   });
-    // }
+    if (data.computing == 2) {
+      const controller = new AbortController()
+      const { signal } = controller
+      controller.abort()
+      localStorage.setItem("patientId", data.patientId)
+      navigate.push('/coder/auditing/details');
+    } else {
+      notification.warning({
+        message: data.patientId + " file not processed Please wait",
+      });
+    }
 
-    // setOpenPationList(true);
+    setOpenPationList(true);
 
   };
 
   const gotoUserList = (data) => {
  
 
-    setOpenPationList(false);
+    navigate.push('/coder/auditing');
 
   };
 
