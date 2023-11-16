@@ -55147,3 +55147,13 @@ li.file-complete-list {
   /* color: #fff; */
 }
 
+.pagination-container {
+    margin: 20px 0px 20px 0px;
+}
+
+.calender-pri-input > input.p-inputtext.p-component{
+  width: 100%;
+  border: none;
+  margin-top: 3px;
+}
+
