@@ -11,7 +11,7 @@ import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCheck, faAdd, faInfo, faIdBadge, faUser, faSearch, faCalendar, faCheckCircle ,faCog,faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import { faClose, faCheck, faAdd, faInfo, faIdBadge, faUser, faSearch, faCalendar, faCheckCircle, faFilter, faArrowLeft, faFile } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm, Divider, Popover, } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from 'react-select';
@@ -139,7 +139,10 @@ export default function PatientDetails() {
     year: "",
     name: "",
     patientId: "",
-    notes: ""
+    notes: "",
+    userId: "",
+    date: "",
+    status: ""
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -188,6 +191,9 @@ export default function PatientDetails() {
   const [sideBarOpen, setSideBarOpen] = useState(false);
 
   const [fileCompleteList, setFileCompleteList] = useState([]);
+  const [stateActive, setStateActive] = useState('');
+  const [filterDrawer, setFilterDrawer] = useState(false);
+  const [userList, setUserList] = useState([]);
 
 
 
@@ -209,9 +215,13 @@ export default function PatientDetails() {
 
 
   const handleChange = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
+    if (e.isValue == "User") {
+      setInputValue({ ...inputValue, ["userId"]: e.value });
+    } else {
+      const key = e.target.name;
+      const value = e.target.value;
+      setInputValue({ ...inputValue, [key]: value });
+    }
   };
 
 
@@ -286,14 +296,22 @@ export default function PatientDetails() {
     //         matchCase: true,
     //     });
     // }
+    setStateActive("Encounter1.pdf")
 
     const data = [
-		{ value: '1', label: 'encounter1.pdf' },
-		{ value: '2', label: 'encounter2.pdf' },
-		{ value: '3', label: 'encounter3.pdf' },
-    
-	]
-  setFileCompleteList(data)
+      { value: '1', label: 'Encounter1.pdf' },
+      { value: '2', label: 'Encounter2.pdf' },
+      { value: '3', label: 'Encounter3.pdf' },
+
+    ]
+    setFileCompleteList(data)
+    const data2 = [
+      { value: '1', label: 'Ajith', isValue: "User" },
+      { value: '2', label: 'Santhosh', isValue: "User" },
+      { value: '3', label: 'Arun', isValue: "User" },
+
+    ]
+    setUserList(data2)
   }, []);
 
   const getYearOfService = async (orgId, tenId) => {
@@ -1505,6 +1523,7 @@ export default function PatientDetails() {
     setSuggestedModal(false);
     setIsModalOpenValidCodes(false);
     setIsModalOpenCaptureSection(false);
+    setFilterDrawer(false)
   };
   const handleOpenModal = (value, disDescription) => {
     var splitPoint = disDescription.substring(' ', 40);
@@ -2311,7 +2330,7 @@ export default function PatientDetails() {
   }
 
   const replaceCaptureSection = (value) => {
-   
+
     return value
 
   }
@@ -2440,10 +2459,31 @@ export default function PatientDetails() {
 
 
   const gotoUserList = (data) => {
- 
+
     navigate.push('/coder/auditing/user');
 
   };
+
+  const openFilterDrawer = () => {
+    setFilterDrawer(true)
+  }
+  const gotoUserDocument = (value) => {
+    setStateActive(value)
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }
+
+  const handleSubmitFilter = async (event) => {
+    const form = event.currentTarget;
+    console.log(inputValue)
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+
+    }
+    setValidated(true)
+  }
 
 
   return (
@@ -2451,31 +2491,57 @@ export default function PatientDetails() {
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
         {sideBarOpen ?
-        <SideBar /> :
-        <div className="deznav show">
-      <div className="deznav-scroll">
-          <div >
-          <Button onClick={gotoUserList} className="btn btn-secondary btn-sm ms-2">
+          <SideBar /> :
+          <div className="deznav show">
+            {/* <div className="deznav-scroll">
+          <div className="user-filter-contain" >
+          <Button onClick={gotoUserList} className="btn btn-secondary btn-sm ms-2 user-backbtn">
                               <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faArrowLeft} />
                               </Button>
-          <Button className="btn btn-primary btn-sm ms-2 complted-btn">
-                                 Filter
+          <Button onClick={openFilterDrawer} className="btn btn-primary btn-sm ms-2 user-filter-btn">
+          <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faFilter} />
                                 </Button>
           </div>
-          <ul className="metismenu" id="menu">
-            {fileCompleteList.map((data, index) => {
-              return (
-                <li key={index} className="file-complete-list cr-pointer">                 
-                <span className={`nav-text text-white`}>
-                      {data.label}
-                </span>
-                <Badge className="badge-circl file-complete-badge text-white" bg={` badge-circle  bg-bg-seven `} >  <FontAwesomeIcon icon={faCheck} className="me-2 mt-1" fontSize={12} /></Badge>
-                </li>
-              );
-            })}
-          </ul>
-      </div>
-    </div>}
+          <div className="about-me file-ul-contain">
+														<ul>
+															{fileCompleteList.map((item, ind)=>(
+																<li onClick={() => gotoUserDocument(item.label)} key={ind} className={`${stateActive === item.label ? " cr-pointer" : " cr-pointer"}`}>
+																	<FontAwesomeIcon className={`${stateActive === item.label ? "fa fa-search form-control-feedback file-user-icon text-white" : " fa fa-search form-control-feedback file-user-icon"}`} icon={faFile} />
+																	<div>
+																		<span className={`${stateActive === item.label ? "text-white" : ""}`} >{item.label}</span>
+																	</div>
+																</li>
+															))}
+															
+														
+														</ul>
+													</div>					
+      </div> */}
+
+            <div className="deznav-scroll">
+              <div className="user-filter-contain" >
+                <Button onClick={gotoUserList} className="btn btn-secondary btn-sm ms-2 user-backbtn">
+                  <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faArrowLeft} />
+                </Button>
+                <Button onClick={openFilterDrawer} className="btn btn-primary btn-sm ms-2 user-filter-btn">
+                  <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faFilter} />
+                </Button>
+              </div>
+              <ul className=" file-completed-menu" id="menu">
+                {fileCompleteList.map((data, index) => {
+                  return (
+                    <li key={index} onClick={() => gotoUserDocument(data.label)} className={`${stateActive === data.label ? "file-complete-list cr-pointer select-user-file-active" : "file-complete-list text-center cr-pointer"}`}>
+                      <span className={`nav-text text-white`}>
+                        {data.label}
+                      </span>
+                      <Badge className="badge-circl file-complete-badge text-white" bg={` badge-circle  bg-bg-seven `} >  <FontAwesomeIcon icon={faCheck} className="me-2 mt-1" fontSize={11} /></Badge>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        }
         <div class="content-body">
           {isLoading ? <LoadingSpinner /> :
             <div className="container-fluid">
@@ -2758,7 +2824,7 @@ export default function PatientDetails() {
                                                           icon={faSearch}
                                                           style={{ color: "#fff" }}
                                                         /> */}
-                                                         {/* {replaceString(data.encounterDate)} */}
+                                                            {/* {replaceString(data.encounterDate)} */}
                                                             {replaceCaptureSection(data.capturedSections)}
                                                             {/* HPI */}
                                                           </Badge>
@@ -2850,12 +2916,12 @@ export default function PatientDetails() {
                                                               </div>
                                                             </div>
                                                             <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                              
-                                                                {data.getPlace == "Lab" ?  <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-seven `} >Lab</Badge> : 
-                                                                data.getPlace == "Radio" ?  <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-five `} >Radiology</Badge>
-                                                                 :  <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-five `} >Hcc</Badge>
-                                                                }                                                 
-                                                                
+
+                                                              {data.getPlace == "Lab" ? <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-seven `} >Lab</Badge> :
+                                                                data.getPlace == "Radio" ? <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-five `} >Radiology</Badge>
+                                                                  : <Badge className="badge-meat  badge-circle mt-2 text-white" bg={` badge-circle mt-2 bg-bg-five `} >Hcc</Badge>
+                                                              }
+
 
 
                                                               <Popover placement="topLeft" content={data.encounterDate}>
@@ -7013,6 +7079,65 @@ export default function PatientDetails() {
                           </Button>
                           <Button
                             onClick={() => setLapReportSlider(false)}
+                            className="btn btn-danger btn-sm light ms-1"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </Form>
+                    </div>
+                  </div>
+                </Offcanvas>
+                <Offcanvas onHide={setFilterDrawer} show={filterDrawer} className="offcanvas-start" placement="start">
+                  <div className="offcanvas-header">
+                    <h5 className="modal-title" id="#gridSystemModal">
+                      Filter
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => handleCloseModal()}
+                    >
+                      <i className="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                  <div className="offcanvas-body">
+                    <div className="container-fluid">
+                      <Form noValidate onSubmit={handleSubmitFilter}>
+                        <div className="row">
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              User
+                            </Form.Label>
+                            <Select onChange={handleChange} name='userId' placeholder={<div>Select User</div>} options={userList} className="custom-react-select"
+
+                              isSearchable={false}
+                            />
+                          </div>
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              Date
+                            </Form.Label>
+                            <input onChange={handleChange} type="date" name='date' className="form-control" placeholder="Date" />
+
+                          </div>
+
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              Status
+                            </Form.Label>
+                            <Select onChange={handleChange} name='status' placeholder={<div>Select User</div>} options={userList} className="custom-react-select"
+                              isSearchable={false}
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Button type="submit" className="btn btn-primary btn-sm me-1">
+                            Submit
+                          </Button>
+                          <Button
+                            onClick={() => handleCloseModal()}
                             className="btn btn-danger btn-sm light ms-1"
                           >
                             Cancel

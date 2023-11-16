@@ -644,8 +644,10 @@ export default function Patient() {
                             <Column field="patientId" header="Patient Id" />
                             <Column field="patientName" header="Patient Name" />
                             <Column field="fileName" header="File Name" />
-                            <Column field="status" body={statusBodyTemplate} header="Status" />
-                            <Column field="createdAt" sortable header="Created Date" />
+                            <Column field="status" body={statusBodyTemplate} header="File Status" />
+                            <Column field="status" body={statusBodyTemplate} header="Processing Status" />
+                            <Column field="createdAt" sortable header="Due Date" />
+                            <Column field="createdAt" sortable header="Modfied Date" />
                             <Column field="action" body={actionBodyTemplate} header="Action" />
                           </DataTable>
                           {/* <table

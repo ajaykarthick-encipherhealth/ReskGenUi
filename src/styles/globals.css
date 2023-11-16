@@ -55102,11 +55102,48 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
 }
 li.file-complete-list {
     padding: 10px;
-    margin-left: 15px !important;
+    /* margin-left: 15px !important; */
 }
 .file-complete-badge {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   padding: 0px 2px 1px 3px !important;
   margin-left: 12px;
+  background: #f1b13c !important;
 }
+.file-completed-menu{
+    border-radius: 10px;
+    /* border: 1px solid #fff; */
+
+    margin: 25px 0px 0px 0px !important;
+    padding-top: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.select-user-file-active {
+  text-align: center;
+  background: #36229f !important;}
+.user-backbtn{
+  background: #36229f !important;
+}
+.user-filter-btn{
+  background: #36229f !important;
+  margin-right: 4px !important;
+
+}
+.user-filter-contain{
+  display: flex;
+  justify-content: space-between;
+}
+.file-ul-contain{
+  margin: 35px 19px 0px 10px;
+
+}
+.file-user-icon{
+  font-size: 18px;
+  margin-left: 5px;
+  margin-right: 5px;
+  /* color: #fff; */
+}
+

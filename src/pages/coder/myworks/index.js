@@ -6,6 +6,11 @@ import { Progress, Tooltip } from "antd";
 import NavBar from "../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
+
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+
 
 const Screen = () => {
     const sideMenu = useSelector(state => state.sideMenu);
@@ -15,6 +20,116 @@ const Screen = () => {
     const gotoPatientDetails = (data) => {
         navigate.push('/physician/patients');
     };
+
+
+    const series =   [
+        {
+          name: "NEW",
+          data: [55],
+        },
+        {
+          name: "INVALIDATION",
+          data: [32],
+        },
+        {
+            name: "VALIDATION",
+            data: [15],
+          },
+          {
+            name: "IN - AUDIT",
+            data: [25],
+          },
+          {
+            name: "IN - RE AUDIT",
+            data: [49],
+          },
+          {
+            name: "QC",
+            data: [22],
+          },
+          {
+            name: "IN-QC",
+            data: [7],
+          },
+          {
+            name: "COMPLETED",
+            data: [78],
+          },
+      ]
+
+      const opations = {
+        chart: {
+          type: "bar",
+          height: 350,
+          toolbar: {
+            show: false,
+          },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "100%",
+            endingShape: "rounded",
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
+
+        legend: {
+          show: true,
+          fontSize: "12px",
+          fontWeight: 300,
+
+          labels: {
+              colors: "#000",
+              fontSize: "14px",
+              fontFamily: "Poppins",
+              fontWeight: 600,
+          },
+          position: "bottom",
+          horizontalAlign: "center",
+          markers: {
+            width: 19,
+            height: 19,
+            strokeWidth: 0,
+            radius: 19,
+            // fillColors: ["#fc8019", "var(--primary)"],
+            offsetX: 0,
+            offsetY: 0,
+          },
+        },
+        yaxis: {
+          labels: {
+            style: {
+              colors: "#000",
+              fontSize: "14px",
+              fontFamily: "Poppins",
+              fontWeight: 400,
+            },
+          },
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"],
+        },
+        xaxis: {
+          categories: ["Total"],
+          labels: {
+            style: {
+              colors: "#000",
+              fontSize: "14px",
+              fontFamily: "Poppins",
+              fontWeight: 400,
+            },
+          },
+        },
+        fill: {
+          opacity: 1,
+        },
+     
+      }
 
 
 
@@ -321,8 +436,20 @@ const Screen = () => {
                                     </div>
                                 </div>
                             </div>
-
-
+                            <div className="col-xl-12 col-sm-12" >
+                                <div className="card dashboard-card">
+                                    <div className="card-body">
+                                    <div id="chart" className="line-chart-style bar-chart">
+        <ReactApexChart
+          options={opations}
+          series={series}
+          type="bar"
+          height={300}
+        />
+      </div>
+                                    </div>
+                    </div>
+                </div>
                         </div>
                     </div>
                 </div>
