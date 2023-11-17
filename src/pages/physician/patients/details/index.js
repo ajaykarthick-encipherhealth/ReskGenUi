@@ -370,12 +370,11 @@ export default function PatientDetails() {
         validDiseaseNewRes = result.validDisease[highestDOS];
         invalidDiseaseNewRes = result.invalidDisease[highestDOS];
         if (result.suggestRadiology != null) {
-          var checkDosRadio = [];
-          for (var key in result.suggestRadiology) {
-            checkDosRadio.push({ value: key, label: key });
-          }
-          suggestRadiologyList =
-            result.suggestRadiology[checkDosRadio[0].value];
+          // var checkDosRadio = [];
+          // for (var key in result.suggestRadiology) {
+          //   checkDosRadio.push({ value: key, label: key });
+          // }
+          suggestRadiologyList =  result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -389,7 +388,7 @@ export default function PatientDetails() {
         }
 
         if (result.suggestLab != null) {
-          suggestLabList = result.suggestLab[highestDOS];
+          suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
             suggestListAll.push({
               actualDescription: res.actualDescription,
