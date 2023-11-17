@@ -73,7 +73,7 @@ export default function PatientDetails() {
   const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
   const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
     useState(false);
-    const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
+  const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
   const [confirmNotesModalHold, setConfirmNotesModalHold] = useState(false);
 
@@ -210,6 +210,10 @@ export default function PatientDetails() {
 
   const [buttonClicked, setButtonClicked] = useState(false);
   const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
+  const [isValidAction, setIsValidAction] = useState('');
+  const [deletedHccList, setDeletedHccList] = useState('');
+
+
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -287,7 +291,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
     }
@@ -320,7 +324,7 @@ export default function PatientDetails() {
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       var result = response.data;
@@ -343,6 +347,7 @@ export default function PatientDetails() {
         var suggestLabList = [];
 
         var suggestListAll = [];
+        var deleteHccList = [];
 
         getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
         setSelectMeatFileId(response.data.fileId);
@@ -369,12 +374,16 @@ export default function PatientDetails() {
         validDis = result.validDisease[highestDOS];
         validDiseaseNewRes = result.validDisease[highestDOS];
         invalidDiseaseNewRes = result.invalidDisease[highestDOS];
+        if(result.deletedDiseases != null){
+          deleteHccList = result.deletedDiseases[highestDOS];
+
+        }
         if (result.suggestRadiology != null) {
           // var checkDosRadio = [];
           // for (var key in result.suggestRadiology) {
           //   checkDosRadio.push({ value: key, label: key });
           // }
-          suggestRadiologyList =  result.suggestRadiology;
+          suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -478,15 +487,16 @@ export default function PatientDetails() {
 
         setNewValidDiseaseList(validDiseaseNewRes);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
-        setNewUnMatchHccList(unMatchRes);
+        setNewUnMatchHccList(suggestListAll);
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
         setComboDiseaseCodesList(comboDis);
         // setMeatCriteriaList(meatCri);
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
-        setSuggestedNonHccList(unMatchResNonHcc);
+        setSuggestedNonHccList(suggestListAll);
         setSuggestedHccList(suggestListAll);
+        setDeletedHccList(deleteHccList)
 
         const COLORS = [
           "bg-bg-seven",
@@ -639,7 +649,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       setRadiologyResCheck(true);
@@ -1004,7 +1014,7 @@ export default function PatientDetails() {
     // }
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
     );
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
@@ -1180,7 +1190,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
     if (response.data.labFileDetail != null) {
@@ -1246,7 +1256,7 @@ export default function PatientDetails() {
   const getPatientPdfFile = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
@@ -1275,7 +1285,7 @@ export default function PatientDetails() {
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
@@ -1296,7 +1306,7 @@ export default function PatientDetails() {
   const getLabReportFiles = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
@@ -1322,10 +1332,47 @@ export default function PatientDetails() {
 
   const confirmvalid = () =>
     new Promise((resolve) => {
-      // validMoveConfirm();
-
-      setTimeout(() => resolve(setConfirmNotesModalValid(true)), 1000);
+      setTimeout(() => resolve(
+        console.log("deletd"),
+        setConfirmNotesModalValid(true),
+        setIsValidAction("validToDeleted")
+      ), 1000);
     });
+
+  const validToSuggested = () =>
+    new Promise((resolve) => {
+      setTimeout(() => resolve(setConfirmNotesModalValid(true),
+        setIsValidAction("validToSuggested")
+      ), 1000);
+    });
+
+    const suggestedToValid = () =>
+    new Promise((resolve) => {
+      setTimeout(() => resolve(setConfirmNotesModalValid(true),
+        setIsValidAction("suggestedToValid")
+      ), 1000);
+    });
+    const suggestedToDeleted = () =>
+    new Promise((resolve) => {
+      setTimeout(() => resolve(setConfirmNotesModalValid(true),
+        setIsValidAction("suggestedToDeleted")
+      ), 1000);
+    });
+
+    const deletedToSuggested = () =>
+    new Promise((resolve) => {
+      setTimeout(() => resolve(setConfirmNotesModalValid(true),
+        setIsValidAction("deletedToSuggested")
+      ), 1000);
+    });
+    const deletedToValid = () =>
+    new Promise((resolve) => {
+      setTimeout(() => resolve(setConfirmNotesModalValid(true),
+        setIsValidAction("deletedToValid")
+      ), 1000);
+    });
+
+
   const confirmInvalid = () =>
     new Promise((resolve) => {
       // invalidMoveConfirm();
@@ -1381,6 +1428,7 @@ export default function PatientDetails() {
     });
 
   const onchangeValid = (code, data) => {
+    console.log(data)
     setSelectDiseasesName(code);
     setSelectInvalidDetails(data);
   };
@@ -1521,7 +1569,7 @@ export default function PatientDetails() {
     setIsAddButtonClicked(false);
     // Add any additional logic for closing the form if needed
   };
-// updated changes
+  // updated changes
   const handleFormSubmit = (event) => {
     event.preventDefault();
     // Add logic for handling form submission
@@ -1543,7 +1591,7 @@ export default function PatientDetails() {
     setConfirmNotesModalDecline(false);
     setConfirmNotesModalHold(false);
     setIsAddButtonClicked(false);
-    setConfirmNotesModalDecline(false); 
+    setConfirmNotesModalDecline(false);
     setIsAddButtonClicked(false);
   };
   const handleOpenModal = (value, disDescription) => {
@@ -1682,11 +1730,30 @@ export default function PatientDetails() {
   };
 
   const handleSubmitValidNotes = async (event) => {
+    console.log("test");
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
       setConfirmNotesModalValid(false);
-      validMoveConfirm();
+      // validMoveConfirm();
+      if (isValidAction == "validToSuggested") {
+        handleSubmitMoveValidToSuggested();
+      }
+      if (isValidAction == "validToDeleted") {
+        handleSubmitMoveValidToDeleted();
+      }
+      if (isValidAction == "suggestedToDeleted") {
+        handleSubmitMoveSuggestedToDeleted();
+      }
+      if (isValidAction == "suggestedToValid") {
+        handleSubmitMoveSuggestedToValid();
+      }
+      if (isValidAction == "deletedToSuggested") {
+        handleSubmitMoveDeletedToSuggested();
+      }
+      if (isValidAction == "deletedToValid") {
+        handleSubmitMoveDeletedToValid();
+      }
     }
     setValidated(true);
   };
@@ -2105,7 +2172,7 @@ export default function PatientDetails() {
     setInputValue({ ...inputValue, [key]: value });
   };
 
-  const openModelDbDescription = () => {};
+  const openModelDbDescription = () => { };
 
   const tabList = [
     { title: "Patient Data", type: "Patient Data" },
@@ -2204,7 +2271,7 @@ export default function PatientDetails() {
     };
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload/radiology
+      `aiservice/ai/upload/radiology
       `,
       formData,
       headers
@@ -2234,7 +2301,7 @@ export default function PatientDetails() {
     };
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload/lab
+      `aiservice/ai/upload/lab
       `,
       formData,
       headers
@@ -2320,6 +2387,152 @@ export default function PatientDetails() {
     setvalidHccDetails(data);
   };
 
+
+
+
+  const handleSubmitMoveValidToSuggested = async () => {
+    console.log(selectInvalidDetails)
+    var dataFormatSuggested = {
+      userId: localUserId,
+      patientId: localPatientId,
+      diagnosisCode: selectInvalidDetails.diagnosisCode,
+      actualDescription: selectInvalidDetails.actualDescription,
+      dbDescription: selectInvalidDetails.dbDescription,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    const response = await axios.put(
+      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/validtosuggested`,
+      dataFormatSuggested
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Moved to suggested Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+  };
+
+  const handleSubmitMoveValidToDeleted = async () => {
+    console.log(selectInvalidDetails)
+    var dataFormatSuggested = {
+      userId: localUserId,
+      patientId: localPatientId,
+      diagnosisCode: selectInvalidDetails.diagnosisCode,
+      actualDescription: selectInvalidDetails.actualDescription,
+      dbDescription: selectInvalidDetails.dbDescription,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    const response = await axios.put(
+      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/validtodeleted`,
+      dataFormatSuggested
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Moved to deleted Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+  };
+
+  const handleSubmitMoveSuggestedToDeleted = async () => {
+    console.log(selectInvalidDetails)
+    var dataFormatSuggested = {
+      userId: localUserId,
+      patientId: localPatientId,
+      diagnosisCode: selectInvalidDetails.diagnosisCode,
+      actualDescription: selectInvalidDetails.actualDescription,
+      dbDescription: selectInvalidDetails.dbDescription,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    const response = await axios.put(
+      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestedtodeleted`,
+      [dataFormatSuggested]
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Moved to deleted Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+  };
+
+  const handleSubmitMoveSuggestedToValid = async () => {
+    console.log(selectInvalidDetails)
+    var dataFormatSuggested = {
+      userId: localUserId,
+      patientId: localPatientId,
+      diagnosisCode: selectInvalidDetails.diagnosisCode,
+      actualDescription: selectInvalidDetails.actualDescription,
+      dbDescription: selectInvalidDetails.dbDescription,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    const response = await axios.put(
+      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestedtovalid`,
+      [dataFormatSuggested]
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Moved to valid Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+  };
+
+  const handleSubmitMoveDeletedToValid = async () => {
+    console.log(selectInvalidDetails)
+    var dataFormatSuggested = {
+      userId: localUserId,
+      patientId: localPatientId,
+      diagnosisCode: selectInvalidDetails.diagnosisCode,
+      actualDescription: selectInvalidDetails.actualDescription,
+      dbDescription: selectInvalidDetails.dbDescription,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    const response = await axios.put(
+      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/deletedtovalid`,
+      dataFormatSuggested
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Moved to valid Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+  };
+  const handleSubmitMoveDeletedToSuggested = async () => {
+    console.log(selectInvalidDetails)
+    var dataFormatSuggested = {
+      userId: localUserId,
+      patientId: localPatientId,
+      diagnosisCode: selectInvalidDetails.diagnosisCode,
+      actualDescription: selectInvalidDetails.actualDescription,
+      dbDescription: selectInvalidDetails.dbDescription,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    const response = await axios.put(
+      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/deletedtoSuggested`,
+      dataFormatSuggested
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Moved to Suggested Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+  };
+
   const handleSubmitInValidtoValid = async () => {
     var dataFormatSuggested = {
       userId: localUserId,
@@ -2330,8 +2543,8 @@ export default function PatientDetails() {
       notes: inputValue.notes,
       dos: selectedDosValue,
     };
-    const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/valid`,
+    const response = await axios.put(
+      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2642,7 +2855,7 @@ export default function PatientDetails() {
                                 {/* {activeTab == 3 ?
                                   <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
                                   : null} */}
-                                  <Button
+                                <Button
                                   className="btn btn-sm ms-2 flr saveBtn"
                                   onClick={() => {
                                     setConfirmNotesModalDecline(true);
@@ -2655,7 +2868,7 @@ export default function PatientDetails() {
                                   />
                                   Hold
                                 </Button>
-                               
+
                                 <Button
                                   onClick={handleSubmitHccDecline}
                                   className="btn btn-primary btn-sm ms-2 flr decline-btn"
@@ -2868,7 +3081,7 @@ export default function PatientDetails() {
                                                             </div>
                                                           </Popover>
 
-                                                        
+
                                                           <Popconfirm
                                                             title="Choose an action"
                                                             icon={
@@ -2881,7 +3094,7 @@ export default function PatientDetails() {
                                                             okText="Move to Deleted"
                                                             cancelText="Move to Suggested"
                                                             onCancel={
-                                                              confirmvalid
+                                                              validToSuggested
                                                             }
                                                             okButtonProps={{
                                                               type: buttonClicked
@@ -2902,7 +3115,8 @@ export default function PatientDetails() {
                                                             placement="leftTop"
                                                             onOpenChange={() =>
                                                               onchangeValid(
-                                                                data.diagnosisCode
+                                                                data.diagnosisCode,
+                                                                data
                                                               )
                                                             }
                                                           >
@@ -3053,7 +3267,7 @@ export default function PatientDetails() {
                                                     return (
                                                       <>
                                                         {data.isHccValid ==
-                                                        true ? (
+                                                          true ? (
                                                           <li>
                                                             <div className="new_valid-dis">
                                                               <div className="timeline-panel">
@@ -3109,7 +3323,55 @@ export default function PatientDetails() {
                                                                 </Popover>
 
                                                                 <div className="icon-box  bg-danger-light me-1">
-                                                                  <Popconfirm
+                                                                <Popconfirm
+                                                            title="Choose an action"
+                                                            icon={
+                                                              <QuestionCircleOutlined
+                                                                style={{
+                                                                  color: "blue",
+                                                                }}
+                                                              />
+                                                            }
+                                                            okText="Move to Deleted"
+                                                            cancelText="Move to Valid"
+                                                            onCancel={
+                                                              suggestedToValid
+                                                            }
+                                                            okButtonProps={{
+                                                              type: buttonClicked
+                                                                ? "primary"
+                                                                : "default",
+                                                            }}
+                                                            cancelButtonProps={{
+                                                              type: buttonClicked
+                                                                ? "danger"
+                                                                : "default",
+                                                            }}
+                                                            description={
+                                                              data.diagnosisCode
+                                                            }
+                                                            onConfirm={
+                                                              suggestedToDeleted
+                                                            }
+                                                            placement="leftTop"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(
+                                                                data.diagnosisCode,
+                                                                data
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                                      icon={faCheck}
+                                                                      style={{
+                                                                        color:
+                                                                          "orange",
+                                                                      }}
+                                                                    />
+                                                                  </div>
+                                                          </Popconfirm>
+                                                                  {/* <Popconfirm
                                                                     title="You want move to valid?"
                                                                     description={
                                                                       data.diagnosisCode
@@ -3136,12 +3398,12 @@ export default function PatientDetails() {
                                                                       className="form-check-input unmatach-checkbox"
                                                                       required
                                                                     />
-                                                                  </Popconfirm>
+                                                                  </Popconfirm> */}
                                                                 </div>
                                                               </div>
                                                               <div className="d-flex justify-content-sm-between valid-providerdocument ">
                                                                 {data.getPlace ==
-                                                                "Lab" ? (
+                                                                  "Lab" ? (
                                                                   <Badge
                                                                     className="badge-meat  badge-circle mt-2 text-white"
                                                                     bg={` badge-circle mt-2 bg-bg-seven `}
@@ -3298,12 +3560,12 @@ export default function PatientDetails() {
                                                       bg="badge-circle invalid-bange"
                                                     >
                                                       {
-                                                        invalidMoveDiseasesList.length
+                                                        deletedHccList.length
                                                       }
                                                     </Badge>
                                                   </span>
                                                 </div>
-                                                {invalidMoveDiseasesList.map(
+                                                {deletedHccList.map(
                                                   (data, i) => (
                                                     <li>
                                                       <div className="timeline-panel invalid-disease">
@@ -3340,6 +3602,54 @@ export default function PatientDetails() {
                                                           </div>
                                                         </Popover>
                                                         <Popconfirm
+                                                            title="Choose an action"
+                                                            icon={
+                                                              <QuestionCircleOutlined
+                                                                style={{
+                                                                  color: "blue",
+                                                                }}
+                                                              />
+                                                            }
+                                                            okText="Move to Suggested"
+                                                            cancelText="Move to Valid"
+                                                            onCancel={
+                                                              deletedToValid
+                                                            }
+                                                            okButtonProps={{
+                                                              type: buttonClicked
+                                                                ? "primary"
+                                                                : "default",
+                                                            }}
+                                                            cancelButtonProps={{
+                                                              type: buttonClicked
+                                                                ? "danger"
+                                                                : "default",
+                                                            }}
+                                                            description={
+                                                              data.diagnosisCode
+                                                            }
+                                                            onConfirm={
+                                                              deletedToSuggested
+                                                            }
+                                                            placement="leftTop"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(
+                                                                data.diagnosisCode,
+                                                                data
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                                      icon={faCheck}
+                                                                      style={{
+                                                                        color:
+                                                                          "orange",
+                                                                      }}
+                                                                    />
+                                                                  </div>
+                                                          </Popconfirm>
+                                                        {/* <Popconfirm
                                                           title="You want move to valid?"
                                                           description={
                                                             data.diagnosisCode
@@ -3364,7 +3674,7 @@ export default function PatientDetails() {
                                                               }}
                                                             />
                                                           </div>
-                                                        </Popconfirm>
+                                                        </Popconfirm> */}
                                                       </div>
                                                     </li>
                                                   )
@@ -3604,7 +3914,7 @@ export default function PatientDetails() {
                                         ) : null}
 
                                         {invalidComboDiseaseCodesList.length !=
-                                        0 ? (
+                                          0 ? (
                                           <>
                                             <div className="invalid-combo">
                                               <span>
@@ -3715,7 +4025,7 @@ export default function PatientDetails() {
                                             <div
                                               className={
                                                 item.isMeatCriteriaPresent ===
-                                                true
+                                                  true
                                                   ? "card meat-card"
                                                   : "card meat-card-false"
                                               }
@@ -4000,44 +4310,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.monitorCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.monitorCapturedFromHeader ===
+                                                              item.monitorCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.monitorCapturedFromHeader ===
+                                                              item.monitorCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.monitorCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.monitorCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.monitorCapturedFromHeader ===
+                                                                  item.monitorCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.monitorCapturedFromHeader ===
+                                                                  item.monitorCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.monitorCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.monitorCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.monitorCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.monitorCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.monitorCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.monitorCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.monitorCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.monitorCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -4068,44 +4378,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.evaluateCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.evaluateCapturedFromHeader ===
+                                                              item.evaluateCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.evaluateCapturedFromHeader ===
+                                                              item.evaluateCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.evaluateCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.evaluateCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.evaluateCapturedFromHeader ===
+                                                                  item.evaluateCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.evaluateCapturedFromHeader ===
+                                                                  item.evaluateCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.evaluateCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.evaluateCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.evaluateCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.evaluateCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.evaluateCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.evaluateCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.evaluateCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.evaluateCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -4136,44 +4446,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.assessmentCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.assessmentCapturedFromHeader ===
+                                                              item.assessmentCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.assessmentCapturedFromHeader ===
+                                                              item.assessmentCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.assessmentCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.assessmentCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.assessmentCapturedFromHeader ===
+                                                                  item.assessmentCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.assessmentCapturedFromHeader ===
+                                                                  item.assessmentCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.assessmentCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.assessmentCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.assessmentCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.assessmentCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.assessmentCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.assessmentCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.assessmentCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.assessmentCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -4205,44 +4515,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.treatmentCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.treatmentCapturedFromHeader ===
+                                                              item.treatmentCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.treatmentCapturedFromHeader ===
+                                                              item.treatmentCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.treatmentCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.treatmentCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.treatmentCapturedFromHeader ===
+                                                                  item.treatmentCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.treatmentCapturedFromHeader ===
+                                                                  item.treatmentCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.treatmentCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.treatmentCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.treatmentCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.treatmentCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.treatmentCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.treatmentCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.treatmentCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.treatmentCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -4331,7 +4641,7 @@ export default function PatientDetails() {
                                           {rafScore != null ? (
                                             <div className="col-xl-12">
                                               {rafScore.scoreOutputDTOList !=
-                                              null ? (
+                                                null ? (
                                                 <>
                                                   {rafScore.scoreOutputDTOList.map(
                                                     (rafScoreMapResult) => {
@@ -4962,106 +5272,208 @@ export default function PatientDetails() {
                                                       <>
                                                         {data.isHccValid ==
                                                           false ||
-                                                        data.isHccValid ==
+                                                          data.isHccValid ==
                                                           null ? (
-                                                          <li>
-                                                            <div className="timeline-panel d-block invalid-disease">
-                                                              <div
-                                                                className="media-body"
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    data.diagnosisCodeFinding,
-                                                                    data.actualDescription
-                                                                  )
-                                                                }
-                                                              >
-                                                                <span className="mb-1 disease-name">
-                                                                  {
-                                                                    data.actualDescription
+                                                            <li>
+                                                            <div className="new_valid-dis">
+                                                              <div className="timeline-panel">
+                                                                <div
+                                                                  className="media-body"
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      data.diagnosisCode,
+                                                                      data.actualDescription,
+                                                                      "valid2",
+                                                                      "nonHcc"
+                                                                    )
                                                                   }
-                                                                </span>
-                                                              </div>
-                                                              {/* <div className="form-check custom-checkbox">
-                                                      <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
-                                                    </div> */}
-                                                              <div className="media-body d-flex">
-                                                                {/* {data.diagnosisCodeDocument != null && data.diagnosisCodeDocument != "" ?
-                                                                  <div className="form-check custom-checkbox unmatch-check">
-                                                                    <div>
-                                                                      <Popconfirm
-                                                                        title="You want move to valid?"
-                                                                        description={data.diagnosisCodeDocument}
-                                                                        onConfirm={onchangeSuggested}
-                                                                        placement="rightTop"
-                                                                        okText="Yes"
-                                                                        cancelText="No"
-                                                                      >
-                                                                        <input onChange={(e) => { handleMatchHcc(e, data, data.diagnosisCodeDocument) }} type="checkbox" id={`customCheckBox ${data.diagnosisCodeDocument}`} className="form-check-input unmatach-checkbox" required />
-
-                                                                      </Popconfirm>
-
-                                                                    </div>
-                                                                    <Popover placement="topLeft" title="Document Code" content={data.diagnosisCodeDocument}>
-                                                                      <span className="disease-name">
-                                                                        {data.diagnosisCodeDocument}
-                                                                      </span>
-                                                                    </Popover>
-                                                                   
-
-                                                                  </div> : null} */}
-                                                                {data.diagnosisCodeFinding !=
-                                                                  null &&
-                                                                data.diagnosisCodeFinding !=
-                                                                  "" ? (
-                                                                  <div className="form-check custom-checkbox unmatch-check ms-3">
-                                                                    <div>
-                                                                      <Popconfirm
-                                                                        title="You want move to valid?"
-                                                                        description={
-                                                                          data.diagnosisCodeDocument
-                                                                        }
-                                                                        onConfirm={
-                                                                          onchangeSuggested
-                                                                        }
-                                                                        placement="rightTop"
-                                                                        okText="Yes"
-                                                                        cancelText="No"
-                                                                      >
-                                                                        <input
-                                                                          onChange={(
-                                                                            e
-                                                                          ) => {
-                                                                            handleMatchHcc(
-                                                                              e,
-                                                                              data,
-                                                                              data.diagnosisCodeFinding
-                                                                            );
-                                                                          }}
-                                                                          type="checkbox"
-                                                                          id={`customCheckBox ${data.diagnosisCodeFinding}`}
-                                                                          className="form-check-input unmatach-checkbox"
-                                                                          required
-                                                                        />
-                                                                      </Popconfirm>
-                                                                    </div>
-                                                                    <Popover
-                                                                      placement="topLeft"
-                                                                      title="Finding Code"
-                                                                      content={
-                                                                        data.diagnosisCodeFinding
+                                                                >
+                                                                  <span className="mb-1 disease-name d-flex">
+                                                                    <span className="valid-dis-name">
+                                                                      {
+                                                                        data.diagnosisCode
                                                                       }
-                                                                    >
-                                                                      <span className="disease-name">
-                                                                        {
-                                                                          data.diagnosisCodeFinding
-                                                                        }
-                                                                      </span>
-                                                                    </Popover>
+                                                                    </span>{" "}
+                                                                    -{" "}
+                                                                    {
+                                                                      data.actualDescription
+                                                                    }
+                                                                  </span>
+                                                                </div>
+                                                                <Popconfirm
+                                                            title="Choose an action"
+                                                            icon={
+                                                              <QuestionCircleOutlined
+                                                                style={{
+                                                                  color: "blue",
+                                                                }}
+                                                              />
+                                                            }
+                                                            okText="Move to Deleted"
+                                                            cancelText="Move to Valid"
+                                                            onCancel={
+                                                              suggestedToValid
+                                                            }
+                                                            okButtonProps={{
+                                                              type: buttonClicked
+                                                                ? "primary"
+                                                                : "default",
+                                                            }}
+                                                            cancelButtonProps={{
+                                                              type: buttonClicked
+                                                                ? "danger"
+                                                                : "default",
+                                                            }}
+                                                            description={
+                                                              data.diagnosisCode
+                                                            }
+                                                            onConfirm={
+                                                              suggestedToDeleted
+                                                            }
+                                                            placement="leftTop"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(
+                                                                data.diagnosisCode,
+                                                                data
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                                      icon={faCheck}
+                                                                      style={{
+                                                                        color:
+                                                                          "orange",
+                                                                      }}
+                                                                    />
                                                                   </div>
-                                                                ) : null}
+                                                          </Popconfirm>
+      
+                                                                
+                                                              </div>
+                                                              <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  content={
+                                                                    data.encounterDate
+                                                                  }
+                                                                >
+                                                                  <Badge
+                                                                    bg=" badge-rounded"
+                                                                    className="badge-outline-info  mt-2"
+                                                                  >
+                                                                    <FontAwesomeIcon
+                                                                      icon={
+                                                                        faCalendar
+                                                                      }
+                                                                      style={{
+                                                                        color:
+                                                                          "#918585",
+                                                                      }}
+                                                                    />
+                                                                    {replaceString(
+                                                                      data.encounterDate
+                                                                    )}
+                                                                  </Badge>
+                                                                </Popover>
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  content={
+                                                                    data.capturedSections
+                                                                  }
+                                                                >
+                                                                  <Badge
+                                                                    bg=" badge-rounded"
+                                                                    className="badge-outline-info  mt-2 cr-pointer"
+                                                                    onClick={() =>
+                                                                      handleOpenModalCombinationCode(
+                                                                        data.diagnosisCode,
+                                                                        data.capturedSections,
+                                                                        "valid"
+                                                                      )
+                                                                    }
+                                                                  >
+                                                                    {
+                                                                      data.capturedSections
+                                                                    }
+                                                                  </Badge>
+                                                                </Popover>
                                                               </div>
                                                             </div>
                                                           </li>
+                                                          // <li>
+                                                          //   <div className="timeline-panel d-block invalid-disease">
+                                                          //     <div
+                                                          //       className="media-body"
+                                                          //       onClick={() =>
+                                                          //         handleOpenModalCombinationCode(
+                                                          //           data.diagnosisCodeFinding,
+                                                          //           data.actualDescription
+                                                          //         )
+                                                          //       }
+                                                          //     >
+                                                          //       <span className="mb-1 disease-name">
+                                                          //         {
+                                                          //           data.actualDescription
+                                                          //         }
+                                                          //       </span>
+                                                          //     </div>
+                                                            
+                                                          //     <div className="media-body d-flex">
+                                                               
+                                                          //       {data.diagnosisCodeFinding !=
+                                                          //         null &&
+                                                          //         data.diagnosisCodeFinding !=
+                                                          //         "" ? (
+                                                          //         <div className="form-check custom-checkbox unmatch-check ms-3">
+                                                          //           <div>
+                                                          //             <Popconfirm
+                                                          //               title="You want move to valid?"
+                                                          //               description={
+                                                          //                 data.diagnosisCodeDocument
+                                                          //               }
+                                                          //               onConfirm={
+                                                          //                 onchangeSuggested
+                                                          //               }
+                                                          //               placement="rightTop"
+                                                          //               okText="Yes"
+                                                          //               cancelText="No"
+                                                          //             >
+                                                          //               <input
+                                                          //                 onChange={(
+                                                          //                   e
+                                                          //                 ) => {
+                                                          //                   handleMatchHcc(
+                                                          //                     e,
+                                                          //                     data,
+                                                          //                     data.diagnosisCodeFinding
+                                                          //                   );
+                                                          //                 }}
+                                                          //                 type="checkbox"
+                                                          //                 id={`customCheckBox ${data.diagnosisCodeFinding}`}
+                                                          //                 className="form-check-input unmatach-checkbox"
+                                                          //                 required
+                                                          //               />
+                                                          //             </Popconfirm>
+                                                          //           </div>
+                                                          //           <Popover
+                                                          //             placement="topLeft"
+                                                          //             title="Finding Code"
+                                                          //             content={
+                                                          //               data.diagnosisCodeFinding
+                                                          //             }
+                                                          //           >
+                                                          //             <span className="disease-name">
+                                                          //               {
+                                                          //                 data.diagnosisCodeFinding
+                                                          //               }
+                                                          //             </span>
+                                                          //           </Popover>
+                                                          //         </div>
+                                                          //       ) : null}
+                                                          //     </div>
+                                                          //   </div>
+                                                          // </li>
                                                         ) : null}
                                                       </>
                                                     );
@@ -5271,7 +5683,7 @@ export default function PatientDetails() {
                                         )}
 
                                         {comboDiseaseCodesListNonHcc.length ==
-                                        0 ? (
+                                          0 ? (
                                           <div className="card combo-card">
                                             <div className="col-xl-12">
                                               <div>
@@ -5284,7 +5696,7 @@ export default function PatientDetails() {
                                         ) : null}
 
                                         {invalidComboDiseaseCodesList.length !=
-                                        0 ? (
+                                          0 ? (
                                           <>
                                             <div className="invalid-combo">
                                               <span>
@@ -5395,7 +5807,7 @@ export default function PatientDetails() {
                                             <div
                                               className={
                                                 item.isMeatCriteriaPresent ===
-                                                true
+                                                  true
                                                   ? "card meat-card"
                                                   : "card meat-card-false"
                                               }
@@ -5628,44 +6040,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.monitorCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.monitorCapturedFromHeader ===
+                                                              item.monitorCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.monitorCapturedFromHeader ===
+                                                              item.monitorCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.monitorCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.monitorCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.monitorCapturedFromHeader ===
+                                                                  item.monitorCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.monitorCapturedFromHeader ===
+                                                                  item.monitorCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.monitorCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.monitorCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.monitorCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.monitorCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.monitorCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.monitorCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.monitorCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.monitorCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -5696,44 +6108,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.evaluateCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.evaluateCapturedFromHeader ===
+                                                              item.evaluateCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.evaluateCapturedFromHeader ===
+                                                              item.evaluateCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.evaluateCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.evaluateCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.evaluateCapturedFromHeader ===
+                                                                  item.evaluateCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.evaluateCapturedFromHeader ===
+                                                                  item.evaluateCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.evaluateCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.evaluateCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.evaluateCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.evaluateCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.evaluateCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.evaluateCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.evaluateCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.evaluateCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -5764,44 +6176,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.assessmentCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.assessmentCapturedFromHeader ===
+                                                              item.assessmentCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.assessmentCapturedFromHeader ===
+                                                              item.assessmentCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.assessmentCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.assessmentCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.assessmentCapturedFromHeader ===
+                                                                  item.assessmentCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.assessmentCapturedFromHeader ===
+                                                                  item.assessmentCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.assessmentCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.assessmentCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.assessmentCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.assessmentCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.assessmentCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.assessmentCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.assessmentCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.assessmentCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -5833,44 +6245,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.treatmentCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.treatmentCapturedFromHeader ===
+                                                              item.treatmentCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.treatmentCapturedFromHeader ===
+                                                              item.treatmentCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.treatmentCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.treatmentCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.treatmentCapturedFromHeader ===
+                                                                  item.treatmentCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.treatmentCapturedFromHeader ===
+                                                                  item.treatmentCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.treatmentCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.treatmentCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.treatmentCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.treatmentCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.treatmentCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.treatmentCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.treatmentCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.treatmentCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -5959,7 +6371,7 @@ export default function PatientDetails() {
                                           {rafScore != null ? (
                                             <div className="col-xl-12">
                                               {rafScore.scoreOutputDTOList !=
-                                              null ? (
+                                                null ? (
                                                 <>
                                                   {rafScore.scoreOutputDTOList.map(
                                                     (rafScoreMapResult) => {
@@ -6760,7 +7172,7 @@ export default function PatientDetails() {
                                                         <div className="media-body d-flex">
                                                           {data.diagnosisCodeDocument !=
                                                             null &&
-                                                          data.diagnosisCodeDocument !=
+                                                            data.diagnosisCodeDocument !=
                                                             "" ? (
                                                             <div className="form-check custom-checkbox unmatch-check">
                                                               <div>
@@ -6799,7 +7211,7 @@ export default function PatientDetails() {
                                                           ) : null}
                                                           {data.diagnosisCodeFinding !=
                                                             null &&
-                                                          data.diagnosisCodeFinding !=
+                                                            data.diagnosisCodeFinding !=
                                                             "" ? (
                                                             <div className="form-check custom-checkbox unmatch-check ms-3">
                                                               <div>
@@ -7017,7 +7429,7 @@ export default function PatientDetails() {
                                               </ul>
                                             </div>
                                             {newInValidDiseaseListRadiology.length ==
-                                            0 ? (
+                                              0 ? (
                                               <div className="card box-shadow-none">
                                                 <div className="card combo-card">
                                                   <div className="col-xl-12">
@@ -7147,7 +7559,7 @@ export default function PatientDetails() {
                                         )}
 
                                         {comboDiseaseCodesListRadiology.length ==
-                                        0 ? (
+                                          0 ? (
                                           <div className="card combo-card">
                                             <div className="col-xl-12">
                                               <div>
@@ -7160,7 +7572,7 @@ export default function PatientDetails() {
                                         ) : null}
 
                                         {invalidComboDiseaseCodesList.length !=
-                                        0 ? (
+                                          0 ? (
                                           <>
                                             <div className="invalid-combo">
                                               <span>
@@ -7264,7 +7676,7 @@ export default function PatientDetails() {
                                               <div
                                                 className={
                                                   item.isMeatCriteriaPresent ===
-                                                  true
+                                                    true
                                                     ? "card meat-card"
                                                     : "card meat-card-false"
                                                 }
@@ -7482,7 +7894,7 @@ export default function PatientDetails() {
                                           }
                                         )}
                                         {meatCriteriaListRadiology.length ==
-                                        0 ? (
+                                          0 ? (
                                           <div className="card combo-card">
                                             <div className="col-xl-12">
                                               <div>
@@ -7537,44 +7949,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.monitorCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.monitorCapturedFromHeader ===
+                                                              item.monitorCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.monitorCapturedFromHeader ===
+                                                              item.monitorCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.monitorCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.monitorCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.monitorCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.monitorCapturedFromHeader ===
+                                                                  item.monitorCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.monitorCapturedFromHeader ===
+                                                                  item.monitorCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.monitorCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.monitorCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.monitorCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.monitorCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.monitorCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.monitorCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.monitorCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.monitorCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -7605,44 +8017,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.evaluateCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.evaluateCapturedFromHeader ===
+                                                              item.evaluateCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.evaluateCapturedFromHeader ===
+                                                              item.evaluateCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.evaluateCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.evaluateCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.evaluateCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.evaluateCapturedFromHeader ===
+                                                                  item.evaluateCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.evaluateCapturedFromHeader ===
+                                                                  item.evaluateCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.evaluateCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.evaluateCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.evaluateCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.evaluateCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.evaluateCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.evaluateCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.evaluateCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.evaluateCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -7673,44 +8085,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.assessmentCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.assessmentCapturedFromHeader ===
+                                                              item.assessmentCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.assessmentCapturedFromHeader ===
+                                                              item.assessmentCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.assessmentCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.assessmentCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.assessmentCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.assessmentCapturedFromHeader ===
+                                                                  item.assessmentCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.assessmentCapturedFromHeader ===
+                                                                  item.assessmentCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.assessmentCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.assessmentCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.assessmentCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.assessmentCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.assessmentCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.assessmentCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.assessmentCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.assessmentCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -7742,44 +8154,44 @@ export default function PatientDetails() {
                                                           bg={
                                                             item.treatmentCapturedFromHeader ===
                                                               "HPI" ||
-                                                            item.treatmentCapturedFromHeader ===
+                                                              item.treatmentCapturedFromHeader ===
                                                               "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.treatmentCapturedFromHeader ===
+                                                              item.treatmentCapturedFromHeader ===
                                                               "Vital Signs"
                                                               ? "third badge-circle mt-2"
                                                               : item.treatmentCapturedFromHeader ===
-                                                                  "Impression" ||
+                                                                "Impression" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Assessments" ||
+                                                                "Assessments" ||
                                                                 item.treatmentCapturedFromHeader ===
-                                                                  "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
+                                                                "Assessment"
+                                                                ? "bg-eight badge-circle mt-2"
+                                                                : item.treatmentCapturedFromHeader ===
                                                                   "Recommendations" ||
-                                                                item.treatmentCapturedFromHeader ===
+                                                                  item.treatmentCapturedFromHeader ===
                                                                   "Plan: GERD without esophagitis" ||
-                                                                item.treatmentCapturedFromHeader ===
+                                                                  item.treatmentCapturedFromHeader ===
                                                                   "Treatment"
-                                                              ? "bgshodowcolor badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                item.treatmentCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                              ? "bg-four badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                  "Patient Instructions" ||
-                                                                item.treatmentCapturedFromHeader ===
-                                                                  "Plan: Hyperlipidemia, acquired"
-                                                              ? "bg-five badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                "N/A"
-                                                              ? "bg-six badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
-                                                                "Plan"
-                                                              ? "bg-seven badge-circle mt-2"
-                                                              : "primary badge-circle mt-2"
+                                                                  ? "bgshodowcolor badge-circle mt-2"
+                                                                  : item.treatmentCapturedFromHeader ===
+                                                                    "Plan / Discussion" ||
+                                                                    item.treatmentCapturedFromHeader ===
+                                                                    "Plan: Arteriosclerotic cardiovascular disease"
+                                                                    ? "bg-four badge-circle mt-2"
+                                                                    : item.treatmentCapturedFromHeader ===
+                                                                      "Patient Instructions" ||
+                                                                      item.treatmentCapturedFromHeader ===
+                                                                      "Plan: Hyperlipidemia, acquired"
+                                                                      ? "bg-five badge-circle mt-2"
+                                                                      : item.treatmentCapturedFromHeader ===
+                                                                        "N/A"
+                                                                        ? "bg-six badge-circle mt-2"
+                                                                        : item.treatmentCapturedFromHeader ===
+                                                                          "Plan"
+                                                                          ? "bg-seven badge-circle mt-2"
+                                                                          : "primary badge-circle mt-2"
                                                           }
                                                           onClick={() =>
                                                             handleOpenModal(
@@ -8239,11 +8651,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.matchCase
-                                                    ? "blue"
-                                                    : "transparent"
-                                                }`,
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase
+                                                  ? "blue"
+                                                  : "transparent"
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8274,11 +8685,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.wholeWords
-                                                    ? "blue"
-                                                    : "transparent"
-                                                }`,
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
+                                                  ? "blue"
+                                                  : "transparent"
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8301,7 +8711,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -8309,7 +8719,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -8438,7 +8848,7 @@ export default function PatientDetails() {
                     </div>
                   </Modal>
                 )}
-               {isModalOpenValidCodes && (
+                {isModalOpenValidCodes && (
                   <Modal
                     title={selectMeatName}
                     // title="Pdf Test"
@@ -8526,11 +8936,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.matchCase
-                                                    ? "blue"
-                                                    : "transparent"
-                                                }`,
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase
+                                                  ? "blue"
+                                                  : "transparent"
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8561,11 +8970,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.wholeWords
-                                                    ? "blue"
-                                                    : "transparent"
-                                                }`,
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
+                                                  ? "blue"
+                                                  : "transparent"
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8588,7 +8996,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -8596,7 +9004,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -8729,7 +9137,7 @@ export default function PatientDetails() {
                           </div>
                         )}
                         {nonHccActiveCodes == false &&
-                        isAddButtonClicked == false ? (
+                          isAddButtonClicked == false ? (
                           <div className="col-xl-4">
                             <ul className="timeline">
                               <div className="modal-valid-container">
@@ -8883,11 +9291,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.matchCase
-                                                    ? "blue"
-                                                    : "transparent"
-                                                }`,
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase
+                                                  ? "blue"
+                                                  : "transparent"
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8918,11 +9325,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.wholeWords
-                                                    ? "blue"
-                                                    : "transparent"
-                                                }`,
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
+                                                  ? "blue"
+                                                  : "transparent"
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8945,7 +9351,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -8953,7 +9359,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -9164,11 +9570,10 @@ export default function PatientDetails() {
                                           style={{
                                             background: "#fff",
                                             border: "none",
-                                            borderBottom: `2px solid ${
-                                              renderSearchProps.matchCase
-                                                ? "blue"
-                                                : "transparent"
-                                            }`,
+                                            borderBottom: `2px solid ${renderSearchProps.matchCase
+                                              ? "blue"
+                                              : "transparent"
+                                              }`,
                                             height: "100%",
                                             padding: "0 2px",
                                           }}
@@ -9199,11 +9604,10 @@ export default function PatientDetails() {
                                           style={{
                                             background: "#fff",
                                             border: "none",
-                                            borderBottom: `2px solid ${
-                                              renderSearchProps.wholeWords
-                                                ? "blue"
-                                                : "transparent"
-                                            }`,
+                                            borderBottom: `2px solid ${renderSearchProps.wholeWords
+                                              ? "blue"
+                                              : "transparent"
+                                              }`,
                                             height: "100%",
                                             padding: "0 2px",
                                           }}
@@ -9296,7 +9700,7 @@ export default function PatientDetails() {
                     </div>
                   </Modal>
                 )}
-                 {confirmNotesModalDecline && (
+                {confirmNotesModalDecline && (
                   <Modal
                     title={selectDiseasesName}
                     centered
@@ -9417,8 +9821,9 @@ export default function PatientDetails() {
                               </Form.Label>
                               <textarea
                                 className="form-control"
-                                id="val-suggestions"
-                                name="val-suggestions"
+                                id="notes"
+                                name="notes"
+                                onChange={handleChangeSuggested}
                                 rows="5"
                               ></textarea>
                             </div>
