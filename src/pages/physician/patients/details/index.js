@@ -441,7 +441,6 @@ export default function PatientDetails() {
           }
         }
 
-        console.log(suggestListAll);
 
         invalidDis = result.invalidDisease[highestDOS];
         comboDis = result.comboDisease[highestDOS];
@@ -1333,7 +1332,6 @@ export default function PatientDetails() {
   const confirmvalid = () =>
     new Promise((resolve) => {
       setTimeout(() => resolve(
-        console.log("deletd"),
         setConfirmNotesModalValid(true),
         setIsValidAction("validToDeleted")
       ), 1000);
@@ -1428,7 +1426,6 @@ export default function PatientDetails() {
     });
 
   const onchangeValid = (code, data) => {
-    console.log(data)
     setSelectDiseasesName(code);
     setSelectInvalidDetails(data);
   };
@@ -1730,7 +1727,6 @@ export default function PatientDetails() {
   };
 
   const handleSubmitValidNotes = async (event) => {
-    console.log("test");
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -2391,7 +2387,6 @@ export default function PatientDetails() {
 
 
   const handleSubmitMoveValidToSuggested = async () => {
-    console.log(selectInvalidDetails)
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -2415,7 +2410,6 @@ export default function PatientDetails() {
   };
 
   const handleSubmitMoveValidToDeleted = async () => {
-    console.log(selectInvalidDetails)
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -2439,7 +2433,6 @@ export default function PatientDetails() {
   };
 
   const handleSubmitMoveSuggestedToDeleted = async () => {
-    console.log(selectInvalidDetails)
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -2463,7 +2456,6 @@ export default function PatientDetails() {
   };
 
   const handleSubmitMoveSuggestedToValid = async () => {
-    console.log(selectInvalidDetails)
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -2487,7 +2479,6 @@ export default function PatientDetails() {
   };
 
   const handleSubmitMoveDeletedToValid = async () => {
-    console.log(selectInvalidDetails)
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -2510,7 +2501,6 @@ export default function PatientDetails() {
     }
   };
   const handleSubmitMoveDeletedToSuggested = async () => {
-    console.log(selectInvalidDetails)
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -2594,11 +2584,13 @@ export default function PatientDetails() {
     var unmatachObject = {};
     var comoboObject = {};
     var meatObject = {};
+    var deletedObject = {};
     validObject[dos] = newValidDiseaseList;
     inValidObject[dos] = newInValidDiseaseList;
     unmatachObject[dos] = suggestedHccList;
     comoboObject[dos] = comboDiseaseCodesList;
     meatObject[dos] = meatCriteriaList;
+    deletedObject[dos]= deletedHccList;
 
     var postData = {
       userId: localUserId,
@@ -2615,9 +2607,9 @@ export default function PatientDetails() {
       rafScore: patientDocumentResult.rafScore,
       dosFiltered: patientDocumentResult.dosFiltered,
       fileDetailDTO: patientDocumentResult.fileDetailDTO,
+      deletedDiseases:deletedObject
     };
 
-    console.log(postData);
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/save`,
@@ -2644,11 +2636,14 @@ export default function PatientDetails() {
     var unmatachObject = {};
     var comoboObject = {};
     var meatObject = {};
+    var deletedObject = {};
     validObject[dos] = newValidDiseaseList;
     inValidObject[dos] = newInValidDiseaseList;
     unmatachObject[dos] = suggestedHccList;
     comoboObject[dos] = comboDiseaseCodesList;
     meatObject[dos] = meatCriteriaList;
+    deletedObject[dos]= deletedHccList;
+    
 
     var postData = {
       userId: localUserId,
@@ -2665,9 +2660,9 @@ export default function PatientDetails() {
       rafScore: patientDocumentResult.rafScore,
       dosFiltered: patientDocumentResult.dosFiltered,
       fileDetailDTO: patientDocumentResult.fileDetailDTO,
+      deletedDiseases:deletedObject
     };
 
-    console.log(postData);
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,

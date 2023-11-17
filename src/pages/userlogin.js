@@ -14,10 +14,10 @@ import { IMAGES } from "../jsx/constant/theme";
 
 export default function UserLogin() {
     const router = useRouter();
-    const [email, setEmail] = useState('ajith01@encipherhealth.onmicrosoft.com');
+    const [email, setEmail] = useState('');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
-    const [password, setPassword] = useState('@Asdf123');
+    const [password, setPassword] = useState('');
     // const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -43,7 +43,7 @@ export default function UserLogin() {
                 const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/auth/login`, postData);
                 var result = response.data;
                 if (result.access_token != null) {
-                    if(emailSplit[0] === "aith01"){
+                    if(emailSplit[0] === "ajith01"){
                         localStorage.setItem("userRole", 'Coder-L2')
 
                     }else{
