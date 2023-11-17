@@ -1750,6 +1750,12 @@ export default function PatientDetails() {
       if (isValidAction == "deletedToValid") {
         handleSubmitMoveDeletedToValid();
       }
+      if (isValidAction == "declineFunction") {
+        handleSubmitHccDeclineApi();
+      }
+      if (isValidAction == "holdFunction") {
+        handleSubmitHccHold();
+      }
     }
     setValidated(true);
   };
@@ -2681,9 +2687,8 @@ export default function PatientDetails() {
     }
   };
 
-  const handleSubmitHccDecline = async () => {
+  const handleSubmitHccDeclineApi = async () => {
     setDeclineBtnTitle("Loading...");
-    setConfirmNotesModalHold(true);
     var postData = {
       orgid: localOrgId,
       patientId: localPatientId,
@@ -2697,12 +2702,44 @@ export default function PatientDetails() {
         notification.success({
           message: "Decline Successfully!",
         });
+        setConfirmNotesModalHold(false);
         setDeclineBtnTitle("Decline");
       } else {
       }
     } catch (e) {
       setDeclineBtnTitle("Decline");
     }
+  };
+
+  const handleSubmitHccHold = async () => {
+    setDeclineBtnTitle("Loading...");
+    var postData = {
+      orgid: localOrgId,
+      patientId: localPatientId,
+    };
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/decline`,
+        postData
+      );
+      if (response?.status == 202) {
+        notification.success({
+          message: "Decline Successfully!",
+        });
+        setConfirmNotesModalHold(false);
+        setDeclineBtnTitle("Decline");
+      } else {
+      }
+    } catch (e) {
+      setDeclineBtnTitle("Decline");
+    }
+  };
+
+
+  const handleSubmitHccDecline = async () => {
+    setIsValidAction("declineFunction")
+    setConfirmNotesModalHold(true);
+ 
   };
 
   return (
@@ -2854,6 +2891,7 @@ export default function PatientDetails() {
                                   className="btn btn-sm ms-2 flr saveBtn"
                                   onClick={() => {
                                     setConfirmNotesModalDecline(true);
+                                    setIsValidAction("holdFunction")
                                   }}
                                 >
                                   <FontAwesomeIcon
@@ -9714,12 +9752,13 @@ export default function PatientDetails() {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Notes <span className="text-danger">*</span>{" "}
+                                Reason <span className="text-danger">*</span>{" "}
                               </Form.Label>
                               <textarea
                                 className="form-control"
-                                id="val-suggestions"
-                                name="val-suggestions"
+                                id="notes"
+                                name="notes"
+                                onChange={handleChangeSuggested}
                                 rows="5"
                               ></textarea>
                             </div>
@@ -9763,12 +9802,13 @@ export default function PatientDetails() {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Notes <span className="text-danger">*</span>{" "}
+                                Reason <span className="text-danger">*</span>{" "}
                               </Form.Label>
                               <textarea
                                 className="form-control"
-                                id="val-suggestions"
-                                name="val-suggestions"
+                                id="notes"
+                                name="notes"
+                                onChange={handleChangeSuggested}
                                 rows="5"
                               ></textarea>
                             </div>

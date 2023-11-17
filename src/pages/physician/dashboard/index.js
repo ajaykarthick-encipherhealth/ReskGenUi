@@ -61,7 +61,7 @@ const Screen = () => {
               </svg>
             </div>
             <div style={{ padding: "10px" }}>
-              <span className="text-num">1000</span>
+              <span className="text-num">95</span>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@ const Screen = () => {
               </svg>
             </div>
             <div style={{ padding: "10px" }}>
-              <span className="text-num">1000</span>
+              <span className="text-num">43</span>
             </div>
           </div>
          
@@ -158,7 +158,7 @@ const Screen = () => {
               </svg>
             </div>
             <div style={{ padding: "10px" }}>
-              <span className="text-num">1000</span>
+              <span className="text-num">25</span>
             </div>
           </div>
          
@@ -198,7 +198,7 @@ const Screen = () => {
               </svg>
             </div>
             <div style={{ padding: "10px" }}>
-              <span className="text-num">1000</span>
+              <span className="text-num">33</span>
             </div>
           </div>
          
@@ -237,7 +237,7 @@ const Screen = () => {
               </svg>
             </div>
             <div style={{ padding: "10px" }}>
-              <span className="text-num">1000</span>
+              <span className="text-num">44</span>
             </div>
           </div>
          
@@ -286,7 +286,7 @@ const Screen = () => {
               </svg>
             </div>
             <div style={{ padding: "10px" }}>
-              <span className="text-num">1000</span>
+              <span className="text-num">29</span>
             </div>
           </div>
          
@@ -351,7 +351,7 @@ const Screen = () => {
               </svg>
             </div>
             <div style={{ padding: "10px" }}>
-              <span className="text-num">1000</span>
+              <span className="text-num">82</span>
             </div>
           </div>
         
@@ -390,7 +390,7 @@ const Screen = () => {
               </svg>
             </div>
             <div style={{ padding: "10px" }}>
-              <span className="text-num">1000</span>
+              <span className="text-num">68</span>
             </div>
           </div>
          
