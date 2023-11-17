@@ -6784,6 +6784,14 @@ export default function PatientDetails() {
                                     <Nav.Item as="li" className="nav-item">
                                       <Nav.Link
                                         to="#my-posts"
+                                        eventKey="nonhcc"
+                                      >
+                                       NON HCC
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link
+                                        to="#my-posts"
                                         eventKey="comboDiseases"
                                       >
                                         Combination Codes
@@ -7092,6 +7100,178 @@ export default function PatientDetails() {
                                               ))}
                                             </ul> */}
                                             </div>
+                                            {/* <div className="col-xl-4">
+                                              <ul className="timeline">
+                                                <div className="invalid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block`}
+                                                  >
+                                                    {" "}
+                                                    NON - HCC{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="badge-circle invalid-bange"
+                                                    >
+                                                      {
+                                                        newInValidDiseaseListRadiology.length
+                                                      }
+                                                    </Badge>
+                                                  </span>
+
+                                                  {isMatchBtn ? (
+                                                    <div className="d-flex justify-content-center">
+                                                      <button
+                                                        onClick={() =>
+                                                          handleSubmitMatchHcc()
+                                                        }
+                                                        className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn match-btn width-fit-content"
+                                                      >
+                                                        {suggestedBtnTitle}
+                                                      </button>
+                                                    </div>
+                                                  ) : null}
+                                                </div>
+                                                {newInValidDiseaseListRadiology?.map(
+                                                  (data) => {
+                                                    return (
+                                                      <>
+                                                      
+                                                            <li>
+                                                            <div className="new_valid-dis">
+                                                              <div className="timeline-panel">
+                                                                <div
+                                                                  className="media-body"
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      data.diagnosisCode,
+                                                                      data.actualDescription,
+                                                                      "valid2",
+                                                                      "nonHcc"
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  <span className="mb-1 disease-name d-flex">
+                                                                    <span className="valid-dis-name">
+                                                                      {
+                                                                        data.diagnosisCode
+                                                                      }
+                                                                    </span>{" "}
+                                                                    -{" "}
+                                                                    {
+                                                                      data.actualDescription
+                                                                    }
+                                                                  </span>
+                                                                </div>
+                                                                <Popconfirm
+                                                            title="Choose an action"
+                                                            icon={
+                                                              <QuestionCircleOutlined
+                                                                style={{
+                                                                  color: "blue",
+                                                                }}
+                                                              />
+                                                            }
+                                                            okText="Move to Deleted"
+                                                            cancelText="Move to Valid"
+                                                            onCancel={
+                                                              suggestedToValid
+                                                            }
+                                                            okButtonProps={{
+                                                              type: buttonClicked
+                                                                ? "primary"
+                                                                : "default",
+                                                            }}
+                                                            cancelButtonProps={{
+                                                              type: buttonClicked
+                                                                ? "danger"
+                                                                : "default",
+                                                            }}
+                                                            description={
+                                                              data.diagnosisCode
+                                                            }
+                                                            onConfirm={
+                                                              suggestedToDeleted
+                                                            }
+                                                            placement="leftTop"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(
+                                                                data.diagnosisCode,
+                                                                data
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                                      icon={faCheck}
+                                                                      style={{
+                                                                        color:
+                                                                          "orange",
+                                                                      }}
+                                                                    />
+                                                                  </div>
+                                                          </Popconfirm>
+      
+                                                                
+                                                              </div>
+                                                              <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  content={
+                                                                    data.encounterDate
+                                                                  }
+                                                                >
+                                                                  <Badge
+                                                                    bg=" badge-rounded"
+                                                                    className="badge-outline-info  mt-2"
+                                                                  >
+                                                                    <FontAwesomeIcon
+                                                                      icon={
+                                                                        faCalendar
+                                                                      }
+                                                                      style={{
+                                                                        color:
+                                                                          "#918585",
+                                                                      }}
+                                                                    />
+                                                                    {replaceString(
+                                                                      data.encounterDate
+                                                                    )}
+                                                                  </Badge>
+                                                                </Popover>
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  content={
+                                                                    data.capturedSections
+                                                                  }
+                                                                >
+                                                                  <Badge
+                                                                    bg=" badge-rounded"
+                                                                    className="badge-outline-info  mt-2 cr-pointer"
+                                                                    onClick={() =>
+                                                                      handleOpenModalCombinationCode(
+                                                                        data.diagnosisCode,
+                                                                        data.capturedSections,
+                                                                        "valid"
+                                                                      )
+                                                                    }
+                                                                  >
+                                                                    {
+                                                                      data.capturedSections
+                                                                    }
+                                                                  </Badge>
+                                                                </Popover>
+                                                              </div>
+                                                            </div>
+                                                          </li>
+                                                      
+                                                      
+                                                      </>
+                                                    );
+                                                  }
+                                                )}
+                                              </ul>
+                                            </div> */}
 
                                             {/* <div className="col-xl-4">
                                             <ul className="timeline">
@@ -7397,20 +7577,7 @@ export default function PatientDetails() {
                                                         newInValidDiseaseListRadiology.length
                                                       }
                                                     </Badge>
-                                                  </span>
-                                                  <div className="d-flex justify-content-center">
-                                                    <button
-                                                      onClick={() =>
-                                                        addValidDiseases()
-                                                      }
-                                                      className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-                                                    >
-                                                      <FontAwesomeIcon
-                                                        icon={faAdd}
-                                                        fontSize={11}
-                                                      />
-                                                    </button>
-                                                  </div>
+                                                  </span>                                                  
                                                 </div>
                                                 {newInValidDiseaseListRadiology.map(
                                                   (data, i) => (
@@ -7461,8 +7628,7 @@ export default function PatientDetails() {
                                                 )}
                                               </ul>
                                             </div>
-                                            {newInValidDiseaseListRadiology.length ==
-                                              0 ? (
+                                            {validDiseasesList.length == 0 ? (
                                               <div className="card box-shadow-none">
                                                 <div className="card combo-card">
                                                   <div className="col-xl-12">
