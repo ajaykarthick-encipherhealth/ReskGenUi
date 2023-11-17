@@ -175,7 +175,7 @@ export default function Patient() {
           "computing": res.computing,
           "createdAt": res.createdAt,
           "lastModifiedDate": res.lastModifiedDate,
-          "processedDate": res.processedDate,
+          "dueDate": res.dueDate,
           "processedStatus": res.processedStatus,
           "createdAt": res.createdAt,
         })
@@ -300,7 +300,7 @@ export default function Patient() {
         setIsLoadingBtn(false);
       }
       setAddPatientId(false);
-      getAllList(localUserId);
+      getAllList(localUserId,pageNo,pageSize);
     }
 
     setValidated(true);
@@ -509,6 +509,10 @@ export default function Patient() {
 
     }
   };
+  const dateFormateChange = (rowData) => {
+    console.log(rowData)
+
+  }
 
   const processstatusBodyTemplate = (rowData) => {
     //   console.log(rowData.computing)
@@ -518,28 +522,28 @@ export default function Patient() {
     // </span>;
 
     switch (rowData.processedStatus) {
-      case 2:
+      case "COMPLETED":
         return <div className='patient-status'><span className={`badge badge-success`}>
-          Processed
+          COMPLETED
           <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
         </span></div>
           ;
 
-      case 1:
+      case "PENDING":
         return <div className='patient-status'><span className={`badge badge-primary`}>
-          Processing
+          PENDING
           <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
         </span></div>;
 
-      case 3:
+      case "DECLINE":
         return <div className='patient-status'><span className={`badge badge-danger`}>
-          Failed
+          DECLINE
           <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
         </span></div>;
 
-      case 0:
+      case "NOTCOMPUTED":
         return <div className='patient-status'><span className={`badge btn-notstarted`}>
-          Not Started
+         NOTCOMPUTED
           <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
         </span>
         </div>;
@@ -588,7 +592,7 @@ export default function Patient() {
       headers
     );
     if (response?.status == 202) {
-      getAllList(localUserId);
+      getAllList(localUserId,pageNo,pageSize);
 
       notification.success({
         message: "Patient File Upload Successfully!",
@@ -629,7 +633,7 @@ export default function Patient() {
       headers
     );
     if (response?.status == 202) {
-      getAllList(localUserId);
+      getAllList(localUserId,pageNo,pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
     } else {
@@ -643,6 +647,7 @@ export default function Patient() {
   };
 
   const onPageChange =(e)=>{
+    console.log(dates)
     console.log(e)
    setPaginationFirst(e.first)
    setPageNo(e.page)
@@ -723,8 +728,8 @@ export default function Patient() {
                             <Column field="fileName" header="File Name" />
                             <Column field="status" body={statusBodyTemplate} header="File Status" />
                             <Column field="processedStatus" body={processstatusBodyTemplate} header="Processing Status" />
-                            <Column field="processedDate" sortable header="Due Date" />
-                            <Column field="lastModifiedDate" sortable header="Modfied Date" />
+                            <Column field="dueDate" body={(data) => moment(data.dueDate).format("MM-DD-YYYY")}  sortable header="Due Date" />
+                            <Column field="lastModifiedDate" body={(data) => moment(data.dueDate).format("MM-DD-YYYY hh:MM:A")} sortable header="Modfied Date" />
                             <Column field="action" body={actionBodyTemplate} header="Action" />
                           </DataTable>
                           <div className='pagination-container'>
