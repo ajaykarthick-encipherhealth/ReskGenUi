@@ -36,6 +36,8 @@ import {
 } from '@ant-design/icons';
 import moment from 'moment';
 import { fetchEventSource } from "@microsoft/fetch-event-source";
+import { Paginator } from 'primereact/paginator';
+import { Calendar } from 'primereact/calendar';
 
 
 
@@ -75,6 +77,8 @@ export default function Patient() {
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
+  const [dates, setDates] = useState(null);
+
 
   const [inputValue, setInputValue] = useState({
     year: "",
@@ -102,10 +106,13 @@ export default function Patient() {
   const [tenantId, setTenantId] = useState('');
   const [localOrgId, setLocalOrgId] = useState('');
   const [localUserId, setLocalUserId] = useState('');
-  const [sideBarOpen, setSideBarOpen] = useState(true);
-  const [userList, setUserList] = useState([]);
-  const [openPationList, setOpenPationList] = useState(true);
 
+  const [pageNo, setPageNo] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [paginationFirst, setPaginationFirst] = useState(0);
+
+  const [totalElements, setTotalElements] = useState(10);
+  const [tableLoading, setTableLoading] = useState(true);
 
 
 
@@ -149,38 +156,41 @@ export default function Patient() {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
-    getAllList(uId);
-
-    const data = [
-		{ value: '1', label: 'Ajith' },
-		{ value: '2', label: 'Santhosh' },
-		{ value: '3', label: 'Arun' },
-    
-	]
-  setUserList(data)
-
+    getAllList(uId,pageNo,pageSize);
     // fetchData();
   }, []);
 
 
-  const getAllList = async (uId) => {
-    const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/getall?userid=" + uId);
+  const getAllList = async (uId,pageNo,pageSize) => {
+    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
+      var result = response.data.content;
+      setTotalElements(response.data.totalElements);
 
-      response.data.map((res) => {
+      result.map((res) => {
         resultMap.push({
           "patientId": res.patientId,
           "patientName": res.patientName,
           "fileName": res.fileName,
           "computing": res.computing,
-          "createdAt": res.createdAt
+          "createdAt": res.createdAt,
+          "lastModifiedDate": res.lastModifiedDate,
+          "dueDate": res.dueDate,
+          "processedStatus": res.processedStatus,
+          "createdAt": res.createdAt,
         })
 
       }
       )
+      var newArray = [];
+      newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
+
+      // console.log(newArray)
       setIsLoading(false);
+      setTableLoading(false)
     //     setTimeout(() => {
     //     subscribe(resultMap);
     // }, 3000);
@@ -292,7 +302,7 @@ export default function Patient() {
         setIsLoadingBtn(false);
       }
       setAddPatientId(false);
-      getAllList(localUserId);
+      getAllList(localUserId,pageNo,pageSize);
     }
 
     setValidated(true);
@@ -300,7 +310,7 @@ export default function Patient() {
 
 
   const gotoPatientDetails = (data) => {
-    // dispatch(patientDetails(data));
+    dispatch(patientDetails(data));
     if (data.computing == 2) {
       const controller = new AbortController()
       const { signal } = controller
@@ -313,16 +323,8 @@ export default function Patient() {
       });
     }
 
-    setOpenPationList(true);
-
   };
 
-  const gotoUserList = (data) => {
- 
-
-    navigate.push('/coder/auditing');
-
-  };
 
   function gotoPage(number) {
     if (canMaxPage > number) {
@@ -473,13 +475,6 @@ export default function Patient() {
 
   // };
 
-  const patientDetailsBody = (rowData) => {
-      return <span className='cr-pointer' onClick={() => gotoPatientDetails(rowData)}>
-      {rowData.patientId}
-    </span>;
-
-  };
-
   const statusBodyTemplate = (rowData) => {
     //   console.log(rowData.computing)
     //   return <span className={`badge badge-success`}>
@@ -489,34 +484,70 @@ export default function Patient() {
 
     switch (rowData.computing) {
       case 2:
-        return <div className='patient-status'><span className={`badge badge-success`}>
+        return <div className='patient-status'><span className={`badge processed-text`}>
           Processed
-          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
         </span></div>
           ;
 
       case 1:
-        return <div className='patient-status'><span className={`badge badge-primary`}>
+        return <div className='patient-status'><span className={`badge processing-text`}>
           Processing
-          <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
         </span></div>;
 
       case 3:
-        return <div className='patient-status'><span className={`badge badge-danger`}>
+        return <div className='patient-status'><span className={`badge failed-text`}>
           Failed
-          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
         </span></div>;
 
       case 0:
-        return <div className='patient-status'><span className={`badge btn-notstarted`}>
+        return <div className='patient-status'><span className={`badge not-started-text`}>
           Not Started
+        </span>
+        </div>;
+
+    }
+  };
+  const dateFormateChange = (rowData) => {
+    console.log(rowData)
+
+  }
+
+  const processstatusBodyTemplate = (rowData) => {
+    //   console.log(rowData.computing)
+    //   return <span className={`badge badge-success`}>
+    //   Processed
+    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
+    // </span>;
+
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return <div className='patient-status'><span className={`badge badge-success`}>
+          COMPLETED
+          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
+        </span></div>
+          ;
+
+      case "PENDING":
+        return <div className='patient-status'><span className={`badge badge-primary`}>
+          PENDING
+          <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
+        </span></div>;
+
+      case "DECLINE":
+        return <div className='patient-status'><span className={`badge badge-danger`}>
+          DECLINE
+          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
+        </span></div>;
+
+      case "NOTCOMPUTED":
+        return <div className='patient-status'><span className={`badge btn-notstarted`}>
+         NOTCOMPUTED
           <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
         </span>
         </div>;
 
     }
   };
-
 
   const actionBodyTemplate = (rowData) => {
     return <div className="d-flex justify-content-center">
@@ -559,7 +590,7 @@ export default function Patient() {
       headers
     );
     if (response?.status == 202) {
-      getAllList(localUserId);
+      getAllList(localUserId,pageNo,pageSize);
 
       notification.success({
         message: "Patient File Upload Successfully!",
@@ -600,7 +631,7 @@ export default function Patient() {
       headers
     );
     if (response?.status == 202) {
-      getAllList(localUserId);
+      getAllList(localUserId,pageNo,pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
     } else {
@@ -610,6 +641,25 @@ export default function Patient() {
     // setIsLoadingBtn(false);
     setSelectFileRadiology(null);
 
+
+  };
+
+  const onPageChange =(e)=>{
+    console.log(dates)
+    console.log(e)
+   setPaginationFirst(e.first)
+   setPageNo(e.page)
+   setPageSize(e.rows)
+   setTableLoading(true)
+   getAllList(localUserId,e.page,e.rows);
+   console.log("test")
+  }
+
+
+  const gotoUserList = (data) => {
+ 
+
+    navigate.push('/coder/auditing');
 
   };
 
@@ -626,39 +676,26 @@ export default function Patient() {
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
-        {sideBarOpen ?
-        <SideBar /> :
-        <div className="deznav show">
-      <div className="deznav-scroll">
-        <div className="nav-control">
-          <div className={`hamburger ${sideMenu ? "is-active" : ""}`}>
-            <span className="line">{SVGICON.NavHeaderIcon}</span>
-          </div>
-        </div>
-          <ul className="metismenu" id="menu">
-            {patinetListAll.map((data, index) => {
-              return (
-                <li key={index}>                 
-                <span className={`nav-text text-white`}>
-                      {data.fileName}
-                </span>
-                </li>
-              );
-            })}
-          </ul>
-      </div>
-    </div>}
         <div class="content-body">
           {isLoading ? <LoadingSpinner /> :
             <div className="container-fluid">
               <div className="row">
+
                 <div className="col-xl-12">
-                  <div className="card">
+                  <div className="">
+                    {/* <div>
+      <p>{listening ? statusMessage.subscribed : statusMessage.unsubscribed}</p>
+      <p>{JSON.stringify(process)}</p>
+      <button onClick={subscribe}>
+        {listening ? statusMessage.unsubscribed : statusMessage.subscribed}
+      </button>
+      <br />
+      <p>{JSON.stringify(message)}</p>
+    </div> */}
                     <div className="card-body p-0">
-                      {openPationList ?
-                        <div className="table-responsive active-projects task-table">
+                      <div className="table-responsive active-projects task-table">
                         <div className="tbl-caption  align-items-center">
-                          <div className="row">
+                          <div className="row filter-contain">
                           <div className='col-xl-1'>                            
                               <Button onClick={gotoUserList} className="btn btn-secondary btn-sm ms-2">
                               <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faArrowLeft} />
@@ -667,20 +704,22 @@ export default function Patient() {
                             <div className='col-xl-3'>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control" placeholder="Patient Id" />
+                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control new-form-control" placeholder="Patient Id" />
                               </div>
 
                             </div>
                             <div className='col-xl-3'>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <InputText type="text" onChange={(e) => filterChangePatientName(e)} className="form-control" placeholder="Patient Name" />
+                                <InputText type="text" onChange={(e) => filterChangePatientName(e)} className="form-control new-form-control" placeholder="Patient Name" />
                               </div>
                             </div>
-
-                            {/* <div className='col-xl-5'>
-                              <Button onClick={addPatientFormId} className="btn btn-primary btn-sm ms-2 flr">+ Add Patient Id</Button>
-                            </div> */}
+                            <div className='col-xl-3'>
+                              <div class="form-group has-search">
+                              <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
+                                <Calendar className="form-control new-form-control calender-pri-input" value={dates} onChange={(e) => setDates(e.value)}    selectionMode="range" readOnlyInput />
+                              </div>
+                            </div>
 
 
                           </div>
@@ -689,17 +728,22 @@ export default function Patient() {
 
 
                         <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-                          <DataTable value={patinetListAll} paginator rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
-                            <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
+                          <DataTable value={patinetListAll} paginator={false} rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
+                            <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => paginationFirst +  options.rowIndex + 1}></Column>
                             <Column field="patientId" header="Patient Id" />
                             <Column field="patientName" header="Patient Name" />
                             <Column field="fileName" header="File Name" />
                             <Column field="status" body={statusBodyTemplate} header="File Status" />
-                            <Column field="status" body={statusBodyTemplate} header="Processing Status" />
-                            <Column field="createdAt" sortable header="Due Date" />
-                            <Column field="createdAt" sortable header="Modfied Date" />
+                            <Column field="processedStatus" body={processstatusBodyTemplate} header="Processing Status" />
+                            <Column field="dueDate" body={(data) => moment(data.dueDate).format("MM-DD-YYYY")}  sortable header="Due Date" />
+                            <Column field="lastModifiedDate" body={(data) => moment(data.dueDate).format("MM-DD-YYYY hh:MM:A")} sortable header="Modfied Date" />
                             <Column field="action" body={actionBodyTemplate} header="Action" />
                           </DataTable>
+                          <div className='pagination-container'>
+                          <Paginator first={paginationFirst} rows={10} totalRecords={totalElements}  onPageChange={onPageChange} />
+
+                            </div>
+
                           {/* <table
                             id="empoloyeestbl2"
                             className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0"
@@ -804,52 +848,7 @@ export default function Patient() {
                             </div>
                           </div> */}
                         </div>
-                      </div> : <div className="table-responsive active-projects task-table">
-                        <div className="tbl-caption  align-items-center">
-                          <div className="row">
-                            <div className='col-xl-3'>
-                              <div class="form-group has-search">
-                                {/* <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} /> */}
-                                {/* <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control" placeholder="Patient Id" /> */}
-                                <Select placeholder={<div>Select User</div>} options={userList} className="custom-react-select"
-															
-															isSearchable={false}
-														/>
-                              </div>
-
-                            </div>
-                            <div className='col-xl-3'>
-                              <div class="form-group has-search">
-                                {/* <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} /> */}
-                                <input type="date" onChange={(e) => filterChangePatientName(e)} className="form-control" placeholder="Patient Name" />
-                              </div>
-                            </div> 
-                            <div className='col-xl-3'>
-                              <div class="form-group has-search">
-                                {/* <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} /> */}
-                                {/* <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control" placeholder="Patient Id" /> */}
-                                <Select placeholder={<div>Select Status</div>} options={userList} className="custom-react-select"
-															
-															isSearchable={false}
-														/>
-                              </div>
-
-                            </div>                          
-                          </div>
-                        </div>
-
-                        <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-                          <DataTable value={patinetListAll} paginator rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
-                            <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
-                            <Column field="patientId"  body={patientDetailsBody} header="User Id" />
-                            <Column field="patientName" header="User Name" />
-                            <Column field="fileName" header="File Name" />
-                            <Column field="status" body={statusBodyTemplate} header="Status" />
-                            <Column field="createdAt" sortable header="Process Date" />
-                            <Column field="createdAt" sortable header="Allocate Date" />
-                          </DataTable>                    
-                        </div>
-                      </div>}
+                      </div>
                     </div>
 
 

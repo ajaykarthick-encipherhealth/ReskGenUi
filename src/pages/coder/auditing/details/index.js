@@ -2544,7 +2544,7 @@ export default function PatientDetails() {
         }
         <div class="content-body">
           {isLoading ? <LoadingSpinner /> :
-            <div className="container-fluid">
+            <div className="container-fluid l2-container-fluid">
               <div className="row patient-file-container">
                 <div className="col-xl-12">
                   <div className="row">

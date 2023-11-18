@@ -117,7 +117,7 @@ const Screen = () => {
         min-height: 85vh;
         justify-content: center;
         align-items: center;
-        margin: 30px 30px 25px 20px;
+        margin: 100px 30px 25px 20px;
         display: flex;
       }
       .cards-seperators-screen {

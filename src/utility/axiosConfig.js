@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = require('axios');
 import LoadingSpinner from "../jsx/components/spinner/spinner";
 
 import ENDPOINTS from '../utility/enpoints';

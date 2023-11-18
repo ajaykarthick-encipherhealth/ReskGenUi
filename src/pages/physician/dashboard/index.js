@@ -3,7 +3,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { Progress, Tooltip } from "antd";
-import NavBar from "../../../jsx/layouts/nav";
+import NavBar from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { useRouter } from 'next/navigation'
 

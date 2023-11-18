@@ -8,6 +8,7 @@ import Select from 'react-select';
 import { SVGICON } from "../../../jsx/constant/theme";
 import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 import NavBar from "../../../jsx/layouts/nav";
+import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 
@@ -482,28 +483,24 @@ export default function Patient() {
 
     switch (rowData.computing) {
       case 2:
-        return <div className='patient-status'><span className={`badge badge-success`}>
+        return <div className='patient-status'><span className={`badge processed-text`}>
           Processed
-          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
         </span></div>
           ;
 
       case 1:
-        return <div className='patient-status'><span className={`badge badge-primary`}>
+        return <div className='patient-status'><span className={`badge processing-text`}>
           Processing
-          <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
         </span></div>;
 
       case 3:
-        return <div className='patient-status'><span className={`badge badge-danger`}>
+        return <div className='patient-status'><span className={`badge failed-text`}>
           Failed
-          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
         </span></div>;
 
       case 0:
-        return <div className='patient-status'><span className={`badge btn-notstarted`}>
+        return <div className='patient-status'><span className={`badge not-started-text`}>
           Not Started
-          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
         </span>
         </div>;
 
@@ -669,14 +666,14 @@ export default function Patient() {
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
-        <NavBar />
+        <Header />
         <div class="content-body">
           {isLoading ? <LoadingSpinner /> :
             <div className="container-fluid">
               <div className="row">
 
                 <div className="col-xl-12">
-                  <div className="card">
+                  <div className="">
                     {/* <div>
       <p>{listening ? statusMessage.subscribed : statusMessage.unsubscribed}</p>
       <p>{JSON.stringify(process)}</p>
@@ -689,24 +686,24 @@ export default function Patient() {
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
                         <div className="tbl-caption  align-items-center">
-                          <div className="row">
+                          <div className="row filter-contain">
                             <div className='col-xl-3'>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control" placeholder="Patient Id" />
+                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control new-form-control" placeholder="Patient Id" />
                               </div>
 
                             </div>
                             <div className='col-xl-3'>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <InputText type="text" onChange={(e) => filterChangePatientName(e)} className="form-control" placeholder="Patient Name" />
+                                <InputText type="text" onChange={(e) => filterChangePatientName(e)} className="form-control new-form-control" placeholder="Patient Name" />
                               </div>
                             </div>
                             <div className='col-xl-3'>
                               <div class="form-group has-search">
                               <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <Calendar className="form-control calender-pri-input" value={dates} onChange={(e) => setDates(e.value)}    selectionMode="range" readOnlyInput />
+                                <Calendar className="form-control new-form-control calender-pri-input" value={dates} onChange={(e) => setDates(e.value)}    selectionMode="range" readOnlyInput />
                               </div>
                             </div>
 
@@ -733,7 +730,7 @@ export default function Patient() {
                             <Column field="action" body={actionBodyTemplate} header="Action" />
                           </DataTable>
                           <div className='pagination-container'>
-                          <Paginator first={paginationFirst} rows={10} totalRecords={totalElements} rowsPerPageOptions={[10, 20, 30]} onPageChange={onPageChange} />
+                          <Paginator first={paginationFirst} rows={10} totalRecords={totalElements}  onPageChange={onPageChange} />
 
                             </div>
 

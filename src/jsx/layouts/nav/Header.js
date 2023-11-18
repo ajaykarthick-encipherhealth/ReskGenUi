@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Logout } from "../../../store/actions/AuthActions";
 import Swal from 'sweetalert2'
+import { MenuList, PhysicanMenuList ,L2AuditMenuList} from "./Menu";
 
 
 
@@ -15,11 +16,23 @@ const Header = ({ onNote }) => {
 	const [headerFix, setheaderFix] = useState(false);
 	const [userName, setUserName] = useState('');
 	const router = useRouter();
+	const [stateActive, setStateActive] = useState(router.pathname);
+	const [userRole, setUserRole] = useState("");
+	const [menuList, setMenuList] = useState([]);
+
 
 	useEffect(() => {
+		console.log(stateActive)
 		var loginCheck = localStorage.getItem("loginCheck");
 		var userName = localStorage.getItem("userName");
+		const userRoleLocal = localStorage.getItem("userRole");
+		setUserRole(userRoleLocal);
 		setUserName(userName);
+		if(userRoleLocal == "Coder-L2"){
+			setMenuList(L2AuditMenuList)
+		}else{
+			setMenuList(PhysicanMenuList)
+		}
 		if(loginCheck !=  "true"){			
 			Swal.fire({
 				title: 'Error!',
@@ -64,8 +77,29 @@ const Header = ({ onNote }) => {
         <nav className="navbar navbar-expand">
           	<div className="collapse navbar-collapse justify-content-between">
 				<div className="header-logo">	
-				<Image src={IMAGES.hccWhiteLogo}/>				
+				<Image src={IMAGES.Hcc_LOGO}/>				
 				</div>
+				{ stateActive != "/physician/home" ? 
+				<div>
+				<ul className="metismenu header-menu d-flex" id="menu">
+            {menuList.map((data, index) => {
+              return (
+                <li   className={` ${stateActive === data.to || stateActive === data.childRoute ? "header-active" : ""}`}
+                  
+                  key={index}
+                >
+                  <Link href={data.to} className="d-flex">
+                    <div className="menu-icon">{data.iconStyle}</div>{" "}
+                    <span className={`nav-text header-nav-text`}>
+                      {data.title}
+                    </span>
+					<span></span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+				</div>:null}
 				<div className="header-right d-flex align-items-center">				
 					<ul className="navbar-nav ">			
 						<li className="nav-item ps-3">
@@ -75,9 +109,9 @@ const Header = ({ onNote }) => {
 										<div className="header-media d-flex">
 											<Image src={IMAGES.profileImage}/>
 											<div>
-											<span className="text-dark-50 ms-2 text-white header-name font-weight-bolder font-size-base d-flex mr-3">{userName}</span>
+											<span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">{userName}</span>
 											<span  onClick={logoutFunction} className="ms-2 d-flex mt-1">
-												{SVGICON.Logout}{" "}
+												{/* {SVGICON.Logout}{" "} */}
 												<h6 className="logout-name">Logout </h6>
 											</span>
 											</div>

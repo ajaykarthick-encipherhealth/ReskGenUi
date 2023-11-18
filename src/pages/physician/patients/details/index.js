@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Tab, Nav, Badge } from "react-bootstrap";
-import NavBar from "../../../../jsx/layouts/nav";
+import NavBar from "../../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
@@ -112,6 +112,7 @@ export default function PatientDetails() {
   const [sectionList, setSectionList] = useState([]);
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
   const [selectFileURL, setSelectFileURL] = useState([]);
+  const [selectFileURLValid, setSelectFileURLValid] = useState([]);
   const [validated, setValidated] = useState(false);
   const [rafScore, setRAFScore] = useState([]);
   const [patientDetails, setPatientDetails] = useState([]);
@@ -157,6 +158,10 @@ export default function PatientDetails() {
     name: "",
     patientId: "",
     notes: "",
+    diagnosisCode:"",
+    actualDescription:'',
+    capturedSections:'',
+    encodedDate:"",
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -211,7 +216,7 @@ export default function PatientDetails() {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
   const [isValidAction, setIsValidAction] = useState('');
-  const [deletedHccList, setDeletedHccList] = useState('');
+  const [deletedHccList, setDeletedHccList] = useState([]);
 
 
 
@@ -221,6 +226,10 @@ export default function PatientDetails() {
 
   const handleChange = async (e) => {
     const key = e.target.name;
+    if(key == "diagnosisCode"){
+      getFindValidDiagnosisCode( e.target.value)
+    }
+
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
   };
@@ -1260,6 +1269,7 @@ export default function PatientDetails() {
     if (response.data) {
       var result = response.data;
       setSelectFileURL(response.data);
+      setSelectFileURLValid(response.data)
       setIsLoading(false);
       setIsLoadingDos(false);
       fetch(response.data)
@@ -1566,15 +1576,7 @@ export default function PatientDetails() {
     setIsAddButtonClicked(false);
     // Add any additional logic for closing the form if needed
   };
-  // updated changes
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    // Add logic for handling form submission
-    // You can access the form data and perform actions accordingly
-    // For example, you can access the input field values using refs or state
-    // After handling the submission, close the form
-    handleCloseForm();
-  };
+
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -2692,6 +2694,7 @@ export default function PatientDetails() {
     var postData = {
       orgid: localOrgId,
       patientId: localPatientId,
+      notes:inputValue.notes,
     };
     try {
       const response = await axios.post(
@@ -2716,15 +2719,16 @@ export default function PatientDetails() {
     var postData = {
       orgid: localOrgId,
       patientId: localPatientId,
+      notes:inputValue.notes,
     };
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/decline`,
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/hold`,
         postData
       );
       if (response?.status == 202) {
         notification.success({
-          message: "Decline Successfully!",
+          message: "Hold Successfully!",
         });
         setConfirmNotesModalHold(false);
         setDeclineBtnTitle("Decline");
@@ -2741,6 +2745,63 @@ export default function PatientDetails() {
     setConfirmNotesModalHold(true);
  
   };
+
+  const getFindValidDiagnosisCode = async (value) => {
+   console.log(value);
+
+   const response = await axios.get(
+    ENDPOINTS.apiEndoint +
+    `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
+  );
+  if (response.data) {
+    console.log(response.data)
+  }
+};
+
+  // updated changes
+  const handleFormSubmit = async (event) => {
+    var dos = dosYearDefalutSelect[0].label;
+    event.preventDefault();
+    console.log(inputValue)
+    var dataFormatSuggested ={
+      "patientComputeDetailId":localPatientId,
+      "year":dos,
+  "diseaseFormats":[
+  {
+  "diagnosisCode":inputValue.diagnosisCode,
+  "actualDescription":inputValue.actualDescription,
+  "encounterDate":inputValue.encodedDate,
+  "capturedSections":[inputValue.capturedSections]
+  }
+  ]
+  }
+
+  try {
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/compute/addvaliddisease`,
+      dataFormatSuggested
+    );
+    if (response?.status == 200) {
+      notification.success({
+        message: "Saved Successfully!",
+      });
+      setIsModalOpenValidCodes(false);
+      getPatientDetails(localOrgId, localTenantId);
+      handleCloseForm();
+
+    } else {
+    }
+  } catch (e) {
+    setDeclineBtnTitle("Decline");
+  }
+    // Add logic for handling form submission
+    // You can access the form data and perform actions accordingly
+    // For example, you can access the input field values using refs or state
+    // After handling the submission, close the form
+  };
+ 
+  
+
 
   return (
     <>
@@ -2861,7 +2922,7 @@ export default function PatientDetails() {
                       <div className="card height80 file-management">
                         <div className="card-body p-0">
                           <Tab.Container defaultActiveKey={"Patient Data"}>
-                            <div className="card-header border-0 flex-wrap">
+                            <div className="card-header border-0 flex-wrap patient-details-tab-card ">
                               <Nav
                                 as="ul"
                                 className="nav nav-pills mix-chart-tab"
@@ -2888,17 +2949,17 @@ export default function PatientDetails() {
                                   <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
                                   : null} */}
                                 <Button
-                                  className="btn btn-sm ms-2 flr saveBtn"
+                                  className="btn btn-sm ms-2 flr hold-btn"
                                   onClick={() => {
                                     setConfirmNotesModalDecline(true);
                                     setIsValidAction("holdFunction")
                                   }}
                                 >
-                                  <FontAwesomeIcon
+                                  {/* <FontAwesomeIcon
                                     icon={faCheck}
                                     className="me-2 mt-1"
                                     fontSize={14}
-                                  />
+                                  /> */}
                                   Hold
                                 </Button>
 
@@ -2906,11 +2967,11 @@ export default function PatientDetails() {
                                   onClick={handleSubmitHccDecline}
                                   className="btn btn-primary btn-sm ms-2 flr decline-btn"
                                 >
-                                  <FontAwesomeIcon
+                                  {/* <FontAwesomeIcon
                                     icon={faClose}
                                     className="me-2 mt-1"
                                     fontSize={14}
-                                  />
+                                  /> */}
                                   {declineBtnTitle}
                                 </Button>
                                 <Button
@@ -2918,22 +2979,22 @@ export default function PatientDetails() {
                                   className="btn btn-primary btn-sm ms-2 flr complted-btn"
 
                                 >
-                                  <FontAwesomeIcon
+                                  {/* <FontAwesomeIcon
                                     icon={faCheckCircle}
                                     className="me-2 mt-1"
                                     fontSize={14}
-                                  />
+                                  /> */}
                                   {completedBtnTitle}
                                 </Button>
                                 <Button
                                   onClick={handleSubmitHccSave}
                                   className="btn btn-primary btn-sm ms-2 flr saveBtn"
                                 >
-                                  <FontAwesomeIcon
+                                  {/* <FontAwesomeIcon
                                     icon={faCheck}
                                     className="me-2 mt-1"
                                     fontSize={14}
-                                  />
+                                  /> */}
                                   {saveBtnTitle}
                                 </Button>
                               </div>
@@ -6781,14 +6842,14 @@ export default function PatientDetails() {
                                         Visit Data
                                       </Nav.Link>
                                     </Nav.Item>
-                                    <Nav.Item as="li" className="nav-item">
+                                    {/* <Nav.Item as="li" className="nav-item">
                                       <Nav.Link
                                         to="#my-posts"
                                         eventKey="nonhcc"
                                       >
                                        NON HCC
                                       </Nav.Link>
-                                    </Nav.Item>
+                                    </Nav.Item> */}
                                     <Nav.Item as="li" className="nav-item">
                                       <Nav.Link
                                         to="#my-posts"
@@ -7327,7 +7388,75 @@ export default function PatientDetails() {
                                               ))}
                                             </ul>
                                           </div> */}
-                                            <div className="col-xl-4">
+                                              <div className="col-xl-4">
+                                              <ul className="timeline">
+                                                <div className="invalid-text d-flex justify-content-sm-between">
+                                                  <span
+                                                    className={`dang d-block`}
+                                                  >
+                                                    {" "}
+                                                    NON-HCC{" "}
+                                                    <Badge
+                                                      as="a"
+                                                      href=""
+                                                      bg="badge-circle invalid-bange"
+                                                    >
+                                                      {
+                                                        newInValidDiseaseListRadiology.length
+                                                      }
+                                                    </Badge>
+                                                  </span>                                                  
+                                                </div>
+                                                {newInValidDiseaseListRadiology.map(
+                                                  (data, i) => (
+                                                    <li>
+                                                      <div className="timeline-panel invalid-disease">
+                                                        <div className="media-body">
+                                                          <span className="mb-1 disease-name d-flex">
+                                                            <span className="valid-dis-name">
+                                                              {
+                                                                data.diagnosisCode
+                                                              }
+                                                            </span>{" "}
+                                                            -{" "}
+                                                            {
+                                                              data.actualDescription
+                                                            }
+                                                          </span>
+                                                        </div>
+                                                        <Popconfirm
+                                                          title="You want move to valid?"
+                                                          description={
+                                                            data.diagnosisCode
+                                                          }
+                                                          onConfirm={
+                                                            confirmInvalid
+                                                          }
+                                                          placement="leftTop"
+                                                          okText="Yes"
+                                                          cancelText="No"
+                                                          onOpenChange={() =>
+                                                            onchangeValid(
+                                                              data.diagnosisCode
+                                                            )
+                                                          }
+                                                        >
+                                                          <div className="icon-box  bg-danger-light me-1">
+                                                            <FontAwesomeIcon
+                                                              icon={faCheck}
+                                                              style={{
+                                                                color: "orange",
+                                                              }}
+                                                            />
+                                                          </div>
+                                                        </Popconfirm>
+                                                      </div>
+                                                    </li>
+                                                  )
+                                                )}
+                                              </ul>
+                                            </div>
+                                            {/* <div className="col-xl-4">
                                               <ul className="timeline">
                                                 <div className="invalid-text d-flex justify-content-sm-between">
                                                   <span
@@ -7358,15 +7487,6 @@ export default function PatientDetails() {
                                                     </div>
                                                   ) : null}
                                                 </div>
-                                                {/* {unmatchHccListRadiology.length == 0 ?
-                                                      <div className="card box-shadow-none">
-                                                        <div className="card combo-card">
-                                                          <div className="col-xl-12">
-
-                                                            <span className="no-patient-data">NO PATIENT DATA</span>
-                                                          </div>
-                                                        </div></div>
-                                                      : null} */}
 
                                                 {unmatchHccListRadiology.map(
                                                   (data, i) => (
@@ -7379,9 +7499,6 @@ export default function PatientDetails() {
                                                             }
                                                           </span>
                                                         </div>
-                                                        {/* <div className="form-check custom-checkbox">
-                                                      <input onChange={(e) => { handleMatchHcc(e, data.diagnosisCode) }} type="checkbox" id={`customCheckBox ${data.diagnosisCode}`} className="form-check-input" required />
-                                                    </div> */}
                                                         <div className="media-body d-flex">
                                                           {data.diagnosisCodeDocument !=
                                                             null &&
@@ -7417,9 +7534,6 @@ export default function PatientDetails() {
                                                                   }
                                                                 </span>
                                                               </Popover>
-                                                              {/* <span className="disease-name">
-                                                            {data.diagnosisCodeDocument}
-                                                          </span> */}
                                                             </div>
                                                           ) : null}
                                                           {data.diagnosisCodeFinding !=
@@ -7464,7 +7578,7 @@ export default function PatientDetails() {
                                                   )
                                                 )}
                                               </ul>
-                                            </div>
+                                            </div> */}
                                             <div className="col-xl-4">
                                               <ul className="timeline">
                                                 <div className="invalid-text d-flex justify-content-sm-between">
@@ -9277,9 +9391,11 @@ export default function PatientDetails() {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  id="exampleInput1"
+                                  id="diagnosisCode"
+                                  name="diagnosisCode"
                                   placeholder="Enter Code"
                                   required
+                                  onChange={handleChange}
                                 />
                               </div>
                               <div className="form-group">
@@ -9287,8 +9403,10 @@ export default function PatientDetails() {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  id="exampleInput2"
+                                  id="providerName"
+                                  name="providerName"
                                   placeholder="Enter provider name (Optional)"
+                                  onChange={handleChange}
                                 />
                               </div>
                               <div className="form-group">
@@ -9298,9 +9416,11 @@ export default function PatientDetails() {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  id="exampleInput1"
+                                  id="capturedSections"
+                                  name="capturedSections"
                                   placeholder="Enter section"
                                   required
+                                  onChange={handleChange}
                                 />
                               </div>
                               <div className="form-group">
@@ -9313,9 +9433,25 @@ export default function PatientDetails() {
                                   type="date"
                                   className="form-control"
                                   id="encodedDate"
+                                  name="encodedDate"
                                   placeholder="Select encoded date"
                                   required
+                                  onChange={handleChange}
                                 />
+                              </div>
+                              <div className="form-group">
+                                <Form.Label>
+                                  Description
+                                  <span className="text-danger">*</span>{" "}
+                                </Form.Label>
+
+                                <textarea
+                                className="form-control"
+                                id="actualDescription"
+                                name="actualDescription"
+                                onChange={handleChangeSuggested}
+                                rows="5"
+                              ></textarea>
                               </div>
                               <div className="d-flex justify-content-between">
                                 <button
