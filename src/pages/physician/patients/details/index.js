@@ -356,6 +356,7 @@ export default function PatientDetails() {
         var suggestLabList = [];
 
         var suggestListAll = [];
+        var suggestListAllNonHcc = [];
         var deleteHccList = [];
 
         getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
@@ -436,7 +437,16 @@ export default function PatientDetails() {
                   getPlace: "Hcc",
                 });
               } else {
-                suggestListAll.push({
+                // suggestListAll.push({
+                //   actualDescription: res.actualDescription,
+                //   diagnosisCodeFinding: res.diagnosisCodeFinding,
+                //   isHccValid: res.isHccValid,
+                //   capturedSections: res.capturedSections,
+                //   diagnosisCode: res.diagnosisCodeFinding,
+                //   encounterDate: res.encounterDate,
+                //   getPlace: "Hcc",
+                // });
+                suggestListAllNonHcc.push({
                   actualDescription: res.actualDescription,
                   diagnosisCodeFinding: res.diagnosisCodeFinding,
                   isHccValid: res.isHccValid,
@@ -502,7 +512,7 @@ export default function PatientDetails() {
         // setMeatCriteriaList(meatCri);
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
-        setSuggestedNonHccList(suggestListAll);
+        setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList)
 
