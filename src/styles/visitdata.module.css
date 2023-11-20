@@ -31,3 +31,33 @@
 .visitdata_header_card2 .nav-item .nav-link.active {
     border-bottom: 3px solid #A20404 !important;
 }
+.hcc_title_card{
+border-radius: 12px;
+background: #EBFFEB;
+margin-bottom: 10px;
+}
+.hcc_title_name{   
+    padding: 15px;
+    border-radius: 10px;
+
+}
+
+.hcc_title_badge{
+    background: #04306F;
+    padding: 15px;
+    border-radius: 12px;
+    width: 55px;
+    text-align: center;
+    color: #fff;
+    color: #FFF;
+   font-size: 14px;
+
+}
+
+.new_valid_dis {
+    border: 1px solid #cdd2e3 !important;
+    margin: 0 0px;
+    border-radius: 0.625rem;
+    position: relative;
+    transition: all 0.5s;
+}

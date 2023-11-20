@@ -3073,34 +3073,16 @@ export default function PatientDetails() {
                                           </div> */}
                                             <div className="col-xl-4">
                                               <ul className="timeline">
-                                                <div className="valid-text d-flex justify-content-sm-between">
+                                                <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`} >
                                                   <span
-                                                    className={`dang d-block text-warning`}
-                                                  >
-                                                    {" "}
-                                                    HCC{" "}
-                                                    <Badge
-                                                      as="a"
-                                                      href=""
-                                                      bg="secondary badge-circle"
-                                                    >
-                                                      {
-                                                        newValidDiseaseList.length
-                                                      }
-                                                    </Badge>
+                                                   className={`${visitStyles.hcc_title_name}`}
+                                                  >                                                   
+                                                    HCC                                                 
                                                   </span>
                                                   <div className="d-flex justify-content-center">
-                                                    <button
-                                                      onClick={() =>
-                                                        addValidDiseases()
-                                                      }
-                                                      className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-                                                    >
-                                                      <FontAwesomeIcon
-                                                        icon={faAdd}
-                                                        fontSize={11}
-                                                      />
-                                                    </button>
+                                                   <span className={`${visitStyles.hcc_title_badge}`}>
+                                                    { newValidDiseaseList.length}
+                                                   </span>
                                                   </div>
                                                 </div>
                                                 {/* {validDiseasesList.length == 0 ?
@@ -3116,7 +3098,7 @@ export default function PatientDetails() {
                                                 {newValidDiseaseList.map(
                                                   (data, i) => (
                                                     <li>
-                                                      <div className="new_valid-dis">
+                                                      <div className={`${visitStyles.new_valid_dis}`}>
                                                         <div className="timeline-panel">
                                                           <div
                                                             className="media-body"

@@ -53480,14 +53480,14 @@ p,
   color: #000 !important;
 }
 
-.valid-text {
+/* .valid-text {
   border: 0.5px solid #FFA500;
   border-radius: 0.625rem;
   text-align: center;
   padding: 3px;
   font-size: 13px !important;
 
-}
+} */
 
 .invalid-text {
   border: 0.5px solid #E97451;
@@ -54624,10 +54624,10 @@ span.mb-1.disease-name {
   border-color: #241571 rgb(243, 243, 243) rgb(243, 243, 243) !important;
 }
 
-.valid-text {
+/* .valid-text {
   margin-bottom: 10px;
   padding: 10px !important;
-}
+} */
 
 .invalid-text {
   margin-bottom: 10px;
