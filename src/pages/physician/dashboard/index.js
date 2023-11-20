@@ -6,6 +6,7 @@ import { Progress, Tooltip } from "antd";
 import NavBar from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { useRouter } from 'next/navigation'
+import styles from "../../../styles/dashboard.module.css";
 
 const Screen = () => {
   const sideMenu = useSelector(state => state.sideMenu);
@@ -20,6 +21,9 @@ const Screen = () => {
     <>
      <div className={`show ${ sideMenu ? "menu-toggle" : ""}`}> 
     <NavBar />
+    <div className={`${styles.dashboardContainer}`}>
+
+    
     <div class="content-body">
     <div className="container-fluid">
     <div className="row">
@@ -439,6 +443,7 @@ const Screen = () => {
          
         </div>
       </div>
+    </div>
     </div>
     </div>
     </div>

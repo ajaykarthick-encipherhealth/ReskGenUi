@@ -1,15 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  rules: [{ test: /\.txt$/, use: 'raw-loader' }],
 }
-module.exports = {
-  async redirects() {
-    return [
-      {
-        source: '/about',
-        destination: '/',
-        permanent: true,
-      },
-    ]
-  },
-}
+
+module.exports = nextConfig
