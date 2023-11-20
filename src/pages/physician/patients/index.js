@@ -190,9 +190,9 @@ export default function Patient() {
       // console.log(newArray)
       setIsLoading(false);
       setTableLoading(false)
-    //     setTimeout(() => {
-    //     subscribe(resultMap);
-    // }, 3000);
+        setTimeout(() => {
+        subscribe(resultMap);
+    }, 3000);
     }
   }
 
@@ -393,7 +393,7 @@ export default function Patient() {
           // 'Cache-Control': 'no-cache',
           // 'Connection': 'keep-alive',
           // 'Accept': "text/event-stream",
-          // 'Access-Control-Allow-Origin':"*"
+          'Access-Control-Allow-Origin':"*"
         },
         withCredentials: true,
         onopen(res) {        

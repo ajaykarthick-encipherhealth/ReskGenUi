@@ -1,3 +1,33 @@
-.container_fluid_patient{
-/* margin-top: 100px !important; */
+.container_fluid_patient {
+    /* margin-top: 100px !important; */
+}
+
+.patient_info_details svg {
+    width: 25px;
+    height: 25px;
+}
+
+.visitdata_header_card {
+    border-radius: 8px;
+    background: #E1EDFE;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+
+}
+
+.visitdata_header_card > ul.nav.nav-pills.mix-chart-tab.nav {
+    margin-top: -5px;
+}
+
+.visitdata_header_card > ul > li > .nav-link.active {
+    border-radius: 12px !important;
+    width: 80px !important;
+    text-align: center;
+}
+
+.visitdata_header_card2 .nav-item .nav-link {
+   color: #221C1C !important;
+}
+
+.visitdata_header_card2 .nav-item .nav-link.active {
+    border-bottom: 3px solid #A20404 !important;
 }

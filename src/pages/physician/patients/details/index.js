@@ -132,7 +132,7 @@ export default function PatientDetails() {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("file");
+  const [activeTabHead, setActiveTabHead] = useState("validDiseases");
 
   const [unmatchHccListRadiology, setUnMatchHccListRadiology] = useState([]);
   const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
@@ -2190,7 +2190,7 @@ export default function PatientDetails() {
   const openModelDbDescription = () => { };
 
   const tabList = [
-    { title: "Patient Data", type: "Patient Data" },
+    { title: "HCC", type: "HCC" },
     { title: "NON HCC", type: "NON HCC" },
     { title: "Radiology", type: "Radiology" },
     { title: "Lab Report", type: "Lab Report" },
@@ -2829,27 +2829,22 @@ export default function PatientDetails() {
             <LoadingSpinner />
           ) : (
             <div className={`container-fluid ${visitStyles.container_fluid_patient}`}>
-              <div className="row patient-file-container">
+              <div className="row card patient-file-container">
                 <div className="col-xl-12">
                   <div className="row">
                     <div className="col-xl-8 col-sm-12">
-                      <div className="card">
+                      <div className={`${visitStyles.patient_info_details}`}>
                         <div className="card-body">
                           <div className="row">
                             <div className="col-xl-2 col-sm-12">
-                              <FontAwesomeIcon
-                                icon={faIdBadge}
-                                className="patientDetails-Icon"
-                                fontSize={14}
-                                color="blue"
-                              />
+                            <i>{SVGICON.patientIdIcon}</i>
                               <label>Patient Id</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.patientId}
                               </h6>
                             </div>
-                            <div className="col-xl-3 col-sm-12">
-                              <i>{SVGICON.DatebirthIcon}</i> <label>Name</label>
+                            <div className="col-xl-2 col-sm-12">
+                              <i>{SVGICON.patientNameIcon}</i> <label>Name</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.patientName}
                               </h6>
@@ -2878,7 +2873,6 @@ export default function PatientDetails() {
                       </div>
                     </div>
                     <div className="col-xl-4 col-sm-12">
-                      <div className="card">
                         <div className="card-body">
                           <div className="row">
                             <div className="col-xl-12 col-sm-12">
@@ -2933,12 +2927,11 @@ export default function PatientDetails() {
                                     </div> */}
                           </div>
                         </div>
-                      </div>
                     </div>
-                    <div className="col-xl-12">
-                      <div className="card height80 file-management">
+                    <div className="col-xl-8">
+                      <div  className={`${visitStyles.visitdata_header_card}`}>
                         <div className="card-body p-0">
-                          <Tab.Container defaultActiveKey={"Patient Data"}>
+                          <Tab.Container defaultActiveKey={"HCC"}>
                             <div className="card-header border-0 flex-wrap patient-details-tab-card ">
                               <Nav
                                 as="ul"
@@ -2961,10 +2954,7 @@ export default function PatientDetails() {
                                   </Nav.Item>
                                 ))}
                               </Nav>
-                              <div>
-                                {/* {activeTab == 3 ?
-                                  <Button onClick={addPatientFile} className="btn btn-primary btn-sm ms-2 flr radiologyBtn">+ Add Patient Radiology</Button>
-                                  : null} */}
+                              {/* <div>
                                 <Button
                                   className="btn btn-sm ms-2 flr hold-btn"
                                   onClick={() => {
@@ -2972,11 +2962,7 @@ export default function PatientDetails() {
                                     setIsValidAction("holdFunction")
                                   }}
                                 >
-                                  {/* <FontAwesomeIcon
-                                    icon={faCheck}
-                                    className="me-2 mt-1"
-                                    fontSize={14}
-                                  /> */}
+                                 
                                   Hold
                                 </Button>
 
@@ -2984,11 +2970,7 @@ export default function PatientDetails() {
                                   onClick={handleSubmitHccDecline}
                                   className="btn btn-primary btn-sm ms-2 flr decline-btn"
                                 >
-                                  {/* <FontAwesomeIcon
-                                    icon={faClose}
-                                    className="me-2 mt-1"
-                                    fontSize={14}
-                                  /> */}
+                                  
                                   {declineBtnTitle}
                                 </Button>
                                 <Button
@@ -2996,25 +2978,17 @@ export default function PatientDetails() {
                                   className="btn btn-primary btn-sm ms-2 flr complted-btn"
 
                                 >
-                                  {/* <FontAwesomeIcon
-                                    icon={faCheckCircle}
-                                    className="me-2 mt-1"
-                                    fontSize={14}
-                                  /> */}
+                                  
                                   {completedBtnTitle}
                                 </Button>
                                 <Button
                                   onClick={handleSubmitHccSave}
                                   className="btn btn-primary btn-sm ms-2 flr saveBtn"
                                 >
-                                  {/* <FontAwesomeIcon
-                                    icon={faCheck}
-                                    className="me-2 mt-1"
-                                    fontSize={14}
-                                  /> */}
+                                 
                                   {saveBtnTitle}
                                 </Button>
-                              </div>
+                              </div> */}
                             </div>
                           </Tab.Container>
                         </div>
@@ -3022,17 +2996,13 @@ export default function PatientDetails() {
                     </div>
                     {activeTab == 1 ? (
                       <div className="col-xl-12">
-                        <div className="card">
+                        <div className="">
                           <div className="card-body">
-                            <div className="profile-tab">
-                              <div className="custom-tab-1">
+                            <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
+                              <div  className="custom-tab-1 "  >
                                 <Tab.Container defaultActiveKey={activeTabHead}>
                                   <Nav as="ul" className="nav nav-tabs">
-                                    <Nav.Item as="li" className="nav-item">
-                                      <Nav.Link to="#my-posts" eventKey="file">
-                                        File
-                                      </Nav.Link>
-                                    </Nav.Item>
+                                   
                                     <Nav.Item as="li" className="nav-item">
                                       <Nav.Link
                                         to="#my-posts"
@@ -3063,6 +3033,11 @@ export default function PatientDetails() {
                                         eventKey="RafScore"
                                       >
                                         RAF Score
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link to="#my-posts" eventKey="file">
+                                        File
                                       </Nav.Link>
                                     </Nav.Item>
                                   </Nav>
