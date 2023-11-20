@@ -327,6 +327,66 @@ DatebirthIcon:<svg width="30" height="31" viewBox="0 0 30 31" fill="none" xmlns=
 </clipPath>
 </defs>
 </svg>,
+ReportIcon:<svg width="30" height="31" viewBox="0 0 30 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="30" height="31" fill="#1E1E1E"/>
+<g id="physcian view">
+<path d="M-3455 -1131C-3455 -1132.1 -3454.1 -1133 -3453 -1133H6568C6569.1 -1133 6570 -1132.1 6570 -1131V1591C6570 1592.1 6569.1 1593 6568 1593H-3453C-3454.1 1593 -3455 1592.1 -3455 1591V-1131Z" fill="#404040"/>
+<g id="patient document view(dermographics)">
+<rect width="1366" height="768" transform="translate(-534 -167)" fill="white"/>
+<g id="Rectangle 901" filter="url(#filter0_dd_0_1)">
+<rect x="-508" y="-15" width="647" height="113" rx="12" fill="white"/>
+</g>
+<g id="promotion-svgrepo-com 1" clip-path="url(#clip0_0_1)" filter="url(#filter1_dd_0_1)">
+<g id="Group">
+<g id="Group_2">
+<g id="Group_3">
+<path id="Vector" d="M14.6831 8.07861C12.6385 8.07861 11.507 9.1381 11.5276 11.1797C11.5576 13.9757 12.7458 15.6719 14.6831 15.6423C14.6831 15.6423 17.837 15.7702 17.837 11.1797C17.837 9.13806 16.7715 8.07861 14.6831 8.07861Z" fill="#241571"/>
+<path id="Vector_2" d="M20.2617 17.7645L17.1103 16.5079L16.3723 15.886C16.1774 15.7213 15.8895 15.7335 15.7088 15.9132L14.6828 16.9336L13.6538 15.9129C13.4729 15.7335 13.1854 15.7219 12.9907 15.8861L12.2526 16.508L9.10117 17.7646C8.08637 18.1688 8.08712 21.7626 8 22.0926H21.3644C21.2774 21.7635 21.277 18.1683 20.2617 17.7645Z" fill="#241571"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<path d="M-3453 -1132H6568V-1134H-3453V-1132ZM6569 -1131V1591H6571V-1131H6569ZM6568 1592H-3453V1594H6568V1592ZM-3454 1591V-1131H-3456V1591H-3454ZM-3453 1592C-3453.55 1592 -3454 1591.55 -3454 1591H-3456C-3456 1592.66 -3454.66 1594 -3453 1594V1592ZM6569 1591C6569 1591.55 6568.55 1592 6568 1592V1594C6569.66 1594 6571 1592.66 6571 1591H6569ZM6568 -1132C6568.55 -1132 6569 -1131.55 6569 -1131H6571C6571 -1132.66 6569.66 -1134 6568 -1134V-1132ZM-3453 -1134C-3454.66 -1134 -3456 -1132.66 -3456 -1131H-3454C-3454 -1131.55 -3453.55 -1132 -3453 -1132V-1134Z" fill="white" fill-opacity="0.1"/>
+</g>
+<defs>
+<filter id="filter0_dd_0_1" x="-516" y="-23" width="663" height="129" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="-2" dy="-2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="2" dy="2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="effect1_dropShadow_0_1" result="effect2_dropShadow_0_1"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_0_1" result="shape"/>
+</filter>
+<filter id="filter1_dd_0_1" x="0" y="-1" width="32" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="-2" dy="-2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="2" dy="2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="effect1_dropShadow_0_1" result="effect2_dropShadow_0_1"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_0_1" result="shape"/>
+</filter>
+<clipPath id="clip0_0_1">
+<rect width="16" height="16" fill="white" transform="translate(8 7)"/>
+</clipPath>
+</defs>
+</svg>,
 cancelIcon:<svg width="16" height="16" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="16" height="16" fill="#1E1E1E"/>
 <g id="admin view">

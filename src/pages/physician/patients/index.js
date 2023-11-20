@@ -1,10 +1,8 @@
-
-
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Button } from 'react-bootstrap';
-import { Badge } from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
-import Select from 'react-select';
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import { Button } from "react-bootstrap";
+import { Badge } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import Select from "react-select";
 import { SVGICON } from "../../../jsx/constant/theme";
 import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 import NavBar from "../../../jsx/layouts/nav";
@@ -14,48 +12,41 @@ import { Offcanvas } from "react-bootstrap";
 
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faClose, faUpload, faCheck, faBan, faAdd, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Space, Spin } from 'antd';
-import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
-import { connect, useDispatch } from 'react-redux';
 import {
-  patientDetails,
-} from '../../../store/actions/AuthActions';
-import { notification } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { DataTable } from 'primereact/datatable';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
-import { Column } from 'primereact/column';
-import { InputText } from 'primereact/inputtext';
-import { Tag } from 'primereact/tag';
-import {
-  EyeOutlined, EyeInvisibleOutlined
-} from '@ant-design/icons';
-import moment from 'moment';
+  faAngleLeft,
+  faAngleRight,
+  faClose,
+  faUpload,
+  faCheck,
+  faBan,
+  faAdd,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
+import { Space, Spin } from "antd";
+import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
+import { connect, useDispatch } from "react-redux";
+import { patientDetails } from "../../../store/actions/AuthActions";
+import { notification } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { DataTable } from "primereact/datatable";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { Column } from "primereact/column";
+import { InputText } from "primereact/inputtext";
+import { Tag } from "primereact/tag";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import moment from "moment";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
-import { Paginator } from 'primereact/paginator';
-import { Calendar } from 'primereact/calendar';
-
-
-
-
-
-
-
-
+import { Paginator } from "primereact/paginator";
+import { Calendar } from "primereact/calendar";
 
 export default function Patient() {
-
-
-
-
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientStoreDetails = useSelector((state) => state);
-  const controller = new AbortController()
-  const signal = controller.signal
+  const controller = new AbortController();
+  const signal = controller.signal;
 
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -69,7 +60,7 @@ export default function Patient() {
   const lastIndex = currentPage * recordsPage;
   const firstIndex = lastIndex - recordsPage;
 
-  const [npage, setNPage] = useState('');
+  const [npage, setNPage] = useState("");
   const [number, setNumber] = useState([]);
   const [records, setRecords] = useState([]);
   const [addPatient, setAddPatient] = useState(false);
@@ -77,7 +68,7 @@ export default function Patient() {
   const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [dates, setDates] = useState(null);
-
+  const [compledtedDate, setCompletedDate] = useState(null);
 
   const [inputValue, setInputValue] = useState({
     year: "",
@@ -86,7 +77,7 @@ export default function Patient() {
   });
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
-    patientName: ""
+    patientName: "",
   });
 
   const [pageCount, setPageCount] = useState(0);
@@ -102,9 +93,9 @@ export default function Patient() {
 
   const [patinetList, setPatinetList] = useState([]);
   const [patinetListAll, setPatinetListAll] = useState([]);
-  const [tenantId, setTenantId] = useState('');
-  const [localOrgId, setLocalOrgId] = useState('');
-  const [localUserId, setLocalUserId] = useState('');
+  const [tenantId, setTenantId] = useState("");
+  const [localOrgId, setLocalOrgId] = useState("");
+  const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -113,39 +104,29 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
 
-
-
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-
   const statusMessage = {
     subscribed: "Subscribed",
-    unsubscribed: "Unsubscribed"
+    unsubscribed: "Unsubscribed",
   };
-
-
 
   const filterChangePatientId = (event) => {
     const value = event.target.value;
     let _filters = { ...filters };
-    _filters['patientId'].value = value;
+    _filters["patientId"].value = value;
     setFilters(_filters);
   };
   const filterChangePatientName = (event) => {
     const value = event.target.value;
     let _filters = { ...filters };
-    _filters['patientName'].value = value;
+    _filters["patientName"].value = value;
     setFilters(_filters);
   };
-
-
-
-
-
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -155,13 +136,12 @@ export default function Patient() {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
-    getAllList(uId,pageNo,pageSize);
+    getAllList(uId, pageNo, pageSize);
     // fetchData();
   }, []);
 
-
-  const getAllList = async (uId,pageNo,pageSize) => {
-    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`
+  const getAllList = async (uId, pageNo, pageSize) => {
+    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -170,34 +150,29 @@ export default function Patient() {
 
       result.map((res) => {
         resultMap.push({
-          "patientId": res.patientId,
-          "patientName": res.patientName,
-          "fileName": res.fileName,
-          "computing": res.computing,
-          "createdAt": res.createdAt,
-          "lastModifiedDate": res.lastModifiedDate,
-          "dueDate": res.dueDate,
-          "processedStatus": res.processedStatus,
-          "createdAt": res.createdAt,
-        })
-
-      }
-      )
+          patientId: res.patientId,
+          patientName: res.patientName,
+          fileName: res.fileName,
+          computing: res.computing,
+          createdAt: res.createdAt,
+          lastModifiedDate: res.lastModifiedDate,
+          dueDate: res.dueDate,
+          processedStatus: res.processedStatus,
+          createdAt: res.createdAt,
+        });
+      });
       var newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
 
       // console.log(newArray)
       setIsLoading(false);
-      setTableLoading(false)
-    //     setTimeout(() => {
-    //     subscribe(resultMap);
-    // }, 3000);
+      setTableLoading(false);
+      //     setTimeout(() => {
+      //     subscribe(resultMap);
+      // }, 3000);
     }
-  }
-
-
-
+  };
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -289,7 +264,8 @@ export default function Patient() {
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`, inputValuePatientId,
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
+        inputValuePatientId
       );
       if (response?.status == 200) {
         notification.success({
@@ -301,29 +277,26 @@ export default function Patient() {
         setIsLoadingBtn(false);
       }
       setAddPatientId(false);
-      getAllList(localUserId,pageNo,pageSize);
+      getAllList(localUserId, pageNo, pageSize);
     }
 
     setValidated(true);
   };
 
-
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
     if (data.computing == 2) {
-      const controller = new AbortController()
-      const { signal } = controller
-      controller.abort()
-      localStorage.setItem("patientId", data.patientId)
-      navigate.push('/physician/patients/details');
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      localStorage.setItem("patientId", data.patientId);
+      navigate.push("/physician/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",
       });
     }
-
   };
-
 
   function gotoPage(number) {
     if (canMaxPage > number) {
@@ -372,53 +345,46 @@ export default function Patient() {
     setPatinetList(records);
   }
 
-
   const subscribe = async (patientResult) => {
     const accessToken = localStorage.getItem("token");
     var uId = localStorage.getItem("userId");
     var tenId = localStorage.getItem("tenantId");
     var processedList = [];
 
-
-
-    var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`
+    var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`;
     const fetchData = async () => {
-     let eventSource = await fetchEventSource(resoureUrl, {
+      let eventSource = await fetchEventSource(resoureUrl, {
         method: "get",
-        mode: 'cors',
+        mode: "cors",
         signal: signal,
         headers: {
           // Accept: "text/event-stream",
-          "Authorization": `Bearer ` + accessToken,
+          Authorization: `Bearer ` + accessToken,
           // 'Cache-Control': 'no-cache',
           // 'Connection': 'keep-alive',
           // 'Accept': "text/event-stream",
           // 'Access-Control-Allow-Origin':"*"
         },
         withCredentials: true,
-        onopen(res) {        
-            console.log("Client side error ", res);
+        onopen(res) {
+          console.log("Client side error ", res);
         },
         onmessage(event) {
           console.log("Client Events Trigger ");
           const parsedData = JSON.parse(event.data);
           processedList = parsedData;
-          var checkProcessedValue =[];
+          var checkProcessedValue = [];
           processedList.map((res) => {
             checkProcessedValue.push({
-              "patientId":res,             
-            })
-          }
-          )
-
-
+              patientId: res,
+            });
+          });
 
           const array1 = patientResult;
           const array2 = checkProcessedValue;
-          console.log(array2)
-          console.log(patientResult)
+          console.log(array2);
+          console.log(patientResult);
 
-    
           const hashMap2 = array2.reduce((carry, item) => {
             const { patientId } = item;
             if (!carry[patientId]) {
@@ -426,16 +392,15 @@ export default function Patient() {
             }
             return carry;
           }, {});
-    
-    
-          const output = array1.map(item => {
+
+          const output = array1.map((item) => {
             const newName = hashMap2[item.patientId];
             if (newName) {
               item.computing = 2;
             }
             return item;
           });
-    
+
           setPatinetListAll(output);
         },
         onclose() {
@@ -443,25 +408,20 @@ export default function Patient() {
           console.log("Connection closed by the server");
         },
         onerror(err) {
-          controller.abort()
+          controller.abort();
           console.log("There was an error from server", err);
         },
       });
     };
 
-
- 
-
-
-    fetchData();  
+    fetchData();
   };
 
   function abortFetching() {
-    console.log('Now aborting');
+    console.log("Now aborting");
     // Abort.
-    controller.abort()
-}
-
+    controller.abort();
+  }
 
   // const fetchData = async () => {
   //   const data = await (await fetchDataApi()).data;
@@ -483,33 +443,37 @@ export default function Patient() {
 
     switch (rowData.computing) {
       case 2:
-        return <div className='patient-status'><span className={`badge processed-text`}>
-          Processed
-        </span></div>
-          ;
+        return (
+          <div className="patient-status">
+            <span className={`badge processed-text`}>Processed</span>
+          </div>
+        );
 
       case 1:
-        return <div className='patient-status'><span className={`badge processing-text`}>
-          Processing
-        </span></div>;
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Processing</span>
+          </div>
+        );
 
       case 3:
-        return <div className='patient-status'><span className={`badge failed-text`}>
-          Failed
-        </span></div>;
+        return (
+          <div className="patient-status">
+            <span className={`badge failed-text`}>Failed</span>
+          </div>
+        );
 
       case 0:
-        return <div className='patient-status'><span className={`badge not-started-text`}>
-          Not Started
-        </span>
-        </div>;
-
+        return (
+          <div className="patient-status">
+            <span className={`badge not-started-text`}>Not Started</span>
+          </div>
+        );
     }
   };
   const dateFormateChange = (rowData) => {
-    console.log(rowData)
-
-  }
+    console.log(rowData);
+  };
 
   const processstatusBodyTemplate = (rowData) => {
     //   console.log(rowData.computing)
@@ -520,51 +484,77 @@ export default function Patient() {
 
     switch (rowData.processedStatus) {
       case "COMPLETED":
-        return <div className='patient-status'><span className={`badge badge-success`}>
-          COMPLETED
-          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-        </span></div>
-          ;
+        return (
+          <div className="patient-status">
+            <span className={`badge badge-success`}>
+              COMPLETED
+              <FontAwesomeIcon className="ml-2 ms-1 " icon={faCheck} />
+            </span>
+          </div>
+        );
 
       case "PENDING":
-        return <div className='patient-status'><span className={`badge badge-primary`}>
-          PENDING
-          <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
-        </span></div>;
+        return (
+          <div className="patient-status">
+            <span className={`badge badge-primary`}>
+              PENDING
+              <Spin
+                className="ml-2 processingSpin ms-1 text-white"
+                size="small"
+              />
+            </span>
+          </div>
+        );
 
       case "DECLINE":
-        return <div className='patient-status'><span className={`badge badge-danger`}>
-          DECLINE
-          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
-        </span></div>;
+        return (
+          <div className="patient-status">
+            <span className={`badge badge-danger`}>
+              DECLINE
+              <FontAwesomeIcon className="ml-2 ms-1 " icon={faClose} />
+            </span>
+          </div>
+        );
 
       case "NOTCOMPUTED":
-        return <div className='patient-status'><span className={`badge btn-notstarted`}>
-         NOTCOMPUTED
-          <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
-        </span>
-        </div>;
-
+        return (
+          <div className="patient-status">
+            <span className={`badge btn-notstarted`}>
+              NOTCOMPUTED
+              <FontAwesomeIcon className="ml-2 ms-1 " icon={faBan} />
+            </span>
+          </div>
+        );
     }
   };
 
   const actionBodyTemplate = (rowData) => {
-    return <div className="d-flex justify-content-center">
-      {rowData.computing == 2 ?
-        <button onClick={() => gotoPatientDetails(rowData)} className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn">
-          <EyeOutlined className='text-white' />
-        </button> : <button disabled className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn">
-          <EyeInvisibleOutlined className='text-white' />
-        </button>}
-      <button onClick={() => addPatientFile(rowData)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-        <FontAwesomeIcon icon={faUpload} fontSize={11} />
-      </button>
-
-    </div>
+    return (
+      <div className="d-flex justify-content-center">
+        {rowData.computing == 2 ? (
+          <button
+            onClick={() => gotoPatientDetails(rowData)}
+            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
+          >
+            <EyeOutlined className="text-white" />
+          </button>
+        ) : (
+          <button
+            disabled
+            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
+          >
+            <EyeInvisibleOutlined className="text-white" />
+          </button>
+        )}
+        <button
+          onClick={() => addPatientFile(rowData)}
+          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
+        >
+          <FontAwesomeIcon icon={faUpload} fontSize={11} />
+        </button>
+      </div>
+    );
   };
-
-
-
 
   const submitPatientFile = async () => {
     // setIsLoadingBtn(false);
@@ -583,20 +573,20 @@ export default function Patient() {
     };
     setSelectFile(formData);
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
+      ENDPOINTS.apiEndointFileUploadHcc +
+      `aiservice/ai/upload
       `,
       formData,
       headers
     );
     if (response?.status == 202) {
-      getAllList(localUserId,pageNo,pageSize);
+      getAllList(localUserId, pageNo, pageSize);
 
       notification.success({
         message: "Patient File Upload Successfully!",
       });
       setAddPatient(false);
       setIsLoadingBtn(false);
-
     } else {
       setIsLoadingBtn(false);
     }
@@ -606,8 +596,6 @@ export default function Patient() {
     // getAllList(localUserId);
 
     // console.log("1");
-
-
   };
   const submitRadiology = async () => {
     const formData = new FormData();
@@ -624,13 +612,14 @@ export default function Patient() {
     };
     setSelectFile(formData);
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload/radiology
+      ENDPOINTS.apiEndointFileUploadHcc +
+      `aiservice/ai/upload/radiology
     `,
       formData,
       headers
     );
     if (response?.status == 202) {
-      getAllList(localUserId,pageNo,pageSize);
+      getAllList(localUserId, pageNo, pageSize);
       setAddPatient(false);
       setIsLoadingBtn(false);
     } else {
@@ -639,369 +628,231 @@ export default function Patient() {
     setAddPatient(false);
     // setIsLoadingBtn(false);
     setSelectFileRadiology(null);
-
-
   };
 
-  const onPageChange =(e)=>{
-    console.log(dates)
-    console.log(e)
-   setPaginationFirst(e.first)
-   setPageNo(e.page)
-   setPageSize(e.rows)
-   setTableLoading(true)
-   getAllList(localUserId,e.page,e.rows);
-   console.log("test")
-  }
-
-
-
-
-
-
-
-
-
+  const onPageChange = (e) => {
+    console.log(dates);
+    console.log(compledtedDate);
+    console.log(e);
+    setPaginationFirst(e.first);
+    setPageNo(e.page);
+    setPageSize(e.rows);
+    setTableLoading(true);
+    getAllList(localUserId, e.page, e.rows);
+    console.log("test");
+  };
 
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
         <div class="content-body">
-          {isLoading ? <LoadingSpinner /> :
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
             <div className="container-fluid">
               <div className="row">
-
                 <div className="col-xl-12">
                   <div className="">
-                    {/* <div>
-      <p>{listening ? statusMessage.subscribed : statusMessage.unsubscribed}</p>
-      <p>{JSON.stringify(process)}</p>
-      <button onClick={subscribe}>
-        {listening ? statusMessage.unsubscribed : statusMessage.subscribed}
-      </button>
-      <br />
-      <p>{JSON.stringify(message)}</p>
-    </div> */}
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
                         <div className="tbl-caption  align-items-center">
                           <div className="row filter-contain">
-                            <div className='col-xl-3'>
+                            <div className="col-xl-3">
                               <div class="form-group has-search">
-                                <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control new-form-control" placeholder="Patient Id" />
-                              </div>
-
-                            </div>
-                            <div className='col-xl-3'>
-                              <div class="form-group has-search">
-                                <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <InputText type="text" onChange={(e) => filterChangePatientName(e)} className="form-control new-form-control" placeholder="Patient Name" />
-                              </div>
-                            </div>
-                            <div className='col-xl-3'>
-                              <div class="form-group has-search">
-                              <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <Calendar className="form-control new-form-control calender-pri-input" value={dates} onChange={(e) => setDates(e.value)}    selectionMode="range" readOnlyInput />
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) => filterChangePatientId(e)}
+                                  className="form-control new-form-control"
+                                  placeholder="Patient Id"
+                                />
                               </div>
                             </div>
+                            <div className="col-xl-2">
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) => filterChangePatientName(e)}
+                                  className="form-control new-form-control"
+                                  placeholder="Patient Name"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-2">
+                              <div class="form-group has-search">
 
-                            <div className='col-xl-3'>
-                              <Button onClick={addPatientFormId} className="btn btn-primary btn-sm ms-2 flr">+ Add Patient Id</Button>
+                                <Calendar
+                                  className="form-control new-form-control calender-pri-input"
+                                  value={dates}
+                                  onChange={(e) => setDates(e.value)}
+                                  selectionMode="range"
+                                  readOnlyInput
+                                  placeholder="Due Date"
+
+                                />
+
+
+                              </div>
+                            </div>
+                            <div className="col-xl-2">
+                              <div class="form-group has-search">
+
+                                <Calendar
+                                  className="form-control new-form-control calender-pri-input"
+                                  value={compledtedDate}
+                                  onChange={(e) => setCompletedDate(e.value)}
+                                  selectionMode="range"
+                                  readOnlyInput
+                                  placeholder="Completed Date"
+                                />
+
+                              </div>
                             </div>
 
-
+                            <div className="col-xl-3">
+                              <Button
+                                onClick={addPatientFormId}
+                                className="btn btn-primary btn-sm ms-2 flr"
+                              >
+                                + Add Patient Id
+                              </Button>
+                            </div>
                           </div>
                         </div>
 
-
-
-                        <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-                          <DataTable value={patinetListAll} paginator={false} rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
-                            <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => paginationFirst +  options.rowIndex + 1}></Column>
-                            <Column field="patientId" header="Patient Id" />
-                            <Column field="patientName" header="Patient Name" />
-                            <Column field="fileName" header="File Name" />
-                            <Column field="status" body={statusBodyTemplate} header="File Status" />
-                            <Column field="processedStatus" body={processstatusBodyTemplate} header="Processing Status" />
-                            <Column field="dueDate" body={(data) => moment(data.dueDate).format("MM-DD-YYYY")}  sortable header="Due Date" />
-                            <Column field="lastModifiedDate" body={(data) => moment(data.dueDate).format("MM-DD-YYYY hh:MM:A")} sortable header="Modfied Date" />
-                            <Column field="action" body={actionBodyTemplate} header="Action" />
-                          </DataTable>
-                          <div className='pagination-container'>
-                          <Paginator first={paginationFirst} rows={10} totalRecords={totalElements}  onPageChange={onPageChange} />
-
-                            </div>
-
-                          {/* <table
-                            id="empoloyeestbl2"
-                            className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0"
+                        <div
+                          id="task-tbl_wrapper"
+                          className="dataTables_wrapper no-footer"
+                        >
+                          <DataTable
+                            value={patinetListAll}
+                            paginator={false}
+                            rows={10}
+                            rowsPerPageOptions={[10, 25, 50, 100]}
+                            dataKey="id"
+                            filters={filters}
+                            filterDisplay="menu"
+                            className="custom-table"
+                            rowClassName="custom-row"
                           >
-                            <thead>
-                              <tr>
-                                <th>SI.NO</th>
-                                <th>Patient Id</th>
-                                <th>Patient Name</th>
-                                <th>File Name</th>
-                                <th>Status</th>
-                                <th>Created Date</th>
-                                <th>Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {patinetList.map((item, index) => (
-                                <tr className='cr-pointer' key={index}>
-                                  <td onClick={() => { gotoPatientDetails(item) }}>
-                                    <span>{index + 1}</span>
-                                  </td>
-                                  <td onClick={() => { gotoPatientDetails(item) }}>
-                                    <span>{item.patientId}</span>
-                                  </td>
-                                  <td onClick={() => { gotoPatientDetails(item) }}>
-                                    <span>{item.patientName}</span>
-                                  </td>
-                                  <td onClick={() => { gotoPatientDetails(item) }}>
-                                    <span>{item.fileName}</span>
-                                  </td>
-                                  <td onClick={() => { gotoPatientDetails(item) }} className='patient-status'>
-                                    {item.computing == 2 ?
+                            <Column
+                              header="SI.NO"
+                              headerStyle={{ width: "3rem" }}
+                              body={(data, options) =>
+                                paginationFirst + options.rowIndex + 1
+                              }
+                              bodyStyle={{
+                                borderLeft: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                              }}
+                            ></Column>
 
-                                      <span className={`badge badge-success`}>
-                                        Processed
-                                        <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-                                      </span>
-                                      : item.computing == 1 ?
-                                        <span className={`badge badge-primary`}>
-                                          Processing
-                                          <Spin className='ml-2 processingSpin ms-1 text-white' size="small" />
-                                        </span> :
-                                        item.computing == 3 ?
-                                          <span className={`badge badge-danger`}>
-                                            Failed
-                                            <FontAwesomeIcon className='ml-2 ms-1 ' icon={faClose} />
-                                          </span>
-
-
-                                          :
-                                          <span className={`badge badge-secondary`}>
-                                            Not Started
-                                            <FontAwesomeIcon className='ml-2 ms-1 ' icon={faBan} />
-                                          </span>
-                                    }
-                                  </td>
-                                  <td onClick={() => { gotoPatientDetails(item) }}>
-                                    <span>{item.createdAt}</span>
-                                  </td>
-                                  <td>
-                                    <div className="d-flex justify-content-center">
-                                      <button onClick={() => addPatientFile(item)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-                                        <FontAwesomeIcon icon={faUpload} fontSize={11} />
-                                      </button>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                          <div className="d-flex justify-content-between mrt-15">
-                            <span>
-                              Page{' '}
-                              <strong>
-                                {pageIndex + 1} of 10
-                              </strong>{''}
-                            </span>
-                            <span className="table-index">
-                              Go to page : {' '}
-                              <input type="number" className="ml-2" defaultValue={pageIndex + 1} min="1" max={canMaxPage}
-                                onChange={e => {
-                                  const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
-                                  gotoPage(pageNumber)
-                                }}
-                              />
-                            </span>
+                            <Column
+                              field="patientId"
+                              header="Patient Id"
+                              bodyStyle={{
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                              }}
+                            />
+                            <Column
+                              field="patientName"
+                              header="Patient Name"
+                              bodyStyle={{
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                              }}
+                            />
+                            <Column
+                              field="fileName"
+                              header="File Name"
+                              bodyStyle={{
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                              }}
+                            />
+                            <Column
+                              field="status"
+                              body={statusBodyTemplate}
+                              header="File Status"
+                              bodyStyle={{
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                              }}
+                            />
+                            <Column
+                              field="processedStatus"
+                              body={processstatusBodyTemplate}
+                              header="Processing Status"
+                              bodyStyle={{
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                              }}
+                            />
+                            <Column
+                              field="dueDate"
+                              body={(data) =>
+                                moment(data.dueDate).format("MM-DD-YYYY")
+                              }
+                              sortable
+                              header="Due Date"
+                              bodyStyle={{
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                              }}
+                            />
+                            <Column
+                              field="lastModifiedDate"
+                              body={(data) =>
+                                moment(data.dueDate).format(
+                                  "MM-DD-YYYY hh:MM:A"
+                                )
+                              }
+                              sortable
+                              header="Modfied Date"
+                              bodyStyle={{
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                              }}
+                            />
+                            <Column
+                              field="action"
+                              body={actionBodyTemplate}
+                              header="Action"
+                              bodyStyle={{
+                                borderTop: " 0.2px solid #241571",
+                                borderBottom: " 0.2px solid #241571",
+                                borderRight: " 0.2px solid #241571",
+                              }}
+                            />
+                          </DataTable>
+                          <div className="pagination-container">
+                            <Paginator
+                              first={paginationFirst}
+                              rows={10}
+                              totalRecords={totalElements}
+                              onPageChange={onPageChange}
+                            />
                           </div>
-                          <div className="text-center mb-3">
-                            <div className="filter-pagination  mt-3">
-                              <button className="previous-button" onClick={() => gotoPage(pageCount - 1)} disabled={!canPreviousPage}>
-                                <FontAwesomeIcon icon={faAngleLeft} />
-                              </button>
-                              <button className="previous-button" onClick={() => previousPage(pageCount - 1)} disabled={!canPreviousPage}>
-                                Previous
-                              </button>
-                              <button className="next-button" onClick={() => nextPage(pageCount + 1)} disabled={!canNextPage}>
-                                Next
-                              </button>
-                              <button className="next-button" onClick={() => gotoPage(pageCount + 1)} disabled={!canNextPage}>
-                                <FontAwesomeIcon icon={faAngleRight} />
-                              </button>
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                     </div>
-
-
                   </div>
                 </div>
               </div>
             </div>
-          }
+          )}
         </div>
-        <Offcanvas onHide={setAddPatient} show={addPatient} className="offcanvas-end" placement="end">
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Details
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setAddPatient(false)}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                      value={inputValue.patientId}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="name"
-                      required
-                      type="text"
-                      value={inputValue.name}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      File <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      required
-                      type="file"
-                      accept="application/pdf,text/plain"
-                      onChange={(e) => onChangeFile(e.target.files)}
-                      disabled={isLoadingBtn ? true : false}
-                    />
-                  </div>
-                  {/* <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Radiology
-                    </Form.Label>
-                    <Form.Control
-                      type="file"
-                      accept="application/pdf,text/plain"
-                      onChange={(e) => onChangeFileRadiology(e.target.files)}
-                      disabled={isLoadingBtn ? true : false}
-                    />
-                  </div> */}
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Year of Service <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="year"
-                      required
-                      type="number"
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loading..." : "Submit"}
-                  </Button>
-                  <Button
-                    onClick={() => setAddPatient(false)}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
-        <Offcanvas onHide={setAddPatientId} show={addPatientId} className="offcanvas-end" placement="end">
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Details
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setAddPatientId(false)}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmitPatientId}>
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientName"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loading..." : "Submit"}
-                  </Button>
-                  <Button
-                    onClick={() => setAddPatientId(false)}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
       </div>
-
-
     </>
-  )
-
+  );
 }

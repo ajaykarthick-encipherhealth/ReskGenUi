@@ -52070,6 +52070,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 
 .content-body .container-fluid {
   padding-top: 100px !important;
+  background: #F0F6FE;
 }
 
 
@@ -55362,3 +55363,11 @@ background: linear-gradient(95deg, #9DC4FB 5.8%, #FDBEBE 92.76%) !important;
   /* padding: 10px; */
  }
 
+ .calendar-container {
+  display: flex;
+  align-items: center;
+}
+
+.form-control-feedback {
+  margin-left: 8px; /* Adjust the margin as needed */
+}

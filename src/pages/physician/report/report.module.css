@@ -1,0 +1,22 @@
+.maincontainer {
+  position: relative;
+}
+.content-body .container-fluid {
+  background: #f0f6fe;
+}
+.export {
+    margin-left:20pc;
+  width: 100px;
+  height: 38px;
+  flex-shrink: 0;
+
+  border-radius: 20px;
+  background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.35) 4.29%,
+      rgba(255, 255, 255, 0.35) 95.6%
+    ),
+    #04306f;
+  background-blend-mode: soft-light, normal;
+  box-shadow: 3px 3px 6px 0px #a6abbd, -3px -3px 6px 0px #fafbff;
+}

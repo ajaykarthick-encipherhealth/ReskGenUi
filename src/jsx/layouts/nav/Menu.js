@@ -40,6 +40,12 @@ export const PhysicanMenuList = [
         to: '/physician/patients',
         childRoute:"/physician/patients/details"
     },
+    {   
+        title:'Report',
+        iconStyle:SVGICON.ReportIcon,
+        to: '/physician/report',
+  
+    },
     //  {   
     //     title:'User',
     //     iconStyle:SVGICON.Usermanagement,
