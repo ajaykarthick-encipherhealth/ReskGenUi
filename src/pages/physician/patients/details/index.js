@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
+import visitStyles from "../../../../styles/vistidata.module.css";
 
 import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -2827,7 +2828,7 @@ export default function PatientDetails() {
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <div className="container-fluid">
+            <div className={`container-fluid ${visitStyles.container_fluid_patient}`}>
               <div className="row patient-file-container">
                 <div className="col-xl-12">
                   <div className="row">
