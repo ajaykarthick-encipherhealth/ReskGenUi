@@ -54899,9 +54899,7 @@ div[aria-describedby="rpv-core__tooltip-body-default-layout-sidebar-tab-1"],div[
     overflow: hidden !important;
     text-overflow: ellipsis;
 }
-.valid-providerdocument svg{
-  padding: 2px 5px 0px 0px;
-}
+
 .validhcc-details {
   border: 1px solid #cdd2e3 !important;
   padding: 10px;
@@ -55176,8 +55174,19 @@ letter-spacing: 0.36px;
   margin-top: 20px;
 } */
 .patient-details-tab-card .nav-link.active{
-  /* border-radius: 12px !important; */
-background: linear-gradient(95deg, #9DC4FB 5.8%, #FDBEBE 92.76%) !important;
+  background: linear-gradient(95deg, #9DC4FB 5.8%, #FDBEBE 92.76%) !important;
+  width: 145px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+}
+.patient-details-tab-card .nav-link {
+  padding: 10px !important;
+  border-radius: 12px !important;
+  width: 145px !important;
+  text-align: center !important;
+  color: #221C1C !important;
 }
 /* .header-active::after{
 

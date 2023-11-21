@@ -105,10 +105,10 @@
 
 }
 
-.new_valid_dis {
-    border: 1px solid #cdd2e3 !important;
+.hcc_card {
+    border-radius: 12px !important;
+    border: 1px solid #E1E1E1 !important;
     margin: 0 0px;
-    border-radius: 0.625rem;
     position: relative;
     transition: all 0.5s;
 }
@@ -161,26 +161,168 @@
     color: #46C263 !important;
     width: 140px;
 }
-.flag_container{
-width: 45px;
-height: 546px;
-border-radius: 8px;
-background: #E1EDFE;
-float: right;
-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
-margin-bottom: 25px;
+
+.flag_container {
+    width: 60px;
+    height: 546px;
+    border-radius: 8px;
+    background: #E1EDFE;
+    float: right;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
 
 }
 
-.flag_container ul{
+.flag_container ul {
     margin-top: 15px;
     padding: 10px;
 }
-.flag_container li i{
+
+.flag_container li {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    display: flex
    
 }
-.flag_container li i{
-    height: 50px;
+.flag_container i {
+ 
     display: flex
+}
 
+.visitdata_header_card>.visitdata_tab_body {
+    padding: 20px 0px 0px 0px !important;
+}
+
+.visitdata_tab_body {
+    padding: 20px 0 0 0px;
+}
+
+.provider_name {
+    border-radius: 6px;
+    background: #E1EDFE !important;
+}
+
+.provider_name i {
+    margin-right: 5px !important;
+}
+
+.close_icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: #FEE1E1;
+    text-align: center;
+    margin-left: 3px;
+}
+
+.tick_icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: #E2FEE1;
+    text-align: center;
+    margin-left: 3px;
+}
+
+.combo_head_card {
+    border-radius: 12px;
+    background: #E1EDFE;
+    padding: 15px 15px 15px 15px;
+    margin-bottom: 15px;
+}
+
+.combo_details_card {
+    border-radius: 12px;
+    border: 1px solid #E1E1E1;
+    padding: 15px 15px 15px 15px;
+    margin-bottom: 15px;
+}
+
+.combo_add_btn {
+    border-radius: 4px;
+    background: #133DD4;
+    width: 24px;
+    height: 24px;
+    border: none !important;
+}
+
+.meat_head_card {
+    border-radius: 12px;
+    background: #E1EDFE;
+    padding: 15px 15px 15px 15px;
+    margin-bottom: 15px;
+}
+
+.meat_details_card {
+    border-radius: 12px;
+    border: 1px solid #E1E1E1;
+    padding: 15px 15px 15px 15px;
+    margin-bottom: 15px;
+}
+
+.meat_details_card_false {
+    border-radius: 12px;
+    border: 1px solid red;
+    padding: 15px 15px 15px 15px;
+    margin-bottom: 15px;
+}
+
+.visitdata_header_title .nav-link.active.li {
+    background: linear-gradient(95deg, #9DC4FB 5.8%, #FDBEBE 92.76%) !important;
+    width: 145px !important;
+    text-align: center !important;
+    padding: 10px !important;
+    border-radius: 12px !important;
+}
+
+.addPatientBtn {
+    border-radius: 8px;
+    border: 1px solid #133DD4;
+    background: rgba(19, 61, 212, 0.15);
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+    color: #133DD4 !important;
+
+}
+
+.addPatientBtn:hover {
+    background: rgba(19, 61, 212, 0.15) !important;
+}
+
+.comments_card {
+    border-radius: 12px;
+    background: #F0F6FE;
+    padding: 15px;
+    display: grid;
+    margin-bottom: 20px;
+}
+.commentsFormControl{
+    border-radius: 16px;
+    border: 1px solid #CECECE;
+    background: #FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    padding: 15px;
+
+}
+
+.commentDrawer{
+    width: 500px !important;
+}
+
+.commentsTagActive{
+    background: linear-gradient(95deg, #9DC4FB 5.8%, #FDBEBE 92.76%) !important;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    display: flex
 }
