@@ -2,7 +2,7 @@ import styles from "./report.module.css";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
 import { ProgressBar } from "primereact/progressbar";
-
+import { Modal } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 
@@ -10,7 +10,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Progress } from 'antd';
+import { Progress } from "antd";
 import {
   faClose,
   faUpload,
@@ -32,6 +32,13 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from "primereact/paginator";
 import { Calendar } from "primereact/calendar";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { SVGICON } from "../../../jsx/constant/theme";
+import {
+  CircularProgressbar,
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -45,6 +52,7 @@ const index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [flagClicked, setFlagClicked] = useState(false);
 
   const recordsPage = 10;
   const lastIndex = currentPage * recordsPage;
@@ -85,6 +93,8 @@ const index = () => {
 
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
+  const [flagStates, setFlagStates] = useState([]);
+  const [modal, setModal] = useState(false);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -160,6 +170,11 @@ const index = () => {
     setValidated(false);
     setAddPatientId(true);
   };
+  const handleFlagClick = (index) => {
+    const newFlagStates = [...flagStates];
+    newFlagStates[index] = !newFlagStates[index];
+    setFlagStates(newFlagStates);
+  };
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
@@ -182,6 +197,9 @@ const index = () => {
         message: data.patientId + " file not processed Please wait",
       });
     }
+  };
+  const handleCloseModal = () => {
+    setModal(false);
   };
 
   const statusBodyTemplate = (rowData) => {
@@ -315,6 +333,23 @@ const index = () => {
     console.log("test");
   };
 
+  function calculateColor(percentage) {
+    // Define your color ranges based on the percentage
+    if (percentage <= 10) {
+      return "#E03838";
+    } else if (percentage <= 30) {
+      return "#E07E38";
+    } else if (percentage <= 50) {
+      return "#E0A738";
+    } else if (percentage <= 80) {
+      return "#387BE0";
+    } else if (percentage <= 100) {
+      return "#289A00";
+    } else {
+      return "#E0A738"; // Default color for percentages greater than 50
+    }
+  }
+
   return (
     <>
       <Header />
@@ -437,8 +472,16 @@ const index = () => {
                           />
                           <Column
                             field="hcc"
-                            body={statusBodyTemplate}
-                            header="HCC Code"
+                            header="HCC "
+                            body={(data) => (
+                              <div>
+                                {data.hcc ? (
+                                  <span>{data.hcc}</span>
+                                ) : (
+                                  <span>0</span>
+                                )}
+                              </div>
+                            )}
                             bodyStyle={{
                               borderTop: " 0.2px solid #241571",
                               borderBottom: " 0.2px solid #241571",
@@ -446,8 +489,16 @@ const index = () => {
                           />
                           <Column
                             field="suggestionCodes"
-                            body={processstatusBodyTemplate}
-                            header="SUGGESTION CODES"
+                            header="Suggestion  "
+                            body={(data) => (
+                              <div>
+                                {data.suggestionCodes ? (
+                                  <span>{data.suggestionCodes}</span>
+                                ) : (
+                                  <span>0</span>
+                                )}
+                              </div>
+                            )}
                             bodyStyle={{
                               borderTop: " 0.2px solid #241571",
                               borderBottom: " 0.2px solid #241571",
@@ -455,44 +506,92 @@ const index = () => {
                           />
                           <Column
                             field="deletedCodes"
-                            body={(data) =>
-                              moment(data.dueDate).format("MM-DD-YYYY")
-                            }
-                            sortable
-                            header="Deleted Codes"
+                            header="Deleted "
+                            body={(data) => (
+                              <div>
+                                {data.deletedCodes ? (
+                                  <span>{data.deletedCodes}</span>
+                                ) : (
+                                  <span>0</span>
+                                )}
+                              </div>
+                            )}
                             bodyStyle={{
                               borderTop: " 0.2px solid #241571",
                               borderBottom: " 0.2px solid #241571",
                             }}
                           />
                           <Column
-                            field="totalIcdCodes"
-                            body={(data) =>
-                              moment(data.dueDate).format("MM-DD-YYYY hh:MM:A")
-                            }
-                            sortable
-                            header="Total ICD Codes"
+                            field="totalCodes"
+                            header="Total Codes"
+                            body={(data) => (
+                              <div>
+                                {data.deletedCodes ? (
+                                  <span>{data.deletedCodes}</span>
+                                ) : (
+                                  <span>0</span>
+                                )}
+                              </div>
+                            )}
                             bodyStyle={{
                               borderTop: " 0.2px solid #241571",
                               borderBottom: " 0.2px solid #241571",
                             }}
                           />
- <Column
-  field="quality"
-  header="Quality"
-  body={(data) => (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-     
-       <Progress type="circle" percent={50} size={30} />
+                          <Column
+                            field="dateReceived"
+                            body={(data) =>
+                              moment(data.dueDate).format("MM-DD-YYYY hh:MM:A")
+                            }
+                            sortable
+                            header="Date Received"
+                            bodyStyle={{
+                              borderTop: " 0.2px solid #241571",
+                              borderBottom: " 0.2px solid #241571",
+                            }}
+                          />
+                          <Column
+                            field="quality"
+                            header="Quality"
+                            body={(data) => {
+                              const percentage = 40; // Replace with the actual percentage from your data
+                              const color = calculateColor(percentage);
 
-    </div>
-  )}
-  bodyStyle={{
-    borderTop: "0.2px solid #241571",
-    borderBottom: "0.2px solid #241571",
-  }}
-/>
-
+                              return (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <CircularProgressbar
+                                    value={percentage}
+                                    text={`${percentage}%`}
+                                    styles={{
+                                      root: { width: 40 },
+                                      path: {
+                                        stroke: color,
+                                        strokeLinecap: "butt",
+                                        transition:
+                                          "stroke-dashoffset 0.5s ease 0s",
+                                      },
+                                      trail: {
+                                        stroke: "#D9D9D9",
+                                      },
+                                      text: {
+                                        fill: "#000000",
+                                        fontSize: "30px",
+                                      },
+                                    }}
+                                  />
+                                </div>
+                              );
+                            }}
+                            bodyStyle={{
+                              borderTop: "0.2px solid #241571",
+                              borderBottom: "0.2px solid #241571",
+                            }}
+                          />
 
                           <Column
                             field="comments"
@@ -500,9 +599,12 @@ const index = () => {
                               <div>
                                 <input
                                   type="text"
-                                  value={data.comments} // Assuming 'comments' is the field in your data
-                                  placeholder="Add Comment"
-                                  style={{ width: "100%", padding: "5px" }}
+                                  onClick={() => setModal(true)}
+                                  value={
+                                    data.comments ||
+                                    "Lorem Ipsum is simp........"
+                                  }
+                                  className={styles.comments}
                                 />
                               </div>
                             )}
@@ -512,14 +614,39 @@ const index = () => {
                               borderBottom: " 0.2px solid #241571",
                             }}
                           />
-                        <Column
+
+                          <Column
                             field="patientName"
                             header="Coder Name"
                             bodyStyle={{
                               borderTop: " 0.2px solid #241571",
                               borderBottom: " 0.2px solid #241571",
-                              borderRight: " 0.2px solid #241571",
-
+                            }}
+                          />
+                          <Column
+                            field="patientName"
+                            header="Flag"
+                            body={(data, { rowIndex }) => (
+                              <div>
+                                {flagStates[rowIndex] ? (
+                                  <span
+                                    onClick={() => handleFlagClick(rowIndex)}
+                                  >
+                                    {SVGICON.redFlag}
+                                  </span>
+                                ) : (
+                                  <span
+                                    onClick={() => handleFlagClick(rowIndex)}
+                                  >
+                                    {SVGICON.flag}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                            bodyStyle={{
+                              borderTop: "0.2px solid #241571",
+                              borderBottom: "0.2px solid #241571",
+                              borderRight: "0.2px solid #241571",
                             }}
                           />
                         </DataTable>
@@ -531,6 +658,72 @@ const index = () => {
                             onPageChange={onPageChange}
                           />
                         </div>
+                        {modal && (
+                          <Modal
+                            title="Comments"
+                            centered
+                            open={modal}
+                            onOk={handleCloseModal}
+                            onCancel={handleCloseModal}
+                            footer={null}
+                          >
+                            <div className="offcanvas-body">
+                              <div className="container-fluid">
+                                <div className={styles.heads}>
+                                  <span className={styles.headText}>
+                                    Hcc codes
+                                  </span>
+                                </div>
+                                <div className={styles.data}>
+                                  <div className={styles.datas}>Visit Data</div>
+                                  <div className={styles.description}>
+                                    Lorem Ipsum is simply dummy text of the
+                                    printing and typesetting industry.
+                                  </div>
+                                </div>
+                                <div className={styles.data}>
+                                  <div className={styles.datas}>
+                                    Combination codes
+                                  </div>
+                                  <div className={styles.description}>
+                                    Lorem Ipsum is simply dummy text of the
+                                    printing and typesetting industry.
+                                  </div>
+                                </div>
+                                <div className={styles.data}>
+                                  <div className={styles.datas}>
+                                    M.E.A.T criteria
+                                  </div>
+                                  <div className={styles.description}>
+                                    Lorem Ipsum is simply dummy text of the
+                                    printing and typesetting industry.
+                                  </div>
+                                </div>
+                                <div className={styles.heads}>
+                                  <span className={styles.headText}>
+                                    Radiology{" "}
+                                  </span>
+                                </div>
+                                <div className={styles.data}>
+                                  <div className={styles.datas}>Visit Data</div>
+                                  <div className={styles.description}>
+                                    Lorem Ipsum is simply dummy text of the
+                                    printing and typesetting industry.
+                                  </div>
+                                </div>
+                                <div className={styles.data}>
+                                  <div className={styles.datas}>
+                                    Combination codes
+                                  </div>
+                                  <div className={styles.description}>
+                                    Lorem Ipsum is simply dummy text of the
+                                    printing and typesetting industry.
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </Modal>
+                        )}
                       </div>
                     </div>
                   </div>

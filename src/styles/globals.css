@@ -52154,7 +52154,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 
 table>thead {
   /* background-color: #222b40 !important; */
-  background-color: #241571 !important;
+  background-color: #133DD4 !important;
   /* background-color: #f8f9fa !important; */
   border-radius: 10px !important;
 }
@@ -52596,6 +52596,7 @@ form#step-form-horizontal .form-group .text-label {
 * {
   font-family: "Poppins", sans-serif !important;
   /* font-family: "Roboto", sans-serif !important; */
+
 
 }
 

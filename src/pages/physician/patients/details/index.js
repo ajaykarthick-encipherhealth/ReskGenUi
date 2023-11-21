@@ -2971,7 +2971,7 @@ export default function PatientDetails() {
                                     setIsValidAction("holdFunction")
                                   }}
                                 >
-                                  {/* <FontAwesomeIcon
+                                  {/* <FontAwesomeIconhold
                                     icon={faCheck}
                                     className="me-2 mt-1"
                                     fontSize={14}
