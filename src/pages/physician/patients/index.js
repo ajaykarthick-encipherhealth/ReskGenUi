@@ -190,9 +190,9 @@ export default function Patient() {
       // console.log(newArray)
       setIsLoading(false);
       setTableLoading(false)
-        setTimeout(() => {
-        subscribe(resultMap);
-    }, 3000);
+    //     setTimeout(() => {
+    //     subscribe(resultMap);
+    // }, 3000);
     }
   }
 

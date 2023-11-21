@@ -1,6 +1,6 @@
-.container_fluid_patient {
-    /* margin-top: 100px !important; */
-}
+/* .container_fluid_patient {
+    margin-top: 100px !important;
+} */
 
 .patient_info_details svg {
     width: 25px;
@@ -14,43 +14,94 @@
 
 }
 
-.visitdata_header_card > ul.nav.nav-pills.mix-chart-tab.nav {
+.visitdata_header_card>ul.nav.nav-pills.mix-chart-tab.nav {
     margin-top: -5px;
 }
 
-.visitdata_header_card > ul > li > .nav-link.active {
+.visitdata_header_card>ul>li>.nav-link.active {
     border-radius: 12px !important;
     width: 80px !important;
     text-align: center;
 }
 
 .visitdata_header_card2 .nav-item .nav-link {
-   color: #221C1C !important;
+    color: #221C1C !important;
 }
 
 .visitdata_header_card2 .nav-item .nav-link.active {
     border-bottom: 3px solid #A20404 !important;
 }
-.hcc_title_card{
-border-radius: 12px;
-background: #EBFFEB;
-margin-bottom: 10px;
+
+.hcc_title_card {
+    border-radius: 12px;
+    background: #E1FFE0;
+    margin-bottom: 10px;
 }
-.hcc_title_name{   
+
+.hcc_title_name {
     padding: 15px;
     border-radius: 10px;
 
 }
 
-.hcc_title_badge{
-    background: #04306F;
+.hcc_title_badge {
+    background: #04B700;
     padding: 15px;
     border-radius: 12px;
     width: 55px;
     text-align: center;
     color: #fff;
     color: #FFF;
-   font-size: 14px;
+    font-size: 14px;
+
+}
+
+.suggested_title_card {
+    border-radius: 12px;
+    background: #FFF1E0;
+    margin-bottom: 10px;
+}
+
+.suggested_title_name {
+    padding: 15px;
+    border-radius: 10px;
+
+}
+
+.suggested_title_badge {
+    background: #FF9209;
+    padding: 15px;
+    border-radius: 12px;
+    width: 55px;
+    text-align: center;
+    color: #fff;
+    color: #FFF;
+    font-size: 14px;
+
+}
+
+
+.deleted_title_card {
+    border-radius: 12px;
+    background: #F9E7E9;
+    margin-bottom: 10px;
+}
+
+.deleted_title_name {
+    padding: 15px;
+    border-radius: 10px;
+
+}
+
+.deleted_title_badge {
+    background: #BE3144;
+    padding: 15px;
+    border-radius: 12px;
+    width: 55px;
+    text-align: center;
+    color: #fff;
+    color: #FFF;
+    font-size: 14px;
 
 }
 
@@ -60,4 +111,76 @@ margin-bottom: 10px;
     border-radius: 0.625rem;
     position: relative;
     transition: all 0.5s;
+}
+
+.actionbtnContainer {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.declineBtn {
+    border-radius: 8px !important;
+    border: 1px solid #DB1A1A !important;
+    background: rgba(250, 209, 209, 0.30) !important;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+    color: #DB1A1A !important;
+    width: 140px;
+
+}
+
+.declineBtn i,
+.holdBtn i,
+.completedBtn i {
+    margin-right: 5px;
+}
+
+.declineBtn i {
+    position: relative;
+    top: -0.8px;
+
+}
+
+.holdBtn {
+    border-radius: 8px !important;
+    border: 1px solid #BCA7FB !important;
+    background: rgba(218, 206, 253, 0.30) !important;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+    color: #BCA7FB !important;
+    width: 140px;
+
+
+}
+
+.completedBtn {
+    border-radius: 8px !important;
+    border: 1px solid #46C263 !important;
+    background: rgba(217, 242, 223, 0.30) !important;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+    color: #46C263 !important;
+    width: 140px;
+}
+.flag_container{
+width: 45px;
+height: 546px;
+border-radius: 8px;
+background: #E1EDFE;
+float: right;
+box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+margin-bottom: 25px;
+
+}
+
+.flag_container ul{
+    margin-top: 15px;
+    padding: 10px;
+}
+.flag_container li i{
+   
+}
+.flag_container li i{
+    height: 50px;
+    display: flex
+
 }
