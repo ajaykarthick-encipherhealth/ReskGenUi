@@ -371,7 +371,7 @@ export default function PatientDetails() {
         })
 
         // const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        // setSelectedDosValue(highestDOS);
+        setSelectedDosValue(dosYearArr[0].value);
 
         // const highestDosValue = dosYearArr.filter(
         //   (i) => parseInt(i.value) === highestDOS
@@ -2433,6 +2433,7 @@ export default function PatientDetails() {
   };
 
   const handleSubmitMoveValidToDeleted = async () => {
+    console.log(selectedDosValue)
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -3101,7 +3102,7 @@ export default function PatientDetails() {
                                                 (data, i) => (
                                                   <li>
                                                     <div className={`${visitStyles.hcc_card}`}>
-                                                      <div className="timeline-panel">
+                                                      <div className={`${visitStyles.hcc_card_nameHead}`}>
                                                         <div
                                                           className="media-body"
                                                           onClick={() =>
@@ -3273,7 +3274,7 @@ export default function PatientDetails() {
                                                         true ? (
                                                         <li>
                                                           <div className={`${visitStyles.hcc_card}`}>
-                                                            <div className="timeline-panel">
+                                                          <div className={`${visitStyles.hcc_card_nameHead}`}>
                                                               <div
                                                                 className="media-body"
                                                                 onClick={() =>
@@ -3445,7 +3446,7 @@ export default function PatientDetails() {
                                                 (data, i) => (
                                                   <li>
                                                     <div className={`${visitStyles.hcc_card}`}>
-                                                      <div className="timeline-panel">
+                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
                                                         <div className="media-body">
                                                           <span className="mb-1 disease-name d-flex">
                                                             <span className="valid-dis-name">
@@ -4409,10 +4410,10 @@ export default function PatientDetails() {
                                   <Tab.Pane id="my-posts" eventKey="RafScore">
                                     <div className="my-post-content pt-3">
                                       <div className="row">
-                                        <div className="col-xl-3">                                          
-                                        </div>
+                                       
                                         {rafScore != null ? (
-                                          <div className="col-xl-12">
+                                          <>
+                                            <div className="col-xl-10">
                                             {rafScore.scoreOutputDTOList !=
                                               null ? (
                                               <>
@@ -4420,7 +4421,7 @@ export default function PatientDetails() {
                                                   (rafScoreMapResult) => {
                                                     return (
                                                       <div className="row raf-main-card">
-                                                        <div className="col-xl-6">
+                                                        {/* <div className="col-xl-3">
                                                           <div className="card">
                                                             <div className="raf-card">
                                                               <div className="row raf-head text-center">
@@ -4452,8 +4453,8 @@ export default function PatientDetails() {
                                                               </div>
                                                             </div>
                                                           </div>
-                                                        </div>
-                                                        <div className="col-xl-6">
+                                                        </div> */}
+                                                        <div className="col-xl-4">
                                                           <div className="card">
                                                             <div className="raf-card">
                                                               <div className="row raf-head">
@@ -4495,7 +4496,7 @@ export default function PatientDetails() {
                                                             </div>
                                                           </div>
                                                         </div>
-                                                        <div className="col-xl-6">
+                                                        <div className="col-xl-4">
                                                           <div className="card">
                                                             <div className="raf-card">
                                                               <div className="row raf-head">
@@ -4542,7 +4543,7 @@ export default function PatientDetails() {
                                                             </div>
                                                           </div>
                                                         </div>
-                                                        <div className="col-xl-6">
+                                                        <div className="col-xl-4">
                                                           <div className="card">
                                                             <div className="raf-card">
                                                               <div className="row raf-head">
@@ -4606,6 +4607,9 @@ export default function PatientDetails() {
                                                 )}
                                               </>
                                             ) : null}
+                                              </div>
+
+                                            <div className="col-xl-2">
 
                                             <div className="row raf-main-card">
                                               <div className="raf-name-head">
@@ -4679,7 +4683,8 @@ export default function PatientDetails() {
                                                 </div>
                                               </div>
                                             </div>
-                                          </div>
+                                            </div>
+                                          </>
                                         ) : null}
                                         {rafScore == null ? (
                                           <div className="card box-shadow-none">
@@ -4826,7 +4831,7 @@ export default function PatientDetails() {
                                                 (data, i) => (
                                                   <li>
                                                     <div className={`${visitStyles.hcc_card}`}>
-                                                      <div className="timeline-panel">
+                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
                                                         <div
                                                           className="media-body"
                                                           onClick={() =>
@@ -6126,7 +6131,7 @@ export default function PatientDetails() {
                                                 (data, i) => (
                                                   <li>
                                                     <div className={`${visitStyles.hcc_card}`}>
-                                                      <div className="timeline-panel">
+                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
                                                         <div
                                                           className="media-body"
                                                           onClick={() =>
@@ -6272,7 +6277,7 @@ export default function PatientDetails() {
                                                 (data, i) => (
                                                   <li>
                                                     <div className={`${visitStyles.hcc_card}`}>
-                                                      <div className="timeline-panel">
+                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
                                                         <div className="media-body">
                                                           <span className="mb-1 disease-name d-flex">
                                                             <span className="valid-dis-name">
@@ -7059,7 +7064,7 @@ export default function PatientDetails() {
                                                 (data, i) => (
                                                   <li>
                                                     <div className={`${visitStyles.hcc_card}`}>
-                                                      <div className="timeline-panel">
+                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
                                                         <div
                                                           className="media-body"
                                                           onClick={() =>

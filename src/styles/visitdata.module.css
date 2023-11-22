@@ -112,6 +112,10 @@
     position: relative;
     transition: all 0.5s;
 }
+.hcc_card > .timeline-panel{
+  display: flex;
+  margin: 20px !important;
+}
 
 .actionbtnContainer {
     text-align: center;
@@ -126,7 +130,7 @@
     background: rgba(250, 209, 209, 0.30) !important;
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
     color: #DB1A1A !important;
-    width: 140px;
+    width: 160px;
 
 }
 
@@ -148,7 +152,7 @@
     background: rgba(218, 206, 253, 0.30) !important;
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
     color: #BCA7FB !important;
-    width: 140px;
+    width: 160px;
 
 
 }
@@ -159,7 +163,7 @@
     background: rgba(217, 242, 223, 0.30) !important;
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
     color: #46C263 !important;
-    width: 140px;
+    width: 170px;
 }
 
 .flag_container {
@@ -219,6 +223,10 @@
     background: #FEE1E1;
     text-align: center;
     margin-left: 3px;
+    margin-top: 3px;
+}
+.close_icon svg{
+    vertical-align: baseline !important;
 }
 
 .tick_icon {
@@ -235,6 +243,7 @@
     background: #E1EDFE;
     padding: 15px 15px 15px 15px;
     margin-bottom: 15px;
+    font-size: 14px;
 }
 
 .combo_details_card {
@@ -325,4 +334,9 @@
     justify-content: center;
     border-radius: 4px;
     display: flex
+}
+
+.hcc_card_nameHead{
+    display: flex;
+    margin: 10px;
 }
