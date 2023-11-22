@@ -363,7 +363,7 @@ export default function Patient() {
           // 'Cache-Control': 'no-cache',
           // 'Connection': 'keep-alive',
           // 'Accept': "text/event-stream",
-          // 'Access-Control-Allow-Origin':"*"
+          'Access-Control-Allow-Origin':"*"
         },
         withCredentials: true,
         onopen(res) {
