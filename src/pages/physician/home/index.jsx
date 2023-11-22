@@ -146,7 +146,7 @@ const Screen = () => {
     
       .text-screen{
         color: #2C353D;
-        font-family: Roboto;
+        font-family: 'Manrope', sans-serif !important;
         font-size: 26px;
         font-style: normal;
         font-weight: 400;

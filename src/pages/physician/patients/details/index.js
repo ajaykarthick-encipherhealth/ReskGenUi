@@ -160,8 +160,8 @@ export default function PatientDetails() {
     patientId: "",
     notes: "",
     diagnosisCode: "",
-    actualDescription: '',
-    capturedSections: '',
+    actualDescription: "",
+    capturedSections: "",
     encodedDate: "",
   });
 
@@ -216,12 +216,10 @@ export default function PatientDetails() {
 
   const [buttonClicked, setButtonClicked] = useState(false);
   const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
-  const [isValidAction, setIsValidAction] = useState('');
+  const [isValidAction, setIsValidAction] = useState("");
   const [deletedHccList, setDeletedHccList] = useState([]);
   const [isModalComments, setIsModalComments] = useState(false);
   const [flagContainerActive, setFlagContainerActive] = useState("");
-
-
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -230,7 +228,7 @@ export default function PatientDetails() {
   const handleChange = async (e) => {
     const key = e.target.name;
     if (key == "diagnosisCode") {
-      getFindValidDiagnosisCode(e.target.value)
+      getFindValidDiagnosisCode(e.target.value);
     }
 
     const value = e.target.value;
@@ -303,7 +301,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
     }
@@ -336,7 +334,7 @@ export default function PatientDetails() {
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       var result = response.data;
@@ -368,7 +366,7 @@ export default function PatientDetails() {
 
         result.encounterYears.map((res) => {
           dosYearArr.push({ value: res, label: res });
-        })
+        });
 
         // const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
         setSelectedDosValue(dosYearArr[0].value);
@@ -378,7 +376,7 @@ export default function PatientDetails() {
         // );
         setDosYearDefalutSelect(dosYearArr[0]);
 
-        console.log(dosYearArr)
+        console.log(dosYearArr);
 
         if (result.rafScore != null) {
           rafScore = result.rafScore;
@@ -391,7 +389,6 @@ export default function PatientDetails() {
         invalidDiseaseNewRes = result.invalidDisease;
         if (result.deletedDiseases != null) {
           deleteHccList = result.deletedDiseases;
-
         }
         if (result.suggestRadiology != null) {
           // var checkDosRadio = [];
@@ -426,7 +423,6 @@ export default function PatientDetails() {
         }
 
         if (result.unMatchedDisease != null) {
-
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
             if (res.isHccValid == true) {
@@ -461,7 +457,6 @@ export default function PatientDetails() {
             }
           });
         }
-
 
         invalidDis = result.invalidDisease;
         comboDis = result.comboDisease;
@@ -514,10 +509,10 @@ export default function PatientDetails() {
         // setMeatCriteriaList(meatCri);
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
-        console.log(suggestListAllNonHcc)
+        console.log(suggestListAllNonHcc);
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
-        setDeletedHccList(deleteHccList)
+        setDeletedHccList(deleteHccList);
 
         const COLORS = [
           "bg-bg-seven",
@@ -670,7 +665,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       setRadiologyResCheck(true);
@@ -1035,7 +1030,7 @@ export default function PatientDetails() {
     // }
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
     );
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
@@ -1211,7 +1206,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
     if (response.data.labFileDetail != null) {
@@ -1277,12 +1272,12 @@ export default function PatientDetails() {
   const getPatientPdfFile = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
       setSelectFileURL(response.data);
-      setSelectFileURLValid(response.data)
+      setSelectFileURLValid(response.data);
       setIsLoading(false);
       setIsLoadingDos(false);
       fetch(response.data)
@@ -1307,7 +1302,7 @@ export default function PatientDetails() {
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
@@ -1328,7 +1323,7 @@ export default function PatientDetails() {
   const getLabReportFiles = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
@@ -1354,45 +1349,73 @@ export default function PatientDetails() {
 
   const confirmvalid = () =>
     new Promise((resolve) => {
-      setTimeout(() => resolve(
-        setConfirmNotesModalValid(true),
-        setIsValidAction("validToDeleted")
-      ), 1000);
+      setTimeout(
+        () =>
+          resolve(
+            setConfirmNotesModalValid(true),
+            setIsValidAction("validToDeleted")
+          ),
+        1000
+      );
     });
 
   const validToSuggested = () =>
     new Promise((resolve) => {
-      setTimeout(() => resolve(setConfirmNotesModalValid(true),
-        setIsValidAction("validToSuggested")
-      ), 1000);
+      setTimeout(
+        () =>
+          resolve(
+            setConfirmNotesModalValid(true),
+            setIsValidAction("validToSuggested")
+          ),
+        1000
+      );
     });
 
   const suggestedToValid = () =>
     new Promise((resolve) => {
-      setTimeout(() => resolve(setConfirmNotesModalValid(true),
-        setIsValidAction("suggestedToValid")
-      ), 1000);
+      setTimeout(
+        () =>
+          resolve(
+            setConfirmNotesModalValid(true),
+            setIsValidAction("suggestedToValid")
+          ),
+        1000
+      );
     });
   const suggestedToDeleted = () =>
     new Promise((resolve) => {
-      setTimeout(() => resolve(setConfirmNotesModalValid(true),
-        setIsValidAction("suggestedToDeleted")
-      ), 1000);
+      setTimeout(
+        () =>
+          resolve(
+            setConfirmNotesModalValid(true),
+            setIsValidAction("suggestedToDeleted")
+          ),
+        1000
+      );
     });
 
   const deletedToSuggested = () =>
     new Promise((resolve) => {
-      setTimeout(() => resolve(setConfirmNotesModalValid(true),
-        setIsValidAction("deletedToSuggested")
-      ), 1000);
+      setTimeout(
+        () =>
+          resolve(
+            setConfirmNotesModalValid(true),
+            setIsValidAction("deletedToSuggested")
+          ),
+        1000
+      );
     });
   const deletedToValid = () =>
     new Promise((resolve) => {
-      setTimeout(() => resolve(setConfirmNotesModalValid(true),
-        setIsValidAction("deletedToValid")
-      ), 1000);
+      setTimeout(
+        () =>
+          resolve(
+            setConfirmNotesModalValid(true),
+            setIsValidAction("deletedToValid")
+          ),
+        1000
+      );
     });
-
 
   const confirmInvalid = () =>
     new Promise((resolve) => {
@@ -1590,7 +1613,6 @@ export default function PatientDetails() {
     // Add any additional logic for closing the form if needed
   };
 
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setIsModalOpenValid(false);
@@ -1606,7 +1628,7 @@ export default function PatientDetails() {
     setConfirmNotesModalDecline(false);
     setIsAddButtonClicked(false);
     setIsModalComments(false);
-    setFlagContainerActive('');
+    setFlagContainerActive("");
   };
   const handleOpenModal = (value, disDescription) => {
     var splitPoint = disDescription.substring(" ", 40);
@@ -1821,7 +1843,6 @@ export default function PatientDetails() {
       //   var meatCri = "";
       //   var rafScore = null;
       //   var result = patientDetails;
-
       //   validDiseaseNewRes = result.validDisease[dosKeyValue];
       //   invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
       //   comboDis = result.comboDisease[dosKeyValue];
@@ -1829,12 +1850,10 @@ export default function PatientDetails() {
       //   if (result.rafScore != null) {
       //     rafScore = result.rafScore[dosKeyValue];
       //   }
-
       //   setNewValidDiseaseList(validDiseaseNewRes);
       //   setInNewValidDiseaseList(invalidDiseaseNewRes);
       //   setComboDiseaseCodesList(comboDis);
       //   setRAFScore(rafScore);
-
       //   const COLORS = [
       //     "bg-bg-seven",
       //     "bg-third",
@@ -1844,7 +1863,6 @@ export default function PatientDetails() {
       //     "bg-bg-eight",
       //     "bg-bg-nine",
       //   ];
-
       //   var meatListArr = [];
       //   var nonHccMeatListArr = [];
       //   var meatMoniterHead = [];
@@ -1855,7 +1873,6 @@ export default function PatientDetails() {
       //   var allMeatHeadColorArr = [];
       //   var allMeatHeadColor = [];
       //   var dublicateRemoveSecondArr = [];
-
       //   meatCri.map((res, index) => {
       //     if (res.monitorCapturedFromHeader != "") {
       //       meatMoniterHead.push({
@@ -1893,11 +1910,9 @@ export default function PatientDetails() {
       //       });
       //     });
       //     allMeatHeadColorArr = allMeatHeadColor;
-
       //     dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
       //     setMeatColorCodeList(dublicateRemoveSecondArr);
       //   });
-
       //   meatCri.map((res, index) => {
       //     if (res.category == "Invalid") {
       //       nonHccMeatListArr.push({
@@ -1971,7 +1986,6 @@ export default function PatientDetails() {
       //   setMeatCriteriaListNonHcc(nonHccMeatListArr);
       //   setIsLoading(false);
       // }
-
       // if (activeTab == 3) {
       //   var validDiseaseNewRes = [];
       //   var invalidDiseaseNewRes = [];
@@ -1979,7 +1993,6 @@ export default function PatientDetails() {
       //   var comboDis = "";
       //   var meatCri = "";
       //   var result = patientDetailsRadiology;
-
       //   validDiseaseNewRes = result.validDisease[dosKeyValue];
       //   invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
       //   unmatchedDiseaseRes = result.unmatchedDisease[dosKeyValue];
@@ -1989,15 +2002,12 @@ export default function PatientDetails() {
       //     var fileDetails = result.radiologyFileDetail[dosKeyValue];
       //     getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, localTenantId);
       //   }
-
       //   if (result.unmatchedDisease != null) {
       //     setUnMatchHccListRadiology(unmatchedDiseaseRes);
       //   }
-
       //   setNewValidDiseaseListRadiology(validDiseaseNewRes);
       //   setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
       //   setComboDiseaseCodesListRadiology(comboDis);
-
       //   const COLORS = [
       //     "bg-bg-seven",
       //     "bg-third",
@@ -2007,7 +2017,6 @@ export default function PatientDetails() {
       //     "bg-bg-eight",
       //     "bg-bg-nine",
       //   ];
-
       //   var meatListArr = [];
       //   var meatMoniterHead = [];
       //   var meatEvaluteHead = [];
@@ -2017,7 +2026,6 @@ export default function PatientDetails() {
       //   var allMeatHeadColorArr = [];
       //   var allMeatHeadColor = [];
       //   var dublicateRemoveSecondArr = [];
-
       //   meatCri.map((res, index) => {
       //     if (res.monitorCapturedFromHeader != "") {
       //       meatMoniterHead.push({
@@ -2055,11 +2063,9 @@ export default function PatientDetails() {
       //       });
       //     });
       //     allMeatHeadColorArr = allMeatHeadColor;
-
       //     dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
       //     setMeatColorCodeList(dublicateRemoveSecondArr);
       //   });
-
       //   meatCri.map((res, index) => {
       //     meatListArr.push({
       //       diagnosisCode: res.diagnosisCode,
@@ -2191,7 +2197,7 @@ export default function PatientDetails() {
     setInputValue({ ...inputValue, [key]: value });
   };
 
-  const openModelDbDescription = () => { };
+  const openModelDbDescription = () => {};
 
   const tabList = [
     { title: "HCC", type: "HCC" },
@@ -2290,7 +2296,7 @@ export default function PatientDetails() {
     };
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `aiservice/ai/upload/radiology
+        `aiservice/ai/upload/radiology
       `,
       formData,
       headers
@@ -2320,7 +2326,7 @@ export default function PatientDetails() {
     };
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `aiservice/ai/upload/lab
+        `aiservice/ai/upload/lab
       `,
       formData,
       headers
@@ -2406,9 +2412,6 @@ export default function PatientDetails() {
     setvalidHccDetails(data);
   };
 
-
-
-
   const handleSubmitMoveValidToSuggested = async () => {
     var dataFormatSuggested = {
       userId: localUserId,
@@ -2420,7 +2423,8 @@ export default function PatientDetails() {
       dos: selectedDosValue,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/validtosuggested`,
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `dbservice/update/move/validtosuggested`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2433,7 +2437,7 @@ export default function PatientDetails() {
   };
 
   const handleSubmitMoveValidToDeleted = async () => {
-    console.log(selectedDosValue)
+    console.log(selectedDosValue);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -2444,7 +2448,8 @@ export default function PatientDetails() {
       dos: selectedDosValue,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/validtodeleted`,
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `dbservice/update/move/validtodeleted`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2467,7 +2472,8 @@ export default function PatientDetails() {
       dos: selectedDosValue,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestedtodeleted`,
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `dbservice/update/move/suggestedtodeleted`,
       [dataFormatSuggested]
     );
     if (response?.status == 202) {
@@ -2490,7 +2496,8 @@ export default function PatientDetails() {
       dos: selectedDosValue,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/suggestedtovalid`,
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `dbservice/update/move/suggestedtovalid`,
       [dataFormatSuggested]
     );
     if (response?.status == 202) {
@@ -2513,7 +2520,8 @@ export default function PatientDetails() {
       dos: selectedDosValue,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/deletedtovalid`,
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `dbservice/update/move/deletedtovalid`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2535,7 +2543,8 @@ export default function PatientDetails() {
       dos: selectedDosValue,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/deletedtoSuggested`,
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `dbservice/update/move/deletedtoSuggested`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2558,7 +2567,8 @@ export default function PatientDetails() {
       dos: selectedDosValue,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc + `dbservice/update/move/invalidtovalid`,
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2634,7 +2644,7 @@ export default function PatientDetails() {
       rafScore: patientDocumentResult.rafScore,
       dosFiltered: patientDocumentResult.dosFiltered,
       fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: deletedObject
+      deletedDiseases: deletedObject,
     };
 
     try {
@@ -2671,7 +2681,6 @@ export default function PatientDetails() {
     meatObject[dos] = meatCriteriaList;
     deletedObject[dos] = deletedHccList;
 
-
     var postData = {
       userId: localUserId,
       patientId: localPatientId,
@@ -2690,7 +2699,7 @@ export default function PatientDetails() {
       rafScore: patientDocumentResult.rafScore,
       dosFiltered: patientDocumentResult.dosFiltered,
       fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: deletedObject
+      deletedDiseases: deletedObject,
     };
 
     try {
@@ -2761,11 +2770,9 @@ export default function PatientDetails() {
     }
   };
 
-
   const handleSubmitHccDecline = async () => {
-    setIsValidAction("declineFunction")
+    setIsValidAction("declineFunction");
     setConfirmNotesModalHold(true);
-
   };
 
   const getFindValidDiagnosisCode = async (value) => {
@@ -2773,10 +2780,10 @@ export default function PatientDetails() {
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
+        `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
     );
     if (response.data) {
-      console.log(response.data)
+      console.log(response.data);
     }
   };
 
@@ -2785,21 +2792,22 @@ export default function PatientDetails() {
     var dos = dosYearDefalutSelect.label;
     event.preventDefault();
     var dataFormatSuggested = {
-      "patientComputeDetailId": localPatientId,
-      "year": dos,
-      "diseaseFormats": [
+      patientComputeDetailId: localPatientId,
+      year: dos,
+      diseaseFormats: [
         {
-          "diagnosisCode": inputValue.diagnosisCode,
-          "actualDescription": inputValue.actualDescription,
-          "encounterDate": inputValue.encodedDate,
-          "capturedSections": [inputValue.capturedSections]
-        }
-      ]
-    }
+          diagnosisCode: inputValue.diagnosisCode,
+          actualDescription: inputValue.actualDescription,
+          encounterDate: inputValue.encodedDate,
+          capturedSections: [inputValue.capturedSections],
+        },
+      ],
+    };
 
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/compute/addvaliddisease`,
+        ENDPOINTS.apiEndointFileUploadHcc +
+          `dbservice/patient/compute/addvaliddisease`,
         dataFormatSuggested
       );
       if (response?.status == 200) {
@@ -2809,11 +2817,9 @@ export default function PatientDetails() {
         setIsModalOpenValidCodes(false);
         getPatientDetails(localOrgId, localTenantId);
         handleCloseForm();
-
       } else {
       }
-    } catch (e) {
-    }
+    } catch (e) {}
     // Add logic for handling form submission
     // You can access the form data and perform actions accordingly
     // For example, you can access the input field values using refs or state
@@ -2823,8 +2829,7 @@ export default function PatientDetails() {
   const addComments = (value) => {
     setIsModalComments(true);
     setFlagContainerActive(value);
-
-  }
+  };
 
   const flagList = [
     {
@@ -2845,9 +2850,6 @@ export default function PatientDetails() {
     },
   ];
 
-
-
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -2856,7 +2858,9 @@ export default function PatientDetails() {
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <div className={`container-fluid ${visitStyles.container_fluid_patient}`}>
+            <div
+              className={`container-fluid ${visitStyles.container_fluid_patient}`}
+            >
               <div className="row card patient-file-container">
                 <div className="col-xl-12">
                   <div className="row">
@@ -2872,7 +2876,8 @@ export default function PatientDetails() {
                               </h6>
                             </div>
                             <div className="col-xl-2 col-sm-12">
-                              <i>{SVGICON.patientNameIcon}</i> <label>Name</label>
+                              <i>{SVGICON.patientNameIcon}</i>{" "}
+                              <label>Name</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.patientName}
                               </h6>
@@ -2914,9 +2919,7 @@ export default function PatientDetails() {
                                     onChange={(e) => dosOnChange(e)}
                                     options={dosYearRadiology}
                                     className="custom-react-select"
-                                    defaultValue={
-                                      dosYearDefalutSelectRadiology
-                                    }
+                                    defaultValue={dosYearDefalutSelectRadiology}
                                     isSearchable={false}
                                   />
                                 ) : activeTab == 4 ? (
@@ -2946,10 +2949,14 @@ export default function PatientDetails() {
                     <div className="col-xl-11">
                       <div className="row">
                         <div className="col-xl-8">
-                          <div className={`${visitStyles.visitdata_header_card}`}>
+                          <div
+                            className={`${visitStyles.visitdata_header_card}`}
+                          >
                             <div className="card-body p-0">
                               <Tab.Container defaultActiveKey={"HCC"}>
-                                <div className={`card-header border-0 flex-wrap patient-details-tab-card `}>
+                                <div
+                                  className={`card-header border-0 flex-wrap patient-details-tab-card `}
+                                >
                                   <Nav
                                     as="ul"
                                     className="nav nav-pills mix-chart-tab"
@@ -2972,12 +2979,12 @@ export default function PatientDetails() {
                                     ))}
                                   </Nav>
                                   <div>
-
                                     {activeTab == 3 ? (
                                       <div>
                                         <Button
                                           onClick={addPatientFile}
-                                          className={`ms-2 ${visitStyles.addPatientBtn}`}>
+                                          className={`ms-2 ${visitStyles.addPatientBtn}`}
+                                        >
                                           Add Patient Radiology
                                         </Button>
                                       </div>
@@ -2986,61 +2993,65 @@ export default function PatientDetails() {
                                       <div>
                                         <Button
                                           onClick={addLabReport}
-                                          className={`ms-2 ${visitStyles.addPatientBtn}`}>
+                                          className={`ms-2 ${visitStyles.addPatientBtn}`}
+                                        >
                                           Add Lab report
                                         </Button>
                                       </div>
                                     ) : null}
-
                                   </div>
                                 </div>
-
                               </Tab.Container>
                             </div>
                           </div>
-
                         </div>
-                        <div className={`col-xl-4 ${visitStyles.actionbtnContainer}`}>
+                        <div
+                          className={`col-xl-4 ${visitStyles.actionbtnContainer}`}
+                        >
                           <Button
                             onClick={handleSubmitHccDecline}
-                            className={`ms-2 ${visitStyles.declineBtn}`}>
+                            className={`ms-2 ${visitStyles.declineBtn}`}
+                          >
                             <i>{SVGICON.delclineIcon}</i>
                             {declineBtnTitle}
                           </Button>
                           <Button
                             onClick={() => {
                               setConfirmNotesModalDecline(true);
-                              setIsValidAction("holdFunction")
+                              setIsValidAction("holdFunction");
                             }}
-                            className={`ms-2 ${visitStyles.holdBtn}`}>
+                            className={`ms-2 ${visitStyles.holdBtn}`}
+                          >
                             <i>{SVGICON.holdBtnIcon}</i>
                             Hold
                           </Button>
 
                           <Button
                             onClick={handleSubmitHccComplete}
-                            className={`ms-2 ${visitStyles.completedBtn}`}>
+                            className={`ms-2 ${visitStyles.completedBtn}`}
+                          >
                             <i>{SVGICON.completedBtnIcon}</i>
 
                             {completedBtnTitle}
                           </Button>
-
-
-
                         </div>
                       </div>
 
                       {activeTab == 1 ? (
                         <div className={visitStyles.visitdata_tab_body}>
-                          <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
-                            <div className="custom-tab-1 "  >
+                          <div
+                            className={`profile-tab ${visitStyles.visitdata_header_card2}`}
+                          >
+                            <div className="custom-tab-1 ">
                               <Tab.Container defaultActiveKey={activeTabHead}>
                                 <Nav as="ul" className="nav nav-tabs">
-
                                   <Nav.Item as="li" className="nav-item">
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="validDiseases"
+                                     
+                                      className={visitStyles.navColor}
+                                      activeClassName={visitStyles.activeLink}
                                     >
                                       Visit Data
                                     </Nav.Link>
@@ -3049,6 +3060,7 @@ export default function PatientDetails() {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="comboDiseases"
+                                      className={visitStyles.navColor}
                                     >
                                       Combination Codes
                                     </Nav.Link>
@@ -3057,6 +3069,7 @@ export default function PatientDetails() {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="meatCriteria"
+                                      className={visitStyles.navColor}
                                     >
                                       MEAT Criteria
                                     </Nav.Link>
@@ -3065,12 +3078,14 @@ export default function PatientDetails() {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="RafScore"
+                                      className={visitStyles.navColor}
                                     >
                                       RAF Score
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="file">
+                                    <Nav.Link to="#my-posts" eventKey="file"
+                                     className={visitStyles.navColor}>
                                       File
                                     </Nav.Link>
                                   </Nav.Item>
@@ -3085,14 +3100,18 @@ export default function PatientDetails() {
                                         <div className="row">
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.hcc_title_name}`}
                                                 >
                                                   HCC
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.hcc_title_badge}`}>
+                                                  <span
+                                                    className={`${visitStyles.hcc_title_badge}`}
+                                                  >
                                                     {newValidDiseaseList.length}
                                                   </span>
                                                 </div>
@@ -3101,8 +3120,12 @@ export default function PatientDetails() {
                                               {newValidDiseaseList.map(
                                                 (data, i) => (
                                                   <li>
-                                                    <div className={`${visitStyles.hcc_card}`}>
-                                                      <div className={`${visitStyles.hcc_card_nameHead}`}>
+                                                    <div
+                                                      className={`${visitStyles.hcc_card}`}
+                                                    >
+                                                      <div
+                                                        className={`${visitStyles.hcc_card_nameHead}`}
+                                                      >
                                                         <div
                                                           className="media-body"
                                                           onClick={() =>
@@ -3142,9 +3165,10 @@ export default function PatientDetails() {
                                                           placement="bottom"
                                                           trigger="click"
                                                         >
-                                                          <i>{SVGICON.infoIcon}</i>
+                                                          <i>
+                                                            {SVGICON.infoIcon}
+                                                          </i>
                                                         </Popover>
-
 
                                                         <Popconfirm
                                                           title="Choose an action"
@@ -3184,7 +3208,11 @@ export default function PatientDetails() {
                                                             )
                                                           }
                                                         >
-                                                          <div className={visitStyles.close_icon}>
+                                                          <div
+                                                            className={
+                                                              visitStyles.close_icon
+                                                            }
+                                                          >
                                                             {SVGICON.closeIcon}
                                                           </div>
                                                         </Popconfirm>
@@ -3197,8 +3225,14 @@ export default function PatientDetails() {
                                                             patientDocumentResult.patientName
                                                           }
                                                         >
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                                            <i>{SVGICON.patientNameIcon}</i>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                          >
+                                                            <i>
+                                                              {
+                                                                SVGICON.patientNameIcon
+                                                              }
+                                                            </i>
                                                             {
                                                               patientDocumentResult.patientName
                                                             }
@@ -3210,8 +3244,14 @@ export default function PatientDetails() {
                                                             data.encounterDate
                                                           }
                                                         >
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                                            <i>{SVGICON.DatebirthIcon}</i>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                          >
+                                                            <i>
+                                                              {
+                                                                SVGICON.DatebirthIcon
+                                                              }
+                                                            </i>
                                                             {replaceString(
                                                               data.encounterDate
                                                             )}
@@ -3223,14 +3263,16 @@ export default function PatientDetails() {
                                                             data.capturedSections
                                                           }
                                                         >
-
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`} onClick={() =>
-                                                            handleOpenModalCombinationCode(
-                                                              data.diagnosisCode,
-                                                              data.capturedSections,
-                                                              "valid"
-                                                            )
-                                                          }>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                            onClick={() =>
+                                                              handleOpenModalCombinationCode(
+                                                                data.diagnosisCode,
+                                                                data.capturedSections,
+                                                                "valid"
+                                                              )
+                                                            }
+                                                          >
                                                             {replaceCaptureSection(
                                                               data.capturedSections
                                                             )}
@@ -3254,272 +3296,305 @@ export default function PatientDetails() {
                                           </div>
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.suggested_title_name}`}
                                                 >
                                                   Suggested Codes
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.suggested_title_badge}`}>
+                                                  <span
+                                                    className={`${visitStyles.suggested_title_badge}`}
+                                                  >
                                                     {suggestedHccList.length}
                                                   </span>
                                                 </div>
                                               </div>
-                                              {suggestedHccList?.map(
-                                                (data) => {
-                                                  return (
-                                                    <>
-                                                      {data.isHccValid ==
-                                                        true ? (
-                                                        <li>
-                                                          <div className={`${visitStyles.hcc_card}`}>
-                                                          <div className={`${visitStyles.hcc_card_nameHead}`}>
-                                                              <div
-                                                                className="media-body"
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    data.diagnosisCode,
-                                                                    data.actualDescription,
-                                                                    "valid2"
-                                                                  )
-                                                                }
-                                                              >
-                                                                <span className="mb-1 disease-name d-flex">
-                                                                  <span className="valid-dis-name">
-                                                                    {
-                                                                      data.diagnosisCode
-                                                                    }
-                                                                  </span>{" "}
-                                                                  -{" "}
+                                              {suggestedHccList?.map((data) => {
+                                                return (
+                                                  <>
+                                                    {data.isHccValid == true ? (
+                                                      <li>
+                                                        <div
+                                                          className={`${visitStyles.hcc_card}`}
+                                                        >
+                                                          <div
+                                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                                          >
+                                                            <div
+                                                              className="media-body"
+                                                              onClick={() =>
+                                                                handleOpenModalCombinationCode(
+                                                                  data.diagnosisCode,
+                                                                  data.actualDescription,
+                                                                  "valid2"
+                                                                )
+                                                              }
+                                                            >
+                                                              <span className="mb-1 disease-name d-flex">
+                                                                <span className="valid-dis-name">
                                                                   {
-                                                                    data.actualDescription
-                                                                  }
-                                                                </span>
-                                                              </div>
-                                                              <Popover
-                                                                onClick={() =>
-                                                                  getValidHccDetails(
-                                                                    data.actualDescription,
                                                                     data.diagnosisCode
-                                                                  )
+                                                                  }
+                                                                </span>{" "}
+                                                                -{" "}
+                                                                {
+                                                                  data.actualDescription
                                                                 }
-                                                                content={
-                                                                  validHccDetails
-                                                                }
-                                                                title={
-                                                                  data.diagnosisCode
-                                                                }
-                                                                placement="bottom"
-                                                                trigger="click"
-                                                              >
-                                                                <i>{SVGICON.infoIcon}</i>
-                                                              </Popover>
-
-                                                              <Popconfirm
-                                                                title="Choose an action"
-                                                                icon={
-                                                                  <QuestionCircleOutlined
-                                                                    style={{
-                                                                      color: "blue",
-                                                                    }}
-                                                                  />
-                                                                }
-                                                                okText="Move to Deleted"
-                                                                cancelText="Move to Valid"
-                                                                onCancel={
-                                                                  suggestedToValid
-                                                                }
-                                                                okButtonProps={{
-                                                                  type: buttonClicked
-                                                                    ? "primary"
-                                                                    : "default",
-                                                                }}
-                                                                cancelButtonProps={{
-                                                                  type: buttonClicked
-                                                                    ? "danger"
-                                                                    : "default",
-                                                                }}
-                                                                description={
-                                                                  data.diagnosisCode
-                                                                }
-                                                                onConfirm={
-                                                                  suggestedToDeleted
-                                                                }
-                                                                placement="leftTop"
-                                                                onOpenChange={() =>
-                                                                  onchangeValid(
-                                                                    data.diagnosisCode,
-                                                                    data
-                                                                  )
-                                                                }
-                                                              >
-                                                                <div className={visitStyles.close_icon}>
-                                                                  {SVGICON.closeIcon}
-                                                                </div>
-                                                              </Popconfirm>
+                                                              </span>
                                                             </div>
-                                                            <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                              {data.getPlace ==
-                                                                "Lab" ? (
-                                                                <Badge
-                                                                  className="badge-meat  badge-circle mt-2 text-white"
-                                                                  bg={` badge-circle mt-2 bg-bg-seven `}
-                                                                >
-                                                                  Lab
-                                                                </Badge>
-                                                              ) : data.getPlace ==
-                                                                "Radio" ? (
-                                                                <Badge
-                                                                  className="badge-meat  badge-circle mt-2 text-white"
-                                                                  bg={` badge-circle mt-2 bg-bg-five `}
-                                                                >
-                                                                  Radiology
-                                                                </Badge>
-                                                              ) : (
-                                                                <Badge
-                                                                  className="badge-meat  badge-circle mt-2 text-white"
-                                                                  bg={` badge-circle mt-2 bg-bg-five `}
-                                                                >
-                                                                  Hcc
-                                                                </Badge>
-                                                              )}
+                                                            <Popover
+                                                              onClick={() =>
+                                                                getValidHccDetails(
+                                                                  data.actualDescription,
+                                                                  data.diagnosisCode
+                                                                )
+                                                              }
+                                                              content={
+                                                                validHccDetails
+                                                              }
+                                                              title={
+                                                                data.diagnosisCode
+                                                              }
+                                                              placement="bottom"
+                                                              trigger="click"
+                                                            >
+                                                              <i>
+                                                                {
+                                                                  SVGICON.infoIcon
+                                                                }
+                                                              </i>
+                                                            </Popover>
 
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                content={
+                                                            <Popconfirm
+                                                              title="Choose an action"
+                                                              icon={
+                                                                <QuestionCircleOutlined
+                                                                  style={{
+                                                                    color:
+                                                                      "blue",
+                                                                  }}
+                                                                />
+                                                              }
+                                                              okText="Move to Deleted"
+                                                              cancelText="Move to Valid"
+                                                              onCancel={
+                                                                suggestedToValid
+                                                              }
+                                                              okButtonProps={{
+                                                                type: buttonClicked
+                                                                  ? "primary"
+                                                                  : "default",
+                                                              }}
+                                                              cancelButtonProps={{
+                                                                type: buttonClicked
+                                                                  ? "danger"
+                                                                  : "default",
+                                                              }}
+                                                              description={
+                                                                data.diagnosisCode
+                                                              }
+                                                              onConfirm={
+                                                                suggestedToDeleted
+                                                              }
+                                                              placement="leftTop"
+                                                              onOpenChange={() =>
+                                                                onchangeValid(
+                                                                  data.diagnosisCode,
+                                                                  data
+                                                                )
+                                                              }
+                                                            >
+                                                              <div
+                                                                className={
+                                                                  visitStyles.close_icon
+                                                                }
+                                                              >
+                                                                {
+                                                                  SVGICON.closeIcon
+                                                                }
+                                                              </div>
+                                                            </Popconfirm>
+                                                          </div>
+                                                          <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                            {data.getPlace ==
+                                                            "Lab" ? (
+                                                              <Badge
+                                                                className="badge-meat  badge-circle mt-2 text-white"
+                                                                bg={` badge-circle mt-2 bg-bg-seven `}
+                                                              >
+                                                                Lab
+                                                              </Badge>
+                                                            ) : data.getPlace ==
+                                                              "Radio" ? (
+                                                              <Badge
+                                                                className="badge-meat  badge-circle mt-2 text-white"
+                                                                bg={` badge-circle mt-2 bg-bg-five `}
+                                                              >
+                                                                Radiology
+                                                              </Badge>
+                                                            ) : (
+                                                              <Badge
+                                                                className="badge-meat  badge-circle mt-2 text-white"
+                                                                bg={` badge-circle mt-2 bg-bg-five `}
+                                                              >
+                                                                Hcc
+                                                              </Badge>
+                                                            )}
+
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              content={
+                                                                data.encounterDate
+                                                              }
+                                                            >
+                                                              <Badge
+                                                                className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                              >
+                                                                <i>
+                                                                  {
+                                                                    SVGICON.DatebirthIcon
+                                                                  }
+                                                                </i>
+                                                                {replaceString(
                                                                   data.encounterDate
-                                                                }
-                                                              >
-                                                                <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                                                  <i>{SVGICON.DatebirthIcon}</i>
-                                                                  {replaceString(
-                                                                    data.encounterDate
-                                                                  )}
-                                                                </Badge>
-                                                              </Popover>
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                content={
-                                                                  data.capturedSections
-                                                                }
-                                                              >
-                                                                <Badge className={`mt-2 text-start ${visitStyles.provider_name}`} onClick={() =>
+                                                                )}
+                                                              </Badge>
+                                                            </Popover>
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              content={
+                                                                data.capturedSections
+                                                              }
+                                                            >
+                                                              <Badge
+                                                                className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                                onClick={() =>
                                                                   handleOpenModalCombinationCode(
                                                                     data.diagnosisCode,
                                                                     data.capturedSections,
                                                                     "valid"
                                                                   )
-                                                                }>
-                                                                  {replaceCaptureSection(
-                                                                    data.capturedSections
-                                                                  )}
-                                                                </Badge>
-                                                              </Popover>
-                                                            </div>
+                                                                }
+                                                              >
+                                                                {replaceCaptureSection(
+                                                                  data.capturedSections
+                                                                )}
+                                                              </Badge>
+                                                            </Popover>
                                                           </div>
-
-                                                        </li>
-                                                      ) : null}
-                                                    </>
-                                                  );
-                                                }
-                                              )}
+                                                        </div>
+                                                      </li>
+                                                    ) : null}
+                                                  </>
+                                                );
+                                              })}
                                             </ul>
                                           </div>
 
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.deleted_title_name}`}
                                                 >
                                                   Deleted Codes
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.deleted_title_badge}`}>
+                                                  <span
+                                                    className={`${visitStyles.deleted_title_badge}`}
+                                                  >
                                                     {deletedHccList.length}
                                                   </span>
                                                 </div>
                                               </div>
-                                              {deletedHccList.map(
-                                                (data, i) => (
-                                                  <li>
-                                                    <div className={`${visitStyles.hcc_card}`}>
-                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
-                                                        <div className="media-body">
-                                                          <span className="mb-1 disease-name d-flex">
-                                                            <span className="valid-dis-name">
-                                                              {
-                                                                data.diagnosisCode
-                                                              }
-                                                            </span>{" "}
-                                                            -{" "}
-                                                            {
-                                                              data.actualDescription
-                                                            }
-                                                          </span>
-                                                        </div>
-                                                        <Popover
-                                                          content={
-                                                            data.dbDescription
+                                              {deletedHccList.map((data, i) => (
+                                                <li>
+                                                  <div
+                                                    className={`${visitStyles.hcc_card}`}
+                                                  >
+                                                    <div
+                                                      className={`${visitStyles.hcc_card_nameHead}`}
+                                                    >
+                                                      <div className="media-body">
+                                                        <span className="mb-1 disease-name d-flex">
+                                                          <span className="valid-dis-name">
+                                                            {data.diagnosisCode}
+                                                          </span>{" "}
+                                                          -{" "}
+                                                          {
+                                                            data.actualDescription
                                                           }
-                                                          title={
-                                                            data.diagnosisCode
-                                                          }
-                                                          placement="bottom"
-                                                          trigger="click"
-                                                        >
-                                                          <i>{SVGICON.infoIcon}</i>
-                                                        </Popover>
-                                                        <Popconfirm
-                                                          title="Choose an action"
-                                                          icon={
-                                                            <QuestionCircleOutlined
-                                                              style={{
-                                                                color: "blue",
-                                                              }}
-                                                            />
-                                                          }
-                                                          okText="Move to Suggested"
-                                                          cancelText="Move to Valid"
-                                                          onCancel={
-                                                            deletedToValid
-                                                          }
-                                                          okButtonProps={{
-                                                            type: buttonClicked
-                                                              ? "primary"
-                                                              : "default",
-                                                          }}
-                                                          cancelButtonProps={{
-                                                            type: buttonClicked
-                                                              ? "danger"
-                                                              : "default",
-                                                          }}
-                                                          description={
-                                                            data.diagnosisCode
-                                                          }
-                                                          onConfirm={
-                                                            deletedToSuggested
-                                                          }
-                                                          placement="leftTop"
-                                                          onOpenChange={() =>
-                                                            onchangeValid(
-                                                              data.diagnosisCode,
-                                                              data
-                                                            )
-                                                          }
-                                                        >
-                                                          <div className={visitStyles.close_icon}>
-                                                            {SVGICON.closeIcon}
-                                                          </div>
-                                                        </Popconfirm>
-
+                                                        </span>
                                                       </div>
+                                                      <Popover
+                                                        content={
+                                                          data.dbDescription
+                                                        }
+                                                        title={
+                                                          data.diagnosisCode
+                                                        }
+                                                        placement="bottom"
+                                                        trigger="click"
+                                                      >
+                                                        <i>
+                                                          {SVGICON.infoIcon}
+                                                        </i>
+                                                      </Popover>
+                                                      <Popconfirm
+                                                        title="Choose an action"
+                                                        icon={
+                                                          <QuestionCircleOutlined
+                                                            style={{
+                                                              color: "blue",
+                                                            }}
+                                                          />
+                                                        }
+                                                        okText="Move to Suggested"
+                                                        cancelText="Move to Valid"
+                                                        onCancel={
+                                                          deletedToValid
+                                                        }
+                                                        okButtonProps={{
+                                                          type: buttonClicked
+                                                            ? "primary"
+                                                            : "default",
+                                                        }}
+                                                        cancelButtonProps={{
+                                                          type: buttonClicked
+                                                            ? "danger"
+                                                            : "default",
+                                                        }}
+                                                        description={
+                                                          data.diagnosisCode
+                                                        }
+                                                        onConfirm={
+                                                          deletedToSuggested
+                                                        }
+                                                        placement="leftTop"
+                                                        onOpenChange={() =>
+                                                          onchangeValid(
+                                                            data.diagnosisCode,
+                                                            data
+                                                          )
+                                                        }
+                                                      >
+                                                        <div
+                                                          className={
+                                                            visitStyles.close_icon
+                                                          }
+                                                        >
+                                                          {SVGICON.closeIcon}
+                                                        </div>
+                                                      </Popconfirm>
                                                     </div>
-                                                  </li>
-                                                )
-                                              )}
+                                                  </div>
+                                                </li>
+                                              ))}
                                             </ul>
                                           </div>
                                         </div>
@@ -3569,9 +3644,7 @@ export default function PatientDetails() {
                                                       <div className="media-body">
                                                         <span className="mb-1 disease-name d-flex">
                                                           <span className="valid-dis-name">
-                                                            {
-                                                              data.diagnosisCode
-                                                            }
+                                                            {data.diagnosisCode}
                                                           </span>{" "}
                                                           -{" "}
                                                           {
@@ -3632,12 +3705,14 @@ export default function PatientDetails() {
                                     <div className="row">
                                       <div className="col-xl-6">
                                         <div className="invalid-combo">
-                                          <span>
-                                            Valid Codes{" "}
-                                          </span>
+                                          <span>Valid Codes </span>
                                         </div>
                                         <div className="my-post-content pt-3">
-                                          <div className={visitStyles.combo_head_card}>
+                                          <div
+                                            className={
+                                              visitStyles.combo_head_card
+                                            }
+                                          >
                                             <div className="row">
                                               <div className="col-xl-3">
                                                 <label>Combo Codes</label>
@@ -3654,7 +3729,9 @@ export default function PatientDetails() {
                                                     onClick={() =>
                                                       addValidDiseases()
                                                     }
-                                                    className={visitStyles.combo_add_btn}
+                                                    className={
+                                                      visitStyles.combo_add_btn
+                                                    }
                                                   >
                                                     {SVGICON.addIcon}
                                                   </button>
@@ -3662,61 +3739,73 @@ export default function PatientDetails() {
                                               </div>
                                             </div>
                                           </div>
-                                          {comboDiseaseCodesList?.map((item) => {
-                                            return (
-                                              <div className={visitStyles.combo_details_card}>
-                                                <div className="row">
-                                                  <div className="col-xl-3">
-                                                    <span className="font-bold">
-                                                      {item.diagnosisCodeCombo}
-                                                    </span>
-                                                  </div>
-                                                  <div className="col-xl-3">
-                                                    <span className="font-bold">
-                                                      {item.addOnCode}
-                                                    </span>
-                                                  </div>
-                                                  <div
-                                                    className="col-xl-5 cr-pointer"
-                                                    onClick={() =>
-                                                      handleOpenModalCombinationCode(
-                                                        item.diagnosisCodeCombo,
-                                                        item.diseaseName
-                                                      )
-                                                    }
-                                                  >
-                                                    <span>
-                                                      {item.diseaseName}
-                                                    </span>
-                                                  </div>
-                                                  <div className="col-xl-1 comboclose">
-                                                    <Popconfirm
-                                                      title="You want move to Invalid?"
-                                                      description={
-                                                        item.diseaseName
-                                                      }
-                                                      onConfirm={
-                                                        confirmComboInvalid
-                                                      }
-                                                      placement="leftTop"
-                                                      okText="Yes"
-                                                      cancelText="No"
-                                                      onOpenChange={() =>
-                                                        onchangeCombo(
-                                                          item.diseaseName,
-                                                          item.addOnCode
+                                          {comboDiseaseCodesList?.map(
+                                            (item) => {
+                                              return (
+                                                <div
+                                                  className={
+                                                    visitStyles.combo_details_card
+                                                  }
+                                                >
+                                                  <div className="row">
+                                                    <div className="col-xl-3">
+                                                      <span className="font-bold">
+                                                        {
+                                                          item.diagnosisCodeCombo
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                    <div className="col-xl-3">
+                                                      <span className="font-bold">
+                                                        {item.addOnCode}
+                                                      </span>
+                                                    </div>
+                                                    <div
+                                                      className="col-xl-5 cr-pointer"
+                                                      onClick={() =>
+                                                        handleOpenModalCombinationCode(
+                                                          item.diagnosisCodeCombo,
+                                                          item.diseaseName
                                                         )
                                                       }
                                                     >
-                                                      <div className={visitStyles.close_icon}>
-                                                        {SVGICON.closeIcon}
-                                                      </div>
-                                                    </Popconfirm>
+                                                      <span>
+                                                        {item.diseaseName}
+                                                      </span>
+                                                    </div>
+                                                    <div className="col-xl-1 comboclose">
+                                                      <Popconfirm
+                                                        title="You want move to Invalid?"
+                                                        description={
+                                                          item.diseaseName
+                                                        }
+                                                        onConfirm={
+                                                          confirmComboInvalid
+                                                        }
+                                                        placement="leftTop"
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                        onOpenChange={() =>
+                                                          onchangeCombo(
+                                                            item.diseaseName,
+                                                            item.addOnCode
+                                                          )
+                                                        }
+                                                      >
+                                                        <div
+                                                          className={
+                                                            visitStyles.close_icon
+                                                          }
+                                                        >
+                                                          {SVGICON.closeIcon}
+                                                        </div>
+                                                      </Popconfirm>
+                                                    </div>
                                                   </div>
                                                 </div>
-                                              </div>
-                                            );
-                                          })}
+                                              );
+                                            }
+                                          )}
 
                                           {comboDiseaseCodesList.length == 0 ? (
                                             <div className="card combo-card">
@@ -3734,12 +3823,14 @@ export default function PatientDetails() {
 
                                       <div className="col-xl-6">
                                         <div className="invalid-combo">
-                                          <span>
-                                            Invalid Codes{" "}
-                                          </span>
+                                          <span>Invalid Codes </span>
                                         </div>
                                         <div className="my-post-content pt-3">
-                                          <div className={visitStyles.combo_head_card}>
+                                          <div
+                                            className={
+                                              visitStyles.combo_head_card
+                                            }
+                                          >
                                             <div className="row">
                                               <div className="col-xl-3">
                                                 <label>Combo Codes</label>
@@ -3753,9 +3844,8 @@ export default function PatientDetails() {
                                             </div>
                                           </div>
                                           {invalidComboDiseaseCodesList.length !=
-                                            0 ? (
+                                          0 ? (
                                             <>
-
                                               {invalidComboDiseaseCodesList?.map(
                                                 (item) => {
                                                   return (
@@ -3805,7 +3895,11 @@ export default function PatientDetails() {
                                                               )
                                                             }
                                                           >
-                                                            <div className={visitStyles.tick_icon}>
+                                                            <div
+                                                              className={
+                                                                visitStyles.tick_icon
+                                                              }
+                                                            >
                                                               {SVGICON.tickIcon}
                                                             </div>
                                                           </Popconfirm>
@@ -3820,14 +3914,15 @@ export default function PatientDetails() {
                                         </div>
                                       </div>
                                     </div>
-
                                   </Tab.Pane>
                                   <Tab.Pane
                                     id="my-posts"
                                     eventKey="meatCriteria"
                                   >
                                     <div className="my-post-content pt-3">
-                                      <div className={visitStyles.meat_head_card}>
+                                      <div
+                                        className={visitStyles.meat_head_card}
+                                      >
                                         <div className="row">
                                           <div className="col-xl-1">
                                             <label>Codes</label>
@@ -3857,7 +3952,7 @@ export default function PatientDetails() {
                                           <div
                                             className={
                                               item.isMeatCriteriaPresent ===
-                                                true
+                                              true
                                                 ? `${visitStyles.meat_details_card}`
                                                 : `${visitStyles.meat_details_card_false}`
                                             }
@@ -4030,12 +4125,8 @@ export default function PatientDetails() {
                                             <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
                                                 <Popconfirm
                                                   title="You want move to Invalid?"
-                                                  description={
-                                                    item.diseaseName
-                                                  }
-                                                  onConfirm={
-                                                    confirmInvalidMeat
-                                                  }
+                                                  description={item.diseaseName}
+                                                  onConfirm={confirmInvalidMeat}
                                                   placement="leftTop"
                                                   okText="Yes"
                                                   cancelText="No"
@@ -4078,7 +4169,11 @@ export default function PatientDetails() {
                                           {invalidMeatCriteriaList?.map(
                                             (item) => {
                                               return (
-                                                <div className={visitStyles.meat_details_card}>
+                                                <div
+                                                  className={
+                                                    visitStyles.meat_details_card
+                                                  }
+                                                >
                                                   <div className="row">
                                                     <div className="col-xl-1">
                                                       <span className="font-bold">
@@ -4113,44 +4208,44 @@ export default function PatientDetails() {
                                                         bg={
                                                           item.monitorCapturedFromHeader ===
                                                             "HPI" ||
-                                                            item.monitorCapturedFromHeader ===
+                                                          item.monitorCapturedFromHeader ===
                                                             "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.monitorCapturedFromHeader ===
+                                                          item.monitorCapturedFromHeader ===
                                                             "Vital Signs"
                                                             ? "third badge-circle mt-2"
                                                             : item.monitorCapturedFromHeader ===
-                                                              "Impression" ||
+                                                                "Impression" ||
                                                               item.monitorCapturedFromHeader ===
-                                                              "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                               item.monitorCapturedFromHeader ===
-                                                              "Assessments" ||
+                                                                "Assessments" ||
                                                               item.monitorCapturedFromHeader ===
-                                                              "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.monitorCapturedFromHeader ===
+                                                                "Assessment"
+                                                            ? "bg-eight badge-circle mt-2"
+                                                            : item.monitorCapturedFromHeader ===
                                                                 "Recommendations" ||
-                                                                item.monitorCapturedFromHeader ===
+                                                              item.monitorCapturedFromHeader ===
                                                                 "Plan: GERD without esophagitis" ||
-                                                                item.monitorCapturedFromHeader ===
+                                                              item.monitorCapturedFromHeader ===
                                                                 "Treatment"
-                                                                ? "bgshodowcolor badge-circle mt-2"
-                                                                : item.monitorCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                  item.monitorCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                                  ? "bg-four badge-circle mt-2"
-                                                                  : item.monitorCapturedFromHeader ===
-                                                                    "Patient Instructions" ||
-                                                                    item.monitorCapturedFromHeader ===
-                                                                    "Plan: Hyperlipidemia, acquired"
-                                                                    ? "bg-five badge-circle mt-2"
-                                                                    : item.monitorCapturedFromHeader ===
-                                                                      "N/A"
-                                                                      ? "bg-six badge-circle mt-2"
-                                                                      : item.monitorCapturedFromHeader ===
-                                                                        "Plan"
-                                                                        ? "bg-seven badge-circle mt-2"
-                                                                        : "primary badge-circle mt-2"
+                                                            ? "bgshodowcolor badge-circle mt-2"
+                                                            : item.monitorCapturedFromHeader ===
+                                                                "Plan / Discussion" ||
+                                                              item.monitorCapturedFromHeader ===
+                                                                "Plan: Arteriosclerotic cardiovascular disease"
+                                                            ? "bg-four badge-circle mt-2"
+                                                            : item.monitorCapturedFromHeader ===
+                                                                "Patient Instructions" ||
+                                                              item.monitorCapturedFromHeader ===
+                                                                "Plan: Hyperlipidemia, acquired"
+                                                            ? "bg-five badge-circle mt-2"
+                                                            : item.monitorCapturedFromHeader ===
+                                                              "N/A"
+                                                            ? "bg-six badge-circle mt-2"
+                                                            : item.monitorCapturedFromHeader ===
+                                                              "Plan"
+                                                            ? "bg-seven badge-circle mt-2"
+                                                            : "primary badge-circle mt-2"
                                                         }
                                                         onClick={() =>
                                                           handleOpenModal(
@@ -4168,9 +4263,7 @@ export default function PatientDetails() {
                                                       <Popover
                                                         placement="topLeft"
                                                         title="Evaluation"
-                                                        content={
-                                                          item.evaluate
-                                                        }
+                                                        content={item.evaluate}
                                                       >
                                                         <span className="meat-name-details">
                                                           {item.evaluate}
@@ -4181,44 +4274,44 @@ export default function PatientDetails() {
                                                         bg={
                                                           item.evaluateCapturedFromHeader ===
                                                             "HPI" ||
-                                                            item.evaluateCapturedFromHeader ===
+                                                          item.evaluateCapturedFromHeader ===
                                                             "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.evaluateCapturedFromHeader ===
+                                                          item.evaluateCapturedFromHeader ===
                                                             "Vital Signs"
                                                             ? "third badge-circle mt-2"
                                                             : item.evaluateCapturedFromHeader ===
-                                                              "Impression" ||
+                                                                "Impression" ||
                                                               item.evaluateCapturedFromHeader ===
-                                                              "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                               item.evaluateCapturedFromHeader ===
-                                                              "Assessments" ||
+                                                                "Assessments" ||
                                                               item.evaluateCapturedFromHeader ===
-                                                              "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.evaluateCapturedFromHeader ===
+                                                                "Assessment"
+                                                            ? "bg-eight badge-circle mt-2"
+                                                            : item.evaluateCapturedFromHeader ===
                                                                 "Recommendations" ||
-                                                                item.evaluateCapturedFromHeader ===
+                                                              item.evaluateCapturedFromHeader ===
                                                                 "Plan: GERD without esophagitis" ||
-                                                                item.evaluateCapturedFromHeader ===
+                                                              item.evaluateCapturedFromHeader ===
                                                                 "Treatment"
-                                                                ? "bgshodowcolor badge-circle mt-2"
-                                                                : item.evaluateCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                  item.evaluateCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                                  ? "bg-four badge-circle mt-2"
-                                                                  : item.evaluateCapturedFromHeader ===
-                                                                    "Patient Instructions" ||
-                                                                    item.evaluateCapturedFromHeader ===
-                                                                    "Plan: Hyperlipidemia, acquired"
-                                                                    ? "bg-five badge-circle mt-2"
-                                                                    : item.evaluateCapturedFromHeader ===
-                                                                      "N/A"
-                                                                      ? "bg-six badge-circle mt-2"
-                                                                      : item.evaluateCapturedFromHeader ===
-                                                                        "Plan"
-                                                                        ? "bg-seven badge-circle mt-2"
-                                                                        : "primary badge-circle mt-2"
+                                                            ? "bgshodowcolor badge-circle mt-2"
+                                                            : item.evaluateCapturedFromHeader ===
+                                                                "Plan / Discussion" ||
+                                                              item.evaluateCapturedFromHeader ===
+                                                                "Plan: Arteriosclerotic cardiovascular disease"
+                                                            ? "bg-four badge-circle mt-2"
+                                                            : item.evaluateCapturedFromHeader ===
+                                                                "Patient Instructions" ||
+                                                              item.evaluateCapturedFromHeader ===
+                                                                "Plan: Hyperlipidemia, acquired"
+                                                            ? "bg-five badge-circle mt-2"
+                                                            : item.evaluateCapturedFromHeader ===
+                                                              "N/A"
+                                                            ? "bg-six badge-circle mt-2"
+                                                            : item.evaluateCapturedFromHeader ===
+                                                              "Plan"
+                                                            ? "bg-seven badge-circle mt-2"
+                                                            : "primary badge-circle mt-2"
                                                         }
                                                         onClick={() =>
                                                           handleOpenModal(
@@ -4249,44 +4342,44 @@ export default function PatientDetails() {
                                                         bg={
                                                           item.assessmentCapturedFromHeader ===
                                                             "HPI" ||
-                                                            item.assessmentCapturedFromHeader ===
+                                                          item.assessmentCapturedFromHeader ===
                                                             "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.assessmentCapturedFromHeader ===
+                                                          item.assessmentCapturedFromHeader ===
                                                             "Vital Signs"
                                                             ? "third badge-circle mt-2"
                                                             : item.assessmentCapturedFromHeader ===
-                                                              "Impression" ||
+                                                                "Impression" ||
                                                               item.assessmentCapturedFromHeader ===
-                                                              "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                               item.assessmentCapturedFromHeader ===
-                                                              "Assessments" ||
+                                                                "Assessments" ||
                                                               item.assessmentCapturedFromHeader ===
-                                                              "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.assessmentCapturedFromHeader ===
+                                                                "Assessment"
+                                                            ? "bg-eight badge-circle mt-2"
+                                                            : item.assessmentCapturedFromHeader ===
                                                                 "Recommendations" ||
-                                                                item.assessmentCapturedFromHeader ===
+                                                              item.assessmentCapturedFromHeader ===
                                                                 "Plan: GERD without esophagitis" ||
-                                                                item.assessmentCapturedFromHeader ===
+                                                              item.assessmentCapturedFromHeader ===
                                                                 "Treatment"
-                                                                ? "bgshodowcolor badge-circle mt-2"
-                                                                : item.assessmentCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                  item.assessmentCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                                  ? "bg-four badge-circle mt-2"
-                                                                  : item.assessmentCapturedFromHeader ===
-                                                                    "Patient Instructions" ||
-                                                                    item.assessmentCapturedFromHeader ===
-                                                                    "Plan: Hyperlipidemia, acquired"
-                                                                    ? "bg-five badge-circle mt-2"
-                                                                    : item.assessmentCapturedFromHeader ===
-                                                                      "N/A"
-                                                                      ? "bg-six badge-circle mt-2"
-                                                                      : item.assessmentCapturedFromHeader ===
-                                                                        "Plan"
-                                                                        ? "bg-seven badge-circle mt-2"
-                                                                        : "primary badge-circle mt-2"
+                                                            ? "bgshodowcolor badge-circle mt-2"
+                                                            : item.assessmentCapturedFromHeader ===
+                                                                "Plan / Discussion" ||
+                                                              item.assessmentCapturedFromHeader ===
+                                                                "Plan: Arteriosclerotic cardiovascular disease"
+                                                            ? "bg-four badge-circle mt-2"
+                                                            : item.assessmentCapturedFromHeader ===
+                                                                "Patient Instructions" ||
+                                                              item.assessmentCapturedFromHeader ===
+                                                                "Plan: Hyperlipidemia, acquired"
+                                                            ? "bg-five badge-circle mt-2"
+                                                            : item.assessmentCapturedFromHeader ===
+                                                              "N/A"
+                                                            ? "bg-six badge-circle mt-2"
+                                                            : item.assessmentCapturedFromHeader ===
+                                                              "Plan"
+                                                            ? "bg-seven badge-circle mt-2"
+                                                            : "primary badge-circle mt-2"
                                                         }
                                                         onClick={() =>
                                                           handleOpenModal(
@@ -4304,9 +4397,7 @@ export default function PatientDetails() {
                                                       <Popover
                                                         placement="topLeft"
                                                         title="Treatment"
-                                                        content={
-                                                          item.treatment
-                                                        }
+                                                        content={item.treatment}
                                                       >
                                                         <span className="meat-name-details">
                                                           {item.treatment}
@@ -4318,44 +4409,44 @@ export default function PatientDetails() {
                                                         bg={
                                                           item.treatmentCapturedFromHeader ===
                                                             "HPI" ||
-                                                            item.treatmentCapturedFromHeader ===
+                                                          item.treatmentCapturedFromHeader ===
                                                             "Plan: Hypertensive heart disease without heart failure" ||
-                                                            item.treatmentCapturedFromHeader ===
+                                                          item.treatmentCapturedFromHeader ===
                                                             "Vital Signs"
                                                             ? "third badge-circle mt-2"
                                                             : item.treatmentCapturedFromHeader ===
-                                                              "Impression" ||
+                                                                "Impression" ||
                                                               item.treatmentCapturedFromHeader ===
-                                                              "Plan: COPD" ||
+                                                                "Plan: COPD" ||
                                                               item.treatmentCapturedFromHeader ===
-                                                              "Assessments" ||
+                                                                "Assessments" ||
                                                               item.treatmentCapturedFromHeader ===
-                                                              "Assessment"
-                                                              ? "bg-eight badge-circle mt-2"
-                                                              : item.treatmentCapturedFromHeader ===
+                                                                "Assessment"
+                                                            ? "bg-eight badge-circle mt-2"
+                                                            : item.treatmentCapturedFromHeader ===
                                                                 "Recommendations" ||
-                                                                item.treatmentCapturedFromHeader ===
+                                                              item.treatmentCapturedFromHeader ===
                                                                 "Plan: GERD without esophagitis" ||
-                                                                item.treatmentCapturedFromHeader ===
+                                                              item.treatmentCapturedFromHeader ===
                                                                 "Treatment"
-                                                                ? "bgshodowcolor badge-circle mt-2"
-                                                                : item.treatmentCapturedFromHeader ===
-                                                                  "Plan / Discussion" ||
-                                                                  item.treatmentCapturedFromHeader ===
-                                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                                                  ? "bg-four badge-circle mt-2"
-                                                                  : item.treatmentCapturedFromHeader ===
-                                                                    "Patient Instructions" ||
-                                                                    item.treatmentCapturedFromHeader ===
-                                                                    "Plan: Hyperlipidemia, acquired"
-                                                                    ? "bg-five badge-circle mt-2"
-                                                                    : item.treatmentCapturedFromHeader ===
-                                                                      "N/A"
-                                                                      ? "bg-six badge-circle mt-2"
-                                                                      : item.treatmentCapturedFromHeader ===
-                                                                        "Plan"
-                                                                        ? "bg-seven badge-circle mt-2"
-                                                                        : "primary badge-circle mt-2"
+                                                            ? "bgshodowcolor badge-circle mt-2"
+                                                            : item.treatmentCapturedFromHeader ===
+                                                                "Plan / Discussion" ||
+                                                              item.treatmentCapturedFromHeader ===
+                                                                "Plan: Arteriosclerotic cardiovascular disease"
+                                                            ? "bg-four badge-circle mt-2"
+                                                            : item.treatmentCapturedFromHeader ===
+                                                                "Patient Instructions" ||
+                                                              item.treatmentCapturedFromHeader ===
+                                                                "Plan: Hyperlipidemia, acquired"
+                                                            ? "bg-five badge-circle mt-2"
+                                                            : item.treatmentCapturedFromHeader ===
+                                                              "N/A"
+                                                            ? "bg-six badge-circle mt-2"
+                                                            : item.treatmentCapturedFromHeader ===
+                                                              "Plan"
+                                                            ? "bg-seven badge-circle mt-2"
+                                                            : "primary badge-circle mt-2"
                                                         }
                                                         onClick={() =>
                                                           handleOpenModal(
@@ -4410,18 +4501,17 @@ export default function PatientDetails() {
                                   <Tab.Pane id="my-posts" eventKey="RafScore">
                                     <div className="my-post-content pt-3">
                                       <div className="row">
-                                       
                                         {rafScore != null ? (
                                           <>
                                             <div className="col-xl-10">
-                                            {rafScore.scoreOutputDTOList !=
+                                              {rafScore.scoreOutputDTOList !=
                                               null ? (
-                                              <>
-                                                {rafScore.scoreOutputDTOList.map(
-                                                  (rafScoreMapResult) => {
-                                                    return (
-                                                      <div className="row raf-main-card">
-                                                        {/* <div className="col-xl-3">
+                                                <>
+                                                  {rafScore.scoreOutputDTOList.map(
+                                                    (rafScoreMapResult) => {
+                                                      return (
+                                                        <div className="row raf-main-card">
+                                                          {/* <div className="col-xl-3">
                                                           <div className="card">
                                                             <div className="raf-card">
                                                               <div className="row raf-head text-center">
@@ -4454,235 +4544,234 @@ export default function PatientDetails() {
                                                             </div>
                                                           </div>
                                                         </div> */}
-                                                        <div className="col-xl-4">
-                                                          <div className="card">
-                                                            <div className="raf-card">
-                                                              <div className="row raf-head">
-                                                                <div className="col-xl-6">
-                                                                  <label className="text-white">
-                                                                    DX Code
-                                                                  </label>
+                                                          <div className="col-xl-4">
+                                                            <div className="card">
+                                                              <div className="raf-card">
+                                                                <div className="row raf-head">
+                                                                  <div className="col-xl-6">
+                                                                    <label className="text-white">
+                                                                      DX Code
+                                                                    </label>
+                                                                  </div>
+                                                                  <div className="col-xl-6">
+                                                                    <label className="text-white">
+                                                                      DX
+                                                                      Description
+                                                                    </label>
+                                                                  </div>
                                                                 </div>
-                                                                <div className="col-xl-6">
-                                                                  <label className="text-white">
-                                                                    DX
-                                                                    Description
-                                                                  </label>
-                                                                </div>
-                                                              </div>
 
-                                                              {rafScoreMapResult.dx_hccs.map(
-                                                                (item) => {
-                                                                  return (
-                                                                    <div className="row raf-details">
-                                                                      <div className="col-xl-6">
-                                                                        <span>
-                                                                          {
-                                                                            item.dx_name
-                                                                          }
-                                                                        </span>
-                                                                      </div>
-                                                                      <div className="col-xl-6">
-                                                                        <span>
-                                                                          {
-                                                                            item.dx_desc
-                                                                          }
-                                                                        </span>
-                                                                      </div>
-                                                                    </div>
-                                                                  );
-                                                                }
-                                                              )}
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                        <div className="col-xl-4">
-                                                          <div className="card">
-                                                            <div className="raf-card">
-                                                              <div className="row raf-head">
-                                                                <div className="col-xl-6">
-                                                                  <label className="text-white">
-                                                                    HCC
-                                                                  </label>
-                                                                </div>
-                                                                <div className="col-xl-6">
-                                                                  <label className="text-white">
-                                                                    HCC
-                                                                    Description
-                                                                  </label>
-                                                                </div>
-                                                              </div>
-                                                              {rafScoreMapResult.dx_hccs.map(
-                                                                (res) => {
-                                                                  return res.hcc_list.map(
-                                                                    (
-                                                                      res1
-                                                                    ) => {
-                                                                      return (
-                                                                        <div className="row raf-details">
-                                                                          <div className="col-xl-6">
-                                                                            <span>
-                                                                              {
-                                                                                res1.hcc_name
-                                                                              }
-                                                                            </span>
-                                                                          </div>
-                                                                          <div className="col-xl-6">
-                                                                            <span>
-                                                                              {
-                                                                                res1.hcc_desc
-                                                                              }
-                                                                            </span>
-                                                                          </div>
+                                                                {rafScoreMapResult.dx_hccs.map(
+                                                                  (item) => {
+                                                                    return (
+                                                                      <div className="row raf-details">
+                                                                        <div className="col-xl-6">
+                                                                          <span>
+                                                                            {
+                                                                              item.dx_name
+                                                                            }
+                                                                          </span>
                                                                         </div>
-                                                                      );
-                                                                    }
-                                                                  );
-                                                                }
-                                                              )}
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                        <div className="col-xl-4">
-                                                          <div className="card">
-                                                            <div className="raf-card">
-                                                              <div className="row raf-head">
-                                                                <div className="col-xl-4">
-                                                                  <label className="text-white">
-                                                                    Trumped By
-                                                                  </label>
-                                                                </div>
-                                                                <div className="col-xl-4">
-                                                                  <label className="text-white">
-                                                                    RAF
-                                                                  </label>
-                                                                </div>
-                                                                <div className="col-xl-4">
-                                                                  <label className="text-white">
-                                                                    Monthly
-                                                                    Premium
-                                                                  </label>
-                                                                </div>
-                                                              </div>
-                                                              {rafScoreMapResult.dx_hccs.map(
-                                                                (res) => {
-                                                                  return res.hcc_list.map(
-                                                                    (
-                                                                      res1
-                                                                    ) => {
-                                                                      return (
-                                                                        <div className="row  raf-details">
-                                                                          <div className="col-xl-4">
-                                                                            <span>
-                                                                              -
-                                                                            </span>
-                                                                          </div>
-                                                                          <div className="col-xl-4">
-                                                                            <span>
-                                                                              {
-                                                                                res1.hcc_raf
-                                                                              }
-                                                                            </span>
-                                                                          </div>
-                                                                          <div className="col-xl-4">
-                                                                            <span>
-                                                                              $
-                                                                              {
-                                                                                res1.premium
-                                                                              }
-                                                                            </span>
-                                                                          </div>
+                                                                        <div className="col-xl-6">
+                                                                          <span>
+                                                                            {
+                                                                              item.dx_desc
+                                                                            }
+                                                                          </span>
                                                                         </div>
-                                                                      );
-                                                                    }
-                                                                  );
-                                                                }
-                                                              )}
+                                                                      </div>
+                                                                    );
+                                                                  }
+                                                                )}
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div className="col-xl-4">
+                                                            <div className="card">
+                                                              <div className="raf-card">
+                                                                <div className="row raf-head">
+                                                                  <div className="col-xl-6">
+                                                                    <label className="text-white">
+                                                                      HCC
+                                                                    </label>
+                                                                  </div>
+                                                                  <div className="col-xl-6">
+                                                                    <label className="text-white">
+                                                                      HCC
+                                                                      Description
+                                                                    </label>
+                                                                  </div>
+                                                                </div>
+                                                                {rafScoreMapResult.dx_hccs.map(
+                                                                  (res) => {
+                                                                    return res.hcc_list.map(
+                                                                      (
+                                                                        res1
+                                                                      ) => {
+                                                                        return (
+                                                                          <div className="row raf-details">
+                                                                            <div className="col-xl-6">
+                                                                              <span>
+                                                                                {
+                                                                                  res1.hcc_name
+                                                                                }
+                                                                              </span>
+                                                                            </div>
+                                                                            <div className="col-xl-6">
+                                                                              <span>
+                                                                                {
+                                                                                  res1.hcc_desc
+                                                                                }
+                                                                              </span>
+                                                                            </div>
+                                                                          </div>
+                                                                        );
+                                                                      }
+                                                                    );
+                                                                  }
+                                                                )}
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div className="col-xl-4">
+                                                            <div className="card">
+                                                              <div className="raf-card">
+                                                                <div className="row raf-head">
+                                                                  <div className="col-xl-4">
+                                                                    <label className="text-white">
+                                                                      Trumped By
+                                                                    </label>
+                                                                  </div>
+                                                                  <div className="col-xl-4">
+                                                                    <label className="text-white">
+                                                                      RAF
+                                                                    </label>
+                                                                  </div>
+                                                                  <div className="col-xl-4">
+                                                                    <label className="text-white">
+                                                                      Monthly
+                                                                      Premium
+                                                                    </label>
+                                                                  </div>
+                                                                </div>
+                                                                {rafScoreMapResult.dx_hccs.map(
+                                                                  (res) => {
+                                                                    return res.hcc_list.map(
+                                                                      (
+                                                                        res1
+                                                                      ) => {
+                                                                        return (
+                                                                          <div className="row  raf-details">
+                                                                            <div className="col-xl-4">
+                                                                              <span>
+                                                                                -
+                                                                              </span>
+                                                                            </div>
+                                                                            <div className="col-xl-4">
+                                                                              <span>
+                                                                                {
+                                                                                  res1.hcc_raf
+                                                                                }
+                                                                              </span>
+                                                                            </div>
+                                                                            <div className="col-xl-4">
+                                                                              <span>
+                                                                                $
+                                                                                {
+                                                                                  res1.premium
+                                                                                }
+                                                                              </span>
+                                                                            </div>
+                                                                          </div>
+                                                                        );
+                                                                      }
+                                                                    );
+                                                                  }
+                                                                )}
+                                                              </div>
                                                             </div>
                                                           </div>
                                                         </div>
-                                                      </div>
-                                                    );
-                                                  }
-                                                )}
-                                              </>
-                                            ) : null}
-                                              </div>
+                                                      );
+                                                    }
+                                                  )}
+                                                </>
+                                              ) : null}
+                                            </div>
 
                                             <div className="col-xl-2">
+                                              <div className="row raf-main-card">
+                                                <div className="raf-name-head">
+                                                  <h5 className="raf-model-version">
+                                                    SCORE DETAILS
+                                                  </h5>
+                                                </div>
 
-                                            <div className="row raf-main-card">
-                                              <div className="raf-name-head">
-                                                <h5 className="raf-model-version">
-                                                  SCORE DETAILS
-                                                </h5>
-                                              </div>
-
-                                              <div className="col-xl-12">
-                                                <div className="card">
-                                                  <div className="raf-card">
-                                                    <div className="row raf-head">
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">
-                                                          v24Score
-                                                        </label>
+                                                <div className="col-xl-12">
+                                                  <div className="card">
+                                                    <div className="raf-card">
+                                                      <div className="row raf-head">
+                                                        <div className="col-xl-2">
+                                                          <label className="text-white">
+                                                            v24Score
+                                                          </label>
+                                                        </div>
+                                                        <div className="col-xl-3">
+                                                          <label className="text-white">
+                                                            v24Score70Percent
+                                                          </label>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <label className="text-white">
+                                                            v28Score
+                                                          </label>
+                                                        </div>
+                                                        <div className="col-xl-3">
+                                                          <label className="text-white">
+                                                            v28Score30Percent
+                                                          </label>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <label className="text-white">
+                                                            Score
+                                                          </label>
+                                                        </div>
                                                       </div>
-                                                      <div className="col-xl-3">
-                                                        <label className="text-white">
-                                                          v24Score70Percent
-                                                        </label>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">
-                                                          v28Score
-                                                        </label>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <label className="text-white">
-                                                          v28Score30Percent
-                                                        </label>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <label className="text-white">
-                                                          Score
-                                                        </label>
-                                                      </div>
-                                                    </div>
-                                                    <div className="row  raf-details">
-                                                      <div className="col-xl-2">
-                                                        <span>
-                                                          {rafScore.v24Score}
-                                                        </span>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <span>
-                                                          {
-                                                            rafScore.v24Score70Percent
-                                                          }
-                                                        </span>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <span>
-                                                          {rafScore.v28Score}
-                                                        </span>
-                                                      </div>
-                                                      <div className="col-xl-3">
-                                                        <span>
-                                                          {
-                                                            rafScore.v28Score30Percent
-                                                          }
-                                                        </span>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <span>
-                                                          {rafScore.score}
-                                                        </span>
+                                                      <div className="row  raf-details">
+                                                        <div className="col-xl-2">
+                                                          <span>
+                                                            {rafScore.v24Score}
+                                                          </span>
+                                                        </div>
+                                                        <div className="col-xl-3">
+                                                          <span>
+                                                            {
+                                                              rafScore.v24Score70Percent
+                                                            }
+                                                          </span>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <span>
+                                                            {rafScore.v28Score}
+                                                          </span>
+                                                        </div>
+                                                        <div className="col-xl-3">
+                                                          <span>
+                                                            {
+                                                              rafScore.v28Score30Percent
+                                                            }
+                                                          </span>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <span>
+                                                            {rafScore.score}
+                                                          </span>
+                                                        </div>
                                                       </div>
                                                     </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
                                             </div>
                                           </>
                                         ) : null}
@@ -4744,9 +4833,7 @@ export default function PatientDetails() {
                                                 onDocumentLoad={
                                                   handleDocumentLoad
                                                 }
-                                                renderLoader={(
-                                                  percentages
-                                                ) => (
+                                                renderLoader={(percentages) => (
                                                   <div
                                                     style={{ width: "240px" }}
                                                   >
@@ -4771,7 +4858,9 @@ export default function PatientDetails() {
                         </div>
                       ) : activeTab == 2 ? (
                         <div className={visitStyles.visitdata_tab_body}>
-                          <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
+                          <div
+                            className={`profile-tab ${visitStyles.visitdata_header_card2}`}
+                          >
                             <div className="custom-tab-1">
                               <Tab.Container defaultActiveKey={activeTabHead}>
                                 <Nav as="ul" className="nav nav-tabs">
@@ -4815,23 +4904,33 @@ export default function PatientDetails() {
                                         <div className="row">
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.hcc_title_name}`}
                                                 >
                                                   NON-HCC
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.hcc_title_badge}`}>
-                                                    {newInValidDiseaseList.length}
+                                                  <span
+                                                    className={`${visitStyles.hcc_title_badge}`}
+                                                  >
+                                                    {
+                                                      newInValidDiseaseList.length
+                                                    }
                                                   </span>
                                                 </div>
                                               </div>
                                               {newInValidDiseaseList.map(
                                                 (data, i) => (
                                                   <li>
-                                                    <div className={`${visitStyles.hcc_card}`}>
-                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
+                                                    <div
+                                                      className={`${visitStyles.hcc_card}`}
+                                                    >
+                                                      <div
+                                                        className={`${visitStyles.hcc_card_nameHead}`}
+                                                      >
                                                         <div
                                                           className="media-body"
                                                           onClick={() =>
@@ -4874,7 +4973,11 @@ export default function PatientDetails() {
                                                             )
                                                           }
                                                         >
-                                                          <div className={visitStyles.close_icon}>
+                                                          <div
+                                                            className={
+                                                              visitStyles.close_icon
+                                                            }
+                                                          >
                                                             {SVGICON.closeIcon}
                                                           </div>
                                                         </Popconfirm>
@@ -4886,8 +4989,14 @@ export default function PatientDetails() {
                                                             data.encounterDate
                                                           }
                                                         >
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                                            <i>{SVGICON.DatebirthIcon}</i>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                          >
+                                                            <i>
+                                                              {
+                                                                SVGICON.DatebirthIcon
+                                                              }
+                                                            </i>
                                                             {replaceString(
                                                               data.encounterDate
                                                             )}
@@ -4899,13 +5008,16 @@ export default function PatientDetails() {
                                                             data.capturedSections
                                                           }
                                                         >
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`} onClick={() =>
-                                                            handleOpenModalCombinationCode(
-                                                              data.diagnosisCode,
-                                                              data.capturedSections,
-                                                              "valid"
-                                                            )
-                                                          }>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                            onClick={() =>
+                                                              handleOpenModalCombinationCode(
+                                                                data.diagnosisCode,
+                                                                data.capturedSections,
+                                                                "valid"
+                                                              )
+                                                            }
+                                                          >
                                                             {replaceCaptureSection(
                                                               data.capturedSections
                                                             )}
@@ -4921,14 +5033,18 @@ export default function PatientDetails() {
 
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.suggested_title_name}`}
                                                 >
                                                   Suggested Codes
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.suggested_title_badge}`}>
+                                                  <span
+                                                    className={`${visitStyles.suggested_title_badge}`}
+                                                  >
                                                     {suggestedNonHccList.length}
                                                   </span>
                                                 </div>
@@ -4939,7 +5055,7 @@ export default function PatientDetails() {
                                                     <>
                                                       {data.isHccValid ==
                                                         false ||
-                                                        data.isHccValid ==
+                                                      data.isHccValid ==
                                                         null ? (
                                                         <li>
                                                           <div className="new_valid-dis">
@@ -4972,7 +5088,8 @@ export default function PatientDetails() {
                                                                 icon={
                                                                   <QuestionCircleOutlined
                                                                     style={{
-                                                                      color: "blue",
+                                                                      color:
+                                                                        "blue",
                                                                     }}
                                                                   />
                                                                 }
@@ -5007,7 +5124,9 @@ export default function PatientDetails() {
                                                               >
                                                                 <div className="icon-box  bg-danger-light me-1">
                                                                   <FontAwesomeIcon
-                                                                    icon={faCheck}
+                                                                    icon={
+                                                                      faCheck
+                                                                    }
                                                                     style={{
                                                                       color:
                                                                         "orange",
@@ -5015,8 +5134,6 @@ export default function PatientDetails() {
                                                                   />
                                                                 </div>
                                                               </Popconfirm>
-
-
                                                             </div>
                                                             <div className="d-flex justify-content-sm-between valid-providerdocument ">
                                                               <Popover
@@ -5068,80 +5185,80 @@ export default function PatientDetails() {
                                                             </div>
                                                           </div>
                                                         </li>
-                                                        // <li>
-                                                        //   <div className="timeline-panel d-block invalid-disease">
-                                                        //     <div
-                                                        //       className="media-body"
-                                                        //       onClick={() =>
-                                                        //         handleOpenModalCombinationCode(
-                                                        //           data.diagnosisCodeFinding,
-                                                        //           data.actualDescription
-                                                        //         )
-                                                        //       }
-                                                        //     >
-                                                        //       <span className="mb-1 disease-name">
-                                                        //         {
-                                                        //           data.actualDescription
-                                                        //         }
-                                                        //       </span>
-                                                        //     </div>
+                                                      ) : // <li>
+                                                      //   <div className="timeline-panel d-block invalid-disease">
+                                                      //     <div
+                                                      //       className="media-body"
+                                                      //       onClick={() =>
+                                                      //         handleOpenModalCombinationCode(
+                                                      //           data.diagnosisCodeFinding,
+                                                      //           data.actualDescription
+                                                      //         )
+                                                      //       }
+                                                      //     >
+                                                      //       <span className="mb-1 disease-name">
+                                                      //         {
+                                                      //           data.actualDescription
+                                                      //         }
+                                                      //       </span>
+                                                      //     </div>
 
-                                                        //     <div className="media-body d-flex">
+                                                      //     <div className="media-body d-flex">
 
-                                                        //       {data.diagnosisCodeFinding !=
-                                                        //         null &&
-                                                        //         data.diagnosisCodeFinding !=
-                                                        //         "" ? (
-                                                        //         <div className="form-check custom-checkbox unmatch-check ms-3">
-                                                        //           <div>
-                                                        //             <Popconfirm
-                                                        //               title="You want move to valid?"
-                                                        //               description={
-                                                        //                 data.diagnosisCodeDocument
-                                                        //               }
-                                                        //               onConfirm={
-                                                        //                 onchangeSuggested
-                                                        //               }
-                                                        //               placement="rightTop"
-                                                        //               okText="Yes"
-                                                        //               cancelText="No"
-                                                        //             >
-                                                        //               <input
-                                                        //                 onChange={(
-                                                        //                   e
-                                                        //                 ) => {
-                                                        //                   handleMatchHcc(
-                                                        //                     e,
-                                                        //                     data,
-                                                        //                     data.diagnosisCodeFinding
-                                                        //                   );
-                                                        //                 }}
-                                                        //                 type="checkbox"
-                                                        //                 id={`customCheckBox ${data.diagnosisCodeFinding}`}
-                                                        //                 className="form-check-input unmatach-checkbox"
-                                                        //                 required
-                                                        //               />
-                                                        //             </Popconfirm>
-                                                        //           </div>
-                                                        //           <Popover
-                                                        //             placement="topLeft"
-                                                        //             title="Finding Code"
-                                                        //             content={
-                                                        //               data.diagnosisCodeFinding
-                                                        //             }
-                                                        //           >
-                                                        //             <span className="disease-name">
-                                                        //               {
-                                                        //                 data.diagnosisCodeFinding
-                                                        //               }
-                                                        //             </span>
-                                                        //           </Popover>
-                                                        //         </div>
-                                                        //       ) : null}
-                                                        //     </div>
-                                                        //   </div>
-                                                        // </li>
-                                                      ) : null}
+                                                      //       {data.diagnosisCodeFinding !=
+                                                      //         null &&
+                                                      //         data.diagnosisCodeFinding !=
+                                                      //         "" ? (
+                                                      //         <div className="form-check custom-checkbox unmatch-check ms-3">
+                                                      //           <div>
+                                                      //             <Popconfirm
+                                                      //               title="You want move to valid?"
+                                                      //               description={
+                                                      //                 data.diagnosisCodeDocument
+                                                      //               }
+                                                      //               onConfirm={
+                                                      //                 onchangeSuggested
+                                                      //               }
+                                                      //               placement="rightTop"
+                                                      //               okText="Yes"
+                                                      //               cancelText="No"
+                                                      //             >
+                                                      //               <input
+                                                      //                 onChange={(
+                                                      //                   e
+                                                      //                 ) => {
+                                                      //                   handleMatchHcc(
+                                                      //                     e,
+                                                      //                     data,
+                                                      //                     data.diagnosisCodeFinding
+                                                      //                   );
+                                                      //                 }}
+                                                      //                 type="checkbox"
+                                                      //                 id={`customCheckBox ${data.diagnosisCodeFinding}`}
+                                                      //                 className="form-check-input unmatach-checkbox"
+                                                      //                 required
+                                                      //               />
+                                                      //             </Popconfirm>
+                                                      //           </div>
+                                                      //           <Popover
+                                                      //             placement="topLeft"
+                                                      //             title="Finding Code"
+                                                      //             content={
+                                                      //               data.diagnosisCodeFinding
+                                                      //             }
+                                                      //           >
+                                                      //             <span className="disease-name">
+                                                      //               {
+                                                      //                 data.diagnosisCodeFinding
+                                                      //               }
+                                                      //             </span>
+                                                      //           </Popover>
+                                                      //         </div>
+                                                      //       ) : null}
+                                                      //     </div>
+                                                      //   </div>
+                                                      // </li>
+                                                      null}
                                                     </>
                                                   );
                                                 }
@@ -5195,9 +5312,7 @@ export default function PatientDetails() {
                                                       <div className="media-body">
                                                         <span className="mb-1 disease-name d-flex">
                                                           <span className="valid-dis-name">
-                                                            {
-                                                              data.diagnosisCode
-                                                            }
+                                                            {data.diagnosisCode}
                                                           </span>{" "}
                                                           -{" "}
                                                           {
@@ -5350,7 +5465,7 @@ export default function PatientDetails() {
                                       )}
 
                                       {comboDiseaseCodesListNonHcc.length ==
-                                        0 ? (
+                                      0 ? (
                                         <div className="card combo-card">
                                           <div className="col-xl-12">
                                             <div>
@@ -5363,12 +5478,10 @@ export default function PatientDetails() {
                                       ) : null}
 
                                       {invalidComboDiseaseCodesList.length !=
-                                        0 ? (
+                                      0 ? (
                                         <>
                                           <div className="invalid-combo">
-                                            <span>
-                                              Invalid Combo Diseases{" "}
-                                            </span>
+                                            <span>Invalid Combo Diseases </span>
                                           </div>
 
                                           {invalidComboDiseaseCodesList?.map(
@@ -5474,7 +5587,7 @@ export default function PatientDetails() {
                                           <div
                                             className={
                                               item.isMeatCriteriaPresent ===
-                                                true
+                                              true
                                                 ? "card meat-card"
                                                 : "card meat-card-false"
                                             }
@@ -5624,12 +5737,8 @@ export default function PatientDetails() {
                                               <div className="col-xl-1 meatclose">
                                                 <Popconfirm
                                                   title="You want move to Invalid?"
-                                                  description={
-                                                    item.diseaseName
-                                                  }
-                                                  onConfirm={
-                                                    confirmInvalidMeat
-                                                  }
+                                                  description={item.diseaseName}
+                                                  onConfirm={confirmInvalidMeat}
                                                   placement="leftTop"
                                                   okText="Yes"
                                                   cancelText="No"
@@ -5663,7 +5772,6 @@ export default function PatientDetails() {
                                           </div>
                                         </div>
                                       ) : null}
-
                                     </div>
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="RafScore">
@@ -5703,7 +5811,7 @@ export default function PatientDetails() {
                                         {rafScore != null ? (
                                           <div className="col-xl-12">
                                             {rafScore.scoreOutputDTOList !=
-                                              null ? (
+                                            null ? (
                                               <>
                                                 {rafScore.scoreOutputDTOList.map(
                                                   (rafScoreMapResult) => {
@@ -5807,9 +5915,7 @@ export default function PatientDetails() {
                                                               {rafScoreMapResult.dx_hccs.map(
                                                                 (res) => {
                                                                   return res.hcc_list.map(
-                                                                    (
-                                                                      res1
-                                                                    ) => {
+                                                                    (res1) => {
                                                                       return (
                                                                         <div className="row raf-details">
                                                                           <div className="col-xl-6">
@@ -5859,9 +5965,7 @@ export default function PatientDetails() {
                                                               {rafScoreMapResult.dx_hccs.map(
                                                                 (res) => {
                                                                   return res.hcc_list.map(
-                                                                    (
-                                                                      res1
-                                                                    ) => {
+                                                                    (res1) => {
                                                                       return (
                                                                         <div className="row  raf-details">
                                                                           <div className="col-xl-4">
@@ -6032,9 +6136,7 @@ export default function PatientDetails() {
                                                 onDocumentLoad={
                                                   handleDocumentLoad
                                                 }
-                                                renderLoader={(
-                                                  percentages
-                                                ) => (
+                                                renderLoader={(percentages) => (
                                                   <div
                                                     style={{ width: "240px" }}
                                                   >
@@ -6059,7 +6161,9 @@ export default function PatientDetails() {
                         </div>
                       ) : activeTab == 3 ? (
                         <div className={visitStyles.visitdata_tab_body}>
-                          <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
+                          <div
+                            className={`profile-tab ${visitStyles.visitdata_header_card2}`}
+                          >
                             <div className="custom-tab-1">
                               <Tab.Container defaultActiveKey={activeTabHead}>
                                 <Nav as="ul" className="nav nav-tabs">
@@ -6114,15 +6218,21 @@ export default function PatientDetails() {
                                         <div className="row">
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.hcc_title_name}`}
                                                 >
                                                   HCC
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.hcc_title_badge}`}>
-                                                    {newValidDiseaseListRadiology.length}
+                                                  <span
+                                                    className={`${visitStyles.hcc_title_badge}`}
+                                                  >
+                                                    {
+                                                      newValidDiseaseListRadiology.length
+                                                    }
                                                   </span>
                                                 </div>
                                               </div>
@@ -6130,8 +6240,12 @@ export default function PatientDetails() {
                                               {newValidDiseaseListRadiology.map(
                                                 (data, i) => (
                                                   <li>
-                                                    <div className={`${visitStyles.hcc_card}`}>
-                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
+                                                    <div
+                                                      className={`${visitStyles.hcc_card}`}
+                                                    >
+                                                      <div
+                                                        className={`${visitStyles.hcc_card_nameHead}`}
+                                                      >
                                                         <div
                                                           className="media-body"
                                                           onClick={() =>
@@ -6198,7 +6312,12 @@ export default function PatientDetails() {
                                                               data.diagnosisCode
                                                             )
                                                           }
-                                                        ><div className={visitStyles.close_icon}>
+                                                        >
+                                                          <div
+                                                            className={
+                                                              visitStyles.close_icon
+                                                            }
+                                                          >
                                                             {SVGICON.closeIcon}
                                                           </div>
                                                         </Popconfirm>
@@ -6211,13 +6330,18 @@ export default function PatientDetails() {
                                                             patientDocumentResult.patientName
                                                           }
                                                         >
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                                            <i>{SVGICON.patientNameIcon}</i>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                          >
+                                                            <i>
+                                                              {
+                                                                SVGICON.patientNameIcon
+                                                              }
+                                                            </i>
                                                             {
                                                               patientDocumentResult.patientName
                                                             }
                                                           </Badge>
-
                                                         </Popover>
                                                         <Popover
                                                           placement="topLeft"
@@ -6225,8 +6349,14 @@ export default function PatientDetails() {
                                                             data.encounterDate
                                                           }
                                                         >
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                                            <i>{SVGICON.DatebirthIcon}</i>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                          >
+                                                            <i>
+                                                              {
+                                                                SVGICON.DatebirthIcon
+                                                              }
+                                                            </i>
                                                             {replaceString(
                                                               data.encounterDate
                                                             )}
@@ -6238,13 +6368,16 @@ export default function PatientDetails() {
                                                             data.capturedSections
                                                           }
                                                         >
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`} onClick={() =>
-                                                            handleOpenModalCombinationCode(
-                                                              data.diagnosisCode,
-                                                              data.capturedSections,
-                                                              "valid"
-                                                            )
-                                                          }>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                            onClick={() =>
+                                                              handleOpenModalCombinationCode(
+                                                                data.diagnosisCode,
+                                                                data.capturedSections,
+                                                                "valid"
+                                                              )
+                                                            }
+                                                          >
                                                             {replaceCaptureSection(
                                                               data.capturedSections
                                                             )}
@@ -6256,28 +6389,37 @@ export default function PatientDetails() {
                                                 )
                                               )}
                                             </ul>
-
                                           </div>
 
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.suggested_title_name}`}
                                                 >
                                                   NON-HCC
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.suggested_title_badge}`}>
-                                                    {newInValidDiseaseListRadiology.length}
+                                                  <span
+                                                    className={`${visitStyles.suggested_title_badge}`}
+                                                  >
+                                                    {
+                                                      newInValidDiseaseListRadiology.length
+                                                    }
                                                   </span>
                                                 </div>
                                               </div>
                                               {newInValidDiseaseListRadiology.map(
                                                 (data, i) => (
                                                   <li>
-                                                    <div className={`${visitStyles.hcc_card}`}>
-                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
+                                                    <div
+                                                      className={`${visitStyles.hcc_card}`}
+                                                    >
+                                                      <div
+                                                        className={`${visitStyles.hcc_card_nameHead}`}
+                                                      >
                                                         <div className="media-body">
                                                           <span className="mb-1 disease-name d-flex">
                                                             <span className="valid-dis-name">
@@ -6308,8 +6450,11 @@ export default function PatientDetails() {
                                                             )
                                                           }
                                                         >
-
-                                                          <div className={visitStyles.close_icon}>
+                                                          <div
+                                                            className={
+                                                              visitStyles.close_icon
+                                                            }
+                                                          >
                                                             {SVGICON.closeIcon}
                                                           </div>
                                                         </Popconfirm>
@@ -6323,15 +6468,21 @@ export default function PatientDetails() {
 
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.deleted_title_name}`}
                                                 >
                                                   Deleted Codes
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.deleted_title_badge}`}>
-                                                    {invalidMoveDiseasesList.length}
+                                                  <span
+                                                    className={`${visitStyles.deleted_title_badge}`}
+                                                  >
+                                                    {
+                                                      invalidMoveDiseasesList.length
+                                                    }
                                                   </span>
                                                 </div>
                                               </div>
@@ -6342,9 +6493,7 @@ export default function PatientDetails() {
                                                       <div className="media-body">
                                                         <span className="mb-1 disease-name d-flex">
                                                           <span className="valid-dis-name">
-                                                            {
-                                                              data.diagnosisCode
-                                                            }
+                                                            {data.diagnosisCode}
                                                           </span>{" "}
                                                           -{" "}
                                                           {
@@ -6437,9 +6586,7 @@ export default function PatientDetails() {
                                                       <div className="media-body">
                                                         <span className="mb-1 disease-name d-flex">
                                                           <span className="valid-dis-name">
-                                                            {
-                                                              data.diagnosisCode
-                                                            }
+                                                            {data.diagnosisCode}
                                                           </span>{" "}
                                                           -{" "}
                                                           {
@@ -6584,7 +6731,7 @@ export default function PatientDetails() {
                                       )}
 
                                       {comboDiseaseCodesListRadiology.length ==
-                                        0 ? (
+                                      0 ? (
                                         <div className="card combo-card">
                                           <div className="col-xl-12">
                                             <div>
@@ -6597,12 +6744,10 @@ export default function PatientDetails() {
                                       ) : null}
 
                                       {invalidComboDiseaseCodesList.length !=
-                                        0 ? (
+                                      0 ? (
                                         <>
                                           <div className="invalid-combo">
-                                            <span>
-                                              Invalid Combo Diseases{" "}
-                                            </span>
+                                            <span>Invalid Combo Diseases </span>
                                           </div>
 
                                           {invalidComboDiseaseCodesList?.map(
@@ -6701,7 +6846,7 @@ export default function PatientDetails() {
                                             <div
                                               className={
                                                 item.isMeatCriteriaPresent ===
-                                                  true
+                                                true
                                                   ? "card meat-card"
                                                   : "card meat-card-false"
                                               }
@@ -6790,9 +6935,7 @@ export default function PatientDetails() {
                                                     <Popover
                                                       placement="topLeft"
                                                       title="Assessment"
-                                                      content={
-                                                        item.assessment
-                                                      }
+                                                      content={item.assessment}
                                                     >
                                                       <span className="meat-name-details">
                                                         {item.assessment}
@@ -6918,8 +7061,7 @@ export default function PatientDetails() {
                                           );
                                         }
                                       )}
-                                      {meatCriteriaListRadiology.length ==
-                                        0 ? (
+                                      {meatCriteriaListRadiology.length == 0 ? (
                                         <div className="card combo-card">
                                           <div className="col-xl-12">
                                             <div>
@@ -6930,7 +7072,6 @@ export default function PatientDetails() {
                                           </div>
                                         </div>
                                       ) : null}
-
                                     </div>
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="file">
@@ -6973,18 +7114,14 @@ export default function PatientDetails() {
                                             >
                                               {" "}
                                               <Viewer
-                                                fileUrl={
-                                                  selectFileURLRadiology
-                                                }
+                                                fileUrl={selectFileURLRadiology}
                                                 plugins={[
                                                   defaultLayoutPluginInstance,
                                                 ]}
                                                 onDocumentLoad={
                                                   handleDocumentLoad
                                                 }
-                                                renderLoader={(
-                                                  percentages
-                                                ) => (
+                                                renderLoader={(percentages) => (
                                                   <div
                                                     style={{ width: "240px" }}
                                                   >
@@ -7009,12 +7146,12 @@ export default function PatientDetails() {
                         </div>
                       ) : (
                         <div className={visitStyles.visitdata_tab_body}>
-                          <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
-
+                          <div
+                            className={`profile-tab ${visitStyles.visitdata_header_card2}`}
+                          >
                             <div className="custom-tab-1">
                               <Tab.Container defaultActiveKey={activeTabHead}>
                                 <Nav as="ul" className="nav nav-tabs">
-
                                   <Nav.Item as="li" className="nav-item">
                                     <Nav.Link
                                       to="#my-posts"
@@ -7047,14 +7184,18 @@ export default function PatientDetails() {
                                         <div className="row">
                                           <div className="col-xl-4">
                                             <ul className="timeline">
-                                              <div className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`} >
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                              >
                                                 <span
                                                   className={`${visitStyles.hcc_title_name}`}
                                                 >
                                                   HCC
                                                 </span>
                                                 <div className="d-flex justify-content-center">
-                                                  <span className={`${visitStyles.hcc_title_badge}`}>
+                                                  <span
+                                                    className={`${visitStyles.hcc_title_badge}`}
+                                                  >
                                                     {labReportValidList.length}
                                                   </span>
                                                 </div>
@@ -7063,8 +7204,12 @@ export default function PatientDetails() {
                                               {labReportValidList.map(
                                                 (data, i) => (
                                                   <li>
-                                                    <div className={`${visitStyles.hcc_card}`}>
-                                                    <div className={`${visitStyles.hcc_card_nameHead}`}>
+                                                    <div
+                                                      className={`${visitStyles.hcc_card}`}
+                                                    >
+                                                      <div
+                                                        className={`${visitStyles.hcc_card_nameHead}`}
+                                                      >
                                                         <div
                                                           className="media-body"
                                                           onClick={() =>
@@ -7096,8 +7241,14 @@ export default function PatientDetails() {
                                                             patientDocumentResult.patientName
                                                           }
                                                         >
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                                            <i>{SVGICON.patientNameIcon}</i>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                          >
+                                                            <i>
+                                                              {
+                                                                SVGICON.patientNameIcon
+                                                              }
+                                                            </i>
                                                             {
                                                               patientDocumentResult.patientName
                                                             }
@@ -7109,9 +7260,14 @@ export default function PatientDetails() {
                                                             data.encounterDate
                                                           }
                                                         >
-
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                                            <i>{SVGICON.DatebirthIcon}</i>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                          >
+                                                            <i>
+                                                              {
+                                                                SVGICON.DatebirthIcon
+                                                              }
+                                                            </i>
                                                             {replaceString(
                                                               data.encounterDate
                                                             )}
@@ -7123,15 +7279,16 @@ export default function PatientDetails() {
                                                             data.capturedSections
                                                           }
                                                         >
-
-
-                                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`} onClick={() =>
-                                                            handleOpenModalCombinationCode(
-                                                              data.diagnosisCode,
-                                                              data.capturedSections,
-                                                              "valid"
-                                                            )
-                                                          }>
+                                                          <Badge
+                                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                            onClick={() =>
+                                                              handleOpenModalCombinationCode(
+                                                                data.diagnosisCode,
+                                                                data.capturedSections,
+                                                                "valid"
+                                                              )
+                                                            }
+                                                          >
                                                             {replaceCaptureSection(
                                                               data.capturedSections
                                                             )}
@@ -7157,9 +7314,7 @@ export default function PatientDetails() {
                                               onChange={(e) =>
                                                 dosOnChangeLabFile(e)
                                               }
-                                              options={
-                                                labFileDateofServieList
-                                              }
+                                              options={labFileDateofServieList}
                                               className="custom-react-select"
                                               defaultValue={
                                                 labFileDateDefaulteSelect
@@ -7195,9 +7350,7 @@ export default function PatientDetails() {
                                                 onDocumentLoad={
                                                   handleDocumentLoad
                                                 }
-                                                renderLoader={(
-                                                  percentages
-                                                ) => (
+                                                renderLoader={(percentages) => (
                                                   <div
                                                     style={{ width: "240px" }}
                                                   >
@@ -7223,18 +7376,20 @@ export default function PatientDetails() {
                       )}
                     </div>
 
-
-
                     <div className={`col-xl-1`}>
                       <div className={`${visitStyles.flag_container}`}>
                         <ul className="">
                           {flagList?.map((data) => {
                             return (
                               <>
-                                <li className={flagContainerActive == data.name
-                                  ? `${visitStyles.commentsTagActive}`
-                                  : `${visitStyles.commentsTag}`
-                                } onClick={() => addComments(data.name)}>
+                                <li
+                                  className={
+                                    flagContainerActive == data.name
+                                      ? `${visitStyles.commentsTagActive}`
+                                      : `${visitStyles.commentsTag}`
+                                  }
+                                  onClick={() => addComments(data.name)}
+                                >
                                   <i>{data.icon}</i>
                                 </li>
                                 {/* <li >
@@ -7251,14 +7406,25 @@ export default function PatientDetails() {
                           })}
                         </ul>
                       </div>
-
-
-
-
-
                     </div>
                   </div>
+              <div className={visitStyles.flags}> 
+              <div>
+                    <span className={visitStyles.flag}>{SVGICON.flagIconHcc}</span>
+                    <span className={visitStyles.flagCodes}>HCC</span>
+                  </div>
+                  <div>
+                    <span className={visitStyles.flag}>{SVGICON.flagIconSuggestion}</span>
+                    <span className={visitStyles.flagCodes}>Suggestion</span>
+                  </div>
+                  <div>
+                    <span className={visitStyles.flag}>{SVGICON.flagIconDelete}</span>
+                    <span className={visitStyles.flagCodes}>Delete</span>
+                  </div>
+              </div>
                 </div>
+
+                {/* Modals */}
                 {isModalOpen && (
                   <Modal
                     title={selectMeatName}
@@ -7338,10 +7504,11 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
+                                                borderBottom: `2px solid ${
+                                                  renderSearchProps.matchCase
+                                                    ? "blue"
+                                                    : "transparent"
+                                                }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -7372,10 +7539,11 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
+                                                borderBottom: `2px solid ${
+                                                  renderSearchProps.wholeWords
+                                                    ? "blue"
+                                                    : "transparent"
+                                                }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -7398,7 +7566,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                        0 && (
+                                          0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -7406,7 +7574,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                        0 && (
+                                          0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -7623,10 +7791,11 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
+                                                borderBottom: `2px solid ${
+                                                  renderSearchProps.matchCase
+                                                    ? "blue"
+                                                    : "transparent"
+                                                }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -7657,10 +7826,11 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
+                                                borderBottom: `2px solid ${
+                                                  renderSearchProps.wholeWords
+                                                    ? "blue"
+                                                    : "transparent"
+                                                }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -7683,7 +7853,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                        0 && (
+                                          0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -7691,7 +7861,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                        0 && (
+                                          0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -7846,7 +8016,7 @@ export default function PatientDetails() {
                           </div>
                         )}
                         {nonHccActiveCodes == false &&
-                          isAddButtonClicked == false ? (
+                        isAddButtonClicked == false ? (
                           <div className="col-xl-4">
                             <ul className="timeline">
                               <div className="modal-valid-container">
@@ -8000,10 +8170,11 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
+                                                borderBottom: `2px solid ${
+                                                  renderSearchProps.matchCase
+                                                    ? "blue"
+                                                    : "transparent"
+                                                }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8034,10 +8205,11 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
+                                                borderBottom: `2px solid ${
+                                                  renderSearchProps.wholeWords
+                                                    ? "blue"
+                                                    : "transparent"
+                                                }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8060,7 +8232,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                        0 && (
+                                          0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -8068,7 +8240,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                        0 && (
+                                          0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -8279,10 +8451,11 @@ export default function PatientDetails() {
                                           style={{
                                             background: "#fff",
                                             border: "none",
-                                            borderBottom: `2px solid ${renderSearchProps.matchCase
-                                              ? "blue"
-                                              : "transparent"
-                                              }`,
+                                            borderBottom: `2px solid ${
+                                              renderSearchProps.matchCase
+                                                ? "blue"
+                                                : "transparent"
+                                            }`,
                                             height: "100%",
                                             padding: "0 2px",
                                           }}
@@ -8313,10 +8486,11 @@ export default function PatientDetails() {
                                           style={{
                                             background: "#fff",
                                             border: "none",
-                                            borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                              ? "blue"
-                                              : "transparent"
-                                              }`,
+                                            borderBottom: `2px solid ${
+                                              renderSearchProps.wholeWords
+                                                ? "blue"
+                                                : "transparent"
+                                            }`,
                                             height: "100%",
                                             padding: "0 2px",
                                           }}
@@ -8941,33 +9115,26 @@ export default function PatientDetails() {
                   </div>
                   <div className="offcanvas-body">
                     <div className="container-fluid">
-
                       <div className={visitStyles.comments_card}>
                         <span>
-                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum is simply dummy text of the printing and
+                          typesetting industry.
                         </span>
-                        <span>
-                          18/11/2023    10:00 Am
-                        </span>
-
+                        <span>18/11/2023 10:00 Am</span>
                       </div>
                       <div className={visitStyles.comments_card}>
                         <span>
-                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum is simply dummy text of the printing and
+                          typesetting industry.
                         </span>
-                        <span>
-                          18/11/2023    10:00 Am
-                        </span>
-
+                        <span>18/11/2023 10:00 Am</span>
                       </div>
                       <div className={visitStyles.comments_card}>
                         <span>
-                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum is simply dummy text of the printing and
+                          typesetting industry.
                         </span>
-                        <span>
-                          18/11/2023    10:00 Am
-                        </span>
-
+                        <span>18/11/2023 10:00 Am</span>
                       </div>
                       <Form
                         noValidate
@@ -8978,7 +9145,6 @@ export default function PatientDetails() {
                           <div className="col-xl-12 mb-3">
                             <textarea
                               className={visitStyles.commentsFormControl}
-
                               rows="5"
                               required
                               placeholder="Add Comments"

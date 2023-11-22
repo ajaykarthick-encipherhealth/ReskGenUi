@@ -750,9 +750,9 @@ export default function Patient() {
                                 paginationFirst + options.rowIndex + 1
                               }
                               bodyStyle={{
-                                borderLeft: " 0.2px solid #241571",
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
+                                borderLeft: " 0.2px solid #e1e1e1",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             ></Column>
 
@@ -760,33 +760,33 @@ export default function Patient() {
                               field="patientId"
                               header="Patient Id"
                               bodyStyle={{
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
                             <Column
                               field="patientName"
                               header="Patient Name"
                               bodyStyle={{
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
-                            <Column
+                            {/* <Column
                               field="fileName"
                               header="File Name"
                               bodyStyle={{
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
                               }}
-                            />
+                            /> */}
                             <Column
                               field="status"
                               body={statusBodyTemplate}
                               header="File Status"
                               bodyStyle={{
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
                             <Column
@@ -794,8 +794,8 @@ export default function Patient() {
                               body={processstatusBodyTemplate}
                               header="Processing Status"
                               bodyStyle={{
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
                             <Column
@@ -806,8 +806,8 @@ export default function Patient() {
                               sortable
                               header="Due Date"
                               bodyStyle={{
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
                             <Column
@@ -820,8 +820,8 @@ export default function Patient() {
                               sortable
                               header="Modfied Date"
                               bodyStyle={{
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
                             <Column
@@ -829,9 +829,9 @@ export default function Patient() {
                               body={actionBodyTemplate}
                               header="Action"
                               bodyStyle={{
-                                borderTop: " 0.2px solid #241571",
-                                borderBottom: " 0.2px solid #241571",
-                                borderRight: " 0.2px solid #241571",
+                                borderTop: " 0.2px solid #e1e1e1",
+                                borderBottom: " 0.2px solid #e1e1e1",
+                                borderRight: " 0.2px solid #e1e1e1",
                               }}
                             />
                           </DataTable>
