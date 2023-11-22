@@ -43,6 +43,7 @@
     "react-bootstrap": "^2.7.4",
     "react-bootstrap-daterangepicker": "^8.0.0",
     "react-chartjs-2": "^5.2.0",
+    "react-circular-progressbar": "^2.1.0",
     "react-color": "^2.19.3",
     "react-countup": "^6.4.2",
     "react-csv": "^2.2.2",

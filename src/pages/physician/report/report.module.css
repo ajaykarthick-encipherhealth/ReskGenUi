@@ -1,0 +1,81 @@
+.maincontainer {
+  position: relative;
+}
+.content-body .container-fluid {
+  background: #f0f6fe;
+}
+.export {
+  width: 108px;
+  height: 38px;
+  flex-shrink: 0;
+
+  border-radius: 8px;
+  border: 1px solid #133dd4;
+  background: rgba(19, 61, 212, 0.15);
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  color: #133dd4 !important;
+  font-family: Manrope;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.48px;
+}
+.custom-table table > thead {
+  background-color: #133dd4;
+}
+.comments {
+  width: 180px;
+  cursor: pointer;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 0.2px solid #000;
+  background: #f4f4f4;
+  color: #000;
+  font-family: Roboto;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 180% */
+  letter-spacing: 0.6px;
+}
+.heads {
+  width: 100%;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: #04306f;
+  text-align: center;
+}
+.headText {
+  color: #fff;
+  font-family: Roboto;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+
+}
+.datas{
+    color: #04306F;
+font-family: Roboto;
+font-size: 13px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+letter-spacing: 0.78px;
+}
+.data{
+    margin-top: 10px;
+}
+.description{
+    color: #000;
+font-family: Roboto;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 18px; /* 150% */
+letter-spacing: 0.72px;
+}
