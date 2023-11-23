@@ -789,7 +789,7 @@ export default function Patient() {
                                 borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
-                            <Column
+                            {/* <Column
                               field="processedStatus"
                               body={processstatusBodyTemplate}
                               header="Processing Status"
@@ -797,7 +797,7 @@ export default function Patient() {
                                 borderTop: " 0.2px solid #e1e1e1",
                                 borderBottom: " 0.2px solid #e1e1e1",
                               }}
-                            />
+                            /> */}
                             <Column
                               field="dueDate"
                               body={(data) =>
@@ -818,7 +818,7 @@ export default function Patient() {
                                 )
                               }
                               sortable
-                              header="Modfied Date"
+                              header="C Date"
                               bodyStyle={{
                                 borderTop: " 0.2px solid #e1e1e1",
                                 borderBottom: " 0.2px solid #e1e1e1",

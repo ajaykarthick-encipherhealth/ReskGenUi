@@ -2,7 +2,7 @@ import styles from "./report.module.css";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
 import { ProgressBar } from "primereact/progressbar";
-import { Modal } from "antd";
+import { Badge, Modal } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 
@@ -11,12 +11,14 @@ import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Progress } from "antd";
+
 import {
   faClose,
   faUpload,
   faCheck,
   faBan,
   faSearch,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 import { Spin } from "antd";
 import { useDispatch } from "react-redux";
@@ -433,44 +435,46 @@ const index = () => {
                           className="custom-table"
                           rowClassName="custom-row"
                         >
-                          <Column
+                          {/* <Column
                             header="SI.NO"
                             headerStyle={{ width: "3rem" }}
                             body={(data, options) =>
                               paginationFirst + options.rowIndex + 1
                             }
                             bodyStyle={{
-                              borderLeft: " 0.2px solid #241571",
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderLeft: "  0.2px solid #e1e1e1",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
-                          ></Column>
+                          ></Column> */}
 
                           <Column
                             field="patientId"
                             header="Patient Id"
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderLeft: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
                           <Column
                             field="patientName"
                             header="Patient Name"
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
-                          <Column
+                          {/* <Column
                             field="fileName"
                             header="File Name"
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
-                          />
-                          <Column
+                          /> */}
+                         
+                            <Column
                             field="hcc"
                             header="HCC "
                             body={(data) => (
@@ -483,10 +487,12 @@ const index = () => {
                               </div>
                             )}
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
+                       
+                          
                           <Column
                             field="suggestionCodes"
                             header="Suggestion  "
@@ -500,8 +506,8 @@ const index = () => {
                               </div>
                             )}
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
                           <Column
@@ -517,8 +523,8 @@ const index = () => {
                               </div>
                             )}
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
                           <Column
@@ -534,8 +540,8 @@ const index = () => {
                               </div>
                             )}
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
                           <Column
@@ -546,8 +552,8 @@ const index = () => {
                             sortable
                             header="Date Received"
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
                           <Column
@@ -588,30 +594,25 @@ const index = () => {
                               );
                             }}
                             bodyStyle={{
-                              borderTop: "0.2px solid #241571",
-                              borderBottom: "0.2px solid #241571",
+                              borderTop: " 0.2px solid #e1e1e1",
+                              borderBottom: " 0.2px solid #e1e1e1",
                             }}
                           />
 
                           <Column
                             field="comments"
                             body={(data) => (
-                              <div>
-                                <input
-                                  type="text"
-                                  onClick={() => setModal(true)}
-                                  value={
-                                    data.comments ||
-                                    "Lorem Ipsum is simp........"
-                                  }
-                                  className={styles.comments}
-                                />
+                              <div
+                                className={styles.commentsIcon}
+                                onClick={() => setModal(true)}
+                              >
+                                {SVGICON.comment}
                               </div>
                             )}
                             header="Comments"
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: " 0.2px solid #e1e1e1",
+                              borderBottom: " 0.2px solid #e1e1e1",
                             }}
                           />
 
@@ -619,8 +620,8 @@ const index = () => {
                             field="patientName"
                             header="Coder Name"
                             bodyStyle={{
-                              borderTop: " 0.2px solid #241571",
-                              borderBottom: " 0.2px solid #241571",
+                              borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
                           <Column
@@ -644,9 +645,9 @@ const index = () => {
                               </div>
                             )}
                             bodyStyle={{
-                              borderTop: "0.2px solid #241571",
-                              borderBottom: "0.2px solid #241571",
-                              borderRight: "0.2px solid #241571",
+                              borderTop: " 0.2px solid #e1e1e1",
+                              borderBottom: " 0.2px solid #e1e1e1",
+                              borderRight: " 0.2px solid #e1e1e1",
                             }}
                           />
                         </DataTable>

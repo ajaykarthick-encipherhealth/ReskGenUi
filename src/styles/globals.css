@@ -10184,13 +10184,13 @@ p,
   font-size: 14px !important;
 }
 
-.profile-tab .nav-item .nav-link:hover,
+
 .profile-tab .nav-item .nav-link.active {
   border: 0;
   background: transparent;
   background: transparent;
-  border-bottom: 0.0125rem solid var(--primary);
-  color: var(--primary);
+  border-bottom: 3px solid #A20404;
+  color: #A20404;
 }
 
 
