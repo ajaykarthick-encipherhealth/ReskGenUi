@@ -363,7 +363,7 @@ export default function Patient() {
           // 'Cache-Control': 'no-cache',
           // 'Connection': 'keep-alive',
           // 'Accept': "text/event-stream",
-          'Access-Control-Allow-Origin':"*"
+          "Access-Control-Allow-Origin": "*",
         },
         withCredentials: true,
         onopen(res) {
@@ -574,7 +574,7 @@ export default function Patient() {
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `aiservice/ai/upload
+        `aiservice/ai/upload
       `,
       formData,
       headers
@@ -613,7 +613,7 @@ export default function Patient() {
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `aiservice/ai/upload/radiology
+        `aiservice/ai/upload/radiology
     `,
       formData,
       headers
@@ -658,7 +658,7 @@ export default function Patient() {
                       <div className="table-responsive active-projects task-table">
                         <div className="tbl-caption  align-items-center">
                           <div className="row filter-contain">
-                            <div className="col-xl-3">
+                            <div className="col-xl-2">
                               <div class="form-group has-search">
                                 <FontAwesomeIcon
                                   className="fa fa-search form-control-feedback"
@@ -668,25 +668,21 @@ export default function Patient() {
                                   type="text"
                                   onChange={(e) => filterChangePatientId(e)}
                                   className="form-control new-form-control"
-                                  placeholder="Patient Id"
+                                  placeholder="Search"
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-2">
+                            <div className="col-xl-1.5">
                               <div class="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
                                 <InputText
                                   type="text"
                                   onChange={(e) => filterChangePatientName(e)}
                                   className="form-control new-form-control"
-                                  placeholder="Patient Name"
+                                  placeholder="Status"
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-2">
+                            {/* <div className="col-xl-2">
                               <div class="form-group has-search">
 
                                 <Calendar
@@ -701,10 +697,9 @@ export default function Patient() {
 
 
                               </div>
-                            </div>
+                            </div> */}
                             <div className="col-xl-2">
                               <div class="form-group has-search">
-
                                 <Calendar
                                   className="form-control new-form-control calender-pri-input"
                                   value={compledtedDate}
@@ -713,10 +708,9 @@ export default function Patient() {
                                   readOnlyInput
                                   placeholder="Completed Date"
                                 />
-
                               </div>
                             </div>
-
+                            {/* 
                             <div className="col-xl-3">
                               <Button
                                 onClick={addPatientFormId}
@@ -724,7 +718,7 @@ export default function Patient() {
                               >
                                 + Add Patient Id
                               </Button>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
 
@@ -743,7 +737,7 @@ export default function Patient() {
                             className="custom-table"
                             rowClassName="custom-row"
                           >
-                            <Column
+                            {/* <Column
                               header="SI.NO"
                               headerStyle={{ width: "3rem" }}
                               body={(data, options) =>
@@ -754,12 +748,13 @@ export default function Patient() {
                                 borderTop: " 0.2px solid #e1e1e1",
                                 borderBottom: " 0.2px solid #e1e1e1",
                               }}
-                            ></Column>
+                            ></Column> */}
 
                             <Column
                               field="patientId"
                               header="Patient Id"
                               bodyStyle={{
+                                borderLeft: " 0.2px solid #e1e1e1",
                                 borderTop: " 0.2px solid #e1e1e1",
                                 borderBottom: " 0.2px solid #e1e1e1",
                               }}
@@ -783,7 +778,7 @@ export default function Patient() {
                             <Column
                               field="status"
                               body={statusBodyTemplate}
-                              header="File Status"
+                              header="Status"
                               bodyStyle={{
                                 borderTop: " 0.2px solid #e1e1e1",
                                 borderBottom: " 0.2px solid #e1e1e1",
@@ -813,12 +808,10 @@ export default function Patient() {
                             <Column
                               field="lastModifiedDate"
                               body={(data) =>
-                                moment(data.dueDate).format(
-                                  "MM-DD-YYYY hh:MM:A"
-                                )
+                                moment(data.dueDate).format("MM-DD-YYYY")
                               }
                               sortable
-                              header="C Date"
+                              header="Completed Date"
                               bodyStyle={{
                                 borderTop: " 0.2px solid #e1e1e1",
                                 borderBottom: " 0.2px solid #e1e1e1",

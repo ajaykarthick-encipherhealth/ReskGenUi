@@ -20,6 +20,12 @@
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.48px;
+  display: flex;
+  
+}
+
+.export:hover{
+  text-decoration: none!important;
 }
 .custom-table table > thead {
   background-color: #133dd4;

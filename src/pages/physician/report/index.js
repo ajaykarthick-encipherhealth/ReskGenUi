@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Progress } from "antd";
 
+
 import {
   faClose,
   faUpload,
@@ -368,7 +369,7 @@ const index = () => {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-3">
+                          <div className="col-xl-2">
                             <div class="form-group has-search">
                               <FontAwesomeIcon
                                 className="fa fa-search form-control-feedback"
@@ -378,25 +379,21 @@ const index = () => {
                                 type="text"
                                 onChange={(e) => filterChangePatientId(e)}
                                 className="form-control new-form-control"
-                                placeholder="Patient Id"
+                                placeholder="Search"
                               />
                             </div>
                           </div>
-                          <div className="col-xl-3">
+                          <div className="col-xl-2">
                             <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
                               <InputText
                                 type="text"
                                 onChange={(e) => filterChangePatientName(e)}
                                 className="form-control new-form-control"
-                                placeholder="Patient Name"
+                                placeholder="Audited By"
                               />
                             </div>
                           </div>
-                          <div className="col-xl-3">
+                          <div className="col-xl-2">
                             <div class="form-group has-search">
                               <Calendar
                                 className="form-control new-form-control calender-pri-input"
@@ -408,14 +405,44 @@ const index = () => {
                               />
                             </div>
                           </div>
-
-                          <div className="col-xl-3">
-                            <Button
-                              onClick={addPatientFormId}
-                              className={styles.export}
-                            >
-                              Export
-                            </Button>
+                          <div
+                            className="col-xl-1"
+                            style={{ marginLeft: "46pc" }}
+                          >
+                            <div className="row">
+                              <Button
+                                onClick={addPatientFormId}
+                                className={styles.export}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 20 20"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
+                                    stroke="#133DD4"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                  <path
+                                    d="M10 12.4999V3.0166"
+                                    stroke="#133DD4"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                  <path
+                                    d="M12.7916 4.87467L9.9999 2.08301L7.20825 4.87467"
+                                    stroke="#133DD4"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                </svg>
+                                Export
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -473,8 +500,8 @@ const index = () => {
                               borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           /> */}
-                         
-                            <Column
+
+                          <Column
                             field="hcc"
                             header="HCC "
                             body={(data) => (
@@ -491,8 +518,7 @@ const index = () => {
                               borderBottom: "  0.2px solid #e1e1e1",
                             }}
                           />
-                       
-                          
+
                           <Column
                             field="suggestionCodes"
                             header="Suggestion  "

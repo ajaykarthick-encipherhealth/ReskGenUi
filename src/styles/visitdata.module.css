@@ -35,6 +35,10 @@
   border-radius: 12px;
   background: #e1ffe0;
   margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  /* background-color: #ffffff; */
+  z-index: 1;
 }
 
 .hcc_title_name {
@@ -67,6 +71,10 @@ text-align: center;
   border-radius: 12px;
   background: #fff1e0;
   margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  /* background-color: #ffffff; */
+  z-index: 1;
 }
 
 .suggested_title_name {
@@ -95,6 +103,10 @@ line-height: normal;
   border-radius: 12px;
   background: #f9e7e9;
   margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  /* background-color: #ffffff; */
+  z-index: 1;
 }
 
 .deleted_title_name {
@@ -178,7 +190,7 @@ line-height: normal;
 
 .flag_container {
   width: 60px;
-  height: 546px;
+  height: 720px;
   border-radius: 8px;
   background: #e1edfe;
   float: right;
@@ -237,8 +249,9 @@ line-height: normal;
 }
 
 .tick_icon {
-  width: 20px;
-  height: 20px;
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
   border-radius: 4px;
   background: #e2fee1;
   text-align: center;
@@ -246,11 +259,14 @@ line-height: normal;
 }
 
 .combo_head_card {
-  border-radius: 12px;
-  background: #e1edfe;
-  padding: 15px 15px 15px 15px;
-  margin-bottom: 15px;
-  font-size: 14px;
+    border-radius: 12px;
+    background: #e1edfe;
+    padding: 15px 15px 15px 15px;
+    margin-bottom: 15px;
+    position: sticky;
+    top: 0;
+    /* background-color: #ffffff; */
+    z-index: 1;
 }
 
 .combo_details_card {
@@ -269,10 +285,14 @@ line-height: normal;
 }
 
 .meat_head_card {
-  border-radius: 12px;
-  background: #e1edfe;
-  padding: 15px 15px 15px 15px;
-  margin-bottom: 15px;
+    border-radius: 12px;
+    background: #e1edfe;
+    padding: 15px 15px 15px 15px;
+    margin-bottom: 15px;
+    position: sticky;
+    top: 0;
+    /* background-color: #ffffff; */
+    z-index: 1;
 }
 
 .meat_details_card {
@@ -366,13 +386,16 @@ line-height: normal;
   border-bottom: 0.0125rem solid purple !important;
 }
 .flags {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-left: 10pc;
-  margin-right: 10pc;
-  margin-bottom: 2pc;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 40pc;
+    /* margin-right: 5pc; */
+    /* margin-top: 20px; */
+ 
+  
+
 }
 .flag {
   margin-right: 5px;
@@ -385,4 +408,34 @@ line-height: normal;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+.nameList{
+    color: #221C1C;
+font-family: Manrope;
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+padding: 10px;
+}
+.circleCard{
+    width: 50px; /* Set the width and height to make it a circle */
+  height: 50px;
+  border-radius: 50%; /* Border-radius 50% makes it a circle */
+  background: #FFF;
+  fill: #FFF;
+box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); /* Add a background color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.timeLine{
+    overflow: scroll;
+}
+.vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
+    width: 177px;
+    height: 303px;
+flex-shrink: 0;
+background: #FFF !important;
 }

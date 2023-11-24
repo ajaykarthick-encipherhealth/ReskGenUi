@@ -6,9 +6,11 @@ import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
 import visitStyles from "../../../../styles/visitdata.module.css";
-
+import { InputText } from "primereact/inputtext";
 import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -43,6 +45,7 @@ import { Offcanvas } from "react-bootstrap";
 import { InfoCircleOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { notification } from "antd";
+// import { C } from "@fullcalendar/core/internal-common";
 
 export default function PatientDetails() {
   let searchKeywords = [];
@@ -1345,6 +1348,24 @@ export default function PatientDetails() {
     { value: "1", label: "Show Original" },
     { value: "2", label: "Enabled" },
     { value: "3", label: "Disabled" },
+  ];
+
+  const names = [
+    "Felipe Almeida.pdf",
+    "Martijn Haspels.pdf",
+    "Hayden Lee.pdf",
+    "Simon Yu.pdf",
+    "Ollie Brown.pdf",
+    "Calvin hsieh.pdf",
+    "Charlotte.pdf",
+    "Amelia.pdf",
+    "Olivia.pdf",
+    "Sophia.pdf",
+    'Amelia.pdf',
+    'Luna.pdf',
+    'Elizabeth.pdf',
+    'Susanne Halstead.pdf'
+    // Add more names as needed
   ];
 
   const confirmvalid = () =>
@@ -2833,6 +2854,10 @@ export default function PatientDetails() {
 
   const flagList = [
     {
+      name: "filter",
+      icon: SVGICON.List,
+    },
+    {
       name: "comments",
       icon: SVGICON.flagIcon,
     },
@@ -2849,6 +2874,46 @@ export default function PatientDetails() {
       icon: SVGICON.notsIcon,
     },
   ];
+  const timelineData = [
+    {
+      title: 'Siva',
+      subtitle: '19/11/2023 | 10.30am',
+     
+      description: 'Completed the  patient chart',
+      iconBackground: 'rgb(33, 150, 243)',
+      icon: '4'
+    },
+    {
+      title: 'Siva',
+      subtitle: '19/11/2023 | 10.30am',
+     
+      description: 'Completed the  patient chart',
+      iconBackground: 'rgb(33, 150, 243)',
+      icon:'3'
+    },
+    {
+      title: 'Siva',
+      subtitle: '19/11/2023 | 10.30am',
+     
+      description: 'Completed the  patient chart',
+      iconBackground: 'rgb(33, 150, 243)',
+      icon:'2'
+    },
+    {
+      title: 'Siva',
+      subtitle: '19/11/2023 | 10.30am',
+     
+      description: 'Completed the  patient chart',
+      iconBackground: 'rgb(33, 150, 243)',
+      icon:'1'
+    },
+    // Add more timeline data objects for other elements
+  ];
+  
+  const Icon = {
+    Home: 1,
+    // Add other SVG icons if needed
+  };
 
   return (
     <>
@@ -2864,7 +2929,7 @@ export default function PatientDetails() {
               <div className="row card patient-file-container">
                 <div className="col-xl-12">
                   <div className="row">
-                    <div className="col-xl-8 col-sm-12">
+                    <div className="col-xl-10 col-sm-12">
                       <div className={`${visitStyles.patient_info_details}`}>
                         <div className="card-body">
                           <div className="row">
@@ -2905,7 +2970,7 @@ export default function PatientDetails() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-xl-4 col-sm-12">
+                    <div className="col-xl-2 col-sm-12">
                       <div className="card-body">
                         <div className="row">
                           <div className="col-xl-12 col-sm-12">
@@ -3049,7 +3114,6 @@ export default function PatientDetails() {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="validDiseases"
-                                     
                                       className={visitStyles.navColor}
                                       activeClassName={visitStyles.activeLink}
                                     >
@@ -3084,12 +3148,42 @@ export default function PatientDetails() {
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="file"
-                                     className={visitStyles.navColor}>
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="file"
+                                      className={visitStyles.navColor}
+                                    >
                                       File
                                     </Nav.Link>
                                   </Nav.Item>
+                                  <div className={visitStyles.flags}>
+                                    <div>
+                                      <span className={visitStyles.flag}>
+                                        {SVGICON.flagIconHcc}
+                                      </span>
+                                      <span className={visitStyles.flagCodes}>
+                                        HCC
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className={visitStyles.flag}>
+                                        {SVGICON.flagIconSuggestion}
+                                      </span>
+                                      <span className={visitStyles.flagCodes}>
+                                        Suggestion
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className={visitStyles.flag}>
+                                        {SVGICON.flagIconDelete}
+                                      </span>
+                                      <span className={visitStyles.flagCodes}>
+                                        Delete
+                                      </span>
+                                    </div>
+                                  </div>
                                 </Nav>
+
                                 <Tab.Content>
                                   <Tab.Pane
                                     id="my-posts"
@@ -3849,7 +3943,11 @@ export default function PatientDetails() {
                                               {invalidComboDiseaseCodesList?.map(
                                                 (item) => {
                                                   return (
-                                                    <div className="card combo-card">
+                                                    <div
+                                                      className={
+                                                        visitStyles.combo_details_card
+                                                      }
+                                                    >
                                                       <div className="row">
                                                         <div className="col-xl-3">
                                                           <span className="font-bold">
@@ -4698,16 +4796,92 @@ export default function PatientDetails() {
                                                 </>
                                               ) : null}
                                             </div>
-
                                             <div className="col-xl-2">
-                                              <div className="row raf-main-card">
+                                              <div>Overall score</div>
+                                              <div className=" raf-score-card ">
+                                                <div className="raf-card ">
+                                                  <div className="row raf-head">
+                                                    <div className="col-xl-4">
+                                                      <label className="text-white">
+                                                        V24 score
+                                                      </label>
+                                                    </div>
+                                                    <div className="col-xl-4">
+                                                      <label className="text-white">
+                                                        v28Score(70%)
+                                                      </label>
+                                                    </div>
+                                                  </div>
+
+                                                  <div className="row  raf-details">
+                                                    <div className="col-xl-4">
+                                                      <span>
+                                                        {rafScore.v24Score}
+                                                      </span>
+                                                    </div>
+                                                    <div className="col-xl-4">
+                                                      <span>
+                                                        {
+                                                          rafScore.v24Score70Percent
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div className="raf-card">
+                                                  <div className="row raf-head">
+                                                    <div className="col-xl-4">
+                                                      <label className="text-white">
+                                                        V24 score
+                                                      </label>
+                                                    </div>
+                                                    <div className="col-xl-4">
+                                                      <label className="text-white">
+                                                        v28Score(70%)
+                                                      </label>
+                                                    </div>
+                                                  </div>
+
+                                                  <div className="row  raf-details">
+                                                    <div className="col-xl-4 ">
+                                                      <span>
+                                                        {rafScore.v28Score}
+                                                      </span>
+                                                    </div>
+                                                    <div className="col-xl-4">
+                                                      <span>
+                                                        {
+                                                          rafScore.v24Score70Percent
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div className="raf-card">
+                                                  <div className=" col raf-head">
+                                                    <div className="col-xl-12">
+                                                      <label className="text-white">
+                                                        Overall score
+                                                      </label>
+                                                    </div>
+                                                  </div>
+
+                                                  <div className="row  raf-details">
+                                                    {rafScore.score}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            {/* <div className="col-xl-2">
+                                              <div className="row raf-score-card">
                                                 <div className="raf-name-head">
                                                   <h5 className="raf-model-version">
                                                     SCORE DETAILS
                                                   </h5>
                                                 </div>
 
-                                                <div className="col-xl-12">
+                                                <div className="col-xl-3">
                                                   <div className="card">
                                                     <div className="raf-card">
                                                       <div className="row raf-head">
@@ -4772,7 +4946,7 @@ export default function PatientDetails() {
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
+                                            </div> */}
                                           </>
                                         ) : null}
                                         {rafScore == null ? (
@@ -5372,7 +5546,9 @@ export default function PatientDetails() {
                                     eventKey="comboDiseases"
                                   >
                                     <div className="my-post-content pt-3">
-                                      <div className="card combo-head-card">
+                                      <div
+                                        className={visitStyles.combo_head_card}
+                                      >
                                         <div className="row">
                                           <div className="col-xl-3">
                                             <label>Combo Codes</label>
@@ -5404,7 +5580,11 @@ export default function PatientDetails() {
                                       {comboDiseaseCodesListNonHcc?.map(
                                         (item) => {
                                           return (
-                                            <div className="card combo-card">
+                                            <div
+                                              className={
+                                                visitStyles.combo_details_card
+                                              }
+                                            >
                                               <div className="row">
                                                 <div className="col-xl-3">
                                                   <span className="font-bold">
@@ -5557,7 +5737,9 @@ export default function PatientDetails() {
                                     eventKey="meatCriteria"
                                   >
                                     <div className="my-post-content pt-3">
-                                      <div className="card meat-head-card">
+                                      <div
+                                        className={visitStyles.meat_head_card}
+                                      >
                                         <div className="row">
                                           <div className="col-xl-1">
                                             <label>Codes</label>
@@ -6646,7 +6828,9 @@ export default function PatientDetails() {
                                     eventKey="comboDiseases"
                                   >
                                     <div className="my-post-content pt-3">
-                                      <div className="card combo-head-card">
+                                      <div
+                                        className={visitStyles.combo_head_card}
+                                      >
                                         <div className="row">
                                           <div className="col-xl-3">
                                             <label>Combo Codes</label>
@@ -6815,7 +6999,9 @@ export default function PatientDetails() {
                                     eventKey="meatCriteria"
                                   >
                                     <div className="my-post-content pt-3">
-                                      <div className="card meat-head-card">
+                                      <div
+                                        className={visitStyles.meat_head_card}
+                                      >
                                         <div className="row">
                                           <div className="col-xl-1">
                                             <label>Codes</label>
@@ -7408,20 +7594,6 @@ export default function PatientDetails() {
                       </div>
                     </div>
                   </div>
-              <div className={visitStyles.flags}> 
-              <div>
-                    <span className={visitStyles.flag}>{SVGICON.flagIconHcc}</span>
-                    <span className={visitStyles.flagCodes}>HCC</span>
-                  </div>
-                  <div>
-                    <span className={visitStyles.flag}>{SVGICON.flagIconSuggestion}</span>
-                    <span className={visitStyles.flagCodes}>Suggestion</span>
-                  </div>
-                  <div>
-                    <span className={visitStyles.flag}>{SVGICON.flagIconDelete}</span>
-                    <span className={visitStyles.flagCodes}>Delete</span>
-                  </div>
-              </div>
                 </div>
 
                 {/* Modals */}
@@ -9103,7 +9275,7 @@ export default function PatientDetails() {
                 >
                   <div className="offcanvas-header">
                     <h5 className="modal-title" id="#gridSystemModal">
-                      Add Comments
+                      Patient List
                     </h5>
                     <button
                       type="button"
@@ -9113,7 +9285,89 @@ export default function PatientDetails() {
                       <i className="fa-solid fa-xmark"></i>
                     </button>
                   </div>
-                  <div className="offcanvas-body">
+                  <div className={visitStyles.timeLine}>
+                  <VerticalTimeline>
+      {timelineData.map((item, index) => (
+        <VerticalTimelineElement
+          key={index}
+          className="vertical-timeline-element--work"
+          contentStyle={{ background: '#fff', color: '#000000', borderTop: '4px solid #00749C', marginLeft:'-18px'}}
+          // contentArrowStyle={{ borderRight: `7px solid #fff`}}
+          date={item.date}
+          iconStyle={{ background: '#F5F9FE', color: 'black', fontWeight:'600', fontSize:'20px',display: 'flex', alignItems: 'center', justifyContent: 'center'  }}
+          icon={item.icon}
+        >
+          <h3 className="vertical-timeline-element-title" style={{fontSize:'26px',fontFamily:'600'}}>{item.title}</h3>
+          <h4 className="vertical-timeline-element-subtitle" style={{fontSize:'12px'}} >{item.subtitle}</h4>
+          <p style={{fontSize:'16px', marginTop:'0px'}} >{item.description}</p>
+          <style>
+      {`
+        .vertical-timeline::before{
+          background: black;
+        }
+        .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
+          margin-right:-18px;
+          margin-left:-26px
+        }
+        .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
+
+        }
+        .vertical-timeline-element-icon{
+          position: absolute;
+    /* top: 0px; */
+    /* left: 0; */
+    /* left: 18px; */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 6px #00749C, inset 0 2px 0 rgba(0,0,0,.08), 0 3px 0 4px rgba(0,0,0,.05);
+        }
+      `}
+    </style>
+        </VerticalTimelineElement>
+      ))}
+    </VerticalTimeline>
+                  </div>
+                  
+                  {/* Patient List */}
+
+                  {/* <div className="col-xl-12">
+                    <div className="row">
+                          <div className="col-xl-10">
+                      <div class="form-group has-search">
+                      <FontAwesomeIcon
+                        className="fa fa-search form-control-feedback"
+                        icon={faSearch}
+                      />
+                      <InputText
+                        type="text"
+                        onChange={(e) => filterChangePatientId(e)}
+                        className="form-control new-form-control"
+                        placeholder="Search"
+                      />
+                   
+                    </div>
+                    </div>
+                    <div className={visitStyles.circleCard}>
+  <span>{SVGICON.filter}</span>
+                    </div>
+                    </div>
+                
+                    
+                    <div className={visitStyles.nameList}>
+                      <ul>
+                        {names.map((name, index) => (
+                          <li className={visitStyles.nameList} key={index}>{name}</li>
+                          
+                        ))}
+                        
+                      </ul>
+                    </div>
+                  </div> */}
+
+                  {/* Comment */}
+
+                  {/* <div className="offcanvas-body">
                     <div className="container-fluid">
                       <div className={visitStyles.comments_card}>
                         <span>
@@ -9162,7 +9416,8 @@ export default function PatientDetails() {
                         </div>
                       </Form>
                     </div>
-                  </div>
+                  </div> */}
+
                 </Offcanvas>
               </div>
             </div>
