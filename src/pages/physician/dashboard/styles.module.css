@@ -1,0 +1,17 @@
+.maincontainer {
+    /* display: flex; */
+    position: relative;
+    top: 77px;
+    height: auto;
+    background-color: #F0F6FE;;
+    padding-bottom: 10px;
+  }
+  .rowCOntainer {
+    width:95%;
+    margin: auto;
+    padding-top: 20px;
+
+  }
+  /* .RowCon {
+    margin-bottom: 20px;
+  } */

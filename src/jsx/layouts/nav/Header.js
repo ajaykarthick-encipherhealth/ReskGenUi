@@ -106,6 +106,9 @@ const Header = ({ onNote }) => {
 							<div className="header-profile2 cr-pointer">
 								<div className="nav-link i-false" as="div">
 									<div className="header-info2 d-flex align-items-center">
+									   <div className="notificationIcon">
+									   {SVGICON.notificationIcon}
+									   </div>
 										<div className="header-media d-flex">
 											<Image src={IMAGES.profileImage}/>
 											<div>

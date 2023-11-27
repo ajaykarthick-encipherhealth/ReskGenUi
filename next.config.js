@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  rules: [{ test: /\.txt$/, use: 'raw-loader' }],
+  reactStrictMode: false,
 }
 
 module.exports = nextConfig

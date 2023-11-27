@@ -1,0 +1,59 @@
+.card2 {
+  width: 100%;
+  height: auto;
+} 
+.title{
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 15px 10px 10px;
+  color: #000000;
+
+} 
+ .sliderdiv{
+   margin-top: 10px;
+    border-radius: 12px;
+    box-shadow: 0 0px 3px 0 rgba(0, 0,0,0.2);
+}
+.container{
+  width:100%;
+    display:flex;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    
+}
+.infoCards{
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.insideCard{
+  display:flex;
+  margin: 15px;
+  color:#000000;
+  
+}
+.headerTitle{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  color:#000000;
+  padding-top: 10px;
+}
+.ImgDIv{
+  height:80%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.subText{
+  width:100%;
+  display:flex;
+  justify-content: end;
+align-items: end;
+margin-left: 20px;
+
+}

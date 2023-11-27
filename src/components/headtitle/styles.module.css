@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 20px 20px 0px 20px;
+  color: #000;
+}
+.anchor {
+  color: #133dd4;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 15px 10px 10px;
+  color: #000000;
+}
+.IMG{
+  background-color:#F0F6FE  !important;
+  border: none !important;
+  width:1%;
+}
+

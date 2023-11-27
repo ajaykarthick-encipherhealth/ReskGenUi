@@ -1,4 +1,6 @@
 import { SVGICON } from "../../constant/theme";
+import workingstatusActive from '../../../images/workingstatus/workingstatusInactive.png';
+
 
 export const MenuList = [  
     {   
@@ -46,11 +48,12 @@ export const PhysicanMenuList = [
         to: '/physician/report',
   
     },
-    //  {   
-    //     title:'User',
-    //     iconStyle:SVGICON.Usermanagement,
-    //     to: '/physician/user',
-    // },
+    {   
+        title:'Working Status',
+        iconStyle:SVGICON.workingStatus,
+        to: '/physician/workingstatus',
+       
+    },
     
 ]
 

@@ -1,0 +1,19 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 20px;
+    color: #000;;
+  }
+  .card5{
+    width:100%;
+    height:auto;
+  }
+  .buttonDiv{
+    width:100%;
+   display: flex;
+   justify-content: end;
+   align-items: end;
+   margin-bottom: 10px;
+  }

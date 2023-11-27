@@ -9,8 +9,12 @@ import visitStyles from "../../../../styles/visitdata.module.css";
 import { InputText } from "primereact/inputtext";
 import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
-import 'react-vertical-timeline-component/style.min.css';
+
+import {
+  VerticalTimeline,
+  VerticalTimelineElement,
+} from "react-vertical-timeline-component";
+import "react-vertical-timeline-component/style.min.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -26,11 +30,12 @@ import {
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Divider, Popover } from "antd";
+import { Popconfirm, Divider, Popover, Menu } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from "react-select";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
+
 import { Space, Spin } from "antd";
 // import { searchPlugin ,NextIcon, PreviousIcon, RenderSearchProps,} from '@react-pdf-viewer/search';
 import { Icon, MinimalButton, Position, Tooltip } from "@react-pdf-viewer/core";
@@ -223,9 +228,35 @@ export default function PatientDetails() {
   const [deletedHccList, setDeletedHccList] = useState([]);
   const [isModalComments, setIsModalComments] = useState(false);
   const [flagContainerActive, setFlagContainerActive] = useState("");
+  const [showIcons, setShowIcons] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [showCard, setShowCard] = useState(false);
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
+  };
+
+  const statusList = [
+    { name: "John", status: "pending" },
+    { name: "Jane", status: "processing" },
+    { name: "Doe", status: "completed" },
+    // Add more names with their respective statuses
+  ];
+
+  const filterChangePatientId = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const handleFilterClick = () => {
+    setShowIcons(!showIcons);
+  };
+  const handleShowCard = () => {
+    setShowCard(!showCard);
+    setShowCard(true);
+  };
+
+  const filterNamesByStatus = (status) => {
+    return statusList.filter((name) => name.status === status);
   };
 
   const handleChange = async (e) => {
@@ -331,7 +362,7 @@ export default function PatientDetails() {
     //   }
     // }
   };
-
+  const statuses = ["Pending", "Completed", "Hold", "Decline"];
   const getPatientDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
@@ -1361,11 +1392,23 @@ export default function PatientDetails() {
     "Amelia.pdf",
     "Olivia.pdf",
     "Sophia.pdf",
-    'Amelia.pdf',
-    'Luna.pdf',
-    'Elizabeth.pdf',
-    'Susanne Halstead.pdf'
+    "Amelia.pdf",
+    "Luna.pdf",
+    "Elizabeth.pdf",
+    "Susanne Halstead.pdf",
     // Add more names as needed
+  ];
+
+  const data = [
+    {
+      userId: "02b",
+      comId: "017",
+      fullName: "Lily",
+      userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
+      text: "I think you have a point🤔",
+      avatarUrl: "https://ui-avatars.com/api/name=Lily&background=random",
+      replies: [],
+    },
   ];
 
   const confirmvalid = () =>
@@ -2138,6 +2181,9 @@ export default function PatientDetails() {
       setLabResultStatus(true);
     }
   };
+  const onClick = (e) => {
+    console.log("click", e);
+  };
 
   const onchangeSuggested = () =>
     new Promise((resolve) => {
@@ -2194,6 +2240,48 @@ export default function PatientDetails() {
       setSuggestedBtnTitle("Add");
     }
   };
+
+  function getItem(label, key, icon, children, type) {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+    };
+  }
+  const items = [
+    getItem("Navigation One", "sub1", SVGICON.AgeIcon, [
+      getItem(
+        "Item 1",
+        null,
+        null,
+        [getItem("Option 1", "1"), getItem("Option 2", "2")],
+        "group"
+      ),
+      getItem(
+        "Item 2",
+        null,
+        null,
+        [getItem("Option 3", "3"), getItem("Option 4", "4")],
+        "group"
+      ),
+    ]),
+    getItem("Navigation Two", "sub2", SVGICON.AgeIcon, [
+      getItem("Option 5", "5"),
+      getItem("Option 6", "6"),
+      getItem("Submenu", "sub3", null, [
+        getItem("Option 7", "7"),
+        getItem("Option 8", "8"),
+      ]),
+    ]),
+    getItem("Navigation Three", "sub4", SVGICON.AgeIcon, [
+      getItem("Option 9", "9"),
+      getItem("Option 10", "10"),
+      getItem("Option 11", "11"),
+      getItem("Option 12", "12"),
+    ]),
+  ];
 
   const submitSuggestedHcc = async (notes) => {
     var newArray = [];
@@ -2848,6 +2936,7 @@ export default function PatientDetails() {
   };
 
   const addComments = (value) => {
+    console.log(value)
     setIsModalComments(true);
     setFlagContainerActive(value);
   };
@@ -2876,40 +2965,40 @@ export default function PatientDetails() {
   ];
   const timelineData = [
     {
-      title: 'Siva',
-      subtitle: '19/11/2023 | 10.30am',
-     
-      description: 'Completed the  patient chart',
-      iconBackground: 'rgb(33, 150, 243)',
-      icon: '4'
+      title: "Siva",
+      subtitle: "19/11/2023 | 10.30am",
+
+      description: "Completed the  patient chart",
+      iconBackground: "rgb(33, 150, 243)",
+      icon: "4",
     },
     {
-      title: 'Siva',
-      subtitle: '19/11/2023 | 10.30am',
-     
-      description: 'Completed the  patient chart',
-      iconBackground: 'rgb(33, 150, 243)',
-      icon:'3'
+      title: "Siva",
+      subtitle: "19/11/2023 | 10.30am",
+
+      description: "Completed the  patient chart",
+      iconBackground: "rgb(33, 150, 243)",
+      icon: "3",
     },
     {
-      title: 'Siva',
-      subtitle: '19/11/2023 | 10.30am',
-     
-      description: 'Completed the  patient chart',
-      iconBackground: 'rgb(33, 150, 243)',
-      icon:'2'
+      title: "Siva",
+      subtitle: "19/11/2023 | 10.30am",
+
+      description: "Completed the  patient chart",
+      iconBackground: "rgb(33, 150, 243)",
+      icon: "2",
     },
     {
-      title: 'Siva',
-      subtitle: '19/11/2023 | 10.30am',
-     
-      description: 'Completed the  patient chart',
-      iconBackground: 'rgb(33, 150, 243)',
-      icon:'1'
+      title: "Siva",
+      subtitle: "19/11/2023 | 10.30am",
+
+      description: "Completed the  patient chart",
+      iconBackground: "rgb(33, 150, 243)",
+      icon: "1",
     },
     // Add more timeline data objects for other elements
   ];
-  
+
   const Icon = {
     Home: 1,
     // Add other SVG icons if needed
@@ -2986,6 +3075,7 @@ export default function PatientDetails() {
                                     className="custom-react-select"
                                     defaultValue={dosYearDefalutSelectRadiology}
                                     isSearchable={false}
+                                   
                                   />
                                 ) : activeTab == 4 ? (
                                   <Select
@@ -3011,14 +3101,9 @@ export default function PatientDetails() {
                       </div>
                     </div>
                     <div className="row"></div>
-                    <div className="col-xl-11">
-                      <div className="row">
-                        <div className="col-xl-8">
-                          <div
-                            className={`${visitStyles.visitdata_header_card}`}
-                          >
-                            <div className="card-body p-0">
-                              <Tab.Container defaultActiveKey={"HCC"}>
+                    <div className="col-xl-2">
+                    <div className={`${visitStyles.sideTab}`}>
+                       <Tab.Container defaultActiveKey={"HCC"}>
                                 <div
                                   className={`card-header border-0 flex-wrap patient-details-tab-card `}
                                 >
@@ -3043,35 +3128,98 @@ export default function PatientDetails() {
                                       </Nav.Item>
                                     ))}
                                   </Nav>
-                                  <div>
-                                    {activeTab == 3 ? (
-                                      <div>
-                                        <Button
-                                          onClick={addPatientFile}
-                                          className={`ms-2 ${visitStyles.addPatientBtn}`}
-                                        >
-                                          Add Patient Radiology
-                                        </Button>
+                                    {/* <div className={visitStyles.flags}>
+                                      <div className={visitStyles.flags} >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconHcc}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          HCC
+                                        </span>
                                       </div>
-                                    ) : null}
-                                    {activeTab == 4 ? (
-                                      <div>
-                                        <Button
-                                          onClick={addLabReport}
-                                          className={`ms-2 ${visitStyles.addPatientBtn}`}
-                                        >
-                                          Add Lab report
-                                        </Button>
+                                      <div className={visitStyles.flags}   >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconSuggestion}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          Suggestion
+                                        </span>
                                       </div>
-                                    ) : null}
-                                  </div>
+                                      <div className={visitStyles.flags} >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconDelete}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          Delete
+                                        </span>
+                                      </div>
+                                    </div> */}
+                                 
                                 </div>
                               </Tab.Container>
+                              </div>
+                    </div>
+                     
+                    <div className="col-xl-9">
+                      <div className="row">
+                          {/* <div className="col-xl-8">
+                            <div
+                              className={`${visitStyles.visitdata_header_card}`}
+                            >
+                              <div className="card-body p-0">
+                                <Tab.Container defaultActiveKey={"HCC"}>
+                                  <div
+                                    className={`card-header border-0 flex-wrap patient-details-tab-card `}
+                                  >
+                                    <Nav
+                                      as="ul"
+                                      className="nav nav-pills mix-chart-tab"
+                                    >
+                                      {tabList.map((item, index) => (
+                                        <Nav.Item
+                                          as="li"
+                                          className="nav-item"
+                                          key={index}
+                                        >
+                                          <Nav.Link
+                                            onClick={() =>
+                                              navigetPageDetails(item.type)
+                                            }
+                                            eventKey={item.title}
+                                          >
+                                            {item.title}
+                                          </Nav.Link>
+                                        </Nav.Item>
+                                      ))}
+                                    </Nav>
+                                    <div>
+                                      {activeTab == 3 ? (
+                                        <div>
+                                          <Button
+                                            onClick={addPatientFile}
+                                            className={`ms-2 ${visitStyles.addPatientBtn}`}
+                                          >
+                                            Add Patient Radiology
+                                          </Button>
+                                        </div>
+                                      ) : null}
+                                      {activeTab == 4 ? (
+                                        <div>
+                                          <Button
+                                            onClick={addLabReport}
+                                            className={`ms-2 ${visitStyles.addPatientBtn}`}
+                                          >
+                                            Add Lab report
+                                          </Button>
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  </div>
+                                </Tab.Container>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div
-                          className={`col-xl-4 ${visitStyles.actionbtnContainer}`}
+                          </div> */}
+                        <div className={`col-xl-12 ${visitStyles.actionbtnContainer}`}
                         >
                           <Button
                             onClick={handleSubmitHccDecline}
@@ -3099,7 +3247,34 @@ export default function PatientDetails() {
 
                             {completedBtnTitle}
                           </Button>
+
+                          <div>
+                                    {activeTab == 3 ? (
+                                      <div>
+                                        <Button
+                                          onClick={addPatientFile}
+                                          className={`ms-2 ${visitStyles.addPatientBtn}`}
+                                        >
+                                          Add Patient Radiology
+                                        </Button>
+                                      </div>
+                                    ) : null}
+                                    {activeTab == 4 ? (
+                                      <div>
+                                        <Button
+                                          onClick={addLabReport}
+                                          className={`ms-2 ${visitStyles.addPatientBtn}`}
+                                        >
+                                          Add Lab report
+                                        </Button>
+                                      </div>
+                                    ) : null}
+                                  </div>
+
+                                 
                         </div>
+
+                          
                       </div>
 
                       {activeTab == 1 ? (
@@ -3109,7 +3284,9 @@ export default function PatientDetails() {
                           >
                             <div className="custom-tab-1 ">
                               <Tab.Container defaultActiveKey={activeTabHead}>
-                                <Nav as="ul" className="nav nav-tabs">
+                                <div className="row">
+                                  <div className="col-xl-8">
+                                  <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item as="li" className="nav-item">
                                     <Nav.Link
                                       to="#my-posts"
@@ -3155,34 +3332,42 @@ export default function PatientDetails() {
                                     >
                                       File
                                     </Nav.Link>
+                                    
                                   </Nav.Item>
-                                  <div className={visitStyles.flags}>
-                                    <div>
-                                      <span className={visitStyles.flag}>
-                                        {SVGICON.flagIconHcc}
-                                      </span>
-                                      <span className={visitStyles.flagCodes}>
-                                        HCC
-                                      </span>
-                                    </div>
-                                    <div>
-                                      <span className={visitStyles.flag}>
-                                        {SVGICON.flagIconSuggestion}
-                                      </span>
-                                      <span className={visitStyles.flagCodes}>
-                                        Suggestion
-                                      </span>
-                                    </div>
-                                    <div>
-                                      <span className={visitStyles.flag}>
-                                        {SVGICON.flagIconDelete}
-                                      </span>
-                                      <span className={visitStyles.flagCodes}>
-                                        Delete
-                                      </span>
+                              
+                                </Nav>
+                                  </div>
+                                  <div className="col-xl-4">
+                                  <div className={ visitStyles.flags} >
+                                      <div className={visitStyles.flags} >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconHcc}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          HCC
+                                        </span>
+                                      </div>
+                                      <div className={visitStyles.flags}   >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconSuggestion}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          Suggestion
+                                        </span>
+                                      </div>
+                                      <div className={visitStyles.flags} >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconDelete}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          Delete
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
-                                </Nav>
+
+                                </div>
+                        
 
                                 <Tab.Content>
                                   <Tab.Pane
@@ -7555,11 +7740,40 @@ export default function PatientDetails() {
                                     </div>
                                   </Tab.Pane>
                                 </Tab.Content>
+                   
                               </Tab.Container>
+                         
+                             
                             </div>
                           </div>
                         </div>
                       )}
+                           {/* <div className={` col-xl-12 ${visitStyles.flags}`}>
+                                      <div className={visitStyles.flags} >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconHcc}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          HCC
+                                        </span>
+                                      </div>
+                                      <div className={visitStyles.flags}   >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconSuggestion}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          Suggestion
+                                        </span>
+                                      </div>
+                                      <div className={visitStyles.flags} >
+                                        <span className={visitStyles.flag}>
+                                          {SVGICON.flagIconDelete}
+                                        </span>
+                                        <span className={visitStyles.flagCodes}>
+                                          Delete
+                                        </span>
+                                      </div>
+                                    </div> */}
                     </div>
 
                     <div className={`col-xl-1`}>
@@ -9275,7 +9489,7 @@ export default function PatientDetails() {
                 >
                   <div className="offcanvas-header">
                     <h5 className="modal-title" id="#gridSystemModal">
-                      Patient List
+                      {flagContainerActive}
                     </h5>
                     <button
                       type="button"
@@ -9285,25 +9499,51 @@ export default function PatientDetails() {
                       <i className="fa-solid fa-xmark"></i>
                     </button>
                   </div>
+                  {flagContainerActive == "timeline" ?
                   <div className={visitStyles.timeLine}>
-                  <VerticalTimeline>
-      {timelineData.map((item, index) => (
-        <VerticalTimelineElement
-          key={index}
-          className="vertical-timeline-element--work"
-          contentStyle={{ background: '#fff', color: '#000000', borderTop: '4px solid #00749C', marginLeft:'-18px'}}
-          // contentArrowStyle={{ borderRight: `7px solid #fff`}}
-          date={item.date}
-          iconStyle={{ background: '#F5F9FE', color: 'black', fontWeight:'600', fontSize:'20px',display: 'flex', alignItems: 'center', justifyContent: 'center'  }}
-          icon={item.icon}
-        >
-          <h3 className="vertical-timeline-element-title" style={{fontSize:'26px',fontFamily:'600'}}>{item.title}</h3>
-          <h4 className="vertical-timeline-element-subtitle" style={{fontSize:'12px'}} >{item.subtitle}</h4>
-          <p style={{fontSize:'16px', marginTop:'0px'}} >{item.description}</p>
-          <style>
-      {`
+                    <VerticalTimeline>
+                      {timelineData.map((item, index) => (
+                        <VerticalTimelineElement
+                          key={index}
+                          className="vertical-timeline-element--work"
+                          contentStyle={{
+                            background: "#fff",
+                            color: "#000000",
+                            borderTop: "4px solid #00749C",
+                            marginLeft: "-18px",
+                          }}
+                          date={item.date}
+                          iconStyle={{
+                            background: "#F5F9FE",
+                            color: "black",
+                            fontWeight: "600",
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                          icon={item.icon}
+                        >
+                          <h3
+                            className="vertical-timeline-element-title"
+                            style={{ fontSize: "26px", fontFamily: "600" }}
+                          >
+                            {item.title}
+                          </h3>
+                          <h4
+                            className="vertical-timeline-element-subtitle"
+                            style={{ fontSize: "12px" }}
+                          >
+                            {item.subtitle}
+                          </h4>
+                          <p style={{ fontSize: "16px", marginTop: "0px" }}>
+                            {item.description}
+                          </p>
+                          <style>
+                            {`
         .vertical-timeline::before{
           background: black;
+          width: 1px;
         }
         .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
           margin-right:-18px;
@@ -9314,60 +9554,96 @@ export default function PatientDetails() {
         }
         .vertical-timeline-element-icon{
           position: absolute;
-    /* top: 0px; */
-    /* left: 0; */
-    /* left: 18px; */
+   
     width: 40px;
     height: 40px;
     border-radius: 50%;
     box-shadow: 0 0 0 6px #00749C, inset 0 2px 0 rgba(0,0,0,.08), 0 3px 0 4px rgba(0,0,0,.05);
         }
       `}
-    </style>
-        </VerticalTimelineElement>
-      ))}
-    </VerticalTimeline>
-                  </div>
-                  
-                  {/* Patient List */}
+                          </style>
+                        </VerticalTimelineElement>
+                      ))}
+                    </VerticalTimeline>
+                  </div> : flagContainerActive == "filter" ?
 
-                  {/* <div className="col-xl-12">
-                    <div className="row">
-                          <div className="col-xl-10">
-                      <div class="form-group has-search">
-                      <FontAwesomeIcon
-                        className="fa fa-search form-control-feedback"
-                        icon={faSearch}
-                      />
-                      <InputText
-                        type="text"
-                        onChange={(e) => filterChangePatientId(e)}
-                        className="form-control new-form-control"
-                        placeholder="Search"
-                      />
-                   
-                    </div>
-                    </div>
-                    <div className={visitStyles.circleCard}>
-  <span>{SVGICON.filter}</span>
-                    </div>
-                    </div>
-                
-                    
+                    <div className={`row ${visitStyles.patientListHead}`}>
+                      <div className="col-xl-10">
+                        <div class="form-group has-search">
+                          <FontAwesomeIcon
+                            className="fa fa-search form-control-feedback"
+                            icon={faSearch}
+                          />
+                          <InputText
+                            type="text"
+                            onChange={(e) => filterChangePatientId(e)}
+                            className="form-control new-form-control"
+                            placeholder="Search"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-xl-2">
+                      <div className={visitStyles.content}>
+                        <span
+                          className={visitStyles.circleCard}
+                          onClick={handleFilterClick}
+                          
+                        >
+                          {" "}
+                         <span></span> {showIcons ? <FontAwesomeIcon icon={faClose}  height={30} width={30} color="#A20404"/>: SVGICON.filter}
+                        </span>
+                        {showIcons && (
+                          <div className={visitStyles.iconContainer}>
+                            <span
+                              className={visitStyles.circleCard}
+                              onClick={handleShowCard}
+                             
+                            >
+                              {SVGICON.dashboard}
+                            </span>
+
+                            <span className={visitStyles.circleCard}>
+                              {SVGICON.dateIcon}
+                            </span>
+                          </div>
+                        )}
+                        {showCard && (
+                          <div
+                            className={visitStyles.menuCard}
+                            onMouseEnter={() => setShowCard(true)}
+                            onMouseLeave={() => setShowCard(false)}
+                          >
+                           
+                            <ul>
+                             
+                              {statuses.map((status, index) => (
+                                <li
+                                  onClick={() => setShowCard(false)}
+                                  className={visitStyles.nameList}
+                                  key={index}
+                                >
+                                  {status}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                      </div>
+
                     <div className={visitStyles.nameList}>
                       <ul>
                         {names.map((name, index) => (
-                          <li className={visitStyles.nameList} key={index}>{name}</li>
-                          
+                          <li className={visitStyles.nameList} key={index}>
+                            {name}
+                          </li>
                         ))}
-                        
                       </ul>
                     </div>
-                  </div> */}
+                  </div> : flagContainerActive == "commentslist" ?
 
-                  {/* Comment */}
 
-                  {/* <div className="offcanvas-body">
+                  <div className="offcanvas-body">
                     <div className="container-fluid">
                       <div className={visitStyles.comments_card}>
                         <span>
@@ -9390,34 +9666,96 @@ export default function PatientDetails() {
                         </span>
                         <span>18/11/2023 10:00 Am</span>
                       </div>
-                      <Form
-                        noValidate
-                        validated={validated}
-                        onSubmit={handleSubmit}
-                      >
-                        <div className="row">
-                          <div className="col-xl-12 mb-3">
-                            <textarea
-                              className={visitStyles.commentsFormControl}
-                              rows="5"
-                              required
-                              placeholder="Add Comments"
-                            ></textarea>
-                          </div>
-                        </div>
+               
+                    </div> 
+                
+                  </div> : flagContainerActive == "comments" ?
 
-                        <div className="text-center">
-                          <Button
-                            type="submit"
-                            className={visitStyles.addPatientBtn}
-                          >
-                            Save
-                          </Button>
-                        </div>
-                      </Form>
-                    </div>
-                  </div> */}
 
+<div className="offcanvas-body">
+  <div className="container-fluid">
+    <div className={visitStyles.comments_card}>
+      <span>
+        Lorem Ipsum is simply dummy text of the printing and
+        typesetting industry.
+      </span>
+      <span>18/11/2023 10:00 Am</span>
+    </div>
+    <div className={visitStyles.comments_card}>
+      <span>
+        Lorem Ipsum is simply dummy text of the printing and
+        typesetting industry.
+      </span>
+      <span>18/11/2023 10:00 Am</span>
+    </div>
+    <div className={visitStyles.comments_card}>
+      <span>
+        Lorem Ipsum is simply dummy text of the printing and
+        typesetting industry.
+      </span>
+      <span>18/11/2023 10:00 Am</span>
+    </div>
+    <Form
+      noValidate
+      validated={validated}
+      onSubmit={handleSubmit}
+    >
+      <div className="row">
+        <div className="col-xl-12 mb-3">
+          <textarea
+            className={visitStyles.commentsFormControl}
+            rows="5"
+            required
+            placeholder="Add Comments"
+          ></textarea>
+        </div>
+      </div>
+
+      <div className="text-center">
+        <Button
+          type="submit"
+          className={visitStyles.addPatientBtn}
+        >
+          Save
+        </Button>
+      </div>
+    </Form>
+  </div> 
+
+</div> : flagContainerActive == "notes" ?
+
+
+<div className="offcanvas-body">
+  <div className="container-fluid">
+    
+    <Form
+      noValidate
+      validated={validated}
+      onSubmit={handleSubmit}
+    >
+      <div className="row">
+        <div className="col-xl-12 mb-3">
+          <textarea
+            className={visitStyles.commentsFormControl}
+            rows="5"
+            required
+            placeholder="Add Notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div className="text-center">
+        <Button
+          type="submit"
+          className={visitStyles.addPatientBtn}
+        >
+          Save
+        </Button>
+      </div>
+    </Form>
+  </div> 
+
+</div> :null}
                 </Offcanvas>
               </div>
             </div>

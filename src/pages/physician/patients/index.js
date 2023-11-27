@@ -641,7 +641,17 @@ export default function Patient() {
     getAllList(localUserId, e.page, e.rows);
     console.log("test");
   };
-
+  const statusOptions = [
+    { label: 'Completed', value: 'completed' },
+    { label: 'Pending', value: 'pending' },
+    { label: 'Declined', value: 'declined' },
+    { label: 'Hold', value: 'hold' },
+  ];
+  const dosOnChange = (selectedOption) => {
+    const selectedValue = selectedOption.value;
+    // Do something with the selected value
+    console.log(selectedValue);
+  };
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -672,14 +682,21 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-1.5">
+                            <div className="col-xl-2">
                               <div class="form-group has-search">
-                                <InputText
+                                {/* <InputText
                                   type="text"
                                   onChange={(e) => filterChangePatientName(e)}
                                   className="form-control new-form-control"
                                   placeholder="Status"
-                                />
+                                /> */}
+                                 <Select
+                                     onChange={(selectedOption) => dosOnChange(selectedOption)}
+                                    options={statusOptions}
+                                    className="custom-react-select"
+                                    isSearchable={false}
+                                   
+                                  />
                               </div>
                             </div>
                             {/* <div className="col-xl-2">

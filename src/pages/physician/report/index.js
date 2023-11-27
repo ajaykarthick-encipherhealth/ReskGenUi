@@ -406,10 +406,10 @@ const index = () => {
                             </div>
                           </div>
                           <div
-                            className="col-xl-1"
-                            style={{ marginLeft: "46pc" }}
+                            className="col-xl-6"
+                           
                           >
-                            <div className="row">
+                            <div className="row flr">
                               <Button
                                 onClick={addPatientFormId}
                                 className={styles.export}
