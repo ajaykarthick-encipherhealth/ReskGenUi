@@ -14,10 +14,10 @@ import { IMAGES } from "../jsx/constant/theme";
 
 export default function UserLogin() {
     const router = useRouter();
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('ajith01@encipherhealth.onmicrosoft.com');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState('@Asdf123');
     // const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -116,7 +116,17 @@ export default function UserLogin() {
                                     <input type="password" className="form-control form-control-lg" value={password} onChange={(e) => setPassword(e.target.value)} />
                                     {errors.password && <div className="text-danger fs-12">{errors.password}</div>}
                                 </div>
-                             
+                                <div className="form-row d-flex justify-content-between mt-4 mb-2">
+                                    <div className="mb-4">
+                                        <div className="form-check custom-checkbox mb-3">
+                                            <input type="checkbox" className="form-check-input" id="customCheckBox1" required="" />
+                                            <label className="form-check-label" htmlFor="customCheckBox1">Remember my preference</label>
+                                        </div>
+                                    </div>
+                                    <div className="mb-4">
+                                        {/* <Link to="/forgot-password" className="btn-link text-primary">Forgot Password</Link> */}
+                                    </div>
+                                </div>
                                 <div className="text-center mb-4">
                                     <button type="submit" className="btn btn-primary btn-block">
                                         {isLoading ? 'Loading...' : 'LOGIN'}

@@ -52,9 +52,14 @@ import Link from "next/link";
 import { notification } from "antd";
 // import { C } from "@fullcalendar/core/internal-common";
 
-export default function PatientDetails() {
-  let searchKeywords = [];
+import { actions as patientActions } from "../../../../stores/patients";
+import { connect } from "react-redux";
+import Image from 'next/image';
 
+
+
+const Details = ({ loadFilterPatientList, filterPatientList }) => {
+  let searchKeywords = [];
   // const searchPluginInstance = searchPlugin({
   //   // keyword: [
   //   //   'document',
@@ -90,9 +95,9 @@ export default function PatientDetails() {
   const [confirmNotesModalInValid, setConfirmNotesModalInValid] =
     useState(false);
 
-  const storePatientDetails = useSelector(
-    (state) => state.patientDetails.patientDetails
-  );
+  // const storePatientDetails = useSelector(
+  //   (state) => state.patientDetails.patientDetails
+  // );
   const storeDetails = useSelector((state) => state);
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
@@ -171,6 +176,8 @@ export default function PatientDetails() {
     actualDescription: "",
     capturedSections: "",
     encodedDate: "",
+    flag:"",
+    comments:""
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -231,6 +238,10 @@ export default function PatientDetails() {
   const [showIcons, setShowIcons] = useState(false);
   const [filter, setFilter] = useState("");
   const [showCard, setShowCard] = useState(false);
+  const [patientList, setPatientList] = useState([]);
+  const[sideNavLabelActiveKey,setSideNavLabelActiveKey] = useState("HCC")
+
+
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -241,6 +252,20 @@ export default function PatientDetails() {
     { name: "Jane", status: "processing" },
     { name: "Doe", status: "completed" },
     // Add more names with their respective statuses
+  ];
+
+  const flagPostList = [
+    { value: "PATIENT_NAME_MISSED", label: "PATIENT_NAME_MISSED" },
+    { value: "PATIENT_DOB_MISSED", label: "PATIENT_DOB_MISSED" },
+    { value: "MRN_ID_MISMATCH", label: "MRN_ID_MISMATCH" },
+    { value: "PROVIDER_SIGN_MISSED", label: "PROVIDER_SIGN_MISSED" },
+    { value: "PROVIDER_SIGNATURE_MISSED", label: "PROVIDER_SIGNATURE_MISSED" },
+    { value: "PROVIDER_CREDENTIAL_MISSED", label: "PROVIDER_CREDENTIAL_MISSED" },
+    { value: "PROVIDER_SIGN_STATUS_PENDING", label: "PROVIDER_SIGN_STATUS_PENDING" },
+    { value: "NO_HCC_FOUND", label: "NO_HCC_FOUND" },
+    { value: "NO_VALID_DOCUMENT_FOUND", label: "NO_VALID_DOCUMENT_FOUND" },
+    { value: "PATIENT_DISEASED", label: "PATIENT_DISEASED" },
+    { value: "PATIENT_DISEASED", label: "PATIENT_DISEASED" },
   ];
 
   const filterChangePatientId = (e) => {
@@ -311,16 +336,19 @@ export default function PatientDetails() {
   };
 
   useEffect(() => {
+    console.log(filterPatientList)
+    // loadFilterPatientList();
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
+    var patientId = localStorage.getItem("patientId");
     setLocalOrgId(orgId);
-    getPatientDetails(orgId, tenId);
+    getPatientDetails(patientId, orgId, tenId);
     // getPatientDetailsRadiology(orgId, tenId);
     setLocalTenantId(tenId);
 
     var uId = localStorage.getItem("userId");
     setLocalUserId(uId);
-    var patientId = localStorage.getItem("patientId");
+
     setLocalPatientId(patientId);
 
     //   if (isDocumentLoaded) {
@@ -335,7 +363,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
     }
@@ -362,13 +390,13 @@ export default function PatientDetails() {
     //   }
     // }
   };
-  const statuses = ["Pending", "Completed", "Hold", "Decline"];
-  const getPatientDetails = async (orgId, tenId) => {
-    var patientId = localStorage.getItem("patientId");
+  const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINE"];
+  const getPatientDetails = async (patientId, orgId, tenId) => {
+    // var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       var result = response.data;
@@ -699,7 +727,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       setRadiologyResCheck(true);
@@ -1064,7 +1092,7 @@ export default function PatientDetails() {
     // }
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
     );
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
@@ -1240,7 +1268,7 @@ export default function PatientDetails() {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
     if (response.data.labFileDetail != null) {
@@ -1306,7 +1334,7 @@ export default function PatientDetails() {
   const getPatientPdfFile = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
@@ -1336,7 +1364,7 @@ export default function PatientDetails() {
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
@@ -1357,7 +1385,7 @@ export default function PatientDetails() {
   const getLabReportFiles = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data;
@@ -2306,18 +2334,24 @@ export default function PatientDetails() {
     setInputValue({ ...inputValue, [key]: value });
   };
 
-  const openModelDbDescription = () => {};
+  
+  const handleChangeFlag = async (e) => {
+    setInputValue({ ...inputValue, ['flag']: e.value });
+  };
+
+  const openModelDbDescription = () => { };
 
   const tabList = [
-    { title: "HCC", type: "HCC" },
-    { title: "NON HCC", type: "NON HCC" },
-    { title: "Radiology", type: "Radiology" },
-    { title: "Lab Report", type: "Lab Report" },
+    { title: "HCC", type: "HCC", iconStyle: IMAGES.visitDataHcc},
+    { title: "NON HCC", type: "NON HCC" , iconStyle: IMAGES.visitDataNonHcc},
+    { title: "Radiology", type: "Radiology", iconStyle: IMAGES.visitDataRadioloy, },
+    { title: "Lab Report", type: "Lab Report" , iconStyle: IMAGES.visitDataLabreport,},
   ];
 
   const navigetPageDetails = (pageTitle) => {
     // setIsLoadingDos(true);
     setActiveTabHead("file");
+    setSideNavLabelActiveKey(pageTitle)
     setIsLoading(true);
     if (pageTitle == "HCC") {
       setActiveTab(1);
@@ -2405,7 +2439,7 @@ export default function PatientDetails() {
     };
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload/radiology
+      `aiservice/ai/upload/radiology
       `,
       formData,
       headers
@@ -2435,7 +2469,7 @@ export default function PatientDetails() {
     };
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload/lab
+      `aiservice/ai/upload/lab
       `,
       formData,
       headers
@@ -2533,7 +2567,7 @@ export default function PatientDetails() {
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/validtosuggested`,
+      `dbservice/update/move/validtosuggested`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2558,7 +2592,7 @@ export default function PatientDetails() {
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/validtodeleted`,
+      `dbservice/update/move/validtodeleted`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2582,7 +2616,7 @@ export default function PatientDetails() {
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/suggestedtodeleted`,
+      `dbservice/update/move/suggestedtodeleted`,
       [dataFormatSuggested]
     );
     if (response?.status == 202) {
@@ -2606,7 +2640,7 @@ export default function PatientDetails() {
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/suggestedtovalid`,
+      `dbservice/update/move/suggestedtovalid`,
       [dataFormatSuggested]
     );
     if (response?.status == 202) {
@@ -2630,7 +2664,7 @@ export default function PatientDetails() {
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/deletedtovalid`,
+      `dbservice/update/move/deletedtovalid`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2653,7 +2687,7 @@ export default function PatientDetails() {
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/deletedtoSuggested`,
+      `dbservice/update/move/deletedtoSuggested`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2677,7 +2711,7 @@ export default function PatientDetails() {
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/invalidtovalid`,
+      `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
     if (response?.status == 202) {
@@ -2889,7 +2923,7 @@ export default function PatientDetails() {
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
+      `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
     );
     if (response.data) {
       console.log(response.data);
@@ -2916,7 +2950,7 @@ export default function PatientDetails() {
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc +
-          `dbservice/patient/compute/addvaliddisease`,
+        `dbservice/patient/compute/addvaliddisease`,
         dataFormatSuggested
       );
       if (response?.status == 200) {
@@ -2928,38 +2962,45 @@ export default function PatientDetails() {
         handleCloseForm();
       } else {
       }
-    } catch (e) {}
+    } catch (e) { }
     // Add logic for handling form submission
     // You can access the form data and perform actions accordingly
     // For example, you can access the input field values using refs or state
     // After handling the submission, close the form
   };
 
-  const addComments = (value) => {
+  const addComments = async (value) => {
     console.log(value)
+    if (value == "filter") {
+      var response = await loadFilterPatientList(localUserId, 0, 1, "COMPLETED");
+      console.log(response)
+      var result = response.content;
+      console.log(result)
+      setPatientList(result)
+    }
     setIsModalComments(true);
     setFlagContainerActive(value);
   };
 
   const flagList = [
     {
-      name: "filter",
+      name: "Filter",
       icon: SVGICON.List,
     },
     {
-      name: "comments",
+      name: "Flag",
       icon: SVGICON.flagIcon,
     },
     {
-      name: "timeline",
+      name: "Timeline",
       icon: SVGICON.filterIcon,
     },
     {
-      name: "commentslist",
+      name: "Comments",
       icon: SVGICON.commentIcon,
     },
     {
-      name: "notes",
+      name: "Notes",
       icon: SVGICON.notsIcon,
     },
   ];
@@ -3004,6 +3045,93 @@ export default function PatientDetails() {
     // Add other SVG icons if needed
   };
 
+
+  const getFiltePatientListStatus = async (value) => {
+    console.log(value)
+    setShowCard(false)
+    var response = await loadFilterPatientList(localUserId, 0, 1, value);
+    console.log(response)
+    var result = response.content;
+    console.log(result)
+    setPatientList(result)
+
+  }
+
+  const handleSubmitFlag = async (event) => {
+    event.preventDefault();
+    var dataFormatSuggested = {
+      patientId: localPatientId,
+      orgId: localOrgId,
+      comments: inputValue.comments,
+      year: selectedDosValue,
+      flag:inputValue.flag
+    };
+    console.log(dataFormatSuggested)
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc +
+      `dbservice/flagdetails`,
+      [dataFormatSuggested]
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Flag added Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+    setIsModalComments(false)
+  };
+
+  const handleSubmitNotes = async (event) => {
+    event.preventDefault();
+    var dataFormatSuggested = {
+      patientId: localPatientId,
+      orgId: localOrgId,
+      comments: inputValue.comments,
+      year: selectedDosValue,
+    };
+    console.log(dataFormatSuggested)
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc +
+      `dbservice/notes`,
+      [dataFormatSuggested]
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Notes added Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+    setIsModalComments(false)
+  };
+
+  const handleSubmitCommnets = async (event) => {
+    event.preventDefault();
+    var dataFormatSuggested = {
+      patientId: localPatientId,
+      orgId: localOrgId,
+      comments: inputValue.comments,
+      year: selectedDosValue,
+    };
+    console.log(dataFormatSuggested)
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc +
+      `dbservice/comment`,
+      [dataFormatSuggested]
+    );
+    if (response?.status == 202) {
+      notification.success({
+        message: "Comment added Successfully!",
+      });
+      getPatientDetails(localOrgId, localTenantId);
+    } else {
+    }
+    setIsModalComments(false)
+  };
+
+
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -3018,18 +3146,18 @@ export default function PatientDetails() {
               <div className="row card patient-file-container">
                 <div className="col-xl-12">
                   <div className="row">
-                    <div className="col-xl-10 col-sm-12">
+                    <div className="col-xl-6 col-sm-12">
                       <div className={`${visitStyles.patient_info_details}`}>
                         <div className="card-body">
                           <div className="row">
-                            <div className="col-xl-2 col-sm-12">
+                            <div className="col-xl-3 col-sm-12">
                               <i>{SVGICON.patientIdIcon}</i>
                               <label>Patient Id</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.patientId}
                               </h6>
                             </div>
-                            <div className="col-xl-2 col-sm-12">
+                            <div className="col-xl-3 col-sm-12">
                               <i>{SVGICON.patientNameIcon}</i>{" "}
                               <label>Name</label>
                               <h6 className="ageDtails">
@@ -3063,9 +3191,9 @@ export default function PatientDetails() {
                       <div className="card-body">
                         <div className="row">
                           <div className="col-xl-12 col-sm-12">
-                            <label className="form-label">
+                            {/* <label className="form-label">
                               Date of Service
-                            </label>
+                            </label> */}
                             {!isLoadingDos ? (
                               <>
                                 {activeTab == 3 ? (
@@ -3075,7 +3203,7 @@ export default function PatientDetails() {
                                     className="custom-react-select"
                                     defaultValue={dosYearDefalutSelectRadiology}
                                     isSearchable={false}
-                                   
+
                                   />
                                 ) : activeTab == 4 ? (
                                   <Select
@@ -3100,35 +3228,125 @@ export default function PatientDetails() {
                         </div>
                       </div>
                     </div>
+                    <div className="col-xl-4 col-sm-12">
+                      <div className="card-body">
+                        <div className={`col-xl-12 ${visitStyles.actionbtnContainer}`}
+                        >
+                          <Button
+                            onClick={handleSubmitHccDecline}
+                            className={`ms-2 ${visitStyles.declineBtn}`}
+                          >
+                            <i>{SVGICON.delclineIcon}</i>
+                            {/* {declineBtnTitle} */}
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              setConfirmNotesModalDecline(true);
+                              setIsValidAction("holdFunction");
+                            }}
+                            className={`ms-2 ${visitStyles.holdBtn}`}
+                          >
+                            <i>{SVGICON.holdBtnIcon}</i>
+                            {/* Hold */}
+                          </Button>
+
+                          <Button
+                            onClick={handleSubmitHccComplete}
+                            className={`ms-2 ${visitStyles.completedBtn}`}
+                          >
+                            <i>{SVGICON.completedBtnIcon}</i>
+
+                            {/* {completedBtnTitle} */}
+                          </Button>
+
+                          <div>
+                            {activeTab == 3 ? (
+                              <div>
+                                <Button
+                                  onClick={addPatientFile}
+                                  className={`ms-2 ${visitStyles.addPatientBtn}`}
+                                >
+                                  +
+                                </Button>
+                              </div>
+                            ) : null}
+                            {activeTab == 4 ? (
+                              <div>
+                                <Button
+                                  onClick={addLabReport}
+                                  className={`ms-2 ${visitStyles.addPatientBtn}`}
+                                >
+                                  +
+                                </Button>
+                              </div>
+                            ) : null}
+                          </div>
+
+
+                        </div>
+                      </div>
+                    </div>
                     <div className="row"></div>
                     <div className="col-xl-2">
-                    <div className={`${visitStyles.sideTab}`}>
-                       <Tab.Container defaultActiveKey={"HCC"}>
-                                <div
-                                  className={`card-header border-0 flex-wrap patient-details-tab-card `}
+                      <div className={`${visitStyles.sideTab}`}>
+
+
+                      <div  className={`${visitStyles.sideNav}`}>
+      <div className="sideNavscroll">
+      <div
+          className="nav-control"
+          // onClick={() => {
+          //   handleToogle();
+          // }}
+        >
+          <div className={`${visitStyles.sideNavArrow}`}>
+            <span className="line">{SVGICON.navSideIcon}</span>
+          </div>
+        </div>
+      <ul className="metismenu" id="menu">
+            {tabList.map((data, index) => (
+                <li className={`${visitStyles.sideNavLabel}`}  onClick={() =>
+                  navigetPageDetails(data.type)
+                }>
+                  <a className={` ${sideNavLabelActiveKey === data.title ? visitStyles.sideNavLabelActive : ""}`}>
+                    <div className="menu-icon">
+                    <Image src={data.iconStyle}/>		
+                      </div>{" "}
+                    <span  className={`${visitStyles.sideNavText}`} >
+                      {data.title}
+                    </span>
+                  </a>
+                </li>
+            ))}
+          </ul>
+        </div>
+        </div>
+                        <Tab.Container defaultActiveKey={"HCC"}>
+                          <div
+                            className={`card-header border-0 flex-wrap patient-details-tab-card `}
+                          >
+                            {/* <Nav
+                              as="ul"
+                              className="nav nav-pills mix-chart-tab"
+                            >
+                              {tabList.map((item, index) => (
+                                <Nav.Item
+                                  as="li"
+                                  className="nav-item"
+                                  key={index}
                                 >
-                                  <Nav
-                                    as="ul"
-                                    className="nav nav-pills mix-chart-tab"
+                                  <Nav.Link
+                                    onClick={() =>
+                                      navigetPageDetails(item.type)
+                                    }
+                                    eventKey={item.title}
                                   >
-                                    {tabList.map((item, index) => (
-                                      <Nav.Item
-                                        as="li"
-                                        className="nav-item"
-                                        key={index}
-                                      >
-                                        <Nav.Link
-                                          onClick={() =>
-                                            navigetPageDetails(item.type)
-                                          }
-                                          eventKey={item.title}
-                                        >
-                                          {item.title}
-                                        </Nav.Link>
-                                      </Nav.Item>
-                                    ))}
-                                  </Nav>
-                                    {/* <div className={visitStyles.flags}>
+                                    {item.title}
+                                  </Nav.Link>
+                                </Nav.Item>
+                              ))}
+                            </Nav> */}
+                            {/* <div className={visitStyles.flags}>
                                       <div className={visitStyles.flags} >
                                         <span className={visitStyles.flag}>
                                           {SVGICON.flagIconHcc}
@@ -3154,15 +3372,15 @@ export default function PatientDetails() {
                                         </span>
                                       </div>
                                     </div> */}
-                                 
-                                </div>
-                              </Tab.Container>
-                              </div>
+
+                          </div>
+                        </Tab.Container>
+                      </div>
                     </div>
-                     
+
                     <div className="col-xl-9">
                       <div className="row">
-                          {/* <div className="col-xl-8">
+                        {/* <div className="col-xl-8">
                             <div
                               className={`${visitStyles.visitdata_header_card}`}
                             >
@@ -3219,7 +3437,7 @@ export default function PatientDetails() {
                               </div>
                             </div>
                           </div> */}
-                        <div className={`col-xl-12 ${visitStyles.actionbtnContainer}`}
+                        {/* <div className={`col-xl-12 ${visitStyles.actionbtnContainer}`}
                         >
                           <Button
                             onClick={handleSubmitHccDecline}
@@ -3272,9 +3490,9 @@ export default function PatientDetails() {
                                   </div>
 
                                  
-                        </div>
+                        </div> */}
 
-                          
+
                       </div>
 
                       {activeTab == 1 ? (
@@ -3286,59 +3504,59 @@ export default function PatientDetails() {
                               <Tab.Container defaultActiveKey={activeTabHead}>
                                 <div className="row">
                                   <div className="col-xl-8">
-                                  <Nav as="ul" className="nav nav-tabs">
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link
-                                      to="#my-posts"
-                                      eventKey="validDiseases"
-                                      className={visitStyles.navColor}
-                                      activeClassName={visitStyles.activeLink}
-                                    >
-                                      Visit Data
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link
-                                      to="#my-posts"
-                                      eventKey="comboDiseases"
-                                      className={visitStyles.navColor}
-                                    >
-                                      Combination Codes
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link
-                                      to="#my-posts"
-                                      eventKey="meatCriteria"
-                                      className={visitStyles.navColor}
-                                    >
-                                      MEAT Criteria
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link
-                                      to="#my-posts"
-                                      eventKey="RafScore"
-                                      className={visitStyles.navColor}
-                                    >
-                                      RAF Score
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link
-                                      to="#my-posts"
-                                      eventKey="file"
-                                      className={visitStyles.navColor}
-                                    >
-                                      File
-                                    </Nav.Link>
-                                    
-                                  </Nav.Item>
-                              
-                                </Nav>
+                                    <Nav as="ul" className="nav nav-tabs">
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link
+                                          to="#my-posts"
+                                          eventKey="validDiseases"
+                                          className={visitStyles.navColor}
+                                          activeClassName={visitStyles.activeLink}
+                                        >
+                                          Visit Data
+                                        </Nav.Link>
+                                      </Nav.Item>
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link
+                                          to="#my-posts"
+                                          eventKey="comboDiseases"
+                                          className={visitStyles.navColor}
+                                        >
+                                          Combination Codes
+                                        </Nav.Link>
+                                      </Nav.Item>
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link
+                                          to="#my-posts"
+                                          eventKey="meatCriteria"
+                                          className={visitStyles.navColor}
+                                        >
+                                          MEAT Criteria
+                                        </Nav.Link>
+                                      </Nav.Item>
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link
+                                          to="#my-posts"
+                                          eventKey="RafScore"
+                                          className={visitStyles.navColor}
+                                        >
+                                          RAF Score
+                                        </Nav.Link>
+                                      </Nav.Item>
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link
+                                          to="#my-posts"
+                                          eventKey="file"
+                                          className={visitStyles.navColor}
+                                        >
+                                          File
+                                        </Nav.Link>
+
+                                      </Nav.Item>
+
+                                    </Nav>
                                   </div>
                                   <div className="col-xl-4">
-                                  <div className={ visitStyles.flags} >
+                                    <div className={visitStyles.flags} >
                                       <div className={visitStyles.flags} >
                                         <span className={visitStyles.flag}>
                                           {SVGICON.flagIconHcc}
@@ -3367,7 +3585,7 @@ export default function PatientDetails() {
                                   </div>
 
                                 </div>
-                        
+
 
                                 <Tab.Content>
                                   <Tab.Pane
@@ -3699,7 +3917,7 @@ export default function PatientDetails() {
                                                           </div>
                                                           <div className="d-flex justify-content-sm-between valid-providerdocument ">
                                                             {data.getPlace ==
-                                                            "Lab" ? (
+                                                              "Lab" ? (
                                                               <Badge
                                                                 className="badge-meat  badge-circle mt-2 text-white"
                                                                 bg={` badge-circle mt-2 bg-bg-seven `}
@@ -4123,7 +4341,7 @@ export default function PatientDetails() {
                                             </div>
                                           </div>
                                           {invalidComboDiseaseCodesList.length !=
-                                          0 ? (
+                                            0 ? (
                                             <>
                                               {invalidComboDiseaseCodesList?.map(
                                                 (item) => {
@@ -4235,7 +4453,7 @@ export default function PatientDetails() {
                                           <div
                                             className={
                                               item.isMeatCriteriaPresent ===
-                                              true
+                                                true
                                                 ? `${visitStyles.meat_details_card}`
                                                 : `${visitStyles.meat_details_card_false}`
                                             }
@@ -4491,44 +4709,44 @@ export default function PatientDetails() {
                                                         bg={
                                                           item.monitorCapturedFromHeader ===
                                                             "HPI" ||
-                                                          item.monitorCapturedFromHeader ===
+                                                            item.monitorCapturedFromHeader ===
                                                             "Plan: Hypertensive heart disease without heart failure" ||
-                                                          item.monitorCapturedFromHeader ===
+                                                            item.monitorCapturedFromHeader ===
                                                             "Vital Signs"
                                                             ? "third badge-circle mt-2"
                                                             : item.monitorCapturedFromHeader ===
-                                                                "Impression" ||
+                                                              "Impression" ||
                                                               item.monitorCapturedFromHeader ===
-                                                                "Plan: COPD" ||
+                                                              "Plan: COPD" ||
                                                               item.monitorCapturedFromHeader ===
-                                                                "Assessments" ||
+                                                              "Assessments" ||
                                                               item.monitorCapturedFromHeader ===
-                                                                "Assessment"
-                                                            ? "bg-eight badge-circle mt-2"
-                                                            : item.monitorCapturedFromHeader ===
+                                                              "Assessment"
+                                                              ? "bg-eight badge-circle mt-2"
+                                                              : item.monitorCapturedFromHeader ===
                                                                 "Recommendations" ||
-                                                              item.monitorCapturedFromHeader ===
+                                                                item.monitorCapturedFromHeader ===
                                                                 "Plan: GERD without esophagitis" ||
-                                                              item.monitorCapturedFromHeader ===
+                                                                item.monitorCapturedFromHeader ===
                                                                 "Treatment"
-                                                            ? "bgshodowcolor badge-circle mt-2"
-                                                            : item.monitorCapturedFromHeader ===
-                                                                "Plan / Discussion" ||
-                                                              item.monitorCapturedFromHeader ===
-                                                                "Plan: Arteriosclerotic cardiovascular disease"
-                                                            ? "bg-four badge-circle mt-2"
-                                                            : item.monitorCapturedFromHeader ===
-                                                                "Patient Instructions" ||
-                                                              item.monitorCapturedFromHeader ===
-                                                                "Plan: Hyperlipidemia, acquired"
-                                                            ? "bg-five badge-circle mt-2"
-                                                            : item.monitorCapturedFromHeader ===
-                                                              "N/A"
-                                                            ? "bg-six badge-circle mt-2"
-                                                            : item.monitorCapturedFromHeader ===
-                                                              "Plan"
-                                                            ? "bg-seven badge-circle mt-2"
-                                                            : "primary badge-circle mt-2"
+                                                                ? "bgshodowcolor badge-circle mt-2"
+                                                                : item.monitorCapturedFromHeader ===
+                                                                  "Plan / Discussion" ||
+                                                                  item.monitorCapturedFromHeader ===
+                                                                  "Plan: Arteriosclerotic cardiovascular disease"
+                                                                  ? "bg-four badge-circle mt-2"
+                                                                  : item.monitorCapturedFromHeader ===
+                                                                    "Patient Instructions" ||
+                                                                    item.monitorCapturedFromHeader ===
+                                                                    "Plan: Hyperlipidemia, acquired"
+                                                                    ? "bg-five badge-circle mt-2"
+                                                                    : item.monitorCapturedFromHeader ===
+                                                                      "N/A"
+                                                                      ? "bg-six badge-circle mt-2"
+                                                                      : item.monitorCapturedFromHeader ===
+                                                                        "Plan"
+                                                                        ? "bg-seven badge-circle mt-2"
+                                                                        : "primary badge-circle mt-2"
                                                         }
                                                         onClick={() =>
                                                           handleOpenModal(
@@ -4557,44 +4775,44 @@ export default function PatientDetails() {
                                                         bg={
                                                           item.evaluateCapturedFromHeader ===
                                                             "HPI" ||
-                                                          item.evaluateCapturedFromHeader ===
+                                                            item.evaluateCapturedFromHeader ===
                                                             "Plan: Hypertensive heart disease without heart failure" ||
-                                                          item.evaluateCapturedFromHeader ===
+                                                            item.evaluateCapturedFromHeader ===
                                                             "Vital Signs"
                                                             ? "third badge-circle mt-2"
                                                             : item.evaluateCapturedFromHeader ===
-                                                                "Impression" ||
+                                                              "Impression" ||
                                                               item.evaluateCapturedFromHeader ===
-                                                                "Plan: COPD" ||
+                                                              "Plan: COPD" ||
                                                               item.evaluateCapturedFromHeader ===
-                                                                "Assessments" ||
+                                                              "Assessments" ||
                                                               item.evaluateCapturedFromHeader ===
-                                                                "Assessment"
-                                                            ? "bg-eight badge-circle mt-2"
-                                                            : item.evaluateCapturedFromHeader ===
+                                                              "Assessment"
+                                                              ? "bg-eight badge-circle mt-2"
+                                                              : item.evaluateCapturedFromHeader ===
                                                                 "Recommendations" ||
-                                                              item.evaluateCapturedFromHeader ===
+                                                                item.evaluateCapturedFromHeader ===
                                                                 "Plan: GERD without esophagitis" ||
-                                                              item.evaluateCapturedFromHeader ===
+                                                                item.evaluateCapturedFromHeader ===
                                                                 "Treatment"
-                                                            ? "bgshodowcolor badge-circle mt-2"
-                                                            : item.evaluateCapturedFromHeader ===
-                                                                "Plan / Discussion" ||
-                                                              item.evaluateCapturedFromHeader ===
-                                                                "Plan: Arteriosclerotic cardiovascular disease"
-                                                            ? "bg-four badge-circle mt-2"
-                                                            : item.evaluateCapturedFromHeader ===
-                                                                "Patient Instructions" ||
-                                                              item.evaluateCapturedFromHeader ===
-                                                                "Plan: Hyperlipidemia, acquired"
-                                                            ? "bg-five badge-circle mt-2"
-                                                            : item.evaluateCapturedFromHeader ===
-                                                              "N/A"
-                                                            ? "bg-six badge-circle mt-2"
-                                                            : item.evaluateCapturedFromHeader ===
-                                                              "Plan"
-                                                            ? "bg-seven badge-circle mt-2"
-                                                            : "primary badge-circle mt-2"
+                                                                ? "bgshodowcolor badge-circle mt-2"
+                                                                : item.evaluateCapturedFromHeader ===
+                                                                  "Plan / Discussion" ||
+                                                                  item.evaluateCapturedFromHeader ===
+                                                                  "Plan: Arteriosclerotic cardiovascular disease"
+                                                                  ? "bg-four badge-circle mt-2"
+                                                                  : item.evaluateCapturedFromHeader ===
+                                                                    "Patient Instructions" ||
+                                                                    item.evaluateCapturedFromHeader ===
+                                                                    "Plan: Hyperlipidemia, acquired"
+                                                                    ? "bg-five badge-circle mt-2"
+                                                                    : item.evaluateCapturedFromHeader ===
+                                                                      "N/A"
+                                                                      ? "bg-six badge-circle mt-2"
+                                                                      : item.evaluateCapturedFromHeader ===
+                                                                        "Plan"
+                                                                        ? "bg-seven badge-circle mt-2"
+                                                                        : "primary badge-circle mt-2"
                                                         }
                                                         onClick={() =>
                                                           handleOpenModal(
@@ -4625,44 +4843,44 @@ export default function PatientDetails() {
                                                         bg={
                                                           item.assessmentCapturedFromHeader ===
                                                             "HPI" ||
-                                                          item.assessmentCapturedFromHeader ===
+                                                            item.assessmentCapturedFromHeader ===
                                                             "Plan: Hypertensive heart disease without heart failure" ||
-                                                          item.assessmentCapturedFromHeader ===
+                                                            item.assessmentCapturedFromHeader ===
                                                             "Vital Signs"
                                                             ? "third badge-circle mt-2"
                                                             : item.assessmentCapturedFromHeader ===
-                                                                "Impression" ||
+                                                              "Impression" ||
                                                               item.assessmentCapturedFromHeader ===
-                                                                "Plan: COPD" ||
+                                                              "Plan: COPD" ||
                                                               item.assessmentCapturedFromHeader ===
-                                                                "Assessments" ||
+                                                              "Assessments" ||
                                                               item.assessmentCapturedFromHeader ===
-                                                                "Assessment"
-                                                            ? "bg-eight badge-circle mt-2"
-                                                            : item.assessmentCapturedFromHeader ===
+                                                              "Assessment"
+                                                              ? "bg-eight badge-circle mt-2"
+                                                              : item.assessmentCapturedFromHeader ===
                                                                 "Recommendations" ||
-                                                              item.assessmentCapturedFromHeader ===
+                                                                item.assessmentCapturedFromHeader ===
                                                                 "Plan: GERD without esophagitis" ||
-                                                              item.assessmentCapturedFromHeader ===
+                                                                item.assessmentCapturedFromHeader ===
                                                                 "Treatment"
-                                                            ? "bgshodowcolor badge-circle mt-2"
-                                                            : item.assessmentCapturedFromHeader ===
-                                                                "Plan / Discussion" ||
-                                                              item.assessmentCapturedFromHeader ===
-                                                                "Plan: Arteriosclerotic cardiovascular disease"
-                                                            ? "bg-four badge-circle mt-2"
-                                                            : item.assessmentCapturedFromHeader ===
-                                                                "Patient Instructions" ||
-                                                              item.assessmentCapturedFromHeader ===
-                                                                "Plan: Hyperlipidemia, acquired"
-                                                            ? "bg-five badge-circle mt-2"
-                                                            : item.assessmentCapturedFromHeader ===
-                                                              "N/A"
-                                                            ? "bg-six badge-circle mt-2"
-                                                            : item.assessmentCapturedFromHeader ===
-                                                              "Plan"
-                                                            ? "bg-seven badge-circle mt-2"
-                                                            : "primary badge-circle mt-2"
+                                                                ? "bgshodowcolor badge-circle mt-2"
+                                                                : item.assessmentCapturedFromHeader ===
+                                                                  "Plan / Discussion" ||
+                                                                  item.assessmentCapturedFromHeader ===
+                                                                  "Plan: Arteriosclerotic cardiovascular disease"
+                                                                  ? "bg-four badge-circle mt-2"
+                                                                  : item.assessmentCapturedFromHeader ===
+                                                                    "Patient Instructions" ||
+                                                                    item.assessmentCapturedFromHeader ===
+                                                                    "Plan: Hyperlipidemia, acquired"
+                                                                    ? "bg-five badge-circle mt-2"
+                                                                    : item.assessmentCapturedFromHeader ===
+                                                                      "N/A"
+                                                                      ? "bg-six badge-circle mt-2"
+                                                                      : item.assessmentCapturedFromHeader ===
+                                                                        "Plan"
+                                                                        ? "bg-seven badge-circle mt-2"
+                                                                        : "primary badge-circle mt-2"
                                                         }
                                                         onClick={() =>
                                                           handleOpenModal(
@@ -4692,44 +4910,44 @@ export default function PatientDetails() {
                                                         bg={
                                                           item.treatmentCapturedFromHeader ===
                                                             "HPI" ||
-                                                          item.treatmentCapturedFromHeader ===
+                                                            item.treatmentCapturedFromHeader ===
                                                             "Plan: Hypertensive heart disease without heart failure" ||
-                                                          item.treatmentCapturedFromHeader ===
+                                                            item.treatmentCapturedFromHeader ===
                                                             "Vital Signs"
                                                             ? "third badge-circle mt-2"
                                                             : item.treatmentCapturedFromHeader ===
-                                                                "Impression" ||
+                                                              "Impression" ||
                                                               item.treatmentCapturedFromHeader ===
-                                                                "Plan: COPD" ||
+                                                              "Plan: COPD" ||
                                                               item.treatmentCapturedFromHeader ===
-                                                                "Assessments" ||
+                                                              "Assessments" ||
                                                               item.treatmentCapturedFromHeader ===
-                                                                "Assessment"
-                                                            ? "bg-eight badge-circle mt-2"
-                                                            : item.treatmentCapturedFromHeader ===
+                                                              "Assessment"
+                                                              ? "bg-eight badge-circle mt-2"
+                                                              : item.treatmentCapturedFromHeader ===
                                                                 "Recommendations" ||
-                                                              item.treatmentCapturedFromHeader ===
+                                                                item.treatmentCapturedFromHeader ===
                                                                 "Plan: GERD without esophagitis" ||
-                                                              item.treatmentCapturedFromHeader ===
+                                                                item.treatmentCapturedFromHeader ===
                                                                 "Treatment"
-                                                            ? "bgshodowcolor badge-circle mt-2"
-                                                            : item.treatmentCapturedFromHeader ===
-                                                                "Plan / Discussion" ||
-                                                              item.treatmentCapturedFromHeader ===
-                                                                "Plan: Arteriosclerotic cardiovascular disease"
-                                                            ? "bg-four badge-circle mt-2"
-                                                            : item.treatmentCapturedFromHeader ===
-                                                                "Patient Instructions" ||
-                                                              item.treatmentCapturedFromHeader ===
-                                                                "Plan: Hyperlipidemia, acquired"
-                                                            ? "bg-five badge-circle mt-2"
-                                                            : item.treatmentCapturedFromHeader ===
-                                                              "N/A"
-                                                            ? "bg-six badge-circle mt-2"
-                                                            : item.treatmentCapturedFromHeader ===
-                                                              "Plan"
-                                                            ? "bg-seven badge-circle mt-2"
-                                                            : "primary badge-circle mt-2"
+                                                                ? "bgshodowcolor badge-circle mt-2"
+                                                                : item.treatmentCapturedFromHeader ===
+                                                                  "Plan / Discussion" ||
+                                                                  item.treatmentCapturedFromHeader ===
+                                                                  "Plan: Arteriosclerotic cardiovascular disease"
+                                                                  ? "bg-four badge-circle mt-2"
+                                                                  : item.treatmentCapturedFromHeader ===
+                                                                    "Patient Instructions" ||
+                                                                    item.treatmentCapturedFromHeader ===
+                                                                    "Plan: Hyperlipidemia, acquired"
+                                                                    ? "bg-five badge-circle mt-2"
+                                                                    : item.treatmentCapturedFromHeader ===
+                                                                      "N/A"
+                                                                      ? "bg-six badge-circle mt-2"
+                                                                      : item.treatmentCapturedFromHeader ===
+                                                                        "Plan"
+                                                                        ? "bg-seven badge-circle mt-2"
+                                                                        : "primary badge-circle mt-2"
                                                         }
                                                         onClick={() =>
                                                           handleOpenModal(
@@ -4788,18 +5006,20 @@ export default function PatientDetails() {
                                           <>
                                             <div className="col-xl-10">
                                               {rafScore.scoreOutputDTOList !=
-                                              null ? (
+                                                null ? (
                                                 <>
                                                   {rafScore.scoreOutputDTOList.map(
                                                     (rafScoreMapResult) => {
                                                       return (
-                                                        <div className="row raf-main-card">
-                                                          {/* <div className="col-xl-3">
+                                                        <>
+                                                          <label>{rafScoreMapResult.hcc_model.version}</label>
+                                                          <div className="row raf-main-card">
+                                                            {/* <div className="col-xl-3">
                                                           <div className="card">
                                                             <div className="raf-card">
                                                               <div className="row raf-head text-center">
                                                                 <div className="col-xl-12">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     Summary
                                                                   </label>
                                                                 </div>
@@ -4827,154 +5047,155 @@ export default function PatientDetails() {
                                                             </div>
                                                           </div>
                                                         </div> */}
-                                                          <div className="col-xl-4">
-                                                            <div className="card">
-                                                              <div className="raf-card">
-                                                                <div className="row raf-head">
-                                                                  <div className="col-xl-6">
-                                                                    <label className="text-white">
-                                                                      DX Code
-                                                                    </label>
+                                                            <div className="col-xl-4">
+                                                              <div className="card">
+                                                                <div className="raf-card">
+                                                                  <div className="row raf-head">
+                                                                    <div className="col-xl-6">
+                                                                      <label >
+                                                                        DX Code
+                                                                      </label>
+                                                                    </div>
+                                                                    <div className="col-xl-6">
+                                                                      <label >
+                                                                        DX
+                                                                        Description
+                                                                      </label>
+                                                                    </div>
                                                                   </div>
-                                                                  <div className="col-xl-6">
-                                                                    <label className="text-white">
-                                                                      DX
-                                                                      Description
-                                                                    </label>
-                                                                  </div>
-                                                                </div>
 
-                                                                {rafScoreMapResult.dx_hccs.map(
-                                                                  (item) => {
-                                                                    return (
-                                                                      <div className="row raf-details">
-                                                                        <div className="col-xl-6">
-                                                                          <span>
-                                                                            {
-                                                                              item.dx_name
-                                                                            }
-                                                                          </span>
-                                                                        </div>
-                                                                        <div className="col-xl-6">
-                                                                          <span>
-                                                                            {
-                                                                              item.dx_desc
-                                                                            }
-                                                                          </span>
-                                                                        </div>
-                                                                      </div>
-                                                                    );
-                                                                  }
-                                                                )}
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                          <div className="col-xl-4">
-                                                            <div className="card">
-                                                              <div className="raf-card">
-                                                                <div className="row raf-head">
-                                                                  <div className="col-xl-6">
-                                                                    <label className="text-white">
-                                                                      HCC
-                                                                    </label>
-                                                                  </div>
-                                                                  <div className="col-xl-6">
-                                                                    <label className="text-white">
-                                                                      HCC
-                                                                      Description
-                                                                    </label>
-                                                                  </div>
-                                                                </div>
-                                                                {rafScoreMapResult.dx_hccs.map(
-                                                                  (res) => {
-                                                                    return res.hcc_list.map(
-                                                                      (
-                                                                        res1
-                                                                      ) => {
-                                                                        return (
-                                                                          <div className="row raf-details">
-                                                                            <div className="col-xl-6">
-                                                                              <span>
-                                                                                {
-                                                                                  res1.hcc_name
-                                                                                }
-                                                                              </span>
-                                                                            </div>
-                                                                            <div className="col-xl-6">
-                                                                              <span>
-                                                                                {
-                                                                                  res1.hcc_desc
-                                                                                }
-                                                                              </span>
-                                                                            </div>
+                                                                  {rafScoreMapResult.dx_hccs.map(
+                                                                    (item) => {
+                                                                      return (
+                                                                        <div className="row raf-details">
+                                                                          <div className="col-xl-6">
+                                                                            <span>
+                                                                              {
+                                                                                item.dx_name
+                                                                              }
+                                                                            </span>
                                                                           </div>
-                                                                        );
-                                                                      }
-                                                                    );
-                                                                  }
-                                                                )}
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                          <div className="col-xl-4">
-                                                            <div className="card">
-                                                              <div className="raf-card">
-                                                                <div className="row raf-head">
-                                                                  <div className="col-xl-4">
-                                                                    <label className="text-white">
-                                                                      Trumped By
-                                                                    </label>
-                                                                  </div>
-                                                                  <div className="col-xl-4">
-                                                                    <label className="text-white">
-                                                                      RAF
-                                                                    </label>
-                                                                  </div>
-                                                                  <div className="col-xl-4">
-                                                                    <label className="text-white">
-                                                                      Monthly
-                                                                      Premium
-                                                                    </label>
-                                                                  </div>
-                                                                </div>
-                                                                {rafScoreMapResult.dx_hccs.map(
-                                                                  (res) => {
-                                                                    return res.hcc_list.map(
-                                                                      (
-                                                                        res1
-                                                                      ) => {
-                                                                        return (
-                                                                          <div className="row  raf-details">
-                                                                            <div className="col-xl-4">
-                                                                              <span>
-                                                                                -
-                                                                              </span>
-                                                                            </div>
-                                                                            <div className="col-xl-4">
-                                                                              <span>
-                                                                                {
-                                                                                  res1.hcc_raf
-                                                                                }
-                                                                              </span>
-                                                                            </div>
-                                                                            <div className="col-xl-4">
-                                                                              <span>
-                                                                                $
-                                                                                {
-                                                                                  res1.premium
-                                                                                }
-                                                                              </span>
-                                                                            </div>
+                                                                          <div className="col-xl-6">
+                                                                            <span>
+                                                                              {
+                                                                                item.dx_desc
+                                                                              }
+                                                                            </span>
                                                                           </div>
-                                                                        );
-                                                                      }
-                                                                    );
-                                                                  }
-                                                                )}
+                                                                        </div>
+                                                                      );
+                                                                    }
+                                                                  )}
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <div className="col-xl-4">
+                                                              <div className="card">
+                                                                <div className="raf-card">
+                                                                  <div className="row raf-head">
+                                                                    <div className="col-xl-6">
+                                                                      <label >
+                                                                        HCC
+                                                                      </label>
+                                                                    </div>
+                                                                    <div className="col-xl-6">
+                                                                      <label >
+                                                                        HCC
+                                                                        Description
+                                                                      </label>
+                                                                    </div>
+                                                                  </div>
+                                                                  {rafScoreMapResult.dx_hccs.map(
+                                                                    (res) => {
+                                                                      return res.hcc_list.map(
+                                                                        (
+                                                                          res1
+                                                                        ) => {
+                                                                          return (
+                                                                            <div className="row raf-details">
+                                                                              <div className="col-xl-6">
+                                                                                <span>
+                                                                                  {
+                                                                                    res1.hcc_name
+                                                                                  }
+                                                                                </span>
+                                                                              </div>
+                                                                              <div className="col-xl-6">
+                                                                                <span>
+                                                                                  {
+                                                                                    res1.hcc_desc
+                                                                                  }
+                                                                                </span>
+                                                                              </div>
+                                                                            </div>
+                                                                          );
+                                                                        }
+                                                                      );
+                                                                    }
+                                                                  )}
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <div className="col-xl-4">
+                                                              <div className="card">
+                                                                <div className="raf-card">
+                                                                  <div className="row raf-head">
+                                                                    <div className="col-xl-4">
+                                                                      <label >
+                                                                        Trumped By
+                                                                      </label>
+                                                                    </div>
+                                                                    <div className="col-xl-4">
+                                                                      <label >
+                                                                        RAF
+                                                                      </label>
+                                                                    </div>
+                                                                    <div className="col-xl-4">
+                                                                      <label >
+                                                                        Monthly
+                                                                        Premium
+                                                                      </label>
+                                                                    </div>
+                                                                  </div>
+                                                                  {rafScoreMapResult.dx_hccs.map(
+                                                                    (res) => {
+                                                                      return res.hcc_list.map(
+                                                                        (
+                                                                          res1
+                                                                        ) => {
+                                                                          return (
+                                                                            <div className="row  raf-details">
+                                                                              <div className="col-xl-4">
+                                                                                <span>
+                                                                                  -
+                                                                                </span>
+                                                                              </div>
+                                                                              <div className="col-xl-4">
+                                                                                <span>
+                                                                                  {
+                                                                                    res1.hcc_raf
+                                                                                  }
+                                                                                </span>
+                                                                              </div>
+                                                                              <div className="col-xl-4">
+                                                                                <span>
+                                                                                  $
+                                                                                  {
+                                                                                    res1.premium
+                                                                                  }
+                                                                                </span>
+                                                                              </div>
+                                                                            </div>
+                                                                          );
+                                                                        }
+                                                                      );
+                                                                    }
+                                                                  )}
+                                                                </div>
                                                               </div>
                                                             </div>
                                                           </div>
-                                                        </div>
+                                                        </>
                                                       );
                                                     }
                                                   )}
@@ -4987,13 +5208,13 @@ export default function PatientDetails() {
                                                 <div className="raf-card ">
                                                   <div className="row raf-head">
                                                     <div className="col-xl-4">
-                                                      <label className="text-white">
+                                                      <label >
                                                         V24 score
                                                       </label>
                                                     </div>
                                                     <div className="col-xl-4">
-                                                      <label className="text-white">
-                                                        v28Score(70%)
+                                                      <label >
+                                                        v24Score(70%)
                                                       </label>
                                                     </div>
                                                   </div>
@@ -5016,13 +5237,13 @@ export default function PatientDetails() {
                                                 <div className="raf-card">
                                                   <div className="row raf-head">
                                                     <div className="col-xl-4">
-                                                      <label className="text-white">
-                                                        V24 score
+                                                      <label >
+                                                        V28 score
                                                       </label>
                                                     </div>
                                                     <div className="col-xl-4">
-                                                      <label className="text-white">
-                                                        v28Score(70%)
+                                                      <label >
+                                                        v28Score(30%)
                                                       </label>
                                                     </div>
                                                   </div>
@@ -5036,7 +5257,7 @@ export default function PatientDetails() {
                                                     <div className="col-xl-4">
                                                       <span>
                                                         {
-                                                          rafScore.v24Score70Percent
+                                                          rafScore.v28Score30Percent
                                                         }
                                                       </span>
                                                     </div>
@@ -5045,7 +5266,7 @@ export default function PatientDetails() {
                                                 <div className="raf-card">
                                                   <div className=" col raf-head">
                                                     <div className="col-xl-12">
-                                                      <label className="text-white">
+                                                      <label >
                                                         Overall score
                                                       </label>
                                                     </div>
@@ -5071,27 +5292,27 @@ export default function PatientDetails() {
                                                     <div className="raf-card">
                                                       <div className="row raf-head">
                                                         <div className="col-xl-2">
-                                                          <label className="text-white">
+                                                          <label >
                                                             v24Score
                                                           </label>
                                                         </div>
                                                         <div className="col-xl-3">
-                                                          <label className="text-white">
+                                                          <label >
                                                             v24Score70Percent
                                                           </label>
                                                         </div>
                                                         <div className="col-xl-2">
-                                                          <label className="text-white">
+                                                          <label >
                                                             v28Score
                                                           </label>
                                                         </div>
                                                         <div className="col-xl-3">
-                                                          <label className="text-white">
+                                                          <label >
                                                             v28Score30Percent
                                                           </label>
                                                         </div>
                                                         <div className="col-xl-2">
-                                                          <label className="text-white">
+                                                          <label >
                                                             Score
                                                           </label>
                                                         </div>
@@ -5414,7 +5635,7 @@ export default function PatientDetails() {
                                                     <>
                                                       {data.isHccValid ==
                                                         false ||
-                                                      data.isHccValid ==
+                                                        data.isHccValid ==
                                                         null ? (
                                                         <li>
                                                           <div className="new_valid-dis">
@@ -5545,79 +5766,79 @@ export default function PatientDetails() {
                                                           </div>
                                                         </li>
                                                       ) : // <li>
-                                                      //   <div className="timeline-panel d-block invalid-disease">
-                                                      //     <div
-                                                      //       className="media-body"
-                                                      //       onClick={() =>
-                                                      //         handleOpenModalCombinationCode(
-                                                      //           data.diagnosisCodeFinding,
-                                                      //           data.actualDescription
-                                                      //         )
-                                                      //       }
-                                                      //     >
-                                                      //       <span className="mb-1 disease-name">
-                                                      //         {
-                                                      //           data.actualDescription
-                                                      //         }
-                                                      //       </span>
-                                                      //     </div>
+                                                        //   <div className="timeline-panel d-block invalid-disease">
+                                                        //     <div
+                                                        //       className="media-body"
+                                                        //       onClick={() =>
+                                                        //         handleOpenModalCombinationCode(
+                                                        //           data.diagnosisCodeFinding,
+                                                        //           data.actualDescription
+                                                        //         )
+                                                        //       }
+                                                        //     >
+                                                        //       <span className="mb-1 disease-name">
+                                                        //         {
+                                                        //           data.actualDescription
+                                                        //         }
+                                                        //       </span>
+                                                        //     </div>
 
-                                                      //     <div className="media-body d-flex">
+                                                        //     <div className="media-body d-flex">
 
-                                                      //       {data.diagnosisCodeFinding !=
-                                                      //         null &&
-                                                      //         data.diagnosisCodeFinding !=
-                                                      //         "" ? (
-                                                      //         <div className="form-check custom-checkbox unmatch-check ms-3">
-                                                      //           <div>
-                                                      //             <Popconfirm
-                                                      //               title="You want move to valid?"
-                                                      //               description={
-                                                      //                 data.diagnosisCodeDocument
-                                                      //               }
-                                                      //               onConfirm={
-                                                      //                 onchangeSuggested
-                                                      //               }
-                                                      //               placement="rightTop"
-                                                      //               okText="Yes"
-                                                      //               cancelText="No"
-                                                      //             >
-                                                      //               <input
-                                                      //                 onChange={(
-                                                      //                   e
-                                                      //                 ) => {
-                                                      //                   handleMatchHcc(
-                                                      //                     e,
-                                                      //                     data,
-                                                      //                     data.diagnosisCodeFinding
-                                                      //                   );
-                                                      //                 }}
-                                                      //                 type="checkbox"
-                                                      //                 id={`customCheckBox ${data.diagnosisCodeFinding}`}
-                                                      //                 className="form-check-input unmatach-checkbox"
-                                                      //                 required
-                                                      //               />
-                                                      //             </Popconfirm>
-                                                      //           </div>
-                                                      //           <Popover
-                                                      //             placement="topLeft"
-                                                      //             title="Finding Code"
-                                                      //             content={
-                                                      //               data.diagnosisCodeFinding
-                                                      //             }
-                                                      //           >
-                                                      //             <span className="disease-name">
-                                                      //               {
-                                                      //                 data.diagnosisCodeFinding
-                                                      //               }
-                                                      //             </span>
-                                                      //           </Popover>
-                                                      //         </div>
-                                                      //       ) : null}
-                                                      //     </div>
-                                                      //   </div>
-                                                      // </li>
-                                                      null}
+                                                        //       {data.diagnosisCodeFinding !=
+                                                        //         null &&
+                                                        //         data.diagnosisCodeFinding !=
+                                                        //         "" ? (
+                                                        //         <div className="form-check custom-checkbox unmatch-check ms-3">
+                                                        //           <div>
+                                                        //             <Popconfirm
+                                                        //               title="You want move to valid?"
+                                                        //               description={
+                                                        //                 data.diagnosisCodeDocument
+                                                        //               }
+                                                        //               onConfirm={
+                                                        //                 onchangeSuggested
+                                                        //               }
+                                                        //               placement="rightTop"
+                                                        //               okText="Yes"
+                                                        //               cancelText="No"
+                                                        //             >
+                                                        //               <input
+                                                        //                 onChange={(
+                                                        //                   e
+                                                        //                 ) => {
+                                                        //                   handleMatchHcc(
+                                                        //                     e,
+                                                        //                     data,
+                                                        //                     data.diagnosisCodeFinding
+                                                        //                   );
+                                                        //                 }}
+                                                        //                 type="checkbox"
+                                                        //                 id={`customCheckBox ${data.diagnosisCodeFinding}`}
+                                                        //                 className="form-check-input unmatach-checkbox"
+                                                        //                 required
+                                                        //               />
+                                                        //             </Popconfirm>
+                                                        //           </div>
+                                                        //           <Popover
+                                                        //             placement="topLeft"
+                                                        //             title="Finding Code"
+                                                        //             content={
+                                                        //               data.diagnosisCodeFinding
+                                                        //             }
+                                                        //           >
+                                                        //             <span className="disease-name">
+                                                        //               {
+                                                        //                 data.diagnosisCodeFinding
+                                                        //               }
+                                                        //             </span>
+                                                        //           </Popover>
+                                                        //         </div>
+                                                        //       ) : null}
+                                                        //     </div>
+                                                        //   </div>
+                                                        // </li>
+                                                        null}
                                                     </>
                                                   );
                                                 }
@@ -5830,7 +6051,7 @@ export default function PatientDetails() {
                                       )}
 
                                       {comboDiseaseCodesListNonHcc.length ==
-                                      0 ? (
+                                        0 ? (
                                         <div className="card combo-card">
                                           <div className="col-xl-12">
                                             <div>
@@ -5843,7 +6064,7 @@ export default function PatientDetails() {
                                       ) : null}
 
                                       {invalidComboDiseaseCodesList.length !=
-                                      0 ? (
+                                        0 ? (
                                         <>
                                           <div className="invalid-combo">
                                             <span>Invalid Combo Diseases </span>
@@ -5954,7 +6175,7 @@ export default function PatientDetails() {
                                           <div
                                             className={
                                               item.isMeatCriteriaPresent ===
-                                              true
+                                                true
                                                 ? "card meat-card"
                                                 : "card meat-card-false"
                                             }
@@ -6178,7 +6399,7 @@ export default function PatientDetails() {
                                         {rafScore != null ? (
                                           <div className="col-xl-12">
                                             {rafScore.scoreOutputDTOList !=
-                                            null ? (
+                                              null ? (
                                               <>
                                                 {rafScore.scoreOutputDTOList.map(
                                                   (rafScoreMapResult) => {
@@ -6193,7 +6414,7 @@ export default function PatientDetails() {
                                                             <div className="raf-card">
                                                               <div className="row raf-head text-center">
                                                                 <div className="col-xl-12">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     Summary
                                                                   </label>
                                                                 </div>
@@ -6226,12 +6447,12 @@ export default function PatientDetails() {
                                                             <div className="raf-card">
                                                               <div className="row raf-head">
                                                                 <div className="col-xl-6">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     DX Code
                                                                   </label>
                                                                 </div>
                                                                 <div className="col-xl-6">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     DX
                                                                     Description
                                                                   </label>
@@ -6268,12 +6489,12 @@ export default function PatientDetails() {
                                                             <div className="raf-card">
                                                               <div className="row raf-head">
                                                                 <div className="col-xl-6">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     HCC
                                                                   </label>
                                                                 </div>
                                                                 <div className="col-xl-6">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     HCC
                                                                     Description
                                                                   </label>
@@ -6313,17 +6534,17 @@ export default function PatientDetails() {
                                                             <div className="raf-card">
                                                               <div className="row raf-head">
                                                                 <div className="col-xl-4">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     Trumped By
                                                                   </label>
                                                                 </div>
                                                                 <div className="col-xl-4">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     RAF
                                                                   </label>
                                                                 </div>
                                                                 <div className="col-xl-4">
-                                                                  <label className="text-white">
+                                                                  <label >
                                                                     Monthly
                                                                     Premium
                                                                   </label>
@@ -6383,27 +6604,27 @@ export default function PatientDetails() {
                                                   <div className="raf-card">
                                                     <div className="row raf-head">
                                                       <div className="col-xl-2">
-                                                        <label className="text-white">
+                                                        <label >
                                                           v24Score
                                                         </label>
                                                       </div>
                                                       <div className="col-xl-3">
-                                                        <label className="text-white">
+                                                        <label >
                                                           v24Score70Percent
                                                         </label>
                                                       </div>
                                                       <div className="col-xl-2">
-                                                        <label className="text-white">
+                                                        <label >
                                                           v28Score
                                                         </label>
                                                       </div>
                                                       <div className="col-xl-3">
-                                                        <label className="text-white">
+                                                        <label >
                                                           v28Score30Percent
                                                         </label>
                                                       </div>
                                                       <div className="col-xl-2">
-                                                        <label className="text-white">
+                                                        <label >
                                                           Score
                                                         </label>
                                                       </div>
@@ -7100,7 +7321,7 @@ export default function PatientDetails() {
                                       )}
 
                                       {comboDiseaseCodesListRadiology.length ==
-                                      0 ? (
+                                        0 ? (
                                         <div className="card combo-card">
                                           <div className="col-xl-12">
                                             <div>
@@ -7113,7 +7334,7 @@ export default function PatientDetails() {
                                       ) : null}
 
                                       {invalidComboDiseaseCodesList.length !=
-                                      0 ? (
+                                        0 ? (
                                         <>
                                           <div className="invalid-combo">
                                             <span>Invalid Combo Diseases </span>
@@ -7217,7 +7438,7 @@ export default function PatientDetails() {
                                             <div
                                               className={
                                                 item.isMeatCriteriaPresent ===
-                                                true
+                                                  true
                                                   ? "card meat-card"
                                                   : "card meat-card-false"
                                               }
@@ -7740,15 +7961,15 @@ export default function PatientDetails() {
                                     </div>
                                   </Tab.Pane>
                                 </Tab.Content>
-                   
+
                               </Tab.Container>
-                         
-                             
+
+
                             </div>
                           </div>
                         </div>
                       )}
-                           {/* <div className={` col-xl-12 ${visitStyles.flags}`}>
+                      {/* <div className={` col-xl-12 ${visitStyles.flags}`}>
                                       <div className={visitStyles.flags} >
                                         <span className={visitStyles.flag}>
                                           {SVGICON.flagIconHcc}
@@ -7890,11 +8111,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.matchCase
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase
                                                     ? "blue"
                                                     : "transparent"
-                                                }`,
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -7925,11 +8145,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.wholeWords
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
                                                     ? "blue"
                                                     : "transparent"
-                                                }`,
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -7952,7 +8171,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -7960,7 +8179,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -8177,11 +8396,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.matchCase
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase
                                                     ? "blue"
                                                     : "transparent"
-                                                }`,
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8212,11 +8430,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.wholeWords
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
                                                     ? "blue"
                                                     : "transparent"
-                                                }`,
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8239,7 +8456,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -8247,7 +8464,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -8402,7 +8619,7 @@ export default function PatientDetails() {
                           </div>
                         )}
                         {nonHccActiveCodes == false &&
-                        isAddButtonClicked == false ? (
+                          isAddButtonClicked == false ? (
                           <div className="col-xl-4">
                             <ul className="timeline">
                               <div className="modal-valid-container">
@@ -8556,11 +8773,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.matchCase
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase
                                                     ? "blue"
                                                     : "transparent"
-                                                }`,
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8591,11 +8807,10 @@ export default function PatientDetails() {
                                               style={{
                                                 background: "#fff",
                                                 border: "none",
-                                                borderBottom: `2px solid ${
-                                                  renderSearchProps.wholeWords
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
                                                     ? "blue"
                                                     : "transparent"
-                                                }`,
+                                                  }`,
                                                 height: "100%",
                                                 padding: "0 2px",
                                               }}
@@ -8618,7 +8833,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches ===
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             Not found
                                           </div>
@@ -8626,7 +8841,7 @@ export default function PatientDetails() {
                                       {readyToSearch &&
                                         renderSearchProps.keyword &&
                                         renderSearchProps.numberOfMatches >
-                                          0 && (
+                                        0 && (
                                           <div style={{ padding: "0 8px" }}>
                                             {renderSearchProps.currentMatch} of{" "}
                                             {renderSearchProps.numberOfMatches}
@@ -8837,11 +9052,10 @@ export default function PatientDetails() {
                                           style={{
                                             background: "#fff",
                                             border: "none",
-                                            borderBottom: `2px solid ${
-                                              renderSearchProps.matchCase
+                                            borderBottom: `2px solid ${renderSearchProps.matchCase
                                                 ? "blue"
                                                 : "transparent"
-                                            }`,
+                                              }`,
                                             height: "100%",
                                             padding: "0 2px",
                                           }}
@@ -8872,11 +9086,10 @@ export default function PatientDetails() {
                                           style={{
                                             background: "#fff",
                                             border: "none",
-                                            borderBottom: `2px solid ${
-                                              renderSearchProps.wholeWords
+                                            borderBottom: `2px solid ${renderSearchProps.wholeWords
                                                 ? "blue"
                                                 : "transparent"
-                                            }`,
+                                              }`,
                                             height: "100%",
                                             padding: "0 2px",
                                           }}
@@ -9499,48 +9712,48 @@ export default function PatientDetails() {
                       <i className="fa-solid fa-xmark"></i>
                     </button>
                   </div>
-                  {flagContainerActive == "timeline" ?
-                  <div className={visitStyles.timeLine}>
-                    <VerticalTimeline>
-                      {timelineData.map((item, index) => (
-                        <VerticalTimelineElement
-                          key={index}
-                          className="vertical-timeline-element--work"
-                          contentStyle={{
-                            background: "#fff",
-                            color: "#000000",
-                            borderTop: "4px solid #00749C",
-                            marginLeft: "-18px",
-                          }}
-                          date={item.date}
-                          iconStyle={{
-                            background: "#F5F9FE",
-                            color: "black",
-                            fontWeight: "600",
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                          icon={item.icon}
-                        >
-                          <h3
-                            className="vertical-timeline-element-title"
-                            style={{ fontSize: "26px", fontFamily: "600" }}
+                  {flagContainerActive == "Timeline" ?
+                    <div className={visitStyles.timeLine}>
+                      <VerticalTimeline>
+                        {timelineData.map((item, index) => (
+                          <VerticalTimelineElement
+                            key={index}
+                            className="vertical-timeline-element--work"
+                            contentStyle={{
+                              background: "#fff",
+                              color: "#000000",
+                              borderTop: "4px solid #00749C",
+                              marginLeft: "-18px",
+                            }}
+                            date={item.date}
+                            iconStyle={{
+                              background: "#F5F9FE",
+                              color: "black",
+                              fontWeight: "600",
+                              fontSize: "20px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                            icon={item.icon}
                           >
-                            {item.title}
-                          </h3>
-                          <h4
-                            className="vertical-timeline-element-subtitle"
-                            style={{ fontSize: "12px" }}
-                          >
-                            {item.subtitle}
-                          </h4>
-                          <p style={{ fontSize: "16px", marginTop: "0px" }}>
-                            {item.description}
-                          </p>
-                          <style>
-                            {`
+                            <h3
+                              className="vertical-timeline-element-title"
+                              style={{ fontSize: "26px", fontFamily: "600" }}
+                            >
+                              {item.title}
+                            </h3>
+                            <h4
+                              className="vertical-timeline-element-subtitle"
+                              style={{ fontSize: "12px" }}
+                            >
+                              {item.subtitle}
+                            </h4>
+                            <p style={{ fontSize: "16px", marginTop: "0px" }}>
+                              {item.description}
+                            </p>
+                            <style>
+                              {`
         .vertical-timeline::before{
           background: black;
           width: 1px;
@@ -9561,120 +9774,152 @@ export default function PatientDetails() {
     box-shadow: 0 0 0 6px #00749C, inset 0 2px 0 rgba(0,0,0,.08), 0 3px 0 4px rgba(0,0,0,.05);
         }
       `}
-                          </style>
-                        </VerticalTimelineElement>
-                      ))}
-                    </VerticalTimeline>
-                  </div> : flagContainerActive == "filter" ?
+                            </style>
+                          </VerticalTimelineElement>
+                        ))}
+                      </VerticalTimeline>
+                    </div> : flagContainerActive == "Filter" ?
 
-                    <div className={`row ${visitStyles.patientListHead}`}>
-                      <div className="col-xl-10">
-                        <div class="form-group has-search">
-                          <FontAwesomeIcon
-                            className="fa fa-search form-control-feedback"
-                            icon={faSearch}
-                          />
-                          <InputText
-                            type="text"
-                            onChange={(e) => filterChangePatientId(e)}
-                            className="form-control new-form-control"
-                            placeholder="Search"
-                          />
+                      <div className={`row ${visitStyles.patientListHead}`}>
+                        <div className="col-xl-10">
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
+                              type="text"
+                              onChange={(e) => filterChangePatientId(e)}
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-xl-2">
-                      <div className={visitStyles.content}>
-                        <span
-                          className={visitStyles.circleCard}
-                          onClick={handleFilterClick}
-                          
-                        >
-                          {" "}
-                         <span></span> {showIcons ? <FontAwesomeIcon icon={faClose}  height={30} width={30} color="#A20404"/>: SVGICON.filter}
-                        </span>
-                        {showIcons && (
-                          <div className={visitStyles.iconContainer}>
+                        <div className="col-xl-2">
+                          <div className={visitStyles.content}>
                             <span
                               className={visitStyles.circleCard}
-                              onClick={handleShowCard}
-                             
+                              onClick={handleFilterClick}
+
                             >
-                              {SVGICON.dashboard}
+                              {" "}
+                              <span></span> {showIcons ? <FontAwesomeIcon icon={faClose} height={30} width={30} color="#A20404" /> : SVGICON.filter}
                             </span>
+                            {showIcons && (
+                              <div className={visitStyles.iconContainer}>
+                                <span
+                                  className={visitStyles.circleCard}
+                                  onClick={handleShowCard}
 
-                            <span className={visitStyles.circleCard}>
-                              {SVGICON.dateIcon}
-                            </span>
-                          </div>
-                        )}
-                        {showCard && (
-                          <div
-                            className={visitStyles.menuCard}
-                            onMouseEnter={() => setShowCard(true)}
-                            onMouseLeave={() => setShowCard(false)}
-                          >
-                           
-                            <ul>
-                             
-                              {statuses.map((status, index) => (
-                                <li
-                                  onClick={() => setShowCard(false)}
-                                  className={visitStyles.nameList}
-                                  key={index}
                                 >
-                                  {status}
-                                </li>
-                              ))}
-                            </ul>
+                                  {SVGICON.dashboard}
+                                </span>
+
+                                <span className={visitStyles.circleCard}>
+                                  {SVGICON.dateIcon}
+                                </span>
+                              </div>
+                            )}
+                            {showCard && (
+                              <div
+                                className={visitStyles.menuCard}
+                                onMouseEnter={() => setShowCard(true)}
+                                onMouseLeave={() => setShowCard(false)}
+                              >
+
+                                <ul>
+
+                                  {statuses.map((status, index) => (
+                                    <li
+                                      onClick={() => getFiltePatientListStatus(status)}
+                                      className={visitStyles.nameList}
+                                      key={index}
+                                    >
+                                      {status}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                      </div>
+                        </div>
 
-                    <div className={visitStyles.nameList}>
-                      <ul>
-                        {names.map((name, index) => (
-                          <li className={visitStyles.nameList} key={index}>
-                            {name}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div> : flagContainerActive == "commentslist" ?
-
-
-                  <div className="offcanvas-body">
-                    <div className="container-fluid">
-                      <div className={visitStyles.comments_card}>
-                        <span>
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry.
-                        </span>
-                        <span>18/11/2023 10:00 Am</span>
-                      </div>
-                      <div className={visitStyles.comments_card}>
-                        <span>
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry.
-                        </span>
-                        <span>18/11/2023 10:00 Am</span>
-                      </div>
-                      <div className={visitStyles.comments_card}>
-                        <span>
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry.
-                        </span>
-                        <span>18/11/2023 10:00 Am</span>
-                      </div>
-               
-                    </div> 
-                
-                  </div> : flagContainerActive == "comments" ?
+                        <div className={visitStyles.nameList}>
+                          <ul>
+                            {patientList.map((data, index) => (
+                              <li className={visitStyles.nameList} key={index} onClick={() => getPatientDetails(data.patientId, localOrgId, localTenantId)}>
+                                {data.patientId} - {data.patientName}
+                              </li>
+                            ))}
+                          </ul>
+                          {patientList.length == 0 ?
+                            <h5 className="text-center">NO DATA</h5> : null}
+                        </div>
+                      </div> : flagContainerActive == "Comments" ?
 
 
-<div className="offcanvas-body">
-  <div className="container-fluid">
-    <div className={visitStyles.comments_card}>
+                        <div className="offcanvas-body">
+                          <div className="container-fluid">
+                            {/* <div className={visitStyles.comments_card}>
+                              <span>
+                                Lorem Ipsum is simply dummy text of the printing and
+                                typesetting industry.
+                              </span>
+                              <span>18/11/2023 10:00 Am</span>
+                            </div>
+                            <div className={visitStyles.comments_card}>
+                              <span>
+                                Lorem Ipsum is simply dummy text of the printing and
+                                typesetting industry.
+                              </span>
+                              <span>18/11/2023 10:00 Am</span>
+                            </div>
+                            <div className={visitStyles.comments_card}>
+                              <span>
+                                Lorem Ipsum is simply dummy text of the printing and
+                                typesetting industry.
+                              </span>
+                              <span>18/11/2023 10:00 Am</span>
+                            </div> */}
+
+<Form
+                                noValidate
+                                validated={validated}
+                                onSubmit={handleSubmitCommnets}
+                              >
+
+                                <div className="row">
+                                  <div className="col-xl-12 mb-3">
+                                    <textarea
+                                      className={visitStyles.commentsFormControl}
+                                      rows="5"
+                                      required
+                                      id="comments"
+                                      name="comments"
+                                      placeholder="Add Comments"
+                                      onChange={handleChangeSuggested}
+                                    ></textarea>
+                                  </div>
+                                </div>
+
+                                <div className="text-center">
+                                  <Button
+                                    type="submit"
+                                    className={visitStyles.addPatientBtn}
+                                  >
+                                    Save
+                                  </Button>
+                                </div>
+                              </Form>
+
+                          </div>
+
+                        </div> : flagContainerActive == "Flag" ?
+
+
+                          <div className="offcanvas-body">
+                            <div className="container-fluid">
+                              {/* <div className={visitStyles.comments_card}>
       <span>
         Lorem Ipsum is simply dummy text of the printing and
         typesetting industry.
@@ -9694,68 +9939,88 @@ export default function PatientDetails() {
         typesetting industry.
       </span>
       <span>18/11/2023 10:00 Am</span>
-    </div>
-    <Form
-      noValidate
-      validated={validated}
-      onSubmit={handleSubmit}
-    >
-      <div className="row">
-        <div className="col-xl-12 mb-3">
-          <textarea
-            className={visitStyles.commentsFormControl}
-            rows="5"
-            required
-            placeholder="Add Comments"
-          ></textarea>
-        </div>
-      </div>
+    </div> */}
+                              <Form
+                                noValidate
+                                validated={validated}
+                                onSubmit={handleSubmitFlag}
+                              >
 
-      <div className="text-center">
-        <Button
-          type="submit"
-          className={visitStyles.addPatientBtn}
-        >
-          Save
-        </Button>
-      </div>
-    </Form>
-  </div> 
+                                <div className="row">
+                                  <div className="col-xl-12 mb-3">
+                                    <Select
+                                      options={flagPostList}
+                                      className="custom-react-select"
+                                      isSearchable={false}
+                                      id="flag"
+                                      name="flag"
+                                      onChange={handleChangeFlag}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="row">
+                                  <div className="col-xl-12 mb-3">
+                                    <textarea
+                                      className={visitStyles.commentsFormControl}
+                                      rows="5"
+                                      required
+                                      id="comments"
+                                      name="comments"
+                                      placeholder="Add Comments"
+                                      onChange={handleChangeSuggested}
+                                    ></textarea>
+                                  </div>
+                                </div>
 
-</div> : flagContainerActive == "notes" ?
+                                <div className="text-center">
+                                  <Button
+                                    type="submit"
+                                    className={visitStyles.addPatientBtn}
+                                  >
+                                    Save
+                                  </Button>
+                                </div>
+                              </Form>
+                            </div>
+
+                          </div> : flagContainerActive == "Notes" ?
 
 
-<div className="offcanvas-body">
-  <div className="container-fluid">
-    
-    <Form
-      noValidate
-      validated={validated}
-      onSubmit={handleSubmit}
-    >
-      <div className="row">
-        <div className="col-xl-12 mb-3">
-          <textarea
-            className={visitStyles.commentsFormControl}
-            rows="5"
-            required
-            placeholder="Add Notes"
-          ></textarea>
-        </div>
-      </div>
+                            <div className="offcanvas-body">
+                              <div className="container-fluid">
 
-      <div className="text-center">
-        <Button
-          type="submit"
-          className={visitStyles.addPatientBtn}
-        >
-          Save
-        </Button>
-      </div>
-    </Form>
-  </div> 
+                              <Form
+                                noValidate
+                                validated={validated}
+                                onSubmit={handleSubmitNotes}
+                              >
 
-</div> :null}
+                                <div className="row">
+                                  <div className="col-xl-12 mb-3">
+                                    <textarea
+                                      className={visitStyles.commentsFormControl}
+                                      rows="5"
+                                      required
+                                      id="comments"
+                                      name="comments"
+                                      placeholder="Add Comments"
+                                      onChange={handleChangeSuggested}
+                                    ></textarea>
+                                  </div>
+                                </div>
+
+                                <div className="text-center">
+                                  <Button
+                                    type="submit"
+                                    className={visitStyles.addPatientBtn}
+                                  >
+                                    Save
+                                  </Button>
+                                </div>
+                              </Form>
+                              </div>
+
+                            </div> : null}
                 </Offcanvas>
               </div>
             </div>
@@ -9765,3 +10030,16 @@ export default function PatientDetails() {
     </>
   );
 }
+
+
+const enhancer = connect(
+  (state) => ({
+    filterPatientList: state.patients.filterPatientList
+
+  }),
+  {
+    loadFilterPatientList: patientActions.loadFilterPatientList,
+  }
+);
+
+export default enhancer(Details);

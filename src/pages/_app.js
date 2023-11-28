@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/globals.css'; // Import your global CSS here
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import { wrapper, store } from "../store/store";
+import {wrapper, store } from "../stores/index";
 import { Provider } from "react-redux";
 import { PrimeReactProvider } from 'primereact/api';
 // import "primereact/resources/themes/lara-light-indigo/theme.css";

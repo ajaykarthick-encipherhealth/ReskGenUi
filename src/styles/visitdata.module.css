@@ -473,3 +473,39 @@ background: #E1EDFE;
 .patientListHead{
   margin: 0 !important;
 }
+
+.sideNav ul{
+  padding-top: 25px;
+} 
+.sideNavLabel a{
+  display: flex;
+  width: 145px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+  font-size: 14px;
+  margin: 0px 0px 15px 25px;
+  cursor: pointer;
+
+}
+
+.sideNavLabelActive{
+  background: linear-gradient(95deg, #9DC4FB 5.8%, #FDBEBE 92.76%) !important;
+  width: 145px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+  font-size: 14px;
+  margin: 0px 0px 15px 25px;
+  cursor: pointer;
+}
+.sideNavArrow span{
+  float: right;
+  margin: 10px 10px 10px 0px;
+  cursor: pointer;
+}
+.sideNavText{
+  padding-left: 8px;
+}
