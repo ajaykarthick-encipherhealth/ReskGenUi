@@ -392,6 +392,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
   };
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINE"];
   const getPatientDetails = async (patientId, orgId, tenId) => {
+    setIsLoading(true);
+    setIsModalComments(false);
     // var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
     const response = await axios.get(
@@ -400,6 +402,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
     );
     if (response.data) {
       var result = response.data;
+      console.log(result)
+      setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
         var validDis = "";
@@ -424,7 +428,7 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
 
         getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
         setSelectMeatFileId(response.data.fileId);
-        setPatientDocumentResult(result);
+        // setPatientDocumentResult(result);
 
         result.encounterYears.map((res) => {
           dosYearArr.push({ value: res, label: res });

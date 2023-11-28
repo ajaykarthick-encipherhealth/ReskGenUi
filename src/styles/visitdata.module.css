@@ -418,6 +418,7 @@ font-style: normal;
 font-weight: 500;
 line-height: normal;
 padding: 10px;
+cursor: pointer;
 }
 .circleCard{
     width: 50px; /* Set the width and height to make it a circle */
