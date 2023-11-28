@@ -5461,7 +5461,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                               <Tab.Container defaultActiveKey={activeTabHead}>
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="file">
+                                    <Nav.Link to="#my-posts"    className={visitStyles.navColor}
+                                          activeClassName={visitStyles.activeLink} eventKey="file">
                                       File
                                     </Nav.Link>
                                   </Nav.Item>
@@ -5469,6 +5470,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="validDiseases"
+                                      className={visitStyles.navColor}
+                                      activeClassName={visitStyles.activeLink}
                                     >
                                       Visit Data
                                     </Nav.Link>
@@ -5477,6 +5480,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="comboDiseases"
+                                      className={visitStyles.navColor}
+                                      activeClassName={visitStyles.activeLink}
                                     >
                                       Combination Codes
                                     </Nav.Link>
@@ -5485,6 +5490,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="meatCriteria"
+                                      className={visitStyles.navColor}
+                                      activeClassName={visitStyles.activeLink}
                                     >
                                       MEAT Criteria
                                     </Nav.Link>
@@ -6775,6 +6782,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="validDiseases"
+                                      className={visitStyles.navColor}
+                                      activeClassName={visitStyles.activeLink}
                                     >
                                       Visit Data
                                     </Nav.Link>
@@ -6783,6 +6792,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="comboDiseases"
+                                      className={visitStyles.navColor}
+                                      activeClassName={visitStyles.activeLink}
                                     >
                                       Combination Codes
                                     </Nav.Link>
@@ -6791,12 +6802,15 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="meatCriteria"
+                                      className={visitStyles.navColor}
+                                      activeClassName={visitStyles.activeLink}
                                     >
                                       MEAT Criteria
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="file">
+                                    <Nav.Link to="#my-posts" eventKey="file"    className={visitStyles.navColor}
+                                          activeClassName={visitStyles.activeLink}>
                                       File
                                     </Nav.Link>
                                   </Nav.Item>
@@ -7764,12 +7778,15 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="validDiseases"
+                                      className={visitStyles.navColor}
+                                      activeClassName={visitStyles.activeLink}
                                     >
                                       Visit Data
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item as="li" className="nav-item">
-                                    <Nav.Link to="#my-posts" eventKey="file">
+                                    <Nav.Link to="#my-posts" eventKey="file"    className={visitStyles.navColor}
+                                          activeClassName={visitStyles.activeLink}>
                                       File
                                     </Nav.Link>
                                   </Nav.Item>

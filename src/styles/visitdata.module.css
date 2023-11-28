@@ -6,6 +6,9 @@
   width: 25px;
   height: 25px;
 }
+.patient_info_details label{
+  color: #66686B !important;
+}
 
 .visitdata_header_card {
   border-radius: 8px;
