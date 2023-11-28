@@ -470,6 +470,14 @@ flex-shrink: 0;
 border-radius: 12px;
 background: #E1EDFE;
 }
+
+.sideTabClose{
+  width: 66px;
+height: 720px;
+flex-shrink: 0;
+border-radius: 12px;
+background: #E1EDFE;
+}
 .patientListHead{
   margin: 0 !important;
 }
@@ -508,4 +516,73 @@ background: #E1EDFE;
 }
 .sideNavText{
   padding-left: 8px;
+}
+
+.sideTabClose .sideNavText{
+  display: none;
+}
+.sideTabClose .sideNavLabel{
+  display: flex;
+  width: 50px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+  font-size: 14px;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.sideTabClose .sideNavLabelActive{
+  background: linear-gradient(95deg, #9DC4FB 5.8%, #FDBEBE 92.76%) !important;
+  width: 50px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+  font-size: 14px;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.sideTabClose .sideNavLabel a{
+  display: flex;
+  width: 145px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+  font-size: 14px;
+  margin:0 !important;
+  cursor: pointer;
+
+}
+
+.sideTabClose .sideNavArrow span{
+  float: right;
+  margin: 10px 20px 10px 0px !important;
+  cursor: pointer;
+}
+.visitDataMain , .visitDataMainClose{
+  display: flex;
+}
+.firstContainer{
+  width: 13%;
+}
+.secondContainer{
+width: 81%;
+margin-left: 20px;
+}
+.thirdContainer{
+  width: 6%;
+}
+.visitDataMainClose .firstContainer{
+ width: 6% !important;
+}
+.visitDataMainClose .secondContainer{
+  width: 88% !important;
+  margin-left: 0px !important;
+}
+.visitDataMainClose .thirdContainer{
+  width: 6% !important;
 }

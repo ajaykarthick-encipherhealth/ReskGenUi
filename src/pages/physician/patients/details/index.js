@@ -176,8 +176,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
     actualDescription: "",
     capturedSections: "",
     encodedDate: "",
-    flag:"",
-    comments:""
+    flag: "",
+    comments: ""
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -239,8 +239,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
   const [filter, setFilter] = useState("");
   const [showCard, setShowCard] = useState(false);
   const [patientList, setPatientList] = useState([]);
-  const[sideNavLabelActiveKey,setSideNavLabelActiveKey] = useState("HCC")
-
+  const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC")
+  const [isSideNavShow, setIsSideNavShow] = useState(true);
 
 
   const handleAddButtonClick = () => {
@@ -2334,7 +2334,7 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
     setInputValue({ ...inputValue, [key]: value });
   };
 
-  
+
   const handleChangeFlag = async (e) => {
     setInputValue({ ...inputValue, ['flag']: e.value });
   };
@@ -2342,10 +2342,10 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
   const openModelDbDescription = () => { };
 
   const tabList = [
-    { title: "HCC", type: "HCC", iconStyle: IMAGES.visitDataHcc},
-    { title: "NON HCC", type: "NON HCC" , iconStyle: IMAGES.visitDataNonHcc},
+    { title: "HCC", type: "HCC", iconStyle: IMAGES.visitDataHcc },
+    { title: "NON HCC", type: "NON HCC", iconStyle: IMAGES.visitDataNonHcc },
     { title: "Radiology", type: "Radiology", iconStyle: IMAGES.visitDataRadioloy, },
-    { title: "Lab Report", type: "Lab Report" , iconStyle: IMAGES.visitDataLabreport,},
+    { title: "Lab Report", type: "Lab Report", iconStyle: IMAGES.visitDataLabreport, },
   ];
 
   const navigetPageDetails = (pageTitle) => {
@@ -3064,7 +3064,7 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
       orgId: localOrgId,
       comments: inputValue.comments,
       year: selectedDosValue,
-      flag:inputValue.flag
+      flag: inputValue.flag
     };
     console.log(dataFormatSuggested)
     const response = await axios.post(
@@ -3129,6 +3129,16 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
     }
     setIsModalComments(false)
   };
+
+  const handleToogleCloseNav =()=>{
+    if(isSideNavShow == true){
+      setIsSideNavShow(false);
+    }else{
+      setIsSideNavShow(true);
+    }
+  
+
+  }
 
 
 
@@ -3286,41 +3296,47 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="row"></div>
-                    <div className="col-xl-2">
-                      <div className={`${visitStyles.sideTab}`}>
+                    <div  className={isSideNavShow ?
+                         `${visitStyles.visitDataMain}`
+                                                : `${visitStyles.visitDataMainClose}`
+                                            }>
+                    <div className={`${visitStyles.firstContainer}`}>
+                      <div className={isSideNavShow ?
+                         `${visitStyles.sideTab}`
+                                                : `${visitStyles.sideTabClose}`
+                                            }>
 
 
-                      <div  className={`${visitStyles.sideNav}`}>
-      <div className="sideNavscroll">
-      <div
-          className="nav-control"
-          // onClick={() => {
-          //   handleToogle();
-          // }}
-        >
-          <div className={`${visitStyles.sideNavArrow}`}>
-            <span className="line">{SVGICON.navSideIcon}</span>
-          </div>
-        </div>
-      <ul className="metismenu" id="menu">
-            {tabList.map((data, index) => (
-                <li className={`${visitStyles.sideNavLabel}`}  onClick={() =>
-                  navigetPageDetails(data.type)
-                }>
-                  <a className={` ${sideNavLabelActiveKey === data.title ? visitStyles.sideNavLabelActive : ""}`}>
-                    <div className="menu-icon">
-                    <Image src={data.iconStyle}/>		
-                      </div>{" "}
-                    <span  className={`${visitStyles.sideNavText}`} >
-                      {data.title}
-                    </span>
-                  </a>
-                </li>
-            ))}
-          </ul>
-        </div>
-        </div>
+                        <div className={`${visitStyles.sideNav}`}>
+                          <div className="sideNavscroll">
+                            <div
+                              className="nav-control"
+                            onClick={() => {
+                              handleToogleCloseNav();
+                            }}
+                            >
+                              <div className={`${visitStyles.sideNavArrow}`}>
+                                <span className="line">{SVGICON.navSideIcon}</span>
+                              </div>
+                            </div>
+                            <ul>
+                              {tabList.map((data, index) => (
+                                <li className={`${visitStyles.sideNavLabel}`} onClick={() =>
+                                  navigetPageDetails(data.type)
+                                }>
+                                  <a className={` ${sideNavLabelActiveKey === data.title ? visitStyles.sideNavLabelActive : ""}`}>
+                                    <div className="menu-icon">
+                                      <Image src={data.iconStyle} />
+                                    </div>{" "}
+                                    <span className={`${visitStyles.sideNavText}`} >
+                                      {data.title}
+                                    </span>
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
                         <Tab.Container defaultActiveKey={"HCC"}>
                           <div
                             className={`card-header border-0 flex-wrap patient-details-tab-card `}
@@ -3378,7 +3394,7 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                       </div>
                     </div>
 
-                    <div className="col-xl-9">
+                    <div className={ `${visitStyles.secondContainer}`}>
                       <div className="row">
                         {/* <div className="col-xl-8">
                             <div
@@ -7997,7 +8013,7 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                     </div> */}
                     </div>
 
-                    <div className={`col-xl-1`}>
+                    <div className={`${visitStyles.thirdContainer}`}>
                       <div className={`${visitStyles.flag_container}`}>
                         <ul className="">
                           {flagList?.map((data) => {
@@ -8027,6 +8043,7 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                           })}
                         </ul>
                       </div>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -8112,8 +8129,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                                 background: "#fff",
                                                 border: "none",
                                                 borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                    ? "blue"
-                                                    : "transparent"
+                                                  ? "blue"
+                                                  : "transparent"
                                                   }`,
                                                 height: "100%",
                                                 padding: "0 2px",
@@ -8146,8 +8163,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                                 background: "#fff",
                                                 border: "none",
                                                 borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                    ? "blue"
-                                                    : "transparent"
+                                                  ? "blue"
+                                                  : "transparent"
                                                   }`,
                                                 height: "100%",
                                                 padding: "0 2px",
@@ -8397,8 +8414,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                                 background: "#fff",
                                                 border: "none",
                                                 borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                    ? "blue"
-                                                    : "transparent"
+                                                  ? "blue"
+                                                  : "transparent"
                                                   }`,
                                                 height: "100%",
                                                 padding: "0 2px",
@@ -8431,8 +8448,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                                 background: "#fff",
                                                 border: "none",
                                                 borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                    ? "blue"
-                                                    : "transparent"
+                                                  ? "blue"
+                                                  : "transparent"
                                                   }`,
                                                 height: "100%",
                                                 padding: "0 2px",
@@ -8774,8 +8791,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                                 background: "#fff",
                                                 border: "none",
                                                 borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                    ? "blue"
-                                                    : "transparent"
+                                                  ? "blue"
+                                                  : "transparent"
                                                   }`,
                                                 height: "100%",
                                                 padding: "0 2px",
@@ -8808,8 +8825,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                                 background: "#fff",
                                                 border: "none",
                                                 borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                    ? "blue"
-                                                    : "transparent"
+                                                  ? "blue"
+                                                  : "transparent"
                                                   }`,
                                                 height: "100%",
                                                 padding: "0 2px",
@@ -9053,8 +9070,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                             background: "#fff",
                                             border: "none",
                                             borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                ? "blue"
-                                                : "transparent"
+                                              ? "blue"
+                                              : "transparent"
                                               }`,
                                             height: "100%",
                                             padding: "0 2px",
@@ -9087,8 +9104,8 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                                             background: "#fff",
                                             border: "none",
                                             borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                ? "blue"
-                                                : "transparent"
+                                              ? "blue"
+                                              : "transparent"
                                               }`,
                                             height: "100%",
                                             padding: "0 2px",
@@ -9882,35 +9899,35 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                               <span>18/11/2023 10:00 Am</span>
                             </div> */}
 
-<Form
-                                noValidate
-                                validated={validated}
-                                onSubmit={handleSubmitCommnets}
-                              >
+                            <Form
+                              noValidate
+                              validated={validated}
+                              onSubmit={handleSubmitCommnets}
+                            >
 
-                                <div className="row">
-                                  <div className="col-xl-12 mb-3">
-                                    <textarea
-                                      className={visitStyles.commentsFormControl}
-                                      rows="5"
-                                      required
-                                      id="comments"
-                                      name="comments"
-                                      placeholder="Add Comments"
-                                      onChange={handleChangeSuggested}
-                                    ></textarea>
-                                  </div>
+                              <div className="row">
+                                <div className="col-xl-12 mb-3">
+                                  <textarea
+                                    className={visitStyles.commentsFormControl}
+                                    rows="5"
+                                    required
+                                    id="comments"
+                                    name="comments"
+                                    placeholder="Add Comments"
+                                    onChange={handleChangeSuggested}
+                                  ></textarea>
                                 </div>
+                              </div>
 
-                                <div className="text-center">
-                                  <Button
-                                    type="submit"
-                                    className={visitStyles.addPatientBtn}
-                                  >
-                                    Save
-                                  </Button>
-                                </div>
-                              </Form>
+                              <div className="text-center">
+                                <Button
+                                  type="submit"
+                                  className={visitStyles.addPatientBtn}
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </Form>
 
                           </div>
 
@@ -9989,35 +10006,35 @@ const Details = ({ loadFilterPatientList, filterPatientList }) => {
                             <div className="offcanvas-body">
                               <div className="container-fluid">
 
-                              <Form
-                                noValidate
-                                validated={validated}
-                                onSubmit={handleSubmitNotes}
-                              >
+                                <Form
+                                  noValidate
+                                  validated={validated}
+                                  onSubmit={handleSubmitNotes}
+                                >
 
-                                <div className="row">
-                                  <div className="col-xl-12 mb-3">
-                                    <textarea
-                                      className={visitStyles.commentsFormControl}
-                                      rows="5"
-                                      required
-                                      id="comments"
-                                      name="comments"
-                                      placeholder="Add Comments"
-                                      onChange={handleChangeSuggested}
-                                    ></textarea>
+                                  <div className="row">
+                                    <div className="col-xl-12 mb-3">
+                                      <textarea
+                                        className={visitStyles.commentsFormControl}
+                                        rows="5"
+                                        required
+                                        id="comments"
+                                        name="comments"
+                                        placeholder="Add Comments"
+                                        onChange={handleChangeSuggested}
+                                      ></textarea>
+                                    </div>
                                   </div>
-                                </div>
 
-                                <div className="text-center">
-                                  <Button
-                                    type="submit"
-                                    className={visitStyles.addPatientBtn}
-                                  >
-                                    Save
-                                  </Button>
-                                </div>
-                              </Form>
+                                  <div className="text-center">
+                                    <Button
+                                      type="submit"
+                                      className={visitStyles.addPatientBtn}
+                                    >
+                                      Save
+                                    </Button>
+                                  </div>
+                                </Form>
                               </div>
 
                             </div> : null}
