@@ -5,3 +5,8 @@ export const loadFilterPatientList = createActionThunk(
   "PATIENT",
   network.loadFilterPatientList
 );
+
+export const loadTimelineList = createActionThunk(
+  "PATIENT",
+  network.loadTimelineList
+);

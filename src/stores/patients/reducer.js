@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { loadFilterPatientList } from "./actions";
+import { loadFilterPatientList,loadTimelineList } from "./actions";
 
 const filterPatientList = handleActions(
   {
@@ -11,6 +11,16 @@ const filterPatientList = handleActions(
   {}
 );
 
+const timeLineList = handleActions(
+  {
+    [loadTimelineList.SUCCEEDED]: (state, { payload }) => {
+      return payload;
+    },
+  },
+  {}
+);
+
 export default combineReducers({
   filterPatientList,
+  timeLineList,
 });
