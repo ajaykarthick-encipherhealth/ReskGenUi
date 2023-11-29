@@ -263,6 +263,8 @@ i{
   appearance: none;
   border-radius: 0.75rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  height: 42px !important;
+    border-radius: 8px !important;
 }
 
 
@@ -11377,7 +11379,7 @@ span.badge-meat.badge {
 
 .raf-head {
   background: #E1EDFE;
-  padding: 10px;
+  padding: 5px 10px 2px 10px;
   border-radius: 10px;
   text-align: center;
 }
@@ -12145,7 +12147,7 @@ letter-spacing: 0.36px;
   position: relative;
  }
  .menu-icon {
-  margin-top: -1px;
+  margin-top: -2px;
 }
  .header-menu .header-active::after {
   content: '';

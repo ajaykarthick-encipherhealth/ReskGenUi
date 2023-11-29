@@ -207,6 +207,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
   const [selectInvalidDetails, setSelectInvalidDetails] = useState(false);
   const [selectActiveCode, setSelectActiveCode] = useState("");
   const [labReportValidList, setLabReportValidList] = useState([]);
+  const [labReportMeatList, setLabReportMeatList] = useState([]);
   const [labReportFile, setLabReportFile] = useState([]);
   const [suggestedHccList, setSuggestedHccList] = useState([]);
   const [suggestedNonHccList, setSuggestedNonHccList] = useState([]);
@@ -394,7 +395,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
     //   }
     // }
   };
-  const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINE"];
+  const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
   const getPatientDetails = async (patientId, orgId, tenId) => {
     // setIsLoading(true);
     setIsModalComments(false);
@@ -872,240 +873,134 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
   };
   const getPatientDetailsRadiologyYear = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
-    var testresult = {
-      patientId: "uvais-10",
-      patientName: "uvais",
-      fileId: "[fe5e4bcc-e61d-49ee-9292-8c5d9e3293e8]",
-      orgId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-      tenantId: "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-      validDisease: {
-        "06/03/2023": [
-          {
-            diagnosisCode: "I65.23",
-            actualDescription:
-              "Mild stenosis in the right internal carotid artery",
-            dbDescription:
-              "Occlusion and stenosis of bilateral carotid arteries",
-            notes: null,
-            capturedSections: ["Right Findings"],
-            encounterDate: "05/09/2023",
-          },
-          {
-            diagnosisCode: "I65.23",
-            actualDescription:
-              "Mild stenosis in the left internal carotid artery",
-            dbDescription:
-              "Occlusion and stenosis of bilateral carotid arteries",
-            notes: null,
-            capturedSections: ["Left Findings"],
-            encounterDate: "05/09/2023",
-          },
-        ],
+    var result =   {
+      "patientId": "lenovo-01",
+      "patientName": "BERR",
+      "dob": "07/04/1953",
+      "gender": "Male",
+      "age": 70,
+      "fileId": [
+          "910ead7b-b65f-4ba2-8cc4-a94321971a76"
+      ],
+      "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+      "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+      "encounterYears": null,
+      "validDisease": {
+          "2023": [
+              {
+                  "diagnosisCode": "I6522",
+                  "actualDescription": "Stenosis of left internal carotid artery",
+                  "dbDescription": "Occlusion and stenosis of left carotid artery",
+                  "notes": null,
+                  "capturedSections": [
+                      "conclusions, left findings"
+                  ],
+                  "encounterDate": "06/03/2023",
+                  "isManuallyAdded": null,
+                  "manuallyAddedAt": null,
+                  "manuallyAddedBy": null,
+                  "diagnosisCodeFinding": null,
+                  "isHccValid": null
+              },
+              {
+                  "diagnosisCode": "I6521",
+                  "actualDescription": "Stenosis of right internal carotid artery",
+                  "dbDescription": "Occlusion and stenosis of right carotid artery",
+                  "notes": null,
+                  "capturedSections": [
+                      "conclusions, right findings"
+                  ],
+                  "encounterDate": "06/03/2023",
+                  "isManuallyAdded": null,
+                  "manuallyAddedAt": null,
+                  "manuallyAddedBy": null,
+                  "diagnosisCodeFinding": null,
+                  "isHccValid": null
+              }
+          ]
       },
-      invalidDisease: {
-        "06/03/2023": [],
+      "invalidDisease": {
+          "2023": []
       },
-      unmatchedDisease: {
-        "06/03/2023": [],
+      "deletedDisease": null,
+      "comboDisease": {
+          "2023": [
+              {
+                  "diseaseName": "Occlusion and stenosis of bilateral carotid arteries",
+                  "diagnosisCodeCombo": "I6523",
+                  "addOnCode": null,
+                  "encounterDate": "06/03/2023",
+                  "ruleType": "BILATERAL_RULE_ENGINE"
+              }
+          ]
       },
-      comboDisease: {
-        "06/03/2023": [],
-      },
-      meatCriteria: {
-        "06/03/2023": [
-          {
-            diseaseName: "Mild stenosis in the right internal carotid artery",
-            diagnosisCode: "I65.23",
-            isMeatCriteriaPresent: true,
-            monitorCapturedFromHeader: "Right Findings",
-            monitor:
-              "Doppler flow velocities in the right internal carotid artery (ICA)",
-            evaluateCapturedFromHeader: "Right Findings",
-            evaluate: "Stenosis in the range of 1-39% with mild plaque",
-            assessmentCapturedFromHeader: "Right Findings",
-            assessment: "Mild stenosis in the right internal carotid artery",
-            treatmentCapturedFromHeader: "Not specified",
-            treatment: "Not specified",
-            category: null,
-          },
-          {
-            diseaseName: "Mild stenosis in the left internal carotid artery",
-            diagnosisCode: "I65.23",
-            isMeatCriteriaPresent: true,
-            monitorCapturedFromHeader: "Left Findings",
-            monitor:
-              "Doppler flow velocities in the left internal carotid artery (ICA)",
-            evaluateCapturedFromHeader: "Left Findings",
-            evaluate: "Stenosis in the range of 1-39% with mild plaque",
-            assessmentCapturedFromHeader: "Left Findings",
-            assessment: "Mild stenosis in the left internal carotid artery",
-            treatmentCapturedFromHeader: "Not specified",
-            treatment: "Not specified",
-            category: null,
-          },
-        ],
-      },
-      radiologyFileDetail: {
-        "06/03/2023": [
-          {
-            createdAt: "11/9/23, 10:29 AM",
-            version: 0,
-            updatedAt: "11/9/23, 10:29 AM",
-            createdBy: null,
-            updatedBy: null,
-            active: false,
-            fileId: "fe5e4bcc-e61d-49ee-9292-8c5d9e3293e8",
-            patientId: "uvais-10",
-            userId: "uvais01@encipherhealth.onmicrosoft.com",
-            orgId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-            dos: "06/03/2023",
-            tenantId: "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-            fileName: "consult.pdf",
-            azureBlobPath: "fe5e4bcc-e61d-49ee-9292-8c5d9e3293e8.pdf",
-          },
-        ],
-      },
-    };
-    // setRadiologyResult(testresult);
-    // var result = testresult;
-    // if (result.validDisease != null) {
-    //   var validDis = '';
-    //   var invalidDis = '';
-    //   var comboDis = '';
-    //   var meatCri = '';
-    //   var dosYearArr = [];
-    //   var dosYearArrFile = [];
-    //   var validDiseaseNewRes = [];
-    //   var invalidDiseaseNewRes = [];
-    //   var unMatchRes = [];
-    //   // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
-    //   // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
+      "meatCriteria": {
+          "2023": [
+              {
+                  "diseaseName": "Stenosis of left internal carotid artery",
+                  "diagnosisCode": "I6522",
+                  "isMeatCriteriaPresent": true,
+                  "monitorCapturedFromHeader": "Left Findings",
+                  "monitor": "Doppler flow velocities in the left internal carotid artery (ICA) are consistent with stenosis in the range of 1-39% with mild plaque.",
+                  "evaluateCapturedFromHeader": "Left Findings",
+                  "evaluate": "Antegrade left vertebral artery flow.",
+                  "assessmentCapturedFromHeader": "Conclusions",
+                  "assessment": "Mild stenosis in the left internal carotid artery (1-39%).",
+                  "treatmentCapturedFromHeader": "N/A",
+                  "treatment": "N/A",
+                  "encounterDate": "06/03/2023",
+                  "radiology": true
+              },
+              {
+                  "diseaseName": "Stenosis of right internal carotid artery",
+                  "diagnosisCode": "I6521",
+                  "isMeatCriteriaPresent": true,
+                  "monitorCapturedFromHeader": "Right Findings",
+                  "monitor": "Doppler flow velocities in the right internal carotid artery (ICA) are consistent with stenosis in the range of 1-39% with mild plaque.",
+                  "evaluateCapturedFromHeader": "Right Findings",
+                  "evaluate": "Antegrade right vertebral artery flow.",
+                  "assessmentCapturedFromHeader": "Conclusions",
+                  "assessment": "Mild stenosis in the right internal carotid artery (1-39%).",
+                  "treatmentCapturedFromHeader": "N/A",
+                  "treatment": "N/A",
+                  "encounterDate": "06/03/2023",
+                  "radiology": true
+              }
+          ]
+      }, 
+      
+      radiologyFileDetail :[
+        {
+            "active": true,
+            "version": 1,
+            "createdBy": "anonymousUser",
+            "updatedBy": "anonymousUser",
+            "fileId": "910ead7b-b65f-4ba2-8cc4-a94321971a76",
+            "patientId": "lenovo-01",
+            "userId": "uvais01@encipherhealth.onmicrosoft.com",
+            "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+            "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+            "fileName": "consult (1).pdf",
+            "documentDos": {
+                "06/03/2023": {
+                    "testName": "Carotid Duplex Ultrasound",
+                    "pageNumbers": [
+                        1,
+                        2
+                    ]
+                }
+            },
+            "azureBlobPath": "910ead7b-b65f-4ba2-8cc4-a94321971a76.pdf",
+            "lastModifiedDate": "2023-11-29T12:24:42.867Z",
+            "createdDate": "2023-11-29T12:20:39.135Z"
+        }
+    ]
+  
+    }
 
-    //   for (var key in result.validDisease) {
-    //     dosYearArr.push({ value: key, label: key });
-    //   }
+    console.log(result)
 
-    //   var dateofService = dosYearArr[0].value;
-
-    //   const highestDOS = Math.max(...dosYearArr.map(res => res.value));
-
-    //   const highestDosValue = dosYearArr.filter((i) => parseInt(i.value) === highestDOS);
-    //   setDosYearDefalutSelectRadiology(dosYearArr[0]);
-
-    //   if (result.radiologyFileDetail != null) {
-    //     for (var key in result.radiologyFileDetail) {
-    //       dosYearArrFile.push({ value: key, label: key });
-    //     }
-    //     var fileDetails = result.radiologyFileDetail[dateofService];
-    //     setRadiologyFileDateDefaulteSelect(dosYearArrFile[0])
-    //     getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
-    //   }
-
-    //   validDis = result.validDisease[dateofService];
-    //   validDiseaseNewRes = result.validDisease[dateofService];
-    //   invalidDiseaseNewRes = result.invalidDisease[dateofService];
-    //   if (result.unmatchedDisease != null) {
-    //     var unMatchResCheck = result.unmatchedDisease[dateofService]
-
-    //     if (unMatchResCheck != null) {
-    //       unMatchRes = result.unmatchedDisease[dateofService]
-
-    //     }
-    //   }
-
-    //   invalidDis = result.invalidDisease[dateofService];
-    //   comboDis = result.comboDisease[dateofService];
-    //   meatCri = result.meatCriteria[dateofService];
-
-    //   setNewValidDiseaseListRadiology(validDiseaseNewRes);
-    //   setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
-    //   setUnMatchHccListRadiology(unMatchRes)
-    //   setComboDiseaseCodesListRadiology(comboDis);
-    //   setDosYearRadiology(dosYearArr);
-    //   setFileRadiologyDateofServiceList(dosYearArrFile)
-
-    //   const COLORS = ['bg-bg-seven', 'bg-third', 'bg-bg-four', 'bg-bg-five', 'bg-bg-six', 'bg-bg-eight', 'bg-bg-nine', 'bg-bg-ten', 'bg-bg-leven'];
-
-    //   var meatListArr = [];
-    //   var meatMoniterHead = [];
-    //   var meatEvaluteHead = [];
-    //   var meatAssesmentHead = [];
-    //   var meatTreatMentHead = [];
-    //   var allMeatHead = [];
-    //   var allMeatHeadColorArr = [];
-    //   var allMeatHeadColor = [];
-    //   var dublicateRemoveSecondArr = [];
-
-    //   meatCri.map((res, index) => {
-    //     if (res.monitorCapturedFromHeader != "") {
-    //       meatMoniterHead.push({
-    //         header: res.monitorCapturedFromHeader,
-    //       })
-    //     }
-    //     if (res.evaluateCapturedFromHeader != "") {
-    //       meatEvaluteHead.push({
-    //         header: res.evaluateCapturedFromHeader
-    //       })
-    //     }
-    //     if (res.assessmentCapturedFromHeader != "") {
-    //       meatAssesmentHead.push({
-    //         header: res.assessmentCapturedFromHeader
-    //       })
-    //     }
-    //     if (res.treatmentCapturedFromHeader != "") {
-    //       meatTreatMentHead.push({
-    //         header: res.treatmentCapturedFromHeader
-    //       });
-    //     }
-    //     var newArray = [];
-    //     newArray = [...allMeatHead, ...meatMoniterHead, ...meatEvaluteHead, ...meatAssesmentHead, ...meatTreatMentHead];
-    //     var dublicateRemoveArr = getUniqueListBy(newArray, 'header');
-    //     dublicateRemoveArr.map((res3, index) => {
-
-    //       allMeatHeadColor.push({
-    //         header: res3.header,
-    //         color: COLORS[index]
-    //       })
-    //     })
-    //     allMeatHeadColorArr = allMeatHeadColor;
-
-    //     dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, 'header');
-    //     setMeatColorCodeList(dublicateRemoveSecondArr)
-    //   })
-
-    //   meatCri.map((res, index) => {
-    //     meatListArr.push({
-    //       diagnosisCode: res.diagnosisCode,
-    //       diseaseName: res.diseaseName,
-    //       monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-    //       assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-    //       evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-    //       treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-    //       monitorCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.monitorCapturedFromHeader),
-    //       assessmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.assessmentCapturedFromHeader),
-    //       evaluateCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.evaluateCapturedFromHeader),
-    //       treatmentCapturedFromHeaderColor: colorCodeMatch(dublicateRemoveSecondArr, res.treatmentCapturedFromHeader),
-    //       monitorColor: COLORS[index],
-    //       meatColor: COLORS[index],
-    //       assessment: res.assessment,
-    //       monitor: res.monitor,
-    //       evaluate: res.evaluate,
-    //       treatment: res.treatment,
-    //       isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-    //     })
-    //   })
-    //   setMeatCriteriaListRadiology(meatListArr);
-    //   setIsLoadingDos(false);
-
-    // }
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
-    );
-    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
-    if (response.data) {
-      var result = response.data;
-      setPatientDetailsRadiology(result);
+    setPatientDetailsRadiology(result);
       setRadiologyResult(result);
       if (result.validDisease != null) {
         var validDis = "";
@@ -1117,7 +1012,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
         var validDiseaseNewRes = [];
         var invalidDiseaseNewRes = [];
         var unMatchRes = [];
-        // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
+        getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
         // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
 
         for (var key in result.validDisease) {
@@ -1134,12 +1029,14 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
         setDosYearDefalutSelectRadiology(dosYearArr[0]);
 
         if (result.radiologyFileDetail != null) {
-          for (var key in result.radiologyFileDetail) {
+          for (var key in result.radiologyFileDetail[0].documentDos) {
             dosYearArrFile.push({ value: key, label: key });
           }
-          var fileDetails = result.radiologyFileDetail[dateofService];
+
+          console.log(dosYearArrFile)
+          // var fileDetails = result.radiologyFileDetail[dateofService];
           setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
-          getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
+          getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
         }
 
         validDis = result.validDisease[dateofService];
@@ -1239,6 +1136,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
             assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
             evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
             treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+            radiology:res.radiology,
             monitorCapturedFromHeaderColor: colorCodeMatch(
               dublicateRemoveSecondArr,
               res.monitorCapturedFromHeader
@@ -1267,54 +1165,507 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
         setMeatCriteriaListRadiology(meatListArr);
         setRadiologyResultStatus(true);
         setIsLoadingDos(false);
-      } else {
-        setIsLoading(false);
       }
-    }
+
+    
+    //    const response = await axios.get(
+    //   ENDPOINTS.apiEndoint +
+    //   `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+    // );
+    // // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+    // if (response.data) {
+    //   var result = response.data;
+    //   setPatientDetailsRadiology(result);
+    //   setRadiologyResult(result);
+    //   if (result.validDisease != null) {
+    //     var validDis = "";
+    //     var invalidDis = "";
+    //     var comboDis = "";
+    //     var meatCri = "";
+    //     var dosYearArr = [];
+    //     var dosYearArrFile = [];
+    //     var validDiseaseNewRes = [];
+    //     var invalidDiseaseNewRes = [];
+    //     var unMatchRes = [];
+    //     // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
+    //     // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
+
+    //     for (var key in result.validDisease) {
+    //       dosYearArr.push({ value: key, label: key });
+    //     }
+
+    //     var dateofService = dosYearArr[0].value;
+
+    //     const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+
+    //     const highestDosValue = dosYearArr.filter(
+    //       (i) => parseInt(i.value) === highestDOS
+    //     );
+    //     setDosYearDefalutSelectRadiology(dosYearArr[0]);
+
+    //     if (result.radiologyFileDetail != null) {
+    //       for (var key in result.radiologyFileDetail) {
+    //         dosYearArrFile.push({ value: key, label: key });
+    //       }
+    //       var fileDetails = result.radiologyFileDetail[dateofService];
+    //       setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
+    //       getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
+    //     }
+
+    //     validDis = result.validDisease[dateofService];
+    //     validDiseaseNewRes = result.validDisease[dateofService];
+    //     invalidDiseaseNewRes = result.invalidDisease[dateofService];
+    //     if (result.unmatchedDisease != null) {
+    //       var unMatchResCheck = result.unmatchedDisease[dateofService];
+
+    //       if (unMatchResCheck != null) {
+    //         unMatchRes = result.unmatchedDisease[dateofService];
+    //       }
+    //     }
+
+    //     invalidDis = result.invalidDisease[dateofService];
+    //     comboDis = result.comboDisease[dateofService];
+    //     meatCri = result.meatCriteria[dateofService];
+
+    //     setNewValidDiseaseListRadiology(validDiseaseNewRes);
+    //     setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
+    //     setUnMatchHccListRadiology(unMatchRes);
+    //     setComboDiseaseCodesListRadiology(comboDis);
+    //     setDosYearRadiology(dosYearArr);
+    //     setFileRadiologyDateofServiceList(dosYearArrFile);
+
+    //     const COLORS = [
+    //       "bg-bg-seven",
+    //       "bg-third",
+    //       "bg-bg-four",
+    //       "bg-bg-five",
+    //       "bg-bg-six",
+    //       "bg-bg-eight",
+    //       "bg-bg-nine",
+    //       "bg-bg-ten",
+    //       "bg-bg-leven",
+    //     ];
+
+    //     var meatListArr = [];
+    //     var meatMoniterHead = [];
+    //     var meatEvaluteHead = [];
+    //     var meatAssesmentHead = [];
+    //     var meatTreatMentHead = [];
+    //     var allMeatHead = [];
+    //     var allMeatHeadColorArr = [];
+    //     var allMeatHeadColor = [];
+    //     var dublicateRemoveSecondArr = [];
+
+    //     meatCri.map((res, index) => {
+    //       if (res.monitorCapturedFromHeader != "") {
+    //         meatMoniterHead.push({
+    //           header: res.monitorCapturedFromHeader,
+    //         });
+    //       }
+    //       if (res.evaluateCapturedFromHeader != "") {
+    //         meatEvaluteHead.push({
+    //           header: res.evaluateCapturedFromHeader,
+    //         });
+    //       }
+    //       if (res.assessmentCapturedFromHeader != "") {
+    //         meatAssesmentHead.push({
+    //           header: res.assessmentCapturedFromHeader,
+    //         });
+    //       }
+    //       if (res.treatmentCapturedFromHeader != "") {
+    //         meatTreatMentHead.push({
+    //           header: res.treatmentCapturedFromHeader,
+    //         });
+    //       }
+    //       var newArray = [];
+    //       newArray = [
+    //         ...allMeatHead,
+    //         ...meatMoniterHead,
+    //         ...meatEvaluteHead,
+    //         ...meatAssesmentHead,
+    //         ...meatTreatMentHead,
+    //       ];
+    //       var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+    //       dublicateRemoveArr.map((res3, index) => {
+    //         allMeatHeadColor.push({
+    //           header: res3.header,
+    //           color: COLORS[index],
+    //         });
+    //       });
+    //       allMeatHeadColorArr = allMeatHeadColor;
+
+    //       dublicateRemoveSecondArr = getUniqueListBy(
+    //         allMeatHeadColor,
+    //         "header"
+    //       );
+    //       setMeatColorCodeList(dublicateRemoveSecondArr);
+    //     });
+
+    //     meatCri.map((res, index) => {
+    //       meatListArr.push({
+    //         diagnosisCode: res.diagnosisCode,
+    //         diseaseName: res.diseaseName,
+    //         monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+    //         assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+    //         evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+    //         treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+    //         monitorCapturedFromHeaderColor: colorCodeMatch(
+    //           dublicateRemoveSecondArr,
+    //           res.monitorCapturedFromHeader
+    //         ),
+    //         assessmentCapturedFromHeaderColor: colorCodeMatch(
+    //           dublicateRemoveSecondArr,
+    //           res.assessmentCapturedFromHeader
+    //         ),
+    //         evaluateCapturedFromHeaderColor: colorCodeMatch(
+    //           dublicateRemoveSecondArr,
+    //           res.evaluateCapturedFromHeader
+    //         ),
+    //         treatmentCapturedFromHeaderColor: colorCodeMatch(
+    //           dublicateRemoveSecondArr,
+    //           res.treatmentCapturedFromHeader
+    //         ),
+    //         monitorColor: COLORS[index],
+    //         meatColor: COLORS[index],
+    //         assessment: res.assessment,
+    //         monitor: res.monitor,
+    //         evaluate: res.evaluate,
+    //         treatment: res.treatment,
+    //         isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+    //       });
+    //     });
+    //     setMeatCriteriaListRadiology(meatListArr);
+    //     setRadiologyResultStatus(true);
+    //     setIsLoadingDos(false);
+    //   } else {
+    //     setIsLoading(false);
+    //   }
+    // }
   };
   const getLabReportDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
-    );
 
-    if (response.data.labFileDetail != null) {
-      var result = response.data;
-      setLabResult(result);
-      var dosYearArr = [];
-      var dosYearArrFile = [];
-      var validDiseaseNewRes = [];
-
-      for (var key in result.validDisease) {
-        dosYearArr.push({ value: key, label: key });
-      }
-
-      setLabFileDosList(dosYearArr);
-
-      var dateofService = dosYearArr[0].value;
-
-      const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-
-      const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
-
-      if (dosYearArr.length != 0) {
-        validDiseaseNewRes = result.validDisease[dateofService];
-        if (result.labFileDetail != null) {
-          for (var key in result.labFileDetail) {
-            dosYearArrFile.push({ value: key, label: key });
+    var resultTest = {
+      "patientId": "lenovo-01",
+      "patientName": "Armstead, Harold B",
+      "fileId": null,
+      "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+      "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+      "dob": "04/22/1950",
+      "gender": "M",
+      "age": 73,
+      "validDisease": {
+          "2023": [
+              {
+                  "diagnosisCode": "E11.9",
+                  "actualDescription": "Type 2 diabetes mellitus without complications",
+                  "dbDescription": null,
+                  "notes": null,
+                  "capturedSections": [
+                      "A1c"
+                  ],
+                  "encounterDate": "01/20/2023",
+                  "isManuallyAdded": null,
+                  "manuallyAddedAt": null,
+                  "manuallyAddedBy": null,
+                  "diagnosisCodeFinding": null,
+                  "isHccValid": null
+              },
+              {
+                  "diagnosisCode": "E11.9",
+                  "actualDescription": "Type 2 diabetes mellitus without complications",
+                  "dbDescription": null,
+                  "notes": null,
+                  "capturedSections": [
+                      "HGA1C"
+                  ],
+                  "encounterDate": "01/19/2023",
+                  "isManuallyAdded": null,
+                  "manuallyAddedAt": null,
+                  "manuallyAddedBy": null,
+                  "diagnosisCodeFinding": null,
+                  "isHccValid": null
+              }
+          ]
+      },
+      "meatCriteria": {
+          "2023": [
+              {
+                  "diseaseName": "Type 2 diabetes mellitus without complications",
+                  "diagnosisCode": "E11.9",
+                  "isMeatCriteriaPresent": true,
+                  "monitorCapturedFromHeader": null,
+                  "monitor": null,
+                  "evaluateCapturedFromHeader": null,
+                  "evaluate": "A1c",
+                  "assessmentCapturedFromHeader": null,
+                  "assessment": null,
+                  "treatmentCapturedFromHeader": null,
+                  "treatment": null,
+                  "encounterDate": "01/20/2023",
+                  "radiology": null
+              },
+              {
+                  "diseaseName": "Type 2 diabetes mellitus without complications",
+                  "diagnosisCode": "E11.9",
+                  "isMeatCriteriaPresent": true,
+                  "monitorCapturedFromHeader": null,
+                  "monitor": null,
+                  "evaluateCapturedFromHeader": null,
+                  "evaluate": "HGA1C",
+                  "assessmentCapturedFromHeader": null,
+                  "assessment": null,
+                  "treatmentCapturedFromHeader": null,
+                  "treatment": null,
+                  "encounterDate": "01/19/2023",
+                  "radiology": null
+              }
+          ]
+      },
+      "labFileDetail": [
+          {
+              "active": true,
+              "version": 0,
+              "createdBy": "anonymousUser",
+              "updatedBy": "anonymousUser",
+              "fileId": "537cc4bc-f072-4f4e-9852-b6045a035236",
+              "patientId": "lenovo-01",
+              "userId": "uvais01@encipherhealth.onmicrosoft.com",
+              "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+              "documentDos": {
+                  "09/02/2022": {
+                      "testName": "Lab file",
+                      "pageNumbers": [
+                          2
+                      ]
+                  },
+                  "01/20/2023": {
+                      "testName": "Lab file",
+                      "pageNumbers": [
+                          4
+                      ]
+                  },
+                  "06/13/2023": {
+                      "testName": "Lab file",
+                      "pageNumbers": [
+                          5
+                      ]
+                  },
+                  "01/19/2023": {
+                      "testName": "Lab file",
+                      "pageNumbers": [
+                          6
+                      ]
+                  },
+                  "07/26/2023": {
+                      "testName": "Lab file",
+                      "pageNumbers": [
+                          3
+                      ]
+                  },
+                  "08/01/2023": {
+                      "testName": "Lab file",
+                      "pageNumbers": [
+                          1
+                      ]
+                  }
+              },
+              "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+              "fileName": "ilovepdf_merged.pdf",
+              "azureBlobPath": "537cc4bc-f072-4f4e-9852-b6045a035236.pdf",
+              "createdDate": "2023-11-29T15:50:34.098Z",
+              "lastModifiedDate": "2023-11-29T15:50:34.098Z"
           }
-          setFileLabDateofServiceList(dosYearArrFile);
-          setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-          var fileDetails = result.labFileDetail[dateofService];
-          getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-        }
-      }
-      setLabReportValidList(validDiseaseNewRes);
-      setLabFileDosListDefaultSelect(dosYearArr[0]);
-      setLabResultStatus(true);
-      setIsLoadingDos(false);
+      ]
     }
+
+    console.log(resultTest)
+
+  if (resultTest.labFileDetail != null) {
+    var result = resultTest;
+    setLabResult(result);
+    var dosYearArr = [];
+    var dosYearArrFile = [];
+    var validDiseaseNewRes = [];
+    var meatRes = [];
+
+    for (var key in result.validDisease) {
+      dosYearArr.push({ value: key, label: key });
+    }
+
+    setLabFileDosList(dosYearArr);
+
+    var dateofService = dosYearArr[0].value;
+
+    const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+
+    const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+
+    if (dosYearArr.length != 0) {
+      validDiseaseNewRes = result.validDisease[dateofService];
+      meatRes = result.meatCriteria[dateofService];
+      if (result.labFileDetail != null) {
+        for (var key in result.labFileDetail[0].documentDos) {
+          dosYearArrFile.push({ value: key, label: key });
+        }
+        setFileLabDateofServiceList(dosYearArrFile);
+        setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+        var fileDetails = result.labFileDetail;
+        getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+      }
+    }
+
+    const COLORS = [
+      "bg-bg-seven",
+      "bg-third",
+      "bg-bg-four",
+      "bg-bg-five",
+      "bg-bg-six",
+      "bg-bg-eight",
+      "bg-bg-nine",
+      "bg-bg-ten",
+      "bg-bg-leven",
+    ];
+
+    var meatListArr = [];
+    var meatMoniterHead = [];
+    var meatEvaluteHead = [];
+    var meatAssesmentHead = [];
+    var meatTreatMentHead = [];
+    var allMeatHead = [];
+    var allMeatHeadColorArr = [];
+    var allMeatHeadColor = [];
+    var dublicateRemoveSecondArr = [];
+
+    meatRes.map((res, index) => {
+      if (res.monitorCapturedFromHeader != "") {
+        meatMoniterHead.push({
+          header: res.monitorCapturedFromHeader,
+        });
+      }
+      if (res.evaluateCapturedFromHeader != "") {
+        meatEvaluteHead.push({
+          header: res.evaluateCapturedFromHeader,
+        });
+      }
+      if (res.assessmentCapturedFromHeader != "") {
+        meatAssesmentHead.push({
+          header: res.assessmentCapturedFromHeader,
+        });
+      }
+      if (res.treatmentCapturedFromHeader != "") {
+        meatTreatMentHead.push({
+          header: res.treatmentCapturedFromHeader,
+        });
+      }
+      var newArray = [];
+      newArray = [
+        ...allMeatHead,
+        ...meatMoniterHead,
+        ...meatEvaluteHead,
+        ...meatAssesmentHead,
+        ...meatTreatMentHead,
+      ];
+      var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+      dublicateRemoveArr.map((res3, index) => {
+        allMeatHeadColor.push({
+          header: res3.header,
+          color: COLORS[index],
+        });
+      });
+      allMeatHeadColorArr = allMeatHeadColor;
+
+      dublicateRemoveSecondArr = getUniqueListBy(
+        allMeatHeadColor,
+        "header"
+      );
+      setMeatColorCodeList(dublicateRemoveSecondArr);
+    });
+
+    meatRes.map((res, index) => {
+      meatListArr.push({
+        diagnosisCode: res.diagnosisCode,
+        diseaseName: res.diseaseName,
+        monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+        assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+        evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+        treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+        radiology:res.radiology,
+        monitorCapturedFromHeaderColor: colorCodeMatch(
+          dublicateRemoveSecondArr,
+          res.monitorCapturedFromHeader
+        ),
+        assessmentCapturedFromHeaderColor: colorCodeMatch(
+          dublicateRemoveSecondArr,
+          res.assessmentCapturedFromHeader
+        ),
+        evaluateCapturedFromHeaderColor: colorCodeMatch(
+          dublicateRemoveSecondArr,
+          res.evaluateCapturedFromHeader
+        ),
+        treatmentCapturedFromHeaderColor: colorCodeMatch(
+          dublicateRemoveSecondArr,
+          res.treatmentCapturedFromHeader
+        ),
+        monitorColor: COLORS[index],
+        meatColor: COLORS[index],
+        assessment: res.assessment,
+        monitor: res.monitor,
+        evaluate: res.evaluate,
+        treatment: res.treatment,
+        isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+      });
+    });
+
+
+     console.log(meatListArr)
+    setLabReportValidList(validDiseaseNewRes);
+    setLabReportMeatList(meatListArr);
+    setLabFileDosListDefaultSelect(dosYearArr[0]);
+    setLabResultStatus(true);
+    setIsLoadingDos(false);
+  }
+    // const response = await axios.get(
+    //   ENDPOINTS.apiEndoint +
+    //   `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+    // );
+
+    // if (response.data.labFileDetail != null) {
+    //   var result = response.data;
+    //   setLabResult(result);
+    //   var dosYearArr = [];
+    //   var dosYearArrFile = [];
+    //   var validDiseaseNewRes = [];
+
+    //   for (var key in result.validDisease) {
+    //     dosYearArr.push({ value: key, label: key });
+    //   }
+
+    //   setLabFileDosList(dosYearArr);
+
+    //   var dateofService = dosYearArr[0].value;
+
+    //   const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+
+    //   const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+
+    //   if (dosYearArr.length != 0) {
+    //     validDiseaseNewRes = result.validDisease[dateofService];
+    //     if (result.labFileDetail != null) {
+    //       for (var key in result.labFileDetail) {
+    //         dosYearArrFile.push({ value: key, label: key });
+    //       }
+    //       setFileLabDateofServiceList(dosYearArrFile);
+    //       setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+    //       var fileDetails = result.labFileDetail[dateofService];
+    //       getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+    //     }
+    //   }
+    //   setLabReportValidList(validDiseaseNewRes);
+    //   setLabFileDosListDefaultSelect(dosYearArr[0]);
+    //   setLabResultStatus(true);
+    //   setIsLoadingDos(false);
+    // }
   };
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
@@ -1816,7 +2167,9 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
-  const handleOpenModalRadiology = (value, disDescription) => {
+  const handleOpenModalRadiology = (value, disDescription,radiologyCheck) => {
+    console.log(radiologyCheck)
+    if(radiologyCheck == true){
     var splitPoint = disDescription.substring(" ", 40);
     setTimeout(() => {
       highlight({
@@ -1833,6 +2186,12 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
     setSelectMeatName(dataset + " -  " + "Loading...");
     setIsLoadingSection(true);
     setIsModalOpenRadiology(true);
+  }else{
+    handleOpenModal(
+      value,
+      disDescription
+    )
+  }
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
@@ -1928,8 +2287,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
 
   const dosOnChangeLabFile = async (e) => {
     var dosKeyValue = e.value;
-    var fileDetails = labResult.labFileDetail[dosKeyValue];
-    getLabReportFiles(fileDetails[0].azureBlobPath, localTenantId);
+    // var fileDetails = labResult.labFileDetail[dosKeyValue];
+    // getLabReportFiles(fileDetails[0].azureBlobPath, localTenantId);
   };
 
   const dosOnChange = async (e) => {
@@ -2818,19 +3177,25 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
 
   const handleSubmitHccComplete = async () => {
     setCompleteBtnTitle("Loading...");
-    var dos = dosYearDefalutSelect[0].label;
+    var dos = selectedDosValue;
     var validObject = {};
     var inValidObject = {};
     var unmatachObject = {};
     var comoboObject = {};
     var meatObject = {};
     var deletedObject = {};
-    validObject[dos] = newValidDiseaseList;
-    inValidObject[dos] = newInValidDiseaseList;
-    unmatachObject[dos] = suggestedHccList;
-    comoboObject[dos] = comboDiseaseCodesList;
-    meatObject[dos] = meatCriteriaList;
-    deletedObject[dos] = deletedHccList;
+    validObject = newValidDiseaseList;
+    inValidObject = newInValidDiseaseList;
+    unmatachObject = suggestedHccList;
+    comoboObject = comboDiseaseCodesList;
+    meatObject = meatCriteriaList;
+    deletedObject = deletedHccList;
+    // validObject[dos] = newValidDiseaseList;
+    // inValidObject[dos] = newInValidDiseaseList;
+    // unmatachObject[dos] = suggestedHccList;
+    // comoboObject[dos] = comboDiseaseCodesList;
+    // meatObject[dos] = meatCriteriaList;
+    // deletedObject[dos] = deletedHccList;
 
     var postData = {
       userId: localUserId,
@@ -2980,11 +3345,11 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
   const addComments = async (value) => {
     console.log(value)
     if (value == "Filter") {
-      var response = await loadFilterPatientList(localUserId, 0, 10, "COMPLETED");
-      console.log(response)
-      var result = response.content;
-      console.log(result)
-      setPatientList(result)
+      // var response = await loadFilterPatientList(localUserId, 0, 10, "COMPLETED");
+      // console.log(response)
+      // var result = response.content;
+      // console.log(result)
+      // setPatientList(result)
     }
 
     if (value == "Timeline") {
@@ -4260,7 +4625,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                 <div className="card combo-card">
                                                   <div className="col-xl-12">
 
-                                                    <span className="no-patient-data">NO PATIENT DATA</span>
+                                                    <span className="no-patient-data">NO DATA</span>
                                                   </div>
                                                 </div></div>
                                               : null} */}
@@ -4395,7 +4760,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                              
                                                   <div>
                                                     <span className="no-patient-data">
-                                                      NO PATIENT DATA
+                                                      NO DATA
                                                     </span>
                                                   </div>
                                          
@@ -4750,7 +5115,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             <div className="col-xl-12">
                                               <div>
                                                 <span className="no-patient-data">
-                                                  NO PATIENT DATA
+                                                  NO DATA
                                                 </span>
                                               </div>
                                             </div>
@@ -5456,7 +5821,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                               <div className="card combo-card">
                                                 <div className="col-xl-12">
                                                   <span className="no-patient-data">
-                                                    NO PATIENT DATA
+                                                    NO DATA
                                                   </span>
                                                 </div>
                                               </div>
@@ -6037,7 +6402,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                 <div className="card combo-card">
                                                   <div className="col-xl-12">
                                                     <span className="no-patient-data">
-                                                      NO PATIENT DATA
+                                                      NO DATA
                                                     </span>
                                                   </div>
                                                 </div>
@@ -6175,7 +6540,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                               //   <div className="col-xl-12">
                                                   <div>
                                                     <span className="no-patient-data">
-                                                      NO PATIENT DATA
+                                                      NO DATA
                                                     </span>
                                                   </div>
                                               //   </div>
@@ -6504,7 +6869,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             <div className="col-xl-12">
                                               <div>
                                                 <span className="no-patient-data">
-                                                  NO PATIENT DATA
+                                                  NO DATA
                                                 </span>
                                               </div>
                                           </div>
@@ -6820,7 +7185,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                               <div className="card combo-card">
                                                 <div className="col-xl-12">
                                                   <span className="no-patient-data">
-                                                    NO PATIENT DATA
+                                                    NO DATA
                                                   </span>
                                                 </div>
                                               </div>
@@ -6991,10 +7356,10 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                           <div
                                                             className="media-body"
                                                             onClick={() =>
-                                                              handleOpenModalCombinationCode(
+                                                              handleOpenModalRadiology(
                                                                 data.diagnosisCode,
                                                                 data.actualDescription,
-                                                                "valid2"
+                                                                true
                                                               )
                                                             }
                                                           >
@@ -7113,10 +7478,10 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             <Badge
                                                               className={`mt-2 text-start ${visitStyles.provider_name}`}
                                                               onClick={() =>
-                                                                handleOpenModalCombinationCode(
+                                                                handleOpenModalRadiology(
                                                                   data.diagnosisCode,
-                                                                  data.capturedSections,
-                                                                  "valid"
+                                                                  data.capturedSections[0],
+                                                                  true
                                                                 )
                                                               }
                                                             >
@@ -7373,7 +7738,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                 <div className="card combo-card">
                                                   <div className="col-xl-12">
                                                     <span className="no-patient-data">
-                                                      NO PATIENT DATA
+                                                      NO DATA
                                                     </span>
                                                   </div>
                                                 </div>
@@ -7387,7 +7752,237 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                       id="my-posts"
                                       eventKey="comboDiseases"
                                     >
-                                      <div className="my-post-content pt-3">
+                                           <div className={`${visitStyles.comboContainer}`}>
+                                      <div  className={`row ${visitStyles.comboContainer2}`}>
+                                        <div className="col-xl-6">
+                                          <div className={`${visitStyles.comboTitle}`}>
+                                            <span>VALID CODES </span>
+                                          </div>
+                                          <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
+                                            <div
+                                              className={
+                                                visitStyles.combo_head_card
+                                              }
+                                            >
+                                              <div className="row">
+                                                <div className="col-xl-3">
+                                                  <label>Combo Codes</label>
+                                                </div>
+                                                <div className="col-xl-3">
+                                                  <label>Additional Codes</label>
+                                                </div>
+                                                <div className="col-xl-5">
+                                                  <label>Description</label>
+                                                </div>
+                                                <div className="col-xl-1">
+                                                  <div className="d-flex justify-content-center">
+                                                    <button
+                                                      onClick={() =>
+                                                        addValidDiseases()
+                                                      }
+                                                      className={
+                                                        visitStyles.combo_add_btn
+                                                      }
+                                                    >
+                                                       <FontAwesomeIcon
+                                icon={
+                                  faPlus
+                                }
+                                style={{
+                                  color:
+                                   "#fff",
+                                   size:12
+                                }}
+                              />
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            {comboDiseaseCodesListRadiology.length != 0 ? 
+                                            <div className={visitStyles.hccStickey_head}>
+                                            {comboDiseaseCodesListRadiology?.map(
+                                              (item) => {
+                                                return (
+                                                  <div
+                                                    className={
+                                                      visitStyles.combo_details_card
+                                                    }
+                                                  >
+                                                    <div className="row">
+                                                      <div className="col-xl-3">
+                                                        <span className="font-bold">
+                                                          {
+                                                            item.diagnosisCodeCombo
+                                                          }
+                                                        </span>
+                                                      </div>
+                                                      <div className="col-xl-3">
+                                                        <span className="font-bold">
+                                                          {item.addOnCode}
+                                                        </span>
+                                                      </div>
+                                                      <div
+                                                        className="col-xl-5 cr-pointer"
+                                                        onClick={() =>
+                                                          handleOpenModalCombinationCode(
+                                                            item.diagnosisCodeCombo,
+                                                            item.diseaseName
+                                                          )
+                                                        }
+                                                      >
+                                                        <span>
+                                                          {item.diseaseName}
+                                                        </span>
+                                                      </div>
+                                                      <div className="col-xl-1 comboclose">
+                                                        <Popconfirm
+                                                          title="You want move to Invalid?"
+                                                          description={
+                                                            item.diseaseName
+                                                          }
+                                                          onConfirm={
+                                                            confirmComboInvalid
+                                                          }
+                                                          placement="leftTop"
+                                                          okText="Yes"
+                                                          cancelText="No"
+                                                          onOpenChange={() =>
+                                                            onchangeCombo(
+                                                              item.diseaseName,
+                                                              item.addOnCode
+                                                            )
+                                                          }
+                                                        >
+                                                          <div
+                                                            className={
+                                                              visitStyles.close_icon
+                                                            }
+                                                          >
+                                                            {SVGICON.closeIcon}
+                                                          </div>
+                                                        </Popconfirm>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                );
+                                              }
+                                            )}
+                                            </div>:null}
+
+                                            {comboDiseaseCodesListRadiology.length == 0 ? (
+                                             
+                                                  <div>
+                                                    <span className="no-patient-data">
+                                                      NO DATA
+                                                    </span>
+                                                  </div>
+                                         
+                                            ) : null}
+                                          </div>
+                                        </div>
+
+                                        <div className="col-xl-6">
+                                        <div className={`${visitStyles.comboTitle}`}>
+                                            <span>INVALID CODES </span>
+                                          </div>
+                                          <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
+                                            <div
+                                              className={
+                                                visitStyles.combo_head_card
+                                              }
+                                            >
+                                              <div className="row">
+                                                <div className="col-xl-3">
+                                                  <label>Combo Codes</label>
+                                                </div>
+                                                <div className="col-xl-3">
+                                                  <label>Additional Codes</label>
+                                                </div>
+                                                <div className="col-xl-5">
+                                                  <label>Description</label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            {invalidComboDiseaseCodesList.length !=
+                                              0 ? (
+                                              <>
+                                              <div className={visitStyles.hccStickey_head}>
+                                                {invalidComboDiseaseCodesList?.map(
+                                                  (item) => {
+                                                    return (
+                                                      <div
+                                                        className={
+                                                          visitStyles.combo_details_card
+                                                        }
+                                                      >
+                                                        <div className="row">
+                                                          <div className="col-xl-3">
+                                                            <span className="font-bold">
+                                                              {
+                                                                item.diagnosisCodeCombo
+                                                              }
+                                                            </span>
+                                                          </div>
+                                                          <div className="col-xl-3">
+                                                            <span className="font-bold">
+                                                              {item.addOnCode}
+                                                            </span>
+                                                          </div>
+                                                          <div
+                                                            className="col-xl-5 cr-pointer"
+                                                            onClick={() =>
+                                                              handleOpenModalCombinationCode(
+                                                                item.diagnosisCodeCombo,
+                                                                item.diseaseName
+                                                              )
+                                                            }
+                                                          >
+                                                            <span>
+                                                              {item.diseaseName}
+                                                            </span>
+                                                          </div>
+                                                          <div className="col-xl-1 comboclose">
+                                                            <Popconfirm
+                                                              title="You want move to Valid?"
+                                                              description={
+                                                                item.diseaseName
+                                                              }
+                                                              onConfirm={
+                                                                confirmComboValid
+                                                              }
+                                                              placement="leftTop"
+                                                              okText="Yes"
+                                                              cancelText="No"
+                                                              onOpenChange={() =>
+                                                                onchangeCombo(
+                                                                  item.diseaseName,
+                                                                  item.addOnCode
+                                                                )
+                                                              }
+                                                            >
+                                                              <div
+                                                                className={
+                                                                  visitStyles.tick_icon
+                                                                }
+                                                              >
+                                                                {SVGICON.tickIcon}
+                                                              </div>
+                                                            </Popconfirm>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    );
+                                                  }
+                                                )}
+                                                </div>
+                                              </>
+                                            ) : null}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      </div>
+                                      {/* <div className="my-post-content pt-3">
                                         <div
                                           className={visitStyles.combo_head_card}
                                         >
@@ -7480,7 +8075,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             <div className="col-xl-12">
                                               <div>
                                                 <span className="no-patient-data">
-                                                  NO PATIENT DATA
+                                                  NO DATA
                                                 </span>
                                               </div>
                                             </div>
@@ -7552,13 +8147,262 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             )}
                                           </>
                                         ) : null}
-                                      </div>
+                                      </div> */}
                                     </Tab.Pane>
                                     <Tab.Pane
                                       id="my-posts"
                                       eventKey="meatCriteria"
                                     >
-                                      <div className="my-post-content pt-3">
+                                        <div className="my-post-content pt-3">
+                                        <div
+                                          className={visitStyles.meat_head_card}
+                                        >
+                                          <div className="row">
+                                            <div className="col-xl-1">
+                                              <label>Codes</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Description</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Monitor</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Evaluation</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Assessment</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Treatment</label>
+                                            </div>
+                                            <div className="col-xl-1">
+                                              <label></label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        { meatCriteriaListRadiology.length != 0 ?
+                                        <div
+                                            className={visitStyles.hccStickey_head}
+                                          >
+                                        {meatCriteriaListRadiology?.map((item) => {
+                                          return (
+                                            <div
+                                              className={
+                                                item.isMeatCriteriaPresent ===
+                                                  true
+                                                  ? `${visitStyles.meat_details_card}`
+                                                  : `${visitStyles.meat_details_card_false}`
+                                              }
+                                            >
+                                              <div className="row">
+                                                {/* <div className="col-xl-1">
+                                                  <span className="font-bold">{item.diagnosisCode}</span>
+                                                </div> */}
+                                                <div className="col-xl-1 d-grid">
+                                                  <span className="font-bold meat-name-details">
+                                                    {item.diagnosisCode}
+                                                  </span>
+                                                  {item.category == "Valid" ? (
+                                                    <Badge
+                                                      className="valid-meat badge-circle mt-2"
+                                                      bg={` badge-circle mt-2 bg-validmeat`}
+                                                    >
+                                                      {item.category}
+                                                    </Badge>
+                                                  ) : (
+                                                    <Badge
+                                                      className="valid-meat badge-circle mt-2"
+                                                      bg={` badge-circle mt-2 bg-validUnmatch`}
+                                                    >
+                                                      {item.category}
+                                                    </Badge>
+                                                  )}
+                                                </div>
+                                                <div className="col-xl-2">
+                                                  <Popover
+                                                    placement="topLeft"
+                                                    title="Description"
+                                                    content={item.diseaseName}
+                                                  >
+                                                    <span className="meat-name-details">
+                                                      {item.diseaseName}
+                                                    </span>
+                                                  </Popover>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.monitor != "" ? (
+                                                    <Popover
+                                                      placement="topLeft"
+                                                      title="Monitor"
+                                                      content={item.monitor}
+                                                    >
+                                                      <span className="meat-name-details">
+                                                        {item.monitor}
+                                                      </span>
+                                                    </Popover>
+                                                  ) : (
+                                                    <span className="meat-name-details text-center font-bold">
+                                                      -
+                                                    </span>
+                                                  )}
+                                                  <Badge
+                                                    className="badge-meat cr-pointer badge-circle mt-2"
+                                                    bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
+                                                    onClick={() =>
+                                                      handleOpenModalRadiology(
+                                                        item.monitorCapturedFromHeader,
+                                                        item.monitor,
+                                                        item.radiology,
+                                                      )
+                                                    }
+                                                  >
+                                                    {
+                                                      item.monitorCapturedFromHeader
+                                                    }
+                                                  </Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.evaluate != "" ? (
+                                                    <Popover
+                                                      placement="topLeft"
+                                                      title="Evaluation"
+                                                      content={item.evaluate}
+                                                    >
+                                                      <span className="meat-name-details">
+                                                        {item.evaluate}
+                                                      </span>
+                                                    </Popover>
+                                                  ) : (
+                                                    <span className="meat-name-details text-center font-bold">
+                                                      -
+                                                    </span>
+                                                  )}
+                                                  <Badge
+                                                    className="badge-meat cr-pointer badge-circle mt-2"
+                                                    bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
+                                                    onClick={() =>
+                                                      handleOpenModalRadiology(
+                                                        item.monitorCapturedFromHeader,
+                                                        item.monitor,
+                                                        item.radiology,
+                                                      )
+                                                    }
+                                                  >
+                                                    {
+                                                      item.evaluateCapturedFromHeader
+                                                    }
+                                                  </Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.assessment != "" ? (
+                                                    <Popover
+                                                      placement="topLeft"
+                                                      title="Assessment"
+                                                      content={item.assessment}
+                                                    >
+                                                      <span className="meat-name-details">
+                                                        {item.assessment}
+                                                      </span>
+                                                    </Popover>
+                                                  ) : (
+                                                    <span className="meat-name-details text-center font-bold">
+                                                      -
+                                                    </span>
+                                                  )}
+                                                  <Badge
+                                                    className="badge-meat cr-pointer badge-circle mt-2"
+                                                    bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
+                                                    onClick={() =>
+                                                      handleOpenModalRadiology(
+                                                        item.monitorCapturedFromHeader,
+                                                        item.monitor,
+                                                        item.radiology,
+                                                      )
+                                                    }
+                                                  >
+                                                    {
+                                                      item.assessmentCapturedFromHeader
+                                                    }
+                                                  </Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.treatment != "" ? (
+                                                    <Popover
+                                                      placement="topLeft"
+                                                      title="Treatment"
+                                                      content={item.treatment}
+                                                    >
+                                                      <span className="meat-name-details">
+                                                        {item.treatment}
+                                                      </span>
+                                                    </Popover>
+                                                  ) : (
+                                                    <span className="meat-name-details text-center font-bold">
+                                                      -
+                                                    </span>
+                                                  )}
+
+                                                  <Badge
+                                                    className="badge-meat cr-pointer badge-circle mt-2"
+                                                    bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
+                                                    onClick={() =>
+                                                      handleOpenModalRadiology(
+                                                        item.monitorCapturedFromHeader,
+                                                        item.monitor,
+                                                        item.radiology,
+                                                      )
+                                                    }
+                                                  >
+                                                    {
+                                                      item.treatmentCapturedFromHeader
+                                                    }
+                                                  </Badge>
+                                                </div>
+                                                <div className="col-xl-1 meatclose">                                                 
+                                                  <Popconfirm
+                                                    title="You want move to Invalid?"
+                                                    description={item.diseaseName}
+                                                    onConfirm={confirmInvalidMeat}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeMeat(
+                                                        item.diseaseName,
+                                                        item.diagnosisCode
+                                                      )
+                                                    }
+                                                  >
+                                                 <div
+                                                              className={
+                                                                visitStyles.close_icon
+                                                              }
+                                                            >
+                                                              {SVGICON.closeIcon}
+                                                            </div>
+                                                  </Popconfirm>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                       
+                                        {meatCriteriaListRadiology.length == 0 ? (
+                                          <div className="card combo-card">
+                                            <div className="col-xl-12">
+                                              <div>
+                                                <span className="no-patient-data">
+                                                  NO DATA
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        ) : null}
+                                      
+                                         </div> : null}
+                                      </div>
+                                      {/* <div className="my-post-content pt-3">
                                         <div
                                           className={visitStyles.meat_head_card}
                                         >
@@ -7739,41 +8583,9 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                       }
                                                     </Badge>
                                                   </div>
-                                                  {/* <div className="col-xl-2 d-grid">
-                                                {item.monitor != "" ?                                 
-                                                <Popover placement="topLeft" title="Monitor" content={item.monitor}>
-                                                  <span className="meat-name-details">{item.monitor}</span>
-                                                </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge  className="badge-meat cr-pointer" bg={(item.monitorCapturedFromHeader === "HPI" || item.monitorCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.monitorCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.monitorCapturedFromHeader === "Impression" || item.monitorCapturedFromHeader === "Plan: COPD" || item.monitorCapturedFromHeader === "Assessments" || item.monitorCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.monitorCapturedFromHeader === "Recommendations" || item.monitorCapturedFromHeader === "Plan: GERD without esophagitis" || item.monitorCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.monitorCapturedFromHeader === "Plan / Discussion" || item.monitorCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.monitorCapturedFromHeader === "Patient Instructions" || item.monitorCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.monitorCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.monitorCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.monitorCapturedFromHeader,item.monitor)}>{item.monitorCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.evaluate != "" ?        
-                                                <Popover placement="topLeft" title="Evaluation" content={item.evaluate}>
-                                                  <span className="meat-name-details">{item.evaluate}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer" bg={(item.evaluateCapturedFromHeader === "HPI" || item.evaluateCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.evaluateCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Impression" || item.evaluateCapturedFromHeader === "Plan: COPD" || item.evaluateCapturedFromHeader === "Assessments" || item.evaluateCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Recommendations" || item.evaluateCapturedFromHeader === "Plan: GERD without esophagitis" || item.evaluateCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Plan / Discussion" || item.evaluateCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.evaluateCapturedFromHeader === "Patient Instructions" || item.evaluateCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.evaluateCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.evaluateCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.evaluateCapturedFromHeader,item.evaluate)}>{item.evaluateCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                              {item.assessment != "" ?     
-                                                <Popover placement="topLeft" title="Assessment" content={item.assessment}>
-                                                  <span className="meat-name-details">{item.assessment}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-                                                <Badge className="badge-meat cr-pointer" bg={(item.assessmentCapturedFromHeader === "HPI" || item.assessmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.assessmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Impression" || item.assessmentCapturedFromHeader === "Plan: COPD" || item.assessmentCapturedFromHeader === "Assessments" || item.assessmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Recommendations" || item.assessmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.assessmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Plan / Discussion" || item.assessmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.assessmentCapturedFromHeader === "Patient Instructions" || item.assessmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.assessmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.assessmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.assessmentCapturedFromHeader,item.assessment)}>{item.assessmentCapturedFromHeader}</Badge>
-                                              </div>
-                                              <div className="col-xl-2 d-grid">
-                                                  {item.treatment != "" ?     
-                                                <Popover placement="topLeft" title="Treatment" content={item.treatment}>
-                                                  <span className="meat-name-details">{item.treatment}</span>
-                                                  </Popover>:<span className="meat-name-details text-center font-bold">-</span>}
-
-                                                <Badge className="badge-meat cr-pointer" bg={(item.treatmentCapturedFromHeader === "HPI" || item.treatmentCapturedFromHeader === "Plan: Hypertensive heart disease without heart failure" || item.treatmentCapturedFromHeader === "Vital Signs") ? "third badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Impression" || item.treatmentCapturedFromHeader === "Plan: COPD" || item.treatmentCapturedFromHeader === "Assessments" || item.treatmentCapturedFromHeader === "Assessment") ? "bg-eight badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Recommendations" || item.treatmentCapturedFromHeader === "Plan: GERD without esophagitis" || item.treatmentCapturedFromHeader === "Treatment") ? "bgshodowcolor badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Plan / Discussion" || item.treatmentCapturedFromHeader === "Plan: Arteriosclerotic cardiovascular disease") ? "bg-four badge-circle mt-2" : (item.treatmentCapturedFromHeader === "Patient Instructions" || item.treatmentCapturedFromHeader === "Plan: Hyperlipidemia, acquired") ? "bg-five badge-circle mt-2" : item.treatmentCapturedFromHeader === "N/A" ? "bg-six badge-circle mt-2" : item.treatmentCapturedFromHeader === "Plan" ? "bg-seven badge-circle mt-2" : "primary badge-circle mt-2"} onClick={() => handleOpenModal(item.treatmentCapturedFromHeader,item.treatment)} >{item.treatmentCapturedFromHeader}</Badge>
-                                              </div> */}
+                                                 
                                                   <div className="col-xl-1 meatclose">
-                                                    {/* {item.isMeatCriteriaPresent === true ?
-                                             <span  className="badge badge-rounded badge-warning badge-meat">
-                                             True
-                                           </span>:
-                                            <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
+                                                   
                                                     <Popconfirm
                                                       title="You want move to Invalid?"
                                                       description={
@@ -7812,13 +8624,13 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             <div className="col-xl-12">
                                               <div>
                                                 <span className="no-patient-data">
-                                                  NO PATIENT DATA
+                                                  NO DATA
                                                 </span>
                                               </div>
                                             </div>
                                           </div>
                                         ) : null}
-                                      </div>
+                                      </div> */}
                                     </Tab.Pane>
                                     <Tab.Pane id="my-posts" eventKey="file">
                                       <div className="my-post-content pt-3">
@@ -7907,6 +8719,16 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                       </Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link
+                                        to="#my-posts"
+                                        eventKey="meatCriteria"
+                                        className={visitStyles.navColor}
+                                        activeClassName={visitStyles.activeLink}
+                                      >
+                                        MEAT Criteria
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
                                       <Nav.Link to="#my-posts" eventKey="file" className={visitStyles.navColor}
                                         activeClassName={visitStyles.activeLink}>
                                         File
@@ -7959,13 +8781,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                         >
                                                           <div
                                                             className="media-body"
-                                                            onClick={() =>
-                                                              handleOpenModalCombinationCode(
-                                                                data.diagnosisCode,
-                                                                data.actualDescription,
-                                                                "valid2"
-                                                              )
-                                                            }
+                                                           
                                                           >
                                                             <span className="mb-1 disease-name d-flex">
                                                               <span className="valid-dis-name">
@@ -8028,13 +8844,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                           >
                                                             <Badge
                                                               className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                                              onClick={() =>
-                                                                handleOpenModalCombinationCode(
-                                                                  data.diagnosisCode,
-                                                                  data.capturedSections,
-                                                                  "valid"
-                                                                )
-                                                              }
+                                                             
                                                             >
                                                               {replaceCaptureSection(
                                                                 data.capturedSections
@@ -8050,6 +8860,260 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             </div>
                                           </div>
                                         </div>
+                                      </div>
+                                    </Tab.Pane>
+                                    <Tab.Pane
+                                      id="my-posts"
+                                      eventKey="meatCriteria"
+                                    >
+                                        <div className="my-post-content pt-3">
+                                        <div
+                                          className={visitStyles.meat_head_card}
+                                        >
+                                          <div className="row">
+                                            <div className="col-xl-1">
+                                              <label>Codes</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Description</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Monitor</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Evaluation</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Assessment</label>
+                                            </div>
+                                            <div className="col-xl-2">
+                                              <label>Treatment</label>
+                                            </div>
+                                            <div className="col-xl-1">
+                                              <label></label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        { labReportMeatList.length != 0 ?
+                                        <div
+                                            className={visitStyles.hccStickey_head}
+                                          >
+                                        {labReportMeatList?.map((item) => {
+                                          return (
+                                            <div
+                                              className={
+                                                item.isMeatCriteriaPresent ===
+                                                  true
+                                                  ? `${visitStyles.meat_details_card}`
+                                                  : `${visitStyles.meat_details_card_false}`
+                                              }
+                                            >
+                                              <div className="row">
+                                                {/* <div className="col-xl-1">
+                                                  <span className="font-bold">{item.diagnosisCode}</span>
+                                                </div> */}
+                                                <div className="col-xl-1 d-grid">
+                                                  <span className="font-bold meat-name-details">
+                                                    {item.diagnosisCode}
+                                                  </span>
+                                                  {item.category == "Valid" ? (
+                                                    <Badge
+                                                      className="valid-meat badge-circle mt-2"
+                                                      bg={` badge-circle mt-2 bg-validmeat`}
+                                                    >
+                                                      {item.category}
+                                                    </Badge>
+                                                  ) : (
+                                                    <Badge
+                                                      className="valid-meat badge-circle mt-2"
+                                                      bg={` badge-circle mt-2 bg-validUnmatch`}
+                                                    >
+                                                      {item.category}
+                                                    </Badge>
+                                                  )}
+                                                </div>
+                                                <div className="col-xl-2">
+                                                  <Popover
+                                                    placement="topLeft"
+                                                    title="Description"
+                                                    content={item.diseaseName}
+                                                  >
+                                                    <span className="meat-name-details">
+                                                      {item.diseaseName}
+                                                    </span>
+                                                  </Popover>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.monitor != "" ? (
+                                                    <Popover
+                                                      placement="topLeft"
+                                                      title="Monitor"
+                                                      content={item.monitor}
+                                                    >
+                                                      <span className="meat-name-details">
+                                                        {item.monitor}
+                                                      </span>
+                                                    </Popover>
+                                                  ) : (
+                                                    <span className="meat-name-details text-center font-bold">
+                                                      -
+                                                    </span>
+                                                  )}
+                                                  <Badge
+                                                    className="badge-meat cr-pointer badge-circle mt-2"
+                                                    bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
+                                                    onClick={() =>
+                                                      handleOpenModalRadiology(
+                                                        item.monitorCapturedFromHeader,
+                                                        item.monitor,
+                                                        item.radiology,
+                                                      )
+                                                    }
+                                                  >
+                                                    {
+                                                      item.monitorCapturedFromHeader
+                                                    }
+                                                  </Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.evaluate != "" ? (
+                                                    <Popover
+                                                      placement="topLeft"
+                                                      title="Evaluation"
+                                                      content={item.evaluate}
+                                                    >
+                                                      <span className="meat-name-details">
+                                                        {item.evaluate}
+                                                      </span>
+                                                    </Popover>
+                                                  ) : (
+                                                    <span className="meat-name-details text-center font-bold">
+                                                      -
+                                                    </span>
+                                                  )}
+                                                  <Badge
+                                                    className="badge-meat cr-pointer badge-circle mt-2"
+                                                    bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
+                                                    onClick={() =>
+                                                      handleOpenModalRadiology(
+                                                        item.monitorCapturedFromHeader,
+                                                        item.monitor,
+                                                        item.radiology,
+                                                      )
+                                                    }
+                                                  >
+                                                    {
+                                                      item.evaluateCapturedFromHeader
+                                                    }
+                                                  </Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.assessment != "" ? (
+                                                    <Popover
+                                                      placement="topLeft"
+                                                      title="Assessment"
+                                                      content={item.assessment}
+                                                    >
+                                                      <span className="meat-name-details">
+                                                        {item.assessment}
+                                                      </span>
+                                                    </Popover>
+                                                  ) : (
+                                                    <span className="meat-name-details text-center font-bold">
+                                                      -
+                                                    </span>
+                                                  )}
+                                                  <Badge
+                                                    className="badge-meat cr-pointer badge-circle mt-2"
+                                                    bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
+                                                    onClick={() =>
+                                                      handleOpenModalRadiology(
+                                                        item.monitorCapturedFromHeader,
+                                                        item.monitor,
+                                                        item.radiology,
+                                                      )
+                                                    }
+                                                  >
+                                                    {
+                                                      item.assessmentCapturedFromHeader
+                                                    }
+                                                  </Badge>
+                                                </div>
+                                                <div className="col-xl-2 d-grid">
+                                                  {item.treatment != "" ? (
+                                                    <Popover
+                                                      placement="topLeft"
+                                                      title="Treatment"
+                                                      content={item.treatment}
+                                                    >
+                                                      <span className="meat-name-details">
+                                                        {item.treatment}
+                                                      </span>
+                                                    </Popover>
+                                                  ) : (
+                                                    <span className="meat-name-details text-center font-bold">
+                                                      -
+                                                    </span>
+                                                  )}
+
+                                                  <Badge
+                                                    className="badge-meat cr-pointer badge-circle mt-2"
+                                                    bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
+                                                    onClick={() =>
+                                                      handleOpenModalRadiology(
+                                                        item.monitorCapturedFromHeader,
+                                                        item.monitor,
+                                                        item.radiology,
+                                                      )
+                                                    }
+                                                  >
+                                                    {
+                                                      item.treatmentCapturedFromHeader
+                                                    }
+                                                  </Badge>
+                                                </div>
+                                                <div className="col-xl-1 meatclose">                                                 
+                                                  <Popconfirm
+                                                    title="You want move to Invalid?"
+                                                    description={item.diseaseName}
+                                                    onConfirm={confirmInvalidMeat}
+                                                    placement="leftTop"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onOpenChange={() =>
+                                                      onchangeMeat(
+                                                        item.diseaseName,
+                                                        item.diagnosisCode
+                                                      )
+                                                    }
+                                                  >
+                                                 <div
+                                                              className={
+                                                                visitStyles.close_icon
+                                                              }
+                                                            >
+                                                              {SVGICON.closeIcon}
+                                                            </div>
+                                                  </Popconfirm>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                       
+                                        {labReportMeatList.length == 0 ? (
+                                          <div className="card combo-card">
+                                            <div className="col-xl-12">
+                                              <div>
+                                                <span className="no-patient-data">
+                                                  NO DATA
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        ) : null}
+                                      
+                                         </div> : null}
                                       </div>
                                     </Tab.Pane>
                                     <Tab.Pane id="my-posts" eventKey="file">
@@ -8504,7 +9568,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                 padding: "4px",
                               }}
                             >
-                              <Search>
+                              {/* <Search>
                                 {(renderSearchProps) => {
                                   const [readyToSearch, setReadyToSearch] =
                                     useState(false);
@@ -8659,7 +9723,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                     </>
                                   );
                                 }}
-                              </Search>
+                              </Search> */}
                             </div>
                           </div>
                           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
