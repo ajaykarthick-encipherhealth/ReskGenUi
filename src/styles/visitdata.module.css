@@ -1,10 +1,24 @@
-/* .container_fluid_patient {
-    margin-top: 100px !important;
-} */
+.container_fluid_patient {
+    height: 100vh !important;
+    overflow: hidden;
+    padding-top: 55px !important;
+    background-color: #fff !important;
+}
 
 .patient_info_details svg {
   width: 25px;
   height: 25px;
+}
+.patient_info_details label{
+  font-size: 13px !important;
+  color: #66686B !important;
+  font-weight: 500 !important;
+
+}
+.patient_info_details h6{
+  color: #221C1C !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
 }
 
 .visitdata_header_card {
@@ -37,30 +51,31 @@
   margin-bottom: 10px;
   position: sticky;
   top: 0;
-  /* background-color: #ffffff; */
   z-index: 1;
+  height: 40px;
 }
 
 .hcc_title_name {
-  padding: 15px;
-  
   border-radius: 10px;
   color: #221C1C;
-font-family: Manrope;
-font-size: 16px;
+font-size: 13px;
 font-style: normal;
 font-weight: 600;
 line-height: normal;
 text-align: center;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-left: 10px !important;
 
   
 }
 
 .hcc_title_badge {
   background: #04b700;
-  padding: 15px;
+  padding: 10px;
   border-radius: 12px;
-  width: 55px;
+  width: 45px;
   text-align: center;
   color: #fff;
   color: #fff;
@@ -73,26 +88,29 @@ text-align: center;
   margin-bottom: 10px;
   position: sticky;
   top: 0;
-  /* background-color: #ffffff; */
+  height: 40px;
   z-index: 1;
 }
 
 .suggested_title_name {
-  padding: 15px;
   border-radius: 10px;
   color: #221C1C;
-font-family: Manrope;
-font-size: 16px;
+font-size: 13px;
 font-style: normal;
 font-weight: 600;
 line-height: normal;
+text-align: center;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-left: 10px !important;
 }
 
 .suggested_title_badge {
   background: #ff9209;
-  padding: 15px;
+  padding: 10px;
   border-radius: 12px;
-  width: 55px;
+  width: 45px;
   text-align: center;
   color: #fff;
   color: #fff;
@@ -105,26 +123,29 @@ line-height: normal;
   margin-bottom: 10px;
   position: sticky;
   top: 0;
-  /* background-color: #ffffff; */
+  height: 40px;
   z-index: 1;
 }
 
 .deleted_title_name {
-  padding: 15px;
   border-radius: 10px;
   color: #221C1C;
-font-family: Manrope;
-font-size: 16px;
+font-size: 13px;
 font-style: normal;
 font-weight: 600;
 line-height: normal;
+text-align: center;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-left: 10px !important;
 }
 
 .deleted_title_badge {
   background: #be3144;
-  padding: 15px;
+  padding: 10px;
   border-radius: 12px;
-  width: 55px;
+  width: 45px;
   text-align: center;
   color: #fff;
   color: #fff;
@@ -144,10 +165,17 @@ line-height: normal;
 }
 
 .actionbtnContainer {
-  text-align: center;
-  justify-content: center;
-  display: flex;
-  align-items: center;
+ float: right;
+ padding-top: 1.25rem;
+}
+.backArrowBtn{
+  margin: 1.25rem;
+  height: 32px !important;
+  width: 32px !important;
+  padding: 0 !important; 
+    background: #E1EDFE !important;
+    border: none;
+    margin-left: 15px !important;
 }
 
 .declineBtn {
@@ -156,7 +184,9 @@ line-height: normal;
   background: rgba(250, 209, 209, 0.3) !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
   color: #db1a1a !important;
-  width: 160px;
+  width: 40px;
+  padding: 0px 0px 0px 5px !important;
+  height: 40px !important;
 }
 
 .declineBtn i,
@@ -176,7 +206,10 @@ line-height: normal;
   background: rgba(218, 206, 253, 0.3) !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
   color: #bca7fb !important;
-  width: 160px;
+  width: 40px;
+  padding: 0px 0px 0px 5px !important;
+  height: 40px !important;
+
 }
 
 .completedBtn {
@@ -185,12 +218,14 @@ line-height: normal;
   background: rgba(217, 242, 223, 0.3) !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
   color: #46c263 !important;
-  width: 170px;
+  width: 40px;
+  padding:  0px 0px 0px 5px !important;
+  height: 40px !important;
 }
 
 .flag_container {
   width: 60px;
-  height: 720px;
+  height: 78vh;
   border-radius: 8px;
   background: #e1edfe;
   float: right;
@@ -223,7 +258,7 @@ line-height: normal;
 }
 
 .visitdata_tab_body {
-  padding: 20px 0 0 0px;
+  padding: 0;
 }
 
 .provider_name {
@@ -241,8 +276,8 @@ line-height: normal;
   border-radius: 4px;
   background: #fee1e1;
   text-align: center;
-  margin-left: 3px;
-  margin-top: 3px;
+  margin-left: -4px;
+  margin-top: 4px
 }
 .close_icon svg {
   vertical-align: baseline !important;
@@ -258,15 +293,41 @@ line-height: normal;
   margin-left: 3px;
 }
 
+.comboContainer,.rafContainer{
+  border-radius: 10px;
+border: 1px solid #D5D5D5;
+margin-top: 15px;
+}
+.comboContainer2,.rafContainer2{
+  padding: 10px;
+}
+.comboTitle span{
+  font-size: 13px !important;
+  font-weight: 600;
+}
+.comboContainer3{
+  padding-top: 5px;
+}
+.labelStyle {
+  font-size: 13px !important;
+  font-weight: 600;
+}
+
+
 .combo_head_card {
     border-radius: 12px;
     background: #e1edfe;
-    padding: 15px 15px 15px 15px;
+    padding: 5px 10px 2px 10px;
     margin-bottom: 15px;
     position: sticky;
     top: 0;
     /* background-color: #ffffff; */
     z-index: 1;
+}
+
+.combo_head_card label{
+  font-size: 13px !important;
+    font-weight: 600;
 }
 
 .combo_details_card {
@@ -275,24 +336,55 @@ line-height: normal;
   padding: 15px 15px 15px 15px;
   margin-bottom: 15px;
 }
+.combo_details_card span {
+  font-size: 13px !important;
+}
 
 .combo_add_btn {
   border-radius: 4px;
   background: #133dd4;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border: none !important;
+  margin-top: 3px;
 }
 
 .meat_head_card {
     border-radius: 12px;
     background: #e1edfe;
-    padding: 15px 15px 15px 15px;
+    padding: 5px 10px 2px 10px;
     margin-bottom: 15px;
     position: sticky;
     top: 0;
     /* background-color: #ffffff; */
     z-index: 1;
+}
+.hccStickey_head{
+    min-height: 10vh;
+    max-height: 64vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.hccStickeyRaf_head{
+  min-height: 10vh;
+  max-height: 69vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* Track */
+.hccStickey_head::-webkit-scrollbar-track, .hccStickeyRaf_head::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+/* Handle */
+.hccStickey_head::-webkit-scrollbar-thumb,.hccStickeyRaf_head::-webkit-scrollbar-thumb {
+  background: transparent; 
+}
+
+/* Handle on hover */
+.hccStickey_head::-webkit-scrollbar-thumb:hover,.hccStickeyRaf_head::-webkit-scrollbar-thumb:hover {
+  background:transparent; 
 }
 
 .meat_details_card {
@@ -302,11 +394,20 @@ line-height: normal;
   margin-bottom: 15px;
 }
 
+.meat_head_card label{
+  font-size: 13px !important;
+    font-weight: 600;
+}
+
 .meat_details_card_false {
   border-radius: 12px;
   border: 1px solid red;
   padding: 15px 15px 15px 15px;
   margin-bottom: 15px;
+}
+
+.overallScoreContainer{
+  margin-right: 4px;
 }
 
 .visitdata_header_title .nav-link.active.li {
@@ -329,6 +430,9 @@ line-height: normal;
   background: rgba(19, 61, 212, 0.15);
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   color: #133dd4 !important;
+  width: 40px;
+  padding: 10px !important;
+  height: 40px !important;
 }
 
 .addPatientBtn:hover {
@@ -345,14 +449,15 @@ line-height: normal;
 .commentsFormControl {
   border-radius: 16px;
   border: 1px solid #cecece;
-  background: #fff;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background: transparent;
+  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
   width: 100%;
   padding: 15px;
 }
 
 .commentDrawer {
-  width: 500px !important;
+  width: 350px !important;
+  background-color: #fff !important;
 }
 
 .commentsTagActive {
@@ -401,25 +506,27 @@ line-height: normal;
 .flagCodes {
   margin-right: 20px;
   color: #000;
-  font-family: Manrope;
-  font-size: 16px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
 .nameList{
     color: #221C1C;
-font-family: Manrope;
-font-size: 16px;
+font-size: 13px;
 font-style: normal;
 font-weight: 500;
 line-height: normal;
 padding: 10px;
+cursor: pointer;
+}
+.nameList h5{
+  font-size: 13px !important;
 }
 .circleCard{
-    width: 50px; /* Set the width and height to make it a circle */
-  height: 50px;
-  border-radius: 50%; /* Border-radius 50% makes it a circle */
+    width: 42px; /* Set the width and height to make it a circle */
+  height: 42px;
+  border-radius: 8px!important; /* Border-radius 50% makes it a circle */
   background: #FFF;
   fill: #FFF;
 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); /* Add a background color */
@@ -444,7 +551,7 @@ background: #FFF !important;
 }
 .content{
     position: absolute;
-    left: 26pc;
+    left: 17pc;
 }
 .menuCard{
 display: inline-flex;
@@ -465,7 +572,15 @@ transition: opacity 0.8s ease-in-out;
 }
 .sideTab{
     width: 194px;
-height: 720px;
+height: 78vh;
+flex-shrink: 0;
+border-radius: 12px;
+background: #E1EDFE;
+}
+
+.sideTabClose{
+  width: 66px;
+  height: 78vh;
 flex-shrink: 0;
 border-radius: 12px;
 background: #E1EDFE;
@@ -508,4 +623,91 @@ background: #E1EDFE;
 }
 .sideNavText{
   padding-left: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    padding-top: 4px;
+}
+
+.sideTabClose .sideNavText{
+  display: none;
+}
+.sideTabClose .sideNavLabel{
+  display: flex;
+  width: 50px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+  font-size: 14px;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.sideTabClose .sideNavLabelActive{
+  background: linear-gradient(95deg, #9DC4FB 5.8%, #FDBEBE 92.76%) !important;
+  width: 50px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+  font-size: 14px;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.sideTabClose .sideNavLabel a{
+  display: flex;
+  width: 145px !important;
+  text-align: center !important;
+  padding: 10px!important;
+  border-radius: 12px!important;
+  color: #221C1C !important;
+  font-size: 14px;
+  margin:0 !important;
+  cursor: pointer;
+
+}
+
+.sideTabClose .sideNavArrow span{
+  float: right;
+  margin: 10px 20px 10px 0px !important;
+  cursor: pointer;
+}
+.visitDataMain , .visitDataMainClose{
+  display: flex;
+}
+.firstContainer{
+  width: 13%;
+}
+.secondContainer{
+width: 81%;
+margin-left: 20px;
+}
+.thirdContainer{
+  width: 6%;
+}
+.visitDataMainClose .firstContainer{
+ width: 6% !important;
+}
+.visitDataMainClose .secondContainer{
+  width: 88% !important;
+  margin-left: 0px !important;
+}
+.visitDataMainClose .thirdContainer{
+  width: 6% !important;
+}
+.textareaContainer{
+  position: relative;
+  display:inline-block;
+}
+
+.commentSendIcon{
+  float: right;
+  position: relative;
+  top: -55px;
+  background: transparent;
+  border: none;
+}
+.commentSendIcon:hover{
+  background: none !important;
 }

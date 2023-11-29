@@ -901,6 +901,156 @@ export default function Patient() {
             </div>
           )}
         </div>
+        <Offcanvas onHide={setAddPatient} show={addPatient} className="offcanvas-end" placement="end">
+          <div className="offcanvas-header">
+            <h5 className="modal-title" id="#gridSystemModal">
+              Add Patient Details
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setAddPatient(false)}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div className="offcanvas-body">
+            <div className="container-fluid">
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <div className="row">
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Id <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientId"
+                      required
+                      type="text"
+                      value={inputValue.patientId}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="name"
+                      required
+                      type="text"
+                      value={inputValue.name}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      File <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      required
+                      type="file"
+                      accept="application/pdf,text/plain"
+                      onChange={(e) => onChangeFile(e.target.files)}
+                      disabled={isLoadingBtn ? true : false}
+                    />
+                  </div>
+                  {/* <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Radiology
+                    </Form.Label>
+                    <Form.Control
+                      type="file"
+                      accept="application/pdf,text/plain"
+                      onChange={(e) => onChangeFileRadiology(e.target.files)}
+                      disabled={isLoadingBtn ? true : false}
+                    />
+                  </div> */}
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Year of Service <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="year"
+                      required
+                      type="number"
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    {isLoadingBtn ? "Loading..." : "Submit"}
+                  </Button>
+                  <Button
+                    onClick={() => setAddPatient(false)}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </div>
+        </Offcanvas>
+        <Offcanvas onHide={setAddPatientId} show={addPatientId} className="offcanvas-end" placement="end">
+          <div className="offcanvas-header">
+            <h5 className="modal-title" id="#gridSystemModal">
+              Add Patient Details
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setAddPatientId(false)}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div className="offcanvas-body">
+            <div className="container-fluid">
+              <Form noValidate validated={validated} onSubmit={handleSubmitPatientId}>
+                <div className="row">
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Id <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientId"
+                      required
+                      type="text"
+                      onChange={handleChangePatientId}
+                    />
+                  </div>
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientName"
+                      required
+                      type="text"
+                      onChange={handleChangePatientId}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    {isLoadingBtn ? "Loading..." : "Submit"}
+                  </Button>
+                  <Button
+                    onClick={() => setAddPatientId(false)}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </div>
+        </Offcanvas>
       </div>
     </>
   );
