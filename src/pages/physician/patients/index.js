@@ -24,7 +24,7 @@ import {
   faAdd,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import { Space, Spin } from "antd";
+import { Space, Spin, DatePicker,Popover, Input, Modal } from "antd";
 import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
 import { connect, useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
@@ -69,7 +69,7 @@ export default function Patient() {
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [dates, setDates] = useState(null);
   const [compledtedDate, setCompletedDate] = useState(null);
-
+  const { RangePicker } = DatePicker;
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -109,12 +109,32 @@ export default function Patient() {
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const statusMessage = {
     subscribed: "Subscribed",
     unsubscribed: "Unsubscribed",
   };
-
+  const content = (
+    <div style={{display:"flex", }}>
+      <div style={{ marginBottom: '8px' }}>
+        <Button>Button 1</Button>
+        <Button>Button 2</Button>
+      </div>
+      <hr></hr>
+      <div>
+        <RangePicker />                                                                                                                                                                                                                                                                                  
+      </div>
+    </div>
+  );                                                                    
   const filterChangePatientId = (event) => {
     const value = event.target.value;
     let _filters = { ...filters };
@@ -642,10 +662,10 @@ export default function Patient() {
     console.log("test");
   };
   const statusOptions = [
-    { label: 'Completed', value: 'completed' },
-    { label: 'Pending', value: 'pending' },
-    { label: 'Declined', value: 'declined' },
-    { label: 'Hold', value: 'hold' },
+    { label: "Completed", value: "completed" },
+    { label: "Pending", value: "pending" },
+    { label: "Declined", value: "declined" },
+    { label: "Hold", value: "hold" },
   ];
   const dosOnChange = (selectedOption) => {
     const selectedValue = selectedOption.value;
@@ -690,13 +710,14 @@ export default function Patient() {
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                                 <Select
-                                     onChange={(selectedOption) => dosOnChange(selectedOption)}
-                                    options={statusOptions}
-                                    className="custom-react-select"
-                                    isSearchable={false}
-                                   
-                                  />
+                                <Select
+                                  onChange={(selectedOption) =>
+                                    dosOnChange(selectedOption)
+                                  }
+                                  options={statusOptions}
+                                  className="custom-react-select"
+                                  isSearchable={false}
+                                />
                               </div>
                             </div>
                             {/* <div className="col-xl-2">
@@ -717,14 +738,31 @@ export default function Patient() {
                             </div> */}
                             <div className="col-xl-2">
                               <div class="form-group has-search">
-                                <Calendar
+                                {/* <Calendar
                                   className="form-control new-form-control calender-pri-input"
                                   value={compledtedDate}
                                   onChange={(e) => setCompletedDate(e.value)}
                                   selectionMode="range"
                                   readOnlyInput
                                   placeholder="Completed Date"
-                                />
+                                /> */}
+        {/* <Button type="primary" onClick={showModal}>
+        Open Modal
+      </Button> */}
+      <Input onClick={showModal}/>
+      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <div >
+      <div style={{ marginBottom: '8px' }}>
+        <button style={{border:"none", backgroundColor:"white",cursor: "pointer", transition: "gray 0.3s"}}>Due Date</button> <br></br>
+        <br/>
+        <button style={{border:"none", backgroundColor:"white", cursor: "pointer", transition: "gray 0.3s"}}>Completed Date</button>
+      </div>
+      <hr></hr>
+      <div>
+        <RangePicker />                                                                                                                                                                                                                                                                                  
+      </div>
+    </div>
+      </Modal>
                               </div>
                             </div>
                             {/* 
@@ -852,6 +890,7 @@ export default function Patient() {
                               totalRecords={totalElements}
                               onPageChange={onPageChange}
                             />
+                            <div className="total-pages">Total Pages: {totalElements}</div>
                           </div>
                         </div>
                       </div>

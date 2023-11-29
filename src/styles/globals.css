@@ -5014,6 +5014,7 @@ label {
 .header .navbar .navbar-collapse {
   height: 100%;
   width: 100%;
+
 }
 
 
@@ -10190,7 +10191,7 @@ p,
   transition: all 0.5s ease-in-out;
   border: none;
   border-bottom: 0.0125rem solid transparent;
-  color: #828690;
+  color: #000;
 }
 
 .profile-tab .nav-item .nav-link {
@@ -11948,6 +11949,9 @@ li.file-complete-list {
 
 .pagination-container {
     margin: 20px 0px 20px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .calender-pri-input > input.p-inputtext.p-component{
@@ -12018,6 +12022,8 @@ th:last-child {
 
 .pagination-container >.p-paginator.p-component{
   background: transparent !important;
+  margin-right: 20px;
+  
 
 }
 
@@ -12171,7 +12177,7 @@ letter-spacing: 0.36px;
 flex-shrink: 0;
 border: none!important;
 }
-.css-13cymwt-control:hover{
+.css-13cymwt-control:focus{
   border: none !important;
   border-color: none!important;
 }
@@ -12235,3 +12241,65 @@ border: none!important;
 .notificationIcon {
   margin-right: 20px;
 }
+:where(.css-dev-only-do-not-override-zcfrx9).ant-ribbon-wrapper {
+  position: relative;
+  bottom: 29px;
+  right: 23px;
+}
+
+.ant-picker {
+ 
+  border-radius: 20px;
+  background-color: #DEDFDF;
+ 
+  border-radius: 8px;
+  background: #FFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+
+  width: 260px;
+  height: 42px;
+  flex-shrink: 0;
+  border: none;
+}
+:where(.css-dev-only-do-not-override-zcfrx9).ant-picker-focused.ant-picker {
+   border-color: none!important; 
+  box-shadow:none !important; 
+  outline: none!important;
+}
+ /* table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+ th,
+ td {
+  padding: 8px;
+  text-align: left;
+}
+
+ th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f8f8;
+  z-index: 1;
+} */
+.custom-react-select>div:nth-child(3):focus{
+  border: none!important;
+}
+.custom-react-select>div:nth-child(3):hover{
+  border: none!important;
+}
+.total-pages{
+  color: #999696;
+font-family: Manrope;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.checkbox:checked:before{
+  background-color:green;
+  }
+
+
