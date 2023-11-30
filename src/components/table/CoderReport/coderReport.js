@@ -1,13 +1,13 @@
 import React from "react";
 import { SVGICON } from "../../../jsx/constant/theme";
 import { Badge } from "antd";
-
+import TableStyle from "../table.module.css"
 function CoderReport({ setModal }) {
   const data = [
     {
       patientId: "Ab01465",
       patientName: "Patient ",
-      hcc: "William",
+      hcc: "0",
       suggestion: "0 ",
       deleted: "0",
       totalCodes: "23",
@@ -19,7 +19,7 @@ function CoderReport({ setModal }) {
     {
       patientId: "Ab01465",
       patientName: "Patient ",
-      hcc: "William",
+      hcc: "0",
       suggestion: "0",
       deleted: "0",
       totalCodes: "23",
@@ -31,7 +31,7 @@ function CoderReport({ setModal }) {
     {
       patientId: "Ab01465",
       patientName: "Patient ",
-      hcc: "William",
+      hcc: "0",
       suggestion: "0",
       deleted: "0",
       totalCodes: "23",
@@ -43,7 +43,7 @@ function CoderReport({ setModal }) {
     {
       patientId: "Ab01465",
       patientName: "Patient ",
-      hcc: "William",
+      hcc: "0",
       suggestion: "0",
       deleted: "0",
       totalCodes: "23",
@@ -55,7 +55,7 @@ function CoderReport({ setModal }) {
     {
       patientId: "Ab01465",
       patientName: "Patient ",
-      hcc: "William",
+      hcc: "0",
       suggestion: "0",
       deleted: "0",
       totalCodes: "23",
@@ -67,7 +67,7 @@ function CoderReport({ setModal }) {
     {
       patientId: "Ab01465",
       patientName: "Patient ",
-      hcc: "William",
+      hcc: "0",
       suggestion: "0",
       deleted: "0",
       totalCodes: "23",
@@ -79,7 +79,7 @@ function CoderReport({ setModal }) {
     {
       patientId: "Ab01465",
       patientName: "Patient ",
-      hcc: "William",
+      hcc: "0",
       suggestion: "0",
       deleted: "0",
       totalCodes: "23",
@@ -91,7 +91,7 @@ function CoderReport({ setModal }) {
     {
       patientId: "Ab01465",
       patientName: "Patient ",
-      hcc: "William",
+      hcc: "0",
       suggestion: "0",
       deleted: "0",
       totalCodes: "23",
@@ -103,9 +103,10 @@ function CoderReport({ setModal }) {
     // Add more data objects as needed
   ];
   return (
-    <div>
-      <table>
-        <thead>
+    <div  className={TableStyle.classContaineer}>
+      <table className={TableStyle.classTable}>
+       
+           <thead className={TableStyle.classThead} >
           <tr>
             <th></th>
             <th>PATIENT ID</th>
@@ -115,29 +116,24 @@ function CoderReport({ setModal }) {
             <th>DELETED </th>
             <th>TOTAL CODES </th>
             <th>COMPLETE DATE </th>
+            <th>COMMENTS </th>
             <th>AUDITOR NAME </th>
             <th>Flag </th>
             <th style={{ display: "flex", justifyContent: "space-around" }}>
               {" "}
               <span>All</span>{" "}
-              <input
-                type="checkbox"
-                onChange={() => {
-                  /* Handle checkbox change */
-                }}
-              />{" "}
+            
             </th>
           </tr>
         </thead>
-        <tbody>
+    
+       
+        <tbody className={TableStyle.bodytable}>
           {data.map((row, index) => (
-            <tr key={index}>
+            <tr key={index} style={{   padding:" 22px!important"}}>
               <td
-                style={{
-                  borderTop: "0.2px solid #e1e1e1",
-                  borderLeft: "0.2px solid #e1e1e1",
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+             
+                className={TableStyle.firstTdBorder}
               >
                 <Badge.Ribbon
                   text="Audited"
@@ -152,88 +148,59 @@ function CoderReport({ setModal }) {
 
                   borderBottom: "  0.2px solid #e1e1e1",
                 }}
+                className={TableStyle.childBorder}
               >
                 {row.patientId}
               </td>
               <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+               className={TableStyle.childBorder}
               >
                 {row.patientName}
               </td>
               <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+                className={TableStyle.childBorder}
               >
                 {row.hcc}
               </td>
               <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+                 className={TableStyle.childBorder}
               >
                 {row.suggestion}
               </td>
               <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+              className={TableStyle.childBorder}
+              >
+                {row.deleted}
+              </td>
+              <td
+                className={TableStyle.childBorder}
               >
                 {row.totalCodes}
               </td>
               <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+                onClick={setModal(false)}
+                className={TableStyle.childBorder}
               >
                 {row.completedDate}
               </td>
               <td
-                onClick={setModal(false)}
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+                className={TableStyle.childBorder}
               >
                 {row.comments}
               </td>
               <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+                className={TableStyle.childBorder}
               >
                 {row.auditorName}
               </td>
               <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
+                className={TableStyle.childBorder}
               >
                 {row.flag}
               </td>
               <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-                  borderBottom: "  0.2px solid #e1e1e1",
-                  borderRight: "  0.2px solid #e1e1e1",
-                }}
+               
+                className={TableStyle.lastBorder}
               >
                 <input
                

@@ -9108,17 +9108,6 @@ flex-shrink: 0;
   box-shadow: 0 0 13px 0 #523f690d !important;
 }
 
-table>thead {
-  /* background-color: #222b40 !important; */
-  /* background-color: #133DD4 !important; */
-  background-color: #04306F!important;
-  border-radius: 10px !important;
-}
-
-thead>tr>th {
-  color: #fff !important;
-}
-
 .dataTables_wrapper {
   padding: 0 20px 0 20px !important;
 }
@@ -11958,20 +11947,8 @@ li.file-complete-list {
 
 
 
-table {
-  border-collapse:separate!important;
-  border-spacing:0 15px!important;
-  width: 100%!important;
-  border: none !important;
-  font-family: Roboto !important;
-}
 
-table td,  th {
-  padding: 22px!important;
-  /* border:  10px 0 0 10px solid #241571!important;
-  border-left: 1px solid #241571!important; */
-  
-}
+
 
 /* td,
 th:first-child {
@@ -11979,42 +11956,16 @@ th:first-child {
   border-bottom: 1px solid #241571!important;
 } */
 
-table tr {
-  border: 1px solid #F00 !important;;
-  border-top: 1px solid #0F0 !important;;
-}
+
 
 tbody>tr {
-  border-radius: 8px!important;
-  /* border: 1px solid #241571!important; */
-  
   background: #FAFCFF!important;
 } 
-tbody>tr {
-  border: 1px solid #F00 !important;;
-  border-top: 1px solid #0F0 !important;;
-}
+
 
 /* table tr {background-color: #eaeefa!important;} */
 
-table th {
-  padding-top: 12px!important;
-  padding-bottom: 12px!important;
-  /* border-radius: 8px!important;
-  border: 0.2px solid #241571!important;
-  
-  background: #FAFCFF!important; */
-}
 
-td:first-child,
-th:first-child {
-  border-radius: 10px 0 0 10px!important;
-  
-}
-td:last-child,
-th:last-child {
-  border-radius: 0 10px 10px 0!important;
-}
 
 .pagination-container >.p-paginator.p-component{
   background: transparent !important;
@@ -12172,9 +12123,12 @@ letter-spacing: 0.36px;
   background: #FAFCFF;
   border-radius: 8px;
   background: #FFF;
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px transparent!important;
 flex-shrink: 0;
 border: none!important;
+}
+.css-t3ipsp-control{
+  box-shadow: 0 0 0 1px transparent!important;
 }
 .css-13cymwt-control:focus{
   border: none !important;
