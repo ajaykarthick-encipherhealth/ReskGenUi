@@ -1168,179 +1168,179 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       }
 
     
-    //    const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //   `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
-    // );
-    // // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
-    // if (response.data) {
-    //   var result = response.data;
-    //   setPatientDetailsRadiology(result);
-    //   setRadiologyResult(result);
-    //   if (result.validDisease != null) {
-    //     var validDis = "";
-    //     var invalidDis = "";
-    //     var comboDis = "";
-    //     var meatCri = "";
-    //     var dosYearArr = [];
-    //     var dosYearArrFile = [];
-    //     var validDiseaseNewRes = [];
-    //     var invalidDiseaseNewRes = [];
-    //     var unMatchRes = [];
-    //     // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
-    //     // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
+       const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+    );
+    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+    if (response.data) {
+      var result = response.data;
+      setPatientDetailsRadiology(result);
+      setRadiologyResult(result);
+      if (result.validDisease != null) {
+        var validDis = "";
+        var invalidDis = "";
+        var comboDis = "";
+        var meatCri = "";
+        var dosYearArr = [];
+        var dosYearArrFile = [];
+        var validDiseaseNewRes = [];
+        var invalidDiseaseNewRes = [];
+        var unMatchRes = [];
+        // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
+        // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
 
-    //     for (var key in result.validDisease) {
-    //       dosYearArr.push({ value: key, label: key });
-    //     }
+        for (var key in result.validDisease) {
+          dosYearArr.push({ value: key, label: key });
+        }
 
-    //     var dateofService = dosYearArr[0].value;
+        var dateofService = dosYearArr[0].value;
 
-    //     const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
 
-    //     const highestDosValue = dosYearArr.filter(
-    //       (i) => parseInt(i.value) === highestDOS
-    //     );
-    //     setDosYearDefalutSelectRadiology(dosYearArr[0]);
+        const highestDosValue = dosYearArr.filter(
+          (i) => parseInt(i.value) === highestDOS
+        );
+        setDosYearDefalutSelectRadiology(dosYearArr[0]);
 
-    //     if (result.radiologyFileDetail != null) {
-    //       for (var key in result.radiologyFileDetail) {
-    //         dosYearArrFile.push({ value: key, label: key });
-    //       }
-    //       var fileDetails = result.radiologyFileDetail[dateofService];
-    //       setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
-    //       getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
-    //     }
+        if (result.radiologyFileDetail != null) {
+          for (var key in result.radiologyFileDetail) {
+            dosYearArrFile.push({ value: key, label: key });
+          }
+          var fileDetails = result.radiologyFileDetail[dateofService];
+          setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
+          getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
+        }
 
-    //     validDis = result.validDisease[dateofService];
-    //     validDiseaseNewRes = result.validDisease[dateofService];
-    //     invalidDiseaseNewRes = result.invalidDisease[dateofService];
-    //     if (result.unmatchedDisease != null) {
-    //       var unMatchResCheck = result.unmatchedDisease[dateofService];
+        validDis = result.validDisease[dateofService];
+        validDiseaseNewRes = result.validDisease[dateofService];
+        invalidDiseaseNewRes = result.invalidDisease[dateofService];
+        if (result.unmatchedDisease != null) {
+          var unMatchResCheck = result.unmatchedDisease[dateofService];
 
-    //       if (unMatchResCheck != null) {
-    //         unMatchRes = result.unmatchedDisease[dateofService];
-    //       }
-    //     }
+          if (unMatchResCheck != null) {
+            unMatchRes = result.unmatchedDisease[dateofService];
+          }
+        }
 
-    //     invalidDis = result.invalidDisease[dateofService];
-    //     comboDis = result.comboDisease[dateofService];
-    //     meatCri = result.meatCriteria[dateofService];
+        invalidDis = result.invalidDisease[dateofService];
+        comboDis = result.comboDisease[dateofService];
+        meatCri = result.meatCriteria[dateofService];
 
-    //     setNewValidDiseaseListRadiology(validDiseaseNewRes);
-    //     setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
-    //     setUnMatchHccListRadiology(unMatchRes);
-    //     setComboDiseaseCodesListRadiology(comboDis);
-    //     setDosYearRadiology(dosYearArr);
-    //     setFileRadiologyDateofServiceList(dosYearArrFile);
+        setNewValidDiseaseListRadiology(validDiseaseNewRes);
+        setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
+        setUnMatchHccListRadiology(unMatchRes);
+        setComboDiseaseCodesListRadiology(comboDis);
+        setDosYearRadiology(dosYearArr);
+        setFileRadiologyDateofServiceList(dosYearArrFile);
 
-    //     const COLORS = [
-    //       "bg-bg-seven",
-    //       "bg-third",
-    //       "bg-bg-four",
-    //       "bg-bg-five",
-    //       "bg-bg-six",
-    //       "bg-bg-eight",
-    //       "bg-bg-nine",
-    //       "bg-bg-ten",
-    //       "bg-bg-leven",
-    //     ];
+        const COLORS = [
+          "bg-bg-seven",
+          "bg-third",
+          "bg-bg-four",
+          "bg-bg-five",
+          "bg-bg-six",
+          "bg-bg-eight",
+          "bg-bg-nine",
+          "bg-bg-ten",
+          "bg-bg-leven",
+        ];
 
-    //     var meatListArr = [];
-    //     var meatMoniterHead = [];
-    //     var meatEvaluteHead = [];
-    //     var meatAssesmentHead = [];
-    //     var meatTreatMentHead = [];
-    //     var allMeatHead = [];
-    //     var allMeatHeadColorArr = [];
-    //     var allMeatHeadColor = [];
-    //     var dublicateRemoveSecondArr = [];
+        var meatListArr = [];
+        var meatMoniterHead = [];
+        var meatEvaluteHead = [];
+        var meatAssesmentHead = [];
+        var meatTreatMentHead = [];
+        var allMeatHead = [];
+        var allMeatHeadColorArr = [];
+        var allMeatHeadColor = [];
+        var dublicateRemoveSecondArr = [];
 
-    //     meatCri.map((res, index) => {
-    //       if (res.monitorCapturedFromHeader != "") {
-    //         meatMoniterHead.push({
-    //           header: res.monitorCapturedFromHeader,
-    //         });
-    //       }
-    //       if (res.evaluateCapturedFromHeader != "") {
-    //         meatEvaluteHead.push({
-    //           header: res.evaluateCapturedFromHeader,
-    //         });
-    //       }
-    //       if (res.assessmentCapturedFromHeader != "") {
-    //         meatAssesmentHead.push({
-    //           header: res.assessmentCapturedFromHeader,
-    //         });
-    //       }
-    //       if (res.treatmentCapturedFromHeader != "") {
-    //         meatTreatMentHead.push({
-    //           header: res.treatmentCapturedFromHeader,
-    //         });
-    //       }
-    //       var newArray = [];
-    //       newArray = [
-    //         ...allMeatHead,
-    //         ...meatMoniterHead,
-    //         ...meatEvaluteHead,
-    //         ...meatAssesmentHead,
-    //         ...meatTreatMentHead,
-    //       ];
-    //       var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-    //       dublicateRemoveArr.map((res3, index) => {
-    //         allMeatHeadColor.push({
-    //           header: res3.header,
-    //           color: COLORS[index],
-    //         });
-    //       });
-    //       allMeatHeadColorArr = allMeatHeadColor;
+        meatCri.map((res, index) => {
+          if (res.monitorCapturedFromHeader != "") {
+            meatMoniterHead.push({
+              header: res.monitorCapturedFromHeader,
+            });
+          }
+          if (res.evaluateCapturedFromHeader != "") {
+            meatEvaluteHead.push({
+              header: res.evaluateCapturedFromHeader,
+            });
+          }
+          if (res.assessmentCapturedFromHeader != "") {
+            meatAssesmentHead.push({
+              header: res.assessmentCapturedFromHeader,
+            });
+          }
+          if (res.treatmentCapturedFromHeader != "") {
+            meatTreatMentHead.push({
+              header: res.treatmentCapturedFromHeader,
+            });
+          }
+          var newArray = [];
+          newArray = [
+            ...allMeatHead,
+            ...meatMoniterHead,
+            ...meatEvaluteHead,
+            ...meatAssesmentHead,
+            ...meatTreatMentHead,
+          ];
+          var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+          dublicateRemoveArr.map((res3, index) => {
+            allMeatHeadColor.push({
+              header: res3.header,
+              color: COLORS[index],
+            });
+          });
+          allMeatHeadColorArr = allMeatHeadColor;
 
-    //       dublicateRemoveSecondArr = getUniqueListBy(
-    //         allMeatHeadColor,
-    //         "header"
-    //       );
-    //       setMeatColorCodeList(dublicateRemoveSecondArr);
-    //     });
+          dublicateRemoveSecondArr = getUniqueListBy(
+            allMeatHeadColor,
+            "header"
+          );
+          setMeatColorCodeList(dublicateRemoveSecondArr);
+        });
 
-    //     meatCri.map((res, index) => {
-    //       meatListArr.push({
-    //         diagnosisCode: res.diagnosisCode,
-    //         diseaseName: res.diseaseName,
-    //         monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-    //         assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-    //         evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-    //         treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-    //         monitorCapturedFromHeaderColor: colorCodeMatch(
-    //           dublicateRemoveSecondArr,
-    //           res.monitorCapturedFromHeader
-    //         ),
-    //         assessmentCapturedFromHeaderColor: colorCodeMatch(
-    //           dublicateRemoveSecondArr,
-    //           res.assessmentCapturedFromHeader
-    //         ),
-    //         evaluateCapturedFromHeaderColor: colorCodeMatch(
-    //           dublicateRemoveSecondArr,
-    //           res.evaluateCapturedFromHeader
-    //         ),
-    //         treatmentCapturedFromHeaderColor: colorCodeMatch(
-    //           dublicateRemoveSecondArr,
-    //           res.treatmentCapturedFromHeader
-    //         ),
-    //         monitorColor: COLORS[index],
-    //         meatColor: COLORS[index],
-    //         assessment: res.assessment,
-    //         monitor: res.monitor,
-    //         evaluate: res.evaluate,
-    //         treatment: res.treatment,
-    //         isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-    //       });
-    //     });
-    //     setMeatCriteriaListRadiology(meatListArr);
-    //     setRadiologyResultStatus(true);
-    //     setIsLoadingDos(false);
-    //   } else {
-    //     setIsLoading(false);
-    //   }
-    // }
+        meatCri.map((res, index) => {
+          meatListArr.push({
+            diagnosisCode: res.diagnosisCode,
+            diseaseName: res.diseaseName,
+            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+            monitorCapturedFromHeaderColor: colorCodeMatch(
+              dublicateRemoveSecondArr,
+              res.monitorCapturedFromHeader
+            ),
+            assessmentCapturedFromHeaderColor: colorCodeMatch(
+              dublicateRemoveSecondArr,
+              res.assessmentCapturedFromHeader
+            ),
+            evaluateCapturedFromHeaderColor: colorCodeMatch(
+              dublicateRemoveSecondArr,
+              res.evaluateCapturedFromHeader
+            ),
+            treatmentCapturedFromHeaderColor: colorCodeMatch(
+              dublicateRemoveSecondArr,
+              res.treatmentCapturedFromHeader
+            ),
+            monitorColor: COLORS[index],
+            meatColor: COLORS[index],
+            assessment: res.assessment,
+            monitor: res.monitor,
+            evaluate: res.evaluate,
+            treatment: res.treatment,
+            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+          });
+        });
+        setMeatCriteriaListRadiology(meatListArr);
+        setRadiologyResultStatus(true);
+        setIsLoadingDos(false);
+      } else {
+        setIsLoading(false);
+      }
+    }
   };
   const getLabReportDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
@@ -3430,7 +3430,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
   const getFiltePatientListStatus = async (value) => {
     console.log(value)
     setShowCard(false)
-    var response = await loadFilterPatientList(localUserId, 0, 1, value);
+    var response = await loadFilterPatientList(localUserId, 0, 10, value);
     console.log(response)
     var result = response.content;
     console.log(result)
