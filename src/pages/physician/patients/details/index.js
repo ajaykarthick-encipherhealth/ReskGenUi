@@ -4422,27 +4422,33 @@ const Details = ({}) => {
                                                             <div className="d-flex justify-content-sm-between valid-providerdocument ">
                                                               {data.getPlace ==
                                                                 "Lab" ? (
+                                                                  <Tooltip title="LAB">
                                                                 <Badge
-                                                                  className="badge-meat  badge-circle mt-2 text-white"
-                                                                  bg={` badge-circle mt-2 bg-bg-seven `}
+                                                                  className="mt-2 text-white"
+                                                                  bg={`  mt-2 bg-bg-seven `}
                                                                 >
-                                                                  Lab
+                                                                  L
                                                                 </Badge>
+                                                                </Tooltip>
                                                               ) : data.getPlace ==
                                                                 "Radio" ? (
+                                                                  <Tooltip title="RADIOLOGY">
                                                                 <Badge
-                                                                  className="badge-meat  badge-circle mt-2 text-white"
-                                                                  bg={` badge-circle mt-2 bg-bg-five `}
+                                                                  className=" mt-2 text-white"
+                                                                  bg={`  mt-2 bg-bg-five `}
                                                                 >
-                                                                  Radiology
+                                                                  R
                                                                 </Badge>
+                                                                </Tooltip>
                                                               ) : (
+                                                                <Tooltip title="HCC">
                                                                 <Badge
-                                                                  className="badge-meat  badge-circle mt-2 text-white"
-                                                                  bg={` badge-circle mt-2 bg-bg-five `}
+                                                                  className=" mt-2 text-white"
+                                                                  bg={` mt-2 bg-bg-five `}
                                                                 >
-                                                                  Hcc
+                                                                  H
                                                                 </Badge>
+                                                                </Tooltip>
                                                               )}
  {data.encounterDate != null ?
                                                               <Popover
