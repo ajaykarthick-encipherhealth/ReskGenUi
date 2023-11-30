@@ -99,10 +99,10 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(12);
   const [paginationFirst, setPaginationFirst] = useState(0);
 
-  const [totalElements, setTotalElements] = useState(10);
+  const [totalElements, setTotalElements] = useState(12);
   const [tableLoading, setTableLoading] = useState(true);
 
   const [filters, setFilters] = useState({
