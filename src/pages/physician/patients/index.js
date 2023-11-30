@@ -855,7 +855,7 @@ export default function Patient() {
                           <div className="pagination-container">
                             <Paginator
                               first={paginationFirst}
-                              rows={10}
+                              rows={12}
                               totalRecords={totalElements}
                               onPageChange={onPageChange}
                             />
