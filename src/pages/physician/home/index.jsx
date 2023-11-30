@@ -113,11 +113,11 @@ const Screen = () => {
         }
        .screen-container-card {
         border-radius: 10px;
-        background: #FFF;
-        min-height: 85vh;
+        background: #f0f6fe;
+        min-height: 100vh;
         justify-content: center;
         align-items: center;
-        margin: 100px 30px 25px 20px;
+        // margin: 100px 30px 25px 20px;
         display: flex;
       }
       .cards-seperators-screen {
