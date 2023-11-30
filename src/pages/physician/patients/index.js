@@ -860,7 +860,7 @@ export default function Patient() {
                               onPageChange={onPageChange}
                             />
                             <div className="total-pages">
-                              Total Pages: {totalElements}
+                              Total count: {totalElements}
                             </div>
                           </div>
                         </div>
