@@ -12172,9 +12172,12 @@ letter-spacing: 0.36px;
   background: #FAFCFF;
   border-radius: 8px;
   background: #FFF;
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px transparent!important;
 flex-shrink: 0;
 border: none!important;
+}
+.css-t3ipsp-control{
+  box-shadow: 0 0 0 1px transparent!important;
 }
 .css-13cymwt-control:focus{
   border: none !important;
