@@ -9022,7 +9022,7 @@ flex-shrink: 0;
 
 .content-body .container-fluid {
   padding-top: 80px;
-  height: 100vh;
+  height: 100%;
   background-color: #F0F6FE;
 }
 .offcanvas-header h5{
