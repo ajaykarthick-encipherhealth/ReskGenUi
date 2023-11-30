@@ -2,7 +2,7 @@ import React from "react";
 import { SVGICON } from "../../../jsx/constant/theme";
 import { Badge } from "antd";
 import TableStyle from "../table.module.css"
-function CoderReport({ setModal }) {
+function CoderReport({ setModal,reportListAll }) {
   const data = [
     {
       patientId: "Ab01465",
@@ -112,9 +112,6 @@ function CoderReport({ setModal }) {
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th>HCC </th>
-            <th>SUGGESTION </th>
-            <th>DELETED </th>
-            <th>TOTAL CODES </th>
             <th>COMPLETE DATE </th>
             <th>COMMENTS </th>
             <th>AUDITOR NAME </th>
@@ -181,21 +178,7 @@ function CoderReport({ setModal }) {
               >
                 {row.hcc}
               </td>
-              <td
-                 className={TableStyle.childBorder}
-              >
-                {row.suggestion}
-              </td>
-              <td
-              className={TableStyle.childBorder}
-              >
-                {row.deleted}
-              </td>
-              <td
-                className={TableStyle.childBorder}
-              >
-                {row.totalCodes}
-              </td>
+         
               <td
                 onClick={setModal(false)}
                 className={TableStyle.childBorder}

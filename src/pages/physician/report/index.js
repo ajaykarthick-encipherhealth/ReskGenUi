@@ -2,7 +2,7 @@ import styles from "./report.module.css";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
 import { ProgressBar } from "primereact/progressbar";
-import { Badge, Modal, DatePicker } from "antd";
+import { Badge, Modal, DatePicker, Checkbox } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 
@@ -54,6 +54,7 @@ const index = () => {
   const signal = controller.signal;
 
   const navigate = useRouter();
+  const [reportListAll, setReportListAll] = useState([]);
   const [validated, setValidated] = useState(false);
   const [dataValidationList, setDataValidationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,6 +62,8 @@ const index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [flagClicked, setFlagClicked] = useState(false);
   const [activeTabHead, setActiveTabHead] = useState("Visit Data");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const recordsPage = 10;
   const lastIndex = currentPage * recordsPage;
@@ -90,7 +93,6 @@ const index = () => {
   const [canMaxPage, setCanMaxPage] = useState(10);
 
   const [patinetList, setPatinetList] = useState([]);
-  const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
@@ -128,21 +130,8 @@ const index = () => {
     _filters["patientName"].value = value;
     setFilters(_filters);
   };
-
-  useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
-    setTenantId(tenId);
-    setLocalOrgId(orgId);
-    setLocalUserId(uId);
-    // setIsLoading(false);
-    getAllList(uId, pageNo, pageSize);
-    // fetchData();
-  }, []);
-
-  const getAllList = async (uId, pageNo, pageSize) => {
-    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+  const getAllReportList = async (uId, pageNo, pageSize) => {
+    var resoureUrl = `dbservice/patient/patientdetailsl1?&page=${pageNo}&size=${pageSize}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -163,8 +152,8 @@ const index = () => {
         });
       });
       var newArray = [];
-      newArray = [...patinetListAll, ...resultMap];
-      setPatinetListAll(resultMap);
+      newArray = [...reportListAll, ...resultMap];
+      setReportListAll(resultMap);
 
       // console.log(newArray)
       setIsLoading(false);
@@ -174,6 +163,24 @@ const index = () => {
       // }, 3000);
     }
   };
+  useEffect(() => {
+    var tenId = localStorage.getItem("tenantId");
+    var uId = localStorage.getItem("userId");
+    var orgId = localStorage.getItem("orgId");
+    setTenantId(tenId);
+    setLocalOrgId(orgId);
+    setLocalUserId(uId);
+    // setIsLoading(false);
+    getAllReportList(uId, pageNo, pageSize);
+    // fetchData();
+  }, []);
+  const handleButtonClick = () => {
+  
+    setButtonClicked(true);
+
+  
+  };
+
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -220,10 +227,10 @@ const index = () => {
     setIsLoading(false);
   };
   const statusOptions = [
-    { label: 'Completed', value: 'completed' },
-    { label: 'Pending', value: 'pending' },
-    { label: 'Declined', value: 'declined' },
-    { label: 'Hold', value: 'hold' },
+    { label: "Completed", value: "completed" },
+    { label: "Pending", value: "pending" },
+    { label: "Declined", value: "declined" },
+    { label: "Hold", value: "hold" },
   ];
   const dosOnChange = (selectedOption) => {
     const selectedValue = selectedOption.value;
@@ -378,6 +385,47 @@ const index = () => {
     }
   }
 
+  const handleExport = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+  const getAllList = async (uId, pageNo, pageSize) => {
+    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response.data) {
+      var resultMap = [];
+      var result = response.data.content;
+      setTotalElements(response.data.totalElements);
+
+      result.map((res) => {
+        resultMap.push({
+          patientId: res.patientId,
+          patientName: res.patientName,
+          fileName: res.fileName,
+          computing: res.computing,
+          createdAt: res.createdAt,
+          lastModifiedDate: res.lastModifiedDate,
+          dueDate: res.dueDate,
+          processedStatus: res.processedStatus,
+          createdAt: res.createdAt,
+        });
+      });
+      var newArray = [];
+      newArray = [...patinetListAll, ...resultMap];
+      setPatinetListAll(resultMap);
+
+      // console.log(newArray)
+      setIsLoading(false);
+      setTableLoading(false);
+      //     setTimeout(() => {
+      //     subscribe(resultMap);
+      // }, 3000);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -408,44 +456,42 @@ const index = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-xl-2"  style={{ zIndex: "999"}}>
-                              <div class="form-group has-search">
-                                {/* <InputText
+                          <div className="col-xl-2" style={{ zIndex: "999" }}>
+                            <div class="form-group has-search">
+                              {/* <InputText
                                   type="text"
                                   onChange={(e) => filterChangePatientName(e)}
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                                 <Select
-                                     onChange={(selectedOption) => dosOnChange(selectedOption)}
-                                    options={statusOptions}
-                                    className="custom-react-select"
-                                    isSearchable={false}
-                                   
-                                  />
-                              </div>
+                              <Select
+                                onChange={(selectedOption) =>
+                                  dosOnChange(selectedOption)
+                                }
+                                options={statusOptions}
+                                className="custom-react-select"
+                                isSearchable={false}
+                              />
                             </div>
-                       
-                            <div className="col-xl-2">
-                             
-                               
-                                <RangePicker />  
-                            </div>
-                           
-                        
-                        
+                          </div>
+
+                          <div className="col-xl-2">
+                            <RangePicker />
+                          </div>
+
                           <div className="col-xl-6">
                             <div className="row flr">
-                              <Button
-                                onClick={addPatientFormId}
+                              <button
+                                onClick={handleExport}
                                 className={styles.export}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
-                                  width="20"
-                                  height="20"
+                                  width="15"
+                                  height="15"
                                   viewBox="0 0 20 20"
                                   fill="none"
+                                  className="me-2"
                                 >
                                   <path
                                     d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
@@ -467,50 +513,96 @@ const index = () => {
                                   />
                                 </svg>
                                 Export
-                              </Button>
+                              </button>
                             </div>
                           </div>
                         </div>
                       </div>
+                      <Modal
+                        title="Export "
+                        visible={isModalVisible}
+                        onCancel={closeModal}
+                        footer={[
+                          <Button key="close" onClick={closeModal}>
+                            Submit
+                          </Button>,
+                        ]}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            margin: "0 5pc",
+                          }}
+                        >
+                          <button key="close"   className={styles.excel}   onClick={handleButtonClick}>Excel</button>
+                          <button key="close" className={styles.excel}   onClick={handleButtonClick}>CSV</button>
+                        </div>
+                        <div
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(3, 1fr)",
+                            gap: "16px",
+                            margin: "20px 0"
+                          }}
+                        >
+                          <Checkbox>Patient Id </Checkbox>
+                          <Checkbox>Patient name </Checkbox>
+                          <Checkbox>HCC </Checkbox>
+                          <Checkbox>Suggestion </Checkbox>
+                          <Checkbox>Deleted </Checkbox>
+                          <Checkbox>Total codes </Checkbox>
+                          <Checkbox>Completed date </Checkbox>
+                          <Checkbox>Comments </Checkbox>
+                          <Checkbox>Auditor name </Checkbox>
+                          <Checkbox>Flag </Checkbox>
+                        </div>
+
+                      </Modal>
 
                       <div
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                          <div
-                            className="profile-tab " style={{marginTop:"20px"}}
-                          >
-                            <div className="custom-tab-1">
-                          <Tab.Container defaultActiveKey="validDiseases">
-                            <Nav as="ul" className="nav nav-tabs">
-                              <Nav.Item as="li" className="nav-item">
-                                <Nav.Link
-                                  to="#my-posts"
+                        <div
+                          className="profile-tab "
+                          style={{ marginTop: "20px" }}
+                        >
+                          <div className="custom-tab-1">
+                            <Tab.Container defaultActiveKey="validDiseases">
+                              <Nav as="ul" className="nav nav-tabs">
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link
+                                    to="#my-posts"
+                                    eventKey="validDiseases"
+                                  >
+                                    Coder Report
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link
+                                    to="#my-posts"
+                                    eventKey="comboDiseases"
+                                  >
+                                    Sent Report
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item as="li" className="nav-item">
+                                  <Nav.Link
+                                    to="#my-posts"
+                                    eventKey="meatCriteria"
+                                  >
+                                    Received Report
+                                  </Nav.Link>
+                                </Nav.Item>
+                              </Nav>
+                              <Tab.Content>
+                                <Tab.Pane
+                                  id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  Coder Report
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item as="li" className="nav-item">
-                                <Nav.Link
-                                  to="#my-posts"
-                                  eventKey="comboDiseases"
-                                >
-                                  Sent Report
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item as="li" className="nav-item">
-                                <Nav.Link
-                                  to="#my-posts"
-                                  eventKey="meatCriteria"
-                                >
-                                  Received Report
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                            <Tab.Content>
-                              <Tab.Pane id="my-posts" eventKey="validDiseases">
-                                {/* <DataTable
+                                  {/* <DataTable
                                   value={patinetListAll}
                                   paginator={false}
                                   rows={10}
@@ -741,32 +833,35 @@ const index = () => {
                                       borderRight: " 0.2px solid #e1e1e1",
                                     }}
                                   /> */}
-                                 {/* </DataTable>  */}
-                                 <CoderReport setModal={setModal} />
-                              </Tab.Pane> 
-                              <Tab.Pane
-                                id="my-posts"
-                                eventKey="nonhcc"
-                              ></Tab.Pane>
-                              <Tab.Pane id="my-posts" eventKey="comboDiseases">
-                                <SentReportTable />
-                              </Tab.Pane>
-                              <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                                <ReceivedReport />
-                              </Tab.Pane>
-                              <Tab.Pane
-                                id="my-posts"
-                                eventKey="RafScore"
-                              ></Tab.Pane>
-                              <Tab.Pane
-                                id="my-posts"
-                                eventKey="file"
-                              ></Tab.Pane>
-                            </Tab.Content>
-                          </Tab.Container>
-                        </div>
+                                  {/* </DataTable>  */}
+                                  <CoderReport setModal={setModal} reportListAll={reportListAll}/>
+                                </Tab.Pane>
+                                <Tab.Pane
+                                  id="my-posts"
+                                  eventKey="nonhcc"
+                                ></Tab.Pane>
+                                <Tab.Pane
+                                  id="my-posts"
+                                  eventKey="comboDiseases"
+                                >
+                                  <SentReportTable />
+                                </Tab.Pane>
+                                <Tab.Pane id="my-posts" eventKey="meatCriteria">
+                                  <ReceivedReport />
+                                </Tab.Pane>
+                                <Tab.Pane
+                                  id="my-posts"
+                                  eventKey="RafScore"
+                                ></Tab.Pane>
+                                <Tab.Pane
+                                  id="my-posts"
+                                  eventKey="file"
+                                ></Tab.Pane>
+                              </Tab.Content>
+                            </Tab.Container>
                           </div>
-                        
+                        </div>
+
                         {/* <div className="pagination-container">
                           <Paginator
                             first={paginationFirst}
@@ -776,16 +871,14 @@ const index = () => {
                           />
                         </div> */}
                         <div className="pagination-container">
-                            <Paginator
-                              first={paginationFirst}
-                              rows={10}
-                              totalRecords={totalElements}
-                              onPageChange={onPageChange}
-                            />
-                            <div className="total-pages">
-                              Total Pages: 8
-                            </div>
-                          </div>
+                          <Paginator
+                            first={paginationFirst}
+                            rows={15}
+                            totalRecords={totalElements}
+                            onPageChange={onPageChange}
+                          />
+                          <div className="total-pages">Total count: 8</div>
+                        </div>
                         {modal && (
                           <Modal
                             title="Comments"
