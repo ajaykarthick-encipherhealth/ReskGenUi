@@ -26,13 +26,13 @@ function PatientTable({ patinetListAll, actionBodyTemplate,statusBodyTemplate })
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>Patient Id</th>
-            <th>Patient Name</th>
+            <th>PATIENT ID</th>
+            <th>PATIENT NAME</th>
       
-            <th>Due Date</th>
-            <th>Completed Date</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th>DUE DATE</th>
+            <th>COMPLETED DATE</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
           </tr>
         </thead>
         <tbody>{renderRows()}</tbody>

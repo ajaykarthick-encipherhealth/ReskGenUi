@@ -98,3 +98,10 @@
   border-bottom: 0.2px solid #e1e1e1;
   border-right: 0.2px solid #e1e1e1;
 }
+.classTable tbody tr td {
+    font-size: 14px;
+    font-weight: 400;
+    padding: 15px;
+    color: #000 !important;
+
+}

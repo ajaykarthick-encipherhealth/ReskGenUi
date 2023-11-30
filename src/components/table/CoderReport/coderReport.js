@@ -122,7 +122,21 @@ function CoderReport({ setModal }) {
             <th style={{ display: "flex", justifyContent: "space-around" }}>
               {" "}
               <span>All</span>{" "}
-            
+              <input
+               
+               type="checkbox"
+               onChange={() => {
+             
+               }}
+               style={{
+                 width: "20px",
+                 height: "20px",
+                 flexhrink: "0",
+                 borderRadius: "4px",
+
+                 backgroundColor: "pink",
+               }}
+             />  
             </th>
           </tr>
         </thead>
