@@ -2,7 +2,7 @@ import styles from "./report.module.css";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
 import { ProgressBar } from "primereact/progressbar";
-import { Badge, Modal } from "antd";
+import { Badge, Modal, DatePicker } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 
@@ -11,7 +11,8 @@ import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Progress } from "antd";
-
+import { Tab, Nav } from "react-bootstrap";
+import Select from "react-select";
 
 import {
   faClose,
@@ -42,6 +43,9 @@ import {
   buildStyles,
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import SentReportTable from "../../../components/table/sentReport/sentReport";
+import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
+import CoderReport from "../../../components/table/CoderReport/coderReport";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -56,6 +60,7 @@ const index = () => {
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [flagClicked, setFlagClicked] = useState(false);
+  const [activeTabHead, setActiveTabHead] = useState("Visit Data");
 
   const recordsPage = 10;
   const lastIndex = currentPage * recordsPage;
@@ -98,6 +103,7 @@ const index = () => {
   const [tableLoading, setTableLoading] = useState(true);
   const [flagStates, setFlagStates] = useState([]);
   const [modal, setModal] = useState(false);
+  const { RangePicker } = DatePicker;
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -205,6 +211,25 @@ const index = () => {
     setModal(false);
   };
 
+  const navigetPageDetails = (pageTitle) => {
+    // setIsLoadingDos(true);
+    setActiveTabHead("file");
+    setSideNavLabelActiveKey(pageTitle);
+    setIsLoading(true);
+
+    setIsLoading(false);
+  };
+  const statusOptions = [
+    { label: 'Completed', value: 'completed' },
+    { label: 'Pending', value: 'pending' },
+    { label: 'Declined', value: 'declined' },
+    { label: 'Hold', value: 'hold' },
+  ];
+  const dosOnChange = (selectedOption) => {
+    const selectedValue = selectedOption.value;
+    // Do something with the selected value
+    console.log(selectedValue);
+  };
   const statusBodyTemplate = (rowData) => {
     //   console.log(rowData.computing)
     //   return <span className={`badge badge-success`}>
@@ -384,31 +409,32 @@ const index = () => {
                             </div>
                           </div>
                           <div className="col-xl-2">
-                            <div class="form-group has-search">
-                              <InputText
-                                type="text"
-                                onChange={(e) => filterChangePatientName(e)}
-                                className="form-control new-form-control"
-                                placeholder="Audited By"
-                              />
+                              <div class="form-group has-search">
+                                {/* <InputText
+                                  type="text"
+                                  onChange={(e) => filterChangePatientName(e)}
+                                  className="form-control new-form-control"
+                                  placeholder="Status"
+                                /> */}
+                                 <Select
+                                     onChange={(selectedOption) => dosOnChange(selectedOption)}
+                                    options={statusOptions}
+                                    className="custom-react-select"
+                                    isSearchable={false}
+                                   
+                                  />
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-xl-2">
-                            <div class="form-group has-search">
-                              <Calendar
-                                className="form-control new-form-control calender-pri-input"
-                                value={dates}
-                                onChange={(e) => setDates(e.value)}
-                                selectionMode="range"
-                                readOnlyInput
-                                placeholder="Due Date"
-                              />
+                       
+                            <div className="col-xl-2">
+                             
+                               
+                                <RangePicker />  
                             </div>
-                          </div>
-                          <div
-                            className="col-xl-6"
                            
-                          >
+                        
+                        
+                          <div className="col-xl-6">
                             <div className="row flr">
                               <Button
                                 onClick={addPatientFormId}
@@ -451,18 +477,51 @@ const index = () => {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        <DataTable
-                          value={patinetListAll}
-                          paginator={false}
-                          rows={10}
-                          rowsPerPageOptions={[10, 25, 50, 100]}
-                          dataKey="id"
-                          filters={filters}
-                          filterDisplay="menu"
-                          className="custom-table"
-                          rowClassName="custom-row"
-                        >
-                          {/* <Column
+                          <div
+                            className="profile-tab " style={{marginTop:"20px"}}
+                          >
+                            <div className="custom-tab-1">
+                          <Tab.Container defaultActiveKey={activeTabHead}>
+                            <Nav as="ul" className="nav nav-tabs">
+                              <Nav.Item as="li" className="nav-item">
+                                <Nav.Link
+                                  to="#my-posts"
+                                  eventKey="validDiseases"
+                                >
+                                  Coder Report
+                                </Nav.Link>
+                              </Nav.Item>
+                              <Nav.Item as="li" className="nav-item">
+                                <Nav.Link
+                                  to="#my-posts"
+                                  eventKey="comboDiseases"
+                                >
+                                  Sent Report
+                                </Nav.Link>
+                              </Nav.Item>
+                              <Nav.Item as="li" className="nav-item">
+                                <Nav.Link
+                                  to="#my-posts"
+                                  eventKey="meatCriteria"
+                                >
+                                  Received Report
+                                </Nav.Link>
+                              </Nav.Item>
+                            </Nav>
+                            <Tab.Content>
+                              <Tab.Pane id="my-posts" eventKey="validDiseases">
+                                {/* <DataTable
+                                  value={patinetListAll}
+                                  paginator={false}
+                                  rows={10}
+                                  rowsPerPageOptions={[10, 25, 50, 100]}
+                                  dataKey="id"
+                                  filters={filters}
+                                  filterDisplay="menu"
+                                  className="custom-table"
+                                  rowClassName="custom-row"
+                                >
+                                  {/* <Column
                             header="SI.NO"
                             headerStyle={{ width: "3rem" }}
                             body={(data, options) =>
@@ -475,24 +534,24 @@ const index = () => {
                             }}
                           ></Column> */}
 
-                          <Column
-                            field="patientId"
-                            header="Patient Id"
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderLeft: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          />
-                          <Column
-                            field="patientName"
-                            header="Patient Name"
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          />
-                          {/* <Column
+                                  {/* <Column
+                                    field="patientId"
+                                    header="Patient Id"
+                                    bodyStyle={{
+                                      borderTop: "  0.2px solid #e1e1e1",
+                                      borderLeft: "  0.2px solid #e1e1e1",
+                                      borderBottom: "  0.2px solid #e1e1e1",
+                                    }}
+                                  />
+                                  <Column
+                                    field="patientName"
+                                    header="Patient Name"
+                                    bodyStyle={{
+                                      borderTop: "  0.2px solid #e1e1e1",
+                                      borderBottom: "  0.2px solid #e1e1e1",
+                                    }}
+                                  /> */}
+                                  {/* <Column
                             field="fileName"
                             header="File Name"
                             bodyStyle={{
@@ -501,88 +560,90 @@ const index = () => {
                             }}
                           /> */}
 
-                          <Column
-                            field="hcc"
-                            header="HCC "
-                            body={(data) => (
-                              <div>
-                                {data.hcc ? (
-                                  <span>{data.hcc}</span>
-                                ) : (
-                                  <span>0</span>
-                                )}
-                              </div>
-                            )}
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          />
+                                  {/* <Column
+                                    field="hcc"
+                                    header="HCC "
+                                    body={(data) => (
+                                      <div>
+                                        {data.hcc ? (
+                                          <span>{data.hcc}</span>
+                                        ) : (
+                                          <span>0</span>
+                                        )}
+                                      </div>
+                                    )}
+                                    bodyStyle={{
+                                      borderTop: "  0.2px solid #e1e1e1",
+                                      borderBottom: "  0.2px solid #e1e1e1",
+                                    }}
+                                  /> */}
 
-                          <Column
-                            field="suggestionCodes"
-                            header="Suggestion  "
-                            body={(data) => (
-                              <div>
-                                {data.suggestionCodes ? (
-                                  <span>{data.suggestionCodes}</span>
-                                ) : (
-                                  <span>0</span>
-                                )}
-                              </div>
-                            )}
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          />
-                          <Column
-                            field="deletedCodes"
-                            header="Deleted "
-                            body={(data) => (
-                              <div>
-                                {data.deletedCodes ? (
-                                  <span>{data.deletedCodes}</span>
-                                ) : (
-                                  <span>0</span>
-                                )}
-                              </div>
-                            )}
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          />
-                          <Column
-                            field="totalCodes"
-                            header="Total Codes"
-                            body={(data) => (
-                              <div>
-                                {data.deletedCodes ? (
-                                  <span>{data.deletedCodes}</span>
-                                ) : (
-                                  <span>0</span>
-                                )}
-                              </div>
-                            )}
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          />
-                          <Column
-                            field="dateReceived"
-                            body={(data) =>
-                              moment(data.dueDate).format("MM-DD-YYYY hh:MM:A")
-                            }
-                            sortable
-                            header="Date Received"
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          />
-                          <Column
+                                  {/* <Column
+                                    field="suggestionCodes"
+                                    header="Suggestion  "
+                                    body={(data) => (
+                                      <div>
+                                        {data.suggestionCodes ? (
+                                          <span>{data.suggestionCodes}</span>
+                                        ) : (
+                                          <span>0</span>
+                                        )}
+                                      </div>
+                                    )}
+                                    bodyStyle={{
+                                      borderTop: "  0.2px solid #e1e1e1",
+                                      borderBottom: "  0.2px solid #e1e1e1",
+                                    }}
+                                  /> */}
+                                  {/* <Column
+                                    field="deletedCodes"
+                                    header="Deleted "
+                                    body={(data) => (
+                                      <div>
+                                        {data.deletedCodes ? (
+                                          <span>{data.deletedCodes}</span>
+                                        ) : (
+                                          <span>0</span>
+                                        )}
+                                      </div>
+                                    )}
+                                    bodyStyle={{
+                                      borderTop: "  0.2px solid #e1e1e1",
+                                      borderBottom: "  0.2px solid #e1e1e1",
+                                    }}
+                                  /> */}
+                                  {/* <Column
+                                    field="totalCodes"
+                                    header="Total Codes"
+                                    body={(data) => (
+                                      <div>
+                                        {data.deletedCodes ? (
+                                          <span>{data.deletedCodes}</span>
+                                        ) : (
+                                          <span>0</span>
+                                        )}
+                                      </div>
+                                    )}
+                                    bodyStyle={{
+                                      borderTop: "  0.2px solid #e1e1e1",
+                                      borderBottom: "  0.2px solid #e1e1e1",
+                                    }}
+                                  />
+                                  <Column
+                                    field="dateReceived"
+                                    body={(data) =>
+                                      moment(data.dueDate).format(
+                                        "MM-DD-YYYY hh:MM:A"
+                                      )
+                                    }
+                                    sortable
+                                    header="Date Received"
+                                    bodyStyle={{
+                                      borderTop: "  0.2px solid #e1e1e1",
+                                      borderBottom: "  0.2px solid #e1e1e1",
+                                    }}
+                                  /> */}
+                                  {/* <Column
                             field="quality"
                             header="Quality"
                             body={(data) => {
@@ -623,60 +684,89 @@ const index = () => {
                               borderTop: " 0.2px solid #e1e1e1",
                               borderBottom: " 0.2px solid #e1e1e1",
                             }}
-                          />
+                          /> */}
 
-                          <Column
-                            field="comments"
-                            body={(data) => (
-                              <div
-                                className={styles.commentsIcon}
-                                onClick={() => setModal(true)}
-                              >
-                                {SVGICON.comment}
-                              </div>
-                            )}
-                            header="Comments"
-                            bodyStyle={{
-                              borderTop: " 0.2px solid #e1e1e1",
-                              borderBottom: " 0.2px solid #e1e1e1",
-                            }}
-                          />
+                                  {/* <Column
+                                    field="comments"
+                                    body={(data) => (
+                                      <div
+                                        className={styles.commentsIcon}
+                                        onClick={() => setModal(true)}
+                                      >
+                                        {SVGICON.comment}
+                                      </div>
+                                    )}
+                                    header="Comments"
+                                    bodyStyle={{
+                                      borderTop: " 0.2px solid #e1e1e1",
+                                      borderBottom: " 0.2px solid #e1e1e1",
+                                    }}
+                                  /> */}
 
-                          <Column
-                            field="patientName"
-                            header="Coder Name"
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          />
-                          <Column
-                            field="patientName"
-                            header="Flag"
-                            body={(data, { rowIndex }) => (
-                              <div>
-                                {flagStates[rowIndex] ? (
-                                  <span
-                                    onClick={() => handleFlagClick(rowIndex)}
-                                  >
-                                    {SVGICON.redFlag}
-                                  </span>
-                                ) : (
-                                  <span
-                                    onClick={() => handleFlagClick(rowIndex)}
-                                  >
-                                    {SVGICON.flag}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                            bodyStyle={{
-                              borderTop: " 0.2px solid #e1e1e1",
-                              borderBottom: " 0.2px solid #e1e1e1",
-                              borderRight: " 0.2px solid #e1e1e1",
-                            }}
-                          />
-                        </DataTable>
+                                  {/* <Column
+                                    field="patientName"
+                                    header="Coder Name"
+                                    bodyStyle={{
+                                      borderTop: "  0.2px solid #e1e1e1",
+                                      borderBottom: "  0.2px solid #e1e1e1",
+                                    }}
+                                  />
+                                  <Column
+                                    field="patientName"
+                                    header="Flag"
+                                    body={(data, { rowIndex }) => (
+                                      <div>
+                                        {flagStates[rowIndex] ? (
+                                          <span
+                                            onClick={() =>
+                                              handleFlagClick(rowIndex)
+                                            }
+                                          >
+                                            {SVGICON.redFlag}
+                                          </span>
+                                        ) : (
+                                          <span
+                                            onClick={() =>
+                                              handleFlagClick(rowIndex)
+                                            }
+                                          >
+                                            {SVGICON.flag}
+                                          </span>
+                                        )}
+                                      </div>
+                                    )}
+                                    bodyStyle={{
+                                      borderTop: " 0.2px solid #e1e1e1",
+                                      borderBottom: " 0.2px solid #e1e1e1",
+                                      borderRight: " 0.2px solid #e1e1e1",
+                                    }}
+                                  /> */}
+                                 {/* </DataTable>  */}
+                                 <CoderReport setModal={setModal} />
+                              </Tab.Pane> 
+                              <Tab.Pane
+                                id="my-posts"
+                                eventKey="nonhcc"
+                              ></Tab.Pane>
+                              <Tab.Pane id="my-posts" eventKey="comboDiseases">
+                                <SentReportTable />
+                              </Tab.Pane>
+                              <Tab.Pane id="my-posts" eventKey="meatCriteria">
+                                <ReceivedReport />
+                              </Tab.Pane>
+                              <Tab.Pane
+                                id="my-posts"
+                                eventKey="RafScore"
+                              ></Tab.Pane>
+                              <Tab.Pane
+                                id="my-posts"
+                                eventKey="file"
+                              ></Tab.Pane>
+                            </Tab.Content>
+                          </Tab.Container>
+                        </div>
+                          </div>
+                        
                         <div className="pagination-container">
                           <Paginator
                             first={paginationFirst}

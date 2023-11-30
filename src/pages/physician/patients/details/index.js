@@ -31,7 +31,7 @@ import {
   faPlus
 } from "@fortawesome/free-solid-svg-icons";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Divider, Popover, Menu } from "antd";
+import { Popconfirm, Divider, Popover, Menu, DatePicker} from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from "react-select";
 import { Modal } from "antd";
@@ -78,6 +78,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
     matchCase: true,
     wholeWords: true,
   });
+  const { RangePicker } = DatePicker;
   const { highlight, Search } = searchPluginInstance;
   const { ShowSearchPopoverButton } = searchPluginInstance;
   const [searchPluginInstanceLocal, setSearchPluginInstanceLocal] =
