@@ -8,12 +8,26 @@
   }
   .card5{
     width:100%;
-    height:auto;
+    height:345px;
   }
-  .buttonDiv{
-    width:100%;
-   display: flex;
-   justify-content: end;
-   align-items: end;
-   margin-bottom: 10px;
+  .buttonDiv {
+    width: 100%;
+    display: flex;
+    justify-content:end;
+  }
+  .picker{
+    /* width: 30%; */
+    display: flex;
+    /* justify-content: space-between; */
+    margin-right: 20px;
+  }
+  .accuracy {
+    width:25%;
+    height: 250px;
+    border-radius: 8px;
+   margin-top: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+  .bulletContainer{
+    margin-top: -30px;
   }

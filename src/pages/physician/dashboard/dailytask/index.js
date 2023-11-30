@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Image from "next/image";
 import ReactECharts from "echarts-for-react";
@@ -7,18 +7,20 @@ import right from "../../../../images/dashboard/right.png";
 import { Col, Row } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
+import dayjs from "dayjs";
+import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
+import { useDispatch, useSelector } from "react-redux";
+import Legends from "../../../../components/legends";
 
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const card2Data = [
-    { id: 1, day: "Monday", lock: false, pending: 8, hold: 4, decline: 2 },
-    { id: 2, day: "Tuesday", lock: false, pending: 8, hold: 4, decline: 2 },
-    { id: 3, day: "Wednesday", lock: true, pending: 8, hold: 4, decline: 2 },
-    { id: 4, day: "Thursday", lock: false, pending: 8, hold: 4, decline: 2 },
-    { id: 5, day: "Friday", lock: false, pending: 8, hold: 4, decline: 2 },
-    { id: 6, day: "Saturday", lock: false, pending: 8, hold: 4, decline: 2 },
-    { id: 7, day: "Sunday", lock: true, pending: 8, hold: 4, decline: 2 },
-  ];
+
+  const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
+  const currentDate = dayjs();
+  const startWeekDate = currentDate.startOf("week");
+  const endWeekDate = currentDate.endOf("week");
+  const dispatch = useDispatch();
+
   const bullets = [
     {
       color: "#FFB54D",
@@ -33,86 +35,35 @@ const DailyTask = () => {
       name: "Decline",
     },
   ];
-  const option = {
-    tooltip: {
-      trigger: "item",
-    },
-    legend: {
-      show: false,
-    },
-    series: [
-      {
-        type: "pie",
-        radius: ["40%", "70%"],
-        label: {
-          show: false,
-          position: "inside",
-          formatter: "{b}: {c}",
-        },
-        data: [
-          {
-            value: 1048,
-            name: "Pending",
-            itemStyle: {
-              color: "#FFB54D",
-            },
-          },
-          {
-            value: 735,
-            name: "Hold",
-            itemStyle: {
-              color: "#AD94FA",
-            },
-          },
-          {
-            value: 580,
-            name: "Decline",
-            itemStyle: {
-              color: "#EB5252",
-            },
-          },
-          {
-            value: 580,
-            name: "",
-            itemStyle: {
-              color: "#E8FAEA",
-            },
-          },
-        ],
-      },
-      {
-        type: "pie",
-        radius: ["0%", "30%"],
-        avoidLabelOverlap: false,
-        label: {
-          show: true,
-          position: "center",
-          formatter: "{a|Allocated}\n \n{b|50}",
-          backgroundColor: "transparent",
 
-          rich: {
-            a: {
-              fontSize: 12,
-            },
-            b: {
-              fontSize: 18,
-            },
-          },
-        },
-        labelLine: {
-          show: false,
-        },
-        data: [
-          {
-            value: 50,
-            itemStyle: {
-              color: "#fff",
-            },
-          },
-        ],
-      },
-    ],
-  };
+  const currentWeekDates = [];
+  let dateIterator = startWeekDate;
+
+  while (
+    dateIterator?.isBefore(endWeekDate) ||
+    dateIterator?.isSame(endWeekDate, "day")
+  ) {
+    currentWeekDates?.push(dateIterator.format("YYYY-MM-DD"));
+    dateIterator = dateIterator?.add(1, "day");
+  }
+
+  const WeekDays = currentWeekDates?.map((date) => {
+    const formattedDate = dayjs(date)
+      .startOf("day")
+      .add(6, "hour")
+      .add(39, "minute")
+      .add(22, "second")
+      .add(786, "millisecond")
+      .toISOString();
+    return formattedDate;
+  });
+
+  useEffect(() => {
+    WeekDays?.slice(0, 3)?.map((date) => {
+      dispatch(getDailyTaskDatas(date));
+    });
+  }, []);
+
   const showPrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
@@ -122,7 +73,113 @@ const DailyTask = () => {
   const showNext = () => {
     if (currentIndex < card2Data.length - 3) {
       setCurrentIndex(currentIndex + 1);
+      const nextDay = WeekDays[currentIndex + 3];
+      dispatch(getDailyTaskDatas(nextDay));
+      // setWeekDays(prevDays => [...prevDays.slice(1), nextDay]);
     }
+  };
+
+  const daysOfWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+  const card2Data = daysOfWeek.map((day, index) => ({
+    id: index + 1,
+    day,
+    pending: dailyStatusData[index]?.pending || 0,
+    hold: dailyStatusData[index]?.hold || 0,
+    completed: dailyStatusData[index]?.completed || 0,
+    decline: dailyStatusData[index]?.decline || 0,
+    allocated: dailyStatusData[index]?.allocated || 0,
+  }));
+
+  const getChartOption = (allocated, pending, hold, decline, completed) => {
+    return {
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        show: false,
+      },
+      series: [
+        {
+          type: "pie",
+          radius: ["40%", "70%"],
+          label: {
+            show: false,
+            position: "inside",
+            formatter: "{b}: {c}",
+          },
+          data: [
+            {
+              value: pending,
+              name: "Pending",
+              itemStyle: {
+                color: "#FFB54D",
+              },
+            },
+            {
+              value: hold,
+              name: "Hold",
+              itemStyle: {
+                color: "#AD94FA",
+              },
+            },
+            {
+              value: decline,
+              name: "Decline",
+              itemStyle: {
+                color: "#EB5252",
+              },
+            },
+            {
+              value: completed,
+              name: "Completed",
+              itemStyle: {
+                color: "#E8FAEA",
+              },
+            },
+          ],
+        },
+        {
+          type: "pie",
+          radius: ["0%", "30%"],
+          avoidLabelOverlap: false,
+          label: {
+            show: true,
+            position: "center",
+            formatter: `{b|${allocated}}`,
+            backgroundColor: "transparent",
+
+            rich: {
+              a: {
+                fontSize: 12,
+              },
+              b: {
+                fontSize: 18,
+              },
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: [
+            {
+              value: allocated,
+              name:"Alocated",
+              itemStyle: {
+                color: "#fff",
+              },
+            },
+          ],
+        },
+      ],
+    };
   };
   return (
     <>
@@ -151,8 +208,14 @@ const DailyTask = () => {
                         <Col span={12}>
                           <div className={styles.container}>
                             <ReactECharts
-                              option={option}
-                              style={{ width: "400px", height: "200px" }}
+                              option={getChartOption(
+                                data?.allocated,
+                                data?.pending,
+                                data?.hold,
+                                data?.decline,
+                                data?.completed
+                              )}
+                              style={{ width: "100%", height: "200px" }}
                             />
                           </div>
                         </Col>
@@ -181,20 +244,7 @@ const DailyTask = () => {
                   ))}
               </Row>
               <div className={styles.infoCards}>
-                {bullets?.map((item) => (
-                  <div className={styles.insideCard}>
-                    <div
-                      style={{
-                        width: "8px",
-                        height: "8px",
-                        backgroundColor: item.color,
-                        borderRadius: "50%",
-                        margin: "5px 5px 0 0",
-                      }}
-                    ></div>
-                    {item.name}
-                  </div>
-                ))}
+                <Legends bullets={bullets} />
               </div>
             </Col>
             <Col span={1}>

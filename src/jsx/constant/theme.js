@@ -757,7 +757,7 @@ closeIcon:<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox
 addIcon:<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
 <path d="M4.5 9H13.5M9 4.5V13.5" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>,
-tickIcon:<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" fill="none">
+tickIcon:<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 16 16" fill="none">
 <g clip-path="url(#clip0_7_2558)">
 <path d="M14.856 1.99194L5.12611 11.7205L1.14299 7.73696L0 8.882L5.12611 14.0079L16 3.13522L14.856 1.99194Z" fill="#068F03"/>
 </g>

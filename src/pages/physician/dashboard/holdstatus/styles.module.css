@@ -6,6 +6,7 @@
    background-color: #04306F;
    border-radius: 12px;
    height:42px;
+   text-align: start;
    /* position: sticky;
    top: 0; */
   }
@@ -14,7 +15,20 @@
     font-weight: 400;
     color:#000
   } 
-  .container{
-    height:100%;
+  .container {
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .container:hover {
     overflow-y: scroll;
+  }
+  
+  .container::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .container::-webkit-scrollbar-thumb {
+    border-radius: 4px;
   }

@@ -30,6 +30,9 @@ import {
   faArrowLeft,
   faPlus
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  CalendarOutlined
+} from '@ant-design/icons';
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker} from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
@@ -39,7 +42,7 @@ import { Button } from "react-bootstrap";
 
 import { Space, Spin } from "antd";
 // import { searchPlugin ,NextIcon, PreviousIcon, RenderSearchProps,} from '@react-pdf-viewer/search';
-import { Icon, MinimalButton, Position, Tooltip } from "@react-pdf-viewer/core";
+import { Icon, MinimalButton, Position } from "@react-pdf-viewer/core";
 import {
   NextIcon,
   PreviousIcon,
@@ -57,10 +60,11 @@ import { actions as patientActions } from "../../../../stores/patients";
 import { connect } from "react-redux";
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
+import { Avatar,Tooltip } from 'antd';
 
 
 
-const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList }) => {
+const Details = ({}) => {
   const navigate = useRouter();
   let searchKeywords = [];
   // const searchPluginInstance = searchPlugin({
@@ -247,6 +251,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
   const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC")
   const [isSideNavShow, setIsSideNavShow] = useState(false);
   const [timelineData, setTimeLineData] = useState([])
+  const [flagTagActive, setFlagTagActive] = useState(true)
+  const [addValidCodeCheck, setAddValidCodeCheck] = useState(null)
 
 
   const handleAddButtonClick = () => {
@@ -342,7 +348,6 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
   };
 
   useEffect(() => {
-    console.log(filterPatientList)
     // loadFilterPatientList();
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -500,10 +505,10 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCodeFinding,
+                diagnosisCodeFinding: res.diagnosisCode,
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCodeFinding,
+                diagnosisCode: res.diagnosisCode,
                 encounterDate: res.encounterDate,
                 getPlace: "Hcc",
               });
@@ -519,10 +524,10 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
               // });
               suggestListAllNonHcc.push({
                 actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCodeFinding,
+                diagnosisCodeFinding: res.diagnosisCode,
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCodeFinding,
+                diagnosisCode: res.diagnosisCode,
                 encounterDate: res.encounterDate,
                 getPlace: "Hcc",
               });
@@ -2066,6 +2071,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
   };
 
   const handleCloseModal = () => {
+    setAddValidCodeCheck(null)
+    setValidated(false);
     setIsModalOpen(false);
     setIsModalOpenValid(false);
     setConfirmNotesModalValid(false);
@@ -2215,6 +2222,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
 
   const addValidDiseases = () => {
     setIsModalOpenValid(true);
+    // setValidated(true);
   };
 
   const handleSubmit = async (event) => {
@@ -2628,7 +2636,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
         notification.success({
           message: "Moved suggested code to valid diseases Successfully!",
         });
-        getPatientDetails(localOrgId, localTenantId);
+        getPatientDetails(localPatientId,localOrgId, localTenantId);
       } else {
         setSuggestedBtnTitle("Add");
       }
@@ -2932,6 +2940,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       dbDescription: selectInvalidDetails.dbDescription,
       notes: inputValue.notes,
       dos: selectedDosValue,
+      encounterDate:selectInvalidDetails.encounterDate,
+      capturedSections:selectInvalidDetails.capturedSections
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
@@ -2942,7 +2952,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       notification.success({
         message: "Moved to suggested Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
   };
@@ -2957,6 +2967,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       dbDescription: selectInvalidDetails.dbDescription,
       notes: inputValue.notes,
       dos: selectedDosValue,
+      encounterDate:selectInvalidDetails.encounterDate,
+      capturedSections:selectInvalidDetails.capturedSections
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
@@ -2967,7 +2979,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       notification.success({
         message: "Moved to deleted Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
   };
@@ -2981,17 +2993,19 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       dbDescription: selectInvalidDetails.dbDescription,
       notes: inputValue.notes,
       dos: selectedDosValue,
+      encounterDate:selectInvalidDetails.encounterDate,
+      capturedSections:selectInvalidDetails.capturedSections
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/update/move/suggestedtodeleted`,
-      [dataFormatSuggested]
+      dataFormatSuggested
     );
     if (response?.status == 202) {
       notification.success({
         message: "Moved to deleted Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
   };
@@ -3005,17 +3019,19 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       dbDescription: selectInvalidDetails.dbDescription,
       notes: inputValue.notes,
       dos: selectedDosValue,
+      encounterDate:selectInvalidDetails.encounterDate,
+      capturedSections:selectInvalidDetails.capturedSections
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/update/move/suggestedtovalid`,
-      [dataFormatSuggested]
+      dataFormatSuggested
     );
     if (response?.status == 202) {
       notification.success({
         message: "Moved to valid Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
   };
@@ -3029,6 +3045,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       dbDescription: selectInvalidDetails.dbDescription,
       notes: inputValue.notes,
       dos: selectedDosValue,
+      encounterDate:selectInvalidDetails.encounterDate,
+      capturedSections:selectInvalidDetails.capturedSections
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
@@ -3039,7 +3057,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       notification.success({
         message: "Moved to valid Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
   };
@@ -3052,6 +3070,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       dbDescription: selectInvalidDetails.dbDescription,
       notes: inputValue.notes,
       dos: selectedDosValue,
+      encounterDate:selectInvalidDetails.encounterDate,
+      capturedSections:selectInvalidDetails.capturedSections
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
@@ -3062,7 +3082,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       notification.success({
         message: "Moved to Suggested Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
   };
@@ -3076,6 +3096,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       dbDescription: selectInvalidDetails.dbDescription,
       notes: inputValue.notes,
       dos: selectedDosValue,
+      encounterDate:selectInvalidDetails.encounterDate,
+      capturedSections:selectInvalidDetails.capturedSections
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
@@ -3086,7 +3108,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       notification.success({
         message: "Moved valid diseases Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
   };
@@ -3168,7 +3190,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
           message: "Saved Successfully!",
         });
         setSaveBtnTitle("Save");
-        getPatientDetails(localOrgId, localTenantId);
+        getPatientDetails(localPatientId,localOrgId, localTenantId);
       } else {
       }
     } catch (e) {
@@ -3229,7 +3251,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
           message: "Completed Successfully!",
         });
         setCompleteBtnTitle("Complete");
-        getPatientDetails(localOrgId, localTenantId);
+        getPatientDetails(localPatientId,localOrgId, localTenantId);
       } else {
       }
     } catch (e) {
@@ -3300,14 +3322,26 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
     );
     if (response.data) {
-      console.log(response.data);
+      if(response.data == "ICD disease not found"){
+        setAddValidCodeCheck(false)
+      }else{
+        setAddValidCodeCheck(true)
+        inputValue.actualDescription = "adakd dvasdv"
+      }
+      console.log(inputValue);
     }
+
+    inputValue.actualDescription = "adakd dvasdv"
   };
 
   // updated changes
   const handleFormSubmit = async (event) => {
     var dos = dosYearDefalutSelect.label;
+    const form = event.currentTarget;
     event.preventDefault();
+    if(addValidCodeCheck == true){
+      setAddValidCodeCheck(null)
+    if (form.checkValidity() === true) {
     var dataFormatSuggested = {
       patientComputeDetailId: localPatientId,
       year: dos,
@@ -3332,11 +3366,18 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
           message: "Saved Successfully!",
         });
         setIsModalOpenValidCodes(false);
-        getPatientDetails(localOrgId, localTenantId);
+        getPatientDetails(localPatientId,localOrgId, localTenantId);
         handleCloseForm();
+        setIsModalOpenValid(false)
       } else {
       }
     } catch (e) { }
+
+  }
+}
+
+    setValidated(true);
+
     // Add logic for handling form submission
     // You can access the form data and perform actions accordingly
     // For example, you can access the input field values using refs or state
@@ -3354,10 +3395,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
     }
 
     if (value == "Timeline") {
-      var response = await loadTimelineList(localPatientId, 0, 10,);
-      console.log(response)
-      var result = response.content;
-      console.log(result)
+      const response = await axios.get(ENDPOINTS.apiEndoint +`dbservice/actioneventaudit?patientid=${localPatientId}&pageno=${0}&pagesize=${20}`);
+      var result = response.data.content;
       setTimeLineData(result)
     }
     setIsModalComments(true);
@@ -3429,12 +3468,9 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
 
 
   const getFiltePatientListStatus = async (value) => {
-    console.log(value)
-    setShowCard(false)
-    var response = await loadFilterPatientList(localUserId, 0, 10, value);
-    console.log(response)
-    var result = response.content;
-    console.log(result)
+
+    const response = await axios.get(ENDPOINTS.apiEndoint +`dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`);
+    var result = response.data.content;
     setPatientList(result)
 
   }
@@ -3458,7 +3494,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       notification.success({
         message: "Flag added Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
     setIsModalComments(false)
@@ -3482,7 +3518,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       notification.success({
         message: "Notes added Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
     setIsModalComments(false)
@@ -3506,7 +3542,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
       notification.success({
         message: "Comment added Successfully!",
       });
-      getPatientDetails(localOrgId, localTenantId);
+      getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
     setIsModalComments(false)
@@ -3525,6 +3561,12 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
   const backToPatientData =() =>{
     navigate.push("/physician/patients");
   }
+
+  
+  const splitUserName = (name)  =>{
+   return name[0]
+  }
+
 
 
 
@@ -3943,7 +3985,10 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             to="#my-posts"
                                             eventKey="validDiseases"
                                             className={visitStyles.navColor}
-                                            activeClassName={visitStyles.activeLink}
+                                            activeClassName={visitStyles.activeLink}  
+                                            onClick={() =>
+                                              setFlagTagActive(true)
+                                            }
                                           >
                                             Visit Data
                                           </Nav.Link>
@@ -3953,6 +3998,9 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             to="#my-posts"
                                             eventKey="comboDiseases"
                                             className={visitStyles.navColor}
+                                            onClick={() =>
+                                              setFlagTagActive(false)
+                                            }
                                           >
                                             Combination Codes
                                           </Nav.Link>
@@ -3962,6 +4010,9 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             to="#my-posts"
                                             eventKey="meatCriteria"
                                             className={visitStyles.navColor}
+                                            onClick={() =>
+                                              setFlagTagActive(false)
+                                            }
                                           >
                                             MEAT Criteria
                                           </Nav.Link>
@@ -3971,6 +4022,9 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             to="#my-posts"
                                             eventKey="RafScore"
                                             className={visitStyles.navColor}
+                                            onClick={() =>
+                                              setFlagTagActive(false)
+                                            }
                                           >
                                             RAF Score
                                           </Nav.Link>
@@ -3980,6 +4034,9 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             to="#my-posts"
                                             eventKey="file"
                                             className={visitStyles.navColor}
+                                            onClick={() =>
+                                              setFlagTagActive(false)
+                                            }
                                           >
                                             File
                                           </Nav.Link>
@@ -3988,34 +4045,33 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
 
                                       </Nav>
                                     </div>
+                                    {flagTagActive == true ?
                                     <div className="col-xl-4">
                                       <div className={visitStyles.flags} >
                                         <div className={visitStyles.flags} >
-                                          <span className={visitStyles.flag}>
-                                            {SVGICON.flagIconHcc}
+                                          <span className={visitStyles.hccFlag}>
+                                          
                                           </span>
                                           <span className={visitStyles.flagCodes}>
                                             HCC
                                           </span>
                                         </div>
                                         <div className={visitStyles.flags}   >
-                                          <span className={visitStyles.flag}>
-                                            {SVGICON.flagIconSuggestion}
+                                          <span className={visitStyles.suggestedFlag}>
                                           </span>
                                           <span className={visitStyles.flagCodes}>
-                                            Suggestion
+                                          SUGGESTED
                                           </span>
                                         </div>
                                         <div className={visitStyles.flags} >
-                                          <span className={visitStyles.flag}>
-                                            {SVGICON.flagIconDelete}
+                                          <span className={visitStyles.deleteFlag}>
                                           </span>
                                           <span className={visitStyles.flagCodes}>
-                                            Delete
+                                            DELETE
                                           </span>
                                         </div>
                                       </div>
-                                    </div>
+                                    </div>:null}
 
                                   </div>
 
@@ -4036,7 +4092,13 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                   <span
                                                     className={`${visitStyles.hcc_title_name}`}
                                                   >
+                                                   
                                                     HCC
+                                                    <FontAwesomeIcon  onClick={() =>
+                                                        addValidDiseases()
+                                                      }
+                                                          icon={faPlus}
+                                                        />
                                                   </span>
                                                   <div className="d-flex justify-content-center">
                                                     <span
@@ -4052,7 +4114,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                   (data, i) => (
                                                     <li>
                                                       <div
-                                                        className={`${visitStyles.hcc_card}`}
+                                                        className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                       >
                                                         <div
                                                           className={`${visitStyles.hcc_card_nameHead}`}
@@ -4148,8 +4210,12 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             </div>
                                                           </Popconfirm>
                                                         </div>
+                                                        <div className="hoverActiveHcc">
                                                         <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                          <Popover
+                                                        <Tooltip title={patientDocumentResult.patientName}>
+                                                         <Avatar className={visitStyles.provider_name_style}>U</Avatar>
+                                                         </Tooltip>
+                                                          {/* <Popover
                                                             placement="topLeft"
                                                             title=""
                                                             content={
@@ -4157,7 +4223,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                               className={`mt-2 text-start w-100px ${visitStyles.provider_name}`}
                                                             >
                                                               <i>
                                                                 {
@@ -4168,7 +4234,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                                 patientDocumentResult.patientName
                                                               }
                                                             </Badge>
-                                                          </Popover>
+                                                          </Popover> */}
+                                                           {data.encounterDate != null ?
                                                           <Popover
                                                             placement="topLeft"
                                                             content={
@@ -4176,18 +4243,16 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                              className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
                                                             >
                                                               <i>
-                                                                {
-                                                                  SVGICON.DatebirthIcon
-                                                                }
+                                                              <CalendarOutlined className={visitStyles.calenderIcon} />
                                                               </i>
                                                               {replaceString(
                                                                 data.encounterDate
                                                               )}
                                                             </Badge>
-                                                          </Popover>
+                                                          </Popover>:null}
                                                           <Popover
                                                             placement="topLeft"
                                                             content={
@@ -4195,7 +4260,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                              className={`mt-2 text-start  w-100px ${visitStyles.captureheader}`}
                                                               onClick={() =>
                                                                 handleOpenModalCombinationCode(
                                                                   data.diagnosisCode,
@@ -4218,6 +4283,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                         HPI Test Urlplan
                                                       </Badge>
                                                       </Popover> */}
+                                                        </div>
                                                         </div>
                                                       </div>
                                                     </li>
@@ -4252,7 +4318,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                       {data.isHccValid == true ? (
                                                         <li>
                                                           <div
-                                                            className={`${visitStyles.hcc_card}`}
+                                                            className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                           >
                                                             <div
                                                               className={`${visitStyles.hcc_card_nameHead}`}
@@ -4352,6 +4418,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                                 </div>
                                                               </Popconfirm>
                                                             </div>
+                                                            <div className="hoverActiveHcc">
                                                             <div className="d-flex justify-content-sm-between valid-providerdocument ">
                                                               {data.getPlace ==
                                                                 "Lab" ? (
@@ -4377,7 +4444,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                                   Hcc
                                                                 </Badge>
                                                               )}
-
+ {data.encounterDate != null ?
                                                               <Popover
                                                                 placement="topLeft"
                                                                 content={
@@ -4385,18 +4452,16 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                                 }
                                                               >
                                                                 <Badge
-                                                                  className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                                                >
-                                                                  <i>
-                                                                    {
-                                                                      SVGICON.DatebirthIcon
-                                                                    }
-                                                                  </i>
-                                                                  {replaceString(
-                                                                    data.encounterDate
-                                                                  )}
-                                                                </Badge>
-                                                              </Popover>
+                                                              className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
+                                                            >
+                                                              <i>
+                                                              <CalendarOutlined className={visitStyles.calenderIcon} />
+                                                              </i>
+                                                              {replaceString(
+                                                                data.encounterDate
+                                                              )}
+                                                            </Badge>
+                                                              </Popover>:null}
                                                               <Popover
                                                                 placement="topLeft"
                                                                 content={
@@ -4404,7 +4469,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                                 }
                                                               >
                                                                 <Badge
-                                                                  className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                                   className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
                                                                   onClick={() =>
                                                                     handleOpenModalCombinationCode(
                                                                       data.diagnosisCode,
@@ -4418,6 +4483,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                                   )}
                                                                 </Badge>
                                                               </Popover>
+                                                            </div>
                                                             </div>
                                                           </div>
                                                         </li>
@@ -4451,7 +4517,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                 {deletedHccList.map((data, i) => (
                                                   <li>
                                                     <div
-                                                      className={`${visitStyles.hcc_card}`}
+                                                      className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                     >
                                                       <div
                                                         className={`${visitStyles.hcc_card_nameHead}`}
@@ -4528,7 +4594,82 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
+                                                      <div className="hoverActiveHcc">
+                                                      <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                        <Tooltip title={patientDocumentResult.patientName}>
+                                                         <Avatar className={visitStyles.provider_name_style}>U</Avatar>
+                                                         </Tooltip>
+                                                          {/* <Popover
+                                                            placement="topLeft"
+                                                            title=""
+                                                            content={
+                                                              patientDocumentResult.patientName
+                                                            }
+                                                          >
+                                                            <Badge
+                                                               className={`mt-2 text-start w-100px ${visitStyles.provider_name}`}
+                                                            >
+                                                              <i>
+                                                                {
+                                                                  SVGICON.patientNameIcon
+                                                                }
+                                                              </i>
+                                                              {
+                                                                patientDocumentResult.patientName
+                                                              }
+                                                            </Badge>
+                                                          </Popover> */}  
+                                                          {data.encounterDate != null ?
+                                                          <Popover
+                                                            placement="topLeft"
+                                                            content={
+                                                              data.encounterDate
+                                                            }
+                                                          >
+                                                             <Badge
+                                                              className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
+                                                            >
+                                                              <i>
+                                                              <CalendarOutlined className={visitStyles.calenderIcon} />
+                                                              </i>
+                                                              {replaceString(
+                                                                data.encounterDate
+                                                              )}
+                                                            </Badge>
+                                                          </Popover> :null}
+                                                          <Popover
+                                                            placement="topLeft"
+                                                            content={
+                                                              data.capturedSections
+                                                            }
+                                                          >
+                                                            <Badge
+                                                              className={`mt-2 text-start  w-100px ${visitStyles.captureheader}`}
+                                                              onClick={() =>
+                                                                handleOpenModalCombinationCode(
+                                                                  data.diagnosisCode,
+                                                                  data.capturedSections,
+                                                                  "valid"
+                                                                )
+                                                              }
+                                                            >
+                                                              {replaceCaptureSection(
+                                                                data.capturedSections
+                                                              )}
+                                                            </Badge>
+                                                          </Popover>
+                                                          {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                      <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
+                                                      <FontAwesomeIcon
+                                                          icon={faSearch}
+                                                          style={{ color: "#fff" }}
+                                                        />
+                                                        HPI Test Urlplan
+                                                      </Badge>
+                                                      </Popover> */}
+                                                        </div>
                                                     </div>
+                                                  </div>
                                                   </li>
                                                 ))}
                                                 </div>
@@ -6040,12 +6181,10 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                              className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
                                                             >
                                                               <i>
-                                                                {
-                                                                  SVGICON.DatebirthIcon
-                                                                }
+                                                              <CalendarOutlined className={visitStyles.calenderIcon} />
                                                               </i>
                                                               {replaceString(
                                                                 data.encounterDate
@@ -6059,7 +6198,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                               className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
                                                               onClick={() =>
                                                                 handleOpenModalCombinationCode(
                                                                   data.diagnosisCode,
@@ -6082,6 +6221,183 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                             </div>
 
                                             <div className="col-xl-4">
+                                              <ul className="timeline">
+                                                <div
+                                                  className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                                >
+                                                  <span
+                                                    className={`${visitStyles.suggested_title_name}`}
+                                                  >
+                                                    SUGGESTED CODES
+                                                  </span>
+                                                  <div className="d-flex justify-content-center">
+                                                    <span
+                                                      className={`${visitStyles.suggested_title_badge}`}
+                                                    >
+                                                      {suggestedNonHccList.length}
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                                <div className={visitStyles.hccStickey_head}>
+                                                {suggestedNonHccList?.map((data) => {
+                                                  return (
+                                                    <>
+                                                      {data.isHccValid == false || data.isHccValid == null ? (
+                                                        <li>
+                                                          <div
+                                                            className={`${visitStyles.hcc_card}`}
+                                                          >
+                                                            <div
+                                                              className={`${visitStyles.hcc_card_nameHead}`}
+                                                            >
+                                                              <div
+                                                                className="media-body"
+                                                                onClick={() =>
+                                                                  handleOpenModalCombinationCode(
+                                                                    data.diagnosisCode,
+                                                                    data.actualDescription,
+                                                                    "valid2"
+                                                                  )
+                                                                }
+                                                              >
+                                                                <span className="mb-1 disease-name d-flex">
+                                                                  <span className="valid-dis-name">
+                                                                    {
+                                                                      data.diagnosisCode
+                                                                    }
+                                                                  </span>{" "}
+                                                                  -{" "}
+                                                                  {
+                                                                    data.actualDescription
+                                                                  }
+                                                                </span>
+                                                              </div>
+                                                           
+
+                                                              <Popconfirm
+                                                                  title="Choose an action"
+                                                                  icon={
+                                                                    <QuestionCircleOutlined
+                                                                      style={{
+                                                                        color:
+                                                                          "blue",
+                                                                      }}
+                                                                    />
+                                                                  }
+                                                                  okText="Move to Deleted"
+                                                                  cancelText="Move to Valid"
+                                                                  onCancel={
+                                                                    suggestedToValid
+                                                                  }
+                                                                  okButtonProps={{
+                                                                    type: buttonClicked
+                                                                      ? "primary"
+                                                                      : "default",
+                                                                  }}
+                                                                  cancelButtonProps={{
+                                                                    type: buttonClicked
+                                                                      ? "danger"
+                                                                      : "default",
+                                                                  }}
+                                                                  description={
+                                                                    data.diagnosisCode
+                                                                  }
+                                                                  onConfirm={
+                                                                    suggestedToDeleted
+                                                                  }
+                                                                  placement="leftTop"
+                                                                  onOpenChange={() =>
+                                                                    onchangeValid(
+                                                                      data.diagnosisCode,
+                                                                      data
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  <div
+                                                              className={
+                                                                visitStyles.tick_icon
+                                                              }
+                                                            >
+                                                              {SVGICON.tickIcon}
+                                                              </div>
+                                                                </Popconfirm>
+                                                            </div>
+                                                            <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                              {data.getPlace ==
+                                                                "Lab" ? (
+                                                                <Badge
+                                                                  className="badge-meat  badge-circle mt-2 text-white"
+                                                                  bg={` badge-circle mt-2 bg-bg-seven `}
+                                                                >
+                                                                  Lab
+                                                                </Badge>
+                                                              ) : data.getPlace ==
+                                                                "Radio" ? (
+                                                                <Badge
+                                                                  className="badge-meat  badge-circle mt-2 text-white"
+                                                                  bg={` badge-circle mt-2 bg-bg-five `}
+                                                                >
+                                                                  Radiology
+                                                                </Badge>
+                                                              ) : (
+                                                                <Badge
+                                                                  className="badge-meat  badge-circle mt-2 text-white"
+                                                                  bg={` badge-circle mt-2 bg-bg-five `}
+                                                                >
+                                                                  Hcc
+                                                                </Badge>
+                                                              )}
+
+                                                              <Popover
+                                                                placement="topLeft"
+                                                                content={
+                                                                  data.encounterDate
+                                                                }
+                                                              >
+                                                                 <Badge
+                                                              className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
+                                                            >
+                                                              <i>
+                                                              <CalendarOutlined className={visitStyles.calenderIcon} />
+                                                              </i>
+                                                              {replaceString(
+                                                                data.encounterDate
+                                                              )}
+                                                            </Badge>
+                                                              </Popover>
+                                                              <Popover
+                                                                placement="topLeft"
+                                                                content={
+                                                                  data.capturedSections
+                                                                }
+                                                              >
+                                                                <Badge
+                                                                   className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      data.diagnosisCode,
+                                                                      data.capturedSections,
+                                                                      "valid"
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  {replaceCaptureSection(
+                                                                    data.capturedSections
+                                                                  )}
+                                                                </Badge>
+                                                              </Popover>
+                                                            </div>
+                                                          </div>
+                                                        </li>
+                                                      ) : null}
+                                                    </>
+                                                  );
+                                                })}
+                                                </div>
+                                              </ul>
+                                            </div>
+
+                                            {/* <div className="col-xl-4">
                                               <ul className="timeline">
                                                 <div
                                                   className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
@@ -6231,86 +6547,16 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                               </div>
                                                             </div>
                                                           </li>
-                                                        ) : // <li>
-                                                          //   <div className="timeline-panel d-block invalid-disease">
-                                                          //     <div
-                                                          //       className="media-body"
-                                                          //       onClick={() =>
-                                                          //         handleOpenModalCombinationCode(
-                                                          //           data.diagnosisCodeFinding,
-                                                          //           data.actualDescription
-                                                          //         )
-                                                          //       }
-                                                          //     >
-                                                          //       <span className="mb-1 disease-name">
-                                                          //         {
-                                                          //           data.actualDescription
-                                                          //         }
-                                                          //       </span>
-                                                          //     </div>
-
-                                                          //     <div className="media-body d-flex">
-
-                                                          //       {data.diagnosisCodeFinding !=
-                                                          //         null &&
-                                                          //         data.diagnosisCodeFinding !=
-                                                          //         "" ? (
-                                                          //         <div className="form-check custom-checkbox unmatch-check ms-3">
-                                                          //           <div>
-                                                          //             <Popconfirm
-                                                          //               title="You want move to valid?"
-                                                          //               description={
-                                                          //                 data.diagnosisCodeDocument
-                                                          //               }
-                                                          //               onConfirm={
-                                                          //                 onchangeSuggested
-                                                          //               }
-                                                          //               placement="rightTop"
-                                                          //               okText="Yes"
-                                                          //               cancelText="No"
-                                                          //             >
-                                                          //               <input
-                                                          //                 onChange={(
-                                                          //                   e
-                                                          //                 ) => {
-                                                          //                   handleMatchHcc(
-                                                          //                     e,
-                                                          //                     data,
-                                                          //                     data.diagnosisCodeFinding
-                                                          //                   );
-                                                          //                 }}
-                                                          //                 type="checkbox"
-                                                          //                 id={`customCheckBox ${data.diagnosisCodeFinding}`}
-                                                          //                 className="form-check-input unmatach-checkbox"
-                                                          //                 required
-                                                          //               />
-                                                          //             </Popconfirm>
-                                                          //           </div>
-                                                          //           <Popover
-                                                          //             placement="topLeft"
-                                                          //             title="Finding Code"
-                                                          //             content={
-                                                          //               data.diagnosisCodeFinding
-                                                          //             }
-                                                          //           >
-                                                          //             <span className="disease-name">
-                                                          //               {
-                                                          //                 data.diagnosisCodeFinding
-                                                          //               }
-                                                          //             </span>
-                                                          //           </Popover>
-                                                          //         </div>
-                                                          //       ) : null}
-                                                          //     </div>
-                                                          //   </div>
-                                                          // </li>
+                                                        ) :
+                                                        
+                                                        
                                                           null}
                                                       </>
                                                     );
                                                   }
                                                 )}
                                               </ul>
-                                            </div>
+                                            </div> */}
                                           </div>
                                         </div>
                                       </div>
@@ -7439,7 +7685,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                               className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
                                                             >
                                                               <i>
                                                                 {
@@ -7458,12 +7704,10 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                              className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
                                                             >
                                                               <i>
-                                                                {
-                                                                  SVGICON.DatebirthIcon
-                                                                }
+                                                              <CalendarOutlined className={visitStyles.calenderIcon} />
                                                               </i>
                                                               {replaceString(
                                                                 data.encounterDate
@@ -7477,7 +7721,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                               className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
                                                               onClick={() =>
                                                                 handleOpenModalRadiology(
                                                                   data.diagnosisCode,
@@ -8806,7 +9050,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                               className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
                                                             >
                                                               <i>
                                                                 {
@@ -8824,13 +9068,11 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                               data.encounterDate
                                                             }
                                                           >
-                                                            <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                           <Badge
+                                                              className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
                                                             >
                                                               <i>
-                                                                {
-                                                                  SVGICON.DatebirthIcon
-                                                                }
+                                                              <CalendarOutlined className={visitStyles.calenderIcon} />
                                                               </i>
                                                               {replaceString(
                                                                 data.encounterDate
@@ -8844,7 +9086,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                                             }
                                                           >
                                                             <Badge
-                                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                               className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
                                                              
                                                             >
                                                               {replaceCaptureSection(
@@ -9763,6 +10005,8 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                   required
                                   onChange={handleChange}
                                 />
+                               
+
                               </div>
                               <div className="form-group">
                                 <Form.Label>Provider name</Form.Label>
@@ -9815,6 +10059,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                                   className="form-control"
                                   id="actualDescription"
                                   name="actualDescription"
+                                  value={inputValue.actualDescription}
                                   onChange={handleChangeSuggested}
                                   rows="5"
                                 ></textarea>
@@ -10674,7 +10919,7 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                       <Form
                         noValidate
                         validated={validated}
-                        onSubmit={handleSubmit}
+                        onSubmit={handleFormSubmit}
                       >
                         <div className="row">
                           <div className="col-xl-12 mb-3">
@@ -10682,19 +10927,66 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                               Code <span className="text-danger">*</span>{" "}
                             </Form.Label>
                             <Form.Control
-                              name="patientId"
                               required
                               type="text"
+                              id="diagnosisCode"
+                              name="diagnosisCode"
+                              onChange={handleChange}
+                            />
+                            {addValidCodeCheck == false ?
+                            <span className={visitStyles.ivalidHccCodeError}>
+                                Invalid Hcc Code
+                               </span> : addValidCodeCheck == true ? <span className={visitStyles.ivalidHccCodeError}>
+                                Valid Hcc Code 
+                               </span> : null}
+                         
+                          </div>
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                            Provider name
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              id="providerName"
+                              name="providerName"
+                              onChange={handleChange}
                             />
                           </div>
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                            Section <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              required
+                              type="text"
+                              id="capturedSections"
+                                  name="capturedSections"
+                                  onChange={handleChange}
+                            />
+                          </div>
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                            Encoded date <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              required
+                              type="date"
+                              id="encodedDate"
+                              name="encodedDate"
+                              onChange={handleChange}
+                            />
+                          </div>
+                      
                           <div className="col-xl-12 mb-3">
                             <Form.Label>
                               Description <span className="text-danger">*</span>{" "}
                             </Form.Label>
                             <textarea
                               className="form-control"
-                              id="val-suggestions"
-                              name="val-suggestions"
+                              id="actualDescription"
+                              name="actualDescription"
+                              onChange={handleChangeSuggested}
+                              value={inputValue.actualDescription}
                               rows="5"
                               required
                             ></textarea>
@@ -10941,19 +11233,46 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
                         <ul className="timeline">
                           {timelineData.map((item, index) => (
                             <li>
-                              <div className="timeline-badge success"></div>
+                              {item.action == "MOVED_INVALID_TO_VALID" ? 
+                              <div className="timeline-badge MOVED_INVALID_TO_VALID"></div> :
+                              item.action == "MOVED_SUGGESTED_TO_VALID" ? 
+                               <div className="timeline-badge MOVED_SUGGESTED_TO_VALID"></div>:
+                               item.action == "MOVED_VALID_TO_SUGGESTED" ? 
+                               <div className="timeline-badge MOVED_VALID_TO_SUGGESTED"></div>:
+                               item.action == "VALID_DISEASE_ADDED" ? 
+                               <div className="timeline-badge VALID_DISEASE_ADDED"></div>:
+                               item.action == "MOVED_VALID_TO_DELETED" ? 
+                               <div className="timeline-badge MOVED_VALID_TO_DELETED"></div>:
+                               item.action == "COMPLETED" ? 
+                               <div className="timeline-badge COMPLETED"></div>:
+                               item.action == "MOVED_DELETED_TO_VALID" ? 
+                               <div className="timeline-badge MOVED_DELETED_TO_VALID"></div>:
+                               item.action == "MOVED_DELETED_TO_SUGGESTED" ? 
+                               <div className="timeline-badge MOVED_DELETED_TO_SUGGESTED"></div>:
+                               item.action == "MOVED_SUGGESTED_TO_DELETED" ? 
+                               <div className="timeline-badge MOVED_SUGGESTED_TO_DELETED"></div>:
+                               null
+                              
+                              
+                              
+                              
+                              
+                              
+                              }
                               <a
                                 className="timeline-panel text-muted"
 
                               >
-                                <span> {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}</span>
+                                <span className={visitStyles.timelineDate} > {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
+                                <Tooltip title={item.userName}>
+                                <Avatar className={visitStyles.timeLineUsername}>{splitUserName(item.userName)}</Avatar>
+                                </Tooltip>
+                                </span>
                                 <span>{item.action}</span>
                                 {/* <h6 className="mb-0">
                                   {item.patientId}
                                 </h6> */}
-                                <h6 className="mb-0">
-                                  {item.userName}
-                                </h6>
+                               
                               </a>
                             </li>
                           ))}
@@ -11281,15 +11600,15 @@ const Details = ({ loadFilterPatientList, loadTimelineList, filterPatientList })
 }
 
 
-const enhancer = connect(
-  (state) => ({
-    filterPatientList: state.patients.filterPatientList
+// const enhancer = connect(
+//   (state) => ({
+//     filterPatientList: state.patients.filterPatientList
 
-  }),
-  {
-    loadFilterPatientList: patientActions.loadFilterPatientList,
-    loadTimelineList: patientActions.loadTimelineList,
-  }
-);
+//   }),
+//   {
+//     loadFilterPatientList: patientActions.loadFilterPatientList,
+//     loadTimelineList: patientActions.loadTimelineList,
+//   }
+// );
 
-export default enhancer(Details);
+export default Details;

@@ -11,15 +11,21 @@
   color: #000;
 }
 .buttonDiv {
-  width: 25%;
-  margin: auto;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+.picker{
+  /* width: 30%; */
+  display: flex;
+  /* justify-content: space-between; */
 }
 .accuracy {
   width:25%;
   height: 250px;
   border-radius: 8px;
  margin-top: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 3px 0 rgba(0, 0, 0, 0.2);
 }
 .Img {
   background-color: #e0eaff;

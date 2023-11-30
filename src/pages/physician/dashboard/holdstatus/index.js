@@ -1,38 +1,20 @@
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import calender from "../../../../images/dashboard/calender.png";
 import HeadTitle from "../../../../components/headtitle";
 import { Modal } from "antd";
+import { getHoldStatusData } from "../../../../store/actions/DashboardActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
-  const holddata = [
-    {
-      key: "1",
-      patient_id: "CE23769",
-      reason:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-    },
-    {
-      key: "2",
-      patient_id: "CE23769",
-      reason:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-    },
-    {
-      key: "3",
-      patient_id: "CE23769",
-      reason:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-    },
-    {
-      key: "4",
-      patient_id: "CE23769",
-      reason:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-    },
-  ];
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getHoldStatusData());
+  }, []);
+  const holdStatusData = useSelector((state) => state.workFlow.holdStatus);
+
   const handleOpen = () => {
     setOpenHoldStatus(!openHoldStatus);
   };
@@ -43,18 +25,25 @@ const HoldStatus = () => {
   const TableData = (
     <table>
       <thead className={styles.tableHead}>
-        <tr >
+        <tr>
           <th>Patient Id</th>
           <th>Reason</th>
         </tr>
       </thead>
       <tbody>
-        {holddata?.map((item) =>  (
+        {holdStatusData?.length > 0 ? (
+          holdStatusData?.map((item) => (
             <tr>
-              <td className={styles.description}>{item.patient_id}</td>
-              <td className={styles.description}>{item.reason}</td>
+              <td className={styles.description}>{item?.patientId}</td>
+              <td className={styles.description}>
+                {item?.notes ? item?.notes : "no data"}
+              </td>
             </tr>
-          )
+          ))
+        ) : (
+          <tr>
+            <td colSpan="2">No datas found</td>
+          </tr>
         )}
       </tbody>
     </table>
@@ -69,7 +58,7 @@ const HoldStatus = () => {
       />
       <div className={styles.card6}>
         <Card borderRadius="28px" padding="10px">
-         <div  className={styles.container}> {TableData}</div>
+          <div className={styles.container}> {TableData}</div>
         </Card>
       </div>
 
