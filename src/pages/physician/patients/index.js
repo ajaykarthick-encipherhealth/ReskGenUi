@@ -703,7 +703,7 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-2">
+                            <div className="col-xl-2" style={{ zIndex: "999"}}>
                               <div class="form-group has-search">
                                 {/* <InputText
                                   type="text"

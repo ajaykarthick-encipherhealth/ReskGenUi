@@ -67,7 +67,7 @@ function ReceivedReport() {
           {data.map((row, index) => (
             <tr key={index}>
               <td
-                style={{
+                style={{  
                   borderTop: "0.2px solid #e1e1e1",
                   borderLeft: "0.2px solid #e1e1e1",
                   borderBottom: "  0.2px solid #e1e1e1",

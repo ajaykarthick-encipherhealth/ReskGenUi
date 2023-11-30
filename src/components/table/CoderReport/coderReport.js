@@ -119,16 +119,19 @@ function CoderReport({ setModal }) {
             <th>COMMENTS </th>
             <th>AUDITOR NAME </th>
             <th>Flag </th>
-            <th style={{ display: "flex", justifyContent: "space-around" }}>
+            <th >
               {" "}
-              <span>All</span>{" "}
-              <input
+              <div style={{display:"flex", justifyContent:"space-around"}}>
+              <span s>All</span>{" "}
+            
+               <input
                
                type="checkbox"
                onChange={() => {
              
                }}
                style={{
+                paddingTop:"10px",
                  width: "20px",
                  height: "20px",
                  flexhrink: "0",
@@ -136,7 +139,9 @@ function CoderReport({ setModal }) {
 
                  backgroundColor: "pink",
                }}
-             />  
+             />    
+              </div>
+             
             </th>
           </tr>
         </thead>
