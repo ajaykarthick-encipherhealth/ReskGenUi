@@ -481,7 +481,7 @@ const index = () => {
                             className="profile-tab " style={{marginTop:"20px"}}
                           >
                             <div className="custom-tab-1">
-                          <Tab.Container defaultActiveKey={activeTabHead}>
+                          <Tab.Container defaultActiveKey="validDiseases">
                             <Nav as="ul" className="nav nav-tabs">
                               <Nav.Item as="li" className="nav-item">
                                 <Nav.Link
