@@ -12526,7 +12526,25 @@ line-height: normal;
 }
 
 
-.MOVED_SUGGESTED_TO_VALID+.timeline-panel,.MOVED_VALID_TO_SUGGESTED+.timeline-panel,.MOVED_INVALID_TO_VALID+.timeline-panel ,
+.widget-timeline .timeline-badge.ENCOUNTER_FILE_UPDATED {
+  border-color: #EADDCA;
+}
+.widget-timeline .timeline-badge.ENCOUNTER_FILE_UPDATED:after {
+  background-color: #EADDCA !important;
+  box-shadow: 0 0.3125rem 0.625rem 0 rgba(58, 155, 148, 0.2);
+}
+
+.widget-timeline .timeline-badge.ENCOUNTER_FILE_ADDED {
+  border-color: #F5F5DC;
+}
+.widget-timeline .timeline-badge.ENCOUNTER_FILE_ADDED:after {
+  background-color: #F5F5DC !important;
+  box-shadow: 0 0.3125rem 0.625rem 0 rgba(58, 155, 148, 0.2);
+}
+
+
+
+.MOVED_SUGGESTED_TO_VALID+.timeline-panel,.ENCOUNTER_FILE_UPDATED+.timeline-panel,.ENCOUNTER_FILE_ADDED+.timeline-panel,.MOVED_VALID_TO_SUGGESTED+.timeline-panel,.MOVED_INVALID_TO_VALID+.timeline-panel ,
 .MOVED_VALID_TO_DELETED+.timeline-panel,.MOVED_SUGGESTED_TO_DELETED+.timeline-panel,.MOVED_DELETED_TO_SUGGESTED+.timeline-panel,.MOVED_VALID_TO_DELETED+.timeline-panel ,.VALID_DISEASE_ADDED+.timeline-panel,.COMPLETED+.timeline-panel,.MOVED_DELETED_TO_VALID+.timeline-panel {
   background: #f5f5f5;
   border-color: #bbe6e3;

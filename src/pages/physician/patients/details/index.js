@@ -11257,6 +11257,10 @@ const Details = ({}) => {
                                <div className="timeline-badge MOVED_DELETED_TO_SUGGESTED"></div>:
                                item.action == "MOVED_SUGGESTED_TO_DELETED" ? 
                                <div className="timeline-badge MOVED_SUGGESTED_TO_DELETED"></div>:
+                               item.action == "ENCOUNTER_FILE_UPDATED" ? 
+                               <div className="timeline-badge ENCOUNTER_FILE_UPDATED"></div>:
+                               item.action == "ENCOUNTER_FILE_ADDED" ? 
+                               <div className="timeline-badge ENCOUNTER_FILE_ADDED"></div>:
                                null
                               
                               
