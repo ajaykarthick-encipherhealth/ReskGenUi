@@ -2,9 +2,13 @@ import styles from "./report.module.css";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
 import { ProgressBar } from "primereact/progressbar";
-import { Badge, Modal, DatePicker, Checkbox } from "antd";
+import { Badge, Modal, DatePicker, Checkbox, Divider } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
+import dayjs from "dayjs";
+import Image from "next/image";
+import calender from "../../../images/dashboard/calender.png";
+
 
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
@@ -106,6 +110,21 @@ const index = () => {
   const [flagStates, setFlagStates] = useState([]);
   const [modal, setModal] = useState(false);
   const { RangePicker } = DatePicker;
+ 
+  const [modalVisible, setModalVisible] = useState(false);
+  const currentDate = dayjs();
+  const [startDate, setStartDate] = useState(
+    currentDate.startOf("month").format("DD MMM YY")
+  );
+  const [endDate, setEndDate] = useState(currentDate.format("DD MMM YY"));
+
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -214,9 +233,7 @@ const index = () => {
       });
     }
   };
-  const handleCloseModal = () => {
-    setModal(false);
-  };
+
 
   const navigetPageDetails = (pageTitle) => {
     // setIsLoadingDos(true);
@@ -394,7 +411,7 @@ const index = () => {
   };
   const getAllList = async (uId, pageNo, pageSize) => {
     var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
       var result = response.data.content;
@@ -423,6 +440,20 @@ const index = () => {
       //     setTimeout(() => {
       //     subscribe(resultMap);
       // }, 3000);
+    }
+  };
+  const handleOk = () => {
+    setModalVisible(false);
+  };
+  const handleDatePickerChange = (dateString) => {
+    const formattedDates = dateString?.map((item) =>
+      dayjs(item).format("DD MMM YY")
+    );
+
+    if (formattedDates.length === 2) {
+      const [startDate, endDate] = formattedDates;
+      setStartDate(startDate);
+      setEndDate(endDate);
     }
   };
 
@@ -456,28 +487,136 @@ const index = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-xl-2" style={{ zIndex: "999" }}>
-                            <div class="form-group has-search">
-                              {/* <InputText
+                          <div className="col-xl-2" style={{ zIndex: "999"}}>
+                              <div class="form-group has-search">
+                                {/* <InputText
                                   type="text"
                                   onChange={(e) => filterChangePatientName(e)}
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                              <Select
-                                onChange={(selectedOption) =>
-                                  dosOnChange(selectedOption)
-                                }
-                                options={statusOptions}
-                                className="custom-react-select"
-                                isSearchable={false}
-                              />
+                                <Select
+                                  onChange={(selectedOption) =>
+                                    dosOnChange(selectedOption)
+                                  }
+                                  options={statusOptions}
+                                  className="custom-react-select"
+                                  isSearchable={false}
+                                />
+                              </div>
                             </div>
+                          <div className="col-xl-2">
+                            <div
+                              onClick={handleOpenModal}
+                              className={styles.dateDisplay}
+                            >
+                              <div>
+                                {startDate}&nbsp;- &nbsp;{endDate}
+                              </div>
+                              <div style={{alignItems:"center"}}>
+                                <Image src={calender} />
+                              </div>
+                              
+                            </div>
+                            <Modal
+                              title=""
+                              visible={modalVisible}
+                              onOk={handleOk}
+                              mask={false}
+                              onCancel={false}
+                              closable={false}
+                              width="45%"
+                              height="800px"
+                              style={{ marginTop: "30px" }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  height: "400px",
+                                }}
+                              >
+                                <div style={{ display: "block" }}>
+                                  <div style={{margin: "20px 0"}}>
+                                    <Button type="ghost">Due Date</Button>
+                                   
+                                  </div>
+                                  <div>
+                                    <Button>Completed Date</Button>
+                                  </div>
+                                </div>
+                          
+                                <div>
+                                  <RangePicker
+                                 
+                                    getPopupContainer={() =>
+                                      document.getElementById("date-popup")
+                                    }
+                                    popupStyle={{
+                                      marginTop: "-259px",
+                                      marginLeft:"-78px"
+                                    }}
+                                    onChange={handleDatePickerChange}
+                                    open={true}
+                                    showNow={false}
+                                    style={{ visibility: "hidden" , boxShadow:"none" }}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                id="date-popup"
+                                style={{ position: "relative" }}
+                              />
+                            </Modal>
                           </div>
 
-                          <div className="col-xl-2">
-                            <RangePicker />
-                          </div>
+                          {/* <Modal
+                              title=""
+                              visible={modalVisible}
+                              onOk={handleOk}
+                              mask={false}
+                              onCancel={false}
+                              closable={false}
+                              width="47%"
+                              style={{ marginTop: "30px" }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  height: "400px",
+                                }}
+                              >
+                                <div style={{ display: "block" }}>
+                                  <div>
+                                    <Button type="ghost">Due Date</Button>
+                                   
+                                  </div>
+                                  <div>
+                                    <Button>Completed Date</Button>
+                                  </div>
+                                </div>
+                                <div>
+                                  <RangePicker
+                                    getPopupContainer={() =>
+                                      document.getElementById("date-popup")
+                                    }
+                                    popupStyle={{
+                                      marginTop: "-259px",
+                                      marginLeft:"-78px"
+                                    }}
+                                    onChange={handleDatePickerChange}
+                                    open={true}
+                                    showNow={false}
+                                    style={{ visibility: "hidden" }}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                id="date-popup"
+                                style={{ position: "relative" }}
+                              />
+                            </Modal> */}
 
                           <div className="col-xl-6">
                             <div className="row flr">
@@ -527,6 +666,8 @@ const index = () => {
                             Submit
                           </Button>,
                         ]}
+                        style={{ top: "150px",
+                          left: "625px"}}
                       >
                         <div
                           style={{

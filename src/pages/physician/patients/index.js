@@ -9,7 +9,7 @@ import NavBar from "../../../jsx/layouts/nav";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
-
+import styles from "../report/report.module.css";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
@@ -41,7 +41,9 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from "primereact/paginator";
 import { Calendar } from "primereact/calendar";
 import PatientTable from "../../../components/table/PatientList/patientList";
-
+import dayjs from "dayjs";
+import Image from "next/image";
+import calender from "../../../images/dashboard/calender.png";
 export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -104,7 +106,20 @@ export default function Patient() {
 
   const [totalElements, setTotalElements] = useState(12);
   const [tableLoading, setTableLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const currentDate = dayjs();
+  const [startDate, setStartDate] = useState(
+    currentDate.startOf("month").format("DD MMM YY")
+  );
+  const [endDate, setEndDate] = useState(currentDate.format("DD MMM YY"));
 
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -114,9 +129,7 @@ export default function Patient() {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -673,6 +686,20 @@ export default function Patient() {
     // Do something with the selected value
     console.log(selectedValue);
   };
+  const handleOk = () => {
+    setModalVisible(false);
+  };
+  const handleDatePickerChange = (dateString) => {
+    const formattedDates = dateString?.map((item) =>
+      dayjs(item).format("DD MMM YY")
+    );
+
+    if (formattedDates.length === 2) {
+      const [startDate, endDate] = formattedDates;
+      setStartDate(startDate);
+      setEndDate(endDate);
+    }
+  };
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -738,7 +765,67 @@ export default function Patient() {
                               </div>
                             </div> */}
                             <div className="col-xl-2">
-                              <div class="form-group has-search">
+                            <div
+                              onClick={handleOpenModal}
+                              className={styles.dateDisplay}
+                            >
+                              <div>
+                                {startDate}&nbsp;- &nbsp;{endDate}
+                              </div>
+                              <Image src={calender} />
+                            </div>
+                            <Modal
+                              title=""
+                              visible={modalVisible}
+                              onOk={handleOk}
+                              mask={false}
+                              onCancel={false}
+                              closable={false}
+                              width="45%"
+                              height="800px"
+                              style={{ marginTop: "30px" }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  height: "400px",
+                                }}
+                              >
+                                <div style={{ display: "block" }}>
+                                  <div style={{margin: "20px 0"}}>
+                                    <Button type="ghost">Due Date</Button>
+                                   
+                                  </div>
+                                  <div>
+                                    <Button>Completed Date</Button>
+                                  </div>
+                                </div>
+                                <div>
+                                  <RangePicker
+                                 
+                                    getPopupContainer={() =>
+                                      document.getElementById("date-popup")
+                                    }
+                                    popupStyle={{
+                                      marginTop: "-259px",
+                                      marginLeft:"-78px"
+                                    }}
+                                    onChange={handleDatePickerChange}
+                                    open={true}
+                                    showNow={false}
+                                    style={{ visibility: "hidden" , boxShadow:"none" }}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                id="date-popup"
+                                style={{ position: "relative" }}
+                              />
+                            </Modal>
+                          </div>
+                            {/* <div className="col-xl-2">
+                              <div class="form-group has-search"> */}
                                 {/* <Calendar
                                   className="form-control new-form-control calender-pri-input"
                                   value={compledtedDate}
@@ -750,11 +837,11 @@ export default function Patient() {
                                 {/* <Button type="primary" onClick={showModal}>
         Open Modal
       </Button> */}
-                                <div>
+                                {/* <div>
                                   <RangePicker />
-                                </div>
-                              </div>
-                            </div>
+                                </div> */}
+                              {/* </div>
+                            </div> */}
                             {/* 
                             <div className="col-xl-3">
                               <Button

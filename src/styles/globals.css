@@ -12366,7 +12366,7 @@ tbody > tr {
   background: #bbe6e3;
   border-color: #bbe6e3;
 }
-:where(.css-dev-only-do-not-override-zcfrx9).ant-modal .ant-modal-content {
+/* :where(.css-dev-only-do-not-override-zcfrx9).ant-modal .ant-modal-content {
   top: 51px;
   left: 625px;
   width: 492px;
@@ -12376,4 +12376,7 @@ tbody > tr {
 
 :where(.css-dev-only-do-not-override-zcfrx9).ant-modal .ant-modal-title {
   background-color: #f5f9fe;
+} */
+:where(.css-dev-only-do-not-override-zcfrx9).ant-picker-dropdown .ant-picker-panel-container{
+  box-shadow: none;
 }
