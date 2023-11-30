@@ -850,6 +850,7 @@ export default function Patient() {
                           <PatientTable
                             patinetListAll={patinetListAll}
                             actionBodyTemplate={actionBodyTemplate}
+                            statusBodyTemplate={statusBodyTemplate}
                           />
                           <div className="pagination-container">
                             <Paginator

@@ -2,19 +2,20 @@ import React from "react";
 import moment from "moment";
 import TableStyle from "../table.module.css";
 
-function PatientTable({ patinetListAll, actionBodyTemplate }) {
+function PatientTable({ patinetListAll, actionBodyTemplate,statusBodyTemplate }) {
   const renderRows = () => {
     return patinetListAll.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
         <td className={TableStyle.childBorder}>{data.patientName}</td>
-        <td className={TableStyle.childBorder}>{data.status}</td>
+      
         <td className={TableStyle.childBorder}>
           {moment(data.dueDate).format("MM-DD-YYYY")}
         </td>
         <td className={TableStyle.childBorder}>
           {moment(data.lastModifiedDate).format("MM-DD-YYYY")}
         </td>
+        <td className={TableStyle.childBorder}>{statusBodyTemplate(data)}</td>
         <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
       </tr>
     ));
@@ -27,9 +28,10 @@ function PatientTable({ patinetListAll, actionBodyTemplate }) {
           <tr>
             <th>Patient Id</th>
             <th>Patient Name</th>
-            <th>Status</th>
+      
             <th>Due Date</th>
             <th>Completed Date</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>

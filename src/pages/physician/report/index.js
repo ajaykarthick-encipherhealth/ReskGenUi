@@ -767,14 +767,25 @@ const index = () => {
                         </div>
                           </div>
                         
-                        <div className="pagination-container">
+                        {/* <div className="pagination-container">
                           <Paginator
                             first={paginationFirst}
                             rows={10}
                             totalRecords={totalElements}
                             onPageChange={onPageChange}
                           />
-                        </div>
+                        </div> */}
+                        <div className="pagination-container">
+                            <Paginator
+                              first={paginationFirst}
+                              rows={10}
+                              totalRecords={totalElements}
+                              onPageChange={onPageChange}
+                            />
+                            <div className="total-pages">
+                              Total Pages: 8
+                            </div>
+                          </div>
                         {modal && (
                           <Modal
                             title="Comments"
