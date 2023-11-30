@@ -1,5 +1,5 @@
 import React from "react";
-
+import TableStyle from "../table.module.css"
 function ReceivedReport() {
   const data = [
     {
@@ -53,9 +53,9 @@ function ReceivedReport() {
     // Add more data objects as needed
   ];
   return (
-    <div>
-      <table>
-        <thead>
+    <div  className={TableStyle.classContaineer}>
+      <table className={TableStyle.classTable} >
+        <thead className={TableStyle.classThead}>
           <tr>
             <th>REPORT ID</th>
             <th>REPORT TYPE</th>
