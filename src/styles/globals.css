@@ -2958,7 +2958,7 @@ textarea.form-control.is-invalid {
 
 .d-flex {
   display: flex !important;
-  align-items: center;
+  /* align-items: center; */
 }
 
 .d-inline-flex {
@@ -11490,6 +11490,13 @@ span.mb-1.disease-name {
   border: none !important;
   font-size: 13px !important;
   color: #000;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 20px;
 }
 
 .raf-details span {
@@ -11796,6 +11803,7 @@ div[aria-describedby="rpv-core__tooltip-body-get-file"] {
 }
 .valid-providerdocument {
   margin: 0 10px 10px 10px;
+  align-items: center;
 }
 .suggest-providerdocument {
   margin: 0 10px 10px 0px;
@@ -12279,7 +12287,7 @@ tbody > tr {
   position: absolute;
   content: " ";
   width: 0.188rem;
-  left: 0.5625rem;
+  left: 15px;
   margin-right: -0.0938rem;
   background: #e6e6e6;
 }
@@ -12305,7 +12313,7 @@ tbody > tr {
   padding: 0.9375rem 1.25rem;
   position: relative;
   display: block;
-  margin-left: 35px;
+  margin-left: 45px;
   border-width: 0.0625rem;
   border-style: solid;
 }
@@ -12344,24 +12352,31 @@ tbody > tr {
 
 .widget-timeline .timeline > li > .timeline-badge {
   border-radius: 50%;
-  height: 1.275rem;
+  height: 35px;
   left: 0;
   position: absolute;
   top: 0.625rem;
-  width: 1.275rem;
-  border-width: 0.125rem;
-  border-style: solid;
-  background: #fff;
+  width: 35px;
+  /* border-width: 0.125rem; */
+  /* border-style: solid; */
+  background: #e3d1f0;
   padding: 0.25rem;
+  color: #7f8db3;
+  text-align: center;
+  /* font-size: 14px; */
+  font-weight: 600;
+  font-size: 14px;
+  padding-top: 6px;
+  text-transform: capitalize;
 }
 
-.widget-timeline .timeline > li > .timeline-badge:after {
+/* .widget-timeline .timeline > li > .timeline-badge:after {
   content: "";
   width: 0.525rem;
   height: 0.525rem;
   border-radius: 100%;
   display: block;
-}
+} */
 
 .widget-timeline .timeline-body > p {
   font-size: 0.75rem;
@@ -12479,9 +12494,9 @@ tbody > tr {
   border-color: #bbe6e3;
   line-height: 24px;
 }
-.hoverActiveHcc {
+/* .hoverActiveHcc {
   display: none;
-}
+} */
 /* :where(.css-dev-only-do-not-override-zcfrx9).ant-modal .ant-modal-content {
   top: 51px;
   left: 625px;
@@ -12498,10 +12513,10 @@ tbody > tr {
   box-shadow: none;
 }
 
-.hccActiveCard:hover .hoverActiveHcc {
+/* .hccActiveCard:hover .hoverActiveHcc {
   display: block; 
 
-}
+} */
 :where(.css-dev-only-do-not-override-2q8sxy).ant-picker-dropdown .ant-picker-panel-container {
   box-shadow: none;
 }
@@ -12513,4 +12528,7 @@ tbody > tr {
   position: relative;
     bottom: 23px;
     right: 6px;
+}
+.metismenu a{
+  align-items: center !important;
 }
