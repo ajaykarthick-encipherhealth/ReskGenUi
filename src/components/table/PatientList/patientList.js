@@ -107,7 +107,7 @@ function PatientTable({
               </span>
             </th>
             <th>ALLOCATED DATE</th>
-            <th>USER ALLOCATED</th>
+            <th> ALLOCATED USER</th>
             <th>PRIORITY</th>
             <th>STATUS</th>
             <th>ACTION</th>

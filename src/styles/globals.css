@@ -11980,6 +11980,18 @@ tbody > tr {
   background: #dfd8f3 !important;
   border-radius: 6px !important;
 }
+.hold-text {
+  background-color: rgb(253, 227, 207);
+  color: rgb(245, 106, 0);
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+ 
+  border-radius: 6px !important;
+}
 .failed-text {
   color: #3a9b94;
   font-family: "Manrope", sans-serif !important;
