@@ -11581,6 +11581,12 @@ const Details = ({}) => {
                                <Tooltip title={item.userName}> 
                                <div className="timeline-badge ENCOUNTER_FILE_ADDED">{splitUserName(item.userName)}</div>
                                </Tooltip>:
+                               item.action == "HOLD" ? 
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge HOLD">{splitUserName(item.userName)}</div></Tooltip>:
+                               item.action == "DECLINED" ? 
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge DECLINED">{splitUserName(item.userName)}</div></Tooltip>:
                                null
                               
                               
@@ -11620,6 +11626,10 @@ const Details = ({}) => {
                                <span >Encounter file updated</span>:
                                item.action == "ENCOUNTER_FILE_ADDED" ? 
                                <span >Encounter file added</span>:
+                               item.action == "HOLD" ? 
+                               <span >Hold</span>:
+                               item.action == "DECLINED" ? 
+                               <span >Declined</span>:
                                null                      
                               }
                                 {/* <span>{item.action}</span> */}
