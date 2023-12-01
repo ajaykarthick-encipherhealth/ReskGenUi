@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
-import Image from "next/image";
-import notification from "../../../../images/dashboard/notification.png";
 import HeadTitle from "../../../../components/headtitle";
 import { Modal } from "antd";
+import {  SVGICON } from "../../../../jsx/constant/theme";
 
 const Notifications = () => {
   const [openNotifications, setOpenNotification] = useState(false);
@@ -66,11 +65,7 @@ const Notifications = () => {
   };
   const notificationData = notificationdata.map((info) => (
       <div className={styles.msgDiv}>
-        <Image
-          className={styles.Image}
-          src={notification}
-          style={{ width: "30px", height: "25px" }}
-        />
+       <div style={{marginTop:"10px"}}> {SVGICON.dashboardNotification}</div>
         <div className={styles.msgCOntainer}>
           <span className={styles.description}>{info.message}</span>
           <div>

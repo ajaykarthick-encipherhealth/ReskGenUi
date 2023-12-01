@@ -79,7 +79,7 @@ const WorkFlow = () => {
                 <Image src={data?.icon} className={styles.Img} />
                 <div className={styles.heading}>{data.title}</div>
               </div>
-              <div className={styles.charts}>{`${data?.charts}  Charts`}</div>
+              <div className={styles.charts}>{`${data?.charts?data?.charts:"0"}  Charts`}</div>
               <div className={styles.days}>{data.days}</div>
             </Col>
           ))}
