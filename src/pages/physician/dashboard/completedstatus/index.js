@@ -11,6 +11,7 @@ import { monthNames, getDays } from "../accuracy";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { getCOmpletedScore } from "../../../../store/actions/DashboardActions";
+import { useRouter } from "next/router";
 
 const CompletedStatus = () => {
   const [activeButton, setActiveButton] = useState(0);
@@ -21,14 +22,15 @@ const CompletedStatus = () => {
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const dispatch = useDispatch();
-
+  const router=useRouter()
   useEffect(() => {
     dispatch(
       getCOmpletedScore(
         currentBtn.toUpperCase(),
         currentDate.getDate(),
         selectedMonth,
-        selectedYear
+        selectedYear,
+        router
       )
     );
   }, [currentBtn, selectedMonth, selectedYear]);
