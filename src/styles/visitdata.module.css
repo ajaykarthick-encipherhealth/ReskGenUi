@@ -270,6 +270,24 @@ margin-left: 10px !important;
   margin-right: 5px !important;
 }
 
+.encounterDate{
+  background: #1090e0 !important;
+  color: #fff !important;
+  font-weight: 500;
+  font-size: 11px;
+}
+.calenderIcon{
+  font-size: 12px;
+  color: #fff !important;
+
+}
+.captureheader{
+  background: #e1a8da !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  font-weight: 500;
+}
+
 .close_icon {
   width: 20px;
   height: 20px;
@@ -282,15 +300,31 @@ margin-left: 10px !important;
 .close_icon svg {
   vertical-align: baseline !important;
 }
+.hcc_title_name svg{
+  color: #fff;
+  margin-left: 10px;
+  background: #04b700;
+  padding: 4px;
+  font-size: 9px;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 2px;
+  cursor: pointer;
+}
 
 .tick_icon {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
   border-radius: 4px;
   background: #e2fee1;
   text-align: center;
   margin-left: 3px;
+}
+.tick_icon svg{
+  text-align: center;
+  margin-top: -7px;
+
 }
 
 .comboContainer,.rafContainer{
@@ -372,20 +406,34 @@ margin-top: 15px;
   overflow-x: hidden;
 }
 
-/* Track */
+
 .hccStickey_head::-webkit-scrollbar-track, .hccStickeyRaf_head::-webkit-scrollbar-track {
   background: transparent; 
 }
  
-/* Handle */
 .hccStickey_head::-webkit-scrollbar-thumb,.hccStickeyRaf_head::-webkit-scrollbar-thumb {
   background: transparent; 
 }
-
-/* Handle on hover */
 .hccStickey_head::-webkit-scrollbar-thumb:hover,.hccStickeyRaf_head::-webkit-scrollbar-thumb:hover {
   background:transparent; 
 }
+
+/* .hccStickey_head::-webkit-scrollbar-track, .hccStickeyRaf_head::-webkit-scrollbar-track {
+  background: rgb(177, 165, 165); 
+  width: 100px !important;
+  border-radius: 10px !important;
+}
+ 
+.hccStickey_head::-webkit-scrollbar-thumb,.hccStickeyRaf_head::-webkit-scrollbar-thumb {
+  background: red; 
+  width: 5px !important;
+  border-radius: 10px !important;
+}
+
+.hccStickey_head::-webkit-scrollbar-thumb:hover,.hccStickeyRaf_head::-webkit-scrollbar-thumb:hover {
+  background:red; 
+  border-radius: 10px !important;
+} */
 
 .meat_details_card {
   border-radius: 12px;
@@ -495,6 +543,7 @@ line-height: normal;
     flex-direction: row;                                                                                                                                                                
     align-items: center;
     justify-content: center;
+    margin-top: 5px ;
    
                                                                                                                                                                                                                                                                                                                                                                           ;
 
@@ -506,9 +555,9 @@ line-height: normal;
 .flagCodes {
   margin-right: 20px;
   color: #000;
-  font-size: 13px;
+  font-size: 11px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   line-height: normal;
 }
 .nameList{
@@ -710,4 +759,73 @@ margin-left: 20px;
 }
 .commentSendIcon:hover{
   background: none !important;
+}
+.ivalidHccCodeError{
+  font-size: 13px;
+  color: red !important;
+}
+.provider_name_style{
+  width: 25px !important;
+  height: 25px !important;
+  margin-top: 10px;
+  background: #9191c9;
+  border-radius: 0.25rem !important;
+}
+.provider_name_style span{
+  color: #fff !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  line-height: 25px !important;
+
+}
+
+.MOVED_DELETED_TO_VALID{
+  background-color: #46c263;
+}
+.hccFlag{
+  height: 10px;
+    width: 10px;
+    background: #9a9ad8;
+    padding: 7px;
+    margin-right: 5px;
+    margin-top: 2px;
+}
+
+.suggestedFlag{
+  height: 10px;
+    width: 10px;
+    background: #52c852;
+    padding: 7px;
+    margin-right: 5px;
+    margin-top: 2px;
+}
+.deleteFlag{
+  height: 10px;
+    width: 10px;
+    background: #f36767;
+    padding: 7px;
+    margin-right: 5px;
+    margin-top: 2px;
+}
+.timelineDate{
+  display: flex !important;
+  justify-content: space-between;
+  color: #000;
+  font-size: 11px !important;
+  font-weight: 500;
+
+}
+
+.timeLineUsername{
+  width: 25px !important;
+  height: 25px !important;
+  background: green;
+  text-transform: capitalize;
+}
+.timeLineUsername span{
+  color: #fff !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  line-height: 25px !important;
+
 }

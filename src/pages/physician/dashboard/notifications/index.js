@@ -41,6 +41,22 @@ const Notifications = () => {
       time: "10:00 am",
       person: "Rahul(manager)",
     },
+    {
+      key: "3",
+      message:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+      date: "18/10/2023",
+      time: "10:00 am",
+      person: "Rahul(manager)",
+    },
+    {
+      key: "4",
+      message:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+      date: "18/10/2023",
+      time: "10:00 am",
+      person: "Rahul(manager)",
+    },
   ];
   const handleOpen = () => {
     setOpenNotification(!openNotifications);
