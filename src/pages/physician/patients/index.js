@@ -537,7 +537,7 @@ export default function Patient() {
       case "DECLINED":
         return (
           <div className="patient-status">
-              <span className={`badge failed-text`}>Declined</span>
+              <span className={`badge failed-text`} style={{color:"red"}}>Declined</span>
            
           </div>
         );
@@ -556,6 +556,13 @@ export default function Patient() {
              
             </div>
           );
+          case "HOLD":
+            return (
+              <div className="patient-status">
+                 <span  className={`badge hold-text`} >Hold</span>
+               
+              </div>
+            );
           case null:
             return (
               <div className="patient-status">
