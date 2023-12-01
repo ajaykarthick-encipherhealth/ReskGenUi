@@ -1385,321 +1385,430 @@ const Details = ({}) => {
   const getLabReportDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
 
-    var resultTest = {
-      "patientId": "lenovo-01",
-      "patientName": "Armstead, Harold B",
-      "fileId": null,
-      "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-      "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-      "dob": "04/22/1950",
-      "gender": "M",
-      "age": 73,
-      "validDisease": {
-          "2023": [
-              {
-                  "diagnosisCode": "E11.9",
-                  "actualDescription": "Type 2 diabetes mellitus without complications",
-                  "dbDescription": null,
-                  "notes": null,
-                  "capturedSections": [
-                      "A1c"
-                  ],
-                  "encounterDate": "01/20/2023",
-                  "isManuallyAdded": null,
-                  "manuallyAddedAt": null,
-                  "manuallyAddedBy": null,
-                  "diagnosisCodeFinding": null,
-                  "isHccValid": null
-              },
-              {
-                  "diagnosisCode": "E11.9",
-                  "actualDescription": "Type 2 diabetes mellitus without complications",
-                  "dbDescription": null,
-                  "notes": null,
-                  "capturedSections": [
-                      "HGA1C"
-                  ],
-                  "encounterDate": "01/19/2023",
-                  "isManuallyAdded": null,
-                  "manuallyAddedAt": null,
-                  "manuallyAddedBy": null,
-                  "diagnosisCodeFinding": null,
-                  "isHccValid": null
-              }
-          ]
-      },
-      "meatCriteria": {
-          "2023": [
-              {
-                  "diseaseName": "Type 2 diabetes mellitus without complications",
-                  "diagnosisCode": "E11.9",
-                  "isMeatCriteriaPresent": true,
-                  "monitorCapturedFromHeader": null,
-                  "monitor": null,
-                  "evaluateCapturedFromHeader": null,
-                  "evaluate": "A1c",
-                  "assessmentCapturedFromHeader": null,
-                  "assessment": null,
-                  "treatmentCapturedFromHeader": null,
-                  "treatment": null,
-                  "encounterDate": "01/20/2023",
-                  "radiology": null
-              },
-              {
-                  "diseaseName": "Type 2 diabetes mellitus without complications",
-                  "diagnosisCode": "E11.9",
-                  "isMeatCriteriaPresent": true,
-                  "monitorCapturedFromHeader": null,
-                  "monitor": null,
-                  "evaluateCapturedFromHeader": null,
-                  "evaluate": "HGA1C",
-                  "assessmentCapturedFromHeader": null,
-                  "assessment": null,
-                  "treatmentCapturedFromHeader": null,
-                  "treatment": null,
-                  "encounterDate": "01/19/2023",
-                  "radiology": null
-              }
-          ]
-      },
-      "labFileDetail": [
-          {
-              "active": true,
-              "version": 0,
-              "createdBy": "anonymousUser",
-              "updatedBy": "anonymousUser",
-              "fileId": "537cc4bc-f072-4f4e-9852-b6045a035236",
-              "patientId": "lenovo-01",
-              "userId": "uvais01@encipherhealth.onmicrosoft.com",
-              "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-              "documentDos": {
-                  "09/02/2022": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          2
-                      ]
-                  },
-                  "01/20/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          4
-                      ]
-                  },
-                  "06/13/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          5
-                      ]
-                  },
-                  "01/19/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          6
-                      ]
-                  },
-                  "07/26/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          3
-                      ]
-                  },
-                  "08/01/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          1
-                      ]
-                  }
-              },
-              "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-              "fileName": "ilovepdf_merged.pdf",
-              "azureBlobPath": "537cc4bc-f072-4f4e-9852-b6045a035236.pdf",
-              "createdDate": "2023-11-29T15:50:34.098Z",
-              "lastModifiedDate": "2023-11-29T15:50:34.098Z"
-          }
-      ]
-    }
+    // var resultTest = {
+    //   "patientId": "lenovo-01",
+    //   "patientName": "Armstead, Harold B",
+    //   "fileId": null,
+    //   "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+    //   "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+    //   "dob": "04/22/1950",
+    //   "gender": "M",
+    //   "age": 73,
+    //   "validDisease": {
+    //       "2023": [
+    //           {
+    //               "diagnosisCode": "E11.9",
+    //               "actualDescription": "Type 2 diabetes mellitus without complications",
+    //               "dbDescription": null,
+    //               "notes": null,
+    //               "capturedSections": [
+    //                   "A1c"
+    //               ],
+    //               "encounterDate": "01/20/2023",
+    //               "isManuallyAdded": null,
+    //               "manuallyAddedAt": null,
+    //               "manuallyAddedBy": null,
+    //               "diagnosisCodeFinding": null,
+    //               "isHccValid": null
+    //           },
+    //           {
+    //               "diagnosisCode": "E11.9",
+    //               "actualDescription": "Type 2 diabetes mellitus without complications",
+    //               "dbDescription": null,
+    //               "notes": null,
+    //               "capturedSections": [
+    //                   "HGA1C"
+    //               ],
+    //               "encounterDate": "01/19/2023",
+    //               "isManuallyAdded": null,
+    //               "manuallyAddedAt": null,
+    //               "manuallyAddedBy": null,
+    //               "diagnosisCodeFinding": null,
+    //               "isHccValid": null
+    //           }
+    //       ]
+    //   },
+    //   "meatCriteria": {
+    //       "2023": [
+    //           {
+    //               "diseaseName": "Type 2 diabetes mellitus without complications",
+    //               "diagnosisCode": "E11.9",
+    //               "isMeatCriteriaPresent": true,
+    //               "monitorCapturedFromHeader": null,
+    //               "monitor": null,
+    //               "evaluateCapturedFromHeader": null,
+    //               "evaluate": "A1c",
+    //               "assessmentCapturedFromHeader": null,
+    //               "assessment": null,
+    //               "treatmentCapturedFromHeader": null,
+    //               "treatment": null,
+    //               "encounterDate": "01/20/2023",
+    //               "radiology": null
+    //           },
+    //           {
+    //               "diseaseName": "Type 2 diabetes mellitus without complications",
+    //               "diagnosisCode": "E11.9",
+    //               "isMeatCriteriaPresent": true,
+    //               "monitorCapturedFromHeader": null,
+    //               "monitor": null,
+    //               "evaluateCapturedFromHeader": null,
+    //               "evaluate": "HGA1C",
+    //               "assessmentCapturedFromHeader": null,
+    //               "assessment": null,
+    //               "treatmentCapturedFromHeader": null,
+    //               "treatment": null,
+    //               "encounterDate": "01/19/2023",
+    //               "radiology": null
+    //           }
+    //       ]
+    //   },
+    //   "labFileDetail": [
+    //       {
+    //           "active": true,
+    //           "version": 0,
+    //           "createdBy": "anonymousUser",
+    //           "updatedBy": "anonymousUser",
+    //           "fileId": "537cc4bc-f072-4f4e-9852-b6045a035236",
+    //           "patientId": "lenovo-01",
+    //           "userId": "uvais01@encipherhealth.onmicrosoft.com",
+    //           "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+    //           "documentDos": {
+    //               "09/02/2022": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       2
+    //                   ]
+    //               },
+    //               "01/20/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       4
+    //                   ]
+    //               },
+    //               "06/13/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       5
+    //                   ]
+    //               },
+    //               "01/19/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       6
+    //                   ]
+    //               },
+    //               "07/26/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       3
+    //                   ]
+    //               },
+    //               "08/01/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       1
+    //                   ]
+    //               }
+    //           },
+    //           "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+    //           "fileName": "ilovepdf_merged.pdf",
+    //           "azureBlobPath": "537cc4bc-f072-4f4e-9852-b6045a035236.pdf",
+    //           "createdDate": "2023-11-29T15:50:34.098Z",
+    //           "lastModifiedDate": "2023-11-29T15:50:34.098Z"
+    //       }
+    //   ]
+    // }
 
 
-  if (resultTest.labFileDetail != null) {
-    var result = resultTest;
-    setLabResult(result);
-    var dosYearArr = [];
-    var dosYearArrFile = [];
-    var validDiseaseNewRes = [];
-    var meatRes = [];
+  // if (resultTest.labFileDetail != null) {
+  //   var result = resultTest;
+  //   setLabResult(result);
+  //   var dosYearArr = [];
+  //   var dosYearArrFile = [];
+  //   var validDiseaseNewRes = [];
+  //   var meatRes = [];
 
-    for (var key in result.validDisease) {
-      dosYearArr.push({ value: key, label: key });
-    }
+  //   for (var key in result.validDisease) {
+  //     dosYearArr.push({ value: key, label: key });
+  //   }
 
-    setLabFileDosList(dosYearArr);
+  //   setLabFileDosList(dosYearArr);
 
-    var dateofService = dosYearArr[0].value;
+  //   var dateofService = dosYearArr[0].value;
 
-    const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+  //   const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
 
-    const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+  //   const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
 
-    if (dosYearArr.length != 0) {
-      validDiseaseNewRes = result.validDisease[dateofService];
-      meatRes = result.meatCriteria[dateofService];
-      if (result.labFileDetail != null) {
-        for (var key in result.labFileDetail[0].documentDos) {
-          dosYearArrFile.push({ value: key, label: key });
-        }
-        setFileLabDateofServiceList(dosYearArrFile);
-        setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-        var fileDetails = result.labFileDetail;
-        getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-      }
-    }
+  //   if (dosYearArr.length != 0) {
+  //     validDiseaseNewRes = result.validDisease[dateofService];
+  //     meatRes = result.meatCriteria[dateofService];
+  //     if (result.labFileDetail != null) {
+  //       for (var key in result.labFileDetail[0].documentDos) {
+  //         dosYearArrFile.push({ value: key, label: key });
+  //       }
+  //       setFileLabDateofServiceList(dosYearArrFile);
+  //       setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+  //       var fileDetails = result.labFileDetail;
+  //       getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+  //     }
+  //   }
 
-    const COLORS = [
-      "bg-bg-seven",
-      "bg-third",
-      "bg-bg-four",
-      "bg-bg-five",
-      "bg-bg-six",
-      "bg-bg-eight",
-      "bg-bg-nine",
-      "bg-bg-ten",
-      "bg-bg-leven",
-    ];
+  //   const COLORS = [
+  //     "bg-bg-seven",
+  //     "bg-third",
+  //     "bg-bg-four",
+  //     "bg-bg-five",
+  //     "bg-bg-six",
+  //     "bg-bg-eight",
+  //     "bg-bg-nine",
+  //     "bg-bg-ten",
+  //     "bg-bg-leven",
+  //   ];
 
-    var meatListArr = [];
-    var meatMoniterHead = [];
-    var meatEvaluteHead = [];
-    var meatAssesmentHead = [];
-    var meatTreatMentHead = [];
-    var allMeatHead = [];
-    var allMeatHeadColorArr = [];
-    var allMeatHeadColor = [];
-    var dublicateRemoveSecondArr = [];
+  //   var meatListArr = [];
+  //   var meatMoniterHead = [];
+  //   var meatEvaluteHead = [];
+  //   var meatAssesmentHead = [];
+  //   var meatTreatMentHead = [];
+  //   var allMeatHead = [];
+  //   var allMeatHeadColorArr = [];
+  //   var allMeatHeadColor = [];
+  //   var dublicateRemoveSecondArr = [];
 
-    meatRes.map((res, index) => {
-      if (res.monitorCapturedFromHeader != "") {
-        meatMoniterHead.push({
-          header: res.monitorCapturedFromHeader,
-        });
-      }
-      if (res.evaluateCapturedFromHeader != "") {
-        meatEvaluteHead.push({
-          header: res.evaluateCapturedFromHeader,
-        });
-      }
-      if (res.assessmentCapturedFromHeader != "") {
-        meatAssesmentHead.push({
-          header: res.assessmentCapturedFromHeader,
-        });
-      }
-      if (res.treatmentCapturedFromHeader != "") {
-        meatTreatMentHead.push({
-          header: res.treatmentCapturedFromHeader,
-        });
-      }
-      var newArray = [];
-      newArray = [
-        ...allMeatHead,
-        ...meatMoniterHead,
-        ...meatEvaluteHead,
-        ...meatAssesmentHead,
-        ...meatTreatMentHead,
-      ];
-      var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-      dublicateRemoveArr.map((res3, index) => {
-        allMeatHeadColor.push({
-          header: res3.header,
-          color: COLORS[index],
-        });
-      });
-      allMeatHeadColorArr = allMeatHeadColor;
+  //   meatRes.map((res, index) => {
+  //     if (res.monitorCapturedFromHeader != "") {
+  //       meatMoniterHead.push({
+  //         header: res.monitorCapturedFromHeader,
+  //       });
+  //     }
+  //     if (res.evaluateCapturedFromHeader != "") {
+  //       meatEvaluteHead.push({
+  //         header: res.evaluateCapturedFromHeader,
+  //       });
+  //     }
+  //     if (res.assessmentCapturedFromHeader != "") {
+  //       meatAssesmentHead.push({
+  //         header: res.assessmentCapturedFromHeader,
+  //       });
+  //     }
+  //     if (res.treatmentCapturedFromHeader != "") {
+  //       meatTreatMentHead.push({
+  //         header: res.treatmentCapturedFromHeader,
+  //       });
+  //     }
+  //     var newArray = [];
+  //     newArray = [
+  //       ...allMeatHead,
+  //       ...meatMoniterHead,
+  //       ...meatEvaluteHead,
+  //       ...meatAssesmentHead,
+  //       ...meatTreatMentHead,
+  //     ];
+  //     var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+  //     dublicateRemoveArr.map((res3, index) => {
+  //       allMeatHeadColor.push({
+  //         header: res3.header,
+  //         color: COLORS[index],
+  //       });
+  //     });
+  //     allMeatHeadColorArr = allMeatHeadColor;
 
-      dublicateRemoveSecondArr = getUniqueListBy(
-        allMeatHeadColor,
-        "header"
-      );
-      setMeatColorCodeList(dublicateRemoveSecondArr);
-    });
+  //     dublicateRemoveSecondArr = getUniqueListBy(
+  //       allMeatHeadColor,
+  //       "header"
+  //     );
+  //     setMeatColorCodeList(dublicateRemoveSecondArr);
+  //   });
 
-    meatRes.map((res, index) => {
-      meatListArr.push({
-        diagnosisCode: res.diagnosisCode,
-        diseaseName: res.diseaseName,
-        monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-        assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-        evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-        treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-        radiology:res.radiology,
-        monitorCapturedFromHeaderColor: colorCodeMatch(
-          dublicateRemoveSecondArr,
-          res.monitorCapturedFromHeader
-        ),
-        assessmentCapturedFromHeaderColor: colorCodeMatch(
-          dublicateRemoveSecondArr,
-          res.assessmentCapturedFromHeader
-        ),
-        evaluateCapturedFromHeaderColor: colorCodeMatch(
-          dublicateRemoveSecondArr,
-          res.evaluateCapturedFromHeader
-        ),
-        treatmentCapturedFromHeaderColor: colorCodeMatch(
-          dublicateRemoveSecondArr,
-          res.treatmentCapturedFromHeader
-        ),
-        monitorColor: COLORS[index],
-        meatColor: COLORS[index],
-        assessment: res.assessment,
-        monitor: res.monitor,
-        evaluate: res.evaluate,
-        treatment: res.treatment,
-        isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-      });
-    });
+  //   meatRes.map((res, index) => {
+  //     meatListArr.push({
+  //       diagnosisCode: res.diagnosisCode,
+  //       diseaseName: res.diseaseName,
+  //       monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+  //       assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+  //       evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+  //       treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+  //       radiology:res.radiology,
+  //       monitorCapturedFromHeaderColor: colorCodeMatch(
+  //         dublicateRemoveSecondArr,
+  //         res.monitorCapturedFromHeader
+  //       ),
+  //       assessmentCapturedFromHeaderColor: colorCodeMatch(
+  //         dublicateRemoveSecondArr,
+  //         res.assessmentCapturedFromHeader
+  //       ),
+  //       evaluateCapturedFromHeaderColor: colorCodeMatch(
+  //         dublicateRemoveSecondArr,
+  //         res.evaluateCapturedFromHeader
+  //       ),
+  //       treatmentCapturedFromHeaderColor: colorCodeMatch(
+  //         dublicateRemoveSecondArr,
+  //         res.treatmentCapturedFromHeader
+  //       ),
+  //       monitorColor: COLORS[index],
+  //       meatColor: COLORS[index],
+  //       assessment: res.assessment,
+  //       monitor: res.monitor,
+  //       evaluate: res.evaluate,
+  //       treatment: res.treatment,
+  //       isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+  //     });
+  //   });
 
 
-    setLabReportValidList(validDiseaseNewRes);
-    setLabReportMeatList(meatListArr);
-    setLabFileDosListDefaultSelect(dosYearArr[0]);
-    setLabResultStatus(true);
-    setIsLoadingDos(false);
-  }
+  //   setLabReportValidList(validDiseaseNewRes);
+  //   setLabReportMeatList(meatListArr);
+  //   setLabFileDosListDefaultSelect(dosYearArr[0]);
+  //   setLabResultStatus(true);
+  //   setIsLoadingDos(false);
+  // }
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
       `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
-    if (response.data.labFileDetail != null) {
-      var result = response.data;
+    var resultTest = response.data;
+
+    if (resultTest.labFileDetail != null) {
+      var result = resultTest;
       setLabResult(result);
       var dosYearArr = [];
       var dosYearArrFile = [];
       var validDiseaseNewRes = [];
-
+      var meatRes = [];
+  
       for (var key in result.validDisease) {
         dosYearArr.push({ value: key, label: key });
       }
-
+  
       setLabFileDosList(dosYearArr);
-
+  
       var dateofService = dosYearArr[0].value;
-
+  
       const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-
+  
       const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
-
+  
       if (dosYearArr.length != 0) {
         validDiseaseNewRes = result.validDisease[dateofService];
+        meatRes = result.meatCriteria[dateofService];
         if (result.labFileDetail != null) {
-          for (var key in result.labFileDetail) {
+          for (var key in result.labFileDetail[0].documentDos) {
             dosYearArrFile.push({ value: key, label: key });
           }
           setFileLabDateofServiceList(dosYearArrFile);
           setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-          var fileDetails = result.labFileDetail[dateofService];
+          var fileDetails = result.labFileDetail;
           getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
         }
       }
+  
+      const COLORS = [
+        "bg-bg-seven",
+        "bg-third",
+        "bg-bg-four",
+        "bg-bg-five",
+        "bg-bg-six",
+        "bg-bg-eight",
+        "bg-bg-nine",
+        "bg-bg-ten",
+        "bg-bg-leven",
+      ];
+  
+      var meatListArr = [];
+      var meatMoniterHead = [];
+      var meatEvaluteHead = [];
+      var meatAssesmentHead = [];
+      var meatTreatMentHead = [];
+      var allMeatHead = [];
+      var allMeatHeadColorArr = [];
+      var allMeatHeadColor = [];
+      var dublicateRemoveSecondArr = [];
+  
+      meatRes.map((res, index) => {
+        if (res.monitorCapturedFromHeader != "") {
+          meatMoniterHead.push({
+            header: res.monitorCapturedFromHeader,
+          });
+        }
+        if (res.evaluateCapturedFromHeader != "") {
+          meatEvaluteHead.push({
+            header: res.evaluateCapturedFromHeader,
+          });
+        }
+        if (res.assessmentCapturedFromHeader != "") {
+          meatAssesmentHead.push({
+            header: res.assessmentCapturedFromHeader,
+          });
+        }
+        if (res.treatmentCapturedFromHeader != "") {
+          meatTreatMentHead.push({
+            header: res.treatmentCapturedFromHeader,
+          });
+        }
+        var newArray = [];
+        newArray = [
+          ...allMeatHead,
+          ...meatMoniterHead,
+          ...meatEvaluteHead,
+          ...meatAssesmentHead,
+          ...meatTreatMentHead,
+        ];
+        var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+        dublicateRemoveArr.map((res3, index) => {
+          allMeatHeadColor.push({
+            header: res3.header,
+            color: COLORS[index],
+          });
+        });
+        allMeatHeadColorArr = allMeatHeadColor;
+  
+        dublicateRemoveSecondArr = getUniqueListBy(
+          allMeatHeadColor,
+          "header"
+        );
+        setMeatColorCodeList(dublicateRemoveSecondArr);
+      });
+  
+      meatRes.map((res, index) => {
+        meatListArr.push({
+          diagnosisCode: res.diagnosisCode,
+          diseaseName: res.diseaseName,
+          monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+          assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+          evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+          treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+          radiology:res.radiology,
+          monitorCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.monitorCapturedFromHeader
+          ),
+          assessmentCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.assessmentCapturedFromHeader
+          ),
+          evaluateCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.evaluateCapturedFromHeader
+          ),
+          treatmentCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.treatmentCapturedFromHeader
+          ),
+          monitorColor: COLORS[index],
+          meatColor: COLORS[index],
+          assessment: res.assessment,
+          monitor: res.monitor,
+          evaluate: res.evaluate,
+          treatment: res.treatment,
+          isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+        });
+      });
+  
+  
       setLabReportValidList(validDiseaseNewRes);
+      setLabReportMeatList(meatListArr);
       setLabFileDosListDefaultSelect(dosYearArr[0]);
       setLabResultStatus(true);
       setIsLoadingDos(false);
