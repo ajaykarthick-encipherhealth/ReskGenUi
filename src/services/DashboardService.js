@@ -1,30 +1,45 @@
 import axios from "axios";
 
-export function workStatusApi(startDate, endDate) {
-  const token = localStorage.getItem("token");
-  return axios.get(
-    `https://hcc.encipherhealth.com/secure/management/dashboard/tile/statistics?start=${startDate}&end=${endDate}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+export async function workStatusApi(startDate, endDate,router) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      `https://hcc.encipherhealth.com/secure/management/dashboard/tile/statistics?start=${startDate}&end=${endDate}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err.response.status === 401) {
+      router.push("/userlogin")
     }
-  );
+  }
 }
 
-export const DailyTaskApi = (date) => {
+export const DailyTaskApi = async (date,router) => {
   const token = localStorage.getItem("token");
-  return axios.get(
-    `https://hcc.encipherhealth.com/secure/management/dashboard/daily/statistics?date=${date}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  try {
+    const response = await axios.get(
+      `https://hcc.encipherhealth.com/secure/management/dashboard/daily/statistics?date=${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err.response.status === 401) {
+      router.push("/userlogin")
+      
     }
-  );
+  }
 };
 
-export const accuracyScore = (btn, month, year) => {
+export const accuracyScore = async (btn, month, year,router) => {
   const token = localStorage.getItem("token");
   const url =
     btn === "Daily"
@@ -32,38 +47,60 @@ export const accuracyScore = (btn, month, year) => {
       : btn === "Weekly"
       ? `weekly?month=${month}&year=${year}`
       : `monthyly?year=${year}`;
-  return axios.post(
-    `https://hcc.encipherhealth.com/secure/dbservice/accuracyscore/${url}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-};
-
-export const CompletedScore = (btn, date, month, year) => {
-  const token = localStorage.getItem("token");
-  const url=`year=${year}&month=${month}&date=${date}&range=${btn}`
-  return axios.get(
-    `https://hcc.encipherhealth.com/secure/management/dashboard/line/statistics?${url}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-};
-
-export const HoldStatus = () => {
-    const token = localStorage.getItem("token");
-    return axios.get(
-      `https://hcc.encipherhealth.com/secure/dbservice/dashboard/hold/charts`,
+  try {
+    const response = await axios.post(
+      `https://hcc.encipherhealth.com/secure/dbservice/accuracyscore/${url}`,
+      {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-  };
+    return response.data;
+  } catch (err) {
+    if (err.response.status === 401) {
+      router.push("/userlogin")
+      
+    }
+  }
+};
+
+export const CompletedScore = async(btn, date, month, year,router) => {
+  const token = localStorage.getItem("token");
+  const url = `year=${year}&month=${month}&date=${date}&range=${btn}`;
+  try{
+    const response =await axios.get(
+      `https://hcc.encipherhealth.com/secure/management/dashboard/line/statistics?${url}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );return response.data
+  }catch(err){
+    if (err.response.status === 401) {
+      router.push("/userlogin")
+      
+    }
+  }
+};
+
+export const HoldStatus = async(router) => {
+  const token = localStorage.getItem("token");
+  try{
+   const response=await axios.get(
+      `https://hcc.encipherhealth.com/secure/dbservice/dashboard/hold/charts`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );return response.data
+  }catch(err){
+    if (err.response.status === 401) {
+      router.push("/userlogin")
+      
+    }
+  }
+};

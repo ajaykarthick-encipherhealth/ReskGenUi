@@ -7,12 +7,14 @@ import { Modal } from "antd";
 import { getHoldStatusData } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import TableStyle from "../../../../components/table/table.module.css"
+import { useRouter } from "next/router";
 
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
   const dispatch = useDispatch();
+  const router=useRouter()
   useEffect(() => {
-    dispatch(getHoldStatusData());
+    dispatch(getHoldStatusData(router));
   }, []);
   const holdStatusData = useSelector((state) => state.workFlow.holdStatus);
 

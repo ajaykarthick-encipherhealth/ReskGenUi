@@ -13,59 +13,59 @@ export const getDateRange=(val)=>({
     payload:val
 })
 
-export const getWorkFlow=(startDate,endDate) =>{
+export const getWorkFlow=(startDate,endDate,router) =>{
   return (dispatch) => {
     try{
-      workStatusApi(startDate,endDate).then((response) => {
+      workStatusApi(startDate,endDate,router).then((response) => {
         dispatch({
           type: WORKFLOWDATA,
-          payload: response.data,
+          payload: response,
         });
       });
     }catch(err){
-      console.log(err)
+      console.log("dasff",err)
     }
   };
 }
-export const getDailyTaskDatas=(date) =>{
+export const getDailyTaskDatas=(date,router) =>{
     return (dispatch) => {
-        DailyTaskApi(date).then((response) => {
+        DailyTaskApi(date,router).then((response) => {
         dispatch({
           type:DAILY_TASK,
-          payload: response.data,
+          payload: response,
         });
       });
     };
   }
 
-  export const getAccuracyScore=(btn,month,year) =>{
+  export const getAccuracyScore=(btn,month,year,router) =>{
     return (dispatch) => {
-      accuracyScore(btn,month,year).then((response) => {
+      accuracyScore(btn,month,year,router).then((response) => {
         dispatch({
           type:ACCURACY,
-          payload: response.data,
+          payload: response,
         });
       });
     };
   }
   
-  export const getCOmpletedScore=(btn,date,month,year) =>{
+  export const getCOmpletedScore=(btn,date,month,year,router) =>{
     return (dispatch) => {
-      CompletedScore(btn,date,month,year).then((response) => {
+      CompletedScore(btn,date,month,year,router).then((response) => {
         dispatch({
           type:COMPLETED,
-          payload: response.data,
+          payload: response,
         });
       });
     };
   }
   
-  export const getHoldStatusData=() =>{
+  export const getHoldStatusData=(router) =>{
     return (dispatch) => {
-      HoldStatus().then((response) => {
+      HoldStatus(router).then((response) => {
         dispatch({
           type:HOLD_STATUS,
-          payload: response.data,
+          payload: response,
         });
       });
     };

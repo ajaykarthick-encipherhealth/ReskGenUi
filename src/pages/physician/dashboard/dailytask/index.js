@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
+import { useRouter } from "next/router";
 
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -58,9 +59,10 @@ const DailyTask = () => {
     return formattedDate;
   });
 
+  const router=useRouter()
   useEffect(() => {
     WeekDays?.slice(0, 3)?.map((date) => {
-      dispatch(getDailyTaskDatas(date));
+      dispatch(getDailyTaskDatas(date,router));
     });
   }, []);
 

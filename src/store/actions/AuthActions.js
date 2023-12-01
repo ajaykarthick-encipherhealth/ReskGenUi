@@ -63,7 +63,6 @@ export function loginAction(email, password, navigate) {
             .then((response) => { 
                 saveTokenInLocalStorage(response.data);
                 localStorage.setItem("token", response.data.access_token)
-
                 runLogoutTimer(
                     dispatch,
                     response.data.expires_in * 1000,
