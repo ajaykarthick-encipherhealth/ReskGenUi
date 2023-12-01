@@ -79,8 +79,8 @@ function PatientTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>Patient Id</th>
-            <th>Patient Name</th>
+            <th>PATIENT ID</th>
+            <th>PATIENT NAME</th>
 
             <th onClick={() => requestSort("dueDate")}>
               DUE DATE
