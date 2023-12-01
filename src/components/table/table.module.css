@@ -8,6 +8,10 @@
 .classThead > tr > th {
   color: #fff !important;
 }
+.classTTotalhead{
+  color: #fff !important;
+
+}
 
 .classTable {
   border-collapse: separate !important;
