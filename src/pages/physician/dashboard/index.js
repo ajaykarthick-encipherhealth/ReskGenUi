@@ -11,6 +11,7 @@ import HoldStatus from "./holdstatus";
 import { getWorkFlow } from "../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 
 const index = () => {
   const currentDate = dayjs();
@@ -23,9 +24,9 @@ const index = () => {
     ? DateRanges?.startDate
     : last30thDate.toISOString();
   const lastDate = DateRanges ? DateRanges?.endDate : currentDate.toISOString();
-
+const router=useRouter()
   useEffect(() => {
-    dispatch(getWorkFlow(startDate, lastDate));
+    dispatch(getWorkFlow(startDate, lastDate,router));
   }, [startDate, lastDate]);
 
   return (

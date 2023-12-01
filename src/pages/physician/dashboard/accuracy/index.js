@@ -10,6 +10,7 @@ import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 import YearPicker from "../../../../components/yearpicker";
+import { useRouter } from "next/router";
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -58,8 +59,9 @@ const Accuracy = () => {
     { length: numberOfWeeks },
     (_, index) => `Week ${index + 1}`
   );
+  const router=useRouter()
   useEffect(() => {
-    dispatch(getAccuracyScore(currentBtn, selectedMonth, selectedYear));
+    dispatch(getAccuracyScore(currentBtn, selectedMonth, selectedYear,router));
   }, [currentBtn, selectedMonth, selectedYear]);
 
   const handleButtonClick = (index, btn) => {

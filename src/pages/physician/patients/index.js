@@ -520,46 +520,52 @@ export default function Patient() {
       case "COMPLETED":
         return (
           <div className="patient-status">
-            <span className={`badge badge-success`}>
-              COMPLETED
-              <FontAwesomeIcon className="ml-2 ms-1 " icon={faCheck} />
-            </span>
+            <span className={`badge processed-text`}>Completed</span>
+              
+         
           </div>
         );
 
       case "PENDING":
         return (
           <div className="patient-status">
-            <span className={`badge badge-primary`}>
-              PENDING
-              <Spin
-                className="ml-2 processingSpin ms-1 text-white"
-                size="small"
-              />
-            </span>
+             <span className={`badge processing-text`}>Pending</span>
+          
           </div>
         );
 
       case "DECLINE":
         return (
           <div className="patient-status">
-            <span className={`badge badge-danger`}>
-              DECLINE
-              <FontAwesomeIcon className="ml-2 ms-1 " icon={faClose} />
-            </span>
+              <span className={`badge failed-text`}>Decline</span>
+           
           </div>
         );
 
       case "NOTCOMPUTED":
         return (
           <div className="patient-status">
-            <span className={`badge btn-notstarted`}>
-              NOTCOMPUTED
-              <FontAwesomeIcon className="ml-2 ms-1 " icon={faBan} />
-            </span>
+               <span className={`badge processing-text`}>Pending</span>
+           
           </div>
         );
+        case "COMPUTED":
+          return (
+            <div className="patient-status">
+               <span className={`badge processing-text`}>Pending</span>
+             
+            </div>
+          );
+          case null:
+            return (
+              <div className="patient-status">
+                 <span className={`badge processing-text`}>Pending</span>
+               
+              </div>
+            );
+          
     }
+    
   };
 
   const actionBodyTemplate = (rowData) => {
@@ -937,7 +943,8 @@ export default function Patient() {
                           <PatientTable
                             patinetListAll={patinetListAll}
                             actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={statusBodyTemplate}
+                            statusBodyTemplate={processstatusBodyTemplate}
+                           
                           />
                           <div className="pagination-container">
                             <Paginator
