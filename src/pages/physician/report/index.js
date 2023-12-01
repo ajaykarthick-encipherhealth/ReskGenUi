@@ -1,20 +1,16 @@
 import styles from "./report.module.css";
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { ProgressBar } from "primereact/progressbar";
-import { Badge, Modal, DatePicker, Checkbox, Divider } from "antd";
+import { Badge, Modal, DatePicker, Checkbox } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import Image from "next/image";
 import calender from "../../../images/dashboard/calender.png";
-
-
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Progress } from "antd";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
 
@@ -24,23 +20,15 @@ import {
   faCheck,
   faBan,
   faSearch,
-  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 import { Spin } from "antd";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
 import { notification } from "antd";
-import { DataTable } from "primereact/datatable";
 import { FilterMatchMode } from "primereact/api";
-import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
-import moment from "moment";
-import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from "primereact/paginator";
-import { Calendar } from "primereact/calendar";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { SVGICON } from "../../../jsx/constant/theme";
 import {
   CircularProgressbar,
   CircularProgressbarWithChildren,
@@ -50,67 +38,31 @@ import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
+import { getReportDetails } from "../../../store/actions/ReportActions";
 
 const index = () => {
   const dispatch = useDispatch();
 
   const controller = new AbortController();
-  const signal = controller.signal;
 
-  const navigate = useRouter();
-  const [reportListAll, setReportListAll] = useState([]);
-  const [validated, setValidated] = useState(false);
-  const [dataValidationList, setDataValidationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [flagClicked, setFlagClicked] = useState(false);
-  const [activeTabHead, setActiveTabHead] = useState("Visit Data");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
-
-  const recordsPage = 10;
-  const lastIndex = currentPage * recordsPage;
-  const firstIndex = lastIndex - recordsPage;
-
-  const [addPatient, setAddPatient] = useState(false);
-  const [addPatientId, setAddPatientId] = useState(false);
-  const [selectFile, setSelectFile] = useState(null);
-  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [dates, setDates] = useState(null);
   const [compledtedDate, setCompletedDate] = useState(null);
 
-  const [inputValue, setInputValue] = useState({
-    year: "",
-    name: "",
-    patientId: "",
-  });
-  const [inputValuePatientId, setInputValuePatientId] = useState({
-    patientId: "",
-    patientName: "",
-  });
-
-  const [pageCount, setPageCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [canPreviousPage, setCanPreviousPage] = useState(false);
-  const [canNextPage, setCanNextPage] = useState(true);
-  const [canMaxPage, setCanMaxPage] = useState(10);
-
-  const [patinetList, setPatinetList] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
   const [paginationFirst, setPaginationFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const [flagStates, setFlagStates] = useState([]);
   const [modal, setModal] = useState(false);
   const { RangePicker } = DatePicker;
- 
+
   const [modalVisible, setModalVisible] = useState(false);
   const currentDate = dayjs();
   const [startDate, setStartDate] = useState(
@@ -132,56 +84,13 @@ const index = () => {
     patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const statusMessage = {
-    subscribed: "Subscribed",
-    unsubscribed: "Unsubscribed",
-  };
-
   const filterChangePatientId = (event) => {
     const value = event.target.value;
     let _filters = { ...filters };
     _filters["patientId"].value = value;
     setFilters(_filters);
   };
-  const filterChangePatientName = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientName"].value = value;
-    setFilters(_filters);
-  };
-  const getAllReportList = async (uId, pageNo, pageSize) => {
-    var resoureUrl = `dbservice/patient/patientdetailsl1?&page=${pageNo}&size=${pageSize}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      var resultMap = [];
-      var result = response.data.content;
-      setTotalElements(response.data.totalElements);
 
-      result.map((res) => {
-        resultMap.push({
-          patientId: res.patientId,
-          patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          processedStatus: res.processedStatus,
-          createdAt: res.createdAt,
-        });
-      });
-      var newArray = [];
-      newArray = [...reportListAll, ...resultMap];
-      setReportListAll(resultMap);
-
-      // console.log(newArray)
-      setIsLoading(false);
-      setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
-    }
-  };
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -190,59 +99,13 @@ const index = () => {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
-    getAllReportList(uId, pageNo, pageSize);
+    dispatch(getReportDetails(pageNo));
     // fetchData();
-  }, []);
+  }, [pageNo]);
   const handleButtonClick = () => {
-  
     setButtonClicked(true);
-
-  
   };
 
-
-  const addPatientFormId = () => {
-    setValidated(false);
-    setAddPatientId(true);
-  };
-  const handleFlagClick = (index) => {
-    const newFlagStates = [...flagStates];
-    newFlagStates[index] = !newFlagStates[index];
-    setFlagStates(newFlagStates);
-  };
-
-  const addPatientFile = (data) => {
-    inputValue.patientId = data.patientId;
-    inputValue.name = data.patientName;
-    setValidated(false);
-    setAddPatient(true);
-    setIsLoadingBtn(false);
-  };
-
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data.computing == 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed Please wait",
-      });
-    }
-  };
-
-
-  const navigetPageDetails = (pageTitle) => {
-    // setIsLoadingDos(true);
-    setActiveTabHead("file");
-    setSideNavLabelActiveKey(pageTitle);
-    setIsLoading(true);
-
-    setIsLoading(false);
-  };
   const statusOptions = [
     { label: "Completed", value: "completed" },
     { label: "Pending", value: "pending" },
@@ -251,138 +114,19 @@ const index = () => {
   ];
   const dosOnChange = (selectedOption) => {
     const selectedValue = selectedOption.value;
-    // Do something with the selected value
-    console.log(selectedValue);
-  };
-  const statusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
-
-    switch (rowData.computing) {
-      case 2:
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Processed</span>
-          </div>
-        );
-
-      case 1:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Processing</span>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`}>Failed</span>
-          </div>
-        );
-
-      case 0:
-        return (
-          <div className="patient-status">
-            <span className={`badge not-started-text`}>Not Started</span>
-          </div>
-        );
-    }
-  };
-
-  const processstatusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
-
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <div className="patient-status">
-            <span className={`badge badge-success`}>
-              COMPLETED
-              <FontAwesomeIcon className="ml-2 ms-1 " icon={faCheck} />
-            </span>
-          </div>
-        );
-
-      case "PENDING":
-        return (
-          <div className="patient-status">
-            <span className={`badge badge-primary`}>
-              PENDING
-              <Spin
-                className="ml-2 processingSpin ms-1 text-white"
-                size="small"
-              />
-            </span>
-          </div>
-        );
-
-      case "DECLINE":
-        return (
-          <div className="patient-status">
-            <span className={`badge badge-danger`}>
-              DECLINE
-              <FontAwesomeIcon className="ml-2 ms-1 " icon={faClose} />
-            </span>
-          </div>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge btn-notstarted`}>
-              NOTCOMPUTED
-              <FontAwesomeIcon className="ml-2 ms-1 " icon={faBan} />
-            </span>
-          </div>
-        );
-    }
-  };
-
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <div className="d-flex justify-content-center">
-        {rowData.computing == 2 ? (
-          <button
-            onClick={() => gotoPatientDetails(rowData)}
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeOutlined className="text-white" />
-          </button>
-        ) : (
-          <button
-            disabled
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeInvisibleOutlined className="text-white" />
-          </button>
-        )}
-        <button
-          onClick={() => addPatientFile(rowData)}
-          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-        >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} />
-        </button>
-      </div>
-    );
+ 
   };
 
   const onPageChange = (e) => {
-    console.log(dates);
-    console.log(compledtedDate);
-    console.log(e);
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    setPageSize(e.rows);
-    setTableLoading(true);
-    getAllList(localUserId, e.page, e.rows);
-    console.log("test");
+    // console.log(dates);
+    // console.log(compledtedDate);
+    // console.log(e);
+    // setPaginationFirst(e.first);
+    // setPageNo(e.page);
+    // setPageSize(e.rows);
+    // setTableLoading(true);
+    // getAllList(localUserId, e.page, e.rows);
+    setPageNo(e?.pageCount)
   };
 
   function calculateColor(percentage) {
@@ -457,6 +201,7 @@ const index = () => {
     }
   };
 
+  const ReportPatientDetails = useSelector((state) => state.report.details);
   return (
     <>
       <Header />
@@ -487,137 +232,35 @@ const index = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-xl-2" style={{ zIndex: "999"}}>
-                              <div class="form-group has-search">
-                                {/* <InputText
+                          <div className="col-xl-2" style={{ zIndex: "999" }}>
+                            <div class="form-group has-search">
+                              {/* <InputText
                                   type="text"
                                   onChange={(e) => filterChangePatientName(e)}
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                                <Select
-                                  onChange={(selectedOption) =>
-                                    dosOnChange(selectedOption)
-                                  }
-                                  options={statusOptions}
-                                  className="custom-react-select"
-                                  isSearchable={false}
-                                />
-                              </div>
+                              <Select
+                                onChange={(selectedOption) =>
+                                  dosOnChange(selectedOption)
+                                }
+                                options={statusOptions}
+                                className="custom-react-select"
+                                isSearchable={false}
+                              />
                             </div>
+                          </div>
                           <div className="col-xl-2">
-                            <div
-                              onClick={handleOpenModal}
-                              className={styles.dateDisplay}
-                            >
-                              <div>
-                                {startDate}&nbsp;- &nbsp;{endDate}
-                              </div>
-                              <div style={{alignItems:"center"}}>
-                                <Image src={calender} />
-                              </div>
-                              
-                            </div>
-                            <Modal
-                              title=""
-                              visible={modalVisible}
-                              onOk={handleOk}
-                              mask={false}
-                              onCancel={false}
-                              closable={false}
-                              width="45%"
-                              height="800px"
-                              style={{ marginTop: "30px" }}
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  height: "400px",
-                                }}
-                              >
-                                <div style={{ display: "block" }}>
-                                  <div style={{margin: "20px 0"}}>
-                                    <Button type="ghost">Due Date</Button>
-                                   
-                                  </div>
-                                  <div>
-                                    <Button>Completed Date</Button>
-                                  </div>
+                           
+                          
+
+                                <div>
+                                  <RangePicker
+                                  
+                                  />
                                 </div>
                           
-                                <div>
-                                  <RangePicker
-                                 
-                                    getPopupContainer={() =>
-                                      document.getElementById("date-popup")
-                                    }
-                                    popupStyle={{
-                                      marginTop: "-259px",
-                                      marginLeft:"-78px"
-                                    }}
-                                    onChange={handleDatePickerChange}
-                                    open={true}
-                                    showNow={false}
-                                    style={{ visibility: "hidden" , boxShadow:"none" }}
-                                  />
-                                </div>
-                              </div>
-                              <div
-                                id="date-popup"
-                                style={{ position: "relative" }}
-                              />
-                            </Modal>
                           </div>
-
-                          {/* <Modal
-                              title=""
-                              visible={modalVisible}
-                              onOk={handleOk}
-                              mask={false}
-                              onCancel={false}
-                              closable={false}
-                              width="47%"
-                              style={{ marginTop: "30px" }}
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  height: "400px",
-                                }}
-                              >
-                                <div style={{ display: "block" }}>
-                                  <div>
-                                    <Button type="ghost">Due Date</Button>
-                                   
-                                  </div>
-                                  <div>
-                                    <Button>Completed Date</Button>
-                                  </div>
-                                </div>
-                                <div>
-                                  <RangePicker
-                                    getPopupContainer={() =>
-                                      document.getElementById("date-popup")
-                                    }
-                                    popupStyle={{
-                                      marginTop: "-259px",
-                                      marginLeft:"-78px"
-                                    }}
-                                    onChange={handleDatePickerChange}
-                                    open={true}
-                                    showNow={false}
-                                    style={{ visibility: "hidden" }}
-                                  />
-                                </div>
-                              </div>
-                              <div
-                                id="date-popup"
-                                style={{ position: "relative" }}
-                              />
-                            </Modal> */}
-
                           <div className="col-xl-6">
                             <div className="row flr">
                               <button
@@ -666,8 +309,7 @@ const index = () => {
                             Submit
                           </Button>,
                         ]}
-                        style={{ top: "150px",
-                          left: "625px"}}
+                        style={{ top: "150px", left: "625px" }}
                       >
                         <div
                           style={{
@@ -677,15 +319,27 @@ const index = () => {
                             margin: "0 5pc",
                           }}
                         >
-                          <button key="close"   className={styles.excel}   onClick={handleButtonClick}>Excel</button>
-                          <button key="close" className={styles.excel}   onClick={handleButtonClick}>CSV</button>
+                          <button
+                            key="close"
+                            className={styles.excel}
+                            onClick={handleButtonClick}
+                          >
+                            Excel
+                          </button>
+                          <button
+                            key="close"
+                            className={styles.excel}
+                            onClick={handleButtonClick}
+                          >
+                            CSV
+                          </button>
                         </div>
                         <div
                           style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(3, 1fr)",
                             gap: "16px",
-                            margin: "20px 0"
+                            margin: "20px 0",
                           }}
                         >
                           <Checkbox>Patient Id </Checkbox>
@@ -699,7 +353,6 @@ const index = () => {
                           <Checkbox>Auditor name </Checkbox>
                           <Checkbox>Flag </Checkbox>
                         </div>
-
                       </Modal>
 
                       <div
@@ -743,239 +396,13 @@ const index = () => {
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {/* <DataTable
-                                  value={patinetListAll}
-                                  paginator={false}
-                                  rows={10}
-                                  rowsPerPageOptions={[10, 25, 50, 100]}
-                                  dataKey="id"
-                                  filters={filters}
-                                  filterDisplay="menu"
-                                  className="custom-table"
-                                  rowClassName="custom-row"
-                                >
-                                  {/* <Column
-                            header="SI.NO"
-                            headerStyle={{ width: "3rem" }}
-                            body={(data, options) =>
-                              paginationFirst + options.rowIndex + 1
-                            }
-                            bodyStyle={{
-                              borderLeft: "  0.2px solid #e1e1e1",
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          ></Column> */}
-
-                                  {/* <Column
-                                    field="patientId"
-                                    header="Patient Id"
-                                    bodyStyle={{
-                                      borderTop: "  0.2px solid #e1e1e1",
-                                      borderLeft: "  0.2px solid #e1e1e1",
-                                      borderBottom: "  0.2px solid #e1e1e1",
-                                    }}
+                                  <CoderReport
+                                    setModal={setModal}
+                                    reportListAll={ReportPatientDetails?.data}
+                                    paginationFirst={paginationFirst}
+                                    ReportPatientDetails={ReportPatientDetails}
+                                    onPageChange={onPageChange}
                                   />
-                                  <Column
-                                    field="patientName"
-                                    header="Patient Name"
-                                    bodyStyle={{
-                                      borderTop: "  0.2px solid #e1e1e1",
-                                      borderBottom: "  0.2px solid #e1e1e1",
-                                    }}
-                                  /> */}
-                                  {/* <Column
-                            field="fileName"
-                            header="File Name"
-                            bodyStyle={{
-                              borderTop: "  0.2px solid #e1e1e1",
-                              borderBottom: "  0.2px solid #e1e1e1",
-                            }}
-                          /> */}
-
-                                  {/* <Column
-                                    field="hcc"
-                                    header="HCC "
-                                    body={(data) => (
-                                      <div>
-                                        {data.hcc ? (
-                                          <span>{data.hcc}</span>
-                                        ) : (
-                                          <span>0</span>
-                                        )}
-                                      </div>
-                                    )}
-                                    bodyStyle={{
-                                      borderTop: "  0.2px solid #e1e1e1",
-                                      borderBottom: "  0.2px solid #e1e1e1",
-                                    }}
-                                  /> */}
-
-                                  {/* <Column
-                                    field="suggestionCodes"
-                                    header="Suggestion  "
-                                    body={(data) => (
-                                      <div>
-                                        {data.suggestionCodes ? (
-                                          <span>{data.suggestionCodes}</span>
-                                        ) : (
-                                          <span>0</span>
-                                        )}
-                                      </div>
-                                    )}
-                                    bodyStyle={{
-                                      borderTop: "  0.2px solid #e1e1e1",
-                                      borderBottom: "  0.2px solid #e1e1e1",
-                                    }}
-                                  /> */}
-                                  {/* <Column
-                                    field="deletedCodes"
-                                    header="Deleted "
-                                    body={(data) => (
-                                      <div>
-                                        {data.deletedCodes ? (
-                                          <span>{data.deletedCodes}</span>
-                                        ) : (
-                                          <span>0</span>
-                                        )}
-                                      </div>
-                                    )}
-                                    bodyStyle={{
-                                      borderTop: "  0.2px solid #e1e1e1",
-                                      borderBottom: "  0.2px solid #e1e1e1",
-                                    }}
-                                  /> */}
-                                  {/* <Column
-                                    field="totalCodes"
-                                    header="Total Codes"
-                                    body={(data) => (
-                                      <div>
-                                        {data.deletedCodes ? (
-                                          <span>{data.deletedCodes}</span>
-                                        ) : (
-                                          <span>0</span>
-                                        )}
-                                      </div>
-                                    )}
-                                    bodyStyle={{
-                                      borderTop: "  0.2px solid #e1e1e1",
-                                      borderBottom: "  0.2px solid #e1e1e1",
-                                    }}
-                                  />
-                                  <Column
-                                    field="dateReceived"
-                                    body={(data) =>
-                                      moment(data.dueDate).format(
-                                        "MM-DD-YYYY hh:MM:A"
-                                      )
-                                    }
-                                    sortable
-                                    header="Date Received"
-                                    bodyStyle={{
-                                      borderTop: "  0.2px solid #e1e1e1",
-                                      borderBottom: "  0.2px solid #e1e1e1",
-                                    }}
-                                  /> */}
-                                  {/* <Column
-                            field="quality"
-                            header="Quality"
-                            body={(data) => {
-                              const percentage = 40; // Replace with the actual percentage from your data
-                              const color = calculateColor(percentage);
-
-                              return (
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <CircularProgressbar
-                                    value={percentage}
-                                    text={`${percentage}%`}
-                                    styles={{
-                                      root: { width: 40 },
-                                      path: {
-                                        stroke: color,
-                                        strokeLinecap: "butt",
-                                        transition:
-                                          "stroke-dashoffset 0.5s ease 0s",
-                                      },
-                                      trail: {
-                                        stroke: "#D9D9D9",
-                                      },
-                                      text: {
-                                        fill: "#000000",
-                                        fontSize: "30px",
-                                      },
-                                    }}
-                                  />
-                                </div>
-                              );
-                            }}
-                            bodyStyle={{
-                              borderTop: " 0.2px solid #e1e1e1",
-                              borderBottom: " 0.2px solid #e1e1e1",
-                            }}
-                          /> */}
-
-                                  {/* <Column
-                                    field="comments"
-                                    body={(data) => (
-                                      <div
-                                        className={styles.commentsIcon}
-                                        onClick={() => setModal(true)}
-                                      >
-                                        {SVGICON.comment}
-                                      </div>
-                                    )}
-                                    header="Comments"
-                                    bodyStyle={{
-                                      borderTop: " 0.2px solid #e1e1e1",
-                                      borderBottom: " 0.2px solid #e1e1e1",
-                                    }}
-                                  /> */}
-
-                                  {/* <Column
-                                    field="patientName"
-                                    header="Coder Name"
-                                    bodyStyle={{
-                                      borderTop: "  0.2px solid #e1e1e1",
-                                      borderBottom: "  0.2px solid #e1e1e1",
-                                    }}
-                                  />
-                                  <Column
-                                    field="patientName"
-                                    header="Flag"
-                                    body={(data, { rowIndex }) => (
-                                      <div>
-                                        {flagStates[rowIndex] ? (
-                                          <span
-                                            onClick={() =>
-                                              handleFlagClick(rowIndex)
-                                            }
-                                          >
-                                            {SVGICON.redFlag}
-                                          </span>
-                                        ) : (
-                                          <span
-                                            onClick={() =>
-                                              handleFlagClick(rowIndex)
-                                            }
-                                          >
-                                            {SVGICON.flag}
-                                          </span>
-                                        )}
-                                      </div>
-                                    )}
-                                    bodyStyle={{
-                                      borderTop: " 0.2px solid #e1e1e1",
-                                      borderBottom: " 0.2px solid #e1e1e1",
-                                      borderRight: " 0.2px solid #e1e1e1",
-                                    }}
-                                  /> */}
-                                  {/* </DataTable>  */}
-                                  <CoderReport setModal={setModal} reportListAll={reportListAll}/>
                                 </Tab.Pane>
                                 <Tab.Pane
                                   id="my-posts"
@@ -1003,23 +430,7 @@ const index = () => {
                           </div>
                         </div>
 
-                        {/* <div className="pagination-container">
-                          <Paginator
-                            first={paginationFirst}
-                            rows={10}
-                            totalRecords={totalElements}
-                            onPageChange={onPageChange}
-                          />
-                        </div> */}
-                        <div className="pagination-container">
-                          <Paginator
-                            first={paginationFirst}
-                            rows={15}
-                            totalRecords={totalElements}
-                            onPageChange={onPageChange}
-                          />
-                          <div className="total-pages">Total count: 8</div>
-                        </div>
+                        
                         {modal && (
                           <Modal
                             title="Comments"
