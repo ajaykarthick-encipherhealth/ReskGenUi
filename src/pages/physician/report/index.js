@@ -251,68 +251,15 @@ const index = () => {
                             </div>
                           </div>
                           <div className="col-xl-2">
-                            <div
-                              onClick={handleOpenModal}
-                              className={styles.dateDisplay}
-                            >
-                              <div>
-                                {startDate}&nbsp;- &nbsp;{endDate}
-                              </div>
-                              <div style={{ alignItems: "center" }}>
-                                <Image src={calender} />
-                              </div>
-                            </div>
-                            <Modal
-                              title=""
-                              visible={modalVisible}
-                              onOk={handleOk}
-                              mask={false}
-                              onCancel={false}
-                              closable={false}
-                              width="45%"
-                              height="800px"
-                              style={{ marginTop: "30px" }}
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  height: "400px",
-                                }}
-                              >
-                                <div style={{ display: "block" }}>
-                                  <div style={{ margin: "20px 0" }}>
-                                    <Button type="ghost">Due Date</Button>
-                                  </div>
-                                  <div>
-                                    <Button>Completed Date</Button>
-                                  </div>
-                                </div>
+                           
+                          
 
                                 <div>
                                   <RangePicker
-                                    getPopupContainer={() =>
-                                      document.getElementById("date-popup")
-                                    }
-                                    popupStyle={{
-                                      marginTop: "-259px",
-                                      marginLeft: "-78px",
-                                    }}
-                                    onChange={handleDatePickerChange}
-                                    open={true}
-                                    showNow={false}
-                                    style={{
-                                      visibility: "hidden",
-                                      boxShadow: "none",
-                                    }}
+                                  
                                   />
                                 </div>
-                              </div>
-                              <div
-                                id="date-popup"
-                                style={{ position: "relative" }}
-                              />
-                            </Modal>
+                          
                           </div>
                           <div className="col-xl-6">
                             <div className="row flr">
@@ -452,6 +399,9 @@ const index = () => {
                                   <CoderReport
                                     setModal={setModal}
                                     reportListAll={ReportPatientDetails?.data}
+                                    paginationFirst={paginationFirst}
+                                    ReportPatientDetails={ReportPatientDetails}
+                                    onPageChange={onPageChange}
                                   />
                                 </Tab.Pane>
                                 <Tab.Pane
@@ -480,17 +430,7 @@ const index = () => {
                           </div>
                         </div>
 
-                        <div className="pagination-container">
-                          <Paginator
-                            first={paginationFirst}
-                            rows={15}
-                            totalRecords={ReportPatientDetails?.data.length}
-                            onPageChange={onPageChange}
-                          />
-                          <div className="total-pages">
-                            Total count: {ReportPatientDetails?.data?.length}
-                          </div>
-                        </div>
+                        
                         {modal && (
                           <Modal
                             title="Comments"
