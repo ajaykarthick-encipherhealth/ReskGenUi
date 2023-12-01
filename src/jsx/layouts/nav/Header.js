@@ -10,7 +10,7 @@ import { Logout } from "../../../store/actions/AuthActions";
 import Swal from 'sweetalert2'
 import { MenuList, PhysicanMenuList ,L2AuditMenuList} from "./Menu";
 import ENDPOINTS from '../../../utility/enpoints';
-
+import axios from "../../../utility/axiosConfig";
 
 
 const Header = ({ onNote }) => {
@@ -20,6 +20,8 @@ const Header = ({ onNote }) => {
 	const [stateActive, setStateActive] = useState(router.pathname);
 	const [userRole, setUserRole] = useState("");
 	const [menuList, setMenuList] = useState([]);
+	const [userIdDetails, setUserIdDetails] = useState([]);
+
 
 
 	useEffect(() => {
@@ -33,6 +35,8 @@ const Header = ({ onNote }) => {
 		var userName = localStorage.getItem("userName");
 		const userRoleLocal = localStorage.getItem("userRole");
 		const userId = localStorage.getItem("userId");
+		getUserIdDetails(userId);
+
 		setUserRole(userRoleLocal);
 		setUserName(userName);
 		if(userRoleLocal == "Coder-L2"){
@@ -92,6 +96,15 @@ const Header = ({ onNote }) => {
 			  } 
 		  })
 	}
+
+	const getUserIdDetails = async (userId) => {
+		const response = await axios.get(
+		  ENDPOINTS.apiEndoint +
+		  `dbservice/user/get?userName=${userId}`
+		);
+		setUserIdDetails(response.data)
+	  }
+	
   
   return ( 
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>

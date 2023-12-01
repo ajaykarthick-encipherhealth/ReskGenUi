@@ -33,7 +33,7 @@ import {
 import {
   CalendarOutlined
 } from '@ant-design/icons';
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined,CheckCircleOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker} from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from "react-select";
@@ -252,7 +252,13 @@ const Details = ({}) => {
   const [isSideNavShow, setIsSideNavShow] = useState(false);
   const [timelineData, setTimeLineData] = useState([])
   const [flagTagActive, setFlagTagActive] = useState(true)
-  const [addValidCodeCheck, setAddValidCodeCheck] = useState(null)
+  const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
+  const [patienIdDetails, setPatienIdDetails] = useState('');
+  const [commentList, setCommentList] = useState([]);
+  const [notesList, setNotesList] = useState([]);
+  const [flagResultList, setFlagResultList] = useState([]);
+
+
 
 
   const handleAddButtonClick = () => {
@@ -354,6 +360,7 @@ const Details = ({}) => {
     var patientId = localStorage.getItem("patientId");
     setLocalOrgId(orgId);
     getPatientDetails(patientId, orgId, tenId);
+    getPatientIdDetails(patientId);
     // getPatientDetailsRadiology(orgId, tenId);
     setLocalTenantId(tenId);
 
@@ -391,6 +398,14 @@ const Details = ({}) => {
     );
   };
 
+  const getPatientIdDetails = async (patientId) => {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/patient/get?patientId=${patientId}`
+    );
+    setPatienIdDetails(response.data)
+  }
+
   const getYearOfServiceDetails = async (year) => {
     var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
@@ -403,6 +418,22 @@ const Details = ({}) => {
   };
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
   const getPatientDetails = async (patientId, orgId, tenId) => {
+
+    setNewValidDiseaseList([]);
+    setInNewValidDiseaseList([]);
+    setNewUnMatchHccList([]);
+    setValidDiseasesList([]);
+    setInvalidDiseasesList([]);
+    setComboDiseaseCodesList([]);
+    setDosYear([]);
+    setRAFScore([]);
+    setSuggestedNonHccList([]);
+    setSuggestedHccList([]);
+    setDeletedHccList([]);
+    setMeatCriteriaList([]);
+    setMeatCriteriaListNonHcc([]);
+
+
     // setIsLoading(true);
     setIsModalComments(false);
     // var patientId = localStorage.getItem("patientId");
@@ -413,7 +444,6 @@ const Details = ({}) => {
     );
     if (response.data) {
       var result = response.data;
-      console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -453,7 +483,6 @@ const Details = ({}) => {
         // );
         setDosYearDefalutSelect(dosYearArr[0]);
 
-        console.log(dosYearArr);
 
         if (result.rafScore != null) {
           rafScore = result.rafScore;
@@ -583,10 +612,8 @@ const Details = ({}) => {
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
         setComboDiseaseCodesList(comboDis);
-        // setMeatCriteriaList(meatCri);
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
-        console.log(suggestListAllNonHcc);
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
@@ -1004,9 +1031,182 @@ const Details = ({}) => {
   
     }
 
-    console.log(result)
 
-    setPatientDetailsRadiology(result);
+    // setPatientDetailsRadiology(result);
+    //   setRadiologyResult(result);
+    //   if (result.validDisease != null) {
+    //     var validDis = "";
+    //     var invalidDis = "";
+    //     var comboDis = "";
+    //     var meatCri = "";
+    //     var dosYearArr = [];
+    //     var dosYearArrFile = [];
+    //     var validDiseaseNewRes = [];
+    //     var invalidDiseaseNewRes = [];
+    //     var unMatchRes = [];
+    //     getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
+    //     // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
+
+    //     for (var key in result.validDisease) {
+    //       dosYearArr.push({ value: key, label: key });
+    //     }
+
+    //     var dateofService = dosYearArr[0].value;
+
+    //     const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+
+    //     const highestDosValue = dosYearArr.filter(
+    //       (i) => parseInt(i.value) === highestDOS
+    //     );
+    //     setDosYearDefalutSelectRadiology(dosYearArr[0]);
+
+    //     if (result.radiologyFileDetail != null) {
+    //       for (var key in result.radiologyFileDetail[0].documentDos) {
+    //         dosYearArrFile.push({ value: key, label: key });
+    //       }
+
+    //       // var fileDetails = result.radiologyFileDetail[dateofService];
+    //       setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
+    //       getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
+    //     }
+
+    //     validDis = result.validDisease[dateofService];
+    //     validDiseaseNewRes = result.validDisease[dateofService];
+    //     invalidDiseaseNewRes = result.invalidDisease[dateofService];
+    //     if (result.unmatchedDisease != null) {
+    //       var unMatchResCheck = result.unmatchedDisease[dateofService];
+
+    //       if (unMatchResCheck != null) {
+    //         unMatchRes = result.unmatchedDisease[dateofService];
+    //       }
+    //     }
+
+    //     invalidDis = result.invalidDisease[dateofService];
+    //     comboDis = result.comboDisease[dateofService];
+    //     meatCri = result.meatCriteria[dateofService];
+
+    //     setNewValidDiseaseListRadiology(validDiseaseNewRes);
+    //     setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
+    //     setUnMatchHccListRadiology(unMatchRes);
+    //     setComboDiseaseCodesListRadiology(comboDis);
+    //     setDosYearRadiology(dosYearArr);
+    //     setFileRadiologyDateofServiceList(dosYearArrFile);
+
+    //     const COLORS = [
+    //       "bg-bg-seven",
+    //       "bg-third",
+    //       "bg-bg-four",
+    //       "bg-bg-five",
+    //       "bg-bg-six",
+    //       "bg-bg-eight",
+    //       "bg-bg-nine",
+    //       "bg-bg-ten",
+    //       "bg-bg-leven",
+    //     ];
+
+    //     var meatListArr = [];
+    //     var meatMoniterHead = [];
+    //     var meatEvaluteHead = [];
+    //     var meatAssesmentHead = [];
+    //     var meatTreatMentHead = [];
+    //     var allMeatHead = [];
+    //     var allMeatHeadColorArr = [];
+    //     var allMeatHeadColor = [];
+    //     var dublicateRemoveSecondArr = [];
+
+    //     meatCri.map((res, index) => {
+    //       if (res.monitorCapturedFromHeader != "") {
+    //         meatMoniterHead.push({
+    //           header: res.monitorCapturedFromHeader,
+    //         });
+    //       }
+    //       if (res.evaluateCapturedFromHeader != "") {
+    //         meatEvaluteHead.push({
+    //           header: res.evaluateCapturedFromHeader,
+    //         });
+    //       }
+    //       if (res.assessmentCapturedFromHeader != "") {
+    //         meatAssesmentHead.push({
+    //           header: res.assessmentCapturedFromHeader,
+    //         });
+    //       }
+    //       if (res.treatmentCapturedFromHeader != "") {
+    //         meatTreatMentHead.push({
+    //           header: res.treatmentCapturedFromHeader,
+    //         });
+    //       }
+    //       var newArray = [];
+    //       newArray = [
+    //         ...allMeatHead,
+    //         ...meatMoniterHead,
+    //         ...meatEvaluteHead,
+    //         ...meatAssesmentHead,
+    //         ...meatTreatMentHead,
+    //       ];
+    //       var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+    //       dublicateRemoveArr.map((res3, index) => {
+    //         allMeatHeadColor.push({
+    //           header: res3.header,
+    //           color: COLORS[index],
+    //         });
+    //       });
+    //       allMeatHeadColorArr = allMeatHeadColor;
+
+    //       dublicateRemoveSecondArr = getUniqueListBy(
+    //         allMeatHeadColor,
+    //         "header"
+    //       );
+    //       setMeatColorCodeList(dublicateRemoveSecondArr);
+    //     });
+
+    //     meatCri.map((res, index) => {
+    //       meatListArr.push({
+    //         diagnosisCode: res.diagnosisCode,
+    //         diseaseName: res.diseaseName,
+    //         monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+    //         assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+    //         evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+    //         treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+    //         radiology:res.radiology,
+    //         monitorCapturedFromHeaderColor: colorCodeMatch(
+    //           dublicateRemoveSecondArr,
+    //           res.monitorCapturedFromHeader
+    //         ),
+    //         assessmentCapturedFromHeaderColor: colorCodeMatch(
+    //           dublicateRemoveSecondArr,
+    //           res.assessmentCapturedFromHeader
+    //         ),
+    //         evaluateCapturedFromHeaderColor: colorCodeMatch(
+    //           dublicateRemoveSecondArr,
+    //           res.evaluateCapturedFromHeader
+    //         ),
+    //         treatmentCapturedFromHeaderColor: colorCodeMatch(
+    //           dublicateRemoveSecondArr,
+    //           res.treatmentCapturedFromHeader
+    //         ),
+    //         monitorColor: COLORS[index],
+    //         meatColor: COLORS[index],
+    //         assessment: res.assessment,
+    //         monitor: res.monitor,
+    //         evaluate: res.evaluate,
+    //         treatment: res.treatment,
+    //         isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+    //       });
+    //     });
+    //     setMeatCriteriaListRadiology(meatListArr);
+    //     setRadiologyResultStatus(true);
+    //     setIsLoadingDos(false);
+    //   }
+
+    
+       const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+    );
+    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
+    if (response.data) {
+      var result = response.data;
+      setPatientDetailsRadiology(result);
       setRadiologyResult(result);
       if (result.validDisease != null) {
         var validDis = "";
@@ -1039,7 +1239,6 @@ const Details = ({}) => {
             dosYearArrFile.push({ value: key, label: key });
           }
 
-          console.log(dosYearArrFile)
           // var fileDetails = result.radiologyFileDetail[dateofService];
           setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
           getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
@@ -1057,8 +1256,14 @@ const Details = ({}) => {
         }
 
         invalidDis = result.invalidDisease[dateofService];
-        comboDis = result.comboDisease[dateofService];
-        meatCri = result.meatCriteria[dateofService];
+        if(result.comboDisease != null){
+          comboDis = result.comboDisease[dateofService];
+
+        }
+        if(result.meatCriteria != null){
+          meatCri = result.meatCriteria[dateofService];
+
+        }
 
         setNewValidDiseaseListRadiology(validDiseaseNewRes);
         setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
@@ -1172,178 +1377,7 @@ const Details = ({}) => {
         setRadiologyResultStatus(true);
         setIsLoadingDos(false);
       }
-
-    
-       const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
-    );
-    // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
-    if (response.data) {
-      var result = response.data;
-      setPatientDetailsRadiology(result);
-      setRadiologyResult(result);
-      if (result.validDisease != null) {
-        var validDis = "";
-        var invalidDis = "";
-        var comboDis = "";
-        var meatCri = "";
-        var dosYearArr = [];
-        var dosYearArrFile = [];
-        var validDiseaseNewRes = [];
-        var invalidDiseaseNewRes = [];
-        var unMatchRes = [];
-        // getPatientPdfFileRadiology(result.radiologyFileDetail.azureBlobPath, tenId);
-        // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
-
-        for (var key in result.validDisease) {
-          dosYearArr.push({ value: key, label: key });
-        }
-
-        var dateofService = dosYearArr[0].value;
-
-        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-
-        const highestDosValue = dosYearArr.filter(
-          (i) => parseInt(i.value) === highestDOS
-        );
-        setDosYearDefalutSelectRadiology(dosYearArr[0]);
-
-        if (result.radiologyFileDetail != null) {
-          for (var key in result.radiologyFileDetail) {
-            dosYearArrFile.push({ value: key, label: key });
-          }
-          var fileDetails = result.radiologyFileDetail[dateofService];
-          setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
-          getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, tenId);
-        }
-
-        validDis = result.validDisease[dateofService];
-        validDiseaseNewRes = result.validDisease[dateofService];
-        invalidDiseaseNewRes = result.invalidDisease[dateofService];
-        if (result.unmatchedDisease != null) {
-          var unMatchResCheck = result.unmatchedDisease[dateofService];
-
-          if (unMatchResCheck != null) {
-            unMatchRes = result.unmatchedDisease[dateofService];
-          }
-        }
-
-        invalidDis = result.invalidDisease[dateofService];
-        comboDis = result.comboDisease[dateofService];
-        meatCri = result.meatCriteria[dateofService];
-
-        setNewValidDiseaseListRadiology(validDiseaseNewRes);
-        setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
-        setUnMatchHccListRadiology(unMatchRes);
-        setComboDiseaseCodesListRadiology(comboDis);
-        setDosYearRadiology(dosYearArr);
-        setFileRadiologyDateofServiceList(dosYearArrFile);
-
-        const COLORS = [
-          "bg-bg-seven",
-          "bg-third",
-          "bg-bg-four",
-          "bg-bg-five",
-          "bg-bg-six",
-          "bg-bg-eight",
-          "bg-bg-nine",
-          "bg-bg-ten",
-          "bg-bg-leven",
-        ];
-
-        var meatListArr = [];
-        var meatMoniterHead = [];
-        var meatEvaluteHead = [];
-        var meatAssesmentHead = [];
-        var meatTreatMentHead = [];
-        var allMeatHead = [];
-        var allMeatHeadColorArr = [];
-        var allMeatHeadColor = [];
-        var dublicateRemoveSecondArr = [];
-
-        meatCri.map((res, index) => {
-          if (res.monitorCapturedFromHeader != "") {
-            meatMoniterHead.push({
-              header: res.monitorCapturedFromHeader,
-            });
-          }
-          if (res.evaluateCapturedFromHeader != "") {
-            meatEvaluteHead.push({
-              header: res.evaluateCapturedFromHeader,
-            });
-          }
-          if (res.assessmentCapturedFromHeader != "") {
-            meatAssesmentHead.push({
-              header: res.assessmentCapturedFromHeader,
-            });
-          }
-          if (res.treatmentCapturedFromHeader != "") {
-            meatTreatMentHead.push({
-              header: res.treatmentCapturedFromHeader,
-            });
-          }
-          var newArray = [];
-          newArray = [
-            ...allMeatHead,
-            ...meatMoniterHead,
-            ...meatEvaluteHead,
-            ...meatAssesmentHead,
-            ...meatTreatMentHead,
-          ];
-          var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-          dublicateRemoveArr.map((res3, index) => {
-            allMeatHeadColor.push({
-              header: res3.header,
-              color: COLORS[index],
-            });
-          });
-          allMeatHeadColorArr = allMeatHeadColor;
-
-          dublicateRemoveSecondArr = getUniqueListBy(
-            allMeatHeadColor,
-            "header"
-          );
-          setMeatColorCodeList(dublicateRemoveSecondArr);
-        });
-
-        meatCri.map((res, index) => {
-          meatListArr.push({
-            diagnosisCode: res.diagnosisCode,
-            diseaseName: res.diseaseName,
-            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-            monitorCapturedFromHeaderColor: colorCodeMatch(
-              dublicateRemoveSecondArr,
-              res.monitorCapturedFromHeader
-            ),
-            assessmentCapturedFromHeaderColor: colorCodeMatch(
-              dublicateRemoveSecondArr,
-              res.assessmentCapturedFromHeader
-            ),
-            evaluateCapturedFromHeaderColor: colorCodeMatch(
-              dublicateRemoveSecondArr,
-              res.evaluateCapturedFromHeader
-            ),
-            treatmentCapturedFromHeaderColor: colorCodeMatch(
-              dublicateRemoveSecondArr,
-              res.treatmentCapturedFromHeader
-            ),
-            monitorColor: COLORS[index],
-            meatColor: COLORS[index],
-            assessment: res.assessment,
-            monitor: res.monitor,
-            evaluate: res.evaluate,
-            treatment: res.treatment,
-            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-          });
-        });
-        setMeatCriteriaListRadiology(meatListArr);
-        setRadiologyResultStatus(true);
-        setIsLoadingDos(false);
-      } else {
+      else {
         setIsLoading(false);
       }
     }
@@ -1351,327 +1385,434 @@ const Details = ({}) => {
   const getLabReportDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
 
-    var resultTest = {
-      "patientId": "lenovo-01",
-      "patientName": "Armstead, Harold B",
-      "fileId": null,
-      "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-      "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-      "dob": "04/22/1950",
-      "gender": "M",
-      "age": 73,
-      "validDisease": {
-          "2023": [
-              {
-                  "diagnosisCode": "E11.9",
-                  "actualDescription": "Type 2 diabetes mellitus without complications",
-                  "dbDescription": null,
-                  "notes": null,
-                  "capturedSections": [
-                      "A1c"
-                  ],
-                  "encounterDate": "01/20/2023",
-                  "isManuallyAdded": null,
-                  "manuallyAddedAt": null,
-                  "manuallyAddedBy": null,
-                  "diagnosisCodeFinding": null,
-                  "isHccValid": null
-              },
-              {
-                  "diagnosisCode": "E11.9",
-                  "actualDescription": "Type 2 diabetes mellitus without complications",
-                  "dbDescription": null,
-                  "notes": null,
-                  "capturedSections": [
-                      "HGA1C"
-                  ],
-                  "encounterDate": "01/19/2023",
-                  "isManuallyAdded": null,
-                  "manuallyAddedAt": null,
-                  "manuallyAddedBy": null,
-                  "diagnosisCodeFinding": null,
-                  "isHccValid": null
-              }
-          ]
-      },
-      "meatCriteria": {
-          "2023": [
-              {
-                  "diseaseName": "Type 2 diabetes mellitus without complications",
-                  "diagnosisCode": "E11.9",
-                  "isMeatCriteriaPresent": true,
-                  "monitorCapturedFromHeader": null,
-                  "monitor": null,
-                  "evaluateCapturedFromHeader": null,
-                  "evaluate": "A1c",
-                  "assessmentCapturedFromHeader": null,
-                  "assessment": null,
-                  "treatmentCapturedFromHeader": null,
-                  "treatment": null,
-                  "encounterDate": "01/20/2023",
-                  "radiology": null
-              },
-              {
-                  "diseaseName": "Type 2 diabetes mellitus without complications",
-                  "diagnosisCode": "E11.9",
-                  "isMeatCriteriaPresent": true,
-                  "monitorCapturedFromHeader": null,
-                  "monitor": null,
-                  "evaluateCapturedFromHeader": null,
-                  "evaluate": "HGA1C",
-                  "assessmentCapturedFromHeader": null,
-                  "assessment": null,
-                  "treatmentCapturedFromHeader": null,
-                  "treatment": null,
-                  "encounterDate": "01/19/2023",
-                  "radiology": null
-              }
-          ]
-      },
-      "labFileDetail": [
-          {
-              "active": true,
-              "version": 0,
-              "createdBy": "anonymousUser",
-              "updatedBy": "anonymousUser",
-              "fileId": "537cc4bc-f072-4f4e-9852-b6045a035236",
-              "patientId": "lenovo-01",
-              "userId": "uvais01@encipherhealth.onmicrosoft.com",
-              "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-              "documentDos": {
-                  "09/02/2022": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          2
-                      ]
-                  },
-                  "01/20/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          4
-                      ]
-                  },
-                  "06/13/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          5
-                      ]
-                  },
-                  "01/19/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          6
-                      ]
-                  },
-                  "07/26/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          3
-                      ]
-                  },
-                  "08/01/2023": {
-                      "testName": "Lab file",
-                      "pageNumbers": [
-                          1
-                      ]
-                  }
-              },
-              "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-              "fileName": "ilovepdf_merged.pdf",
-              "azureBlobPath": "537cc4bc-f072-4f4e-9852-b6045a035236.pdf",
-              "createdDate": "2023-11-29T15:50:34.098Z",
-              "lastModifiedDate": "2023-11-29T15:50:34.098Z"
-          }
-      ]
-    }
-
-    console.log(resultTest)
-
-  if (resultTest.labFileDetail != null) {
-    var result = resultTest;
-    setLabResult(result);
-    var dosYearArr = [];
-    var dosYearArrFile = [];
-    var validDiseaseNewRes = [];
-    var meatRes = [];
-
-    for (var key in result.validDisease) {
-      dosYearArr.push({ value: key, label: key });
-    }
-
-    setLabFileDosList(dosYearArr);
-
-    var dateofService = dosYearArr[0].value;
-
-    const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-
-    const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
-
-    if (dosYearArr.length != 0) {
-      validDiseaseNewRes = result.validDisease[dateofService];
-      meatRes = result.meatCriteria[dateofService];
-      if (result.labFileDetail != null) {
-        for (var key in result.labFileDetail[0].documentDos) {
-          dosYearArrFile.push({ value: key, label: key });
-        }
-        setFileLabDateofServiceList(dosYearArrFile);
-        setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-        var fileDetails = result.labFileDetail;
-        getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-      }
-    }
-
-    const COLORS = [
-      "bg-bg-seven",
-      "bg-third",
-      "bg-bg-four",
-      "bg-bg-five",
-      "bg-bg-six",
-      "bg-bg-eight",
-      "bg-bg-nine",
-      "bg-bg-ten",
-      "bg-bg-leven",
-    ];
-
-    var meatListArr = [];
-    var meatMoniterHead = [];
-    var meatEvaluteHead = [];
-    var meatAssesmentHead = [];
-    var meatTreatMentHead = [];
-    var allMeatHead = [];
-    var allMeatHeadColorArr = [];
-    var allMeatHeadColor = [];
-    var dublicateRemoveSecondArr = [];
-
-    meatRes.map((res, index) => {
-      if (res.monitorCapturedFromHeader != "") {
-        meatMoniterHead.push({
-          header: res.monitorCapturedFromHeader,
-        });
-      }
-      if (res.evaluateCapturedFromHeader != "") {
-        meatEvaluteHead.push({
-          header: res.evaluateCapturedFromHeader,
-        });
-      }
-      if (res.assessmentCapturedFromHeader != "") {
-        meatAssesmentHead.push({
-          header: res.assessmentCapturedFromHeader,
-        });
-      }
-      if (res.treatmentCapturedFromHeader != "") {
-        meatTreatMentHead.push({
-          header: res.treatmentCapturedFromHeader,
-        });
-      }
-      var newArray = [];
-      newArray = [
-        ...allMeatHead,
-        ...meatMoniterHead,
-        ...meatEvaluteHead,
-        ...meatAssesmentHead,
-        ...meatTreatMentHead,
-      ];
-      var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-      dublicateRemoveArr.map((res3, index) => {
-        allMeatHeadColor.push({
-          header: res3.header,
-          color: COLORS[index],
-        });
-      });
-      allMeatHeadColorArr = allMeatHeadColor;
-
-      dublicateRemoveSecondArr = getUniqueListBy(
-        allMeatHeadColor,
-        "header"
-      );
-      setMeatColorCodeList(dublicateRemoveSecondArr);
-    });
-
-    meatRes.map((res, index) => {
-      meatListArr.push({
-        diagnosisCode: res.diagnosisCode,
-        diseaseName: res.diseaseName,
-        monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-        assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-        evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-        treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-        radiology:res.radiology,
-        monitorCapturedFromHeaderColor: colorCodeMatch(
-          dublicateRemoveSecondArr,
-          res.monitorCapturedFromHeader
-        ),
-        assessmentCapturedFromHeaderColor: colorCodeMatch(
-          dublicateRemoveSecondArr,
-          res.assessmentCapturedFromHeader
-        ),
-        evaluateCapturedFromHeaderColor: colorCodeMatch(
-          dublicateRemoveSecondArr,
-          res.evaluateCapturedFromHeader
-        ),
-        treatmentCapturedFromHeaderColor: colorCodeMatch(
-          dublicateRemoveSecondArr,
-          res.treatmentCapturedFromHeader
-        ),
-        monitorColor: COLORS[index],
-        meatColor: COLORS[index],
-        assessment: res.assessment,
-        monitor: res.monitor,
-        evaluate: res.evaluate,
-        treatment: res.treatment,
-        isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-      });
-    });
-
-
-     console.log(meatListArr)
-    setLabReportValidList(validDiseaseNewRes);
-    setLabReportMeatList(meatListArr);
-    setLabFileDosListDefaultSelect(dosYearArr[0]);
-    setLabResultStatus(true);
-    setIsLoadingDos(false);
-  }
-    // const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //   `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
-    // );
-
-    // if (response.data.labFileDetail != null) {
-    //   var result = response.data;
-    //   setLabResult(result);
-    //   var dosYearArr = [];
-    //   var dosYearArrFile = [];
-    //   var validDiseaseNewRes = [];
-
-    //   for (var key in result.validDisease) {
-    //     dosYearArr.push({ value: key, label: key });
-    //   }
-
-    //   setLabFileDosList(dosYearArr);
-
-    //   var dateofService = dosYearArr[0].value;
-
-    //   const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-
-    //   const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
-
-    //   if (dosYearArr.length != 0) {
-    //     validDiseaseNewRes = result.validDisease[dateofService];
-    //     if (result.labFileDetail != null) {
-    //       for (var key in result.labFileDetail) {
-    //         dosYearArrFile.push({ value: key, label: key });
+    // var resultTest = {
+    //   "patientId": "lenovo-01",
+    //   "patientName": "Armstead, Harold B",
+    //   "fileId": null,
+    //   "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+    //   "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+    //   "dob": "04/22/1950",
+    //   "gender": "M",
+    //   "age": 73,
+    //   "validDisease": {
+    //       "2023": [
+    //           {
+    //               "diagnosisCode": "E11.9",
+    //               "actualDescription": "Type 2 diabetes mellitus without complications",
+    //               "dbDescription": null,
+    //               "notes": null,
+    //               "capturedSections": [
+    //                   "A1c"
+    //               ],
+    //               "encounterDate": "01/20/2023",
+    //               "isManuallyAdded": null,
+    //               "manuallyAddedAt": null,
+    //               "manuallyAddedBy": null,
+    //               "diagnosisCodeFinding": null,
+    //               "isHccValid": null
+    //           },
+    //           {
+    //               "diagnosisCode": "E11.9",
+    //               "actualDescription": "Type 2 diabetes mellitus without complications",
+    //               "dbDescription": null,
+    //               "notes": null,
+    //               "capturedSections": [
+    //                   "HGA1C"
+    //               ],
+    //               "encounterDate": "01/19/2023",
+    //               "isManuallyAdded": null,
+    //               "manuallyAddedAt": null,
+    //               "manuallyAddedBy": null,
+    //               "diagnosisCodeFinding": null,
+    //               "isHccValid": null
+    //           }
+    //       ]
+    //   },
+    //   "meatCriteria": {
+    //       "2023": [
+    //           {
+    //               "diseaseName": "Type 2 diabetes mellitus without complications",
+    //               "diagnosisCode": "E11.9",
+    //               "isMeatCriteriaPresent": true,
+    //               "monitorCapturedFromHeader": null,
+    //               "monitor": null,
+    //               "evaluateCapturedFromHeader": null,
+    //               "evaluate": "A1c",
+    //               "assessmentCapturedFromHeader": null,
+    //               "assessment": null,
+    //               "treatmentCapturedFromHeader": null,
+    //               "treatment": null,
+    //               "encounterDate": "01/20/2023",
+    //               "radiology": null
+    //           },
+    //           {
+    //               "diseaseName": "Type 2 diabetes mellitus without complications",
+    //               "diagnosisCode": "E11.9",
+    //               "isMeatCriteriaPresent": true,
+    //               "monitorCapturedFromHeader": null,
+    //               "monitor": null,
+    //               "evaluateCapturedFromHeader": null,
+    //               "evaluate": "HGA1C",
+    //               "assessmentCapturedFromHeader": null,
+    //               "assessment": null,
+    //               "treatmentCapturedFromHeader": null,
+    //               "treatment": null,
+    //               "encounterDate": "01/19/2023",
+    //               "radiology": null
+    //           }
+    //       ]
+    //   },
+    //   "labFileDetail": [
+    //       {
+    //           "active": true,
+    //           "version": 0,
+    //           "createdBy": "anonymousUser",
+    //           "updatedBy": "anonymousUser",
+    //           "fileId": "537cc4bc-f072-4f4e-9852-b6045a035236",
+    //           "patientId": "lenovo-01",
+    //           "userId": "uvais01@encipherhealth.onmicrosoft.com",
+    //           "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+    //           "documentDos": {
+    //               "09/02/2022": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       2
+    //                   ]
+    //               },
+    //               "01/20/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       4
+    //                   ]
+    //               },
+    //               "06/13/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       5
+    //                   ]
+    //               },
+    //               "01/19/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       6
+    //                   ]
+    //               },
+    //               "07/26/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       3
+    //                   ]
+    //               },
+    //               "08/01/2023": {
+    //                   "testName": "Lab file",
+    //                   "pageNumbers": [
+    //                       1
+    //                   ]
+    //               }
+    //           },
+    //           "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+    //           "fileName": "ilovepdf_merged.pdf",
+    //           "azureBlobPath": "537cc4bc-f072-4f4e-9852-b6045a035236.pdf",
+    //           "createdDate": "2023-11-29T15:50:34.098Z",
+    //           "lastModifiedDate": "2023-11-29T15:50:34.098Z"
     //       }
-    //       setFileLabDateofServiceList(dosYearArrFile);
-    //       setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-    //       var fileDetails = result.labFileDetail[dateofService];
-    //       getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-    //     }
-    //   }
-    //   setLabReportValidList(validDiseaseNewRes);
-    //   setLabFileDosListDefaultSelect(dosYearArr[0]);
-    //   setLabResultStatus(true);
-    //   setIsLoadingDos(false);
+    //   ]
     // }
+
+
+  // if (resultTest.labFileDetail != null) {
+  //   var result = resultTest;
+  //   setLabResult(result);
+  //   var dosYearArr = [];
+  //   var dosYearArrFile = [];
+  //   var validDiseaseNewRes = [];
+  //   var meatRes = [];
+
+  //   for (var key in result.validDisease) {
+  //     dosYearArr.push({ value: key, label: key });
+  //   }
+
+  //   setLabFileDosList(dosYearArr);
+
+  //   var dateofService = dosYearArr[0].value;
+
+  //   const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+
+  //   const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+
+  //   if (dosYearArr.length != 0) {
+  //     validDiseaseNewRes = result.validDisease[dateofService];
+  //     meatRes = result.meatCriteria[dateofService];
+  //     if (result.labFileDetail != null) {
+  //       for (var key in result.labFileDetail[0].documentDos) {
+  //         dosYearArrFile.push({ value: key, label: key });
+  //       }
+  //       setFileLabDateofServiceList(dosYearArrFile);
+  //       setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+  //       var fileDetails = result.labFileDetail;
+  //       getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+  //     }
+  //   }
+
+  //   const COLORS = [
+  //     "bg-bg-seven",
+  //     "bg-third",
+  //     "bg-bg-four",
+  //     "bg-bg-five",
+  //     "bg-bg-six",
+  //     "bg-bg-eight",
+  //     "bg-bg-nine",
+  //     "bg-bg-ten",
+  //     "bg-bg-leven",
+  //   ];
+
+  //   var meatListArr = [];
+  //   var meatMoniterHead = [];
+  //   var meatEvaluteHead = [];
+  //   var meatAssesmentHead = [];
+  //   var meatTreatMentHead = [];
+  //   var allMeatHead = [];
+  //   var allMeatHeadColorArr = [];
+  //   var allMeatHeadColor = [];
+  //   var dublicateRemoveSecondArr = [];
+
+  //   meatRes.map((res, index) => {
+  //     if (res.monitorCapturedFromHeader != "") {
+  //       meatMoniterHead.push({
+  //         header: res.monitorCapturedFromHeader,
+  //       });
+  //     }
+  //     if (res.evaluateCapturedFromHeader != "") {
+  //       meatEvaluteHead.push({
+  //         header: res.evaluateCapturedFromHeader,
+  //       });
+  //     }
+  //     if (res.assessmentCapturedFromHeader != "") {
+  //       meatAssesmentHead.push({
+  //         header: res.assessmentCapturedFromHeader,
+  //       });
+  //     }
+  //     if (res.treatmentCapturedFromHeader != "") {
+  //       meatTreatMentHead.push({
+  //         header: res.treatmentCapturedFromHeader,
+  //       });
+  //     }
+  //     var newArray = [];
+  //     newArray = [
+  //       ...allMeatHead,
+  //       ...meatMoniterHead,
+  //       ...meatEvaluteHead,
+  //       ...meatAssesmentHead,
+  //       ...meatTreatMentHead,
+  //     ];
+  //     var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+  //     dublicateRemoveArr.map((res3, index) => {
+  //       allMeatHeadColor.push({
+  //         header: res3.header,
+  //         color: COLORS[index],
+  //       });
+  //     });
+  //     allMeatHeadColorArr = allMeatHeadColor;
+
+  //     dublicateRemoveSecondArr = getUniqueListBy(
+  //       allMeatHeadColor,
+  //       "header"
+  //     );
+  //     setMeatColorCodeList(dublicateRemoveSecondArr);
+  //   });
+
+  //   meatRes.map((res, index) => {
+  //     meatListArr.push({
+  //       diagnosisCode: res.diagnosisCode,
+  //       diseaseName: res.diseaseName,
+  //       monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+  //       assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+  //       evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+  //       treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+  //       radiology:res.radiology,
+  //       monitorCapturedFromHeaderColor: colorCodeMatch(
+  //         dublicateRemoveSecondArr,
+  //         res.monitorCapturedFromHeader
+  //       ),
+  //       assessmentCapturedFromHeaderColor: colorCodeMatch(
+  //         dublicateRemoveSecondArr,
+  //         res.assessmentCapturedFromHeader
+  //       ),
+  //       evaluateCapturedFromHeaderColor: colorCodeMatch(
+  //         dublicateRemoveSecondArr,
+  //         res.evaluateCapturedFromHeader
+  //       ),
+  //       treatmentCapturedFromHeaderColor: colorCodeMatch(
+  //         dublicateRemoveSecondArr,
+  //         res.treatmentCapturedFromHeader
+  //       ),
+  //       monitorColor: COLORS[index],
+  //       meatColor: COLORS[index],
+  //       assessment: res.assessment,
+  //       monitor: res.monitor,
+  //       evaluate: res.evaluate,
+  //       treatment: res.treatment,
+  //       isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+  //     });
+  //   });
+
+
+  //   setLabReportValidList(validDiseaseNewRes);
+  //   setLabReportMeatList(meatListArr);
+  //   setLabFileDosListDefaultSelect(dosYearArr[0]);
+  //   setLabResultStatus(true);
+  //   setIsLoadingDos(false);
+  // }
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+    );
+
+    var resultTest = response.data;
+
+    if (resultTest.labFileDetail != null) {
+      var result = resultTest;
+      setLabResult(result);
+      var dosYearArr = [];
+      var dosYearArrFile = [];
+      var validDiseaseNewRes = [];
+      var meatRes = [];
+  
+      for (var key in result.validDisease) {
+        dosYearArr.push({ value: key, label: key });
+      }
+  
+      setLabFileDosList(dosYearArr);
+  
+      var dateofService = dosYearArr[0].value;
+  
+      const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+  
+      const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+  
+      if (dosYearArr.length != 0) {
+        validDiseaseNewRes = result.validDisease[dateofService];
+        meatRes = result.meatCriteria[dateofService];
+        if (result.labFileDetail != null) {
+          for (var key in result.labFileDetail[0].documentDos) {
+            dosYearArrFile.push({ value: key, label: key });
+          }
+          setFileLabDateofServiceList(dosYearArrFile);
+          setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+          var fileDetails = result.labFileDetail;
+          getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+        }
+      }
+  
+      const COLORS = [
+        "bg-bg-seven",
+        "bg-third",
+        "bg-bg-four",
+        "bg-bg-five",
+        "bg-bg-six",
+        "bg-bg-eight",
+        "bg-bg-nine",
+        "bg-bg-ten",
+        "bg-bg-leven",
+      ];
+  
+      var meatListArr = [];
+      var meatMoniterHead = [];
+      var meatEvaluteHead = [];
+      var meatAssesmentHead = [];
+      var meatTreatMentHead = [];
+      var allMeatHead = [];
+      var allMeatHeadColorArr = [];
+      var allMeatHeadColor = [];
+      var dublicateRemoveSecondArr = [];
+  
+      meatRes.map((res, index) => {
+        if (res.monitorCapturedFromHeader != "") {
+          meatMoniterHead.push({
+            header: res.monitorCapturedFromHeader,
+          });
+        }
+        if (res.evaluateCapturedFromHeader != "") {
+          meatEvaluteHead.push({
+            header: res.evaluateCapturedFromHeader,
+          });
+        }
+        if (res.assessmentCapturedFromHeader != "") {
+          meatAssesmentHead.push({
+            header: res.assessmentCapturedFromHeader,
+          });
+        }
+        if (res.treatmentCapturedFromHeader != "") {
+          meatTreatMentHead.push({
+            header: res.treatmentCapturedFromHeader,
+          });
+        }
+        var newArray = [];
+        newArray = [
+          ...allMeatHead,
+          ...meatMoniterHead,
+          ...meatEvaluteHead,
+          ...meatAssesmentHead,
+          ...meatTreatMentHead,
+        ];
+        var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+        dublicateRemoveArr.map((res3, index) => {
+          allMeatHeadColor.push({
+            header: res3.header,
+            color: COLORS[index],
+          });
+        });
+        allMeatHeadColorArr = allMeatHeadColor;
+  
+        dublicateRemoveSecondArr = getUniqueListBy(
+          allMeatHeadColor,
+          "header"
+        );
+        setMeatColorCodeList(dublicateRemoveSecondArr);
+      });
+  
+      meatRes.map((res, index) => {
+        meatListArr.push({
+          diagnosisCode: res.diagnosisCode,
+          diseaseName: res.diseaseName,
+          monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+          assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+          evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+          treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+          radiology:res.radiology,
+          monitorCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.monitorCapturedFromHeader
+          ),
+          assessmentCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.assessmentCapturedFromHeader
+          ),
+          evaluateCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.evaluateCapturedFromHeader
+          ),
+          treatmentCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.treatmentCapturedFromHeader
+          ),
+          monitorColor: COLORS[index],
+          meatColor: COLORS[index],
+          assessment: res.assessment,
+          monitor: res.monitor,
+          evaluate: res.evaluate,
+          treatment: res.treatment,
+          isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+        });
+      });
+  
+  
+      setLabReportValidList(validDiseaseNewRes);
+      setLabReportMeatList(meatListArr);
+      setLabFileDosListDefaultSelect(dosYearArr[0]);
+      setLabResultStatus(true);
+      setIsLoadingDos(false);
+    }
   };
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
@@ -1812,7 +1953,7 @@ const Details = ({}) => {
             setConfirmNotesModalValid(true),
             setIsValidAction("validToDeleted")
           ),
-        1000
+    
       );
     });
 
@@ -1824,7 +1965,7 @@ const Details = ({}) => {
             setConfirmNotesModalValid(true),
             setIsValidAction("validToSuggested")
           ),
-        1000
+    
       );
     });
 
@@ -1836,7 +1977,7 @@ const Details = ({}) => {
             setConfirmNotesModalValid(true),
             setIsValidAction("suggestedToValid")
           ),
-        1000
+    
       );
     });
   const suggestedToDeleted = () =>
@@ -1847,7 +1988,7 @@ const Details = ({}) => {
             setConfirmNotesModalValid(true),
             setIsValidAction("suggestedToDeleted")
           ),
-        1000
+    
       );
     });
 
@@ -1859,7 +2000,7 @@ const Details = ({}) => {
             setConfirmNotesModalValid(true),
             setIsValidAction("deletedToSuggested")
           ),
-        1000
+    
       );
     });
   const deletedToValid = () =>
@@ -1870,7 +2011,7 @@ const Details = ({}) => {
             setConfirmNotesModalValid(true),
             setIsValidAction("deletedToValid")
           ),
-        1000
+    
       );
     });
 
@@ -2176,7 +2317,6 @@ const Details = ({}) => {
     // getSectionResult(value.toLowerCase());
   };
   const handleOpenModalRadiology = (value, disDescription,radiologyCheck) => {
-    console.log(radiologyCheck)
     if(radiologyCheck == true){
     var splitPoint = disDescription.substring(" ", 40);
     setTimeout(() => {
@@ -2586,7 +2726,6 @@ const Details = ({}) => {
     }
   };
   const onClick = (e) => {
-    console.log("click", e);
   };
 
   const onchangeSuggested = () =>
@@ -2958,7 +3097,6 @@ const Details = ({}) => {
   };
 
   const handleSubmitMoveValidToDeleted = async () => {
-    console.log(selectedDosValue);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -3262,7 +3400,7 @@ const Details = ({}) => {
   const handleSubmitHccDeclineApi = async () => {
     setDeclineBtnTitle("Loading...");
     var postData = {
-      orgid: localOrgId,
+      orgId: localOrgId,
       patientId: localPatientId,
       notes: inputValue.notes,
       dos:selectedDosValue
@@ -3288,7 +3426,7 @@ const Details = ({}) => {
   const handleSubmitHccHold = async () => {
     setDeclineBtnTitle("Loading...");
     var postData = {
-      orgid: localOrgId,
+      orgId: localOrgId,
       patientId: localPatientId,
       notes: inputValue.notes,
       dos:selectedDosValue
@@ -3317,7 +3455,6 @@ const Details = ({}) => {
   };
 
   const getFindValidDiagnosisCode = async (value) => {
-    console.log(value);
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
@@ -3330,7 +3467,6 @@ const Details = ({}) => {
         setAddValidCodeCheck(true)
         inputValue.actualDescription = "adakd dvasdv"
       }
-      console.log(inputValue);
     }
 
     inputValue.actualDescription = "adakd dvasdv"
@@ -3387,13 +3523,12 @@ const Details = ({}) => {
   };
 
   const addComments = async (value) => {
-    console.log(value)
+    setIsModalComments(true);
+    setFlagContainerActive(value);
     if (value == "Filter") {
-      // var response = await loadFilterPatientList(localUserId, 0, 10, "COMPLETED");
-      // console.log(response)
-      // var result = response.content;
-      // console.log(result)
-      // setPatientList(result)
+      const response = await axios.get(ENDPOINTS.apiEndoint +`dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${20}`);
+      var result = response.data.content;
+      setPatientList(result)
     }
 
     if (value == "Timeline") {
@@ -3401,8 +3536,17 @@ const Details = ({}) => {
       var result = response.data.content;
       setTimeLineData(result)
     }
-    setIsModalComments(true);
-    setFlagContainerActive(value);
+    if (value == "Notes") {
+      getNotesList();
+    }
+    if (value == "Comments") {
+    getCommentsList();
+    }
+    if(value =="Flag"){
+      getFlagList();
+    }
+
+   
   };
 
   const flagList = [
@@ -3486,7 +3630,6 @@ const Details = ({}) => {
       year: selectedDosValue,
       flag: inputValue.flag
     };
-    console.log(dataFormatSuggested)
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/flagdetails`,
@@ -3496,10 +3639,11 @@ const Details = ({}) => {
       notification.success({
         message: "Flag added Successfully!",
       });
-      getPatientDetails(localPatientId,localOrgId, localTenantId);
+      getFlagList();
+      // getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
-    setIsModalComments(false)
+    // setIsModalComments(false)
   };
 
   const handleSubmitNotes = async (event) => {
@@ -3507,23 +3651,23 @@ const Details = ({}) => {
     var dataFormatSuggested = {
       patientId: localPatientId,
       orgId: localOrgId,
-      comments: inputValue.comments,
+      notes: inputValue.comments,
       year: selectedDosValue,
     };
-    console.log(dataFormatSuggested)
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/notes`,
       [dataFormatSuggested]
     );
     if (response?.status == 202) {
+      inputValue.comments = ''
       notification.success({
         message: "Notes added Successfully!",
       });
-      getPatientDetails(localPatientId,localOrgId, localTenantId);
+      getNotesList();
     } else {
     }
-    setIsModalComments(false)
+    // setIsModalComments(false)
   };
 
   const handleSubmitCommnets = async (event) => {
@@ -3531,24 +3675,74 @@ const Details = ({}) => {
     var dataFormatSuggested = {
       patientId: localPatientId,
       orgId: localOrgId,
-      comments: inputValue.comments,
+      comment: inputValue.comments,
       year: selectedDosValue,
     };
-    console.log(dataFormatSuggested)
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/comment`,
       [dataFormatSuggested]
     );
     if (response?.status == 202) {
+      inputValue.comments = '';
       notification.success({
         message: "Comment added Successfully!",
       });
-      getPatientDetails(localPatientId,localOrgId, localTenantId);
+      getCommentsList();
     } else {
     }
-    setIsModalComments(false)
+    // setIsModalComments(false)
   };
+
+  const handleEnterTextComments = async (event) => {
+
+    if(event.charCode == 13){
+          var dataFormatSuggested = {
+      patientId: localPatientId,
+      orgId: localOrgId,
+      comment: inputValue.comments,
+      year: selectedDosValue,
+    };
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc +
+      `dbservice/comment`,
+      [dataFormatSuggested]
+    );
+    if (response?.status == 202) {
+      inputValue.comments = '';
+      notification.success({
+        message: "Comment added Successfully!",
+      });
+      getCommentsList();
+    } else {
+    }
+  }
+  }
+
+  const handleEnterTextNotes = async (event) => {
+    if(event.charCode == 13){
+
+    var dataFormatSuggested = {
+      patientId: localPatientId,
+      orgId: localOrgId,
+      notes: inputValue.comments,
+      year: selectedDosValue,
+    };
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc +
+      `dbservice/notes`,
+      [dataFormatSuggested]
+    );
+    if (response?.status == 202) {
+      inputValue.comments = ''
+      notification.success({
+        message: "Notes added Successfully!",
+      });
+      getNotesList();
+    } else {
+    }
+  }
+  }
 
   const handleToogleCloseNav = () => {
     if (isSideNavShow == true) {
@@ -3568,6 +3762,33 @@ const Details = ({}) => {
   const splitUserName = (name)  =>{
    return name[0]
   }
+
+
+  const getCommentsList = async () => {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/comment?patientId=${localPatientId}&year=${selectedDosValue}`
+    );
+    setCommentList(response.data)
+  }
+
+
+  const getNotesList = async () => {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/notes?patientId=${localPatientId}&year=${selectedDosValue}`
+    );
+    setNotesList(response.data)
+  }
+
+  const getFlagList = async () => {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/flagdetails?patientId=${localPatientId}&year=${selectedDosValue}`
+    );
+    setFlagResultList(response.data)
+  }
+
 
 
 
@@ -3686,6 +3907,20 @@ const Details = ({}) => {
                     </div>
                     <div className="col-xl-2 col-sm-12">
                       <div className={`${visitStyles.actionbtnContainer}`}>
+                        {patienIdDetails.processedStatus == "COMPLETED" ?
+                          <div className={`col-xl-12`}
+                          >
+                            <i className={visitStyles.completedStatus}>
+                            {SVGICON.completedStatusIcon  }
+                             {/* <span>COMPLETED</span> */}
+
+                            </i>
+                            </div>: patienIdDetails.processedStatus == "DECLINED" ?
+                           <div className={`col-xl-12`}
+                           >
+                             <span>DECLINED</span>
+ 
+                             </div> :
                         <div className={`col-xl-12`}
                         >
                           <Button
@@ -3754,7 +3989,7 @@ const Details = ({}) => {
 
 
 
-                        </div>
+                        </div>}
                       </div>
                     </div>
                     <div className={isSideNavShow ?
@@ -4069,7 +4304,7 @@ const Details = ({}) => {
                                           <span className={visitStyles.deleteFlag}>
                                           </span>
                                           <span className={visitStyles.flagCodes}>
-                                            DELETE
+                                            DELETED
                                           </span>
                                         </div>
                                       </div>
@@ -4143,6 +4378,7 @@ const Details = ({}) => {
                                                               }
                                                             </span>
                                                           </div>
+                                                          
 
                                                           <Popover
                                                             onClick={() =>
@@ -4164,6 +4400,7 @@ const Details = ({}) => {
                                                               {SVGICON.infoIcon}
                                                             </i>
                                                           </Popover>
+                                                          
 
                                                           <Popconfirm
                                                             title="Choose an action"
@@ -4214,9 +4451,9 @@ const Details = ({}) => {
                                                         </div>
                                                         <div className="hoverActiveHcc">
                                                         <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                        <Tooltip title={patientDocumentResult.patientName}>
+                                                        {/* <Tooltip title={patientDocumentResult.patientName}>
                                                          <Avatar className={visitStyles.provider_name_style}>U</Avatar>
-                                                         </Tooltip>
+                                                         </Tooltip> */}
                                                           {/* <Popover
                                                             placement="topLeft"
                                                             title=""
@@ -4237,6 +4474,20 @@ const Details = ({}) => {
                                                               }
                                                             </Badge>
                                                           </Popover> */}
+                                                            {data.isManuallyAdded == true ?
+                                                          <Popover
+                                                            placement="topLeft"
+                                                            content={
+                                                              "Manually Added"
+                                                            }
+                                                          >
+                                                            <Badge
+                                                              className={`mt-2 text-start w-100px ${visitStyles.manuallyAdded}`}
+                                                            >
+                                                              Manually Added                                                             
+                                                            
+                                                            </Badge>
+                                                          </Popover>:null}
                                                            {data.encounterDate != null ?
                                                           <Popover
                                                             placement="topLeft"
@@ -4369,8 +4620,10 @@ const Details = ({}) => {
                                                                   }
                                                                 </i>
                                                               </Popover>
-
-                                                              <Popconfirm
+                                                              {data.getPlace ==
+                                                                "Radio" || data.getPlace ==
+                                                                "Lab" ?
+                                                                <Popconfirm
                                                                 title="Choose an action"
                                                                 icon={
                                                                   <QuestionCircleOutlined
@@ -4381,7 +4634,50 @@ const Details = ({}) => {
                                                                   />
                                                                 }
                                                                 okText="Move to Deleted"
-                                                                cancelText="Move to Valid"
+                                                               
+                                                                okButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "primary"
+                                                                    : "default",
+                                                                }}
+                                                               
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  suggestedToDeleted
+                                                                }
+                                                                placement="leftTop"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
+                                                                }
+                                                              >
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
+                                                                >
+                                                                  {
+                                                                    SVGICON.closeIcon
+                                                                  }
+                                                                </div>
+                                                              </Popconfirm>
+
+                                                              :<Popconfirm
+                                                                title="Choose an action"
+                                                                icon={
+                                                                  <QuestionCircleOutlined
+                                                                    style={{
+                                                                      color:
+                                                                        "blue",
+                                                                    }}
+                                                                  />
+                                                                }
+                                                                okText="Move to Deleted"
+                                                                cancelText="Move to HCC"
                                                                 onCancel={
                                                                   suggestedToValid
                                                                 }
@@ -4418,7 +4714,7 @@ const Details = ({}) => {
                                                                     SVGICON.closeIcon
                                                                   }
                                                                 </div>
-                                                              </Popconfirm>
+                                                              </Popconfirm>}
                                                             </div>
                                                             <div className="hoverActiveHcc">
                                                             <div className="d-flex justify-content-sm-between valid-providerdocument ">
@@ -4437,7 +4733,7 @@ const Details = ({}) => {
                                                                   <Tooltip title="RADIOLOGY">
                                                                 <Badge
                                                                   className=" mt-2 text-white"
-                                                                  bg={`  mt-2 bg-bg-five `}
+                                                                  bg={`  mt-2 bg-bg-eight `}
                                                                 >
                                                                   R
                                                                 </Badge>
@@ -4565,7 +4861,7 @@ const Details = ({}) => {
                                                             />
                                                           }
                                                           okText="Move to Suggested"
-                                                          cancelText="Move to Valid"
+                                                          cancelText="Move to HCC"
                                                           onCancel={
                                                             deletedToValid
                                                           }
@@ -4604,9 +4900,9 @@ const Details = ({}) => {
                                                       </div>
                                                       <div className="hoverActiveHcc">
                                                       <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                        <Tooltip title={patientDocumentResult.patientName}>
+                                                        {/* <Tooltip title={patientDocumentResult.patientName}>
                                                          <Avatar className={visitStyles.provider_name_style}>U</Avatar>
-                                                         </Tooltip>
+                                                         </Tooltip> */}
                                                           {/* <Popover
                                                             placement="topLeft"
                                                             title=""
@@ -4920,7 +5216,7 @@ const Details = ({}) => {
 
                                         <div className="col-xl-6">
                                         <div className={`${visitStyles.comboTitle}`}>
-                                            <span>INVALID CODES </span>
+                                            <span>DELETED COMBO CODES </span>
                                           </div>
                                           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
                                             <div
@@ -6293,7 +6589,7 @@ const Details = ({}) => {
                                                                     />
                                                                   }
                                                                   okText="Move to Deleted"
-                                                                  cancelText="Move to Valid"
+                                                                  cancelText="Move to HCC"
                                                                   onCancel={
                                                                     suggestedToValid
                                                                   }
@@ -6468,7 +6764,7 @@ const Details = ({}) => {
                                                                     />
                                                                   }
                                                                   okText="Move to Deleted"
-                                                                  cancelText="Move to Valid"
+                                                                  cancelText="Move to HCC"
                                                                   onCancel={
                                                                     suggestedToValid
                                                                   }
@@ -6806,7 +7102,7 @@ const Details = ({}) => {
 
                                         <div className="col-xl-6">
                                         <div className={`${visitStyles.comboTitle}`}>
-                                            <span>INVALID CODES </span>
+                                            <span>DELETED COMBO CODES </span>
                                           </div>
                                           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
                                             <div
@@ -8137,7 +8433,7 @@ const Details = ({}) => {
 
                                         <div className="col-xl-6">
                                         <div className={`${visitStyles.comboTitle}`}>
-                                            <span>INVALID CODES </span>
+                                            <span>DELETED COMBO CODES </span>
                                           </div>
                                           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
                                             <div
@@ -10947,7 +11243,7 @@ const Details = ({}) => {
                             {addValidCodeCheck == false ?
                             <span className={visitStyles.ivalidHccCodeError}>
                                 Invalid Hcc Code
-                               </span> : addValidCodeCheck == true ? <span className={visitStyles.ivalidHccCodeError}>
+                               </span> : addValidCodeCheck == true ? <span className={visitStyles.validHccCodeError}>
                                 Valid Hcc Code 
                                </span> : null}
                          
@@ -11245,27 +11541,52 @@ const Details = ({}) => {
                           {timelineData.map((item, index) => (
                             <li>
                               {item.action == "MOVED_INVALID_TO_VALID" ? 
-                              <div className="timeline-badge MOVED_INVALID_TO_VALID"></div> :
+                                <Tooltip title={item.userName}>
+                              <div className="timeline-badge MOVED_INVALID_TO_VALID">{splitUserName(item.userName)}</div>
+                              </Tooltip> :
                               item.action == "MOVED_SUGGESTED_TO_VALID" ? 
-                               <div className="timeline-badge MOVED_SUGGESTED_TO_VALID"></div>:
-                               item.action == "MOVED_VALID_TO_SUGGESTED" ? 
-                               <div className="timeline-badge MOVED_VALID_TO_SUGGESTED"></div>:
+                              <Tooltip title={item.userName}>
+                               <div className="timeline-badge MOVED_SUGGESTED_TO_VALID">{splitUserName(item.userName)}</div>
+                               </Tooltip>:
+                               item.action == "MOVED_VALID_TO_SUGGESTED" ?
+                               <Tooltip title={item.userName}> 
+                               <div className="timeline-badge MOVED_VALID_TO_SUGGESTED">{splitUserName(item.userName)}</div>
+                               </Tooltip>:
                                item.action == "VALID_DISEASE_ADDED" ? 
-                               <div className="timeline-badge VALID_DISEASE_ADDED"></div>:
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge VALID_DISEASE_ADDED">{splitUserName(item.userName)}</div>
+                               </Tooltip> :
                                item.action == "MOVED_VALID_TO_DELETED" ? 
-                               <div className="timeline-badge MOVED_VALID_TO_DELETED"></div>:
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge MOVED_VALID_TO_DELETED">{splitUserName(item.userName)}</div>
+                               </Tooltip>
+                               :
                                item.action == "COMPLETED" ? 
-                               <div className="timeline-badge COMPLETED"></div>:
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge COMPLETED">{splitUserName(item.userName)}</div>
+                               </Tooltip>:
                                item.action == "MOVED_DELETED_TO_VALID" ? 
-                               <div className="timeline-badge MOVED_DELETED_TO_VALID"></div>:
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge MOVED_DELETED_TO_VALID">{splitUserName(item.userName)}</div></Tooltip>:
                                item.action == "MOVED_DELETED_TO_SUGGESTED" ? 
-                               <div className="timeline-badge MOVED_DELETED_TO_SUGGESTED"></div>:
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge MOVED_DELETED_TO_SUGGESTED">{splitUserName(item.userName)}</div></Tooltip>:
                                item.action == "MOVED_SUGGESTED_TO_DELETED" ? 
-                               <div className="timeline-badge MOVED_SUGGESTED_TO_DELETED"></div>:
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge MOVED_SUGGESTED_TO_DELETED">{splitUserName(item.userName)}</div></Tooltip>:
                                item.action == "ENCOUNTER_FILE_UPDATED" ? 
-                               <div className="timeline-badge ENCOUNTER_FILE_UPDATED"></div>:
-                               item.action == "ENCOUNTER_FILE_ADDED" ? 
-                               <div className="timeline-badge ENCOUNTER_FILE_ADDED"></div>:
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge ENCOUNTER_FILE_UPDATED">{splitUserName(item.userName)}</div></Tooltip>:
+                               item.action == "ENCOUNTER_FILE_ADDED" ?
+                               <Tooltip title={item.userName}> 
+                               <div className="timeline-badge ENCOUNTER_FILE_ADDED">{splitUserName(item.userName)}</div>
+                               </Tooltip>:
+                               item.action == "HOLD" ? 
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge HOLD">{splitUserName(item.userName)}</div></Tooltip>:
+                               item.action == "DECLINED" ? 
+                               <Tooltip title={item.userName}>
+                               <div className="timeline-badge DECLINED">{splitUserName(item.userName)}</div></Tooltip>:
                                null
                               
                               
@@ -11279,11 +11600,39 @@ const Details = ({}) => {
 
                               >
                                 <span className={visitStyles.timelineDate} > {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
-                                <Tooltip title={item.userName}>
+                                {/* <Tooltip title={item.userName}>
                                 <Avatar className={visitStyles.timeLineUsername}>{splitUserName(item.userName)}</Avatar>
-                                </Tooltip>
+                                </Tooltip> */}
                                 </span>
-                                <span>{item.action}</span>
+                                {item.action == "MOVED_INVALID_TO_VALID" ? 
+                              <span >Moved invalid to valid</span> :
+                              item.action == "MOVED_SUGGESTED_TO_VALID" ? 
+                               <span >Moved invalid to valid</span>:
+                               item.action == "MOVED_VALID_TO_SUGGESTED" ? 
+                               <span >Moved valid to suggested</span>:
+                               item.action == "VALID_DISEASE_ADDED" ? 
+                               <span >Valid disease added</span>:
+                               item.action == "MOVED_VALID_TO_DELETED" ? 
+                               <span >Moved valid to deleted</span>:
+                               item.action == "COMPLETED" ? 
+                               <span >Completed</span>:
+                               item.action == "MOVED_DELETED_TO_VALID" ? 
+                               <span >Moved deleted to valid</span>:
+                               item.action == "MOVED_DELETED_TO_SUGGESTED" ? 
+                               <span >Moved deleted to suggested</span>:
+                               item.action == "MOVED_SUGGESTED_TO_DELETED" ? 
+                               <span >Moved suggested to deleted</span>:
+                               item.action == "ENCOUNTER_FILE_UPDATED" ? 
+                               <span >Encounter file updated</span>:
+                               item.action == "ENCOUNTER_FILE_ADDED" ? 
+                               <span >Encounter file added</span>:
+                               item.action == "HOLD" ? 
+                               <span >Hold</span>:
+                               item.action == "DECLINED" ? 
+                               <span >Declined</span>:
+                               null                      
+                              }
+                                {/* <span>{item.action}</span> */}
                                 {/* <h6 className="mb-0">
                                   {item.patientId}
                                 </h6> */}
@@ -11429,7 +11778,11 @@ const Details = ({}) => {
                           <ul>
                             {patientList.map((data, index) => (
                               <li className={visitStyles.nameList} key={index} onClick={() => getPatientDetails(data.patientId, localOrgId, localTenantId)}>
-                                {data.patientId} - {data.patientName}
+                                {data.patientId} - {data.patientName} 
+                                {data.processedStatus == "COMPLETED" ?
+                                <i className={visitStyles.filterCompletedIcon}>
+                                <CheckCircleOutlined />
+                                </i> : null}
                               </li>
                             ))}
                           </ul>
@@ -11470,7 +11823,7 @@ const Details = ({}) => {
                             >
 
                               <div className="row">
-                                <div className="col-xl-12 mb-3">
+                                <div className="col-xl-12">
                                   <textarea
                                     className={visitStyles.commentsFormControl}
                                     rows="5"
@@ -11478,7 +11831,10 @@ const Details = ({}) => {
                                     id="comments"
                                     name="comments"
                                     placeholder="Add Comments"
+                                    value={inputValue.comments}
                                     onChange={handleChangeSuggested}
+                                    onKeyPress={handleEnterTextComments}
+                                    type="submit"
                                   >
 
                                    
@@ -11501,6 +11857,23 @@ const Details = ({}) => {
                                 </Button>
                               </div> */}
                             </Form>
+                            {commentList.map((data, index) => (
+                                       <div className={visitStyles.comments_card}>
+                                        <div className={`${visitStyles.commentNameHead}`}>
+                                          
+                                       <span className={visitStyles.commentsName}>
+                                        {data.comment}
+                                      
+                                       </span>
+                                       <Tooltip title={data.commentCreatedBy}>
+                                <Avatar className={visitStyles.timeLineUsername}>{splitUserName(data.commentCreatedBy)}</Avatar>
+                                </Tooltip>
+                                       </div>
+                                       <span className={visitStyles.commentsTime}> {moment(data.commentCreatedAt).format("MM-DD-YYYY hh:mm:A")}</span>
+                                     </div>
+                                  ))}
+                          
+                           
 
                           </div>
 
@@ -11549,7 +11922,7 @@ const Details = ({}) => {
                                   </div>
                                 </div>
                                 <div className="row">
-                                  <div className="col-xl-12 mb-3">
+                                  <div className="col-xl-12">
                                     <textarea
                                       className={visitStyles.commentsFormControl}
                                       rows="5"
@@ -11558,6 +11931,8 @@ const Details = ({}) => {
                                       name="comments"
                                       placeholder="Add Comments"
                                       onChange={handleChangeSuggested}
+                                      // onKeyPress={handleEnterTextNotes}
+                                      // type="submit"
                                     ></textarea>
                                      <Button type="submit"   className={visitStyles.commentSendIcon}>
                                   {SVGICON.sentMessageIcon}
@@ -11567,6 +11942,26 @@ const Details = ({}) => {
 
                      
                               </Form>
+
+                              {flagResultList.map((data, index) => (
+                                       <div className={visitStyles.comments_card}>
+                                        <div className={`${visitStyles.commentNameHead}`}>
+                                          
+                                       <span className={visitStyles.commentsName}>
+                                        {data.flag}
+                                      
+                                       </span>
+                                       <Tooltip title={data.commentCreatedBy}>
+                                <Avatar className={visitStyles.timeLineUsername}>{splitUserName(data.commentCreatedBy)}</Avatar>
+                                </Tooltip>
+                                       </div>
+                                       <span className={visitStyles.commentsName}>
+                                        {data.comments}                                      
+                                       </span>
+                                       <span className={visitStyles.commentsTime}> {moment(data.commentCreatedAt).format("MM-DD-YYYY hh:mm:A")}</span>
+                                     </div>
+                                  ))}
+                          
                             </div>
 
                           </div> : flagContainerActive == "Notes" ?
@@ -11582,7 +11977,7 @@ const Details = ({}) => {
                                 >
 
                                   <div className="row">
-                                    <div className={`col-xl-12 mb-3 ${visitStyles.textareaContainer}`}>
+                                    <div className={`col-xl-12 ${visitStyles.textareaContainer}`}>
                                       <textarea
                                         className={visitStyles.commentsFormControl}
                                         rows="5"
@@ -11591,6 +11986,9 @@ const Details = ({}) => {
                                         name="comments"
                                         placeholder="Add Notes"
                                         onChange={handleChangeSuggested}
+                                        onKeyPress={handleEnterTextNotes}
+                                        type="submit"
+                                        value={inputValue.comments}
                                       ></textarea>
                                        <Button type="submit"   className={visitStyles.commentSendIcon}>
                                   {SVGICON.sentMessageIcon}
@@ -11600,6 +11998,29 @@ const Details = ({}) => {
 
                                 
                                 </Form>
+                                {notesList.map((data, index) => (
+                                    //    <div className={visitStyles.comments_card}>
+                                    //    <span>
+                                    //     {data.notes}
+                                    //    </span>
+                                    //    <span> {moment(data.notesCreatedAt).format("MM-DD-YYYY hh:mm:A")}</span>
+                                    //  </div>
+
+                                    <div className={visitStyles.comments_card}>
+                                    <div className={`${visitStyles.commentNameHead}`}>
+                                      
+                                   <span className={visitStyles.commentsName}>
+                                    {data.notes}
+                                  
+                                   </span>
+                                   <Tooltip title={data.notesCreatedBy}>
+                            <Avatar className={visitStyles.timeLineUsername}>{splitUserName(data.notesCreatedBy)}</Avatar>
+                            </Tooltip>
+                                   </div>
+                                   <span className={visitStyles.commentsTime}> {moment(data.notesCreatedAt).format("MM-DD-YYYY hh:mm:A")}</span>
+                                 </div>
+                                     
+                                  ))}
                               </div>
 
                             </div> : null}
