@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
 import { DatePicker } from "antd";
@@ -7,18 +7,6 @@ import { useDispatch } from "react-redux";
 import { getDateRange } from "../../store/actions/DashboardActions";
 const { RangePicker } = DatePicker;
 
-export const converDates = (dateString) => {
-  dateString?.map((date) => {
-    const formattedDate = dayjs(date)
-      .startOf("day")
-      .add(6, "hour")
-      .add(39, "minute")
-      .add(22, "second")
-      .add(786, "millisecond")
-      .toISOString();
-    return formattedDate;
-  });
-};
 const HeadTitle = ({
   header,
   icon,
@@ -28,6 +16,8 @@ const HeadTitle = ({
   setOpenPicker,
 }) => {
   const dispatch = useDispatch();
+  const [selectedDates, setSelectedDates] = useState([]); // State to hold selected dates
+
   const handleDatePickerChange = (dateString) => {
     const convertedDates = dateString?.map((date) => {
       const formattedDate = dayjs(date)
@@ -45,9 +35,8 @@ const HeadTitle = ({
       endDate: convertedDates[1],
     };
     dispatch(getDateRange(dates));
-    setTimeout(() => {
-      setOpenPicker(false);
-    }, 500);
+    setSelectedDates([]); 
+    setOpenPicker(false); 
   };
 
   return (
@@ -56,21 +45,30 @@ const HeadTitle = ({
         style={{
           display: "flex",
           with: "100%",
+          height: "100%",
           justifyContent: "space-between",
         }}
       >
         <div className={styles.title}>{header}</div>
         {icon && (
-          <div style={{ width: "10%" }}>
+          <div style={{ width: "10%", height: "100%" }}>
             <Image
               src={icon}
               alt="Calendar Icon"
-              onClick={() => setOpenPicker(!openPicker)}
+              onClick={() => {
+                setOpenPicker(!openPicker)
+                if (!openPicker) {
+                  setSelectedDates([]); 
+                }}}
               className={styles.IMG}
             />
             <RangePicker
               open={openPicker}
-              onChange={handleDatePickerChange}
+              value={selectedDates}
+              onChange={(dates, dateStrings) => {
+                setSelectedDates(dates); 
+                handleDatePickerChange(dateStrings); 
+              }}
               suffixIcon={false}
               className={styles.datepicker}
             />
