@@ -11818,7 +11818,7 @@ div[aria-describedby="rpv-core__tooltip-body-get-file"] {
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
-=======
+}
 .w-100px{
   width: 110px;
 }
@@ -12503,9 +12503,22 @@ tbody > tr {
 } */
 :where(.css-dev-only-do-not-override-zcfrx9).ant-picker-dropdown .ant-picker-panel-container{
   box-shadow: none;
+}
 
 .hccActiveCard:hover .hoverActiveHcc {
   display: block;
   
 
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-picker-dropdown .ant-picker-panel-container {
+  box-shadow: none;
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-ribbon.ant-ribbon-placement-start{
+  width: 57px;
+    font-size: 12px;
+}
+:where(.css-dev-only-do-not-override-2q8sxy).ant-ribbon-wrapper{
+  position: relative;
+    bottom: 23px;
+    right: 6px;
 }
