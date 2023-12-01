@@ -3,7 +3,7 @@
   justify-content: space-between;
   font-size: 18px;
   font-weight: 600;
-  margin: 20px 20px 0px 20px;
+  margin: 20px 20px 0px 0px;
   color: #000;
 }
 .anchor {
@@ -13,14 +13,21 @@
   cursor: pointer;
 }
 .title {
+  width:90%;
   font-size: 18px;
   font-weight: 600;
   margin: 0 15px 10px 10px;
   color: #000000;
 }
-.IMG{
-  background-color:#F0F6FE  !important;
+.datepicker {
+  background-color: #f0f6fe !important;
   border: none !important;
-  width:1%;
+  width: 0%;
+  box-shadow: none !important;
+  margin-left: -35px;
+  visibility: hidden;
 }
 
+.IMG {
+  cursor: pointer;
+}

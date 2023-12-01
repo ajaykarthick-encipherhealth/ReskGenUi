@@ -1,17 +1,38 @@
 import React from "react";
-import styles from "./style.module.css";
+// import { BtnContainer, Button} from "./styles";
+import styles from "./styles.module.css";
 
-const Buttonscroller = ({ Buttons, activeButton, handleButtonClick }) => {
+const Buttonscroller = ({
+  Buttons,
+  activeButton,
+  handleButtonClick,
+  activeColor,
+  inActiveColor,
+  activeBg,
+  inActiveBg,
+  containerBg,
+}) => {
   return (
-    <div className={styles.buttonContainter}>
+    <div
+      className={styles.btnContainer}
+      style={{
+        backgroundColor: containerBg,
+      }}
+    >
       {Buttons?.map((btn, index) => {
         return (
           <label
             key={index}
+            // className={styles.button}
             className={`${
               activeButton === index ? styles.btnActive : styles.btnInactive
             }`}
-            onClick={() => handleButtonClick(index,btn?.title)}
+            style={{
+              backgroundColor: activeButton === index ? activeBg : inActiveBg,
+              color: activeButton === index ? activeColor : inActiveColor,
+              borderRadius: activeButton === index && "16px",
+            }}
+            onClick={() => handleButtonClick(index, btn?.title)}
           >
             {btn.title}
           </label>

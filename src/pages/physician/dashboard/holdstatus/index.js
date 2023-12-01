@@ -6,6 +6,7 @@ import HeadTitle from "../../../../components/headtitle";
 import { Modal } from "antd";
 import { getHoldStatusData } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
+import TableStyle from "../../../../components/table/table.module.css"
 
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
@@ -23,7 +24,7 @@ const HoldStatus = () => {
   };
 
   const TableData = (
-    <table>
+    <table  className={styles.classTable}>
       <thead className={styles.tableHead}>
         <tr>
           <th>Patient Id</th>
