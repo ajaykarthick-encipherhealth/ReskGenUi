@@ -2958,6 +2958,7 @@ textarea.form-control.is-invalid {
 
 .d-flex {
   display: flex !important;
+  align-items: center;
 }
 
 .d-inline-flex {
