@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import { AuthReducer, PatientStore } from "./reducers/AuthReducer";
 import todoReducers from "./reducers/Reducers";
 import { DashboardReducer } from "./reducers/DashboradReducer";
+import { ReportReducer } from "./reducers/ReportReducer";
 //import { reducer as reduxFormReducer } from 'redux-form';
 import { createWrapper } from "next-redux-wrapper";
 
@@ -18,6 +19,7 @@ const reducers = combineReducers({
   patientDetails: PatientStore,
   todoReducers,
   workFlow: DashboardReducer,
+  report:ReportReducer
   //form: reduxFormReducer,
 });
 

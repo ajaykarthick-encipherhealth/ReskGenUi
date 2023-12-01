@@ -8,6 +8,10 @@
 .classThead > tr > th {
   color: #fff !important;
 }
+.classTTotalhead{
+  color: #fff !important;
+
+}
 
 .classTable {
   border-collapse: separate !important;
@@ -74,7 +78,6 @@
 }
 
 .classContaineer {
-  height: 710px;
   overflow: scroll;
   padding: 10px;
 }
