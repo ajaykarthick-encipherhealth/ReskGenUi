@@ -4620,8 +4620,10 @@ const Details = ({}) => {
                                                                   }
                                                                 </i>
                                                               </Popover>
-
-                                                              <Popconfirm
+                                                              {data.getPlace ==
+                                                                "Radio" || data.getPlace ==
+                                                                "Lab" ?
+                                                                <Popconfirm
                                                                 title="Choose an action"
                                                                 icon={
                                                                   <QuestionCircleOutlined
@@ -4632,7 +4634,50 @@ const Details = ({}) => {
                                                                   />
                                                                 }
                                                                 okText="Move to Deleted"
-                                                                cancelText="Move to Valid"
+                                                               
+                                                                okButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "primary"
+                                                                    : "default",
+                                                                }}
+                                                               
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  suggestedToDeleted
+                                                                }
+                                                                placement="leftTop"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
+                                                                }
+                                                              >
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
+                                                                >
+                                                                  {
+                                                                    SVGICON.closeIcon
+                                                                  }
+                                                                </div>
+                                                              </Popconfirm>
+
+                                                              :<Popconfirm
+                                                                title="Choose an action"
+                                                                icon={
+                                                                  <QuestionCircleOutlined
+                                                                    style={{
+                                                                      color:
+                                                                        "blue",
+                                                                    }}
+                                                                  />
+                                                                }
+                                                                okText="Move to Deleted"
+                                                                cancelText="Move to HCC"
                                                                 onCancel={
                                                                   suggestedToValid
                                                                 }
@@ -4669,7 +4714,7 @@ const Details = ({}) => {
                                                                     SVGICON.closeIcon
                                                                   }
                                                                 </div>
-                                                              </Popconfirm>
+                                                              </Popconfirm>}
                                                             </div>
                                                             <div className="hoverActiveHcc">
                                                             <div className="d-flex justify-content-sm-between valid-providerdocument ">
@@ -4688,7 +4733,7 @@ const Details = ({}) => {
                                                                   <Tooltip title="RADIOLOGY">
                                                                 <Badge
                                                                   className=" mt-2 text-white"
-                                                                  bg={`  mt-2 bg-bg-five `}
+                                                                  bg={`  mt-2 bg-bg-eight `}
                                                                 >
                                                                   R
                                                                 </Badge>
@@ -4816,7 +4861,7 @@ const Details = ({}) => {
                                                             />
                                                           }
                                                           okText="Move to Suggested"
-                                                          cancelText="Move to Valid"
+                                                          cancelText="Move to HCC"
                                                           onCancel={
                                                             deletedToValid
                                                           }
@@ -5171,7 +5216,7 @@ const Details = ({}) => {
 
                                         <div className="col-xl-6">
                                         <div className={`${visitStyles.comboTitle}`}>
-                                            <span>INVALID CODES </span>
+                                            <span>DELETED COMBO CODES </span>
                                           </div>
                                           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
                                             <div
@@ -6544,7 +6589,7 @@ const Details = ({}) => {
                                                                     />
                                                                   }
                                                                   okText="Move to Deleted"
-                                                                  cancelText="Move to Valid"
+                                                                  cancelText="Move to HCC"
                                                                   onCancel={
                                                                     suggestedToValid
                                                                   }
@@ -6719,7 +6764,7 @@ const Details = ({}) => {
                                                                     />
                                                                   }
                                                                   okText="Move to Deleted"
-                                                                  cancelText="Move to Valid"
+                                                                  cancelText="Move to HCC"
                                                                   onCancel={
                                                                     suggestedToValid
                                                                   }
@@ -7057,7 +7102,7 @@ const Details = ({}) => {
 
                                         <div className="col-xl-6">
                                         <div className={`${visitStyles.comboTitle}`}>
-                                            <span>INVALID CODES </span>
+                                            <span>DELETED COMBO CODES </span>
                                           </div>
                                           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
                                             <div
@@ -8388,7 +8433,7 @@ const Details = ({}) => {
 
                                         <div className="col-xl-6">
                                         <div className={`${visitStyles.comboTitle}`}>
-                                            <span>INVALID CODES </span>
+                                            <span>DELETED COMBO CODES </span>
                                           </div>
                                           <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
                                             <div
