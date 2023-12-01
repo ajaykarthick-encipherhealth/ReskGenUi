@@ -9,7 +9,7 @@ import NavBar from "../../../jsx/layouts/nav";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
-
+import styles from "../report/report.module.css";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
@@ -24,7 +24,7 @@ import {
   faAdd,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import { Space, Spin, DatePicker,Popover, Input, Modal } from "antd";
+import { Space, Spin, DatePicker, Popover, Input, Modal } from "antd";
 import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
 import { connect, useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
@@ -40,7 +40,10 @@ import moment from "moment";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from "primereact/paginator";
 import { Calendar } from "primereact/calendar";
-
+import PatientTable from "../../../components/table/PatientList/patientList";
+import dayjs from "dayjs";
+import Image from "next/image";
+import calender from "../../../images/dashboard/calender.png";
 export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -98,12 +101,25 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(12);
   const [paginationFirst, setPaginationFirst] = useState(0);
 
-  const [totalElements, setTotalElements] = useState(10);
+  const [totalElements, setTotalElements] = useState(12);
   const [tableLoading, setTableLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const currentDate = dayjs();
+  const [startDate, setStartDate] = useState(
+    currentDate.startOf("month").format("DD MMM YY")
+  );
+  const [endDate, setEndDate] = useState(currentDate.format("DD MMM YY"));
 
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -113,9 +129,7 @@ export default function Patient() {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -124,17 +138,17 @@ export default function Patient() {
     unsubscribed: "Unsubscribed",
   };
   const content = (
-    <div style={{display:"flex", }}>
-      <div style={{ marginBottom: '8px' }}>
+    <div style={{ display: "flex" }}>
+      <div style={{ marginBottom: "8px" }}>
         <Button>Button 1</Button>
         <Button>Button 2</Button>
       </div>
       <hr></hr>
       <div>
-        <RangePicker />                                                                                                                                                                                                                                                                                  
+        <RangePicker />
       </div>
     </div>
-  );                                                                    
+  );
   const filterChangePatientId = (event) => {
     const value = event.target.value;
     let _filters = { ...filters };
@@ -672,6 +686,20 @@ export default function Patient() {
     // Do something with the selected value
     console.log(selectedValue);
   };
+  const handleOk = () => {
+    setModalVisible(false);
+  };
+  const handleDatePickerChange = (dateString) => {
+    const formattedDates = dateString?.map((item) =>
+      dayjs(item).format("DD MMM YY")
+    );
+
+    if (formattedDates.length === 2) {
+      const [startDate, endDate] = formattedDates;
+      setStartDate(startDate);
+      setEndDate(endDate);
+    }
+  };
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -702,7 +730,7 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-2">
+                            <div className="col-xl-2" style={{ zIndex: "999"}}>
                               <div class="form-group has-search">
                                 {/* <InputText
                                   type="text"
@@ -737,7 +765,67 @@ export default function Patient() {
                               </div>
                             </div> */}
                             <div className="col-xl-2">
-                              <div class="form-group has-search">
+                            <div
+                              onClick={handleOpenModal}
+                              className={styles.dateDisplay}
+                            >
+                              <div>
+                                {startDate}&nbsp;- &nbsp;{endDate}
+                              </div>
+                              <Image src={calender} />
+                            </div>
+                            <Modal
+                              title=""
+                              visible={modalVisible}
+                              onOk={handleOk}
+                              mask={false}
+                              onCancel={false}
+                              closable={false}
+                              width="45%"
+                              height="800px"
+                              style={{ marginTop: "30px" }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  height: "400px",
+                                }}
+                              >
+                                <div style={{ display: "block" }}>
+                                  <div style={{margin: "20px 0"}}>
+                                    <Button type="ghost">Due Date</Button>
+                                   
+                                  </div>
+                                  <div>
+                                    <Button>Completed Date</Button>
+                                  </div>
+                                </div>
+                                <div>
+                                  <RangePicker
+                                 
+                                    getPopupContainer={() =>
+                                      document.getElementById("date-popup")
+                                    }
+                                    popupStyle={{
+                                      marginTop: "-259px",
+                                      marginLeft:"-78px"
+                                    }}
+                                    onChange={handleDatePickerChange}
+                                    open={true}
+                                    showNow={false}
+                                    style={{ visibility: "hidden" , boxShadow:"none" }}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                id="date-popup"
+                                style={{ position: "relative" }}
+                              />
+                            </Modal>
+                          </div>
+                            {/* <div className="col-xl-2">
+                              <div class="form-group has-search"> */}
                                 {/* <Calendar
                                   className="form-control new-form-control calender-pri-input"
                                   value={compledtedDate}
@@ -746,25 +834,14 @@ export default function Patient() {
                                   readOnlyInput
                                   placeholder="Completed Date"
                                 /> */}
-        {/* <Button type="primary" onClick={showModal}>
+                                {/* <Button type="primary" onClick={showModal}>
         Open Modal
       </Button> */}
-      <Input onClick={showModal}/>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-      <div >
-      <div style={{ marginBottom: '8px' }}>
-        <button style={{border:"none", backgroundColor:"white",cursor: "pointer", transition: "gray 0.3s"}}>Due Date</button> <br></br>
-        <br/>
-        <button style={{border:"none", backgroundColor:"white", cursor: "pointer", transition: "gray 0.3s"}}>Completed Date</button>
-      </div>
-      <hr></hr>
-      <div>
-        <RangePicker />                                                                                                                                                                                                                                                                                  
-      </div>
-    </div>
-      </Modal>
-                              </div>
-                            </div>
+                                {/* <div>
+                                  <RangePicker />
+                                </div> */}
+                              {/* </div>
+                            </div> */}
                             {/* 
                             <div className="col-xl-3">
                               <Button
@@ -781,7 +858,7 @@ export default function Patient() {
                           id="task-tbl_wrapper"
                           className="dataTables_wrapper no-footer"
                         >
-                          <DataTable
+                          {/* <DataTable
                             value={patinetListAll}
                             paginator={false}
                             rows={10}
@@ -792,18 +869,7 @@ export default function Patient() {
                             className="custom-table"
                             rowClassName="custom-row"
                           >
-                            {/* <Column
-                              header="SI.NO"
-                              headerStyle={{ width: "3rem" }}
-                              body={(data, options) =>
-                                paginationFirst + options.rowIndex + 1
-                              }
-                              bodyStyle={{
-                                borderLeft: " 0.2px solid #e1e1e1",
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            ></Column> */}
+                           
 
                             <Column
                               field="patientId"
@@ -822,14 +888,7 @@ export default function Patient() {
                                 borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
-                            {/* <Column
-                              field="fileName"
-                              header="File Name"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            /> */}
+                           
                             <Column
                               field="status"
                               body={statusBodyTemplate}
@@ -839,15 +898,7 @@ export default function Patient() {
                                 borderBottom: " 0.2px solid #e1e1e1",
                               }}
                             />
-                            {/* <Column
-                              field="processedStatus"
-                              body={processstatusBodyTemplate}
-                              header="Processing Status"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            /> */}
+                           
                             <Column
                               field="dueDate"
                               body={(data) =>
@@ -882,15 +933,22 @@ export default function Patient() {
                                 borderRight: " 0.2px solid #e1e1e1",
                               }}
                             />
-                          </DataTable>
+                          </DataTable> */}
+                          <PatientTable
+                            patinetListAll={patinetListAll}
+                            actionBodyTemplate={actionBodyTemplate}
+                            statusBodyTemplate={statusBodyTemplate}
+                          />
                           <div className="pagination-container">
                             <Paginator
                               first={paginationFirst}
-                              rows={10}
+                              rows={12}
                               totalRecords={totalElements}
                               onPageChange={onPageChange}
                             />
-                            <div className="total-pages">Total Pages: {totalElements}</div>
+                            <div className="total-pages">
+                              Total count: {totalElements}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -901,7 +959,12 @@ export default function Patient() {
             </div>
           )}
         </div>
-        <Offcanvas onHide={setAddPatient} show={addPatient} className="offcanvas-end" placement="end">
+        <Offcanvas
+          onHide={setAddPatient}
+          show={addPatient}
+          className="offcanvas-end"
+          placement="end"
+        >
           <div className="offcanvas-header">
             <h5 className="modal-title" id="#gridSystemModal">
               Add Patient Details
@@ -995,7 +1058,12 @@ export default function Patient() {
             </div>
           </div>
         </Offcanvas>
-        <Offcanvas onHide={setAddPatientId} show={addPatientId} className="offcanvas-end" placement="end">
+        <Offcanvas
+          onHide={setAddPatientId}
+          show={addPatientId}
+          className="offcanvas-end"
+          placement="end"
+        >
           <div className="offcanvas-header">
             <h5 className="modal-title" id="#gridSystemModal">
               Add Patient Details
@@ -1010,7 +1078,11 @@ export default function Patient() {
           </div>
           <div className="offcanvas-body">
             <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmitPatientId}>
+              <Form
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmitPatientId}
+              >
                 <div className="row">
                   <div className="col-xl-12 mb-3">
                     <Form.Label>

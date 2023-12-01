@@ -22,11 +22,11 @@
   letter-spacing: 0.48px;
   display: flex;
   margin-right: 17px;
-  
+  padding: 10px;
 }
 
-.export:hover{
-  text-decoration: none!important;
+.export:hover {
+  text-decoration: none !important;
 }
 .custom-table table > thead {
   background-color: #133dd4;
@@ -40,7 +40,7 @@
   border: 0.2px solid #000;
   background: #f4f4f4;
   color: #000;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Manrope", sans-serif !important;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
@@ -57,36 +57,82 @@
 }
 .headText {
   color: #fff;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Manrope", sans-serif !important;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.78px;
-
 }
-.datas{
-    color: #04306F;
-font-family: 'Manrope', sans-serif !important;
-font-size: 13px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-letter-spacing: 0.78px;
+.datas {
+  color: #04306f;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.78px;
 }
-.data{
-    margin-top: 10px;
+.data {
+  margin-top: 10px;
 }
-.description{
-    color: #000;
-font-family: 'Manrope', sans-serif !important;
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: 18px; /* 150% */
-letter-spacing: 0.72px;
+.description {
+  color: #000;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 150% */
+  letter-spacing: 0.72px;
 }
-.commentsIcon{
+.commentsIcon {
   text-align: center;
   cursor: pointer;
 }
+.excel:active {
+  width: 100px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #04306f;
+  border: none;
+
+  color: #fff;
+  font-family: Manrope;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.64px;
+}
+.excel {
+  width: 100px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 0.5px solid #b1aeae;
+
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  color: black;
+  background: #f5f9fe;
+
+  font-family: Manrope;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.64px;
+}
+.dateDisplay {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  width: 300px;
+  height: 40px;
+  box-shadow: 0px 2px 6px 0px #00000014;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
