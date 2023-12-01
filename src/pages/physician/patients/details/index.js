@@ -33,7 +33,7 @@ import {
 import {
   CalendarOutlined
 } from '@ant-design/icons';
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined,CheckCircleOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker} from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from "react-select";
@@ -418,6 +418,22 @@ const Details = ({}) => {
   };
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
   const getPatientDetails = async (patientId, orgId, tenId) => {
+
+    setNewValidDiseaseList([]);
+    setInNewValidDiseaseList([]);
+    setNewUnMatchHccList([]);
+    setValidDiseasesList([]);
+    setInvalidDiseasesList([]);
+    setComboDiseaseCodesList([]);
+    setDosYear([]);
+    setRAFScore([]);
+    setSuggestedNonHccList([]);
+    setSuggestedHccList([]);
+    setDeletedHccList([]);
+    setMeatCriteriaList([]);
+    setMeatCriteriaListNonHcc([]);
+
+
     // setIsLoading(true);
     setIsModalComments(false);
     // var patientId = localStorage.getItem("patientId");
@@ -428,7 +444,6 @@ const Details = ({}) => {
     );
     if (response.data) {
       var result = response.data;
-      console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -468,7 +483,6 @@ const Details = ({}) => {
         // );
         setDosYearDefalutSelect(dosYearArr[0]);
 
-        console.log(dosYearArr);
 
         if (result.rafScore != null) {
           rafScore = result.rafScore;
@@ -598,10 +612,8 @@ const Details = ({}) => {
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
         setComboDiseaseCodesList(comboDis);
-        // setMeatCriteriaList(meatCri);
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
-        console.log(suggestListAllNonHcc);
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
@@ -1019,7 +1031,6 @@ const Details = ({}) => {
   
     }
 
-    // console.log(result)
 
     // setPatientDetailsRadiology(result);
     //   setRadiologyResult(result);
@@ -1054,7 +1065,6 @@ const Details = ({}) => {
     //         dosYearArrFile.push({ value: key, label: key });
     //       }
 
-    //       console.log(dosYearArrFile)
     //       // var fileDetails = result.radiologyFileDetail[dateofService];
     //       setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
     //       getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
@@ -1229,7 +1239,6 @@ const Details = ({}) => {
             dosYearArrFile.push({ value: key, label: key });
           }
 
-          console.log(dosYearArrFile)
           // var fileDetails = result.radiologyFileDetail[dateofService];
           setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
           getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
@@ -1510,7 +1519,6 @@ const Details = ({}) => {
       ]
     }
 
-    console.log(resultTest)
 
   if (resultTest.labFileDetail != null) {
     var result = resultTest;
@@ -1649,7 +1657,6 @@ const Details = ({}) => {
     });
 
 
-     console.log(meatListArr)
     setLabReportValidList(validDiseaseNewRes);
     setLabReportMeatList(meatListArr);
     setLabFileDosListDefaultSelect(dosYearArr[0]);
@@ -2201,7 +2208,6 @@ const Details = ({}) => {
     // getSectionResult(value.toLowerCase());
   };
   const handleOpenModalRadiology = (value, disDescription,radiologyCheck) => {
-    console.log(radiologyCheck)
     if(radiologyCheck == true){
     var splitPoint = disDescription.substring(" ", 40);
     setTimeout(() => {
@@ -2611,7 +2617,6 @@ const Details = ({}) => {
     }
   };
   const onClick = (e) => {
-    console.log("click", e);
   };
 
   const onchangeSuggested = () =>
@@ -2983,7 +2988,6 @@ const Details = ({}) => {
   };
 
   const handleSubmitMoveValidToDeleted = async () => {
-    console.log(selectedDosValue);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -3342,7 +3346,6 @@ const Details = ({}) => {
   };
 
   const getFindValidDiagnosisCode = async (value) => {
-    console.log(value);
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
@@ -3355,7 +3358,6 @@ const Details = ({}) => {
         setAddValidCodeCheck(true)
         inputValue.actualDescription = "adakd dvasdv"
       }
-      console.log(inputValue);
     }
 
     inputValue.actualDescription = "adakd dvasdv"
@@ -3412,13 +3414,12 @@ const Details = ({}) => {
   };
 
   const addComments = async (value) => {
-    console.log(value)
+    setIsModalComments(true);
+    setFlagContainerActive(value);
     if (value == "Filter") {
-      // var response = await loadFilterPatientList(localUserId, 0, 10, "COMPLETED");
-      // console.log(response)
-      // var result = response.content;
-      // console.log(result)
-      // setPatientList(result)
+      const response = await axios.get(ENDPOINTS.apiEndoint +`dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${20}`);
+      var result = response.data.content;
+      setPatientList(result)
     }
 
     if (value == "Timeline") {
@@ -3436,8 +3437,7 @@ const Details = ({}) => {
       getFlagList();
     }
 
-    setIsModalComments(true);
-    setFlagContainerActive(value);
+   
   };
 
   const flagList = [
@@ -3521,7 +3521,6 @@ const Details = ({}) => {
       year: selectedDosValue,
       flag: inputValue.flag
     };
-    console.log(dataFormatSuggested)
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/flagdetails`,
@@ -3546,7 +3545,6 @@ const Details = ({}) => {
       notes: inputValue.comments,
       year: selectedDosValue,
     };
-    console.log(dataFormatSuggested)
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/notes`,
@@ -3564,7 +3562,6 @@ const Details = ({}) => {
   };
 
   const handleSubmitCommnets = async (event) => {
-    console.log("test")
     event.preventDefault();
     var dataFormatSuggested = {
       patientId: localPatientId,
@@ -3572,7 +3569,6 @@ const Details = ({}) => {
       comment: inputValue.comments,
       year: selectedDosValue,
     };
-    console.log(dataFormatSuggested)
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/comment`,
@@ -3598,7 +3594,6 @@ const Details = ({}) => {
       comment: inputValue.comments,
       year: selectedDosValue,
     };
-    console.log(dataFormatSuggested)
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/comment`,
@@ -3624,7 +3619,6 @@ const Details = ({}) => {
       notes: inputValue.comments,
       year: selectedDosValue,
     };
-    console.log(dataFormatSuggested)
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
       `dbservice/notes`,
@@ -11095,7 +11089,7 @@ const Details = ({}) => {
                             {addValidCodeCheck == false ?
                             <span className={visitStyles.ivalidHccCodeError}>
                                 Invalid Hcc Code
-                               </span> : addValidCodeCheck == true ? <span className={visitStyles.ivalidHccCodeError}>
+                               </span> : addValidCodeCheck == true ? <span className={visitStyles.validHccCodeError}>
                                 Valid Hcc Code 
                                </span> : null}
                          
@@ -11620,7 +11614,11 @@ const Details = ({}) => {
                           <ul>
                             {patientList.map((data, index) => (
                               <li className={visitStyles.nameList} key={index} onClick={() => getPatientDetails(data.patientId, localOrgId, localTenantId)}>
-                                {data.patientId} - {data.patientName}
+                                {data.patientId} - {data.patientName} 
+                                {data.processedStatus == "COMPLETED" ?
+                                <i className={visitStyles.filterCompletedIcon}>
+                                <CheckCircleOutlined />
+                                </i> : null}
                               </li>
                             ))}
                           </ul>

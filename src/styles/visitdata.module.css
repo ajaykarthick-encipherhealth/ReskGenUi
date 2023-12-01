@@ -776,9 +776,13 @@ margin-left: 20px;
 .commentSendIcon:hover{
   background: none !important;
 }
-.ivalidHccCodeError{
+.invalidHccCodeError{
   font-size: 13px;
   color: red !important;
+}
+.validHccCodeError{
+  font-size: 13px;
+  color: green !important;
 }
 .provider_name_style{
   width: 25px !important;
@@ -805,6 +809,7 @@ margin-left: 20px;
     padding: 7px;
     margin-right: 5px;
     margin-top: 2px;
+    border-radius: 20px;
 }
 
 .suggestedFlag{
@@ -814,6 +819,7 @@ margin-left: 20px;
     padding: 7px;
     margin-right: 5px;
     margin-top: 2px;
+    border-radius: 20px;
 }
 .deleteFlag{
   height: 10px;
@@ -822,6 +828,7 @@ margin-left: 20px;
     padding: 7px;
     margin-right: 5px;
     margin-top: 2px;
+    border-radius: 20px;
 }
 .timelineDate{
   display: flex !important;
@@ -867,4 +874,9 @@ margin-left: 20px;
 }
 .commentsTime{
   font-size: 12px !important;
+}
+.filterCompletedIcon{
+  margin-left: 10px;
+    font-size: 12px;
+    color: #aeafae;
 }
