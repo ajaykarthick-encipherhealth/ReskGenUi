@@ -3265,6 +3265,7 @@ const Details = ({}) => {
       orgid: localOrgId,
       patientId: localPatientId,
       notes: inputValue.notes,
+      dos:selectedDosValue
     };
     try {
       const response = await axios.post(
@@ -3290,6 +3291,7 @@ const Details = ({}) => {
       orgid: localOrgId,
       patientId: localPatientId,
       notes: inputValue.notes,
+      dos:selectedDosValue
     };
     try {
       const response = await axios.post(
@@ -9469,6 +9471,8 @@ const Details = ({}) => {
                             {flagList?.map((data) => {
                               return (
                                 <>
+                                  <Tooltip title={data.name} placement="left">
+                                                       
                                   <li
                                     className={
                                       flagContainerActive == data.name
@@ -9479,6 +9483,7 @@ const Details = ({}) => {
                                   >
                                     <i>{data.icon}</i>
                                   </li>
+                                  </Tooltip>
                                   {/* <li >
                             <i>{SVGICON.filterIcon}</i>
                           </li>
