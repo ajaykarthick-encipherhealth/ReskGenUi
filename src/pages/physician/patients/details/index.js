@@ -257,6 +257,9 @@ const Details = ({}) => {
   const [commentList, setCommentList] = useState([]);
   const [notesList, setNotesList] = useState([]);
   const [flagResultList, setFlagResultList] = useState([]);
+  const[openPicker,setOpenPicker]=useState(false);
+  const [selectedDates, setSelectedDates] = useState([]); // State to hold selected dates
+
 
 
 
@@ -3621,6 +3624,14 @@ const Details = ({}) => {
 
   }
 
+  // const getFiltePatientListDate = async (date1,date2) => {
+
+  //   const response = await axios.get(ENDPOINTS.apiEndoint +`dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`);
+  //   var result = response.data.content;
+  //   setPatientList(result)
+
+  // }
+
   const handleSubmitFlag = async (event) => {
     event.preventDefault();
     var dataFormatSuggested = {
@@ -3788,6 +3799,13 @@ const Details = ({}) => {
     );
     setFlagResultList(response.data)
   }
+
+  const handleDatePickerChange = (dateString) => {
+      console.log(dateString)
+    
+
+      // getFiltePatientListDate(dateString[0],dateString[1])
+    };
 
 
 
@@ -11723,6 +11741,17 @@ const Details = ({}) => {
                               className="form-control new-form-control"
                               placeholder="Search"
                             />
+                             <RangePicker
+              open={openPicker}
+
+              onChange={(dates, dateStrings) => {
+                setSelectedDates(dates); 
+                handleDatePickerChange(dateStrings); 
+              }}
+            
+              suffixIcon={false}
+              className={visitStyles.datepicker}
+            />
                           </div>
                         </div>
                         <div className="col-xl-3">
@@ -11745,7 +11774,9 @@ const Details = ({}) => {
                                   {SVGICON.dashboard}
                                 </span>
 
-                                <span className={visitStyles.circleCard}>
+                                <span className={visitStyles.circleCard} onClick={() => {
+                setOpenPicker(!openPicker)
+                }}>
                                   {SVGICON.dateIcon}
                                 </span>
                               </div>
