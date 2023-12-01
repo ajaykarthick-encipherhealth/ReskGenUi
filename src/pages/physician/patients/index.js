@@ -534,10 +534,10 @@ export default function Patient() {
           </div>
         );
 
-      case "DECLINE":
+      case "DECLINED":
         return (
           <div className="patient-status">
-              <span className={`badge failed-text`}>Decline</span>
+              <span className={`badge failed-text`}>Declined</span>
            
           </div>
         );
