@@ -59,10 +59,10 @@ const DailyTask = () => {
     return formattedDate;
   });
 
-  const router=useRouter()
+  const router = useRouter();
   useEffect(() => {
     WeekDays?.slice(0, 3)?.map((date) => {
-      dispatch(getDailyTaskDatas(date,router));
+      dispatch(getDailyTaskDatas(date, router));
     });
   }, []);
 
@@ -93,9 +93,12 @@ const DailyTask = () => {
   const card2Data = daysOfWeek.map((day, index) => ({
     id: index + 1,
     day,
+    pendingColor:'#FFB54D',
     pending: dailyStatusData[index]?.pending || 0,
+    holdColor:"#AD94FA",
     hold: dailyStatusData[index]?.hold || 0,
     completed: dailyStatusData[index]?.completed || 0,
+    declineColor:"#EB5252",
     decline: dailyStatusData[index]?.decline || 0,
     allocated: dailyStatusData[index]?.allocated || 0,
   }));
@@ -173,7 +176,7 @@ const DailyTask = () => {
           data: [
             {
               value: allocated,
-              name:"Alocated",
+              name: "Alocated",
               itemStyle: {
                 color: "#fff",
               },
@@ -224,17 +227,44 @@ const DailyTask = () => {
                         <Col span={12} className={styles.headerTitle}>
                           <div style={{ paddingLeft: "10px" }}>
                             <div className={styles.container}>
-                              Pending{" "}
+                              <div style={{ display: "flex" }}>
+                                {" "}
+                                <div
+                                  className={styles.bgColor}
+                                  style={{
+                                    backgroundColor: data.pendingColor,
+                                  }}
+                                ></div>{" "}
+                                Pending{" "}
+                              </div>
                               <div className={styles.subText}>
                                 {data.pending}
                               </div>
                             </div>
                             <div className={styles.container}>
-                              Hold{" "}
+                            <div style={{ display: "flex" }}>
+                                {" "}
+                                <div
+                                  className={styles.bgColor}
+                                  style={{
+                                    backgroundColor: data.holdColor,
+                                  }}
+                                ></div>{" "}
+                                Hold{" "}
+                              </div>
                               <div className={styles.subText}>{data.hold}</div>
                             </div>
                             <div className={styles.container}>
-                              Decline
+                            <div style={{ display: "flex" }}>
+                                {" "}
+                                <div
+                                  className={styles.bgColor}
+                                  style={{
+                                    backgroundColor: data.declineColor,
+                                  }}
+                                ></div>{" "}
+                                Decline{" "}
+                              </div>
                               <div className={styles.subText}>
                                 {data.decline}
                               </div>{" "}
