@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
-import { DatePicker } from "antd";
+import { DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { getDateRange } from "../../store/actions/DashboardActions";
@@ -16,7 +16,16 @@ const HeadTitle = ({
   setOpenPicker,
 }) => {
   const dispatch = useDispatch();
-  const [selectedDates, setSelectedDates] = useState([]); // State to hold selected dates
+  const [selectedDates, setSelectedDates] = useState([]);
+
+  const currentDate = dayjs();
+  const startOfMonth = currentDate.startOf("month");
+  useEffect(() => {
+    setSelectedDates([
+      dayjs(currentDate).format("YYYY/MM/DD"),
+      dayjs(startOfMonth).format("YYYY/MM/DD"),
+    ]);
+  }, []);
 
   const handleDatePickerChange = (dateString) => {
     const convertedDates = dateString?.map((date) => {
@@ -35,10 +44,7 @@ const HeadTitle = ({
       endDate: convertedDates[1],
     };
     dispatch(getDateRange(dates));
-    setSelectedDates([]);
-    setOpenPicker(false);
   };
-
   return (
     <div className={styles.header} style={{ display: anchorTag && "flex" }}>
       <div
@@ -63,18 +69,6 @@ const HeadTitle = ({
               }}
               className={styles.IMG}
             />
-            {icon && (
-              <RangePicker
-                open={openPicker}
-                value={selectedDates}
-                onChange={(dates, dateStrings) => {
-                  setSelectedDates(dates);
-                  handleDatePickerChange(dateStrings);
-                }}
-                suffixIcon={false}
-                className={styles.datepicker}
-              />
-            )}
           </div>
         )}
       </div>
@@ -83,6 +77,44 @@ const HeadTitle = ({
           view all
         </span>
       )}
+      <Modal
+        open={openPicker}
+        mask={false}
+        width="34.5%"
+        closable={false}
+        style={{ left: "-20%", top: "18%" }}
+        onOk={() => {
+          setOpenPicker(false);
+          setSelectedDates([]);
+        }}
+        onCancel={() => {
+          setOpenPicker(false);
+          setSelectedDates([]);
+        }}
+      >
+        <div className={styles.modalDetails}>
+          <RangePicker
+            getPopupContainer={() => document.getElementById("date-popup")}
+            popupStyle={{
+              marginTop: "-259px",
+              marginLeft: "-78px",
+            }}
+            placeholder={[
+              dayjs(currentDate).format("YYYY/MM/DD"),
+              dayjs(startOfMonth).format("YYYY/MM/DD"),
+            ]}
+            open={openPicker}
+            value={selectedDates}
+            onChange={(dates, dateStrings) => {
+              setSelectedDates(dates);
+              handleDatePickerChange(dateStrings);
+            }}
+            suffixIcon={false}
+            className={styles.datepicker}
+          />
+        </div>
+        <div id="date-popup" style={{ position: "relative" }} />
+      </Modal>
     </div>
   );
 };
