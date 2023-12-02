@@ -40,7 +40,7 @@ const HeadTitle = ({
   };
 
   return (
-    <div className={styles.header}>
+    <div className={styles.header} style={{display:anchorTag && "flex"}}>
       <div
         style={{
           display: "flex",
