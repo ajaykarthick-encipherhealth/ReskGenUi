@@ -1,5 +1,4 @@
 import React from "react";
-// import { BtnContainer, Button} from "./styles";
 import styles from "./styles.module.css";
 
 const Buttonscroller = ({
@@ -23,7 +22,6 @@ const Buttonscroller = ({
         return (
           <label
             key={index}
-            // className={styles.button}
             className={`${
               activeButton === index ? styles.btnActive : styles.btnInactive
             }`}

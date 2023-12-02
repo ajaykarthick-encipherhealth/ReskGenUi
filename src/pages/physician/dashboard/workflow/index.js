@@ -69,8 +69,7 @@ const WorkFlow = () => {
                 backgroundImage: `url(${data?.bg.src})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
-                width: "100%",
-                height: "50%",
+               
               }}
               className={styles.colData}
             >
