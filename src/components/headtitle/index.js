@@ -35,12 +35,12 @@ const HeadTitle = ({
       endDate: convertedDates[1],
     };
     dispatch(getDateRange(dates));
-    setSelectedDates([]); 
-    setOpenPicker(false); 
+    setSelectedDates([]);
+    setOpenPicker(false);
   };
 
   return (
-    <div className={styles.header} style={{display:anchorTag && "flex"}}>
+    <div className={styles.header} style={{ display: anchorTag && "flex" }}>
       <div
         style={{
           display: "flex",
@@ -51,34 +51,37 @@ const HeadTitle = ({
       >
         <div className={styles.title}>{header}</div>
         {icon && (
-          <div style={{ width: "10%", height: "100%" }}>
+          <div className={styles.imgContainer}>
             <Image
               src={icon}
               alt="Calendar Icon"
               onClick={() => {
-                setOpenPicker(!openPicker)
+                setOpenPicker(!openPicker);
                 if (!openPicker) {
-                  setSelectedDates([]); 
-                }}}
+                  setSelectedDates([]);
+                }
+              }}
               className={styles.IMG}
             />
-            <RangePicker
-              open={openPicker}
-              value={selectedDates}
-              onChange={(dates, dateStrings) => {
-                setSelectedDates(dates); 
-                handleDatePickerChange(dateStrings); 
-              }}
-              suffixIcon={false}
-              className={styles.datepicker}
-            />
+            {icon && (
+              <RangePicker
+                open={openPicker}
+                value={selectedDates}
+                onChange={(dates, dateStrings) => {
+                  setSelectedDates(dates);
+                  handleDatePickerChange(dateStrings);
+                }}
+                suffixIcon={false}
+                className={styles.datepicker}
+              />
+            )}
           </div>
         )}
       </div>
       {anchorTag && (
-        <p className={styles.anchor} onClick={handleOpen}>
+        <span className={styles.anchor} onClick={handleOpen}>
           view all
-        </p>
+        </span>
       )}
     </div>
   );

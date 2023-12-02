@@ -13,7 +13,7 @@
   cursor: pointer;
 }
 .title {
-  width:90%;
+  width: 90%;
   font-size: 18px;
   font-weight: 600;
   margin: 0 15px 10px 10px;
@@ -31,4 +31,66 @@
 .IMG {
   cursor: pointer;
   margin-top: -20px;
+}
+.imgContainer {
+  width: 10%;
+  height: 100%;
+}
+@media screen and (max-width: 1400px) {
+  .header {
+    /* display: flex; */
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0px;
+    color: #000;
+  }
+}
+
+@media screen and (max-width: 1323px) {
+  .header {
+    margin: 0px;
+    color: #000;
+  }
+  .title {
+    width: 100%;
+    font-size: 12px;
+    margin: 0;
+    color: #000000;
+  }
+  .title {
+    margin: 0;
+    color: #000000;
+  }
+}
+@media screen and (max-width: 1404px) {
+  .header {
+    margin: 0px;
+    color: #000;
+  }
+  .title {
+    width: 100%;
+    font-size: 12px;
+    margin: 0;
+    color: #000000;
+  }
+  .title {
+    margin: 0;
+    color: #000000;
+  }
+}
+@media screen and (max-width: 1140px) {
+  .header {
+    margin: 0px;
+    color: #000;
+    font-size: 16px;
+  }
+  .title {
+    font-size: 12px;
+    margin: 0;
+    color: #000000;
+  }
+  .imgContainer {
+    width: 25%;
+  }
 }

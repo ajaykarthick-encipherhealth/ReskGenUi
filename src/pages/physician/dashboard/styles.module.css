@@ -12,7 +12,9 @@
     padding-top: 20px;
 
   }
- 
+ .RowCon{
+  margin-bottom: 10px;
+ }
   .column1{
     flex: 0 0 27% !important;
     max-width: 20% !important;
