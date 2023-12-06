@@ -877,6 +877,9 @@ margin-left: 20px;
 }
 .commentsName{
   font-size: 13px !important;
+  font-weight: 600;
+  width: fit-content;
+  margin-bottom: 5px;
 }
 .commentsTime{
   font-size: 12px !important;
@@ -985,6 +988,11 @@ margin-left: 20px;
   margin-bottom: -5px;
 }
 
+.commentsDesc{
+  font-size: 14px !important;
+  margin-bottom: 10px;
+}
+
 .flagDetailsChange{
   margin-top: 6px !important;
     height: 17px !important;
@@ -1029,4 +1037,37 @@ margin-left: 20px;
   box-shadow: none !important;
   width: 150px!important;
 
+}
+.name_missed path{
+  fill: #7ad2e5;
+}
+.dob_missed path{
+  fill: #063970
+}
+.name_missed path{
+  fill: #f7d392
+}
+.id_missed path{
+  fill: #755dff
+}
+.sign_missed path{
+  fill: #e28743
+}
+.signature_missed path{
+  fill: #abdbe3
+}
+.cred_missed path{
+  fill: #b39868
+}
+.sign_status path{
+  fill: #ffa502
+}
+.no_hcc_found path{
+  fill: #ffffba
+}
+.no_doc_found path{
+  fill: #e95c4b
+}
+.patient_diseased path{
+  fill: #b8a8bd
 }
