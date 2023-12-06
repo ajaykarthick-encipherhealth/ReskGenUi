@@ -1011,11 +1011,22 @@ margin-left: 20px;
     border-radius: 6px !important;
 }
 .pendingBtn{
+  font-size: 13px;
   color: #452b90;
   background: #dfd8f3!important;
   border: none !important;
   box-shadow: none !important;
   border-radius:6px;
+  width: 150px!important;
+
+}
+.holdBtnHcc{
+  font-size: 13px;
+  color: #d8c11b;
+  background: #faead1!important;
+  border-radius: 6px!important;
+  border: none !important;
+  box-shadow: none !important;
   width: 150px!important;
 
 }
