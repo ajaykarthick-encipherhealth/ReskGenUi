@@ -9,7 +9,7 @@ import visitStyles from "../../../../styles/visitdata.module.css";
 import { InputText } from "primereact/inputtext";
 import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment from "moment";
+import moment, { months } from "moment";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -22,19 +22,23 @@ import {
   faCheck,
   faAdd,
   faInfo,
-  faIdBadge,
   faUser,
   faSearch,
-  faCalendar,
   faCheckCircle,
   faArrowLeft,
-  faPlus
+  faPlus,
+  faUserCircle,
+  faVenusMars,
+  faCalendarAlt,
+  faIdCardClip,
+  faCog,
+  faClock
 } from "@fortawesome/free-solid-svg-icons";
 import {
   CalendarOutlined
 } from '@ant-design/icons';
 import { QuestionCircleOutlined,CheckCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Divider, Popover, Menu, DatePicker} from "antd";
+import { Popconfirm, Divider, Popover, Menu, DatePicker,Dropdown} from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from "react-select";
 import { Modal } from "antd";
@@ -51,7 +55,7 @@ import {
 } from "@react-pdf-viewer/search";
 import Form from "react-bootstrap/Form";
 import { Offcanvas } from "react-bootstrap";
-import { InfoCircleOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, DownOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { notification } from "antd";
 // import { C } from "@fullcalendar/core/internal-common";
@@ -258,7 +262,17 @@ const Details = ({}) => {
   const [notesList, setNotesList] = useState([]);
   const [flagResultList, setFlagResultList] = useState([]);
   const[openPicker,setOpenPicker]=useState(false);
-  const [selectedDates, setSelectedDates] = useState([]); // State to hold selected dates
+  const [selectedDates, setSelectedDates] = useState([]); 
+  const [actionItems, setActionItems] = useState([]); 
+  const [actionItems2, setActionItems2] = useState([]); 
+  const [actionItems3, setActionItems3] = useState([]); 
+  const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
+  const [userDetails,setUserDetails] = useState("");
+  const [currentTime,setCurrentTime] = useState("");
+  const [commentsTrigger, setCommentsTrigger] = useState(false);
+
+
+
 
 
 
@@ -275,18 +289,25 @@ const Details = ({}) => {
     // Add more names with their respective statuses
   ];
 
+
+  var userSpinner = (       
+    <div className={visitStyles.userDetailsCard}>
+      <FontAwesomeIcon icon={faUserCircle}/>
+    </div>
+   );
+
   const flagPostList = [
-    { value: "PATIENT_NAME_MISSED", label: "PATIENT_NAME_MISSED" },
-    { value: "PATIENT_DOB_MISSED", label: "PATIENT_DOB_MISSED" },
-    { value: "MRN_ID_MISMATCH", label: "MRN_ID_MISMATCH" },
-    { value: "PROVIDER_SIGN_MISSED", label: "PROVIDER_SIGN_MISSED" },
-    { value: "PROVIDER_SIGNATURE_MISSED", label: "PROVIDER_SIGNATURE_MISSED" },
-    { value: "PROVIDER_CREDENTIAL_MISSED", label: "PROVIDER_CREDENTIAL_MISSED" },
-    { value: "PROVIDER_SIGN_STATUS_PENDING", label: "PROVIDER_SIGN_STATUS_PENDING" },
-    { value: "NO_HCC_FOUND", label: "NO_HCC_FOUND" },
-    { value: "NO_VALID_DOCUMENT_FOUND", label: "NO_VALID_DOCUMENT_FOUND" },
-    { value: "PATIENT_DISEASED", label: "PATIENT_DISEASED" },
-    { value: "PATIENT_DISEASED", label: "PATIENT_DISEASED" },
+    { value: "PATIENT_NAME_MISSED" , label: <>PATIENT_NAME_MISSED <i>{SVGICON.emptyFlag}</i> </>},
+    { value: "PATIENT_DOB_MISSED", label: <>PATIENT_DOB_MISSED <i>{SVGICON.emptyFlag}</i> </>},
+    { value: "MRN_ID_MISMATCH", label: <>MRN_ID_MISMATCH <i>{SVGICON.emptyFlag}</i> </>},
+    { value: "PROVIDER_SIGN_MISSED", label:<>PROVIDER_SIGN_MISSED <i>{SVGICON.emptyFlag}</i> </> },
+    { value: "PROVIDER_SIGNATURE_MISSED", label: <>PROVIDER_SIGNATURE_MISSED <i>{SVGICON.emptyFlag}</i> </>},
+    { value: "PROVIDER_CREDENTIAL_MISSED", label: <>PROVIDER_CREDENTIAL_MISSED <i>{SVGICON.emptyFlag}</i> </> },
+    { value: "PROVIDER_SIGN_STATUS_PENDING", label: <>PROVIDER_SIGN_STATUS_PENDING <i>{SVGICON.emptyFlag}</i> </>},
+    { value: "NO_HCC_FOUND", label: <>NO_HCC_FOUND <i>{SVGICON.emptyFlag}</i> </>},
+    { value: "NO_VALID_DOCUMENT_FOUND", label: <>NO_VALID_DOCUMENT_FOUND <i>{SVGICON.emptyFlag}</i> </> },
+    { value: "PATIENT_DISEASED", label: <>PATIENT_DISEASED <i>{SVGICON.emptyFlag}</i> </> },
+    { value: "PATIENT_DISEASED", label: <>PATIENT_DISEASED <i>{SVGICON.emptyFlag}</i> </> }
   ];
 
   const filterChangePatientId = (e) => {
@@ -372,12 +393,72 @@ const Details = ({}) => {
 
     setLocalPatientId(patientId);
 
-    //   if (isDocumentLoaded) {
-    //     enableShortcuts({
-    //         keyword: 'Coverage for Jeffrey She',
-    //         matchCase: true,
-    //     });
-    // }
+
+    const menu = (
+      <Menu>
+        <Menu.Item  key='1' onClick={() => handleActionClick("HOLD")}>
+         HOLD
+        </Menu.Item>
+        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
+         DECLINE
+        </Menu.Item>
+        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
+        COMPLETE
+        </Menu.Item>
+      </Menu>
+    );
+
+    const menu2 = (
+      <Menu>
+        <Menu.Item  key='1' onClick={() => handleActionClick("HOLD")}>
+         HOLD
+        </Menu.Item>
+        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
+         DECLINE
+        </Menu.Item>
+        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
+        COMPLETE
+        </Menu.Item>
+        <Menu.Item key='3' onClick={() => handleActionClick("ADD RADIOLOGY")}>
+        ADD RADIOLOGY
+        </Menu.Item>
+      </Menu>
+    );
+    const menu3 = (
+      <Menu>
+        <Menu.Item  key='1' onClick={() => handleActionClick("HOLD")}>
+         HOLD
+        </Menu.Item>
+        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
+         DECLINE
+        </Menu.Item>
+        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
+        COMPLETE
+        </Menu.Item>
+        <Menu.Item key='3' onClick={() => handleActionClick("ADD LAP")}>
+        ADD LAB
+        </Menu.Item>
+      </Menu>
+    );
+
+
+
+    setActionItems(menu);
+    setActionItems2(menu2);
+    setActionItems3(menu3);
+
+    var userSpinner = (       
+      <div className={visitStyles.userDetailsCard}>
+  <Spin className='ml-2 ms-1 section-spin' size="medium" />
+      </div>
+     );
+
+     var currentTime  = moment().format("hh:mm");
+     setCurrentTime(currentTime)
+
+     setUserDetails(userSpinner);
+
+
   }, []);
 
   const getYearOfService = async (orgId, tenId) => {
@@ -620,6 +701,8 @@ const Details = ({}) => {
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
+
+        
 
         const COLORS = [
           "bg-bg-seven",
@@ -2232,6 +2315,7 @@ const Details = ({}) => {
     setIsAddButtonClicked(false);
     setIsModalComments(false);
     setFlagContainerActive("");
+    setConfirmCompleteModal(false);
   };
   const handleOpenModal = (value, disDescription) => {
     var splitPoint = disDescription.substring(" ", 40);
@@ -2777,6 +2861,8 @@ const Details = ({}) => {
         setSuggestedBtnTitle("Add");
         notification.success({
           message: "Moved suggested code to valid diseases Successfully!",
+          placement:"top",
+          duration:1
         });
         getPatientDetails(localPatientId,localOrgId, localTenantId);
       } else {
@@ -3093,6 +3179,8 @@ const Details = ({}) => {
     if (response?.status == 202) {
       notification.success({
         message: "Moved to suggested Successfully!",
+        placement:"top",
+        duration:1
       });
       getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
@@ -3119,6 +3207,8 @@ const Details = ({}) => {
     if (response?.status == 202) {
       notification.success({
         message: "Moved to deleted Successfully!",
+        placement:"top",
+        duration:1
       });
       getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
@@ -3145,6 +3235,8 @@ const Details = ({}) => {
     if (response?.status == 202) {
       notification.success({
         message: "Moved to deleted Successfully!",
+        placement:"top",
+        duration:1
       });
       getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
@@ -3171,6 +3263,8 @@ const Details = ({}) => {
     if (response?.status == 202) {
       notification.success({
         message: "Moved to valid Successfully!",
+        placement:"top",
+        duration:1
       });
       getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
@@ -3197,6 +3291,8 @@ const Details = ({}) => {
     if (response?.status == 202) {
       notification.success({
         message: "Moved to valid Successfully!",
+        placement:"top",
+        duration:1
       });
       getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
@@ -3222,6 +3318,8 @@ const Details = ({}) => {
     if (response?.status == 202) {
       notification.success({
         message: "Moved to Suggested Successfully!",
+        placement:"top",
+        duration:1
       });
       getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
@@ -3248,6 +3346,8 @@ const Details = ({}) => {
     if (response?.status == 202) {
       notification.success({
         message: "Moved valid diseases Successfully!",
+        placement:"top",
+        duration:1
       });
       getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
@@ -3329,6 +3429,8 @@ const Details = ({}) => {
       if (response?.status == 202) {
         notification.success({
           message: "Saved Successfully!",
+          placement:"top",
+          duration:1
         });
         setSaveBtnTitle("Save");
         getPatientDetails(localPatientId,localOrgId, localTenantId);
@@ -3338,6 +3440,10 @@ const Details = ({}) => {
       setSaveBtnTitle("Save");
     }
   };
+
+  const handleSubmitHccAction = () =>{
+    handleSubmitHccComplete()
+  }
 
   const handleSubmitHccComplete = async () => {
     setCompleteBtnTitle("Loading...");
@@ -3382,6 +3488,8 @@ const Details = ({}) => {
       deletedDiseases: deletedObject,
     };
 
+    console.log(postData)
+
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
@@ -3390,9 +3498,13 @@ const Details = ({}) => {
       if (response?.status == 202) {
         notification.success({
           message: "Completed Successfully!",
+          placement:"top",
+          duration:1
         });
+        setConfirmCompleteModal(false);
         setCompleteBtnTitle("Complete");
         getPatientDetails(localPatientId,localOrgId, localTenantId);
+        getPatientIdDetails(localPatientId);
       } else {
       }
     } catch (e) {
@@ -3416,6 +3528,8 @@ const Details = ({}) => {
       if (response?.status == 202) {
         notification.success({
           message: "Decline Successfully!",
+          placement:"top",
+          duration:1
         });
         setConfirmNotesModalHold(false);
         setDeclineBtnTitle("Decline");
@@ -3442,6 +3556,8 @@ const Details = ({}) => {
       if (response?.status == 202) {
         notification.success({
           message: "Hold Successfully!",
+          placement:"top",
+          duration:1
         });
         setConfirmNotesModalHold(false);
         setDeclineBtnTitle("Decline");
@@ -3505,6 +3621,8 @@ const Details = ({}) => {
       if (response?.status == 200) {
         notification.success({
           message: "Saved Successfully!",
+          placement:"top",
+          duration:1
         });
         setIsModalOpenValidCodes(false);
         getPatientDetails(localPatientId,localOrgId, localTenantId);
@@ -3633,7 +3751,10 @@ const Details = ({}) => {
   // }
 
   const handleSubmitFlag = async (event) => {
+    const form = event.currentTarget;
     event.preventDefault();
+    if (form.checkValidity() === true) {
+      setCommentsTrigger(true);
     var dataFormatSuggested = {
       patientId: localPatientId,
       orgId: localOrgId,
@@ -3649,16 +3770,25 @@ const Details = ({}) => {
     if (response?.status == 202) {
       notification.success({
         message: "Flag added Successfully!",
+        placement:"top",
+        duration:1
       });
       getFlagList();
+      setCommentsTrigger(false);
+
       // getPatientDetails(localPatientId,localOrgId, localTenantId);
     } else {
     }
+  }
+  setValidated(true)
     // setIsModalComments(false)
   };
 
   const handleSubmitNotes = async (event) => {
+    const form = event.currentTarget;
     event.preventDefault();
+    if (form.checkValidity() === true) {
+      setCommentsTrigger(true);
     var dataFormatSuggested = {
       patientId: localPatientId,
       orgId: localOrgId,
@@ -3674,15 +3804,25 @@ const Details = ({}) => {
       inputValue.comments = ''
       notification.success({
         message: "Notes added Successfully!",
+        placement:"top",
+        duration:1
       });
       getNotesList();
+      setCommentsTrigger(false);
+
     } else {
     }
+  }
+  setValidated(true)
     // setIsModalComments(false)
   };
 
   const handleSubmitCommnets = async (event) => {
+    const form = event.currentTarget;
     event.preventDefault();
+    if (form.checkValidity() === true) {
+      setCommentsTrigger(true);
+
     var dataFormatSuggested = {
       patientId: localPatientId,
       orgId: localOrgId,
@@ -3698,10 +3838,16 @@ const Details = ({}) => {
       inputValue.comments = '';
       notification.success({
         message: "Comment added Successfully!",
+        placement:"top",
+        duration:1
       });
       getCommentsList();
+      setCommentsTrigger(false);
+
     } else {
     }
+  }
+    setValidated(true)
     // setIsModalComments(false)
   };
 
@@ -3723,6 +3869,8 @@ const Details = ({}) => {
       inputValue.comments = '';
       notification.success({
         message: "Comment added Successfully!",
+        placement:"top",
+        duration:1
       });
       getCommentsList();
     } else {
@@ -3748,6 +3896,8 @@ const Details = ({}) => {
       inputValue.comments = ''
       notification.success({
         message: "Notes added Successfully!",
+        placement:"top",
+        duration:1
       });
       getNotesList();
     } else {
@@ -3807,7 +3957,72 @@ const Details = ({}) => {
       // getFiltePatientListDate(dateString[0],dateString[1])
     };
 
+ 
 
+
+    const handleActionClick = (value) => {
+
+      if(value == "HOLD"){
+        setConfirmNotesModalDecline(true);
+        setIsValidAction("holdFunction");
+      }
+
+      if(value == "DECLINE"){
+        handleSubmitHccDecline();
+    }
+
+      if(value == "COMPLETE"){
+        setConfirmCompleteModal(true);
+      }
+
+      // getFiltePatientListDate(dateString[0],dateString[1])
+    };
+
+    const renderUserDetails = async (userId) => {
+      var result = "";
+      var data = "";
+
+      data = (       
+        <div className={visitStyles.userDetailsCard}>
+    <Spin className='ml-2 ms-1 section-spin' size="medium" />
+        </div>
+       );
+    
+      setTimeout( async () => {
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
+        );
+  
+        if (response.data) {
+          result = response.data;
+          data = (       
+            <div className={visitStyles.userDetailsCard}>
+             <div className={visitStyles.avatarStyle}>
+             <Avatar  size={60}>{splitUserName(result.userName)}</Avatar>
+             <span className={visitStyles.userRole}>{result.role[0]}</span>
+             </div>
+             <div className={visitStyles.userNameDetails}>
+             <FontAwesomeIcon icon={faUserCircle}/>
+             <span>{result.userName}</span>
+             </div>  
+             <div className={visitStyles.usertimeDetails}>
+             <FontAwesomeIcon icon={faClock}/>
+             <span>{currentTime}</span>
+             </div>                       
+            </div>
+        );
+        }
+        setUserDetails(data);
+    }, 1000);
+
+     
+
+      setUserDetails(data);
+    };
+
+
+
+    
 
 
 
@@ -3846,34 +4061,41 @@ const Details = ({}) => {
                         <div className="card-body">
                           <div className="row">
                             <div className="col-xl-3 col-sm-12">
-                              <i>{SVGICON.patientIdIcon}</i>
+                              {/* <i>{SVGICON.patientIdIcon}</i> */}
+                              <FontAwesomeIcon icon={faIdCardClip}/>
                               <label>Patient Id</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.patientId}
                               </h6>
                             </div>
                             <div className="col-xl-3 col-sm-12">
-                              <i>{SVGICON.patientNameIcon}</i>{" "}
+                              {/* <i>{SVGICON.patientNameIcon}</i>{" "} */}
+                              <FontAwesomeIcon icon={faUserCircle}/>
+                               
                               <label>Name</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.patientName}
                               </h6>
                             </div>
                             <div className="col-xl-2 col-sm-12">
-                              <i>{SVGICON.AgeIcon}</i> <label>Age</label>
+                              {/* <i>{SVGICON.AgeIcon}</i> */}
+                              <FontAwesomeIcon icon={faCalendarAlt}/>
+                               <label>Age</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.age}
+
                               </h6>
                             </div>
                             <div className="col-xl-2 col-sm-12">
-                              <i>{SVGICON.GenerIcon}</i>
+                              {/* <i>{SVGICON.GenerIcon}</i> */}
+                              <FontAwesomeIcon icon={faVenusMars}/>
                               <label>Gender</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.gender}
                               </h6>
                             </div>
                             <div className="col-xl-2 col-sm-12">
-                              <i>{SVGICON.DatebirthIcon}</i> <label>DOB</label>
+                              <i className={visitStyles.dob_icon}>{SVGICON.DatebirthIcon}</i> <label>DOB</label>
                               <h6 className="ageDtails">
                                 {patientDocumentResult.dob}
                               </h6>
@@ -3930,7 +4152,6 @@ const Details = ({}) => {
                           >
                             <i className={visitStyles.completedStatus}>
                             {SVGICON.completedStatusIcon  }
-                             {/* <span>COMPLETED</span> */}
 
                             </i>
                             </div>: patienIdDetails.processedStatus == "DECLINED" ?
@@ -3941,12 +4162,21 @@ const Details = ({}) => {
                              </div> :
                         <div className={`col-xl-12`}
                         >
-                          <Button
+
+<Dropdown.Button
+ type="primary"
+        icon={<DownOutlined />}
+        overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems }
+      >
+        Submit
+      </Dropdown.Button>
+
+
+                          {/* <Button
                             onClick={handleSubmitHccDecline}
                             className={`ms-2 ${visitStyles.declineBtn}`}
                           >
                             <i>{SVGICON.delclineIcon}</i>
-                            {/* {declineBtnTitle} */}
                           </Button>
                           <Button
                             onClick={() => {
@@ -3956,7 +4186,6 @@ const Details = ({}) => {
                             className={`ms-2 ${visitStyles.holdBtn}`}
                           >
                             <i>{SVGICON.holdBtnIcon}</i>
-                            {/* Hold */}
                           </Button>
 
                           <Button
@@ -3965,11 +4194,18 @@ const Details = ({}) => {
                           >
                             <i>{SVGICON.completedBtnIcon}</i>
 
-                            {/* {completedBtnTitle} */}
-                          </Button>
+                          </Button> */}
+
+{/* <Button
+                            onClick={handleSubmitHccComplete}
+                            className={`ms-2 ${visitStyles.completedBtn}`}
+                          >
+                            <i>{SVGICON.completedBtnIcon}</i>
+
+                          </Button> */}
 
 
-                          {activeTab == 3 ? (
+                          {/* {activeTab == 3 ? (
 
                             <Button
                               onClick={addPatientFile}
@@ -4004,7 +4240,7 @@ const Details = ({}) => {
                             </Button>
 
                           ) : null}
-
+ */}
 
 
                         </div>}
@@ -4035,6 +4271,7 @@ const Details = ({}) => {
                               </div>
                               <ul>
                                 {tabList.map((data, index) => (
+                                   <Tooltip title={data.title} placement="right">
                                   <li className={`${visitStyles.sideNavLabel}`} onClick={() =>
                                     navigetPageDetails(data.type)
                                   }>
@@ -4047,6 +4284,7 @@ const Details = ({}) => {
                                       </span>
                                     </a>
                                   </li>
+                                  </Tooltip>
                                 ))}
                               </ul>
                             </div>
@@ -4414,9 +4652,11 @@ const Details = ({}) => {
                                                             placement="bottom"
                                                             trigger="click"
                                                           >
+                                                              <Tooltip title="HCC Veriosn Details" placement="bottom">
                                                             <i>
                                                               {SVGICON.infoIcon}
                                                             </i>
+                                                            </Tooltip>
                                                           </Popover>
                                                           
 
@@ -4739,31 +4979,31 @@ const Details = ({}) => {
                                                               {data.getPlace ==
                                                                 "Lab" ? (
                                                                   <Tooltip title="LAB">
-                                                                <Badge
-                                                                  className="mt-2 text-white"
+                                                                <span
+                                                                  className={` mt-2 ${visitStyles.labStatus}`}
                                                                   bg={`  mt-2 bg-bg-seven `}
                                                                 >
-                                                                  L
-                                                                </Badge>
+                                                                  Lap
+                                                                </span>
                                                                 </Tooltip>
                                                               ) : data.getPlace ==
                                                                 "Radio" ? (
                                                                   <Tooltip title="RADIOLOGY">
-                                                                <Badge
-                                                                  className=" mt-2 text-white"
+                                                                <span
+                                                                  className={` mt-2 ${visitStyles.radiologyStatus}`}
                                                                   bg={`  mt-2 bg-bg-eight `}
                                                                 >
-                                                                  R
-                                                                </Badge>
+                                                                  Radiology
+                                                                </span>
                                                                 </Tooltip>
                                                               ) : (
                                                                 <Tooltip title="HCC">
-                                                                <Badge
-                                                                  className=" mt-2 text-white"
+                                                                <span
+                                                                  className={` mt-2 ${visitStyles.hccStatus}`}
                                                                   bg={` mt-2 bg-bg-five `}
                                                                 >
-                                                                  H
-                                                                </Badge>
+                                                                  HCC
+                                                                </span>
                                                                 </Tooltip>
                                                               )}
  {data.encounterDate != null ?
@@ -4865,9 +5105,11 @@ const Details = ({}) => {
                                                           placement="bottom"
                                                           trigger="click"
                                                         >
+                                                           <Tooltip title="HCC Veriosn Details" placement="bottom">
                                                           <i>
                                                             {SVGICON.infoIcon}
                                                           </i>
+                                                          </Tooltip>
                                                         </Popover>
                                                         <Popconfirm
                                                           title="Choose an action"
@@ -11090,7 +11332,7 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Notes <span className="text-danger">*</span>{" "}
+                                Reason <span className="text-danger">*</span>{" "}
                               </Form.Label>
                               <textarea
                                 className="form-control"
@@ -11140,7 +11382,7 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Notes <span className="text-danger">*</span>{" "}
+                              Reason <span className="text-danger">*</span>{" "}
                               </Form.Label>
                               <textarea
                                 className="form-control"
@@ -11190,7 +11432,7 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Notes <span className="text-danger">*</span>{" "}
+                              Reason <span className="text-danger">*</span>{" "}
                               </Form.Label>
                               <textarea
                                 className="form-control"
@@ -11559,52 +11801,80 @@ const Details = ({}) => {
                           {timelineData.map((item, index) => (
                             <li>
                               {item.action == "MOVED_INVALID_TO_VALID" ? 
-                                <Tooltip title={item.userName}>
-                              <div className="timeline-badge MOVED_INVALID_TO_VALID">{splitUserName(item.userName)}</div>
+                                <Tooltip title={item.userName} placement="bottom">
+                                  <Popover
+                                                            placement="bottom"
+                                                            content={userDetails}
+                                                          >
+                              <div className="timeline-badge MOVED_INVALID_TO_VALID">{splitUserName(item.userName)}
+                             
+                                                          
+                              </div>
+                              </Popover>
                               </Tooltip> :
                               item.action == "MOVED_SUGGESTED_TO_VALID" ? 
-                              <Tooltip title={item.userName}>
-                               <div className="timeline-badge MOVED_SUGGESTED_TO_VALID">{splitUserName(item.userName)}</div>
+                              <Tooltip title={item.userName} placement="bottom">
+                                  <Popover
+                                                            placement="bottom"
+                                                            content={userDetails}  onOpenChange={() => renderUserDetails(item.userName)}>
+                                                          
+                               <div className="timeline-badge MOVED_SUGGESTED_TO_VALID">{splitUserName(item.userName)}
+                               </div>
+                               </Popover>
                                </Tooltip>:
                                item.action == "MOVED_VALID_TO_SUGGESTED" ?
-                               <Tooltip title={item.userName}> 
-                               <div className="timeline-badge MOVED_VALID_TO_SUGGESTED">{splitUserName(item.userName)}</div>
+                               <Tooltip title={item.userName} placement="bottom">
+                                <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               
+                               <div className="timeline-badge MOVED_VALID_TO_SUGGESTED">{splitUserName(item.userName)}</div></Popover>
                                </Tooltip>:
                                item.action == "VALID_DISEASE_ADDED" ? 
-                               <Tooltip title={item.userName}>
-                               <div className="timeline-badge VALID_DISEASE_ADDED">{splitUserName(item.userName)}</div>
+                               <Tooltip title={item.userName} placement="bottom">
+                                 <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge VALID_DISEASE_ADDED">{splitUserName(item.userName)}</div></Popover>
                                </Tooltip> :
                                item.action == "MOVED_VALID_TO_DELETED" ? 
-                               <Tooltip title={item.userName}>
+                               <Tooltip title={item.userName} placement="bottom">
+                                 <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
                                <div className="timeline-badge MOVED_VALID_TO_DELETED">{splitUserName(item.userName)}</div>
+                               </Popover>
                                </Tooltip>
                                :
                                item.action == "COMPLETED" ? 
-                               <Tooltip title={item.userName}>
-                               <div className="timeline-badge COMPLETED">{splitUserName(item.userName)}</div>
+                               <Tooltip title={item.userName} placement="bottom">
+                                 <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge COMPLETED">{splitUserName(item.userName)}</div></Popover>
                                </Tooltip>:
                                item.action == "MOVED_DELETED_TO_VALID" ? 
-                               <Tooltip title={item.userName}>
-                               <div className="timeline-badge MOVED_DELETED_TO_VALID">{splitUserName(item.userName)}</div></Tooltip>:
+                               <Tooltip title={item.userName} placement="bottom">
+                                 <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge MOVED_DELETED_TO_VALID">{splitUserName(item.userName)}</div></Popover></Tooltip>:
                                item.action == "MOVED_DELETED_TO_SUGGESTED" ? 
-                               <Tooltip title={item.userName}>
-                               <div className="timeline-badge MOVED_DELETED_TO_SUGGESTED">{splitUserName(item.userName)}</div></Tooltip>:
+                               <Tooltip title={item.userName} placement="bottom">
+                                 <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge MOVED_DELETED_TO_SUGGESTED">{splitUserName(item.userName)}</div></Popover></Tooltip>:
                                item.action == "MOVED_SUGGESTED_TO_DELETED" ? 
-                               <Tooltip title={item.userName}>
-                               <div className="timeline-badge MOVED_SUGGESTED_TO_DELETED">{splitUserName(item.userName)}</div></Tooltip>:
+                               <Tooltip title={item.userName} placement="bottom">
+                                 <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge MOVED_SUGGESTED_TO_DELETED">{splitUserName(item.userName)}</div></Popover></Tooltip>:
                                item.action == "ENCOUNTER_FILE_UPDATED" ? 
-                               <Tooltip title={item.userName}>
-                               <div className="timeline-badge ENCOUNTER_FILE_UPDATED">{splitUserName(item.userName)}</div></Tooltip>:
+                               <Tooltip title={item.userName} placement="bottom">
+                                 <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge ENCOUNTER_FILE_UPDATED">{splitUserName(item.userName)}</div></Popover></Tooltip>:
                                item.action == "ENCOUNTER_FILE_ADDED" ?
-                               <Tooltip title={item.userName}> 
-                               <div className="timeline-badge ENCOUNTER_FILE_ADDED">{splitUserName(item.userName)}</div>
+                               <Tooltip title={item.userName} placement="bottom">
+                                <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge ENCOUNTER_FILE_ADDED">{splitUserName(item.userName)}</div></Popover>
                                </Tooltip>:
                                item.action == "HOLD" ? 
-                               <Tooltip title={item.userName}>
-                               <div className="timeline-badge HOLD">{splitUserName(item.userName)}</div></Tooltip>:
+                               <Tooltip title={item.userName} placement="bottom">
+                                 <Popover placement="bottom"  content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge HOLD">{splitUserName(item.userName)}</div></Popover></Tooltip>:
                                item.action == "DECLINED" ? 
-                               <Tooltip title={item.userName}>
-                               <div className="timeline-badge DECLINED">{splitUserName(item.userName)}</div></Tooltip>:
+                               <Tooltip title={item.userName} placement="bottom">
+                                <Popover placement="bottom" content={userDetails}  onOpenChange={() => renderUserDetails(item.userName)}>
+                               <div className="timeline-badge DECLINED">{splitUserName(item.userName)}</div>
+                               </Popover></Tooltip>:
                                null
                               
                               
@@ -11617,39 +11887,40 @@ const Details = ({}) => {
                                 className="timeline-panel text-muted"
 
                               >
-                                <span className={visitStyles.timelineDate} > {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
+                               
+                                {item.action == "MOVED_INVALID_TO_VALID" ? 
+                              <span className={visitStyles.timelineheading} >Moved invalid to valid</span> :
+                              item.action == "MOVED_SUGGESTED_TO_VALID" ? 
+                               <span  className={visitStyles.timelineheading}>Moved invalid to valid</span>:
+                               item.action == "MOVED_VALID_TO_SUGGESTED" ? 
+                               <span  className={visitStyles.timelineheading}>Moved valid to suggested</span>:
+                               item.action == "VALID_DISEASE_ADDED" ? 
+                               <span  className={visitStyles.timelineheading}>Valid disease added</span>:
+                               item.action == "MOVED_VALID_TO_DELETED" ? 
+                               <span  className={visitStyles.timelineheading}>Moved valid to deleted</span>:
+                               item.action == "COMPLETED" ? 
+                               <span  className={visitStyles.timelineheading}>Completed</span>:
+                               item.action == "MOVED_DELETED_TO_VALID" ? 
+                               <span  className={visitStyles.timelineheading}>Moved deleted to valid</span>:
+                               item.action == "MOVED_DELETED_TO_SUGGESTED" ? 
+                               <span  className={visitStyles.timelineheading}>Moved deleted to suggested</span>:
+                               item.action == "MOVED_SUGGESTED_TO_DELETED" ? 
+                               <span  className={visitStyles.timelineheading}>Moved suggested to deleted</span>:
+                               item.action == "ENCOUNTER_FILE_UPDATED" ? 
+                               <span  className={visitStyles.timelineheading}>Encounter file updated</span>:
+                               item.action == "ENCOUNTER_FILE_ADDED" ? 
+                               <span  className={visitStyles.timelineheading}>Encounter file added</span>:
+                               item.action == "HOLD" ? 
+                               <span  className={visitStyles.timelineheading}>Hold</span>:
+                               item.action == "DECLINED" ? 
+                               <span  className={visitStyles.timelineheading}>Declined</span>:
+                               null                      
+                              }
+                               <span className={visitStyles.timelineDate} > {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
                                 {/* <Tooltip title={item.userName}>
                                 <Avatar className={visitStyles.timeLineUsername}>{splitUserName(item.userName)}</Avatar>
                                 </Tooltip> */}
                                 </span>
-                                {item.action == "MOVED_INVALID_TO_VALID" ? 
-                              <span >Moved invalid to valid</span> :
-                              item.action == "MOVED_SUGGESTED_TO_VALID" ? 
-                               <span >Moved invalid to valid</span>:
-                               item.action == "MOVED_VALID_TO_SUGGESTED" ? 
-                               <span >Moved valid to suggested</span>:
-                               item.action == "VALID_DISEASE_ADDED" ? 
-                               <span >Valid disease added</span>:
-                               item.action == "MOVED_VALID_TO_DELETED" ? 
-                               <span >Moved valid to deleted</span>:
-                               item.action == "COMPLETED" ? 
-                               <span >Completed</span>:
-                               item.action == "MOVED_DELETED_TO_VALID" ? 
-                               <span >Moved deleted to valid</span>:
-                               item.action == "MOVED_DELETED_TO_SUGGESTED" ? 
-                               <span >Moved deleted to suggested</span>:
-                               item.action == "MOVED_SUGGESTED_TO_DELETED" ? 
-                               <span >Moved suggested to deleted</span>:
-                               item.action == "ENCOUNTER_FILE_UPDATED" ? 
-                               <span >Encounter file updated</span>:
-                               item.action == "ENCOUNTER_FILE_ADDED" ? 
-                               <span >Encounter file added</span>:
-                               item.action == "HOLD" ? 
-                               <span >Hold</span>:
-                               item.action == "DECLINED" ? 
-                               <span >Declined</span>:
-                               null                      
-                              }
                                 {/* <span>{item.action}</span> */}
                                 {/* <h6 className="mb-0">
                                   {item.patientId}
@@ -11870,7 +12141,7 @@ const Details = ({}) => {
 
                                    
                                   </textarea>
-                                  <Button type="submit"   className={visitStyles.commentSendIcon}>
+                                  <Button type="submit"  disabled={commentsTrigger}  className={visitStyles.commentSendIcon}>
                                   {SVGICON.sentMessageIcon}
                                   </Button>
 
@@ -11896,8 +12167,13 @@ const Details = ({}) => {
                                         {data.comment}
                                       
                                        </span>
-                                       <Tooltip title={data.commentCreatedBy}>
+                                       <Tooltip  placement="bottom" title={data.commentCreatedBy}>
+                                       <Popover
+                                                            placement="bottom"
+                                                            content={userDetails}  onOpenChange={() => renderUserDetails(data.commentCreatedBy)}>
+                                                          
                                 <Avatar className={visitStyles.timeLineUsername}>{splitUserName(data.commentCreatedBy)}</Avatar>
+                                </Popover>
                                 </Tooltip>
                                        </div>
                                        <span className={visitStyles.commentsTime}> {moment(data.commentCreatedAt).format("MM-DD-YYYY hh:mm:A")}</span>
@@ -11965,7 +12241,7 @@ const Details = ({}) => {
                                       // onKeyPress={handleEnterTextNotes}
                                       // type="submit"
                                     ></textarea>
-                                     <Button type="submit"   className={visitStyles.commentSendIcon}>
+                                     <Button type="submit" disabled={commentsTrigger}   className={visitStyles.commentSendIcon}>
                                   {SVGICON.sentMessageIcon}
                                   </Button>
                                   </div>
@@ -11980,10 +12256,15 @@ const Details = ({}) => {
                                           
                                        <span className={visitStyles.commentsName}>
                                         {data.flag}
+                                        <i>{SVGICON.filledFlag}</i>
                                       
                                        </span>
-                                       <Tooltip title={data.commentCreatedBy}>
+                                       <Tooltip  placement="bottom"  title={data.commentCreatedBy}>
+                                       <Popover
+                                                            placement="bottom"
+                                                            content={userDetails}  onOpenChange={() => renderUserDetails(data.commentCreatedBy)}>
                                 <Avatar className={visitStyles.timeLineUsername}>{splitUserName(data.commentCreatedBy)}</Avatar>
+                                </Popover>
                                 </Tooltip>
                                        </div>
                                        <span className={visitStyles.commentsName}>
@@ -12021,7 +12302,7 @@ const Details = ({}) => {
                                         type="submit"
                                         value={inputValue.comments}
                                       ></textarea>
-                                       <Button type="submit"   className={visitStyles.commentSendIcon}>
+                                       <Button type="submit" disabled={commentsTrigger}   className={visitStyles.commentSendIcon}>
                                   {SVGICON.sentMessageIcon}
                                   </Button>
                                     </div>
@@ -12044,8 +12325,12 @@ const Details = ({}) => {
                                     {data.notes}
                                   
                                    </span>
-                                   <Tooltip title={data.notesCreatedBy}>
+                                   <Tooltip  placement="bottom" title={data.notesCreatedBy} >
+                                   <Popover
+                                                            placement="bottom"
+                                                            content={userDetails}  onOpenChange={() => renderUserDetails(data.notesCreatedBy)}>
                             <Avatar className={visitStyles.timeLineUsername}>{splitUserName(data.notesCreatedBy)}</Avatar>
+                            </Popover>
                             </Tooltip>
                                    </div>
                                    <span className={visitStyles.commentsTime}> {moment(data.notesCreatedAt).format("MM-DD-YYYY hh:mm:A")}</span>
@@ -12056,6 +12341,13 @@ const Details = ({}) => {
 
                             </div> : null}
                 </Offcanvas>
+                {confirmCompleteModal ?
+                <div  className={visitStyles.completedModal}>
+                  
+                <Modal  title="Are you sure to complete this task?" open={true} onOk={handleSubmitHccComplete} onCancel={handleCloseModal}>
+
+      </Modal>
+      </div>:null}
               </div>
             </div>
           )}

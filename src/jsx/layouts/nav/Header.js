@@ -20,7 +20,7 @@ const Header = ({ onNote }) => {
 	const [stateActive, setStateActive] = useState(router.pathname);
 	const [userRole, setUserRole] = useState("");
 	const [menuList, setMenuList] = useState([]);
-	const [userIdDetails, setUserIdDetails] = useState([]);
+	const [userIdDetails, setUserIdDetails] = useState('');
 
 
 
@@ -145,13 +145,38 @@ const Header = ({ onNote }) => {
 									   {SVGICON.notificationIcon}
 									   </div>
 										<div className="header-media d-flex">
-											<Image src={IMAGES.profileImage}/>
+											{/* <Image src={IMAGES.profileImage}/> */}
+
+										
+                                           <div>
+										   <Dropdown>
+								<Dropdown.Toggle className="nav-link i-false" as="div">
+									<div className="header-info2 d-flex align-items-center">
+										<div className="header-media">
+										<Image src={IMAGES.profileImage}/>
+										</div>										
+										
+									</div>
+								</Dropdown.Toggle>
+								<Dropdown.Menu align="end">
+									<div className=" border-0 mb-0">
+									<span onClick={logoutFunction} className="dropdown-item ai-icon ">
+									{SVGICON.Logout}{" "}
+												<span className="ms-2">Logout </span>
+											</span>									
+									</div>
+									
+								</Dropdown.Menu>
+							</Dropdown>
+										   </div>
+
 											<div>
 											<span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">{userName}</span>
-											<span  onClick={logoutFunction} className="ms-2 d-flex mt-1">
+										{userIdDetails != '' ?
+											<span   className="ms-2 d-flex mt-1">
 												{/* {SVGICON.Logout}{" "} */}
-												<h6 className="logout-name">Logout </h6>
-											</span>
+												<h6 className="logout-name">{userIdDetails?.role[0]} </h6>
+											</span>:null}
 											</div>
 
 										</div>										
