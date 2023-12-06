@@ -12576,3 +12576,20 @@ tbody > tr {
 .metismenu a{
   align-items: center !important;
 }
+
+.pendingBtn button.ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
+  color: #452b90;
+  background: #dfd8f3!important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px;
+  font-size: 13px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+  color: #452b90;
+  background: #dfd8f3!important;
+  border-radius: 6px;
+}

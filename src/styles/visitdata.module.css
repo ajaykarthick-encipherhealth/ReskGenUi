@@ -984,3 +984,38 @@ margin-left: 20px;
   font-weight: 500;
   margin-bottom: -5px;
 }
+
+.flagDetailsChange{
+  margin-top: 6px !important;
+    height: 17px !important;
+    width: 17px !important;
+    display: block;
+}
+.nonHccFlag{
+  height: 10px;
+    width: 10px;
+    background: #9bdc37;
+    padding: 7px;
+    margin-right: 5px;
+    margin-top: 2px;
+    border-radius: 20px;
+}
+.add_text{
+  color: #3a9b94;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.78px;
+    background: #baf6ea !important;
+    border-radius: 6px !important;
+}
+.pendingBtn{
+  color: #452b90;
+  background: #dfd8f3!important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius:6px;
+  width: 150px!important;
+
+}

@@ -2702,6 +2702,12 @@ export const SVGICON = {
       />
     </svg>
   ),
+  emptyFlagSmall:<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 800 800" fill="none">
+<path d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z" stroke="#000" stroke-width="10"/>
+</svg>,
+filledFlagSmall:<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" fill="none">
+<path d="M225 100H700L575 300L700 500H225V750H150V50H225V100Z" fill="#D40B0B"/>
+</svg>,
 
 emptyFlag:<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 800 800" fill="none">
 <path d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z" stroke="#000" stroke-width="10"/>

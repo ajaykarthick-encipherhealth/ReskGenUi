@@ -297,17 +297,17 @@ const Details = ({}) => {
    );
 
   const flagPostList = [
-    { value: "PATIENT_NAME_MISSED" , label: <>PATIENT_NAME_MISSED <i>{SVGICON.emptyFlag}</i> </>},
-    { value: "PATIENT_DOB_MISSED", label: <>PATIENT_DOB_MISSED <i>{SVGICON.emptyFlag}</i> </>},
-    { value: "MRN_ID_MISMATCH", label: <>MRN_ID_MISMATCH <i>{SVGICON.emptyFlag}</i> </>},
-    { value: "PROVIDER_SIGN_MISSED", label:<>PROVIDER_SIGN_MISSED <i>{SVGICON.emptyFlag}</i> </> },
-    { value: "PROVIDER_SIGNATURE_MISSED", label: <>PROVIDER_SIGNATURE_MISSED <i>{SVGICON.emptyFlag}</i> </>},
-    { value: "PROVIDER_CREDENTIAL_MISSED", label: <>PROVIDER_CREDENTIAL_MISSED <i>{SVGICON.emptyFlag}</i> </> },
-    { value: "PROVIDER_SIGN_STATUS_PENDING", label: <>PROVIDER_SIGN_STATUS_PENDING <i>{SVGICON.emptyFlag}</i> </>},
-    { value: "NO_HCC_FOUND", label: <>NO_HCC_FOUND <i>{SVGICON.emptyFlag}</i> </>},
-    { value: "NO_VALID_DOCUMENT_FOUND", label: <>NO_VALID_DOCUMENT_FOUND <i>{SVGICON.emptyFlag}</i> </> },
-    { value: "PATIENT_DISEASED", label: <>PATIENT_DISEASED <i>{SVGICON.emptyFlag}</i> </> },
-    { value: "PATIENT_DISEASED", label: <>PATIENT_DISEASED <i>{SVGICON.emptyFlag}</i> </> }
+    { value: "PATIENT_NAME_MISSED" , label: <>PATIENT_NAME_MISSED <i>{SVGICON.emptyFlagSmall}</i> </>},
+    { value: "PATIENT_DOB_MISSED", label: <>PATIENT_DOB_MISSED <i>{SVGICON.emptyFlagSmall}</i> </>},
+    { value: "MRN_ID_MISMATCH", label: <>MRN_ID_MISMATCH <i>{SVGICON.emptyFlagSmall}</i> </>},
+    { value: "PROVIDER_SIGN_MISSED", label:<>PROVIDER_SIGN_MISSED <i>{SVGICON.emptyFlagSmall}</i> </> },
+    { value: "PROVIDER_SIGNATURE_MISSED", label: <>PROVIDER_SIGNATURE_MISSED <i>{SVGICON.emptyFlagSmall}</i> </>},
+    { value: "PROVIDER_CREDENTIAL_MISSED", label: <>PROVIDER_CREDENTIAL_MISSED <i>{SVGICON.emptyFlagSmall}</i> </> },
+    { value: "PROVIDER_SIGN_STATUS_PENDING", label: <>PROVIDER_SIGN_STATUS_PENDING <i>{SVGICON.emptyFlagSmall}</i> </>},
+    { value: "NO_HCC_FOUND", label: <>NO_HCC_FOUND <i>{SVGICON.emptyFlagSmall}</i> </>},
+    { value: "NO_VALID_DOCUMENT_FOUND", label: <>NO_VALID_DOCUMENT_FOUND <i>{SVGICON.emptyFlagSmall}</i> </> },
+    { value: "PATIENT_DISEASED", label: <>PATIENT_DISEASED <i>{SVGICON.emptyFlagSmall}</i> </> },
+    { value: "PATIENT_DISEASED", label: <>PATIENT_DISEASED <i>{SVGICON.emptyFlagSmall}</i> </> }
   ];
 
   const filterChangePatientId = (e) => {
@@ -397,13 +397,22 @@ const Details = ({}) => {
     const menu = (
       <Menu>
         <Menu.Item  key='1' onClick={() => handleActionClick("HOLD")}>
-         HOLD
+        <div className="patient-status">
+                 <span  className={`badge hold-text`} >HOLD</span>               
+              </div>
         </Menu.Item>
         <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-         DECLINE
+        <div className="patient-status">
+              <span className={`badge failed-text`} style={{color:"red"}}>DECLINE</span>
+           
+          </div>
         </Menu.Item>
         <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-        COMPLETE
+        <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+              
+         
+          </div>
         </Menu.Item>
       </Menu>
     );
@@ -411,32 +420,56 @@ const Details = ({}) => {
     const menu2 = (
       <Menu>
         <Menu.Item  key='1' onClick={() => handleActionClick("HOLD")}>
-         HOLD
+        <div className="patient-status">
+                 <span  className={`badge hold-text`} >HOLD</span>
+               
+              </div>
         </Menu.Item>
         <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-         DECLINE
+        <div className="patient-status">
+              <span className={`badge failed-text`} style={{color:"red"}}>DECLINE</span>
+           
+          </div>
         </Menu.Item>
         <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-        COMPLETE
+        <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+              
+         
+          </div>
         </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("ADD RADIOLOGY")}>
-        ADD RADIOLOGY
+        <Menu.Item key='4' onClick={() => handleActionClick("ADD RADIOLOGY")}>
+        <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD RADIOLOGY</span>  
+          </div>
         </Menu.Item>
       </Menu>
     );
     const menu3 = (
       <Menu>
         <Menu.Item  key='1' onClick={() => handleActionClick("HOLD")}>
-         HOLD
+        <div className="patient-status">
+                 <span  className={`badge hold-text`} >HOLD</span>
+               
+              </div>
         </Menu.Item>
         <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-         DECLINE
+        <div className="patient-status">
+              <span className={`badge failed-text`} style={{color:"red"}}>DECLINE</span>
+           
+          </div>
         </Menu.Item>
         <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-        COMPLETE
+        <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+              
+         
+          </div>
         </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("ADD LAP")}>
-        ADD LAB
+        <Menu.Item key='4' onClick={() => handleActionClick("ADD LAP")}>
+        <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>  
+          </div>
         </Menu.Item>
       </Menu>
     );
@@ -528,6 +561,7 @@ const Details = ({}) => {
     );
     if (response.data) {
       var result = response.data;
+      console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -2508,7 +2542,8 @@ const Details = ({}) => {
     });
 
   const onchangeValid = (code, data) => {
-    setSelectDiseasesName(code);
+    var title = code + " - " + data.actualDescription;
+    setSelectDiseasesName(title);
     setSelectInvalidDetails(data);
   };
 
@@ -4519,10 +4554,16 @@ const Details = ({}) => {
 
 <Dropdown.Button
  type="primary"
+ className={`pendingBtn ${visitStyles.pendingBtn}`}
         icon={<DownOutlined />}
         overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems }
       >
-        Submit
+         {/* <div className="patient-status">
+            <span className={`badge processed-text`}>PENDING</span>
+              
+         
+          </div> */}
+        PENDING
       </Dropdown.Button>
 
 
@@ -4897,10 +4938,16 @@ const Details = ({}) => {
                                       <div className={visitStyles.flags} >
                                         <div className={visitStyles.flags} >
                                           <span className={visitStyles.hccFlag}>
-                                          
                                           </span>
                                           <span className={visitStyles.flagCodes}>
                                             HCC
+                                          </span>
+                                        </div>
+                                        <div className={visitStyles.flags} >
+                                          <span className={visitStyles.nonHccFlag}>
+                                          </span>
+                                          <span className={visitStyles.flagCodes}>
+                                            NON HCC
                                           </span>
                                         </div>
                                         <div className={visitStyles.flags}   >
@@ -4977,7 +5024,10 @@ const Details = ({}) => {
                                                             }
                                                           >
                                                             <span className="mb-1 disease-name d-flex">
+
                                                               <span className="valid-dis-name">
+                                                                
+                                                        
                                                                 {
                                                                   data.diagnosisCode
                                                                 }
@@ -4986,10 +5036,25 @@ const Details = ({}) => {
                                                               {
                                                                 data.actualDescription
                                                               }
+                                                             
                                                             </span>
                                                           </div>
-                                                          
 
+                                                          {data.defaultPosition == "VALID" || data.defaultPosition == null ?
+                                                           <Tooltip title="HCC" placement="bottom">
+                                                          <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span></Tooltip>:data.defaultPosition == "SUGGESTED" ?
+                                                               <Tooltip title="SUGGESTED" placement="bottom">
+                                                          <span  className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span></Tooltip>
+                                                              :data.defaultPosition == "INVALID" ?
+                                                              <Tooltip title="NON-HCC" placement="bottom">
+                                                         <span  className={`${visitStyles.nonHccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                             </span></Tooltip>
+                                                              : data.defaultPosition == "DELETED" ?
+                                                              <Tooltip title="DELETED" placement="bottom">
+                                                          <span  className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span> </Tooltip> : null}
                                                           <Popover
                                                             onClick={() =>
                                                               getValidHccDetails(
@@ -5210,6 +5275,17 @@ const Details = ({}) => {
                                                                   }
                                                                 </span>
                                                               </div>
+                                                              {data.defaultPosition == "VALID" || data.defaultPosition == null ?
+                                                           <Tooltip title="HCC" placement="bottom">
+                                                          <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span></Tooltip>:data.defaultPosition == "VALID" ?
+                                                               <Tooltip title="SUGGESTED" placement="bottom">
+                                                          <span  className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span></Tooltip>
+                                                              : data.defaultPosition == "DELETED" ?
+                                                              <Tooltip title="DELETED" placement="bottom">
+                                                          <span  className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span> </Tooltip> : null}
                                                               <Popover
                                                                 onClick={() =>
                                                                   getValidHccDetails(
@@ -5449,6 +5525,17 @@ const Details = ({}) => {
                                                             }
                                                           </span>
                                                         </div>
+                                                        {data.defaultPosition == "VALID" || data.defaultPosition == null ?
+                                                           <Tooltip title="HCC" placement="bottom">
+                                                          <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span></Tooltip>:data.defaultPosition == "VALID" ?
+                                                               <Tooltip title="SUGGESTED" placement="bottom">
+                                                          <span  className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span></Tooltip>
+                                                              : data.defaultPosition == "DELETED" ?
+                                                              <Tooltip title="DELETED" placement="bottom">
+                                                          <span  className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span> </Tooltip> : null}
                                                         <Popover
                                                           content={
                                                             data.dbDescription
@@ -12243,31 +12330,31 @@ const Details = ({}) => {
                               >
                                
                                 {item.action == "MOVED_INVALID_TO_VALID" ? 
-                              <span className={visitStyles.timelineheading} >Moved invalid to valid</span> :
+                              <span className={visitStyles.timelineheading} > {item.diagnosisCode} - Moved invalid to valid</span> :
                               item.action == "MOVED_SUGGESTED_TO_VALID" ? 
-                               <span  className={visitStyles.timelineheading}>Moved invalid to valid</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved Suggested to valid</span>:
                                item.action == "MOVED_VALID_TO_SUGGESTED" ? 
-                               <span  className={visitStyles.timelineheading}>Moved valid to suggested</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved valid to suggested</span>:
                                item.action == "VALID_DISEASE_ADDED" ? 
-                               <span  className={visitStyles.timelineheading}>Valid disease added</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Valid disease added</span>:
                                item.action == "MOVED_VALID_TO_DELETED" ? 
-                               <span  className={visitStyles.timelineheading}>Moved valid to deleted</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved valid to deleted</span>:
                                item.action == "COMPLETED" ? 
-                               <span  className={visitStyles.timelineheading}>Completed</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Completed</span>:
                                item.action == "MOVED_DELETED_TO_VALID" ? 
-                               <span  className={visitStyles.timelineheading}>Moved deleted to valid</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved deleted to valid</span>:
                                item.action == "MOVED_DELETED_TO_SUGGESTED" ? 
-                               <span  className={visitStyles.timelineheading}>Moved deleted to suggested</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved deleted to suggested</span>:
                                item.action == "MOVED_SUGGESTED_TO_DELETED" ? 
-                               <span  className={visitStyles.timelineheading}>Moved suggested to deleted</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved suggested to deleted</span>:
                                item.action == "ENCOUNTER_FILE_UPDATED" ? 
-                               <span  className={visitStyles.timelineheading}>Encounter file updated</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Encounter file updated</span>:
                                item.action == "ENCOUNTER_FILE_ADDED" ? 
-                               <span  className={visitStyles.timelineheading}>Encounter file added</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Encounter file added</span>:
                                item.action == "HOLD" ? 
-                               <span  className={visitStyles.timelineheading}>Hold</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - Hold</span>:
                                item.action == "DECLINED" ? 
-                               <span  className={visitStyles.timelineheading}>Declined</span>:
+                               <span  className={visitStyles.timelineheading}>{item.diagnosisCode} - </span>:
                                null                      
                               }
                                <span className={visitStyles.timelineDate} > {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
