@@ -559,13 +559,14 @@ const Details = ({}) => {
           dosYearArr.push({ value: res, label: res });
         });
 
-        // const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
         setSelectedDosValue(dosYearArr[0].value);
+        // console.log(highestDOS)
 
-        // const highestDosValue = dosYearArr.filter(
-        //   (i) => parseInt(i.value) === highestDOS
-        // );
-        setDosYearDefalutSelect(dosYearArr[0]);
+        const highestDosValue = dosYearArr.filter(
+          (i) => parseInt(i.value) === highestDOS
+        );
+        setDosYearDefalutSelect(highestDosValue[0]);
 
 
         if (result.rafScore != null) {
@@ -690,6 +691,357 @@ const Details = ({}) => {
         //   validDiseasesArray.push({ name: validDis[key] });
         // }
 
+        setNewValidDiseaseList(validDiseaseNewRes);
+        setInNewValidDiseaseList(invalidDiseaseNewRes);
+        setNewUnMatchHccList(suggestListAll);
+        setValidDiseasesList(validDiseasesArray);
+        setInvalidDiseasesList(invalidDiseasesArray);
+        setComboDiseaseCodesList(comboDis);
+        setDosYear(dosYearArr);
+        setRAFScore(rafScore);
+        setSuggestedNonHccList(suggestListAllNonHcc);
+        setSuggestedHccList(suggestListAll);
+        setDeletedHccList(deleteHccList);
+
+        
+
+        const COLORS = [
+          "bg-bg-seven",
+          "bg-third",
+          "bg-bg-four",
+          "bg-bg-five",
+          "bg-bg-six",
+          "bg-bg-eight",
+          "bg-bg-nine",
+          "bg-bg-ten",
+          "bg-bg-leven",
+        ];
+
+        var meatListArr = [];
+        var meatMoniterHead = [];
+        var meatEvaluteHead = [];
+        var meatAssesmentHead = [];
+        var meatTreatMentHead = [];
+        var allMeatHead = [];
+        var allMeatHeadColorArr = [];
+        var allMeatHeadColor = [];
+        var dublicateRemoveSecondArr = [];
+        var nonHccMeatListArr = [];
+
+        meatCri.map((res, index) => {
+          if (res.monitorCapturedFromHeader != "") {
+            meatMoniterHead.push({
+              header: res.monitorCapturedFromHeader,
+            });
+          }
+          if (res.evaluateCapturedFromHeader != "") {
+            meatEvaluteHead.push({
+              header: res.evaluateCapturedFromHeader,
+            });
+          }
+          if (res.assessmentCapturedFromHeader != "") {
+            meatAssesmentHead.push({
+              header: res.assessmentCapturedFromHeader,
+            });
+          }
+          if (res.treatmentCapturedFromHeader != "") {
+            meatTreatMentHead.push({
+              header: res.treatmentCapturedFromHeader,
+            });
+          }
+          var newArray = [];
+          newArray = [
+            ...allMeatHead,
+            ...meatMoniterHead,
+            ...meatEvaluteHead,
+            ...meatAssesmentHead,
+            ...meatTreatMentHead,
+          ];
+          var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+          dublicateRemoveArr.map((res3, index) => {
+            allMeatHeadColor.push({
+              header: res3.header,
+              color: COLORS[index],
+            });
+          });
+          allMeatHeadColorArr = allMeatHeadColor;
+
+          dublicateRemoveSecondArr = getUniqueListBy(
+            allMeatHeadColor,
+            "header"
+          );
+          setMeatColorCodeList(dublicateRemoveSecondArr);
+        });
+
+        meatCri.map((res, index) => {
+          if (res.category == "Invalid") {
+            nonHccMeatListArr.push({
+              diagnosisCode: res.diagnosisCode,
+              diseaseName: res.diseaseName,
+              monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+              assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+              evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+              treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+              monitorCapturedFromHeaderColor: colorCodeMatch(
+                dublicateRemoveSecondArr,
+                res.monitorCapturedFromHeader
+              ),
+              assessmentCapturedFromHeaderColor: colorCodeMatch(
+                dublicateRemoveSecondArr,
+                res.assessmentCapturedFromHeader
+              ),
+              evaluateCapturedFromHeaderColor: colorCodeMatch(
+                dublicateRemoveSecondArr,
+                res.evaluateCapturedFromHeader
+              ),
+              treatmentCapturedFromHeaderColor: colorCodeMatch(
+                dublicateRemoveSecondArr,
+                res.treatmentCapturedFromHeader
+              ),
+              monitorColor: COLORS[index],
+              meatColor: COLORS[index],
+              assessment: res.assessment,
+              monitor: res.monitor,
+              evaluate: res.evaluate,
+              treatment: res.treatment,
+              isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+              category: res.category,
+            });
+          } else {
+            meatListArr.push({
+              diagnosisCode: res.diagnosisCode,
+              diseaseName: res.diseaseName,
+              monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+              assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+              evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+              treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+              monitorCapturedFromHeaderColor: colorCodeMatch(
+                dublicateRemoveSecondArr,
+                res.monitorCapturedFromHeader
+              ),
+              assessmentCapturedFromHeaderColor: colorCodeMatch(
+                dublicateRemoveSecondArr,
+                res.assessmentCapturedFromHeader
+              ),
+              evaluateCapturedFromHeaderColor: colorCodeMatch(
+                dublicateRemoveSecondArr,
+                res.evaluateCapturedFromHeader
+              ),
+              treatmentCapturedFromHeaderColor: colorCodeMatch(
+                dublicateRemoveSecondArr,
+                res.treatmentCapturedFromHeader
+              ),
+              monitorColor: COLORS[index],
+              meatColor: COLORS[index],
+              assessment: res.assessment,
+              monitor: res.monitor,
+              evaluate: res.evaluate,
+              treatment: res.treatment,
+              isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+              category: res.category,
+            });
+          }
+        });
+        setMeatCriteriaList(meatListArr);
+        setMeatCriteriaListNonHcc(nonHccMeatListArr);
+        setIsLoadingDos(false);
+      } else {
+        setIsLoading(false);
+      }
+    }
+  };
+  const getPatientDetailsYear = async (patientId, orgId, tenId,year) => {
+    console.log("dajdg")
+    setNewValidDiseaseList([]);
+    setInNewValidDiseaseList([]);
+    setNewUnMatchHccList([]);
+    setValidDiseasesList([]);
+    setInvalidDiseasesList([]);
+    setComboDiseaseCodesList([]);
+    setDosYear([]);
+    setRAFScore([]);
+    setSuggestedNonHccList([]);
+    setSuggestedHccList([]);
+    setDeletedHccList([]);
+    setMeatCriteriaList([]);
+    setMeatCriteriaListNonHcc([]);
+
+
+    // setIsLoading(true);
+    setIsModalComments(false);
+    // var patientId = localStorage.getItem("patientId");
+    // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}&year=${year}`
+    );
+    console.log(response.data)
+    if (response.data) {
+      var result = response.data;
+      setPatientDocumentResult(result);
+      setPatientDetails(result);
+      if (result.validDisease != null) {
+        var validDis = "";
+        var invalidDis = "";
+        var comboDis = "";
+        var meatCri = "";
+        var dosYearArr = [];
+        var rafScore = null;
+        var validDiseaseNewRes = [];
+        var invalidDiseaseNewRes = [];
+        var unMatchRes = [];
+        var unMatchResHcc = [];
+        var unMatchResNonHcc = [];
+        var meatCriColorTagList = [];
+
+        var suggestRadiologyList = [];
+        var suggestLabList = [];
+
+        var suggestListAll = [];
+        var suggestListAllNonHcc = [];
+        var deleteHccList = [];
+
+        getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
+        setSelectMeatFileId(response.data.fileId);
+        // setPatientDocumentResult(result);
+
+        result.encounterYears.map((res) => {
+          dosYearArr.push({ value: res, label: res });
+        });
+
+        // const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+        setSelectedDosValue(dosYearArr[0].value);
+
+        // const highestDosValue = dosYearArr.filter(
+        //   (i) => parseInt(i.value) === highestDOS
+        // );
+        setDosYearDefalutSelect(dosYearArr[0]);
+
+
+        if (result.rafScore != null) {
+          rafScore = result.rafScore;
+        }
+
+        var unMacthResList = [];
+
+        validDis = result.validDisease;
+        validDiseaseNewRes = result.validDisease;
+        invalidDiseaseNewRes = result.invalidDisease != null ? result.invalidDisease : [] ;
+        if (result.deletedDiseases != null) {
+          deleteHccList = result.deletedDiseases;
+        }
+        if (result.suggestRadiology != null) {
+          // var checkDosRadio = [];
+          // for (var key in result.suggestRadiology) {
+          //   checkDosRadio.push({ value: key, label: key });
+          // }
+          suggestRadiologyList = result.suggestRadiology;
+          suggestRadiologyList.map((res, index) => {
+            suggestListAll.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              getPlace: "Radio",
+              isHccValid: true,
+            });
+          });
+        }
+
+        if (result.suggestLab != null) {
+          suggestLabList = result.suggestLab;
+          suggestLabList.map((res, index) => {
+            suggestListAll.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              getPlace: "Lab",
+              isHccValid: true,
+            });
+          });
+        }
+
+        if (result.unMatchedDisease != null) {
+          unMatchRes = result.unMatchedDisease;
+          unMatchRes.map((res, index) => {
+            if (res.isHccValid == true) {
+              suggestListAll.push({
+                actualDescription: res.actualDescription,
+                diagnosisCodeFinding: res.diagnosisCode,
+                isHccValid: res.isHccValid,
+                capturedSections: res.capturedSections,
+                diagnosisCode: res.diagnosisCode,
+                encounterDate: res.encounterDate,
+                getPlace: "Hcc",
+              });
+            } else {
+              // suggestListAll.push({
+              //   actualDescription: res.actualDescription,
+              //   diagnosisCodeFinding: res.diagnosisCodeFinding,
+              //   isHccValid: res.isHccValid,
+              //   capturedSections: res.capturedSections,
+              //   diagnosisCode: res.diagnosisCodeFinding,
+              //   encounterDate: res.encounterDate,
+              //   getPlace: "Hcc",
+              // });
+              suggestListAllNonHcc.push({
+                actualDescription: res.actualDescription,
+                diagnosisCodeFinding: res.diagnosisCode,
+                isHccValid: res.isHccValid,
+                capturedSections: res.capturedSections,
+                diagnosisCode: res.diagnosisCode,
+                encounterDate: res.encounterDate,
+                getPlace: "Hcc",
+              });
+            }
+          });
+        }
+
+        invalidDis = result.invalidDisease;
+        comboDis = result.comboDisease != null ? result.comboDisease :[];
+        meatCri = result.meatCriteria != null ? result.meatCriteria : [];
+
+        // validDiseaseNewRes = validDiseaseNew[2019]
+
+        var invalidDiseasesArray = [];
+        var validDiseasesArray = [];
+
+        for (var key in invalidDis) {
+          invalidDiseasesArray.push({ name: invalidDis[key] });
+        }
+        for (var key in validDis) {
+          validDiseasesArray.push({ name: validDis[key] });
+        }
+
+        // for (var key in result.validDisease) {
+        //   validDis = result.validDisease[key];
+        //   if (result.rafScore != null) {
+        //     rafScore = result.rafScore[key]
+        //   }
+        // }
+        // for (var key in result.invalidDisease) {
+        //   invalidDis = result.invalidDisease[key];
+        // }
+        // for (var key in result.comboDisease) {
+        //   comboDis = result.comboDisease[key];
+        // }
+        // for (var key in result.meatCriteria) {
+        //   meatCri = result.meatCriteria[key];
+        // }
+
+        // var invalidDiseasesArray = [];
+        // var validDiseasesArray = [];
+
+        // for (var key in invalidDis) {
+        //   invalidDiseasesArray.push({ name: invalidDis[key] });
+        // }
+        // for (var key in validDis) {
+        //   validDiseasesArray.push({ name: validDis[key] });
+        // }
+
+
+        console.log(invalidDiseaseNewRes)
         setNewValidDiseaseList(validDiseaseNewRes);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
@@ -2529,288 +2881,290 @@ const Details = ({}) => {
 
   const dosOnChange = async (e) => {
     var dosKeyValue = e.value;
-    getYearOfServiceDetails(e.value);
+    // getYearOfServiceDetails(e.value);
+    // console.log(e)
+    getPatientDetailsYear(localPatientId,localOrgId, localTenantId,e.value);
 
-    if (activeTab == 1 || activeTab == 2) {
-      //   var validDiseaseNewRes = [];
-      //   var invalidDiseaseNewRes = [];
-      //   var comboDis = "";
-      //   var meatCri = "";
-      //   var rafScore = null;
-      //   var result = patientDetails;
-      //   validDiseaseNewRes = result.validDisease[dosKeyValue];
-      //   invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
-      //   comboDis = result.comboDisease[dosKeyValue];
-      //   meatCri = result.meatCriteria[dosKeyValue];
-      //   if (result.rafScore != null) {
-      //     rafScore = result.rafScore[dosKeyValue];
-      //   }
-      //   setNewValidDiseaseList(validDiseaseNewRes);
-      //   setInNewValidDiseaseList(invalidDiseaseNewRes);
-      //   setComboDiseaseCodesList(comboDis);
-      //   setRAFScore(rafScore);
-      //   const COLORS = [
-      //     "bg-bg-seven",
-      //     "bg-third",
-      //     "bg-bg-four",
-      //     "bg-bg-five",
-      //     "bg-bg-six",
-      //     "bg-bg-eight",
-      //     "bg-bg-nine",
-      //   ];
-      //   var meatListArr = [];
-      //   var nonHccMeatListArr = [];
-      //   var meatMoniterHead = [];
-      //   var meatEvaluteHead = [];
-      //   var meatAssesmentHead = [];
-      //   var meatTreatMentHead = [];
-      //   var allMeatHead = [];
-      //   var allMeatHeadColorArr = [];
-      //   var allMeatHeadColor = [];
-      //   var dublicateRemoveSecondArr = [];
-      //   meatCri.map((res, index) => {
-      //     if (res.monitorCapturedFromHeader != "") {
-      //       meatMoniterHead.push({
-      //         header: res.monitorCapturedFromHeader,
-      //       });
-      //     }
-      //     if (res.evaluateCapturedFromHeader != "") {
-      //       meatEvaluteHead.push({
-      //         header: res.evaluateCapturedFromHeader,
-      //       });
-      //     }
-      //     if (res.assessmentCapturedFromHeader != "") {
-      //       meatAssesmentHead.push({
-      //         header: res.assessmentCapturedFromHeader,
-      //       });
-      //     }
-      //     if (res.treatmentCapturedFromHeader != "") {
-      //       meatTreatMentHead.push({
-      //         header: res.treatmentCapturedFromHeader,
-      //       });
-      //     }
-      //     var newArray = [];
-      //     newArray = [
-      //       ...allMeatHead,
-      //       ...meatMoniterHead,
-      //       ...meatEvaluteHead,
-      //       ...meatAssesmentHead,
-      //       ...meatTreatMentHead,
-      //     ];
-      //     var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-      //     dublicateRemoveArr.map((res3, index) => {
-      //       allMeatHeadColor.push({
-      //         header: res3.header,
-      //         color: COLORS[index],
-      //       });
-      //     });
-      //     allMeatHeadColorArr = allMeatHeadColor;
-      //     dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
-      //     setMeatColorCodeList(dublicateRemoveSecondArr);
-      //   });
-      //   meatCri.map((res, index) => {
-      //     if (res.category == "Invalid") {
-      //       nonHccMeatListArr.push({
-      //         diagnosisCode: res.diagnosisCode,
-      //         diseaseName: res.diseaseName,
-      //         monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-      //         assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-      //         evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-      //         treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-      //         monitorCapturedFromHeaderColor: colorCodeMatch(
-      //           dublicateRemoveSecondArr,
-      //           res.monitorCapturedFromHeader
-      //         ),
-      //         assessmentCapturedFromHeaderColor: colorCodeMatch(
-      //           dublicateRemoveSecondArr,
-      //           res.assessmentCapturedFromHeader
-      //         ),
-      //         evaluateCapturedFromHeaderColor: colorCodeMatch(
-      //           dublicateRemoveSecondArr,
-      //           res.evaluateCapturedFromHeader
-      //         ),
-      //         treatmentCapturedFromHeaderColor: colorCodeMatch(
-      //           dublicateRemoveSecondArr,
-      //           res.treatmentCapturedFromHeader
-      //         ),
-      //         monitorColor: COLORS[index],
-      //         meatColor: COLORS[index],
-      //         assessment: res.assessment,
-      //         monitor: res.monitor,
-      //         evaluate: res.evaluate,
-      //         treatment: res.treatment,
-      //         isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-      //         category: res.category,
-      //       });
-      //     } else {
-      //       meatListArr.push({
-      //         diagnosisCode: res.diagnosisCode,
-      //         diseaseName: res.diseaseName,
-      //         monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-      //         assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-      //         evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-      //         treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-      //         monitorCapturedFromHeaderColor: colorCodeMatch(
-      //           dublicateRemoveSecondArr,
-      //           res.monitorCapturedFromHeader
-      //         ),
-      //         assessmentCapturedFromHeaderColor: colorCodeMatch(
-      //           dublicateRemoveSecondArr,
-      //           res.assessmentCapturedFromHeader
-      //         ),
-      //         evaluateCapturedFromHeaderColor: colorCodeMatch(
-      //           dublicateRemoveSecondArr,
-      //           res.evaluateCapturedFromHeader
-      //         ),
-      //         treatmentCapturedFromHeaderColor: colorCodeMatch(
-      //           dublicateRemoveSecondArr,
-      //           res.treatmentCapturedFromHeader
-      //         ),
-      //         monitorColor: COLORS[index],
-      //         meatColor: COLORS[index],
-      //         assessment: res.assessment,
-      //         monitor: res.monitor,
-      //         evaluate: res.evaluate,
-      //         treatment: res.treatment,
-      //         isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-      //         category: res.category,
-      //       });
-      //     }
-      //   });
-      //   setMeatCriteriaList(meatListArr);
-      //   setMeatCriteriaListNonHcc(nonHccMeatListArr);
-      //   setIsLoading(false);
-      // }
-      // if (activeTab == 3) {
-      //   var validDiseaseNewRes = [];
-      //   var invalidDiseaseNewRes = [];
-      //   var unmatchedDiseaseRes = [];
-      //   var comboDis = "";
-      //   var meatCri = "";
-      //   var result = patientDetailsRadiology;
-      //   validDiseaseNewRes = result.validDisease[dosKeyValue];
-      //   invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
-      //   unmatchedDiseaseRes = result.unmatchedDisease[dosKeyValue];
-      //   comboDis = result.comboDisease[dosKeyValue];
-      //   meatCri = result.meatCriteria[dosKeyValue];
-      //   if (result.radiologyFileDetail != null) {
-      //     var fileDetails = result.radiologyFileDetail[dosKeyValue];
-      //     getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, localTenantId);
-      //   }
-      //   if (result.unmatchedDisease != null) {
-      //     setUnMatchHccListRadiology(unmatchedDiseaseRes);
-      //   }
-      //   setNewValidDiseaseListRadiology(validDiseaseNewRes);
-      //   setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
-      //   setComboDiseaseCodesListRadiology(comboDis);
-      //   const COLORS = [
-      //     "bg-bg-seven",
-      //     "bg-third",
-      //     "bg-bg-four",
-      //     "bg-bg-five",
-      //     "bg-bg-six",
-      //     "bg-bg-eight",
-      //     "bg-bg-nine",
-      //   ];
-      //   var meatListArr = [];
-      //   var meatMoniterHead = [];
-      //   var meatEvaluteHead = [];
-      //   var meatAssesmentHead = [];
-      //   var meatTreatMentHead = [];
-      //   var allMeatHead = [];
-      //   var allMeatHeadColorArr = [];
-      //   var allMeatHeadColor = [];
-      //   var dublicateRemoveSecondArr = [];
-      //   meatCri.map((res, index) => {
-      //     if (res.monitorCapturedFromHeader != "") {
-      //       meatMoniterHead.push({
-      //         header: res.monitorCapturedFromHeader,
-      //       });
-      //     }
-      //     if (res.evaluateCapturedFromHeader != "") {
-      //       meatEvaluteHead.push({
-      //         header: res.evaluateCapturedFromHeader,
-      //       });
-      //     }
-      //     if (res.assessmentCapturedFromHeader != "") {
-      //       meatAssesmentHead.push({
-      //         header: res.assessmentCapturedFromHeader,
-      //       });
-      //     }
-      //     if (res.treatmentCapturedFromHeader != "") {
-      //       meatTreatMentHead.push({
-      //         header: res.treatmentCapturedFromHeader,
-      //       });
-      //     }
-      //     var newArray = [];
-      //     newArray = [
-      //       ...allMeatHead,
-      //       ...meatMoniterHead,
-      //       ...meatEvaluteHead,
-      //       ...meatAssesmentHead,
-      //       ...meatTreatMentHead,
-      //     ];
-      //     var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-      //     dublicateRemoveArr.map((res3, index) => {
-      //       allMeatHeadColor.push({
-      //         header: res3.header,
-      //         color: COLORS[index],
-      //       });
-      //     });
-      //     allMeatHeadColorArr = allMeatHeadColor;
-      //     dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
-      //     setMeatColorCodeList(dublicateRemoveSecondArr);
-      //   });
-      //   meatCri.map((res, index) => {
-      //     meatListArr.push({
-      //       diagnosisCode: res.diagnosisCode,
-      //       diseaseName: res.diseaseName,
-      //       monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-      //       assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-      //       evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-      //       treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-      //       monitorCapturedFromHeaderColor: colorCodeMatch(
-      //         dublicateRemoveSecondArr,
-      //         res.monitorCapturedFromHeader
-      //       ),
-      //       assessmentCapturedFromHeaderColor: colorCodeMatch(
-      //         dublicateRemoveSecondArr,
-      //         res.assessmentCapturedFromHeader
-      //       ),
-      //       evaluateCapturedFromHeaderColor: colorCodeMatch(
-      //         dublicateRemoveSecondArr,
-      //         res.evaluateCapturedFromHeader
-      //       ),
-      //       treatmentCapturedFromHeaderColor: colorCodeMatch(
-      //         dublicateRemoveSecondArr,
-      //         res.treatmentCapturedFromHeader
-      //       ),
-      //       monitorColor: COLORS[index],
-      //       meatColor: COLORS[index],
-      //       assessment: res.assessment,
-      //       monitor: res.monitor,
-      //       evaluate: res.evaluate,
-      //       treatment: res.treatment,
-      //       isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-      //     });
-      //   });
-      //   setMeatCriteriaListRadiology(meatListArr);
-      //   setIsLoading(false);
-    }
-    if (activeTab == 4) {
-      var result = labResult;
-      var validDiseaseNewRes = [];
+    // if (activeTab == 1 || activeTab == 2) {
+    //   //   var validDiseaseNewRes = [];
+    //   //   var invalidDiseaseNewRes = [];
+    //   //   var comboDis = "";
+    //   //   var meatCri = "";
+    //   //   var rafScore = null;
+    //   //   var result = patientDetails;
+    //   //   validDiseaseNewRes = result.validDisease[dosKeyValue];
+    //   //   invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
+    //   //   comboDis = result.comboDisease[dosKeyValue];
+    //   //   meatCri = result.meatCriteria[dosKeyValue];
+    //   //   if (result.rafScore != null) {
+    //   //     rafScore = result.rafScore[dosKeyValue];
+    //   //   }
+    //   //   setNewValidDiseaseList(validDiseaseNewRes);
+    //   //   setInNewValidDiseaseList(invalidDiseaseNewRes);
+    //   //   setComboDiseaseCodesList(comboDis);
+    //   //   setRAFScore(rafScore);
+    //   //   const COLORS = [
+    //   //     "bg-bg-seven",
+    //   //     "bg-third",
+    //   //     "bg-bg-four",
+    //   //     "bg-bg-five",
+    //   //     "bg-bg-six",
+    //   //     "bg-bg-eight",
+    //   //     "bg-bg-nine",
+    //   //   ];
+    //   //   var meatListArr = [];
+    //   //   var nonHccMeatListArr = [];
+    //   //   var meatMoniterHead = [];
+    //   //   var meatEvaluteHead = [];
+    //   //   var meatAssesmentHead = [];
+    //   //   var meatTreatMentHead = [];
+    //   //   var allMeatHead = [];
+    //   //   var allMeatHeadColorArr = [];
+    //   //   var allMeatHeadColor = [];
+    //   //   var dublicateRemoveSecondArr = [];
+    //   //   meatCri.map((res, index) => {
+    //   //     if (res.monitorCapturedFromHeader != "") {
+    //   //       meatMoniterHead.push({
+    //   //         header: res.monitorCapturedFromHeader,
+    //   //       });
+    //   //     }
+    //   //     if (res.evaluateCapturedFromHeader != "") {
+    //   //       meatEvaluteHead.push({
+    //   //         header: res.evaluateCapturedFromHeader,
+    //   //       });
+    //   //     }
+    //   //     if (res.assessmentCapturedFromHeader != "") {
+    //   //       meatAssesmentHead.push({
+    //   //         header: res.assessmentCapturedFromHeader,
+    //   //       });
+    //   //     }
+    //   //     if (res.treatmentCapturedFromHeader != "") {
+    //   //       meatTreatMentHead.push({
+    //   //         header: res.treatmentCapturedFromHeader,
+    //   //       });
+    //   //     }
+    //   //     var newArray = [];
+    //   //     newArray = [
+    //   //       ...allMeatHead,
+    //   //       ...meatMoniterHead,
+    //   //       ...meatEvaluteHead,
+    //   //       ...meatAssesmentHead,
+    //   //       ...meatTreatMentHead,
+    //   //     ];
+    //   //     var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+    //   //     dublicateRemoveArr.map((res3, index) => {
+    //   //       allMeatHeadColor.push({
+    //   //         header: res3.header,
+    //   //         color: COLORS[index],
+    //   //       });
+    //   //     });
+    //   //     allMeatHeadColorArr = allMeatHeadColor;
+    //   //     dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
+    //   //     setMeatColorCodeList(dublicateRemoveSecondArr);
+    //   //   });
+    //   //   meatCri.map((res, index) => {
+    //   //     if (res.category == "Invalid") {
+    //   //       nonHccMeatListArr.push({
+    //   //         diagnosisCode: res.diagnosisCode,
+    //   //         diseaseName: res.diseaseName,
+    //   //         monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+    //   //         assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+    //   //         evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+    //   //         treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+    //   //         monitorCapturedFromHeaderColor: colorCodeMatch(
+    //   //           dublicateRemoveSecondArr,
+    //   //           res.monitorCapturedFromHeader
+    //   //         ),
+    //   //         assessmentCapturedFromHeaderColor: colorCodeMatch(
+    //   //           dublicateRemoveSecondArr,
+    //   //           res.assessmentCapturedFromHeader
+    //   //         ),
+    //   //         evaluateCapturedFromHeaderColor: colorCodeMatch(
+    //   //           dublicateRemoveSecondArr,
+    //   //           res.evaluateCapturedFromHeader
+    //   //         ),
+    //   //         treatmentCapturedFromHeaderColor: colorCodeMatch(
+    //   //           dublicateRemoveSecondArr,
+    //   //           res.treatmentCapturedFromHeader
+    //   //         ),
+    //   //         monitorColor: COLORS[index],
+    //   //         meatColor: COLORS[index],
+    //   //         assessment: res.assessment,
+    //   //         monitor: res.monitor,
+    //   //         evaluate: res.evaluate,
+    //   //         treatment: res.treatment,
+    //   //         isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+    //   //         category: res.category,
+    //   //       });
+    //   //     } else {
+    //   //       meatListArr.push({
+    //   //         diagnosisCode: res.diagnosisCode,
+    //   //         diseaseName: res.diseaseName,
+    //   //         monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+    //   //         assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+    //   //         evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+    //   //         treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+    //   //         monitorCapturedFromHeaderColor: colorCodeMatch(
+    //   //           dublicateRemoveSecondArr,
+    //   //           res.monitorCapturedFromHeader
+    //   //         ),
+    //   //         assessmentCapturedFromHeaderColor: colorCodeMatch(
+    //   //           dublicateRemoveSecondArr,
+    //   //           res.assessmentCapturedFromHeader
+    //   //         ),
+    //   //         evaluateCapturedFromHeaderColor: colorCodeMatch(
+    //   //           dublicateRemoveSecondArr,
+    //   //           res.evaluateCapturedFromHeader
+    //   //         ),
+    //   //         treatmentCapturedFromHeaderColor: colorCodeMatch(
+    //   //           dublicateRemoveSecondArr,
+    //   //           res.treatmentCapturedFromHeader
+    //   //         ),
+    //   //         monitorColor: COLORS[index],
+    //   //         meatColor: COLORS[index],
+    //   //         assessment: res.assessment,
+    //   //         monitor: res.monitor,
+    //   //         evaluate: res.evaluate,
+    //   //         treatment: res.treatment,
+    //   //         isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+    //   //         category: res.category,
+    //   //       });
+    //   //     }
+    //   //   });
+    //   //   setMeatCriteriaList(meatListArr);
+    //   //   setMeatCriteriaListNonHcc(nonHccMeatListArr);
+    //   //   setIsLoading(false);
+    //   // }
+    //   // if (activeTab == 3) {
+    //   //   var validDiseaseNewRes = [];
+    //   //   var invalidDiseaseNewRes = [];
+    //   //   var unmatchedDiseaseRes = [];
+    //   //   var comboDis = "";
+    //   //   var meatCri = "";
+    //   //   var result = patientDetailsRadiology;
+    //   //   validDiseaseNewRes = result.validDisease[dosKeyValue];
+    //   //   invalidDiseaseNewRes = result.invalidDisease[dosKeyValue];
+    //   //   unmatchedDiseaseRes = result.unmatchedDisease[dosKeyValue];
+    //   //   comboDis = result.comboDisease[dosKeyValue];
+    //   //   meatCri = result.meatCriteria[dosKeyValue];
+    //   //   if (result.radiologyFileDetail != null) {
+    //   //     var fileDetails = result.radiologyFileDetail[dosKeyValue];
+    //   //     getPatientPdfFileRadiology(fileDetails[0].azureBlobPath, localTenantId);
+    //   //   }
+    //   //   if (result.unmatchedDisease != null) {
+    //   //     setUnMatchHccListRadiology(unmatchedDiseaseRes);
+    //   //   }
+    //   //   setNewValidDiseaseListRadiology(validDiseaseNewRes);
+    //   //   setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
+    //   //   setComboDiseaseCodesListRadiology(comboDis);
+    //   //   const COLORS = [
+    //   //     "bg-bg-seven",
+    //   //     "bg-third",
+    //   //     "bg-bg-four",
+    //   //     "bg-bg-five",
+    //   //     "bg-bg-six",
+    //   //     "bg-bg-eight",
+    //   //     "bg-bg-nine",
+    //   //   ];
+    //   //   var meatListArr = [];
+    //   //   var meatMoniterHead = [];
+    //   //   var meatEvaluteHead = [];
+    //   //   var meatAssesmentHead = [];
+    //   //   var meatTreatMentHead = [];
+    //   //   var allMeatHead = [];
+    //   //   var allMeatHeadColorArr = [];
+    //   //   var allMeatHeadColor = [];
+    //   //   var dublicateRemoveSecondArr = [];
+    //   //   meatCri.map((res, index) => {
+    //   //     if (res.monitorCapturedFromHeader != "") {
+    //   //       meatMoniterHead.push({
+    //   //         header: res.monitorCapturedFromHeader,
+    //   //       });
+    //   //     }
+    //   //     if (res.evaluateCapturedFromHeader != "") {
+    //   //       meatEvaluteHead.push({
+    //   //         header: res.evaluateCapturedFromHeader,
+    //   //       });
+    //   //     }
+    //   //     if (res.assessmentCapturedFromHeader != "") {
+    //   //       meatAssesmentHead.push({
+    //   //         header: res.assessmentCapturedFromHeader,
+    //   //       });
+    //   //     }
+    //   //     if (res.treatmentCapturedFromHeader != "") {
+    //   //       meatTreatMentHead.push({
+    //   //         header: res.treatmentCapturedFromHeader,
+    //   //       });
+    //   //     }
+    //   //     var newArray = [];
+    //   //     newArray = [
+    //   //       ...allMeatHead,
+    //   //       ...meatMoniterHead,
+    //   //       ...meatEvaluteHead,
+    //   //       ...meatAssesmentHead,
+    //   //       ...meatTreatMentHead,
+    //   //     ];
+    //   //     var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+    //   //     dublicateRemoveArr.map((res3, index) => {
+    //   //       allMeatHeadColor.push({
+    //   //         header: res3.header,
+    //   //         color: COLORS[index],
+    //   //       });
+    //   //     });
+    //   //     allMeatHeadColorArr = allMeatHeadColor;
+    //   //     dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
+    //   //     setMeatColorCodeList(dublicateRemoveSecondArr);
+    //   //   });
+    //   //   meatCri.map((res, index) => {
+    //   //     meatListArr.push({
+    //   //       diagnosisCode: res.diagnosisCode,
+    //   //       diseaseName: res.diseaseName,
+    //   //       monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+    //   //       assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+    //   //       evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+    //   //       treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+    //   //       monitorCapturedFromHeaderColor: colorCodeMatch(
+    //   //         dublicateRemoveSecondArr,
+    //   //         res.monitorCapturedFromHeader
+    //   //       ),
+    //   //       assessmentCapturedFromHeaderColor: colorCodeMatch(
+    //   //         dublicateRemoveSecondArr,
+    //   //         res.assessmentCapturedFromHeader
+    //   //       ),
+    //   //       evaluateCapturedFromHeaderColor: colorCodeMatch(
+    //   //         dublicateRemoveSecondArr,
+    //   //         res.evaluateCapturedFromHeader
+    //   //       ),
+    //   //       treatmentCapturedFromHeaderColor: colorCodeMatch(
+    //   //         dublicateRemoveSecondArr,
+    //   //         res.treatmentCapturedFromHeader
+    //   //       ),
+    //   //       monitorColor: COLORS[index],
+    //   //       meatColor: COLORS[index],
+    //   //       assessment: res.assessment,
+    //   //       monitor: res.monitor,
+    //   //       evaluate: res.evaluate,
+    //   //       treatment: res.treatment,
+    //   //       isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+    //   //     });
+    //   //   });
+    //   //   setMeatCriteriaListRadiology(meatListArr);
+    //   //   setIsLoading(false);
+    // }
+    // if (activeTab == 4) {
+    //   var result = labResult;
+    //   var validDiseaseNewRes = [];
 
-      validDiseaseNewRes = result.validDisease[dosKeyValue];
+    //   validDiseaseNewRes = result.validDisease[dosKeyValue];
 
-      if (result.labFileDetail != null) {
-        var fileDetails = result.labFileDetail[dosKeyValue];
-        getLabReportFiles(fileDetails[0].azureBlobPath, localTenantId);
-      }
+    //   if (result.labFileDetail != null) {
+    //     var fileDetails = result.labFileDetail[dosKeyValue];
+    //     getLabReportFiles(fileDetails[0].azureBlobPath, localTenantId);
+    //   }
 
-      setLabReportValidList(validDiseaseNewRes);
-      setLabResultStatus(true);
-    }
+    //   setLabReportValidList(validDiseaseNewRes);
+    //   setLabResultStatus(true);
+    // }
   };
   const onClick = (e) => {
   };
