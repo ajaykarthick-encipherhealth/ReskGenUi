@@ -317,7 +317,8 @@ margin-left: 10px !important;
   background: #fee1e1;
   text-align: center;
   margin-left: -4px;
-  margin-top: 4px
+  margin-top: 4px;
+  cursor: pointer;
 }
 .close_icon svg {
   vertical-align: baseline !important;

@@ -481,7 +481,11 @@ const Details = ({ }) => {
 
     var userSpinner = (
       <div className={visitStyles.userDetailsCard}>
-        <Spin className='ml-2 ms-1 section-spin' size="medium" />
+         <div className="bouncing-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       </div>
     );
 
@@ -489,6 +493,8 @@ const Details = ({ }) => {
     setCurrentTime(currentTime)
 
     setUserDetails(userSpinner);
+
+    setvalidHccDetails(userSpinner)
 
 
   }, []);
@@ -3512,38 +3518,53 @@ const Details = ({ }) => {
   const getValidHccDetails = async (value, code) => {
     var patientId = localStorage.getItem("patientId");
     var result = "";
+    var data = "";
+
+    data = (
+      <div className={visitStyles.userDetailsCard}>
+         <div className="bouncing-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      </div>
+    );
+    setvalidHccDetails(data);
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/hccdisease?diagnosisCode=${code}`
     );
     if (response.data) {
       result = response.data;
+       data = (
+        <div className="validhcc-details">
+          {/* <Spin className='ml-2 ms-1' size="small" /> */}
+          {/* <div>{value}</div> */}
+          <div>
+            cmsHcc_V22_for_2023_payment_year :{" "}
+            {result.cmsHcc_Model_Category_V22_for_2023_payment_year}
+          </div>
+          <div>
+            cmsHcc_V24_for_2023_payment_year :{" "}
+            {result.cmsHcc_Model_Category_V24_for_2023_payment_year}
+          </div>
+          <div>cmsHcc_V22 : {result.cmsHcc_model_category_V22}</div>
+          <div>cmsHcc_V24 : {result.cmsHcc_model_category_V24}</div>
+          <div>
+            rxHcc_V05_for_2023_payment_year :{" "}
+            {result.rxHcc_Model_Category_V05_for_2023_payment_year}
+          </div>
+          <div>
+            rxHcc_V08_for_2023_payment_year :{" "}
+            {result.rxHcc_model_category_V08_for_2023_payment_year}
+          </div>
+          <div>rxHcc_V05 : {result.rxHcc_model_category_V05}</div>
+          <div>rxHcc_V08 : {result.rxHcc_model_category_V08}</div>
+        </div>
+      );
     }
-    var data = (
-      <div className="validhcc-details">
-        {/* <Spin className='ml-2 ms-1' size="small" /> */}
-        {/* <div>{value}</div> */}
-        <div>
-          cmsHcc_V22_for_2023_payment_year :{" "}
-          {result.cmsHcc_Model_Category_V22_for_2023_payment_year}
-        </div>
-        <div>
-          cmsHcc_V24_for_2023_payment_year :{" "}
-          {result.cmsHcc_Model_Category_V24_for_2023_payment_year}
-        </div>
-        <div>cmsHcc_V22 : {result.cmsHcc_model_category_V22}</div>
-        <div>cmsHcc_V24 : {result.cmsHcc_model_category_V24}</div>
-        <div>
-          rxHcc_V05_for_2023_payment_year :{" "}
-          {result.rxHcc_Model_Category_V05_for_2023_payment_year}
-        </div>
-        <div>
-          rxHcc_V08_for_2023_payment_year :{" "}
-          {result.rxHcc_model_category_V08_for_2023_payment_year}
-        </div>
-        <div>rxHcc_V05 : {result.rxHcc_model_category_V05}</div>
-        <div>rxHcc_V08 : {result.rxHcc_model_category_V08}</div>
-      </div>
-    );
+   
+
+  
     setvalidHccDetails(data);
   };
 
@@ -4378,7 +4399,11 @@ const Details = ({ }) => {
 
     data = (
       <div className={visitStyles.userDetailsCard}>
-        <Spin className='ml-2 ms-1 section-spin' size="medium" />
+         <div className="bouncing-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       </div>
     );
 
@@ -5097,7 +5122,7 @@ const Details = ({ }) => {
                                                                 trigger="click"
                                                               >
                                                                 <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                                                  <i>
+                                                                  <i className="cr-pointer">
                                                                     {SVGICON.infoIcon}
                                                                   </i>
                                                                 </Tooltip>
@@ -5215,7 +5240,7 @@ const Details = ({ }) => {
                                                                   }
                                                                 >
                                                                   <Badge
-                                                                    className={`mt-2 text-start  w-100px ${visitStyles.captureheader}`}
+                                                                    className={`mt-2 text-start cr-pointer  w-100px ${visitStyles.captureheader}`}
                                                                     onClick={() =>
                                                                       handleOpenModalCombinationCode(
                                                                         data.diagnosisCode,
