@@ -466,7 +466,7 @@ const Details = ({}) => {
          
           </div>
         </Menu.Item>
-        <Menu.Item key='4' onClick={() => handleActionClick("ADD LAP")}>
+        <Menu.Item key='4' onClick={() => handleActionClick("ADD LAB")}>
         <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>  
           </div>
@@ -4362,6 +4362,12 @@ const Details = ({}) => {
 
       if(value == "COMPLETE"){
         setConfirmCompleteModal(true);
+      }
+      if(value == "ADD RADIOLOGY"){
+        addPatientFile();
+      }
+      if(value == "ADD LAB"){
+        addLabReport();
       }
 
       // getFiltePatientListDate(dateString[0],dateString[1])
