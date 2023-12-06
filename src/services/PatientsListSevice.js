@@ -1,0 +1,21 @@
+import axios from "axios";
+import ENDPOINTS from "../utility/enpoints";
+
+export const PatientsList = async (page,url) => {
+  var uId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `
+       ${ENDPOINTS?.apiEndoint}dbservice/patient/filter?userId=${uId}&page=${page}&size=10&${url}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
