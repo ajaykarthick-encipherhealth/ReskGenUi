@@ -38,7 +38,7 @@ import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
-import { getReportDetails } from "../../../store/actions/ReportActions";
+import { getReceivedDetails, getReportDetails, getSentDetails } from "../../../store/actions/ReportActions";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -56,6 +56,9 @@ const index = () => {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
+  const [sentPageNo, setSentPageNo] = useState(0);
+  const [receivedPageNo, setReceivedPageNo] = useState(0);
+
   const [paginationFirst, setPaginationFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
@@ -100,6 +103,8 @@ const index = () => {
     setLocalUserId(uId);
     // setIsLoading(false);
     dispatch(getReportDetails(pageNo));
+    dispatch(getSentDetails(sentPageNo))
+    dispatch(getReceivedDetails(receivedPageNo))
     // fetchData();
   }, [pageNo]);
   const handleButtonClick = () => {
@@ -128,6 +133,12 @@ const index = () => {
     // getAllList(localUserId, e.page, e.rows);
     setPageNo(e?.pageCount)
   };
+  const onReceivedPageChange=()=>{
+    setReceivedPageNo(e?.pageCount)
+  }
+  const onSentPageChange=()=>{
+    setSentPageNo(e?.pageCount)
+  }
 
   function calculateColor(percentage) {
     // Define your color ranges based on the percentage
@@ -201,7 +212,9 @@ const index = () => {
     }
   };
 
-  const ReportPatientDetails = useSelector((state) => state.report.details);
+  const ReportPatientDetails = useSelector((state) => state.report?.details);
+  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
+  const ReceivedReportDetails = useSelector((state) => state.report?.receivedDetails);
   return (
     <>
       <Header />
@@ -398,7 +411,7 @@ const index = () => {
                                 >
                                   <CoderReport
                                     setModal={setModal}
-                                    reportListAll={ReportPatientDetails?.data}
+                                    reportListAll={ReportPatientDetails}
                                     paginationFirst={paginationFirst}
                                     ReportPatientDetails={ReportPatientDetails}
                                     onPageChange={onPageChange}
@@ -412,10 +425,10 @@ const index = () => {
                                   id="my-posts"
                                   eventKey="comboDiseases"
                                 >
-                                  <SentReportTable />
+                                  <SentReportTable details={SentReportDetails} onPageChange={onSentPageChange} />
                                 </Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                                  <ReceivedReport />
+                                  <ReceivedReport details={ReceivedReportDetails} onPageChange={onReceivedPageChange}/>
                                 </Tab.Pane>
                                 <Tab.Pane
                                   id="my-posts"
