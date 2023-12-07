@@ -1,11 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import TableStyle from "../table.module.css";
 import { Paginator } from "primereact/paginator";
-import { Modal } from "antd";
+import { Modal, Popover } from "antd";
+
 function SentReportTable(details, onSentPageChange) {
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
   const displayReceivedUsers = (list) => {
-    console.log(list);
+    setSelectedUsers(list);
   };
+
+  const popCOntent = (
+    <div style={{width:"100%"}}>
+    <table className={TableStyle.classTable}>
+      <thead className={TableStyle.classThead}>
+        <tr>
+          <th>USER</th>
+          <th>ROLE</th>
+        </tr>
+      </thead>
+      <tbody>
+        {selectedUsers?.map((row, index) => {
+          return (
+            <tr key={index}>
+              <td
+                style={{
+                  borderTop: "  0.2px solid #e1e1e1",
+                  borderLeft: "  0.2px solid #e1e1e1",
+                  borderBottom: "  0.2px solid #e1e1e1",
+                }}
+              >
+                {row.user}
+              </td>
+              <td
+                style={{
+                  borderTop: "  0.2px solid #e1e1e1",
+                  borderBottom: "  0.2px solid #e1e1e1",
+                }}
+              >
+                {row.role}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+    </div>
+  );
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -57,13 +98,17 @@ function SentReportTable(details, onSentPageChange) {
                 <td
                   style={{
                     borderTop: "  0.2px solid #e1e1e1",
-
+                    cursor: "pointer",
                     borderBottom: "  0.2px solid #e1e1e1",
-                    borderRight: "  0.2px solid #e1e1e1",
                   }}
-                  onClick={() => displayReceivedUsers(row.receivedUsers)}
                 >
-                  ...
+                  <Popover trigger="click" content={popCOntent}>
+                    <div
+                      onClick={() => displayReceivedUsers(row.receivedUsers)}
+                    >
+                      ...
+                    </div>
+                  </Popover>
                 </td>
                 <td
                   style={{
@@ -82,22 +127,9 @@ function SentReportTable(details, onSentPageChange) {
       </table>
       <div className="pagination-container">
         <Paginator
-          // first={paginationFirst}
           rows={15}
           totalRecords={details?.details?.content?.length}
-          onPageChange={
-            <div className="pagination-container">
-              <Paginator
-                // first={paginationFirst}
-                rows={15}
-                totalRecords={details?.details?.content?.length}
-                onPageChange={onSentPageChange}
-              />
-              <div className="total-pages">
-                Total count: {details?.details?.content?.length}
-              </div>
-            </div>
-          }
+          onPageChange={onSentPageChange}
         />
         <div className="total-pages">
           Total count:{" "}
