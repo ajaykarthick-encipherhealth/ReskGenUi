@@ -12561,3 +12561,8 @@ tbody > tr {
 .metismenu a{
   align-items: center !important;
 }
+
+/* Display the clear icon when input field is focused */
+.ant-picker-clear {
+  display: none !important; 
+}
