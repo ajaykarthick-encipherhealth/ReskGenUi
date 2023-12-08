@@ -128,13 +128,13 @@ function SentReportTable(details, onSentPageChange) {
       <div className="pagination-container">
         <Paginator
           rows={15}
-          totalRecords={details?.details?.content?.length}
+          totalRecords={details?.details?.length}
           onPageChange={onSentPageChange}
         />
         <div className="total-pages">
           Total count:{" "}
-          {details?.details?.content?.length > 0
-            ? details?.details?.content?.length
+          {details?.details?.length > 0
+            ? details?.details?.length
             : 0}
         </div>
       </div>

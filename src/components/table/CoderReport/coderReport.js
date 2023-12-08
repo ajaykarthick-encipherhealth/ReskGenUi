@@ -175,11 +175,11 @@ function CoderReport({
         <Paginator
           first={paginationFirst}
           rows={15}
-          totalRecords={ReportPatientDetails?.data?.length}
+          totalRecords={ReportPatientDetails?.length}
           onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {ReportPatientDetails?.data?.length}
+          Total count: {ReportPatientDetails?.length}
         </div>
       </div>
     </div>

@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
+import { ArrowUpOutlined,ArrowDownOutlined } from '@ant-design/icons';
 
-function ReceivedReport(details,onReceivedPageChange) {
+function ReceivedReport(details, onReceivedPageChange) {
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [detailsContent, setDetailsContent] = useState(
+    details?.details?.content
+  );
+
+  const sortTableByDate = () => {
+    const sortedContent = [...detailsContent];
+    if (sortOrder === "asc") {
+      sortedContent.sort((a, b) => dayjs(a.sendDate).diff(dayjs(b.sendDate)));
+      setSortOrder("desc");
+    } else {
+      sortedContent.sort((a, b) => dayjs(b.sendDate).diff(dayjs(a.sendDate)));
+      setSortOrder("asc");
+    }
+    setDetailsContent(sortedContent);
+  };
+
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -13,11 +31,14 @@ function ReceivedReport(details,onReceivedPageChange) {
             <th>REPORT NAME</th>
             <th>ACCESS TYPE</th>
             <th>SENDER</th>
-            <th>DATE</th>
+            <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
+              DATE{" "}
+              {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+            </th>
           </tr>
         </thead>
         <tbody>
-          {details?.details?.content?.map((row, index) => {
+          {detailsContent?.map((row, index) => {
             const formattedDate = row.receiveDate
               ? dayjs(row.sendDate).format("DD/MM/YY")
               : "Invalid Date";
