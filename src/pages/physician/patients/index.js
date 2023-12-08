@@ -174,8 +174,46 @@ export default function Patient() {
     // fetchData();
   }, []);
 
-  const getAllList = async (uId, pageNo, pageSize) => {
+  const getAllList = async (uId,pageNo, pageSize) => {
     var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response.data) {
+      var resultMap = [];
+      var result = response.data.content;
+      setTotalElements(response.data.totalElements);
+
+      result.map((res) => {
+        resultMap.push({
+          patientId: res.patientId,
+          patientName: res.patientName,
+          fileName: res.fileName,
+          computing: res.computing,
+          createdAt: res.createdAt,
+          lastModifiedDate: res.lastModifiedDate,
+          dueDate: res.dueDate,
+          processedStatus: res.processedStatus,
+          createdAt: res.createdAt,
+        });
+      });
+      var newArray = [];
+      newArray = [...patinetListAll, ...resultMap];
+      setPatinetListAll(resultMap);
+
+      // console.log(newArray)
+      setIsLoading(false);
+      setTableLoading(false);
+      //     setTimeout(() => {
+      //     subscribe(resultMap);
+      // }, 3000);
+    }
+  };
+
+  const getFilteApi= async (pageNo, pageSize,processedStatus,processedStart,processedEnd,dueDateStart,dueDateEnd   ) => {
+    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}
+    &processedStatus=${processedStatus}
+    &processedStart=${processedStart}
+    &processedEnd=${processedEnd
+    }`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -689,29 +727,35 @@ export default function Patient() {
     console.log("test");
   };
   const statusOptions = [
-    { label: "Completed", value: "completed" },
-    { label: "Pending", value: "pending" },
-    { label: "Declined", value: "declined" },
-    { label: "Hold", value: "hold" },
+    { label: "COMPLETED", value: "COMPLETED" },
+    { label: "PENDING", value: "PENDING" },
+    { label: "DECLINED", value: "DECLINED" },
+    { label: "HOLD", value: "HOLD" },
   ];
   const dosOnChange = (selectedOption) => {
     const selectedValue = selectedOption.value;
     // Do something with the selected value
     console.log(selectedValue);
+    getFilteApi(0, 10,selectedValue)
   };
   const handleOk = () => {
     setModalVisible(false);
   };
-  const handleDatePickerChange = (dateString) => {
-    const formattedDates = dateString?.map((item) =>
-      dayjs(item).format("DD MMM YY")
-    );
+  const handleDatePickerChange = (dateString) => {  
+    console.log(dateString)
+    console.log(dateString);
 
-    if (formattedDates.length === 2) {
-      const [startDate, endDate] = formattedDates;
-      setStartDate(startDate);
-      setEndDate(endDate);
-    }
+    let utcISOTimestamp = moment.utc(dateString[0]).toDate()
+console.log(utcISOTimestamp)
+let utcISOTimestamp2 = moment.utc(dateString[1]).toDate()
+console.log(utcISOTimestamp)
+
+
+    setStartDate(dateString[0]);
+      setEndDate(dateString[1]);
+
+      getFilteApi(0, 10,"COMPLETED","2023-11-15T05%3A07%3A59.016Z","2023-11-16T23%3A07%3A59.016Z")
+
   };
   return (
     <>
@@ -792,7 +836,7 @@ export default function Patient() {
                               visible={modalVisible}
                               onOk={handleOk}
                               mask={false}
-                              onCancel={false}
+                              // onCancel={false}
                               closable={false}
                               width="45%"
                               height="800px"
@@ -824,7 +868,9 @@ export default function Patient() {
                                       marginTop: "-259px",
                                       marginLeft:"-78px"
                                     }}
-                                    onChange={handleDatePickerChange}
+                                    onChange={(dates, dateStrings) => {
+                                      handleDatePickerChange(dateStrings); 
+                                    }}
                                     open={true}
                                     showNow={false}
                                     style={{ visibility: "hidden" , boxShadow:"none" }}

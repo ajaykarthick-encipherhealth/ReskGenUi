@@ -92,12 +92,6 @@ const index = () => {
     patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const ReportPatientDetails = useSelector((state) => state.report?.details);
-  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
-  const ReceivedReportDetails = useSelector(
-    (state) => state.report?.receivedDetails
-  );
-
   const filterChangePatientId = (event) => {
     const value = event.target.value;
     let _filters = { ...filters };
@@ -117,11 +111,16 @@ const index = () => {
     dispatch(getSentDetails(sentPageNo));
     dispatch(getReceivedDetails(receivedPageNo));
     // fetchData();
-  }, [pageNo]);
+  }, [pageNo,sentPageNo,receivedPageNo]);
   const handleButtonClick = () => {
     setButtonClicked(true);
   };
 
+  const ReportPatientDetails = useSelector((state) => state.report?.details);
+  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
+  const ReceivedReportDetails = useSelector(
+    (state) => state.report?.receivedDetails
+  );
   const statusOptions = [
     { label: "Completed", value: "completed" },
     { label: "Pending", value: "pending" },
@@ -237,7 +236,6 @@ const index = () => {
       setEndDate(endDate);
     }
   };
-
   return (
     <>
       <Header />
@@ -466,10 +464,12 @@ const index = () => {
                                   />
                                 </Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                                  <ReceivedReport
-                                    details={ReceivedReportDetails}
+                                  {ReceivedReportDetails?.content && (
+                                    <ReceivedReport
+                                    details={ReceivedReportDetails?.content}
                                     onPageChange={onReceivedPageChange}
                                   />
+                                  )}
                                 </Tab.Pane>
                                 <Tab.Pane
                                   id="my-posts"

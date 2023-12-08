@@ -7,7 +7,7 @@ import { ArrowUpOutlined,ArrowDownOutlined } from '@ant-design/icons';
 function ReceivedReport(details, onReceivedPageChange) {
   const [sortOrder, setSortOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(
-    details?.details?.content
+    details?.details
   );
 
   const sortTableByDate = () => {
@@ -100,11 +100,11 @@ function ReceivedReport(details, onReceivedPageChange) {
         <Paginator
           // first={paginationFirst}
           rows={15}
-          totalRecords={details?.details?.content?.length}
+          totalRecords={details?.details.length}
           onPageChange={onReceivedPageChange}
         />
         <div className="total-pages">
-          Total count: {details?.details?.content?.length}
+          Total count: {details?.details?.length}
         </div>
       </div>
     </div>
