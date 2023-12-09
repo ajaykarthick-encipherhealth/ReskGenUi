@@ -11475,7 +11475,8 @@ img.login-logo {
 
 .ant-modal-body {
   min-height: 10px !important;
-  max-height: 400px !important;
+  height:auto !important;
+  /* max-height: 400px !important; */
   overflow: scroll !important;
 }
 
@@ -12650,4 +12651,5 @@ tbody > tr {
 .bouncing-loader > div:nth-child(3) {
   animation-delay: 0.4s;
 }
+
 

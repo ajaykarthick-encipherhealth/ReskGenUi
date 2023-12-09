@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, Modal, Select } from "antd";
+import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useState } from "react";
 import styles from "./report.module.css";
 
@@ -9,6 +9,8 @@ const Export = ({
   handleButtonClick,
 }) => {
   const [selectedUser, setSelectedUser] = useState([]);
+  const[selUser,setSelUser]=useState()
+  const[selRole,SetSelRole]=useState()
   const options = [
     {
       value: "lucy",
@@ -66,14 +68,30 @@ const Export = ({
     },
   ];
   const handleSelectedOption = (value) => {
-    setSelectedUser((prev) => [...prev, value]);
+    setSelUser(value)
+    setSelectedUser((prev) => [...prev, { user: value, role: "" }]);
+  };
+  const handleSelectedRole = (value) => {
+    SetSelRole(value)
+    setSelectedUser((prevUsers) => {
+      const updatedUsers = prevUsers.map((user, index) => {
+        if (index === prevUsers.length - 1) {
+          return { ...user, role: value }; // Update the role for the latest added user
+        }
+        return user;
+      });
+      return updatedUsers;
+    });
   };
   const deleteUser = (item) => {
-    setSelectedUser(selectedUser?.filter((data) => data !== item));
+    setSelectedUser(selectedUser?.filter((data) => data.user !== item));
   };
   const filteredOptions = options.filter(
-    (option) => !selectedUser.includes(option.value)
+    (option) => !selectedUser?.user?.includes(option.value)
   );
+  const handleSearch = () => {
+    console.log("dc");
+  };
   return (
     <Modal
       title="Export "
@@ -106,34 +124,19 @@ const Export = ({
             },
           ]}
         >
-          <div
-            style={{
-              width: "60%",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <button
-              //   key="close"
-              className={styles.excel}
-              //   onClick={handleButtonClick}
-            >
+          <Radio.Group>
+            <Radio.Button value="Excel" className={styles.excel}>
               Excel
-            </button>
-            <button
-              //   key="close"
-              className={styles.excel}
-              //   onClick={handleButtonClick}
-            >
+            </Radio.Button>
+            <Radio.Button value="CSV" className={styles.excel}>
               CSV
-            </button>
-          </div>
+            </Radio.Button>
+          </Radio.Group>
         </Form.Item>
 
         <Form.Item
           label="Report Fields"
           name="ReportFields"
-          valuePropName="checked"
           rules={[
             {
               required: true,
@@ -141,27 +144,33 @@ const Export = ({
             },
           ]}
         >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "16px",
-              margin: "0px 0",
-            }}
-          >
-            {checkBoxData?.map((data) => (
-              <Checkbox>{data.title}</Checkbox>
-            ))}
-          </div>
+          <Checkbox.Group>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "16px",
+                margin: "0px 0",
+              }}
+            >
+              {checkBoxData?.map((data) => (
+                <Checkbox key={data.id} value={data.title}>
+                  {data.title}
+                </Checkbox>
+              ))}
+            </div>
+          </Checkbox.Group>
         </Form.Item>
 
-        <Form.Item
+      <div style={{display:"flex",marginBottom:"20px"}}>
+     <div style={{width:"50%",marginRight:"10px"}}>
+     <Form.Item
           label="Sender"
-          name="sender"
+          name="Sender"
           rules={[
             {
               required: true,
-              message: "",
+              message: "Select User and Role",
             },
           ]}
         >
@@ -172,14 +181,18 @@ const Export = ({
               justifyContent: "space-between",
             }}
           >
+        
             <Select
               placeholder="Select"
               className={styles.selectDiv}
               options={filteredOptions}
+              showSearch
+            //   value={selUser} 
+              onSearch={handleSearch}
               onChange={handleSelectedOption}
             />
+
             <Select
-              //   defaultValue="lucy"
               placeholder="Select"
               className={styles.selectDiv}
               options={[
@@ -192,28 +205,38 @@ const Export = ({
                   label: "Download",
                 },
               ]}
+             
+              onChange={handleSelectedRole}
             />
-            <div className={styles.displayDiv}>
+          
+          </div>
+        </Form.Item>
+     </div>
+        <div className={styles.displayDiv}>
               {selectedUser?.length > 0 ? (
-                <div>
-                  {selectedUser?.map((item) => (
+                <>
+                  {selectedUser?.map((item, index) => (
                     <div className={styles.userName}>
-                      <div>{item}</div>
+                      <div key={index} className={styles.userRoleContainer}>
+                        {item.user}
+                      </div>
+                      <div key={index} className={styles.userRoleContainer}>
+                        {item.role}
+                      </div>
                       <div
                         style={{ cursor: "pointer" }}
-                        onClick={() => deleteUser(item)}
+                        onClick={() => deleteUser(item.user)}
                       >
                         X
                       </div>
                     </div>
                   ))}
-                </div>
+                </>
               ) : (
                 "No Users Selected"
               )}
             </div>
-          </div>
-        </Form.Item>
+      </div>
         <Form.Item
           wrapperCol={{
             offset: 8,

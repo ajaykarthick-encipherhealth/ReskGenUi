@@ -89,22 +89,20 @@
   text-align: center;
   cursor: pointer;
 }
-.excel:active {
+/* .excel:active {
   width: 100px;
   height: 40px;
   flex-shrink: 0;
   border-radius: 8px;
-  background: #04306f;
-  border: none;
-
-  color: #fff;
+  background: #04306f !important;
+  border: none !important;
+  color: #fff !important;
   font-family: Manrope;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  letter-spacing: 0.64px;
-}
+} */
 .excel {
   width: 100px;
   height: 40px;
@@ -115,11 +113,11 @@
   color: black;
   background: #f5f9fe;
   font-family: Manrope;
+  text-align: center;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: normal;
-  letter-spacing: 0.64px;
+  margin-right: 10px;
 }
 .dateDisplay {
   display: flex;
@@ -140,17 +138,16 @@
 }
 .modelCon{
   width:50% !important;
-  height:600px !important;
 }
 .selectDiv{
-  width:20% !important;
+  width:45% !important;
 }
 .displayDiv{
-  width:45%;
+  width:50%;
   height:150px;
   margin-right: 10px;
   border-radius: 8px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   padding:5px;
   box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
 }
