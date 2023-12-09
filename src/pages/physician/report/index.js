@@ -1,7 +1,7 @@
 import styles from "./report.module.css";
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { Badge, Modal, DatePicker, Checkbox } from "antd";
+import { Badge, Modal, DatePicker, Checkbox, Input, Form } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
-
 import {
   faClose,
   faUpload,
@@ -39,6 +38,7 @@ import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
 import { getReportDetails } from "../../../store/actions/ReportActions";
+import Export from "./Export";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -114,7 +114,6 @@ const index = () => {
   ];
   const dosOnChange = (selectedOption) => {
     const selectedValue = selectedOption.value;
- 
   };
 
   const onPageChange = (e) => {
@@ -126,7 +125,7 @@ const index = () => {
     // setPageSize(e.rows);
     // setTableLoading(true);
     // getAllList(localUserId, e.page, e.rows);
-    setPageNo(e?.pageCount)
+    setPageNo(e?.pageCount);
   };
 
   function calculateColor(percentage) {
@@ -202,6 +201,11 @@ const index = () => {
   };
 
   const ReportPatientDetails = useSelector((state) => state.report.details);
+  const onFinish = (values) => {
+    console.log("Success:", values);
+  };
+
+
   return (
     <>
       <Header />
@@ -251,15 +255,9 @@ const index = () => {
                             </div>
                           </div>
                           <div className="col-xl-2">
-                           
-                          
-
-                                <div>
-                                  <RangePicker
-                                  
-                                  />
-                                </div>
-                          
+                            <div>
+                              <RangePicker />
+                            </div>
                           </div>
                           <div className="col-xl-6">
                             <div className="row flr">
@@ -300,60 +298,11 @@ const index = () => {
                           </div>
                         </div>
                       </div>
-                      <Modal
-                        title="Export "
-                        visible={isModalVisible}
-                        onCancel={closeModal}
-                        footer={[
-                          <Button key="close" onClick={closeModal}>
-                            Submit
-                          </Button>,
-                        ]}
-                        style={{ top: "150px", left: "625px" }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-around",
-                            alignItems: "center",
-                            margin: "0 5pc",
-                          }}
-                        >
-                          <button
-                            key="close"
-                            className={styles.excel}
-                            onClick={handleButtonClick}
-                          >
-                            Excel
-                          </button>
-                          <button
-                            key="close"
-                            className={styles.excel}
-                            onClick={handleButtonClick}
-                          >
-                            CSV
-                          </button>
-                        </div>
-                        <div
-                          style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(3, 1fr)",
-                            gap: "16px",
-                            margin: "20px 0",
-                          }}
-                        >
-                          <Checkbox>Patient Id </Checkbox>
-                          <Checkbox>Patient name </Checkbox>
-                          <Checkbox>HCC </Checkbox>
-                          <Checkbox>Suggestion </Checkbox>
-                          <Checkbox>Deleted </Checkbox>
-                          <Checkbox>Total codes </Checkbox>
-                          <Checkbox>Completed date </Checkbox>
-                          <Checkbox>Comments </Checkbox>
-                          <Checkbox>Auditor name </Checkbox>
-                          <Checkbox>Flag </Checkbox>
-                        </div>
-                      </Modal>
+                     <Export
+                      isModalVisible={isModalVisible}
+                      closeModal={closeModal}
+                      onFinish={onFinish}
+                      handleButtonClick={handleButtonClick}/>
 
                       <div
                         id="task-tbl_wrapper"
@@ -430,7 +379,6 @@ const index = () => {
                           </div>
                         </div>
 
-                        
                         {modal && (
                           <Modal
                             title="Comments"

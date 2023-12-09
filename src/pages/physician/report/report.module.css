@@ -111,11 +111,9 @@
   flex-shrink: 0;
   border-radius: 8px;
   border: 0.5px solid #b1aeae;
-
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   color: black;
   background: #f5f9fe;
-
   font-family: Manrope;
   font-size: 16px;
   font-style: normal;
@@ -135,4 +133,34 @@
   font-weight: 500;
   cursor: pointer;
 }
+.footerBtn {
+  width: 30%;
+  display: flex;
+  margin: auto;
+}
+.modelCon{
+  width:50% !important;
+  height:600px !important;
+}
+.selectDiv{
+  width:20% !important;
+}
+.displayDiv{
+  width:45%;
+  height:150px;
+  margin-right: 10px;
+  border-radius: 8px;
+  overflow-y: scroll;
+  padding:5px;
+  box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
+}
 
+.userName{
+  display: flex;
+  padding:10px;
+  justify-content: space-between;
+  box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
+  border-radius: 8px;
+ margin-bottom: 10px;
+
+}
