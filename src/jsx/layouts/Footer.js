@@ -130,7 +130,7 @@ const Footer = () => {
               <a href="#">Docs</a>
             </li>
             <li className="list-inline-item">
-              <a href="#">Contact</a>
+              <a href="#">Contact &nbsp; </a>
             </li>
           </ul>
 		  <p className="mb-0">
