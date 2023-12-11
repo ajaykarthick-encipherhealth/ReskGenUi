@@ -33,7 +33,7 @@ function ReceivedReport(details, onReceivedPageChange) {
             <th>SENDER</th>
             <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
               DATE{" "}
-              {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+              {/* {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />} */}
             </th>
           </tr>
         </thead>

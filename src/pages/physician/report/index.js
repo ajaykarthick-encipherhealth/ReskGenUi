@@ -38,7 +38,7 @@ import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
 import Spinner from "../../../components/spinner/spinner";
-import Export from "./Export";
+import Export, { debounce } from "./Export";
 import {
   getReceivedDetails,
   getReportDetails,
@@ -79,6 +79,7 @@ const index = () => {
   const [receivedStartDate, setReceivedStartDate] = useState(
     dayjs().toISOString()
   );
+  const [selectedDates, setSelectedDates] = useState(null);
   const [receivedEndDate, setReceivedEndDate] = useState(
     dayjs().endOf("month").toISOString()
   );
@@ -97,19 +98,28 @@ const index = () => {
     patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const filterChangePatientId = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientId"].value = value;
-    setFilters(_filters);
+  const debouncedSearch = debounce((value) => {
     if (activeTab === "SentReport") {
       dispatch(getSentDetails(sentPageNo, startDate, endDate, value));
     }
     if (activeTab === "ReceivedReport") {
       dispatch(
-        getReceivedDetails(receivedPageNo, receivedStartDate, receivedEndDate,value)
+        getReceivedDetails(
+          receivedPageNo,
+          receivedStartDate,
+          receivedEndDate,
+          value
+        )
       );
     }
+  }, 300);
+
+  const filterChangePatientId = (event) => {
+    const value = event.target.value;
+    let _filters = { ...filters };
+    _filters["patientId"].value = value;
+    setFilters(_filters);
+    debouncedSearch(value);
   };
 
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -254,24 +264,25 @@ const index = () => {
   const handleOk = () => {
     setModalVisible(false);
   };
-  const handleDatePickerChange = (dateString) => {
+  const handleDatePickerChange = (date, dateString) => {
     const formattedDates = dateString.map((date) => {
       const formattedDate = new Date(date).toISOString(); // Convert to ISO string
       return formattedDate;
     });
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
-
+    setSelectedDates(date);
     dispatch(getSentDetails(sentPageNo, formattedDates[0], formattedDates[1]));
   };
 
-  const handleReceivedDatePicker = (dateString) => {
+  const handleReceivedDatePicker = (date, dateString) => {
     const formattedDates = dateString.map((date) => {
       const formattedDate = new Date(date).toISOString();
       return formattedDate;
     });
     setReceivedStartDate(formattedDates[0]);
     setReceivedEndDate(formattedDates[1]);
+    setSelectedDates(date);
     dispatch(
       getReceivedDetails(sentPageNo, formattedDates[0], formattedDates[1])
     );
@@ -336,6 +347,7 @@ const index = () => {
                             <div className="col-xl-2">
                               <div>
                                 <RangePicker
+                                  value={selectedDates}
                                   onChange={
                                     activeTab === "SentReport"
                                       ? handleDatePickerChange
@@ -416,7 +428,10 @@ const index = () => {
                                   <Nav.Item
                                     as="li"
                                     className="nav-item"
-                                    onClick={() => setActiveTab("SentReport")}
+                                    onClick={() => {
+                                      setSelectedDates(null);
+                                      setActiveTab("SentReport");
+                                    }}
                                   >
                                     <Nav.Link
                                       to="#my-posts"
@@ -429,9 +444,8 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
+                                      setSelectedDates(null);
                                       setActiveTab("ReceivedReport");
-                                      setStartDate();
-                                      setEndDate();
                                     }}
                                   >
                                     <Nav.Link
