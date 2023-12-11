@@ -123,7 +123,7 @@ function PatientTable({
   );
 
   const renderRows = () => {
-    return patinetListAll.map((data, index) => (
+    return patinetListAll?.map((data, index) => (
       <tr key={index}>
         <td
           className={TableStyle.firstTdBorder}

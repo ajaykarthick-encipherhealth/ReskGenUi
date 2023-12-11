@@ -7,11 +7,16 @@ import {
 } from "../../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
 const { Option } = Select;
-const Export = ({
-  isModalVisible,
-  closeModal,
-  rowsLength,
-}) => {
+
+export const debounce = (func, delay) => {
+  let timer;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timer);
+    timer = setTimeout(() => func.apply(context, args), delay);
+  };
+};
+const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   const [selectedUser, setSelectedUser] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -90,14 +95,7 @@ const Export = ({
   const filteredOptions =
     options &&
     options.filter((option) => !selectedUser?.user?.includes(option.value));
-  const debounce = (func, delay) => {
-    let timer;
-    return function (...args) {
-      const context = this;
-      clearTimeout(timer);
-      timer = setTimeout(() => func.apply(context, args), delay);
-    };
-  };
+
   const debouncedSearch = debounce((value) => {
     setSearch(value);
   }, 300);
