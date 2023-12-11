@@ -1,50 +1,65 @@
-import { WORKFLOWDATA,DATE_RANGE,DAILY_TASK,ACCURACY,COMPLETED,HOLD_STATUS } from "../actions/DashboardActions";
+import {
+  WORKFLOWDATA,
+  DATE_RANGE,
+  DAILY_TASK,
+  ACCURACY,
+  COMPLETED,
+  HOLD_STATUS,
+  SELECTED_DAY,
+} from "../actions/DashboardActions";
 
-const initialState={
-    data:null,
-    dateRange:null,
-    dailyTask:[],
-    accuracy:null,
-    completed:null,
-    holdStatus:null
-}
+const initialState = {
+  data: null,
+  dateRange: null,
+  dailyTask: [],
+  accuracy: null,
+  completed: null,
+  holdStatus: null,
+  dayDetails: null,
+};
 
-export const DashboardReducer=(state=initialState,action)=>{
-    if (action.type === WORKFLOWDATA) {
-        return {
-            ...state,
-            data: action.payload,
-        };
-    }
-    if (action.type === DATE_RANGE) {
-        return {
-            ...state,
-            dateRange: action.payload,
-        };
-    }
-    if (action.type === DAILY_TASK) {
-        return {
-            ...state,
-            dailyTask: [...state.dailyTask, action.payload],
-        };
-    }
-    if (action.type === ACCURACY) {
-        return {
-            ...state,
-            accuracy: action.payload,
-        };
-    }
-    if (action.type === COMPLETED) {
-        return {
-            ...state,
-            completed: action.payload,
-        };
-    }
-    if (action.type === HOLD_STATUS) {
-        return {
-            ...state,
-            holdStatus: action.payload,
-        };
-    }
-    return state;
-}
+export const DashboardReducer = (state = initialState, action) => {
+  if (action.type === WORKFLOWDATA) {
+    return {
+      ...state,
+      data: action.payload,
+    };
+  }
+  if (action.type === DATE_RANGE) {
+    return {
+      ...state,
+      dateRange: action.payload,
+    };
+  }
+  if (action.type === DAILY_TASK) {
+    return {
+      ...state,
+      dailyTask: [...state.dailyTask, action.payload],
+    };
+  }
+  if (action.type === ACCURACY) {
+    return {
+      ...state,
+      accuracy: action.payload,
+    };
+  }
+  if (action.type === COMPLETED) {
+    return {
+      ...state,
+      completed: action.payload,
+    };
+  }
+  if (action.type === HOLD_STATUS) {
+    return {
+      ...state,
+      holdStatus: action.payload,
+    };
+  }
+  if (action.type === SELECTED_DAY) {
+    return {
+      ...state,
+      dayDetails: action.payload,
+    };
+  }
+  return state;
+};

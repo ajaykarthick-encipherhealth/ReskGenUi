@@ -1,5 +1,5 @@
 import styles from "./report.module.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { Button } from "react-bootstrap";
 import { Badge, Modal, DatePicker, Checkbox, Input, Form } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
@@ -39,6 +39,12 @@ import ReceivedReport from "../../../components/table/receivedReport/receivedRep
 import CoderReport from "../../../components/table/CoderReport/coderReport";
 import { getReportDetails } from "../../../store/actions/ReportActions";
 import Export from "./Export";
+import {
+  getReceivedDetails,
+  getReportDetails,
+  getSentDetails,
+} from "../../../store/actions/ReportActions";
+
 
 const index = () => {
   const dispatch = useDispatch();
@@ -46,6 +52,7 @@ const index = () => {
   const controller = new AbortController();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("CoderReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
   const [dates, setDates] = useState(null);
@@ -56,6 +63,9 @@ const index = () => {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
+  const [sentPageNo, setSentPageNo] = useState(0);
+  const [receivedPageNo, setReceivedPageNo] = useState(0);
+
   const [paginationFirst, setPaginationFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
@@ -100,26 +110,52 @@ const index = () => {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
+    if (activeTab === "SentReport") {
+      dispatch(getSentDetails(sentPageNo));
+    }
+    if (activeTab === "ReceivedReport") {
+      dispatch(getReceivedDetails(receivedPageNo));
+    }
     dispatch(getReportDetails(pageNo));
-    // setIsLoading(false);
-    // fetchData();
     if (ExportResponse) {
       setIsModalVisible(false);
       notification.success({
         message:"Details Exported Successfully"
       })
     }
-  }, [pageNo, ExportResponse]);
+  }, [pageNo, sentPageNo, receivedPageNo, activeTab,ExportResponse]);
+  
   const handleButtonClick = () => {
     setButtonClicked(true);
   };
 
+  const ReportPatientDetails = useSelector((state) => state.report?.details);
+  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
+  const ReceivedReportDetails = useSelector(
+    (state) => state.report?.receivedDetails
+  );
   const statusOptions = [
     { label: "Completed", value: "completed" },
     { label: "Pending", value: "pending" },
     { label: "Declined", value: "declined" },
     { label: "Hold", value: "hold" },
   ];
+  const ReceivedOptions = [];
+  ReceivedReportDetails?.content?.map((item) => {
+    return ReceivedOptions.push({ label: item.sender, value: item.sender });
+  });
+  const SentOptions = [];
+  const uniqueRoles = new Set();
+
+  SentReportDetails?.forEach((data) => {
+    data?.receivedUsers?.forEach((item) => {
+      const role = item.role;
+      if (!uniqueRoles.has(role)) {
+        SentOptions.push({ label: role, value: role });
+        uniqueRoles.add(role);
+      }
+    });
+  });
   const dosOnChange = (selectedOption) => {
     const selectedValue = selectedOption.value;
   };
@@ -134,6 +170,13 @@ const index = () => {
     // setTableLoading(true);
     // getAllList(localUserId, e.page, e.rows);
     setPageNo(e?.pageCount);
+  };
+  const onReceivedPageChange = () => {
+    setReceivedPageNo(e?.pageCount);
+  };
+  const onSentPageChange = () => {
+    setSentPageNo(e?.pageCount);
+
   };
 
   function calculateColor(percentage) {
@@ -211,7 +254,6 @@ const index = () => {
   const ReportPatientDetails = useSelector((state) => state.report.details);
 
   const rowsLength = useSelector((state) => state.report.row);
-
   return (
     <>
       <Header />
@@ -254,7 +296,13 @@ const index = () => {
                                 onChange={(selectedOption) =>
                                   dosOnChange(selectedOption)
                                 }
-                                options={statusOptions}
+                                options={
+                                  activeTab === "CoderReport"
+                                    ? statusOptions
+                                    : activeTab === "ReceivedReport"
+                                    ? ReceivedOptions
+                                    : SentOptions
+                                }
                                 className="custom-react-select"
                                 isSearchable={false}
                               />
@@ -322,7 +370,11 @@ const index = () => {
                           <div className="custom-tab-1">
                             <Tab.Container defaultActiveKey="validDiseases">
                               <Nav as="ul" className="nav nav-tabs">
-                                <Nav.Item as="li" className="nav-item">
+                                <Nav.Item
+                                  as="li"
+                                  className="nav-item"
+                                  onClick={() => setActiveTab("CoderReport")}
+                                >
                                   <Nav.Link
                                     to="#my-posts"
                                     eventKey="validDiseases"
@@ -330,7 +382,11 @@ const index = () => {
                                     Coder Report
                                   </Nav.Link>
                                 </Nav.Item>
-                                <Nav.Item as="li" className="nav-item">
+                                <Nav.Item
+                                  as="li"
+                                  className="nav-item"
+                                  onClick={() => setActiveTab("SentReport")}
+                                >
                                   <Nav.Link
                                     to="#my-posts"
                                     eventKey="comboDiseases"
@@ -338,7 +394,11 @@ const index = () => {
                                     Sent Report
                                   </Nav.Link>
                                 </Nav.Item>
-                                <Nav.Item as="li" className="nav-item">
+                                <Nav.Item
+                                  as="li"
+                                  className="nav-item"
+                                  onClick={() => setActiveTab("ReceivedReport")}
+                                >
                                   <Nav.Link
                                     to="#my-posts"
                                     eventKey="meatCriteria"
@@ -354,7 +414,7 @@ const index = () => {
                                 >
                                   <CoderReport
                                     setModal={setModal}
-                                    reportListAll={ReportPatientDetails?.data}
+                                    reportListAll={ReportPatientDetails}
                                     paginationFirst={paginationFirst}
                                     ReportPatientDetails={ReportPatientDetails}
                                     onPageChange={onPageChange}
@@ -368,10 +428,18 @@ const index = () => {
                                   id="my-posts"
                                   eventKey="comboDiseases"
                                 >
-                                  <SentReportTable />
+                                  <SentReportTable
+                                    details={SentReportDetails}
+                                    onPageChange={onSentPageChange}
+                                  />
                                 </Tab.Pane>
                                 <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                                  <ReceivedReport />
+                                  {ReceivedReportDetails?.content && (
+                                    <ReceivedReport
+                                      details={ReceivedReportDetails?.content}
+                                      onPageChange={onReceivedPageChange}
+                                    />
+                                  )}
                                 </Tab.Pane>
                                 <Tab.Pane
                                   id="my-posts"

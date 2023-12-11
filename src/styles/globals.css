@@ -12578,6 +12578,11 @@ tbody > tr {
   align-items: center !important;
 }
 
+/* Display the clear icon when input field is focused */
+.ant-picker-clear {
+  display: none !important; 
+}
+
 .pendingBtn button.ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
   color: #452b90;
   background: #dfd8f3!important;
