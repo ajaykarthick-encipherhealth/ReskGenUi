@@ -37,12 +37,17 @@ import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
+
+import { getReportDetails } from "../../../store/actions/ReportActions";
+import Spinner from "../../../components/spinner/spinner";
+
 import Export from "./Export";
 import {
   getReceivedDetails,
   getReportDetails,
   getSentDetails,
 } from "../../../store/actions/ReportActions";
+
 
 
 const index = () => {
@@ -108,12 +113,15 @@ const index = () => {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
+    setIsLoading(false);
+
     if (activeTab === "SentReport") {
       dispatch(getSentDetails(sentPageNo));
     }
     if (activeTab === "ReceivedReport") {
       dispatch(getReceivedDetails(receivedPageNo));
     }
+
     dispatch(getReportDetails(pageNo));
     if (ExportResponse) {
       setIsModalVisible(false);
@@ -248,6 +256,7 @@ const index = () => {
       setEndDate(endDate);
     }
   };
+  
 
   const rowsLength = useSelector((state) => state.report.row);
   return (
@@ -255,9 +264,10 @@ const index = () => {
       <Header />
       <div className={styles.maincontainer}>
         <div class="content-body">
-          {/* {isLoading ? (
-            <LoadingSpinner />
-          ) : ( */}
+          {!ReportPatientDetails ? (
+            <Spinner />
+          ) : (
+            
           <div className="container-fluid">
             <div className="row">
               <div className="col-xl-12">
@@ -523,7 +533,7 @@ const index = () => {
               </div>
             </div>
           </div>
-          {/* )} */}
+           )} 
         </div>
       </div>
     </>

@@ -84,9 +84,9 @@ import { notification } from 'antd';
     }
     if(statusCode === 401) {
       Swal.fire({
-        title: 'Error!',
-        text: 'Access Denied',
-        icon: 'error',
+        title: '',
+        text: 'Your session has timed out. Please log in again.',
+        icon: 'warning',
         confirmButtonText: 'Logout',
         confirmButtonColor: "#DD6B55",
         closeOnConfirm: false

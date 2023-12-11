@@ -64,7 +64,10 @@ import { actions as patientActions } from "../../../../stores/patients";
 import { connect } from "react-redux";
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
-import { Avatar, Tooltip } from 'antd';
+
+import { Avatar,Tooltip } from 'antd';
+import Spinner from "../../../../components/spinner/spinner";
+
 
 
 
@@ -4474,6 +4477,7 @@ const Details = ({ }) => {
                             }}
                           />
                         </Button>
+
                       </div>
                       <div className="col-xl-7 col-sm-12">
                         <div className={`${visitStyles.patient_info_details}`}>

@@ -14,6 +14,8 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FacebookLoading from 'react-facebook-loading';
+import 'react-facebook-loading/dist/react-facebook-loading.css';
 import {
   faAngleLeft,
   faAngleRight,
@@ -44,6 +46,8 @@ import PatientTable from "../../../components/table/PatientList/patientList";
 import dayjs from "dayjs";
 import Image from "next/image";
 import calender from "../../../images/dashboard/calender.png";
+import Spinner from "../../../components/spinner/spinner";
+import Footer from "../../../jsx/layouts/Footer";
 export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -101,10 +105,10 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(13);
   const [paginationFirst, setPaginationFirst] = useState(0);
 
-  const [totalElements, setTotalElements] = useState(12);
+  const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const currentDate = dayjs();
@@ -356,6 +360,8 @@ export default function Patient() {
   };
 
   const gotoPatientDetails = (data) => {
+    console.log("Clicked on patient details:", data);
+
     dispatch(patientDetails(data));
     if (data.computing == 2) {
       const controller = new AbortController();
@@ -763,7 +769,7 @@ console.log(utcISOTimestamp)
         <Header />
         <div class="content-body">
           {isLoading ? (
-            <LoadingSpinner />
+            <Spinner />
           ) : (
             <div className="container-fluid">
               <div className="row">
@@ -997,12 +1003,15 @@ console.log(utcISOTimestamp)
                             patinetListAll={patinetListAll}
                             actionBodyTemplate={actionBodyTemplate}
                             statusBodyTemplate={processstatusBodyTemplate}
+                            gotoPatientDetails={gotoPatientDetails}
+                            patientDetails={patientDetails}
                            
                           />
-                          <div className="pagination-container">
+                          <div >
+                               <div className="pagination-container">
                             <Paginator
                               first={paginationFirst}
-                              rows={12}
+                              rows={13}
                               totalRecords={totalElements}
                               onPageChange={onPageChange}
                             />
@@ -1010,6 +1019,10 @@ console.log(utcISOTimestamp)
                               Total count: {totalElements}
                             </div>
                           </div>
+                       
+                          </div>
+                      
+                    
                         </div>
                       </div>
                     </div>

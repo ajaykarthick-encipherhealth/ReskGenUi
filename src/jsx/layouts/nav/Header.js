@@ -47,7 +47,7 @@ const Header = ({ onNote }) => {
 		if(loginCheck !=  "true"){			
 			Swal.fire({
 				title: 'Error!',
-				text: 'Access Denied',
+				text: 'Session Expired',
 				icon: 'error',
 				confirmButtonText: 'Logout',
 				confirmButtonColor: "#DD6B55",

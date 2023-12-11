@@ -94,9 +94,16 @@
   height: 40px;
   flex-shrink: 0;
   border-radius: 8px;
+
+  background: #04306f;
+  border: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  color: #fff;
+
   background: #04306f !important;
   border: none !important;
   color: #fff !important;
+
   font-family: Manrope;
   font-size: 16px;
   font-style: normal;
@@ -109,7 +116,11 @@
   flex-shrink: 0;
   border-radius: 8px;
   border: 0.5px solid #b1aeae;
+
+
+
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
   color: black;
   background: #f5f9fe;
   font-family: Manrope;
