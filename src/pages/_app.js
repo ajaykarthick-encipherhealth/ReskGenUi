@@ -12,6 +12,7 @@ import "primereact/resources/primereact.min.css";
 //icons
 
 import { config } from "@fortawesome/fontawesome-svg-core";
+import Footer from '../jsx/layouts/Footer';
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
@@ -19,7 +20,11 @@ function MyApp({ Component, pageProps }) {
     <>
       <PrimeReactProvider>
       <Provider store={store}>
+        
+        
         <Component {...pageProps} />
+        <Footer/>
+
       </Provider>
       </PrimeReactProvider>
     </>

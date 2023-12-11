@@ -39,6 +39,7 @@ import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
 import { getReportDetails } from "../../../store/actions/ReportActions";
+import Spinner from "../../../components/spinner/spinner";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -98,7 +99,7 @@ const index = () => {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    // setIsLoading(false);
+    setIsLoading(false);
     dispatch(getReportDetails(pageNo));
     // fetchData();
   }, [pageNo]);
@@ -200,6 +201,7 @@ const index = () => {
       setEndDate(endDate);
     }
   };
+  
 
   const ReportPatientDetails = useSelector((state) => state.report.details);
   return (
@@ -207,9 +209,10 @@ const index = () => {
       <Header />
       <div className={styles.maincontainer}>
         <div class="content-body">
-          {/* {isLoading ? (
-            <LoadingSpinner />
-          ) : ( */}
+          {!ReportPatientDetails ? (
+            <Spinner />
+          ) : (
+            
           <div className="container-fluid">
             <div className="row">
               <div className="col-xl-12">
@@ -504,7 +507,7 @@ const index = () => {
               </div>
             </div>
           </div>
-          {/* )} */}
+           )} 
         </div>
       </div>
     </>

@@ -61,6 +61,7 @@ import { connect } from "react-redux";
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import { Avatar,Tooltip } from 'antd';
+import Spinner from "../../../../components/spinner/spinner";
 
 
 
@@ -3820,7 +3821,7 @@ const Details = ({}) => {
         
         <div class="content-body">
           {isLoading ? (
-            <LoadingSpinner />
+           <Spinner />
           ) : (
             <div
               className={`container-fluid ${visitStyles.container_fluid_patient}`}
