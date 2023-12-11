@@ -1,7 +1,7 @@
 import styles from "./report.module.css";
 import React, { useState, useEffect, use } from "react";
 import { Button } from "react-bootstrap";
-import { Badge, Modal, DatePicker, Checkbox } from "antd";
+import { Badge, Modal, DatePicker, Checkbox, Input, Form } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
-
 import {
   faClose,
   faUpload,
@@ -38,11 +37,14 @@ import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
+import { getReportDetails } from "../../../store/actions/ReportActions";
+import Export from "./Export";
 import {
   getReceivedDetails,
   getReportDetails,
   getSentDetails,
 } from "../../../store/actions/ReportActions";
+
 
 const index = () => {
   const dispatch = useDispatch();
@@ -99,6 +101,8 @@ const index = () => {
     setFilters(_filters);
   };
 
+  const ExportResponse = useSelector((state) => state.report.exportRes);
+
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -106,7 +110,6 @@ const index = () => {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    // setIsLoading(false);
     if (activeTab === "SentReport") {
       dispatch(getSentDetails(sentPageNo));
     }
@@ -114,8 +117,13 @@ const index = () => {
       dispatch(getReceivedDetails(receivedPageNo));
     }
     dispatch(getReportDetails(pageNo));
-    // fetchData();
-  }, [pageNo, sentPageNo, receivedPageNo, activeTab]);
+    if (ExportResponse) {
+      setIsModalVisible(false);
+      notification.success({
+        message:"Details Exported Successfully"
+      })
+    }
+  }, [pageNo, sentPageNo, receivedPageNo, activeTab,ExportResponse]);
   
   const handleButtonClick = () => {
     setButtonClicked(true);
@@ -168,6 +176,7 @@ const index = () => {
   };
   const onSentPageChange = () => {
     setSentPageNo(e?.pageCount);
+
   };
 
   function calculateColor(percentage) {
@@ -241,6 +250,10 @@ const index = () => {
       setEndDate(endDate);
     }
   };
+
+  const ReportPatientDetails = useSelector((state) => state.report.details);
+
+  const rowsLength = useSelector((state) => state.report.row);
   return (
     <>
       <Header />
@@ -305,6 +318,7 @@ const index = () => {
                               <button
                                 onClick={handleExport}
                                 className={styles.export}
+                                disabled={rowsLength?.length === 0 && true}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -339,60 +353,11 @@ const index = () => {
                           </div>
                         </div>
                       </div>
-                      <Modal
-                        title="Export "
-                        visible={isModalVisible}
-                        onCancel={closeModal}
-                        footer={[
-                          <Button key="close" onClick={closeModal}>
-                            Submit
-                          </Button>,
-                        ]}
-                        style={{ top: "150px", left: "625px" }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-around",
-                            alignItems: "center",
-                            margin: "0 5pc",
-                          }}
-                        >
-                          <button
-                            key="close"
-                            className={styles.excel}
-                            onClick={handleButtonClick}
-                          >
-                            Excel
-                          </button>
-                          <button
-                            key="close"
-                            className={styles.excel}
-                            onClick={handleButtonClick}
-                          >
-                            CSV
-                          </button>
-                        </div>
-                        <div
-                          style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(3, 1fr)",
-                            gap: "16px",
-                            margin: "20px 0",
-                          }}
-                        >
-                          <Checkbox>Patient Id </Checkbox>
-                          <Checkbox>Patient name </Checkbox>
-                          <Checkbox>HCC </Checkbox>
-                          <Checkbox>Suggestion </Checkbox>
-                          <Checkbox>Deleted </Checkbox>
-                          <Checkbox>Total codes </Checkbox>
-                          <Checkbox>Completed date </Checkbox>
-                          <Checkbox>Comments </Checkbox>
-                          <Checkbox>Auditor name </Checkbox>
-                          <Checkbox>Flag </Checkbox>
-                        </div>
-                      </Modal>
+                      <Export
+                        isModalVisible={isModalVisible}
+                        closeModal={closeModal}
+                        rowsLength={rowsLength}
+                      />
 
                       <div
                         id="task-tbl_wrapper"

@@ -1,5 +1,8 @@
 import {
   REPORT_PATIENTS_DETAILS,
+  SELECTEDROW,
+  SEARCH,
+  EXPORT,
   SENT_REPORT,
   RECEIVED_REPORT,
   REPORT_DETAILS,
@@ -7,6 +10,9 @@ import {
 
 const initialState = {
   details: null,
+  row: null,
+  usersList: null,
+  exportRes: null,
   sentDetails: null,
   receivedDetails: null,
   getReport: null,
@@ -19,6 +25,25 @@ export const ReportReducer = (state = initialState, action) => {
       details: action.payload,
     };
   }
+  if (action.type === SELECTEDROW) {
+    return {
+      ...state,
+      row: action.payload,
+    };
+  }
+  if (action.type === SEARCH) {
+    return {
+      ...state,
+      usersList: action.payload,
+    };
+  }
+  if (action.type === EXPORT) {
+    return {
+      ...state,
+      exportRes: action.payload,
+    }
+  }
+
   if (action.type === SENT_REPORT) {
     return {
       ...state,
@@ -35,7 +60,6 @@ export const ReportReducer = (state = initialState, action) => {
     return {
       ...state,
       getReport: action.payload,
-    };
-  }
+
   return state;
 };

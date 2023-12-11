@@ -89,39 +89,35 @@
   text-align: center;
   cursor: pointer;
 }
-.excel:active {
+/* .excel:active {
   width: 100px;
   height: 40px;
   flex-shrink: 0;
   border-radius: 8px;
-  background: #04306f;
-  border: none;
-
-  color: #fff;
+  background: #04306f !important;
+  border: none !important;
+  color: #fff !important;
   font-family: Manrope;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  letter-spacing: 0.64px;
-}
+} */
 .excel {
   width: 100px;
   height: 40px;
   flex-shrink: 0;
   border-radius: 8px;
   border: 0.5px solid #b1aeae;
-
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   color: black;
   background: #f5f9fe;
-
   font-family: Manrope;
+  text-align: center;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: normal;
-  letter-spacing: 0.64px;
+  margin-right: 10px;
 }
 .dateDisplay {
   display: flex;
@@ -135,4 +131,34 @@
   font-weight: 500;
   cursor: pointer;
 }
+.footerBtn {
+  width: 30%;
+  display: flex;
+  margin: auto;
+}
+.modelCon{
+  width:50% !important;
+}
+.selectDiv{
+  width:85% !important;
+  margin-right: 20px;
+}
+.displayDiv{
+  width:50%;
+  height:150px;
+  margin-right: 10px;
+  border-radius: 8px;
+  /* overflow-y: scroll; */
+  padding:5px;
+  box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
+}
 
+.userName{
+  display: flex;
+  padding:10px;
+  justify-content: space-between;
+  box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
+  border-radius: 8px;
+ margin-bottom: 10px;
+
+}
