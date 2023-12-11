@@ -91,6 +91,8 @@ const index = () => {
     setFilters(_filters);
   };
 
+  const ExportResponse = useSelector((state) => state.report.exportRes);
+
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -98,10 +100,16 @@ const index = () => {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    // setIsLoading(false);
     dispatch(getReportDetails(pageNo));
+    // setIsLoading(false);
     // fetchData();
-  }, [pageNo]);
+    if (ExportResponse) {
+      setIsModalVisible(false);
+      notification.success({
+        message:"Details Exported Successfully"
+      })
+    }
+  }, [pageNo, ExportResponse]);
   const handleButtonClick = () => {
     setButtonClicked(true);
   };
@@ -201,10 +209,8 @@ const index = () => {
   };
 
   const ReportPatientDetails = useSelector((state) => state.report.details);
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
 
+  const rowsLength = useSelector((state) => state.report.row);
 
   return (
     <>
@@ -264,6 +270,7 @@ const index = () => {
                               <button
                                 onClick={handleExport}
                                 className={styles.export}
+                                disabled={rowsLength?.length === 0 && true}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -298,11 +305,11 @@ const index = () => {
                           </div>
                         </div>
                       </div>
-                     <Export
-                      isModalVisible={isModalVisible}
-                      closeModal={closeModal}
-                      onFinish={onFinish}
-                      handleButtonClick={handleButtonClick}/>
+                      <Export
+                        isModalVisible={isModalVisible}
+                        closeModal={closeModal}
+                        rowsLength={rowsLength}
+                      />
 
                       <div
                         id="task-tbl_wrapper"

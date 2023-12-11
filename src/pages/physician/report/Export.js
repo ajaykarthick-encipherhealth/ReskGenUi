@@ -1,97 +1,158 @@
 import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./report.module.css";
-
+import {
+  getExportDetails,
+  getUsersList,
+} from "../../../store/actions/ReportActions";
+import { useDispatch, useSelector } from "react-redux";
+const { Option } = Select;
 const Export = ({
   isModalVisible,
   closeModal,
-  onFinish,
-  handleButtonClick,
+  rowsLength,
 }) => {
   const [selectedUser, setSelectedUser] = useState([]);
-  const[selUser,setSelUser]=useState()
-  const[selRole,SetSelRole]=useState()
-  const options = [
-    {
-      value: "lucy",
-      label: "Lucy",
-    },
-    {
-      value: "Read",
-      label: "Read",
-    },
-    {
-      value: "Download",
-      label: "Download",
-    },
-  ];
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    var orgId = localStorage.getItem("orgId");
+    dispatch(getUsersList(orgId, search));
+  }, [search]);
+  const dispatch = useDispatch();
+  const usersList = useSelector((state) => state.report.usersList);
+  const options = usersList?.map((data) => ({
+    label: data.userName,
+    value: data.userName,
+  }));
+
   const checkBoxData = [
     {
       id: 1,
-      title: "Patient Id",
+      title: "patientId",
     },
     {
       id: 2,
-      title: "Patient Name",
+      title: "patientName",
     },
     {
       id: 3,
-      title: "HCC",
+      title: "dob",
     },
     {
       id: 4,
-      title: "Suggestion",
+      title: "processedDate",
     },
     {
       id: 5,
-      title: "Deleted",
+      title: "providerName",
     },
     {
       id: 6,
-      title: "Total codes",
+      title: "allocatedOn",
     },
     {
       id: 7,
-      title: "Completed date",
+      title: "noOfValidCodes",
     },
     {
       id: 8,
-      title: "Comments",
+      title: "noOfSuggestedCodes",
     },
     {
       id: 9,
-      title: "Auditor Name",
+      title: "noOfDeletedCodes",
     },
     {
       id: 10,
-      title: "Flag",
+      title: "totalCodes",
+    },
+    {
+      id: 11,
+      title: "allocatedUserId",
+    },
+    {
+      id: 12,
+      title: "comments",
+    },
+    {
+      id: 13,
+      title: "validDisease",
     },
   ];
   const handleSelectedOption = (value) => {
-    setSelUser(value)
-    setSelectedUser((prev) => [...prev, { user: value, role: "" }]);
+    setSelectedUser((prev) => ({ ...prev, user: value, role: "" }));
   };
   const handleSelectedRole = (value) => {
-    SetSelRole(value)
-    setSelectedUser((prevUsers) => {
-      const updatedUsers = prevUsers.map((user, index) => {
-        if (index === prevUsers.length - 1) {
-          return { ...user, role: value }; // Update the role for the latest added user
-        }
-        return user;
-      });
-      return updatedUsers;
-    });
+    setSelectedUser((prevUsers) => ({ ...prevUsers, role: value }));
   };
-  const deleteUser = (item) => {
-    setSelectedUser(selectedUser?.filter((data) => data.user !== item));
+
+  const filteredOptions =
+    options &&
+    options.filter((option) => !selectedUser?.user?.includes(option.value));
+  const debounce = (func, delay) => {
+    let timer;
+    return function (...args) {
+      const context = this;
+      clearTimeout(timer);
+      timer = setTimeout(() => func.apply(context, args), delay);
+    };
   };
-  const filteredOptions = options.filter(
-    (option) => !selectedUser?.user?.includes(option.value)
-  );
-  const handleSearch = () => {
-    console.log("dc");
+  const debouncedSearch = debounce((value) => {
+    setSearch(value);
+  }, 300);
+  const handleSearch = (e) => {
+    debouncedSearch(e);
   };
+
+  const onFinish = (values) => {
+    const patientIds = rowsLength.map((item) => item.patientId);
+    const userAndAccess = selectedUser.user.reduce((result, user, index) => {
+      result[user] = selectedUser.role[index];
+      return result;
+    }, {});
+    const data = {
+      fields: {
+        patientId: values.ReportFields?.includes("patientId") ? true : false,
+        patientName: values.ReportFields?.includes("patientName")
+          ? true
+          : false,
+        dob: values.ReportFields?.includes("dob") ? true : false,
+        processedDate: values.ReportFields?.includes("processedDate")
+          ? true
+          : false,
+        providerName: values.ReportFields?.includes("providerName")
+          ? true
+          : false,
+        allocatedOn: values.ReportFields?.includes("allocatedOn")
+          ? true
+          : false,
+        noOfValidCodes: values.ReportFields?.includes("noOfValidCodes")
+          ? true
+          : false,
+        noOfSuggestedCodes: values.ReportFields?.includes("noOfSuggestedCodes")
+          ? true
+          : false,
+        noOfDeletedCodes: values.ReportFields?.includes("noOfDeletedCodes")
+          ? true
+          : false,
+        totalCodes: values.ReportFields?.includes("totalCodes") ? true : false,
+        allocatedUserId: values.ReportFields?.includes("allocatedUserId")
+          ? true
+          : false,
+        comments: values.ReportFields?.includes("comments") ? true : false,
+        validDisease: values.ReportFields?.includes("validDisease")
+          ? true
+          : false,
+      },
+      patientIds: patientIds,
+      fileType: values.ReportTYpe,
+      reportName: values.ReportName,
+      userAndAccess: userAndAccess,
+    };
+    dispatch(getExportDetails(data));
+  };
+
   return (
     <Modal
       title="Export "
@@ -111,7 +172,7 @@ const Export = ({
             },
           ]}
         >
-          <Input style={{ width: "50%" }} />
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -125,7 +186,7 @@ const Export = ({
           ]}
         >
           <Radio.Group>
-            <Radio.Button value="Excel" className={styles.excel}>
+            <Radio.Button value="EXCEL" className={styles.excel}>
               Excel
             </Radio.Button>
             <Radio.Button value="CSV" className={styles.excel}>
@@ -162,81 +223,73 @@ const Export = ({
           </Checkbox.Group>
         </Form.Item>
 
-      <div style={{display:"flex",marginBottom:"20px"}}>
-     <div style={{width:"50%",marginRight:"10px"}}>
-     <Form.Item
-          label="Sender"
-          name="Sender"
-          rules={[
-            {
-              required: true,
-              message: "Select User and Role",
-            },
-          ]}
-        >
-          <div
-            style={{
-              width: "auto",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-        
-            <Select
-              placeholder="Select"
-              className={styles.selectDiv}
-              options={filteredOptions}
-              showSearch
-            //   value={selUser} 
-              onSearch={handleSearch}
-              onChange={handleSelectedOption}
-            />
-
-            <Select
-              placeholder="Select"
-              className={styles.selectDiv}
-              options={[
+        <div style={{ display: "flex", marginBottom: "20px" }}>
+          <div style={{ width: "100%" }}>
+            <Form.Item
+              label="Sender"
+              name="User"
+              rules={[
                 {
-                  value: "Read",
-                  label: "Read",
-                },
-                {
-                  value: "Download",
-                  label: "Download",
+                  required: false,
+                  message: "Select User",
                 },
               ]}
-             
-              onChange={handleSelectedRole}
-            />
-          
-          </div>
-        </Form.Item>
-     </div>
-        <div className={styles.displayDiv}>
-              {selectedUser?.length > 0 ? (
-                <>
-                  {selectedUser?.map((item, index) => (
-                    <div className={styles.userName}>
-                      <div key={index} className={styles.userRoleContainer}>
-                        {item.user}
-                      </div>
-                      <div key={index} className={styles.userRoleContainer}>
-                        {item.role}
-                      </div>
-                      <div
-                        style={{ cursor: "pointer" }}
-                        onClick={() => deleteUser(item.user)}
-                      >
-                        X
-                      </div>
-                    </div>
+            >
+              <div
+                style={{
+                  width: "auto",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Select
+                  mode="multiple"
+                  placeholder="Please select"
+                  onChange={handleSelectedOption}
+                  onSearch={handleSearch}
+                  className={styles.selectDiv}
+                >
+                  {filteredOptions?.map((data) => (
+                    <Option value={data.label}>{data.label}</Option>
                   ))}
-                </>
-              ) : (
-                "No Users Selected"
-              )}
-            </div>
-      </div>
+                </Select>
+                <Select
+                  mode="multiple"
+                  placeholder="Please select"
+                  onChange={handleSelectedRole}
+                  className={styles.selectDiv}
+                >
+                  <Option value="READ">Read</Option>
+                  <Option value="DOWNLOAD">Download</Option>
+                </Select>
+              </div>
+            </Form.Item>
+          </div>
+          {/* <div className={styles.displayDiv}>
+            {selectedUser?.length > 0 ? (
+              <>
+                {selectedUser?.map((item, index) => (
+                  <div className={styles.userName}>
+                    <div key={index} className={styles.userRoleContainer}>
+                      {item.user}
+                    </div>
+                    <div key={index} className={styles.userRoleContainer}>
+                      {item.role}
+                    </div>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => deleteUser(item.user)}
+                    >
+                      X
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              "No Users Selected"
+            )}
+          </div> */}
+        </div>
         <Form.Item
           wrapperCol={{
             offset: 8,
