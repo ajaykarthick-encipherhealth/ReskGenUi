@@ -13,13 +13,15 @@ import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 
 const Header = ({ onNote }) => {
-  const [headerFix, setheaderFix] = useState(false);
-  const [userName, setUserName] = useState("");
-  const router = useRouter();
-  const [stateActive, setStateActive] = useState(router.pathname);
-  const [userRole, setUserRole] = useState("");
-  const [menuList, setMenuList] = useState([]);
-  const [userIdDetails, setUserIdDetails] = useState([]);
+
+	const [headerFix, setheaderFix] = useState(false);
+	const [userName, setUserName] = useState('');
+	const router = useRouter();
+	const [stateActive, setStateActive] = useState(router.pathname);
+	const [userRole, setUserRole] = useState("");
+	const [menuList, setMenuList] = useState([]);
+	const [userIdDetails, setUserIdDetails] = useState('');
+
 
   useEffect(() => {
     var loginCheck = localStorage.getItem("loginCheck");
@@ -157,8 +159,61 @@ const Header = ({ onNote }) => {
                     </div>
                   </div>
                 </li>
-              </ul>
-            </div>
+              );
+            })}
+          </ul>
+				</div>:null}
+				<div className="header-right d-flex align-items-center">				
+					<ul className="navbar-nav ">			
+						<li className="nav-item ps-3">
+							<div className="header-profile2 cr-pointer">
+								<div className="nav-link i-false" as="div">
+									<div className="header-info2 d-flex align-items-center">
+									   <div className="notificationIcon">
+									   {SVGICON.notificationIcon}
+									   </div>
+										<div className="header-media d-flex">
+											{/* <Image src={IMAGES.profileImage}/> */}
+
+										
+                                           <div>
+										   <Dropdown>
+								<Dropdown.Toggle className="nav-link i-false" as="div">
+									<div className="header-info2 d-flex align-items-center">
+										<div className="header-media">
+										<Image src={IMAGES.profileImage}/>
+										</div>										
+										
+									</div>
+								</Dropdown.Toggle>
+								<Dropdown.Menu align="end">
+									<div className=" border-0 mb-0">
+									<span onClick={logoutFunction} className="dropdown-item ai-icon ">
+									{SVGICON.Logout}{" "}
+												<span className="ms-2">Logout </span>
+											</span>									
+									</div>
+									
+								</Dropdown.Menu>
+							</Dropdown>
+										   </div>
+
+											<div>
+											<span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">{userName}</span>
+										{userIdDetails != '' ?
+											<span   className="ms-2 d-flex mt-1">
+												{/* {SVGICON.Logout}{" "} */}
+												<h6 className="logout-name">{userIdDetails?.role[0]} </h6>
+											</span>:null}
+											</div>
+
+										</div>										
+									</div>
+								</div>
+							</div>
+						</li>						
+					</ul>
+				</div>
           </div>
         </nav>
       </div>
