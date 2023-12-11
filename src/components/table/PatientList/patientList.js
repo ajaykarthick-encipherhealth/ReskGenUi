@@ -151,7 +151,7 @@ function PatientTable({
             : "MM-DD-YYYY"}
         </td>
         <td className={TableStyle.childBorder}>
-          <Tooltip title={data.allocatedBy}>
+          <Tooltip title={data.allocatedBy ? data.allocatedBy : "null" }>
             <Avatar
               style={{
                 backgroundColor: "#fde3cf",
