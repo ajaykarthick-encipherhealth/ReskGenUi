@@ -60,6 +60,7 @@ export const ReportReducer = (state = initialState, action) => {
     return {
       ...state,
       getReport: action.payload,
-
+    }
+}
   return state;
 };

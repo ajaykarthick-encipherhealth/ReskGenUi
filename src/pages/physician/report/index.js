@@ -37,7 +37,6 @@ import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
-import { getReportDetails } from "../../../store/actions/ReportActions";
 import Export from "./Export";
 import {
   getReceivedDetails,
@@ -101,8 +100,7 @@ const index = () => {
     setFilters(_filters);
   };
 
-  const ExportResponse = useSelector((state) => state.report.exportRes);
-
+  const ExportResponse = useSelector((state) => state.report?.exportRes);
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -250,8 +248,6 @@ const index = () => {
       setEndDate(endDate);
     }
   };
-
-  const ReportPatientDetails = useSelector((state) => state.report.details);
 
   const rowsLength = useSelector((state) => state.report.row);
   return (
