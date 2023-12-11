@@ -901,15 +901,15 @@ console.log(utcISOTimestamp)
                                 </div> */}
                               {/* </div>
                             </div> */}
-                            {/* 
-                            <div className="col-xl-3">
+                            
+                            <div className="col-xl-3" style={{width:"49%"}}>
                               <Button
                                 onClick={addPatientFormId}
                                 className="btn btn-primary btn-sm ms-2 flr"
                               >
                                 + Add Patient Id
                               </Button>
-                            </div> */}
+                            </div> 
                           </div>
                         </div>
 
