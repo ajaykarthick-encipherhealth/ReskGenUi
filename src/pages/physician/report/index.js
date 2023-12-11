@@ -107,11 +107,16 @@ const index = () => {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
+    if (activeTab === "SentReport") {
+      dispatch(getSentDetails(sentPageNo));
+    }
+    if (activeTab === "ReceivedReport") {
+      dispatch(getReceivedDetails(receivedPageNo));
+    }
     dispatch(getReportDetails(pageNo));
-    dispatch(getSentDetails(sentPageNo));
-    dispatch(getReceivedDetails(receivedPageNo));
     // fetchData();
-  }, [pageNo,sentPageNo,receivedPageNo]);
+  }, [pageNo, sentPageNo, receivedPageNo, activeTab]);
+  
   const handleButtonClick = () => {
     setButtonClicked(true);
   };
@@ -466,9 +471,9 @@ const index = () => {
                                 <Tab.Pane id="my-posts" eventKey="meatCriteria">
                                   {ReceivedReportDetails?.content && (
                                     <ReceivedReport
-                                    details={ReceivedReportDetails?.content}
-                                    onPageChange={onReceivedPageChange}
-                                  />
+                                      details={ReceivedReportDetails?.content}
+                                      onPageChange={onReceivedPageChange}
+                                    />
                                   )}
                                 </Tab.Pane>
                                 <Tab.Pane
