@@ -1,11 +1,12 @@
 import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
 
-export const patientDetails = async (pagenum) => {
+export const patientDetails = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=10&searchstring=${search}&startdate=${startDate}&enddate=${endDate}`:`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=10&startdate=${startDate}&enddate=${endDate}`
   try {
     const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint}dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {},
       {
         headers: {

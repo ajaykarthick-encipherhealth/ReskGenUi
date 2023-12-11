@@ -79,10 +79,14 @@ const index = () => {
   const [receivedStartDate, setReceivedStartDate] = useState(
     dayjs().toISOString()
   );
-  const [selectedDates, setSelectedDates] = useState(null);
   const [receivedEndDate, setReceivedEndDate] = useState(
     dayjs().endOf("month").toISOString()
   );
+  const [coderStartDate, setCoderStartDate] = useState(dayjs().toISOString());
+  const [coderEndDate, setCoderEndDate] = useState(
+    dayjs().endOf("month").toISOString()
+  );
+  const [selectedDates, setSelectedDates] = useState(null);
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -102,7 +106,7 @@ const index = () => {
     if (activeTab === "SentReport") {
       dispatch(getSentDetails(sentPageNo, startDate, endDate, value));
     }
-    if (activeTab === "ReceivedReport") {
+    else if (activeTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
@@ -112,6 +116,17 @@ const index = () => {
         )
       );
     }
+    else{
+      dispatch(
+        getReportDetails(
+          pageNo,
+          coderStartDate,
+          coderEndDate,
+          value
+        )
+      );
+    }
+
   }, 300);
 
   const filterChangePatientId = (event) => {
@@ -142,7 +157,7 @@ const index = () => {
       );
     }
 
-    dispatch(getReportDetails(pageNo));
+    dispatch(getReportDetails(pageNo, coderStartDate, coderEndDate));
     if (ExportResponse) {
       setIsModalVisible(false);
       notification.success({
@@ -265,10 +280,10 @@ const index = () => {
     setModalVisible(false);
   };
   const handleDatePickerChange = (date, dateString) => {
-    const formattedDates = dateString.map((date) => {
-      const formattedDate = new Date(date).toISOString(); // Convert to ISO string
+    const formattedDates = dateString.map((date, index) => {
+      const formattedDate = index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
       return formattedDate;
-    });
+    });  
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
     setSelectedDates(date);
@@ -276,8 +291,8 @@ const index = () => {
   };
 
   const handleReceivedDatePicker = (date, dateString) => {
-    const formattedDates = dateString.map((date) => {
-      const formattedDate = new Date(date).toISOString();
+    const formattedDates = dateString.map((date, index) => {
+      const formattedDate = index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
       return formattedDate;
     });
     setReceivedStartDate(formattedDates[0]);
@@ -285,6 +300,18 @@ const index = () => {
     setSelectedDates(date);
     dispatch(
       getReceivedDetails(sentPageNo, formattedDates[0], formattedDates[1])
+    );
+  };
+  const handleCoderPicker = (date, dateString) => {
+    const formattedDates = dateString.map((date, index) => {
+      const formattedDate = index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
+      return formattedDate;
+    });
+    setSelectedDates(date);
+    setCoderStartDate(formattedDates[0]);
+    setCoderEndDate(formattedDates[1])
+    dispatch(
+      getReportDetails(pageNo, formattedDates[0], formattedDates[1])
     );
   };
 
@@ -351,7 +378,9 @@ const index = () => {
                                   onChange={
                                     activeTab === "SentReport"
                                       ? handleDatePickerChange
-                                      : handleReceivedDatePicker
+                                      : activeTab === "ReceivedReport"
+                                      ? handleReceivedDatePicker
+                                      : handleCoderPicker
                                   }
                                 />
                               </div>
@@ -416,7 +445,10 @@ const index = () => {
                                   <Nav.Item
                                     as="li"
                                     className="nav-item"
-                                    onClick={() => setActiveTab("CoderReport")}
+                                    onClick={() => {
+                                      setSelectedDates(null);
+                                      setActiveTab("CoderReport");
+                                    }}
                                   >
                                     <Nav.Link
                                       to="#my-posts"
