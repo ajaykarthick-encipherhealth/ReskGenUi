@@ -37,10 +37,7 @@ import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
-
-import { getReportDetails } from "../../../store/actions/ReportActions";
 import Spinner from "../../../components/spinner/spinner";
-
 import Export from "./Export";
 import {
   getReceivedDetails,
