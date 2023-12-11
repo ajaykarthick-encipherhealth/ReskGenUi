@@ -67,10 +67,10 @@ export const getUsersList = (id, search) => {
   };
 };
 
-export const getSentDetails = (pagenum) => {
+export const getSentDetails = (pagenum,startDate,endDate,search) => {
   return (dispatch) => {
     try {
-      SentReport(pagenum).then((response) => {
+      SentReport(pagenum,startDate,endDate,search).then((response) => {
         if (response) {
           dispatch({
             type: SENT_REPORT,
@@ -83,10 +83,10 @@ export const getSentDetails = (pagenum) => {
     }
   };
 };
-export const getReceivedDetails = (pagenum) => {
+export const getReceivedDetails = (pagenum,startDate,endDate,search) => {
   return (dispatch) => {
     try {
-      ReceivedReport(pagenum).then((response) => {
+      ReceivedReport(pagenum,startDate,endDate,search).then((response) => {
         if (response) {
           dispatch({
             type: RECEIVED_REPORT,

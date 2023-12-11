@@ -45,8 +45,6 @@ import {
   getSentDetails,
 } from "../../../store/actions/ReportActions";
 
-
-
 const index = () => {
   const dispatch = useDispatch();
 
@@ -76,10 +74,14 @@ const index = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const currentDate = dayjs();
-  const [startDate, setStartDate] = useState(
-    currentDate.startOf("month").format("DD MMM YY")
+  const [startDate, setStartDate] = useState(dayjs().toISOString());
+  const [endDate, setEndDate] = useState(dayjs().endOf("month").toISOString());
+  const [receivedStartDate, setReceivedStartDate] = useState(
+    dayjs().toISOString()
   );
-  const [endDate, setEndDate] = useState(currentDate.format("DD MMM YY"));
+  const [receivedEndDate, setReceivedEndDate] = useState(
+    dayjs().endOf("month").toISOString()
+  );
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -100,9 +102,18 @@ const index = () => {
     let _filters = { ...filters };
     _filters["patientId"].value = value;
     setFilters(_filters);
+    if (activeTab === "SentReport") {
+      dispatch(getSentDetails(sentPageNo, startDate, endDate, value));
+    }
+    if (activeTab === "ReceivedReport") {
+      dispatch(
+        getReceivedDetails(receivedPageNo, receivedStartDate, receivedEndDate,value)
+      );
+    }
   };
 
   const ExportResponse = useSelector((state) => state.report?.exportRes);
+
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -113,21 +124,23 @@ const index = () => {
     setIsLoading(false);
 
     if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo));
+      dispatch(getSentDetails(sentPageNo, startDate, endDate));
     }
     if (activeTab === "ReceivedReport") {
-      dispatch(getReceivedDetails(receivedPageNo));
+      dispatch(
+        getReceivedDetails(receivedPageNo, receivedStartDate, receivedEndDate)
+      );
     }
 
     dispatch(getReportDetails(pageNo));
     if (ExportResponse) {
       setIsModalVisible(false);
       notification.success({
-        message:"Details Exported Successfully"
-      })
+        message: "Details Exported Successfully",
+      });
     }
-  }, [pageNo, sentPageNo, receivedPageNo, activeTab,ExportResponse]);
-  
+  }, [pageNo, sentPageNo, receivedPageNo, activeTab, ExportResponse]);
+
   const handleButtonClick = () => {
     setButtonClicked(true);
   };
@@ -179,7 +192,6 @@ const index = () => {
   };
   const onSentPageChange = () => {
     setSentPageNo(e?.pageCount);
-
   };
 
   function calculateColor(percentage) {
@@ -243,19 +255,30 @@ const index = () => {
     setModalVisible(false);
   };
   const handleDatePickerChange = (dateString) => {
-    const formattedDates = dateString?.map((item) =>
-      dayjs(item).format("DD MMM YY")
-    );
+    const formattedDates = dateString.map((date) => {
+      const formattedDate = new Date(date).toISOString(); // Convert to ISO string
+      return formattedDate;
+    });
+    setStartDate(formattedDates[0]);
+    setEndDate(formattedDates[1]);
 
-    if (formattedDates.length === 2) {
-      const [startDate, endDate] = formattedDates;
-      setStartDate(startDate);
-      setEndDate(endDate);
-    }
+    dispatch(getSentDetails(sentPageNo, formattedDates[0], formattedDates[1]));
   };
-  
+
+  const handleReceivedDatePicker = (dateString) => {
+    const formattedDates = dateString.map((date) => {
+      const formattedDate = new Date(date).toISOString();
+      return formattedDate;
+    });
+    setReceivedStartDate(formattedDates[0]);
+    setReceivedEndDate(formattedDates[1]);
+    dispatch(
+      getReceivedDetails(sentPageNo, formattedDates[0], formattedDates[1])
+    );
+  };
 
   const rowsLength = useSelector((state) => state.report.row);
+
   return (
     <>
       <Header />
@@ -264,273 +287,291 @@ const index = () => {
           {!ReportPatientDetails ? (
             <Spinner />
           ) : (
-            
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="">
-                  <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption  align-items-center">
-                        <div className="row filter-contain">
-                          <div className="col-xl-2">
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => filterChangePatientId(e)}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-xl-12">
+                  <div className="">
+                    <div className="card-body p-0">
+                      <div className="table-responsive active-projects task-table">
+                        <div className="tbl-caption  align-items-center">
+                          <div className="row filter-contain">
+                            <div className="col-xl-2">
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) => filterChangePatientId(e)}
+                                  className="form-control new-form-control"
+                                  placeholder="Search"
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-xl-2" style={{ zIndex: "999" }}>
-                            <div class="form-group has-search">
-                              {/* <InputText
+                            <div className="col-xl-2" style={{ zIndex: "999" }}>
+                              <div class="form-group has-search">
+                                {/* <InputText
                                   type="text"
                                   onChange={(e) => filterChangePatientName(e)}
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                              <Select
-                                onChange={(selectedOption) =>
-                                  dosOnChange(selectedOption)
-                                }
-                                options={
-                                  activeTab === "CoderReport"
-                                    ? statusOptions
-                                    : activeTab === "ReceivedReport"
-                                    ? ReceivedOptions
-                                    : SentOptions
-                                }
-                                className="custom-react-select"
-                                isSearchable={false}
-                              />
+                                <Select
+                                  onChange={(selectedOption) =>
+                                    dosOnChange(selectedOption)
+                                  }
+                                  options={
+                                    activeTab === "CoderReport"
+                                      ? statusOptions
+                                      : activeTab === "ReceivedReport"
+                                      ? ReceivedOptions
+                                      : SentOptions
+                                  }
+                                  className="custom-react-select"
+                                  isSearchable={false}
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-xl-2">
-                            <div>
-                              <RangePicker />
+                            <div className="col-xl-2">
+                              <div>
+                                <RangePicker
+                                  onChange={
+                                    activeTab === "SentReport"
+                                      ? handleDatePickerChange
+                                      : handleReceivedDatePicker
+                                  }
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-xl-6">
-                            <div className="row flr">
-                              <button
-                                onClick={handleExport}
-                                className={styles.export}
-                                disabled={rowsLength?.length === 0 && true}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="15"
-                                  height="15"
-                                  viewBox="0 0 20 20"
-                                  fill="none"
-                                  className="me-2"
+                            <div className="col-xl-6">
+                              <div className="row flr">
+                                <button
+                                  onClick={handleExport}
+                                  className={styles.export}
+                                  disabled={rowsLength?.length === 0 && true}
                                 >
-                                  <path
-                                    d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
-                                    stroke="#133DD4"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                  />
-                                  <path
-                                    d="M10 12.4999V3.0166"
-                                    stroke="#133DD4"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                  />
-                                  <path
-                                    d="M12.7916 4.87467L9.9999 2.08301L7.20825 4.87467"
-                                    stroke="#133DD4"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                  />
-                                </svg>
-                                Export
-                              </button>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 20 20"
+                                    fill="none"
+                                    className="me-2"
+                                  >
+                                    <path
+                                      d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
+                                      stroke="#133DD4"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                    />
+                                    <path
+                                      d="M10 12.4999V3.0166"
+                                      stroke="#133DD4"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                    />
+                                    <path
+                                      d="M12.7916 4.87467L9.9999 2.08301L7.20825 4.87467"
+                                      stroke="#133DD4"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                    />
+                                  </svg>
+                                  Export
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <Export
-                        isModalVisible={isModalVisible}
-                        closeModal={closeModal}
-                        rowsLength={rowsLength}
-                      />
+                        <Export
+                          isModalVisible={isModalVisible}
+                          closeModal={closeModal}
+                          rowsLength={rowsLength}
+                        />
 
-                      <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
-                      >
                         <div
-                          className="profile-tab "
-                          style={{ marginTop: "20px" }}
+                          id="task-tbl_wrapper"
+                          className="dataTables_wrapper no-footer"
                         >
-                          <div className="custom-tab-1">
-                            <Tab.Container defaultActiveKey="validDiseases">
-                              <Nav as="ul" className="nav nav-tabs">
-                                <Nav.Item
-                                  as="li"
-                                  className="nav-item"
-                                  onClick={() => setActiveTab("CoderReport")}
-                                >
-                                  <Nav.Link
-                                    to="#my-posts"
+                          <div
+                            className="profile-tab "
+                            style={{ marginTop: "20px" }}
+                          >
+                            <div className="custom-tab-1">
+                              <Tab.Container defaultActiveKey="validDiseases">
+                                <Nav as="ul" className="nav nav-tabs">
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => setActiveTab("CoderReport")}
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="validDiseases"
+                                    >
+                                      Coder Report
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => setActiveTab("SentReport")}
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="comboDiseases"
+                                    >
+                                      Sent Report
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      setActiveTab("ReceivedReport");
+                                      setStartDate();
+                                      setEndDate();
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="meatCriteria"
+                                    >
+                                      Received Report
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                </Nav>
+                                <Tab.Content>
+                                  <Tab.Pane
+                                    id="my-posts"
                                     eventKey="validDiseases"
                                   >
-                                    Coder Report
-                                  </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item
-                                  as="li"
-                                  className="nav-item"
-                                  onClick={() => setActiveTab("SentReport")}
-                                >
-                                  <Nav.Link
-                                    to="#my-posts"
+                                    <CoderReport
+                                      setModal={setModal}
+                                      reportListAll={ReportPatientDetails}
+                                      paginationFirst={paginationFirst}
+                                      ReportPatientDetails={
+                                        ReportPatientDetails
+                                      }
+                                      onPageChange={onPageChange}
+                                    />
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="nonhcc"
+                                  ></Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
                                     eventKey="comboDiseases"
                                   >
-                                    Sent Report
-                                  </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item
-                                  as="li"
-                                  className="nav-item"
-                                  onClick={() => setActiveTab("ReceivedReport")}
-                                >
-                                  <Nav.Link
-                                    to="#my-posts"
+                                    <SentReportTable
+                                      details={SentReportDetails}
+                                      onPageChange={onSentPageChange}
+                                    />
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
                                     eventKey="meatCriteria"
                                   >
-                                    Received Report
-                                  </Nav.Link>
-                                </Nav.Item>
-                              </Nav>
-                              <Tab.Content>
-                                <Tab.Pane
-                                  id="my-posts"
-                                  eventKey="validDiseases"
-                                >
-                                  <CoderReport
-                                    setModal={setModal}
-                                    reportListAll={ReportPatientDetails}
-                                    paginationFirst={paginationFirst}
-                                    ReportPatientDetails={ReportPatientDetails}
-                                    onPageChange={onPageChange}
-                                  />
-                                </Tab.Pane>
-                                <Tab.Pane
-                                  id="my-posts"
-                                  eventKey="nonhcc"
-                                ></Tab.Pane>
-                                <Tab.Pane
-                                  id="my-posts"
-                                  eventKey="comboDiseases"
-                                >
-                                  <SentReportTable
-                                    details={SentReportDetails}
-                                    onPageChange={onSentPageChange}
-                                  />
-                                </Tab.Pane>
-                                <Tab.Pane id="my-posts" eventKey="meatCriteria">
-                                  {ReceivedReportDetails?.content && (
-                                    <ReceivedReport
-                                      details={ReceivedReportDetails?.content}
-                                      onPageChange={onReceivedPageChange}
-                                    />
-                                  )}
-                                </Tab.Pane>
-                                <Tab.Pane
-                                  id="my-posts"
-                                  eventKey="RafScore"
-                                ></Tab.Pane>
-                                <Tab.Pane
-                                  id="my-posts"
-                                  eventKey="file"
-                                ></Tab.Pane>
-                              </Tab.Content>
-                            </Tab.Container>
+                                    {ReceivedReportDetails?.content && (
+                                      <ReceivedReport
+                                        details={ReceivedReportDetails?.content}
+                                        onPageChange={onReceivedPageChange}
+                                      />
+                                    )}
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="RafScore"
+                                  ></Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="file"
+                                  ></Tab.Pane>
+                                </Tab.Content>
+                              </Tab.Container>
+                            </div>
                           </div>
-                        </div>
 
-                        {modal && (
-                          <Modal
-                            title="Comments"
-                            centered
-                            open={modal}
-                            onOk={handleCloseModal}
-                            onCancel={handleCloseModal}
-                            footer={null}
-                          >
-                            <div className="offcanvas-body">
-                              <div className="container-fluid">
-                                <div className={styles.heads}>
-                                  <span className={styles.headText}>
-                                    Hcc codes
-                                  </span>
-                                </div>
-                                <div className={styles.data}>
-                                  <div className={styles.datas}>Visit Data</div>
-                                  <div className={styles.description}>
-                                    Lorem Ipsum is simply dummy text of the
-                                    printing and typesetting industry.
+                          {modal && (
+                            <Modal
+                              title="Comments"
+                              centered
+                              open={modal}
+                              onOk={handleCloseModal}
+                              onCancel={handleCloseModal}
+                              footer={null}
+                            >
+                              <div className="offcanvas-body">
+                                <div className="container-fluid">
+                                  <div className={styles.heads}>
+                                    <span className={styles.headText}>
+                                      Hcc codes
+                                    </span>
                                   </div>
-                                </div>
-                                <div className={styles.data}>
-                                  <div className={styles.datas}>
-                                    Combination codes
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      Visit Data
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
                                   </div>
-                                  <div className={styles.description}>
-                                    Lorem Ipsum is simply dummy text of the
-                                    printing and typesetting industry.
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      Combination codes
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
                                   </div>
-                                </div>
-                                <div className={styles.data}>
-                                  <div className={styles.datas}>
-                                    M.E.A.T criteria
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      M.E.A.T criteria
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
                                   </div>
-                                  <div className={styles.description}>
-                                    Lorem Ipsum is simply dummy text of the
-                                    printing and typesetting industry.
+                                  <div className={styles.heads}>
+                                    <span className={styles.headText}>
+                                      Radiology{" "}
+                                    </span>
                                   </div>
-                                </div>
-                                <div className={styles.heads}>
-                                  <span className={styles.headText}>
-                                    Radiology{" "}
-                                  </span>
-                                </div>
-                                <div className={styles.data}>
-                                  <div className={styles.datas}>Visit Data</div>
-                                  <div className={styles.description}>
-                                    Lorem Ipsum is simply dummy text of the
-                                    printing and typesetting industry.
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      Visit Data
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
                                   </div>
-                                </div>
-                                <div className={styles.data}>
-                                  <div className={styles.datas}>
-                                    Combination codes
-                                  </div>
-                                  <div className={styles.description}>
-                                    Lorem Ipsum is simply dummy text of the
-                                    printing and typesetting industry.
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      Combination codes
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </Modal>
-                        )}
+                            </Modal>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-           )} 
+          )}
         </div>
       </div>
     </>

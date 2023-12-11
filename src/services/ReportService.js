@@ -18,11 +18,12 @@ export const patientDetails = async (pagenum) => {
     console.log(err);
   }
 };
-export const SentReport = async (pagenum) => {
+export const SentReport = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=10&searchstring=${search}&senddate=${startDate}&receivedate=${endDate}`:`dbservice/reportdetails/sent?pageNo=${pagenum}&size=10&senddate=${startDate}&receivedate=${endDate}`
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/sent?pageNo=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,11 +35,13 @@ export const SentReport = async (pagenum) => {
     console.log(err);
   }
 };
-export const ReceivedReport = async (pagenum) => {
+export const ReceivedReport = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/reportdetails/received?pageNo=${pagenum}&size=10&searchstring=${search}&senddate=${startDate}&receivedate=${endDate}`:`dbservice/reportdetails/received?pageNo=${pagenum}&size=10&senddate=${startDate}&receivedate=${endDate}`
+  
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/received?pageNo=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
