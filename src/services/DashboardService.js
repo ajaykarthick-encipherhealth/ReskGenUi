@@ -1,10 +1,11 @@
 import axios from "axios";
+import ENDPOINTS from "../utility/enpoints";
 
-export async function workStatusApi(startDate, endDate,router) {
+export async function workStatusApi(startDate,endDate,router) {
   try {
     const token = localStorage.getItem("token");
     const response = await axios.get(
-      `https://hcc.encipherhealth.com/secure/management/dashboard/tile/statistics?start=${startDate}&end=${endDate}`,
+      `${ENDPOINTS?.apiEndoint}management/dashboard/tile/statistics?start=${startDate}&end=${endDate}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -23,7 +24,7 @@ export const DailyTaskApi = async (date,router) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `https://hcc.encipherhealth.com/secure/management/dashboard/daily/statistics?date=${date}`,
+      `${ENDPOINTS?.apiEndoint}management/dashboard/daily/statistics?date=${date}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -49,7 +50,7 @@ export const accuracyScore = async (btn, month, year,router) => {
       : `monthyly?year=${year}`;
   try {
     const response = await axios.post(
-      `https://hcc.encipherhealth.com/secure/dbservice/accuracyscore/${url}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/accuracyscore/${url}`,
       {},
       {
         headers: {
@@ -71,7 +72,7 @@ export const CompletedScore = async(btn, date, month, year,router) => {
   const url = `year=${year}&month=${month}&date=${date}&range=${btn}`;
   try{
     const response =await axios.get(
-      `https://hcc.encipherhealth.com/secure/management/dashboard/line/statistics?${url}`,
+      `${ENDPOINTS?.apiEndoint}management/dashboard/line/statistics?${url}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -90,7 +91,7 @@ export const HoldStatus = async(router) => {
   const token = localStorage.getItem("token");
   try{
    const response=await axios.get(
-      `https://hcc.encipherhealth.com/secure/dbservice/dashboard/hold/charts`,
+      `${ENDPOINTS?.apiEndoint}dbservice/dashboard/hold/charts`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

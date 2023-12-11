@@ -12,9 +12,11 @@ import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
+import { getpatientsList } from "../../../../store/actions/PatientsActions";
 
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const[selectedDate,setSelectedDate]=useState()
 
   const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
   const currentDate = dayjs();
@@ -59,10 +61,10 @@ const DailyTask = () => {
     return formattedDate;
   });
 
-  const router=useRouter()
+  const router = useRouter();
   useEffect(() => {
     WeekDays?.slice(0, 3)?.map((date) => {
-      dispatch(getDailyTaskDatas(date,router));
+      dispatch(getDailyTaskDatas(date, router));
     });
   }, []);
 
@@ -82,24 +84,43 @@ const DailyTask = () => {
   };
 
   const daysOfWeek = [
+    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday",
-    "Sunday",
+    "Saturday"
   ];
-  const card2Data = daysOfWeek.map((day, index) => ({
+
+  const getCurrentWeekDates = () => {
+    const today = new Date();
+    const currentDay = today.getDay(); 
+    const weekStart = new Date(today); 
+    weekStart.setDate(today.getDate() - currentDay); 
+  
+    const weekDates = [];
+    for (let i = 0; i < 7; i++) {
+      const nextDay = new Date(weekStart);
+      nextDay.setDate(weekStart.getDate() + i);
+      weekDates.push(nextDay.toISOString().split('T')[0]); 
+    }
+    return weekDates;
+  };
+  
+
+  const currentWeek = getCurrentWeekDates();
+
+  const card2Data = currentWeek?.map((date, index) => ({
     id: index + 1,
-    day,
+    day: daysOfWeek[new Date(date).getDay()],
     pending: dailyStatusData[index]?.pending || 0,
     hold: dailyStatusData[index]?.hold || 0,
     completed: dailyStatusData[index]?.completed || 0,
     decline: dailyStatusData[index]?.decline || 0,
     allocated: dailyStatusData[index]?.allocated || 0,
   }));
-
+  
   const getChartOption = (allocated, pending, hold, decline, completed) => {
     return {
       tooltip: {
@@ -173,7 +194,7 @@ const DailyTask = () => {
           data: [
             {
               value: allocated,
-              name:"Alocated",
+              name: "Alocated",
               itemStyle: {
                 color: "#fff",
               },
@@ -182,6 +203,12 @@ const DailyTask = () => {
         },
       ],
     };
+  };
+  const handleDays = (status) => {
+    if(status){
+      const url=`processedStatus=${status?.toUpperCase()}&processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`
+      dispatch(getpatientsList(0,url))
+    }
   };
   return (
     <>
@@ -199,10 +226,19 @@ const DailyTask = () => {
                 {card2Data
                   .slice(currentIndex, currentIndex + 3)
                   .map((data, index) => (
-                    <Col key={index} span={7} className={styles.sliderdiv}>
+                    <Col
+                      key={index}
+                      span={7}
+                      className={styles.sliderdiv}
+                      onClick={()=>setSelectedDate(currentWeek[index])}
+                    >
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
+                        onClick={()=>{
+                          const url=`processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`
+                          dispatch(getpatientsList(0,url))
+                        }}
                       >
                         {data.day}
                       </h4>
@@ -223,22 +259,28 @@ const DailyTask = () => {
                         </Col>
                         <Col span={12} className={styles.headerTitle}>
                           <div style={{ paddingLeft: "10px" }}>
-                            <div className={styles.container}>
-                              Pending{" "}
-                              <div className={styles.subText}>
-                                {data.pending}
+                            {bullets?.map((item) => (
+                              <div
+                                className={styles.container}
+                                onClick={() => {
+                                  handleDays(item?.name);
+                                }}
+                              >
+                                <div style={{ display: "flex" }}>
+                                  {" "}
+                                  <div
+                                    className={styles.bgColor}
+                                    style={{
+                                      backgroundColor: item.color,
+                                    }}
+                                  ></div>{" "}
+                                  {item.name}
+                                </div>
+                                <div className={styles.subText}>
+                                  {data.pending}
+                                </div>
                               </div>
-                            </div>
-                            <div className={styles.container}>
-                              Hold{" "}
-                              <div className={styles.subText}>{data.hold}</div>
-                            </div>
-                            <div className={styles.container}>
-                              Decline
-                              <div className={styles.subText}>
-                                {data.decline}
-                              </div>{" "}
-                            </div>
+                            ))}
                           </div>
                         </Col>
                       </Row>
