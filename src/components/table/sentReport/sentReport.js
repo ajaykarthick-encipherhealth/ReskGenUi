@@ -54,8 +54,8 @@ function SentReportTable(details, onSentPageChange) {
           <tr>
             <th>REPORT ID</th>
             <th>REPORT NAME</th>
-            <th>SENDER</th>
-            <th>USER LIST</th>
+            {/* <th>SENDER</th> */}
+            <th> RECEIVED USERS LIST</th>
             <th>DATE</th>
           </tr>
         </thead>
@@ -85,15 +85,7 @@ function SentReportTable(details, onSentPageChange) {
                 >
                   {row.reportName}
                 </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
-
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                >
-                  {row.sender}
-                </td>
+              
 
                 <td
                   style={{

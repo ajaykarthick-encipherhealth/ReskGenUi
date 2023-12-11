@@ -30,7 +30,8 @@ function PatientTable({
       value: "Urgent",
       label: (
         <>
-          <i className={visitStyles.name_missed}>{SVGICON.alert}</i> Urgent{" "}
+          <i>{SVGICON.alert}</i>{" "}
+          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
         </>
       ),
     },
@@ -38,7 +39,8 @@ function PatientTable({
       value: "High",
       label: (
         <>
-          <i className={visitStyles.name_missed}>{SVGICON.alert}</i> High{" "}
+          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+          <span style={{ fontSize: "13px" }}>High</span>{" "}
         </>
       ),
     },
@@ -46,7 +48,8 @@ function PatientTable({
       value: "Normal",
       label: (
         <>
-          <i className={visitStyles.name_missed}>{SVGICON.alert}</i> Normal{" "}
+          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
         </>
       ),
     },
@@ -54,7 +57,8 @@ function PatientTable({
       value: "Low",
       label: (
         <>
-          <i className={visitStyles.name_missed}>{SVGICON.alert}</i> Low{" "}
+          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+          <span style={{ fontSize: "13px" }}>Low</span>{" "}
         </>
       ),
     },
@@ -125,44 +129,29 @@ function PatientTable({
   const renderRows = () => {
     return patinetListAll.map((data, index) => (
       <tr key={index}>
-        <td
-          className={TableStyle.firstTdBorder}
-          onClick={handleTableRowClick}
-        >
+        <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           {data.patientId}
         </td>
-        <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-        >
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.patientName}
         </td>
-        <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-        >
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.dueDate
             ? moment(data.dueDate).format("MM-DD-YYYY")
             : "MM-DD-YYYY"}
         </td>
-        <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-        >
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.lastModifiedDate
             ? moment(data.lastModifiedDate).format("MM-DD-YYYY")
             : "MM-DD-YYYY"}
         </td>
-        <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-        >
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.allocatedOn
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
             : "MM-DD-YYYY"}
         </td>
         <td className={TableStyle.childBorder}>
-          <Tooltip title="Uvais">
+          <Tooltip title={data.allocatedBy}>
             <Avatar
               style={{
                 backgroundColor: "#fde3cf",
@@ -170,30 +159,29 @@ function PatientTable({
                 cursor: "pointer",
               }}
             >
-              U
+              {data.allocatedBy
+                ? data.allocatedBy.charAt(0).toUpperCase()
+                : "N"}
+
+              {console.log(data, "test")}
             </Avatar>
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
           <AntSelect
-            options={priorityOptions.map((option) => (
-              <Option key={option.value} value={option.value}>
-                {option.label}
-              </Option>
-            ))}
-            className="custom-ant-select"
-            showSearch={true}
-            value={selectedPriority[data.patientId]}
-            onChange={(value) =>
-              handlePriorityChange(data.patientId, value)
+            options={priorityOptions}
+            placeholder="set priority"
+            className={`custom-ant-select ${TableStyle.customAntSelect}`}
+            showSearch={false}
+            value={
+              selectedPriority[data.patientId] ||
+              (data.priority ? data.priority : "Normal")
             }
-            style={{ width: "100%" }}
+            onChange={(value) => handlePriorityChange(data.patientId, value)}
+            style={{ width: "80%" }}
           />
         </td>
-        <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-        >
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
       </tr>
@@ -219,9 +207,7 @@ function PatientTable({
                 />
               </span>
             </th>
-            <th
-              onClick={() => requestSort("lastModifiedDate")}
-            >
+            <th onClick={() => requestSort("lastModifiedDate")}>
               COMPLETED DATE
               <span style={{ padding: "10px" }}>
                 <FontAwesomeIcon
@@ -234,7 +220,7 @@ function PatientTable({
               </span>
             </th>
             <th>ALLOCATED DATE</th>
-            <th>ALLOCATED USER</th>
+            <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th>STATUS</th>
           </tr>

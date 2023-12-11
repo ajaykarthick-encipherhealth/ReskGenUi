@@ -195,6 +195,8 @@ export default function Patient() {
           createdAt: res.createdAt,
           lastModifiedDate: res.lastModifiedDate,
           dueDate: res.dueDate,
+          allocatedBy: res.allocatedBy,
+          priority: res.priority,
           processedStatus: res.processedStatus,
           createdAt: res.createdAt,
         });
@@ -889,6 +891,7 @@ console.log(utcISOTimestamp)
                               />
                             </Modal>
                           </div>
+                          
                             {/* <div className="col-xl-2">
                               <div class="form-group has-search"> */}
                                 {/* <Calendar

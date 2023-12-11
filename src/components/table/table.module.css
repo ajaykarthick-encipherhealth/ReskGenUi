@@ -109,3 +109,16 @@
   transition: box-shadow 0.3s ease-in-out;
   cursor: pointer;
 }
+.highFlag path{
+  fill: #cf940a;
+}
+.lowFlag path{
+  fill: #87909e;
+}
+.normalFlag path{
+  fill: #4466ff;
+}
+.custom-ant-select :where(.css-dev-only-do-not-override-2q8sxy).ant-select:not(.ant-select-customize-input) .ant-select-selector  {
+  border: none !important;
+  box-shadow: none !important;
+}
