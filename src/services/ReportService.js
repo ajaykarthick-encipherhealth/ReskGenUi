@@ -1,11 +1,12 @@
 import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
 
-export const patientDetails = async (pagenum) => {
+export const patientDetails = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=10&searchstring=${search}&startdate=${startDate}&enddate=${endDate}`:`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=10&startdate=${startDate}&enddate=${endDate}`
   try {
     const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint}dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {},
       {
         headers: {
@@ -18,11 +19,12 @@ export const patientDetails = async (pagenum) => {
     console.log(err);
   }
 };
-export const SentReport = async (pagenum) => {
+export const SentReport = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=10&searchstring=${search}&senddate=${startDate}&receivedate=${endDate}`:`dbservice/reportdetails/sent?pageNo=${pagenum}&size=10&senddate=${startDate}&receivedate=${endDate}`
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/sent?pageNo=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,11 +36,13 @@ export const SentReport = async (pagenum) => {
     console.log(err);
   }
 };
-export const ReceivedReport = async (pagenum) => {
+export const ReceivedReport = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/reportdetails/received?pageNo=${pagenum}&size=10&searchstring=${search}&senddate=${startDate}&receivedate=${endDate}`:`dbservice/reportdetails/received?pageNo=${pagenum}&size=10&senddate=${startDate}&receivedate=${endDate}`
+  
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/received?pageNo=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -33,12 +33,12 @@ function ReceivedReport(details, onReceivedPageChange) {
             <th>SENDER</th>
             <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
               DATE{" "}
-              {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+              {/* {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />} */}
             </th>
           </tr>
         </thead>
         <tbody>
-          {detailsContent?.map((row, index) => {
+          { details?.details?.map((row, index) => {
             const formattedDate = row.receiveDate
               ? dayjs(row.sendDate).format("DD/MM/YY")
               : "Invalid Date";
