@@ -57,7 +57,7 @@ export default function UserLogin() {
                     localStorage.setItem("userName", emailSplit[0]);
                     localStorage.setItem("loginCheck", true);
 
-                    router.push("/physician/home");
+                    router.push("/physician/dashboard");
                     notification.success({
                         message: "Login Success"
                     });
