@@ -12047,6 +12047,7 @@ tbody > tr {
 .filter-contain {
   margin-bottom: -20px;
   margin-top: -20px;
+  margin-left: 1px;
 }
 .new-form-control {
   border-radius: 8px !important;
