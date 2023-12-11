@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Badge } from "antd";
 import TableStyle from "../table.module.css";
 import moment from "moment";
 import { SVGICON } from "../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
+import { selectedRow } from "../../../store/actions/ReportActions";
+import { useDispatch } from "react-redux";
 
 function CoderReport({
   setModal,
@@ -12,42 +14,73 @@ function CoderReport({
   ReportPatientDetails,
   onPageChange,
 }) {
-  const auditLength = reportListAll?.filter((item) => item.auditedBy);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(selectedRow(selectedRows));
+  }, [selectedRows]);
+  
+  const handleHeaderCheckboxChange = () => {
+    setSelectAll(!selectAll);
+    const updatedRows = selectAll ? [] : reportListAll;
+    setSelectedRows(updatedRows);
+  };
+
+  const handleRowCheckboxChange = (row) => {
+    const isSelected = selectedRows.some(
+      (selectedRow) => selectedRow.patientId === row.patientId
+    );
+
+    let updatedRows;
+
+    if (isSelected) {
+      updatedRows = selectedRows.filter(
+        (selectedRow) => selectedRow.patientId !== row.patientId
+      );
+    } else {
+      updatedRows = [...selectedRows, row];
+    }
+
+    setSelectedRows(updatedRows);
+  };
 
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classTTotalhead}>
-          <tr>      
-              <>
-                <th></th>
-                <th>PATIENT ID</th>
-                <th>PATIENT NAME</th>
-                <th>HCC </th>
-                <th>COMPLETE DATE </th>
-                <th>COMMENTS </th>
-                <th>AUDITOR NAME </th>
-                <th>RAF SCORE </th>
-                <th>Flag </th>
-                <th>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-around" }}
-                  >
-                    <input
-                      type="checkbox"
-                      onChange={() => {}}
-                      style={{
-                        paddingTop: "10px",
-                        width: "20px",
-                        height: "20px",
-                        flexhrink: "0",
-                        borderRadius: "4px",
-                        backgroundColor: "pink",
-                      }}
-                    />
-                  </div>
-                </th>
-              </>
+          <tr>
+            <>
+              <th></th>
+              <th>PATIENT ID</th>
+              <th>PATIENT NAME</th>
+              <th>HCC </th>
+              <th>COMPLETE DATE </th>
+              <th>COMMENTS </th>
+              <th>AUDITOR NAME </th>
+              <th>RAF SCORE </th>
+              <th>Flag </th>
+              <th>
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
+                >
+                  <input
+                    type="checkbox"
+                    onChange={handleHeaderCheckboxChange}
+                    style={{
+                      paddingTop: "10px",
+                      width: "20px",
+                      height: "20px",
+                      flexhrink: "0",
+                      borderRadius: "4px",
+                      backgroundColor: "pink",
+                    }}
+                    checked={selectAll}
+                  />
+                </div>
+              </th>
+            </>
           </tr>
         </thead>
 
@@ -85,9 +118,11 @@ function CoderReport({
                       onClick={setModal(false)}
                       className={TableStyle.childBorder}
                     >
-                      {row?.processedDate
-                        ? moment(row?.processedDate).format("MM-DD-YYYY")
-                        : <span color="#6e6e6e">MM-DD-YYYY</span>}
+                      {row?.processedDate ? (
+                        moment(row?.processedDate).format("MM-DD-YYYY")
+                      ) : (
+                        <span color="#6e6e6e">MM-DD-YYYY</span>
+                      )}
                     </td>
                     <td className={TableStyle.childBorder}>
                       {row?.comments ? SVGICON.comment : SVGICON.emptyComments}
@@ -103,8 +138,12 @@ function CoderReport({
                       <input
                         type="checkbox"
                         onChange={() => {
-                          /* Handle checkbox change */
+                          handleRowCheckboxChange(row);
                         }}
+                        checked={selectedRows.some(
+                          (selectedRow) =>
+                            selectedRow.patientId === row.patientId
+                        )}
                         style={{
                           width: "20px",
                           height: "20px",
@@ -154,7 +193,13 @@ function CoderReport({
                     <td className={TableStyle.lastBorder}>
                       <input
                         type="checkbox"
-                        onChange={() => {}}
+                        onChange={() => {
+                          handleRowCheckboxChange(row);
+                        }}
+                        checked={selectedRows.some(
+                          (selectedRow) =>
+                            selectedRow.patientId === row.patientId
+                        )}
                         style={{
                           width: "20px",
                           height: "20px",
@@ -175,11 +220,11 @@ function CoderReport({
         <Paginator
           first={paginationFirst}
           rows={15}
-          totalRecords={ReportPatientDetails?.data?.length}
+          totalRecords={ReportPatientDetails?.length}
           onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {ReportPatientDetails?.data?.length}
+          Total count: {ReportPatientDetails?.length}
         </div>
       </div>
     </div>

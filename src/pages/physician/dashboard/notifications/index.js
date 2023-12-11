@@ -3,15 +3,15 @@ import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import { Modal } from "antd";
-import {  SVGICON } from "../../../../jsx/constant/theme";
+import { SVGICON } from "../../../../jsx/constant/theme";
 
 const Notifications = () => {
   const [openNotifications, setOpenNotification] = useState(false);
-   const notificationdata = [
+  const notificationdata = [
     {
       key: "1",
       message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+        "Needs to validate surgical history for any amputation status and PE for laterality of diagnosis (ulcer, paralysis, atherosclerosis of LE, etc.). ",
       date: "18/10/2023",
       time: "10:00 am",
       person: "Rahul(manager)",
@@ -19,15 +19,14 @@ const Notifications = () => {
     {
       key: "2",
       message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+        " We need minimal support (stable, continue X medication with dosage, is acceptable) for the diagnosis found in the assessment plan to confirm the diagnosis; if support is not sufficient, query the diagnosis.",
       date: "18/10/2023",
       time: "10:00 am",
       person: "Rahul(manager)",
     },
     {
       key: "3",
-      message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+      message: "We should give priority to the more specific diagnosis ",
       date: "18/10/2023",
       time: "10:00 am",
       person: "Rahul(manager)",
@@ -35,23 +34,22 @@ const Notifications = () => {
     {
       key: "4",
       message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+        " Needs to validate surgical history for any amputation status and PE for laterality of diagnosis (ulcer, paralysis, atherosclerosis of LE, etc.). ",
       date: "18/10/2023",
       time: "10:00 am",
       person: "Rahul(manager)",
     },
     {
-      key: "3",
+      key: "5",
       message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+        " We need minimal support (stable, continue X medication with dosage, is acceptable) for the diagnosis found in the assessment plan to confirm the diagnosis; if support is not sufficient, query the diagnosis.",
       date: "18/10/2023",
       time: "10:00 am",
       person: "Rahul(manager)",
     },
     {
-      key: "4",
-      message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+      key: "6",
+      message: " We should give priority to the more specific diagnosis",
       date: "18/10/2023",
       time: "10:00 am",
       person: "Rahul(manager)",
@@ -64,17 +62,16 @@ const Notifications = () => {
     setOpenNotification(false);
   };
   const notificationData = notificationdata.map((info) => (
-      <div className={styles.msgDiv}>
-       <div style={{marginTop:"10px"}}> {SVGICON.dashboardNotification}</div>
-        <div className={styles.msgCOntainer}>
-          <span className={styles.description}>{info.message}</span>
-          <div>
-            {info.date}&nbsp;.{info.time} &nbsp;.{info.person}
-          </div>
+    <div className={styles.msgDiv}>
+      <div style={{ marginTop: "10px" }}> {SVGICON.dashboardNotification}</div>
+      <div className={styles.msgCOntainer}>
+        <span className={styles.description}>{info.message}</span>
+        <div>
+          {info.date}&nbsp;.{info.time} &nbsp;.{info.person}
         </div>
       </div>
-    )
-  );
+    </div>
+  ));
   return (
     <>
       <HeadTitle
@@ -85,9 +82,7 @@ const Notifications = () => {
 
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
-        <div  className={styles.container}>
-          {notificationData}
-          </div>
+          <div className={styles.container}>{notificationData}</div>
         </Card>
       </div>
       <Modal
@@ -104,6 +99,5 @@ const Notifications = () => {
     </>
   );
 };
-
 
 export default Notifications;

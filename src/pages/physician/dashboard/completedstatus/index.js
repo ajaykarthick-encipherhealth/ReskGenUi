@@ -22,7 +22,7 @@ const CompletedStatus = () => {
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const dispatch = useDispatch();
-  const router=useRouter()
+  const router = useRouter();
   useEffect(() => {
     dispatch(
       getCOmpletedScore(
@@ -36,29 +36,34 @@ const CompletedStatus = () => {
   }, [currentBtn, selectedMonth, selectedYear]);
 
   const completedDatas = useSelector((state) => state?.workFlow?.completed);
-  const CompletedSortedData = completedDatas?.response?.completedData?.sort((a, b) => a._id.month - b._id.month);
-  const ALlocatedSortedData = completedDatas?.response?.allocatedData?.sort((a, b) => a._id.month - b._id.month);
-
-  const allocatedData = CompletedSortedData?.map(
-    (item) => item?.count
+  const CompletedSortedData = completedDatas?.response?.completedData?.sort(
+    (a, b) => a._id.month - b._id.month
   );
-  const completedData = ALlocatedSortedData?.map(
-    (item) => item?.count
+  const ALlocatedSortedData = completedDatas?.response?.allocatedData?.sort(
+    (a, b) => a._id.month - b._id.month
   );
 
-  const numberOfWeeks = completedDatas && Object.keys(completedDatas)?.length;
+  const allocatedData = CompletedSortedData?.map((item) => item?.count);
+  const completedData = ALlocatedSortedData?.map((item) => item?.count);
 
-  const weekNames = Array.from(
-    { length: numberOfWeeks },
-    (_, index) => `Week ${index + 1}`
+  const completedWeeks = new Set(
+    completedDatas?.response?.completedData?.map((item) => item._id.week)
   );
+  const allocatedWeeks = new Set(
+    completedDatas?.response?.allocatedData?.map((item) => item._id.week)
+  );
+  const uniqueWeeks = new Set([...completedWeeks, ...allocatedWeeks]);
+
+  const weekNames = Array.from(uniqueWeeks)
+    .sort((a, b) => a - b)
+    .map((week) => `Week ${week}`);
 
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);
     setCurrentBtn(btn);
   };
 
-  const handleYearChange = (date,dateString) => {
+  const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
   };
   const handleMonthChange = (date) => {
@@ -132,7 +137,6 @@ const CompletedStatus = () => {
     },
   ];
 
-  
   return (
     <>
       <HeadTitle header="Completed Status" />
@@ -140,9 +144,17 @@ const CompletedStatus = () => {
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
             <div className={styles.picker}>
-              <YearPicker onChange={handleYearChange} type={"year"} bgColor="#F3F3FF"/>
+              <YearPicker
+                onChange={handleYearChange}
+                type={"year"}
+                bgColor="#F3F3FF"
+              />
               {currentBtn !== "Monthly" && (
-                <YearPicker onChange={handleMonthChange} type={"month"} bgColor="#F3F3FF"/>
+                <YearPicker
+                  onChange={handleMonthChange}
+                  type={"month"}
+                  bgColor="#F3F3FF"
+                />
               )}
             </div>
             <div className={styles.btnScroller}>

@@ -36,7 +36,7 @@ const HoldStatus = () => {
       <tbody>
         {holdStatusData?.length > 0 ? (
           holdStatusData?.map((item) => (
-            <tr>
+            <tr className={styles.tabelCell}>
               <td className={styles.description}>{item?.patientId}</td>
               <td className={styles.description}>
                 {item?.notes ? item?.notes : "no data"}
