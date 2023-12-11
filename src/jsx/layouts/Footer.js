@@ -105,39 +105,43 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
     <footer className="p-4 text-center">
-      <div className="container">
-        <div className="d-flex align-items-center justify-content-center mb-3">
-          <Image
-            src={IMAGES.Hcc_LOGO}
-            style={{ height: "30px", width: "30px", padding: "4px" }}
-          />
-          <p className="mb-0">&copy; {currentYear} Encipherhealth, Inc.</p>
+      <div className="d-flex">
+        <div className="container d-flex flex-column align-items-center justify-content-center">
+          <div className="d-flex align-items-center mb-3">
+            <Image
+              src={IMAGES.Hcc_LOGO}
+              style={{ height: "30px", width: "30px", padding: "4px" }}
+            />
+            <p className="mb-0">&copy; {currentYear} Encipherhealth, Inc.</p>
+			<ul className="list-inline mb-0">
+            <li className="list-inline-item">
+              <a href="#">Terms</a>
+            </li>
+            <li className="list-inline-item">
+              <a href="#">Privacy</a>
+            </li>
+            <li className="list-inline-item">
+              <a href="#">Security</a>
+            </li>
+            <li className="list-inline-item">
+              <a href="#">Status</a>
+            </li>
+            <li className="list-inline-item">
+              <a href="#">Docs</a>
+            </li>
+            <li className="list-inline-item">
+              <a href="#">Contact</a>
+            </li>
+          </ul>
+		  <p className="mb-0">
+            <a href="#">Manage cookies</a>
+            <span className="mx-2">|</span>
+            <a href="#">Do not share my personal information</a>
+          </p>
+          </div>
+        
+       
         </div>
-        <ul className="list-inline mb-0">
-          <li className="list-inline-item">
-            <a href="#">Terms</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">Privacy</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">Security</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">Status</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">Docs</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">Contact</a>
-          </li>
-        </ul>
-        <p className="mb-0">
-          <a href="#">Manage cookies</a>
-          <span className="mx-2">|</span>
-          <a href="#">Do not share my personal information</a>
-        </p>
       </div>
     </footer>
   );

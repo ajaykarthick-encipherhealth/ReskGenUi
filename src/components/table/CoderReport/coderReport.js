@@ -170,7 +170,7 @@ function CoderReport({
                       {row?.patientName ? row?.patientName : "---"}
                     </td>
                     <td className={TableStyle.childBorder}>
-                      {row?.validDisease ? row?.validDisease : "000"}
+                      {row?.validDiseaseCount ? row?.validDiseaseCount : "000"}
                     </td>
                     <td
                       onClick={setModal(false)}
