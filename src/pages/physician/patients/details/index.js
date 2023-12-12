@@ -5327,9 +5327,10 @@ const Details = ({ }) => {
                                                                           visitStyles.close_icon
                                                                         }
                                                                       >
-                                                                        {
-                                                                          SVGICON.closeIcon
-                                                                        }
+                                                                       <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                                       </div>
                                                                     </Popconfirm>
 
@@ -5377,9 +5378,10 @@ const Details = ({ }) => {
                                                                           visitStyles.close_icon
                                                                         }
                                                                       >
-                                                                        {
-                                                                          SVGICON.closeIcon
-                                                                        }
+                                                                        <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                                       </div>
                                                                     </Popconfirm>}
                                                                 </div>
@@ -5573,7 +5575,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                               <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -5870,7 +5875,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                   <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -6226,7 +6234,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                           <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
@@ -7152,7 +7163,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -7753,7 +7767,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                   <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -8655,7 +8672,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -8790,7 +8810,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -9087,7 +9110,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                    <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -9607,7 +9633,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                            <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
@@ -10318,7 +10347,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                            <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color: "#04b700" }}
+                                                        />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
