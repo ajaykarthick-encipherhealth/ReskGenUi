@@ -311,17 +311,20 @@ margin-left: 10px !important;
 
 
 .close_icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 15px;
   border-radius: 4px;
   background: #fee1e1;
   text-align: center;
-  margin-left: -4px;
-  margin-top: 4px;
+  margin-left: -8px;
+  margin-top: 7px;
   cursor: pointer;
 }
 .close_icon svg {
-  vertical-align: baseline !important;
+  text-align: center;
+  display: flex;
+  font-size: 10px;
+  margin: 2px 0px 0px 3px;
 }
 .hcc_title_name svg{
   color: #fff;
@@ -582,6 +585,7 @@ line-height: normal;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  margin-top: 1px;
 }
 .nameList{
     color: #221C1C;
@@ -810,32 +814,29 @@ margin-left: 20px;
   background-color: #46c263;
 }
 .hccFlag{
-  height: 10px;
-    width: 10px;
+  height: 13px;
+  width: 13px;
     background: #04b700;
-    padding: 7px;
-    margin-right: 5px;
+    margin-right: 3px;
     margin-top: 2px;
-    border-radius: 20px;
+    border-radius: 2px;
 }
 
 .suggestedFlag{
-  height: 10px;
-    width: 10px;
+  height: 13px;
+  width: 13px;
     background: #ff9209;
-    padding: 7px;
-    margin-right: 5px;
+    margin-right: 3px;
     margin-top: 2px;
-    border-radius: 20px;
+    border-radius: 2px;
 }
 .deleteFlag{
-  height: 10px;
-    width: 10px;
+  height: 13px;
+    width: 13px;
     background: #be3144;
-    padding: 7px;
-    margin-right: 5px;
+    margin-right: 3px;
     margin-top: 2px;
-    border-radius: 20px;
+    border-radius: 2px;
 }
 .timelineDate{
   display: flex !important;
@@ -995,9 +996,9 @@ margin-left: 20px;
 }
 
 .flagDetailsChange{
-  margin-top: 6px !important;
-    height: 17px !important;
-    width: 17px !important;
+  margin-top: 8px !important;
+    /* height: 17px !important;
+    width: 17px !important; */
     display: block;
 }
 .nonHccFlag{
@@ -1039,6 +1040,32 @@ margin-left: 20px;
   width: 150px!important;
 
 }
+.completedBtnHcc{
+  font-size: 13px;
+  color: #3a9b94;
+  background: #daf1ef !important;
+  border-radius: 6px!important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 150px!important;
+
+}
+
+.declinedBtnHcc{
+  font-size: 13px;
+  color: #3a9b94;
+  background: #fcc !important;
+  border-radius: 6px!important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 150px!important;
+
+}
+
+
+
+
+
 .name_missed path{
   fill: #7ad2e5;
 }
