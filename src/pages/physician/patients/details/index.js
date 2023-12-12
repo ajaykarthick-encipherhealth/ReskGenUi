@@ -397,91 +397,7 @@ const Details = ({ }) => {
     setLocalPatientId(patientId);
 
 
-    const menu = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-
-    const menu2 = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='4' onClick={() => handleActionClick("ADD RADIOLOGY")}>
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>+ ADD RADIOLOGY</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-    const menu3 = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='4' onClick={() => handleActionClick("ADD LAB")}>
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-
-
-
-    setActionItems(menu);
-    setActionItems2(menu2);
-    setActionItems3(menu3);
+   
 
     var userSpinner = (
       <div className={visitStyles.userDetailsCard}>
@@ -529,7 +445,118 @@ const Details = ({ }) => {
       ENDPOINTS.apiEndoint +
       `dbservice/patient/get?patientId=${patientId}`
     );
-    setPatienIdDetails(response.data)
+    setPatienIdDetails(response.data);
+    console.log(response.data)
+    var result = response.data;
+
+
+    const menu = (
+      <Menu>
+         {result.processedStatus != "HOLD" ?
+        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+          <div className="patient-status">
+            <span className={`badge hold-text`} >HOLD</span>
+          </div>
+        </Menu.Item>: null}
+        {result.processedStatus != "PENDING" ?
+        <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+          <div className="patient-status">
+            <span className={`badge processing-text`}>PENDING</span>
+          </div>
+        </Menu.Item>:null}
+        {result.processedStatus != "DECLINE" ?
+        <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+          </div>
+        </Menu.Item>:null}
+        
+        {result.processedStatus != "COMPLETE" ?
+        <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+          <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+          </div>
+        </Menu.Item>:null}
+      </Menu>
+    );
+
+    const menu2 = (
+      <Menu>
+        {result.processedStatus != "HOLD" ?
+        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+          <div className="patient-status">
+            <span className={`badge hold-text`} >HOLD</span>
+          </div>
+        </Menu.Item>: null}
+        {result.processedStatus != "PENDING" ?
+        <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+          <div className="patient-status">
+            <span className={`badge processing-text`}>PENDING</span>
+          </div>
+        </Menu.Item>:null}
+        {result.processedStatus != "DECLINE" ?
+        <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+          </div>
+        </Menu.Item>:null}
+        
+        {result.processedStatus != "COMPLETE" ?
+        <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+          <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+          </div>
+        </Menu.Item>:null}
+        <Menu.Item key='5' onClick={() => handleActionClick("ADD RADIOLOGY")}>
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD RADIOLOGY</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+    const menu3 = (
+      <Menu>
+         {result.processedStatus != "HOLD" ?
+        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+          <div className="patient-status">
+            <span className={`badge hold-text`} >HOLD</span>
+          </div>
+        </Menu.Item>: null}
+        {result.processedStatus != "PENDING" ?
+        <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+          <div className="patient-status">
+            <span className={`badge processing-text`}>PENDING</span>
+          </div>
+        </Menu.Item>:null}
+        {result.processedStatus != "DECLINE" ?
+        <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+          </div>
+        </Menu.Item>:null}
+        
+        {result.processedStatus != "COMPLETE" ?
+        <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+          <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+          </div>
+        </Menu.Item>:null}
+        <Menu.Item key='5' onClick={() => handleActionClick("ADD LAB")}>
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+
+
+
+    setActionItems(menu);
+    setActionItems2(menu2);
+    setActionItems3(menu3);
   }
 
   const getYearOfServiceDetails = async (year) => {
@@ -734,6 +761,7 @@ const Details = ({ }) => {
         // for (var key in validDis) {
         //   validDiseasesArray.push({ name: validDis[key] });
         // }
+        
 
         setNewValidDiseaseList(validDiseaseNewRes);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -746,6 +774,31 @@ const Details = ({ }) => {
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
+
+
+        console.log(validDiseaseNewRes);
+
+        
+        var capturedSectionsColorsMatching = [];
+
+        validDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2) => {
+            console.log(res2)
+            capturedSectionsColorsMatching.push({
+              name:res2,
+              "parentDisCode":res.diagnosisCode
+            })
+           
+          })
+        })
+        
+
+       var test =  colorCodeMatch(
+        validDiseaseNewRes,
+          "hpi"
+        )
+
+        console.log(capturedSectionsColorsMatching)
 
 
 
@@ -5099,10 +5152,10 @@ const Details = ({ }) => {
                                                                     visitStyles.close_icon
                                                                   }
                                                                 >
-                                                                  <FontAwesomeIcon
+                                                                  {<FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
-                                                        />
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />}
                                                                 </div>
                                                               </Popconfirm>
                                                             </div>
@@ -5329,7 +5382,7 @@ const Details = ({ }) => {
                                                                       >
                                                                        <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                                       </div>
                                                                     </Popconfirm>
@@ -5380,7 +5433,7 @@ const Details = ({ }) => {
                                                                       >
                                                                         <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                                       </div>
                                                                     </Popconfirm>}
@@ -5577,7 +5630,7 @@ const Details = ({ }) => {
                                                               >
                                                                <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                               </div>
                                                             </Popconfirm>
@@ -5877,7 +5930,7 @@ const Details = ({ }) => {
                                                                   >
                                                                    <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                                   </div>
                                                                 </Popconfirm>
@@ -6236,7 +6289,7 @@ const Details = ({ }) => {
                                                           >
                                                            <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                           </div>
                                                         </Popconfirm>
@@ -7165,7 +7218,7 @@ const Details = ({ }) => {
                                                               >
                                                                 <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                               </div>
                                                             </Popconfirm>
@@ -7769,7 +7822,7 @@ const Details = ({ }) => {
                                                                   >
                                                                    <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                                   </div>
                                                                 </Popconfirm>
@@ -8674,7 +8727,7 @@ const Details = ({ }) => {
                                                               >
                                                                 <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                               </div>
                                                             </Popconfirm>
@@ -8812,7 +8865,7 @@ const Details = ({ }) => {
                                                               >
                                                                 <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                               </div>
                                                             </Popconfirm>
@@ -9112,7 +9165,7 @@ const Details = ({ }) => {
                                                                   >
                                                                     <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                                   </div>
                                                                 </Popconfirm>
@@ -9635,7 +9688,7 @@ const Details = ({ }) => {
                                                           >
                                                             <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                           </div>
                                                         </Popconfirm>
@@ -10349,7 +10402,7 @@ const Details = ({ }) => {
                                                           >
                                                             <FontAwesomeIcon
                                                           icon={faArrowsAlt}
-                                                          style={{ size:8, color: "#04b700" }}
+                                                          style={{ size:8, color:"#a80404" }}
                                                         />
                                                           </div>
                                                         </Popconfirm>
