@@ -216,19 +216,10 @@ export default function Patient() {
     }
   };
 
-  const getFilteApi = async (
-    pageNo,
-    pageSize,
-    processedStatus,
-    processedStart,
-    processedEnd,
-    dueDateStart,
-    dueDateEnd
-  ) => {
-    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}
-    &processedStatus=${processedStatus}
-    &processedStart=${processedStart}
-    &processedEnd=${processedEnd}`;
+
+  const getFilteApi= async (pageNo, pageSize,processedStatus,processedStart,processedEnd,dueDateStart,dueDateEnd   ) => {
+    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${processedStart}&processedEnd=${processedEnd}`;
+
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];

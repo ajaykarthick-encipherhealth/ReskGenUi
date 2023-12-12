@@ -1,11 +1,13 @@
 import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
 
-export const patientDetails = async (pagenum) => {
+export const patientDetails = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&searchstring=${search}`:
+  (startDate && endDate) ?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15`
   try {
     const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint}dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {},
       {
         headers: {
@@ -13,16 +15,18 @@ export const patientDetails = async (pagenum) => {
         },
       }
     );
-    return response.data;
+    return response;
   } catch (err) {
     console.log(err);
   }
 };
-export const SentReport = async (pagenum) => {
+export const SentReport = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&searchstring=${search}`:
+  (startDate && endDate) ?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15`
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/sent?pageNo=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,11 +38,13 @@ export const SentReport = async (pagenum) => {
     console.log(err);
   }
 };
-export const ReceivedReport = async (pagenum) => {
+export const ReceivedReport = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
+  const url= search?`dbservice/reportdetails/received?pageNo=${pagenum}&size=15&searchstring=${search}`:
+  (startDate && endDate) ?`dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:`dbservice/reportdetails/received?pageNo=${pagenum}&size=15`
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/received?pageNo=${pagenum}&size=10`,
+      `${ENDPOINTS?.apiEndoint}${url}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

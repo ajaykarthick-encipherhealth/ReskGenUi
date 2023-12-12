@@ -19,3 +19,21 @@ export const PatientsList = async (page,url) => {
     console.log(err);
   }
 };
+
+export const SearchPatientsList = async (pagenum,search) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `
+       ${ENDPOINTS?.apiEndoint}dbservice/patient/compute/search?pageno=${pagenum}&searchtext=${search}&pagesize=12`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
