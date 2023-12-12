@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
+import visitStyles from "../../../styles/visitdata.module.css";
+
 import {
   faClose,
   faUpload,
@@ -316,7 +318,39 @@ const index = () => {
                               <RangePicker />
                             </div>
                           </div>
-                          <div className="col-xl-6">
+                          <div className="col-xl-2" style={{ width: "30%" }}>
+                              <div className={visitStyles.flags}>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.completed}
+                                    style={{ background: "#3a9b94 !important" }}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Completed
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.pending}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Pending
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.hold}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Hold
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.declined}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Declined
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          
+                          <div className="col-xl-6" style={{width:"19%"}}>
                             <div className="row flr">
                               <button
                                 onClick={handleExport}

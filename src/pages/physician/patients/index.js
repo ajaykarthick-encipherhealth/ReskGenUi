@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
+import visitStyles from "../../../styles/visitdata.module.css";
+
 import { Badge } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Select from "react-select";
@@ -14,8 +16,8 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLoading from 'react-facebook-loading';
-import 'react-facebook-loading/dist/react-facebook-loading.css';
+import FacebookLoading from "react-facebook-loading";
+import "react-facebook-loading/dist/react-facebook-loading.css";
 import {
   faAngleLeft,
   faAngleRight,
@@ -105,7 +107,7 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(13);
+  const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
@@ -178,7 +180,7 @@ export default function Patient() {
     // fetchData();
   }, []);
 
-  const getAllList = async (uId,pageNo, pageSize) => {
+  const getAllList = async (uId, pageNo, pageSize) => {
     var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
@@ -214,12 +216,19 @@ export default function Patient() {
     }
   };
 
-  const getFilteApi= async (pageNo, pageSize,processedStatus,processedStart,processedEnd,dueDateStart,dueDateEnd   ) => {
+  const getFilteApi = async (
+    pageNo,
+    pageSize,
+    processedStatus,
+    processedStart,
+    processedEnd,
+    dueDateStart,
+    dueDateEnd
+  ) => {
     var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}
     &processedStatus=${processedStatus}
     &processedStart=${processedStart}
-    &processedEnd=${processedEnd
-    }`;
+    &processedEnd=${processedEnd}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -567,58 +576,50 @@ export default function Patient() {
         return (
           <div className="patient-status">
             <span className={`badge processed-text`}>Completed</span>
-              
-         
           </div>
         );
 
       case "PENDING":
         return (
           <div className="patient-status">
-             <span className={`badge processing-text`}>Pending</span>
-          
+            <span className={`badge processing-text`}>Pending</span>
           </div>
         );
 
       case "DECLINED":
         return (
           <div className="patient-status">
-              <span className={`badge failed-text`} style={{color:"red"}}>Declined</span>
-           
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
           </div>
         );
 
       case "NOTCOMPUTED":
         return (
           <div className="patient-status">
-               <span className={`badge processing-text`}>Pending</span>
-           
+            <span className={`badge processing-text`}>Pending</span>
           </div>
         );
-        case "COMPUTED":
-          return (
-            <div className="patient-status">
-               <span className={`badge processing-text`}>Pending</span>
-             
-            </div>
-          );
-          case "HOLD":
-            return (
-              <div className="patient-status">
-                 <span  className={`badge hold-text`} >Hold</span>
-               
-              </div>
-            );
-          case null:
-            return (
-              <div className="patient-status">
-                 <span className={`badge processing-text`}>Pending</span>
-               
-              </div>
-            );
-          
+      case "COMPUTED":
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+      case "HOLD":
+        return (
+          <div className="patient-status">
+            <span className={`badge hold-text`}>Hold</span>
+          </div>
+        );
+      case null:
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
     }
-    
   };
 
   const actionBodyTemplate = (rowData) => {
@@ -744,26 +745,30 @@ export default function Patient() {
     const selectedValue = selectedOption.value;
     // Do something with the selected value
     console.log(selectedValue);
-    getFilteApi(0, 10,selectedValue)
+    getFilteApi(0, 10, selectedValue);
   };
   const handleOk = () => {
     setModalVisible(false);
   };
-  const handleDatePickerChange = (dateString) => {  
-    console.log(dateString)
+  const handleDatePickerChange = (dateString) => {
+    console.log(dateString);
     console.log(dateString);
 
-    let utcISOTimestamp = moment.utc(dateString[0]).toDate()
-console.log(utcISOTimestamp)
-let utcISOTimestamp2 = moment.utc(dateString[1]).toDate()
-console.log(utcISOTimestamp)
-
+    let utcISOTimestamp = moment.utc(dateString[0]).toDate();
+    console.log(utcISOTimestamp);
+    let utcISOTimestamp2 = moment.utc(dateString[1]).toDate();
+    console.log(utcISOTimestamp);
 
     setStartDate(dateString[0]);
-      setEndDate(dateString[1]);
+    setEndDate(dateString[1]);
 
-      getFilteApi(0, 10,"COMPLETED","2023-11-15T05%3A07%3A59.016Z","2023-11-16T23%3A07%3A59.016Z")
-
+    getFilteApi(
+      0,
+      10,
+      "COMPLETED",
+      "2023-11-15T05%3A07%3A59.016Z",
+      "2023-11-16T23%3A07%3A59.016Z"
+    );
   };
   return (
     <>
@@ -795,7 +800,7 @@ console.log(utcISOTimestamp)
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-2" style={{ zIndex: "999"}}>
+                            <div className="col-xl-2" style={{ zIndex: "999" }}>
                               <div class="form-group has-search">
                                 {/* <InputText
                                   type="text"
@@ -813,6 +818,7 @@ console.log(utcISOTimestamp)
                                 />
                               </div>
                             </div>
+
                             {/* <div className="col-xl-2">
                               <div class="form-group has-search">
 
@@ -830,71 +836,72 @@ console.log(utcISOTimestamp)
                               </div>
                             </div> */}
                             <div className="col-xl-2">
-                            <div
-                              onClick={handleOpenModal}
-                              className={styles.dateDisplay}
-                            >
-                              <div>
-                                {startDate}&nbsp;- &nbsp;{endDate}
-                              </div>
-                              <Image src={calender} />
-                            </div>
-                            <Modal
-                              title=""
-                              visible={modalVisible}
-                              onOk={handleOk}
-                              mask={false}
-                              // onCancel={false}
-                              closable={false}
-                              width="45%"
-                              height="800px"
-                              style={{ marginTop: "30px" }}
-                            >
                               <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  height: "400px",
-                                }}
+                                onClick={handleOpenModal}
+                                className={styles.dateDisplay}
                               >
-                                <div style={{ display: "block" }}>
-                                  <div style={{margin: "20px 0"}}>
-                                    <Button type="ghost">Due Date</Button>
-                                   
+                                <div>
+                                  {startDate}&nbsp;- &nbsp;{endDate}
+                                </div>
+                                <Image src={calender} />
+                              </div>
+                              <Modal
+                                title=""
+                                visible={modalVisible}
+                                onOk={handleOk}
+                                mask={false}
+                                // onCancel={false}
+                                closable={false}
+                                width="45%"
+                                height="800px"
+                                style={{ marginTop: "30px" }}
+                              >
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    height: "400px",
+                                  }}
+                                >
+                                  <div style={{ display: "block" }}>
+                                    <div style={{ margin: "20px 0" }}>
+                                      <Button type="ghost">Due Date</Button>
+                                    </div>
+                                    <div>
+                                      <Button>Completed Date</Button>
+                                    </div>
                                   </div>
                                   <div>
-                                    <Button>Completed Date</Button>
+                                    <RangePicker
+                                      getPopupContainer={() =>
+                                        document.getElementById("date-popup")
+                                      }
+                                      popupStyle={{
+                                        marginTop: "-259px",
+                                        marginLeft: "-78px",
+                                      }}
+                                      onChange={(dates, dateStrings) => {
+                                        handleDatePickerChange(dateStrings);
+                                      }}
+                                      open={true}
+                                      showNow={false}
+                                      style={{
+                                        visibility: "hidden",
+                                        boxShadow: "none",
+                                      }}
+                                    />
                                   </div>
                                 </div>
-                                <div>
-                                  <RangePicker
-                                 
-                                    getPopupContainer={() =>
-                                      document.getElementById("date-popup")
-                                    }
-                                    popupStyle={{
-                                      marginTop: "-259px",
-                                      marginLeft:"-78px"
-                                    }}
-                                    onChange={(dates, dateStrings) => {
-                                      handleDatePickerChange(dateStrings); 
-                                    }}
-                                    open={true}
-                                    showNow={false}
-                                    style={{ visibility: "hidden" , boxShadow:"none" }}
-                                  />
-                                </div>
-                              </div>
-                              <div
-                                id="date-popup"
-                                style={{ position: "relative" }}
-                              />
-                            </Modal>
-                          </div>
-                          
+                                <div
+                                  id="date-popup"
+                                  style={{ position: "relative" }}
+                                />
+                              </Modal>
+                            </div>
+
                             {/* <div className="col-xl-2">
                               <div class="form-group has-search"> */}
-                                {/* <Calendar
+                            {/* <Calendar
                                   className="form-control new-form-control calender-pri-input"
                                   value={compledtedDate}
                                   onChange={(e) => setCompletedDate(e.value)}
@@ -902,23 +909,55 @@ console.log(utcISOTimestamp)
                                   readOnlyInput
                                   placeholder="Completed Date"
                                 /> */}
-                                {/* <Button type="primary" onClick={showModal}>
+                            {/* <Button type="primary" onClick={showModal}>
         Open Modal
       </Button> */}
-                                {/* <div>
+                            {/* <div>
                                   <RangePicker />
                                 </div> */}
-                              {/* </div>
+                            {/* </div>
                             </div> */}
-                            
-                            <div className="col-xl-3" style={{width:"49%"}}>
+
+                            <div className="col-xl-2" style={{ width: "30%" }}>
+                              <div className={visitStyles.flags}>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.completed}
+                                    style={{ background: "#3a9b94 !important" }}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Completed
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.pending}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Pending
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.hold}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Hold
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.declined}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Declined
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="col-xl-2" style={{ width: "" }}>
                               <Button
                                 onClick={addPatientFormId}
                                 className="btn btn-primary btn-sm ms-2 flr"
                               >
                                 + Add Patient Id
                               </Button>
-                            </div> 
+                            </div>
                           </div>
                         </div>
 
@@ -1008,24 +1047,20 @@ console.log(utcISOTimestamp)
                             statusBodyTemplate={processstatusBodyTemplate}
                             gotoPatientDetails={gotoPatientDetails}
                             patientDetails={patientDetails}
-                           
                           />
-                          <div >
-                               <div className="pagination-container">
-                            <Paginator
-                              first={paginationFirst}
-                              rows={13}
-                              totalRecords={totalElements}
-                              onPageChange={onPageChange}
-                            />
-                            <div className="total-pages">
-                              Total count: {totalElements}
+                          <div>
+                            <div className="pagination-container">
+                              <Paginator
+                                first={paginationFirst}
+                                rows={15}
+                                totalRecords={totalElements}
+                                onPageChange={onPageChange}
+                              />
+                              <div className="total-pages">
+                                Total count: {totalElements}
+                              </div>
                             </div>
                           </div>
-                       
-                          </div>
-                      
-                    
                         </div>
                       </div>
                     </div>
