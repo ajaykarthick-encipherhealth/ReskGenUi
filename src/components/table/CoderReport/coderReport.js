@@ -21,7 +21,7 @@ function CoderReport({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
-  
+
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
     const updatedRows = selectAll ? [] : reportListAll;
@@ -45,7 +45,65 @@ function CoderReport({
 
     setSelectedRows(updatedRows);
   };
+ 
+  const processstatusBodyTemplate = (rowData) => {
+    //   console.log(rowData.computing)
+    //   return <span className={`badge badge-success`}>
+    //   Processed
+    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
+    // </span>;
 
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return (
+          <div className="patient-status">
+            <span className={`badge processed-text`}>Completed</span>
+          </div>
+        );
+
+      case "PENDING":
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+
+      case "DECLINED":
+        return (
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
+          </div>
+        );
+
+      case "NOTCOMPUTED":
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+      case "COMPUTED":
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+      case "HOLD":
+        return (
+          <div className="patient-status">
+            <span className={`badge hold-text`}>Hold</span>
+          </div>
+        );
+      case null:
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+    }
+  };
+  
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -61,6 +119,7 @@ function CoderReport({
               <th>AUDITOR NAME </th>
               <th>RAF SCORE </th>
               <th>Flag </th>
+              <th>Status</th>
               <th>
                 <div
                   style={{ display: "flex", justifyContent: "space-around" }}
@@ -130,10 +189,16 @@ function CoderReport({
                     <td className={TableStyle.childBorder}>
                       {row?.auditedBy ? row?.auditedBy : "---"}
                     </td>
-                    <td className={TableStyle.childBorder}>---</td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.rafSum ? row?.rafSum : "000"}
+                    </td>
                     <td className={TableStyle.childBorder}>
                       {row?.flag ? SVGICON.filledFlag : SVGICON.emptyFlag}
                     </td>
+                    <td className={TableStyle.childBorder}>
+                      {processstatusBodyTemplate(row)}
+                    </td>
+
                     <td className={TableStyle.lastBorder}>
                       <input
                         type="checkbox"
@@ -185,9 +250,14 @@ function CoderReport({
                     <td className={TableStyle.childBorder}>
                       {row?.auditedBy ? row?.auditedBy : "---"}
                     </td>
-                    <td className={TableStyle.childBorder}>---</td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.rafSum ? row?.rafSum : "000"}{" "}
+                    </td>
                     <td className={TableStyle.childBorder}>
                       {row?.flag ? SVGICON.filledFlag : SVGICON.emptyFlag}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {processstatusBodyTemplate(row)}{" "}
                     </td>
                     <td className={TableStyle.lastBorder}>
                       <input

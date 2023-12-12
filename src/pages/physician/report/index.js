@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
+import visitStyles from "../../../styles/visitdata.module.css";
+
 import {
   faClose,
   faUpload,
@@ -341,6 +343,87 @@ const index = () => {
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
+
+                              <Select
+                                onChange={(selectedOption) =>
+                                  dosOnChange(selectedOption)
+                                }
+                                options={
+                                  activeTab === "CoderReport"
+                                    ? statusOptions
+                                    : activeTab === "ReceivedReport"
+                                    ? ReceivedOptions
+                                    : SentOptions
+                                }
+                                className="custom-react-select"
+                                isSearchable={false}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-xl-2">
+                            <div>
+                              <RangePicker />
+                            </div>
+                          </div>
+                          <div className="col-xl-2" style={{ width: "30%" }}>
+                              <div className={visitStyles.flags}>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.completed}
+                                    style={{ background: "#3a9b94 !important" }}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Completed
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.pending}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Pending
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.hold}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Hold
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.declined}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Declined
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          
+                          <div className="col-xl-6" style={{width:"19%"}}>
+                            <div className="row flr">
+                              <button
+                                onClick={handleExport}
+                                className={styles.export}
+                                disabled={rowsLength?.length === 0 && true}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="15"
+                                  height="15"
+                                  viewBox="0 0 20 20"
+                                  fill="none"
+                                  className="me-2"
+                                >
+                                  <path
+                                    d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
+                                    stroke="#133DD4"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                  <path
+                                    d="M10 12.4999V3.0166"
+                                    stroke="#133DD4"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+
                                 {activeTab === "CoderReport" && (
                                   <Select
                                     onChange={(selectedOption) =>
@@ -349,6 +432,7 @@ const index = () => {
                                     options={statusOptions}
                                     className="custom-react-select"
                                     isSearchable={false}
+
                                   />
                                 )}
                               </div>
