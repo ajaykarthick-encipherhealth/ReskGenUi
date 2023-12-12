@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
+import styles from './receivedReport.module.css'
 import { Paginator } from "primereact/paginator";
-import { ArrowUpOutlined,ArrowDownOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { Modal } from "antd";
+import IndividualReceiverReport from "./IndividualReceiverReport";
 
-function ReceivedReport(details, onReceivedPageChange) {
+
+function ReceivedReport({details, onReceivedPageChange}) {
   const [sortOrder, setSortOrder] = useState("asc");
+  const [reportUser,setReportUser]=useState(null)
+  const[openModal,setOpenModal]=useState(false)
   const [detailsContent, setDetailsContent] = useState(
-    details?.details?.content
+    details?.content
   );
 
   const sortTableByDate = () => {
@@ -22,7 +28,10 @@ function ReceivedReport(details, onReceivedPageChange) {
     setDetailsContent(sortedContent);
   };
 
-  console.log(details)
+  const handleReceiverReport = (row) => {
+    setReportUser(row)
+    setOpenModal(true)
+  };
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -34,18 +43,18 @@ function ReceivedReport(details, onReceivedPageChange) {
             <th>SENDER</th>
             <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
               DATE{" "}
-              {/* {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />} */}
+              {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
             </th>
           </tr>
         </thead>
         <tbody>
-          { details?.details?.content?.map((row, index) => {
+          {detailsContent?.map((row, index) => {
             const formattedDate = row.receiveDate
               ? dayjs(row.sendDate).format("DD/MM/YY")
               : "Invalid Date";
 
             return (
-              <tr key={index}>
+              <tr key={index} onClick={() => handleReceiverReport(row)}>
                 <td
                   style={{
                     borderTop: "0.2px solid #e1e1e1",
@@ -101,13 +110,19 @@ function ReceivedReport(details, onReceivedPageChange) {
         <Paginator
           // first={paginationFirst}
           rows={15}
-          totalRecords={details?.details?.totalElements}
+          totalRecords={details?.totalElements}
           onPageChange={onReceivedPageChange}
         />
         <div className="total-pages">
-          Total count: {details?.details?.totalElements}
+          Total count: {details?.totalElements}
         </div>
       </div>
+      <Modal open={openModal} footer={false} 
+         className={styles.classModal}
+         onCancel={()=>setOpenModal(false)}
+      >
+        <IndividualReceiverReport reportUser={reportUser} ReceivedDetails={details}/>
+      </Modal>
     </div>
   );
 }

@@ -98,3 +98,16 @@ export const usersList=(id,search)=>{
   );
 }
 
+export const getFile=(pathname)=>{
+  const token = localStorage.getItem("token");
+  return axios.get(
+    `${ENDPOINTS?.apiEndoint}management/patient/report/getfile?blobName=${pathname}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
+
+

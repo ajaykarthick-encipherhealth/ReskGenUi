@@ -3,7 +3,7 @@ import TableStyle from "../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { Modal, Popover } from "antd";
 
-function SentReportTable(details, onSentPageChange) {
+function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const displayReceivedUsers = (list) => {
@@ -11,40 +11,40 @@ function SentReportTable(details, onSentPageChange) {
   };
 
   const popCOntent = (
-    <div style={{width:"100%"}}>
-    <table className={TableStyle.classTable}>
-      <thead className={TableStyle.classThead}>
-        <tr>
-          <th>USER</th>
-          <th>ROLE</th>
-        </tr>
-      </thead>
-      <tbody>
-        {selectedUsers?.map((row, index) => {
-          return (
-            <tr key={index}>
-              <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-                  borderLeft: "  0.2px solid #e1e1e1",
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
-              >
-                {row.user}
-              </td>
-              <td
-                style={{
-                  borderTop: "  0.2px solid #e1e1e1",
-                  borderBottom: "  0.2px solid #e1e1e1",
-                }}
-              >
-                {row.role}
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <div style={{ width: "100%" }}>
+      <table className={TableStyle.classTable}>
+        <thead className={TableStyle.classThead}>
+          <tr>
+            <th>USER</th>
+            <th>ROLE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {selectedUsers?.map((row, index) => {
+            return (
+              <tr key={index}>
+                <td
+                  style={{
+                    borderTop: "  0.2px solid #e1e1e1",
+                    borderLeft: "  0.2px solid #e1e1e1",
+                    borderBottom: "  0.2px solid #e1e1e1",
+                  }}
+                >
+                  {row.user}
+                </td>
+                <td
+                  style={{
+                    borderTop: "  0.2px solid #e1e1e1",
+                    borderBottom: "  0.2px solid #e1e1e1",
+                  }}
+                >
+                  {row.role}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
   return (
@@ -60,7 +60,7 @@ function SentReportTable(details, onSentPageChange) {
           </tr>
         </thead>
         <tbody>
-          {details?.details?.map((row, index) => {
+          {details?.data?.map((row, index) => {
             const formattedDate = row.receiveDate
               ? dayjs(row.receiveDate).format("DD/MM/YY")
               : "Invalid Date";
@@ -85,7 +85,6 @@ function SentReportTable(details, onSentPageChange) {
                 >
                   {row.reportName}
                 </td>
-              
 
                 <td
                   style={{
@@ -119,15 +118,13 @@ function SentReportTable(details, onSentPageChange) {
       </table>
       <div className="pagination-container">
         <Paginator
+          first={paginationFirst}
           rows={15}
-          totalRecords={details?.details?.length}
+          totalRecords={details?.totalElements}
           onPageChange={onSentPageChange}
         />
         <div className="total-pages">
-          Total count:{" "}
-          {details?.details?.length > 0
-            ? details?.details?.length
-            : 0}
+          Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
     </div>

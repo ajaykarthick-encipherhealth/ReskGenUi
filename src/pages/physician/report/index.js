@@ -66,6 +66,8 @@ const index = () => {
   const [receivedPageNo, setReceivedPageNo] = useState(0);
 
   const [paginationFirst, setPaginationFirst] = useState(0);
+  const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
+  const [paginationSentFirst, setPaginationSentFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
@@ -173,7 +175,7 @@ const index = () => {
   const SentOptions = [];
   const uniqueRoles = new Set();
 
-  SentReportDetails?.forEach((data) => {
+  SentReportDetails?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
       const role = item.role;
       if (!uniqueRoles.has(role)) {
@@ -198,10 +200,12 @@ const index = () => {
     // setPageNo(e?.pageCount);
   };
   const onReceivedPageChange = (e) => {
-    setReceivedPageNo(e?.page);
+    setPaginationReceivedFirst(e.first);
+    setReceivedPageNo(e.page);
   };
   const onSentPageChange = (e) => {
-    setSentPageNo(e?.page);
+    setPaginationSentFirst(e.first);
+    setSentPageNo(e.page);
   };
 
   function calculateColor(percentage) {
@@ -372,7 +376,11 @@ const index = () => {
                                 <div className="row flr">
                                   <button
                                     onClick={handleExport}
-                                    className={rowsLength?.length === 0 ?styles.csv:styles.export}
+                                    className={
+                                      rowsLength?.length === 0
+                                        ? styles.csv
+                                        : styles.export
+                                    }
                                     disabled={rowsLength?.length === 0 && true}
                                   >
                                     <svg
@@ -496,8 +504,9 @@ const index = () => {
                                     eventKey="comboDiseases"
                                   >
                                     <SentReportTable
+                                      paginationFirst={paginationSentFirst}
                                       details={SentReportDetails}
-                                      onPageChange={onSentPageChange}
+                                      onSentPageChange={onSentPageChange}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -506,6 +515,7 @@ const index = () => {
                                   >
                                     {ReceivedReportDetails?.content && (
                                       <ReceivedReport
+                                        paginationFirst={paginationReceivedFirst}
                                         details={ReceivedReportDetails}
                                         onPageChange={onReceivedPageChange}
                                       />

@@ -5,6 +5,7 @@ import {
   GetSelectedReport,
   exportData,
   usersList,
+  getFile
 } from "../../services/ReportService";
 
 export const REPORT_PATIENTS_DETAILS = "REPORT_PATIENTS_DETAILS";
@@ -14,6 +15,7 @@ export const REPORT_DETAILS = "REPORT_DETAILS";
 export const SELECTEDROW = "SELECTEDROW";
 export const EXPORT = "EXPORT";
 export const SEARCH = "SEARCH";
+export const FILEPATH='FILEPATH'
 
 export const selectedRow = (val) => ({
   type: SELECTEDROW,
@@ -106,7 +108,23 @@ export const getSelectedReportDetails = (reportId) => {
         if (response) {
           dispatch({
             type: REPORT_DETAILS,
-            payload: response.data,
+            payload: response,
+          });
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+export const getFileDetails = (pathname) => {
+  return (dispatch) => {
+    try {
+      getFile(pathname).then((response) => {
+        if (response) {
+          dispatch({
+            type: FILEPATH,
+            payload: response,
           });
         }
       });
