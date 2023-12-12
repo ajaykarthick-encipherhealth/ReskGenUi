@@ -12627,6 +12627,10 @@ tbody > tr {
 .declinedBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   color: #3a9b94 !important;
 }
+.holdBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #d8c11b !important;
+}
+
 
 .completedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
   color: #3a9b94;

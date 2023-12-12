@@ -49,6 +49,8 @@ import calender from "../../../images/dashboard/calender.png";
 import Spinner from "../../../components/spinner/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { getSearchPatients } from "../../../store/actions/PatientsActions";
+import visitStyles from "../../../styles/visitdata.module.css";
+
 
 export default function Patient() {
   const dispatch = useDispatch();
@@ -896,7 +898,7 @@ export default function Patient() {
 
                               </div>
                             </div> */}
-                            <div className="col-xl-2">
+                            <div className="col-xl-3">
                               <div
                                 onClick={handleOpenModal}
                                 className={styles.dateDisplay}
@@ -978,6 +980,38 @@ export default function Patient() {
                                 />
                               </Modal>
                             </div>
+                            <div className="col-xl-2" >
+                              <div className={visitStyles.flags}>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.completed}
+                                    style={{ background: "#3a9b94 !important" }}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Completed
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.pending}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Pending
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.hold}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Hold
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.declined}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Declined
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
 
                             {/* <div className="col-xl-2">
                               <div class="form-group has-search"> */}
@@ -998,7 +1032,7 @@ export default function Patient() {
                             {/* </div>
                             </div> */}
 
-                            <div className="col-xl-3" style={{ width: "49%" }}>
+                            <div className="col-xl-3" >
                               <Button
                                 onClick={addPatientFormId}
                                 className="btn btn-primary btn-sm ms-2 flr"
