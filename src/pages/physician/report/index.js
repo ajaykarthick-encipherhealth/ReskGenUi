@@ -74,18 +74,12 @@ const index = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const currentDate = dayjs();
-  const [startDate, setStartDate] = useState(dayjs().toISOString());
-  const [endDate, setEndDate] = useState(dayjs().endOf("month").toISOString());
-  const [receivedStartDate, setReceivedStartDate] = useState(
-    dayjs().toISOString()
-  );
-  const [receivedEndDate, setReceivedEndDate] = useState(
-    dayjs().endOf("month").toISOString()
-  );
-  const [coderStartDate, setCoderStartDate] = useState(dayjs().toISOString());
-  const [coderEndDate, setCoderEndDate] = useState(
-    dayjs().endOf("month").toISOString()
-  );
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [receivedStartDate, setReceivedStartDate] = useState();
+  const [receivedEndDate, setReceivedEndDate] = useState();
+  const [coderStartDate, setCoderStartDate] = useState();
+  const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
 
   const handleOpenModal = () => {
@@ -102,11 +96,10 @@ const index = () => {
     patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const debouncedSearch = debounce((value) => {
+  const performanceSearch = (value) => {
     if (activeTab === "SentReport") {
       dispatch(getSentDetails(sentPageNo, startDate, endDate, value));
-    }
-    else if (activeTab === "ReceivedReport") {
+    } else if (activeTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
@@ -115,19 +108,11 @@ const index = () => {
           value
         )
       );
+    } else {
+      dispatch(getReportDetails(pageNo, coderStartDate, coderEndDate, value));
     }
-    else{
-      dispatch(
-        getReportDetails(
-          pageNo,
-          coderStartDate,
-          coderEndDate,
-          value
-        )
-      );
-    }
-
-  }, 300);
+  };
+  const debouncedSearch = debounce(performanceSearch, 500);
 
   const filterChangePatientId = (event) => {
     const value = event.target.value;
@@ -205,18 +190,18 @@ const index = () => {
     // console.log(dates);
     // console.log(compledtedDate);
     // console.log(e);
-    // setPaginationFirst(e.first);
-    // setPageNo(e.page);
+    setPaginationFirst(e.first);
+    setPageNo(e.page);
     // setPageSize(e.rows);
-    // setTableLoading(true);
+    setTableLoading(true);
     // getAllList(localUserId, e.page, e.rows);
-    setPageNo(e?.pageCount);
+    // setPageNo(e?.pageCount);
   };
-  const onReceivedPageChange = () => {
-    setReceivedPageNo(e?.pageCount);
+  const onReceivedPageChange = (e) => {
+    setReceivedPageNo(e?.page);
   };
-  const onSentPageChange = () => {
-    setSentPageNo(e?.pageCount);
+  const onSentPageChange = (e) => {
+    setSentPageNo(e?.page);
   };
 
   function calculateColor(percentage) {
@@ -281,9 +266,10 @@ const index = () => {
   };
   const handleDatePickerChange = (date, dateString) => {
     const formattedDates = dateString.map((date, index) => {
-      const formattedDate = index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
+      const formattedDate =
+        index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
       return formattedDate;
-    });  
+    });
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
     setSelectedDates(date);
@@ -292,7 +278,8 @@ const index = () => {
 
   const handleReceivedDatePicker = (date, dateString) => {
     const formattedDates = dateString.map((date, index) => {
-      const formattedDate = index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
+      const formattedDate =
+        index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
       return formattedDate;
     });
     setReceivedStartDate(formattedDates[0]);
@@ -304,15 +291,14 @@ const index = () => {
   };
   const handleCoderPicker = (date, dateString) => {
     const formattedDates = dateString.map((date, index) => {
-      const formattedDate = index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
+      const formattedDate =
+        index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
       return formattedDate;
     });
     setSelectedDates(date);
     setCoderStartDate(formattedDates[0]);
-    setCoderEndDate(formattedDates[1])
-    dispatch(
-      getReportDetails(pageNo, formattedDates[0], formattedDates[1])
-    );
+    setCoderEndDate(formattedDates[1]);
+    dispatch(getReportDetails(pageNo, formattedDates[0], formattedDates[1]));
   };
 
   const rowsLength = useSelector((state) => state.report.row);
@@ -355,20 +341,16 @@ const index = () => {
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                                <Select
-                                  onChange={(selectedOption) =>
-                                    dosOnChange(selectedOption)
-                                  }
-                                  options={
-                                    activeTab === "CoderReport"
-                                      ? statusOptions
-                                      : activeTab === "ReceivedReport"
-                                      ? ReceivedOptions
-                                      : SentOptions
-                                  }
-                                  className="custom-react-select"
-                                  isSearchable={false}
-                                />
+                                {activeTab === "CoderReport" && (
+                                  <Select
+                                    onChange={(selectedOption) =>
+                                      dosOnChange(selectedOption)
+                                    }
+                                    options={statusOptions}
+                                    className="custom-react-select"
+                                    isSearchable={false}
+                                  />
+                                )}
                               </div>
                             </div>
                             <div className="col-xl-2">
@@ -385,44 +367,46 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-6">
-                              <div className="row flr">
-                                <button
-                                  onClick={handleExport}
-                                  className={styles.export}
-                                  disabled={rowsLength?.length === 0 && true}
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="15"
-                                    height="15"
-                                    viewBox="0 0 20 20"
-                                    fill="none"
-                                    className="me-2"
+                            {activeTab === "CoderReport" && (
+                              <div className="col-xl-6">
+                                <div className="row flr">
+                                  <button
+                                    onClick={handleExport}
+                                    className={rowsLength?.length === 0 ?styles.csv:styles.export}
+                                    disabled={rowsLength?.length === 0 && true}
                                   >
-                                    <path
-                                      d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
-                                      stroke="#133DD4"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                    />
-                                    <path
-                                      d="M10 12.4999V3.0166"
-                                      stroke="#133DD4"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                    />
-                                    <path
-                                      d="M12.7916 4.87467L9.9999 2.08301L7.20825 4.87467"
-                                      stroke="#133DD4"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                    />
-                                  </svg>
-                                  Export
-                                </button>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="15"
+                                      height="15"
+                                      viewBox="0 0 20 20"
+                                      fill="none"
+                                      className="me-2"
+                                    >
+                                      <path
+                                        d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
+                                        stroke="#133DD4"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      />
+                                      <path
+                                        d="M10 12.4999V3.0166"
+                                        stroke="#133DD4"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      />
+                                      <path
+                                        d="M12.7916 4.87467L9.9999 2.08301L7.20825 4.87467"
+                                        stroke="#133DD4"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      />
+                                    </svg>
+                                    Export
+                                  </button>
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </div>
                         </div>
                         <Export
@@ -522,7 +506,7 @@ const index = () => {
                                   >
                                     {ReceivedReportDetails?.content && (
                                       <ReceivedReport
-                                        details={ReceivedReportDetails?.content}
+                                        details={ReceivedReportDetails}
                                         onPageChange={onReceivedPageChange}
                                       />
                                     )}

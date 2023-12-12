@@ -7,7 +7,7 @@ import { ArrowUpOutlined,ArrowDownOutlined } from '@ant-design/icons';
 function ReceivedReport(details, onReceivedPageChange) {
   const [sortOrder, setSortOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(
-    details?.details
+    details?.details?.content
   );
 
   const sortTableByDate = () => {
@@ -22,6 +22,7 @@ function ReceivedReport(details, onReceivedPageChange) {
     setDetailsContent(sortedContent);
   };
 
+  console.log(details)
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -38,7 +39,7 @@ function ReceivedReport(details, onReceivedPageChange) {
           </tr>
         </thead>
         <tbody>
-          { details?.details?.map((row, index) => {
+          { details?.details?.content?.map((row, index) => {
             const formattedDate = row.receiveDate
               ? dayjs(row.sendDate).format("DD/MM/YY")
               : "Invalid Date";
@@ -100,11 +101,11 @@ function ReceivedReport(details, onReceivedPageChange) {
         <Paginator
           // first={paginationFirst}
           rows={15}
-          totalRecords={details?.details.length}
+          totalRecords={details?.details?.totalElements}
           onPageChange={onReceivedPageChange}
         />
         <div className="total-pages">
-          Total count: {details?.details?.length}
+          Total count: {details?.details?.totalElements}
         </div>
       </div>
     </div>
