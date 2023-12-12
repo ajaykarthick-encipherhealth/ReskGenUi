@@ -30,7 +30,7 @@ const router=useRouter()
   }, [startDate, lastDate]);
 
   return (
-    <>
+    <div style={{backgroundColor: "#F0F6FE"}}>
       <Header />
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
@@ -60,7 +60,7 @@ const router=useRouter()
           </Row>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

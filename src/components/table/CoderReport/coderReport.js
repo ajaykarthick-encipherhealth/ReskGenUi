@@ -85,8 +85,8 @@ function CoderReport({
         </thead>
 
         <tbody className={TableStyle.bodytable}>
-          {reportListAll?.length > 0 &&
-            reportListAll?.map((row, index) => (
+          {reportListAll?.data?.length > 0 &&
+            reportListAll?.data?.map((row, index) => (
               <tr key={index} style={{ padding: " 22px!important" }}>
                 {row?.auditedBy && (
                   <td className={TableStyle.firstTdBorder}>
@@ -140,9 +140,8 @@ function CoderReport({
                         onChange={() => {
                           handleRowCheckboxChange(row);
                         }}
-                        checked={selectedRows.some(
-                          (selectedRow) =>
-                            selectedRow.patientId === row.patientId
+                        checked={selectedRows?.data?.some(
+                          (selectedRow) => selectedRow.patientId === row.patientId
                         )}
                         style={{
                           width: "20px",
@@ -196,9 +195,8 @@ function CoderReport({
                         onChange={() => {
                           handleRowCheckboxChange(row);
                         }}
-                        checked={selectedRows.some(
-                          (selectedRow) =>
-                            selectedRow.patientId === row.patientId
+                        checked={selectedRows?.data?.some(
+                          (selectedRow) => selectedRow.patientId === row.patientId
                         )}
                         style={{
                           width: "20px",
@@ -220,11 +218,11 @@ function CoderReport({
         <Paginator
           first={paginationFirst}
           rows={15}
-          totalRecords={ReportPatientDetails?.length}
+          totalRecords={ReportPatientDetails?.totalElements}
           onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {ReportPatientDetails?.length}
+          Total count: {ReportPatientDetails?.totalElements}
         </div>
       </div>
     </div>

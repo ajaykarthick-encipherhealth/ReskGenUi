@@ -9035,8 +9035,8 @@ button:focus {
 
 .content-body .container-fluid {
   padding-top: 80px;
-  height: 100vh;
-
+  min-height: 100vh;
+  height: auto;
   background-color: #f0f6fe;
 }
 .offcanvas-header h5 {
@@ -12667,6 +12667,15 @@ tbody > tr {
 
 .bouncing-loader > div:nth-child(3) {
   animation-delay: 0.4s;
+}
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{
+  color: white;
+}
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  z-index: 1;
+  color: white;
+  background: #04306f;
+  border-color: #04306f;
 }
 
 

@@ -252,7 +252,6 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
                   ))}
                 </Select>
                 <Select
-                  mode="multiple"
                   placeholder="Please select"
                   onChange={handleSelectedRole}
                   className={styles.selectDiv}
@@ -295,7 +294,8 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
           }}
           className={styles.footerBtn}
         >
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit"  style={{backgroundColor:"#04306f", width: "100px"
+,  height: "40px"}}>
             Generate
           </Button>
         </Form.Item>

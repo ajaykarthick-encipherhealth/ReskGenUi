@@ -110,24 +110,55 @@
   font-weight: 400;
   line-height: normal;
 } */
-.excel {
+.excel:active{
+  background-color: #04306f;
+  color:#fff;
+  border:none !important;
+}
+.excel:focus{
+  background-color: #04306f;
+  color:#fff;
+  border:none !important;
+}
+.excel:hover{
+  color: black;
+
+}
+.csv {
   width: 100px;
   height: 40px;
-  flex-shrink: 0;
-  border-radius: 8px;
-  border: 0.5px solid #b1aeae;
-
-
-
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-
   color: black;
-  background: #f5f9fe;
-  font-family: Manrope;
   text-align: center;
+  padding-top: 5px;
+  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
+  text-align: center;
+  margin-right: 10px;
+  border-radius: 8px;
+}
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)
+{
+  background-color: #04306f !important;
+
+}
+.excel {
+  width: 100px;
+  height: 40px;
+  /* border-radius: 8px; */
+  /* border: 0.5px solid #b1aeae; */
+  /* flex-shrink: 0;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background: #f5f9fe;
+  font-family: Manrope; */
+  color: black;
+  text-align: center;
+  padding-top: 5px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
   margin-right: 10px;
 }
 .dateDisplay {
