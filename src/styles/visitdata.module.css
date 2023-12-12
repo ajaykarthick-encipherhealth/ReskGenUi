@@ -838,6 +838,43 @@ margin-left: 20px;
     margin-top: 2px;
     border-radius: 2px;
 }
+.completed{
+  height: 10px;
+    width: 10px;
+    background: #3a9b94;
+    
+    margin-right: 5px;
+    margin-top: 2px;
+    border-radius: 20px;
+}
+
+.pending{
+  height: 10px;
+    width: 10px;
+    background: #452b90;
+    
+    margin-right: 5px;
+    margin-top: 2px;
+    border-radius: 20px;
+}
+.declined{
+  height: 10px;
+    width: 10px;
+    background: #be3144;
+    
+    margin-right: 5px;
+    margin-top: 2px;
+    border-radius: 20px;
+}
+.hold{
+  height: 10px;
+    width: 10px;
+    background: #d8c11b;
+    
+    margin-right: 5px;
+    margin-top: 2px;
+    border-radius: 20px;
+}
 .timelineDate{
   display: flex !important;
   justify-content: space-between;

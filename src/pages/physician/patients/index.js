@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
+import visitStyles from "../../../styles/visitdata.module.css";
+
 import { Badge } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Select from "react-select";
@@ -14,8 +16,8 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLoading from 'react-facebook-loading';
-import 'react-facebook-loading/dist/react-facebook-loading.css';
+import FacebookLoading from "react-facebook-loading";
+import "react-facebook-loading/dist/react-facebook-loading.css";
 import {
   faAngleLeft,
   faAngleRight,
@@ -107,7 +109,7 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(13);
+  const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
@@ -220,35 +222,8 @@ export default function Patient() {
   };
 
 
-  const getFilteApi = async (pageNo, pageSize,statusValue,pStart,pEnd,dStart,dEnd) => {
-    console.log(pStart,pEnd,dStart,dEnd)
-    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-    if (statusValue != null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`
-    }
-    if (pStart != null && statusValue == null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`
-    }
-
-    if (pStart != null && statusValue != null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`
-    }
-
-    if (dStart != null && statusValue == null && pStart ==  null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`
-    }
-
-    if (dStart != null && statusValue != null && pStart !=  null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`
-    }
-
-    console.log(resoureUrl)
-
-
-
-    // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
-
-
+  const getFilteApi= async (pageNo, pageSize,processedStatus,processedStart,processedEnd,dueDateStart,dueDateEnd   ) => {
+    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${processedStart}&processedEnd=${processedEnd}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -634,58 +609,58 @@ export default function Patient() {
         return (
           <div className="patient-status">
             <span className={`badge processed-text`}>Completed</span>
-
-
+              
+         
           </div>
         );
 
       case "PENDING":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-
+             <span className={`badge processing-text`}>Pending</span>
+          
           </div>
         );
 
       case "DECLINED":
         return (
           <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>Declined</span>
-
+              <span className={`badge failed-text`} style={{color:"red"}}>Declined</span>
+           
           </div>
         );
 
       case "NOTCOMPUTED":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-
+               <span className={`badge processing-text`}>Pending</span>
+           
           </div>
         );
-      case "COMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-
-          </div>
-        );
-      case "HOLD":
-        return (
-          <div className="patient-status">
-            <span className={`badge hold-text`} >Hold</span>
-
-          </div>
-        );
-      case null:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-
-          </div>
-        );
-
+        case "COMPUTED":
+          return (
+            <div className="patient-status">
+               <span className={`badge processing-text`}>Pending</span>
+             
+            </div>
+          );
+          case "HOLD":
+            return (
+              <div className="patient-status">
+                 <span  className={`badge hold-text`} >Hold</span>
+               
+              </div>
+            );
+          case null:
+            return (
+              <div className="patient-status">
+                 <span className={`badge processing-text`}>Pending</span>
+               
+              </div>
+            );
+          
     }
-
+    
   };
 
   const actionBodyTemplate = (rowData) => {
@@ -808,28 +783,28 @@ export default function Patient() {
     { label: "HOLD", value: "HOLD" },
   ];
   const dosOnChange = (selectedOption) => {
-    const value = selectedOption.value;
-    setStausSelectedValue(value);
-    getFilteApi(0, 10,value,processedStart,processedEnd,dueDateStart,dueDateEnd)
+    const selectedValue = selectedOption.value;
+    // Do something with the selected value
+    console.log(selectedValue);
+    getFilteApi(0, 10,selectedValue)
   };
   const handleOk = () => {
     setModalVisible(false);
   };
-  const handleDatePickerChange = (dateString) => {
-    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
-    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate )
-    setDueDateEnd(convertEndDate )
-    getFilteApi(0, 10,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
+  const handleDatePickerChange = (dateString) => {  
+    console.log(dateString)
+    console.log(dateString);
 
-  };
+    let utcISOTimestamp = moment.utc(dateString[0]).toDate()
+console.log(utcISOTimestamp)
+let utcISOTimestamp2 = moment.utc(dateString[1]).toDate()
+console.log(utcISOTimestamp)
 
-  const handleDatePickerChangeProcesseDate = (dateString) => {
-    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
-    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z"
-    setProcessedStart(convertStartDate )
-    setProcessedEnd(convertEndDate )
-    getFilteApi(0, 10,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
+
+    setStartDate(dateString[0]);
+      setEndDate(dateString[1]);
+
+      getFilteApi(0, 10,"COMPLETED","2023-11-15T05%3A07%3A59.016Z","2023-11-16T23%3A07%3A59.016Z")
 
   };
   return (
@@ -880,6 +855,7 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
+
                             {/* <div className="col-xl-2">
                               <div class="form-group has-search">
 
@@ -897,88 +873,68 @@ export default function Patient() {
                               </div>
                             </div> */}
                             <div className="col-xl-2">
-                              <div
-                                onClick={handleOpenModal}
-                                className={styles.dateDisplay}
-                              >
-                                {dueDateStart != null ?
-                                <div>
-                                {moment(dueDateStart).format("MM-DD-YYYY")}&nbsp;- &nbsp;{moment(dueDateEnd).format("MM-DD-YYYY")}
-                                </div> :<div></div>}
-                                <Image src={calender} />
+                            <div
+                              onClick={handleOpenModal}
+                              className={styles.dateDisplay}
+                            >
+                              <div>
+                                {startDate}&nbsp;- &nbsp;{endDate}
                               </div>
-                              <Modal
-                                title=""
-                                visible={modalVisible}
-                                onOk={handleOk}
-                                mask={false}
-                                // onCancel={false}
-                                closable={false}
-                                width="45%"
-                                height="800px"
-                                style={{ marginTop: "30px" }}
-                              >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    height: "400px",
-                                  }}
-                                >
-                                  <div style={{ display: "block" }}>
-                                    <div style={{ margin: "20px 0" }}>
-                                      <Button onClick={() => setIsDueDateCalender(true)} type="ghost">Due Date</Button>
-
-                                    </div>
-                                    <div>
-                                      <Button onClick={() => setIsDueDateCalender(false)}>Completed Date</Button>
-                                    </div>
-                                  </div>
-                                  {isDueDateCalender ?
-                                  <div>
-                                    <RangePicker
-
-                                      getPopupContainer={() =>
-                                        document.getElementById("date-popup")
-                                      }
-                                      popupStyle={{
-                                        marginTop: "-259px",
-                                        marginLeft: "-78px"
-                                      }}
-                                      onChange={(dates, dateStrings) => {
-                                        handleDatePickerChange(dateStrings);
-                                      }}
-                                      open={true}
-                                      showNow={false}
-                                      style={{ visibility: "hidden", boxShadow: "none" }}
-                                    />
-                                  </div> :
-                                  <div>
-                                    <RangePicker
-
-                                      getPopupContainer={() =>
-                                        document.getElementById("date-popup")
-                                      }
-                                      popupStyle={{
-                                        marginTop: "-259px",
-                                        marginLeft: "-78px"
-                                      }}
-                                      onChange={(dates, dateStrings) => {
-                                        handleDatePickerChangeProcesseDate(dateStrings);
-                                      }}
-                                      open={true}
-                                      showNow={false}
-                                      style={{ visibility: "hidden", boxShadow: "none" }}
-                                    />
-                                  </div>}
-                                </div>
-                                <div
-                                  id="date-popup"
-                                  style={{ position: "relative" }}
-                                />
-                              </Modal>
+                              <Image src={calender} />
                             </div>
-
+                            <Modal
+                              title=""
+                              visible={modalVisible}
+                              onOk={handleOk}
+                              mask={false}
+                              // onCancel={false}
+                              closable={false}
+                              width="45%"
+                              height="800px"
+                              style={{ marginTop: "30px" }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  height: "400px",
+                                }}
+                              >
+                                <div style={{ display: "block" }}>
+                                  <div style={{margin: "20px 0"}}>
+                                    <Button type="ghost">Due Date</Button>
+                                   
+                                  </div>
+                                  <div>
+                                    <Button>Completed Date</Button>
+                                  </div>
+                                </div>
+                                <div>
+                                  <RangePicker
+                                 
+                                    getPopupContainer={() =>
+                                      document.getElementById("date-popup")
+                                    }
+                                    popupStyle={{
+                                      marginTop: "-259px",
+                                      marginLeft:"-78px"
+                                    }}
+                                    onChange={(dates, dateStrings) => {
+                                      handleDatePickerChange(dateStrings); 
+                                    }}
+                                    open={true}
+                                    showNow={false}
+                                    style={{ visibility: "hidden" , boxShadow:"none" }}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                id="date-popup"
+                                style={{ position: "relative" }}
+                              />
+                            </Modal>
+                          </div>
+                          
                             {/* <div className="col-xl-2">
                               <div class="form-group has-search"> */}
                             {/* <Calendar
@@ -997,8 +953,8 @@ export default function Patient() {
                                 </div> */}
                             {/* </div>
                             </div> */}
-
-                            <div className="col-xl-3" style={{ width: "49%" }}>
+                            
+                            <div className="col-xl-3" style={{width:"49%"}}>
                               <Button
                                 onClick={addPatientFormId}
                                 className="btn btn-primary btn-sm ms-2 flr"
@@ -1095,24 +1051,24 @@ export default function Patient() {
                             statusBodyTemplate={processstatusBodyTemplate}
                             gotoPatientDetails={gotoPatientDetails}
                             patientDetails={patientDetails}
-
+                           
                           />
                           <div >
-                            <div className="pagination-container">
-                              <Paginator
-                                first={paginationFirst}
-                                rows={13}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count: {totalElements}
-                              </div>
+                               <div className="pagination-container">
+                            <Paginator
+                              first={paginationFirst}
+                              rows={13}
+                              totalRecords={totalElements}
+                              onPageChange={onPageChange}
+                            />
+                            <div className="total-pages">
+                              Total count: {totalElements}
                             </div>
-
                           </div>
-
-
+                       
+                          </div>
+                      
+                    
                         </div>
                       </div>
                     </div>
