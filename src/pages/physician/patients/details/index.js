@@ -275,8 +275,13 @@ const Details = ({ }) => {
   const [userDetails, setUserDetails] = useState("");
   const [currentTime, setCurrentTime] = useState("");
   const [commentsTrigger, setCommentsTrigger] = useState(false);
-  const [captureSectionMatching, setCaptureSectionMatching] = useState(false);
-  const [encounterDateMatching, setEncounterDateMatching] = useState(false);
+  const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
+  const [encounterDateMatching, setEncounterDateMatching] = useState([]);
+
+  // const [captureValidSuggested, setCaptureValidSuggested] = useState([]);
+  // const [encounterDateValidSuggested, setEncounterDateValidSuggested] = useState([]);
+  // const [captureSectionInvalidDis, setCaptureInvalidDis] = useState([]);
+  // const [encounterDateInvalidDis, setEncounterDateInvalidDis] = useState([]);
 
 
 
@@ -651,7 +656,7 @@ const Details = ({ }) => {
 
         validDis = result.validDisease;
         validDiseaseNewRes = result.validDisease;
-        // invalidDiseaseNewRes = result.invalidDisease;
+        // invalidDiseaseNewRes =validDisArray;
         var validDisArray = [];
         var validEncounterDateArray = [];
         validDiseaseNewRes.map((res, index) => {
@@ -877,6 +882,25 @@ const Details = ({ }) => {
 
           })
         })
+        invalidDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2, index) => {
+            capturedSectionsArr.push({
+              name: res2,
+              "diagnosisCode": res.diagnosisCode,
+            });
+
+          })
+        })
+
+        suggestListAll.map((res) => {
+          res.capturedSections.map((res2, index) => {
+            capturedSectionsArr.push({
+              name: res2,
+              "diagnosisCode": res.diagnosisCode,
+            });
+
+          })
+        })
 
         var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
@@ -888,6 +912,7 @@ const Details = ({ }) => {
           });
         })
         setCaptureSectionMatching(capturedSectionsColorsMatching);
+        
 
 
         var encounterDateColorsMatching = [];
@@ -902,6 +927,44 @@ const Details = ({ }) => {
           })
         })
 
+        result.invalidDisease.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+        result.unMatchedDisease.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+        result.suggestRadiology.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+        result.suggestLab.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+
+        console.log(encounterDateArr)
+
 
         var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
 
@@ -913,6 +976,10 @@ const Details = ({ }) => {
         })
 
         setEncounterDateMatching(encounterDateColorsMatching);
+
+
+        console.log(capturedSectionsColorsMatching)
+        console.log(encounterDateColorsMatching)
 
 
 
@@ -1431,16 +1498,27 @@ const Details = ({ }) => {
       if (result.meatCriteria != null) {
         var meatCri = result.meatCriteria;
 
+        // const COLORS = [
+        //   "bg-bg-seven",
+        //   "bg-third",
+        //   "bg-bg-four",
+        //   "bg-bg-five",
+        //   "bg-bg-six",
+        //   "bg-bg-eight",
+        //   "bg-bg-nine",
+        //   "bg-bg-ten",
+        //   "bg-bg-leven",
+        // ];
+
         const COLORS = [
-          "bg-bg-seven",
-          "bg-third",
-          "bg-bg-four",
-          "bg-bg-five",
-          "bg-bg-six",
-          "bg-bg-eight",
-          "bg-bg-nine",
-          "bg-bg-ten",
-          "bg-bg-leven",
+          "encounterDateTag1",
+          "encounterDateTag2",
+          "encounterDateTag3",
+          "encounterDateTag4",
+          "encounterDateTag5",
+          "encounterDateTag6",
+          "encounterDateTag7",
+          "encounterDateTag8"
         ];
 
         var meatListArr = [];
@@ -1903,23 +1981,47 @@ const Details = ({ }) => {
 
         }
 
-        setNewValidDiseaseListRadiology(validDiseaseNewRes);
+         var validDisArray = [];
+        validDiseaseNewRes.map((res, index) => {
+          const encounterDatearray = res.encounterDate.split(',');
+          validDisArray.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition
+          });
+
+        });
+
+
+        setNewValidDiseaseListRadiology(validDisArray);
         setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
         setUnMatchHccListRadiology(unMatchRes);
         setComboDiseaseCodesListRadiology(comboDis);
         setDosYearRadiology(dosYearArr);
         setFileRadiologyDateofServiceList(dosYearArrFile);
 
+
+      
+
+       
+
+
+
+
+
         const COLORS = [
-          "bg-bg-seven",
-          "bg-third",
-          "bg-bg-four",
-          "bg-bg-five",
-          "bg-bg-six",
-          "bg-bg-eight",
-          "bg-bg-nine",
-          "bg-bg-ten",
-          "bg-bg-leven",
+          "encounterDateTag1",
+          "encounterDateTag2",
+          "encounterDateTag3",
+          "encounterDateTag4",
+          "encounterDateTag5",
+          "encounterDateTag6",
+          "encounterDateTag7",
+          "encounterDateTag8"
         ];
 
         var meatListArr = [];
@@ -2330,6 +2432,23 @@ const Details = ({ }) => {
 
       if (dosYearArr.length != 0) {
         validDiseaseNewRes = result.validDisease[dateofService];
+
+        var validDisArray = [];
+        validDiseaseNewRes.map((res, index) => {
+          const encounterDatearray = res.encounterDate.split(',');
+          validDisArray.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition
+          });
+
+        });
+
+
         meatRes = result.meatCriteria[dateofService];
         if (result.labFileDetail != null) {
           for (var key in result.labFileDetail[0].documentDos) {
@@ -2343,15 +2462,14 @@ const Details = ({ }) => {
       }
 
       const COLORS = [
-        "bg-bg-seven",
-        "bg-third",
-        "bg-bg-four",
-        "bg-bg-five",
-        "bg-bg-six",
-        "bg-bg-eight",
-        "bg-bg-nine",
-        "bg-bg-ten",
-        "bg-bg-leven",
+        "encounterDateTag1",
+        "encounterDateTag2",
+        "encounterDateTag3",
+        "encounterDateTag4",
+        "encounterDateTag5",
+        "encounterDateTag6",
+        "encounterDateTag7",
+        "encounterDateTag8"
       ];
 
       var meatListArr = [];
@@ -2445,7 +2563,7 @@ const Details = ({ }) => {
       });
 
 
-      setLabReportValidList(validDiseaseNewRes);
+      setLabReportValidList(validDisArray);
       setLabReportMeatList(meatListArr);
       setLabFileDosListDefaultSelect(dosYearArr[0]);
       setLabResultStatus(true);
@@ -4610,7 +4728,7 @@ const Details = ({ }) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.name == res
       );
-      var backColor = result[0].colors;
+      var backColor = result[0]?.colors;
       var sectionMapArr =
         (<Badge
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
@@ -4625,7 +4743,7 @@ const Details = ({ }) => {
       const result = encounterDateMatching.filter(
         (res2) => res2.name == res
       );
-      var backColor = result[0].colors;
+      var backColor = result[0]?.colors;
       var sectionMapArr =
         // (<Badge
         // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
@@ -8648,32 +8766,7 @@ const Details = ({ }) => {
                                                               </span>
                                                             </div>
 
-                                                            {/* <Popover
-                                                              className="info-hcc-details"
-                                                              onClick={() =>
-                                                                getValidHccDetails(
-                                                                  data.actualDescription,
-                                                                  data.diagnosisCode
-                                                                )
-                                                              }
-                                                              content={
-                                                                validHccDetails
-                                                              }
-                                                              title={
-                                                                data.diagnosisCode
-                                                              }
-                                                              placement="bottom"
-                                                              trigger="click"
-                                                            >
-                                                              <div className="icon-box  bg-danger-light me-1">
-                                                                <FontAwesomeIcon
-                                                                  icon={faInfo}
-                                                                  style={{
-                                                                    color: "blue",
-                                                                  }}
-                                                                />
-                                                              </div>
-                                                            </Popover> */}
+                                                            
 
                                                             <Popconfirm
                                                               title="You want to delete?"
@@ -8704,66 +8797,16 @@ const Details = ({ }) => {
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
-                                                          <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                            <Popover
-                                                              placement="topLeft"
-                                                              title=""
-                                                              content={
-                                                                patientDocumentResult.patientName
-                                                              }
-                                                            >
-                                                              <Badge
-                                                                className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
-                                                              >
-                                                                <i>
-                                                                  {
-                                                                    SVGICON.patientNameIcon
-                                                                  }
-                                                                </i>
-                                                                {
-                                                                  patientDocumentResult.patientName
-                                                                }
-                                                              </Badge>
-                                                            </Popover>
-                                                            <Popover
-                                                              placement="topLeft"
-                                                              content={
-                                                                data.encounterDate
-                                                              }
-                                                            >
-                                                              <Badge
-                                                                className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                              >
-                                                                <i>
-                                                                  <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                </i>
-                                                                {replaceString(
-                                                                  data.encounterDate
-                                                                )}
-                                                              </Badge>
-                                                            </Popover>
-                                                            <Popover
-                                                              placement="topLeft"
-                                                              content={
-                                                                data.capturedSections
-                                                              }
-                                                            >
-                                                              <Badge
-                                                                className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
-                                                                onClick={() =>
-                                                                  handleOpenModalRadiology(
-                                                                    data.diagnosisCode,
-                                                                    data.capturedSections[0],
-                                                                    true
-                                                                  )
-                                                                }
-                                                              >
-                                                                {replaceCaptureSection(
-                                                                  data.capturedSections
-                                                                )}
-                                                              </Badge>
-                                                            </Popover>
+                                                          <div className="">
+                                                           
+                                                          {getEncounterDateBackground(data.encounterDate)}
                                                           </div>
+                                                          <div>
+                                                          {getCaptureSectionBackground(data.capturedSections)}
+
+                                                          </div>
+                                                          
+                                                          
                                                         </div>
                                                       </li>
                                                     )
@@ -10078,60 +10121,15 @@ const Details = ({ }) => {
                                                               </span>
                                                             </div>
                                                           </div>
-                                                          <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                            <Popover
-                                                              placement="topLeft"
-                                                              title=""
-                                                              content={
-                                                                patientDocumentResult.patientName
-                                                              }
-                                                            >
-                                                              <Badge
-                                                                className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
-                                                              >
-                                                                <i>
-                                                                  {
-                                                                    SVGICON.patientNameIcon
-                                                                  }
-                                                                </i>
-                                                                {
-                                                                  patientDocumentResult.patientName
-                                                                }
-                                                              </Badge>
-                                                            </Popover>
-                                                            <Popover
-                                                              placement="topLeft"
-                                                              content={
-                                                                data.encounterDate
-                                                              }
-                                                            >
-                                                              <Badge
-                                                                className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                              >
-                                                                <i>
-                                                                  <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                </i>
-                                                                {replaceString(
-                                                                  data.encounterDate
-                                                                )}
-                                                              </Badge>
-                                                            </Popover>
-                                                            <Popover
-                                                              placement="topLeft"
-                                                              content={
-                                                                data.capturedSections
-                                                              }
-                                                            >
-                                                              <Badge
-                                                                className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
+                                                          <div className="">
+                                                           
+                                                          {getEncounterDateBackground(data.encounterDate)}
 
-                                                              >
-                                                                {replaceCaptureSection(
-                                                                  data.capturedSections
-                                                                )}
-                                                              </Badge>
-                                                            </Popover>
+                                                           
                                                           </div>
+                                                          <div  className={`${visitStyles.encounterAndSectionHeader}`} > 
+                                                               {getCaptureSectionBackground(data.capturedSections)}                                                               
+                                                              </div>
                                                         </div>
                                                       </li>
                                                     )
