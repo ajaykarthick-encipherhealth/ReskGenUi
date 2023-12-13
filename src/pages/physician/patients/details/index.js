@@ -7093,15 +7093,15 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                                                   </>
                                                 ) : null}
                                                 {rafScore == null ? (
-                                                  <div className="card box-shadow-none">
-                                                    <div className="card combo-card">
+                                                  // <div className="card box-shadow-none">
+                                                  //   <div className="card combo-card">
                                                       <div className="col-xl-12">
                                                         <span className="no-patient-data">
-                                                          NO DATA
+                                                          No RAF Score
                                                         </span>
                                                       </div>
-                                                    </div>
-                                                  </div>
+                                                  //   </div>
+                                                  // </div>
                                                 ) : null}
                                               </div>
                                             </div>
