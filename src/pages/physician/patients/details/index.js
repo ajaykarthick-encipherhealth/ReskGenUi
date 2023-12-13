@@ -4759,9 +4759,24 @@ const Details = ({ }) => {
     setUserDetails(data);
   };
 
+  function removeDuplicates(array){
+    let output = []
+    for(let item of array){
+        
+        if(!output.includes(item))
+          output.push(item)
+    }
+    
+    return output
+    
+    }
+
 
   const getCaptureSectionBackground = (value) => {
-    return value.map((res) => {
+    console.log(value)
+    var dublicateCaptureDelete = removeDuplicates(value);
+    console.log(dublicateCaptureDelete)
+    return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.name == res
       );

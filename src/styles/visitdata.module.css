@@ -708,6 +708,7 @@ background: #E1EDFE;
 }
 .patientListHead{
   margin: 0 !important;
+  /* overflow-y: scroll; */
 }
 
 .sideNav ul{
@@ -1205,4 +1206,10 @@ margin-left: 20px;
 }
 .hoverActiveHcc{
   margin-bottom: 10px;
+}
+.file_name_listcontainer {
+  background: #eefcfd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
 }
