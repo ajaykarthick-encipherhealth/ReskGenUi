@@ -1213,3 +1213,24 @@ margin-left: 20px;
   margin-bottom: 10px;
   border-radius: 10px;
 }
+.patientList{
+  /* background: #f7f7f7; */
+  border-radius: 4px;
+  margin-bottom: 10px;
+  margin-right: 2px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 3px 10px rgba(220, 199, 199, 0.2);
+  border: 1px solid rgba(220, 199, 199, 0.2);
+  border-radius: 10px;
+}
+.patientDetailsHead{
+  height: 75vh;
+    overflow: hidden;
+    margin-right: 0px;
+}
+.patientDetailsHead:hover{
+  height: 75vh;
+    overflow-y: scroll;
+    margin-right: 0px;
+}

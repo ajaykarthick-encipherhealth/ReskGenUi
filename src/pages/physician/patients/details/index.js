@@ -323,8 +323,18 @@ const Details = ({ }) => {
     { value: "PATIENT_DISEASED", label: <>PATIENT_DISEASED <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlagSmall}</i> </> },
   ];
 
-  const filterChangePatientId = (e) => {
+  const filterChangePatientId = async (e) => {
     setFilter(e.target.value);
+    var value = e.target.value;
+    if(value){
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/search?searchtext=${value}&pageno=${0}&pagesize=${50}`);
+    var result = response.data.content;
+    setPatientList(result)
+    }else{
+      const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${20}`);
+      var result = response.data.content;
+      setPatientList(result)
+    }
   };
 
   const handleFilterClick = () => {
@@ -667,7 +677,8 @@ const Details = ({ }) => {
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
-            encounterDate: encounterDatearray,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition
@@ -681,7 +692,8 @@ const Details = ({ }) => {
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
-            encounterDate: encounterDatearray,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition
@@ -697,7 +709,8 @@ const Details = ({ }) => {
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: encounterDatearray,
+              encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition
@@ -717,7 +730,8 @@ const Details = ({ }) => {
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: encounterDatearray,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
               getPlace: "Radio",
               isHccValid: true,
             });
@@ -732,7 +746,8 @@ const Details = ({ }) => {
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: encounterDatearray,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
             });
@@ -750,7 +765,8 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: encounterDatearray,
+                encounterDate: res.encounterDate,
+                encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
               });
             } else {
@@ -769,7 +785,8 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: encounterDatearray,
+                encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
               });
             }
@@ -914,7 +931,7 @@ const Details = ({ }) => {
           });
         })
         setCaptureSectionMatching(capturedSectionsColorsMatching);
-        
+
 
 
         var encounterDateColorsMatching = [];
@@ -1202,7 +1219,8 @@ const Details = ({ }) => {
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
-            encounterDate: encounterDatearray,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition
@@ -1216,7 +1234,8 @@ const Details = ({ }) => {
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
-            encounterDate: encounterDatearray,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition
@@ -1232,7 +1251,8 @@ const Details = ({ }) => {
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: encounterDatearray,
+              encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition
@@ -1252,7 +1272,8 @@ const Details = ({ }) => {
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: encounterDatearray,
+              encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
               getPlace: "Radio",
               isHccValid: true,
             });
@@ -1267,7 +1288,8 @@ const Details = ({ }) => {
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: encounterDatearray,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
             });
@@ -1285,7 +1307,8 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: encounterDatearray,
+                encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
               });
             } else {
@@ -1304,7 +1327,8 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: encounterDatearray,
+                encounterDate: res.encounterDate,
+                encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
               });
             }
@@ -1448,7 +1472,7 @@ const Details = ({ }) => {
           });
         })
         setCaptureSectionMatching(capturedSectionsColorsMatching);
-        
+
 
 
         var encounterDateColorsMatching = [];
@@ -2018,14 +2042,15 @@ const Details = ({ }) => {
 
         }
 
-         var validDisArray = [];
+        var validDisArray = [];
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(',');
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
-            encounterDate: encounterDatearray,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition
@@ -2042,9 +2067,9 @@ const Details = ({ }) => {
         setFileRadiologyDateofServiceList(dosYearArrFile);
 
 
-      
 
-       
+
+
 
 
 
@@ -2477,7 +2502,8 @@ const Details = ({ }) => {
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
-            encounterDate: encounterDatearray,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition
@@ -4759,17 +4785,17 @@ const Details = ({ }) => {
     setUserDetails(data);
   };
 
-  function removeDuplicates(array){
+  function removeDuplicates(array) {
     let output = []
-    for(let item of array){
-        
-        if(!output.includes(item))
-          output.push(item)
+    for (let item of array) {
+
+      if (!output.includes(item))
+        output.push(item)
     }
-    
+
     return output
-    
-    }
+
+  }
 
 
   const getCaptureSectionBackground = (value) => {
@@ -4782,15 +4808,15 @@ const Details = ({ }) => {
       );
       var backColor = result[0]?.colors;
       var disCode = result[0]?.diagnosisCode;
-    
+
       var sectionMapArr =
         (<Badge onClick={() =>
-                                                                      handleOpenModalCombinationCode(
-                                                                        disCode,
-                                                                        res,
-                                                                        "valid"
-                                                                      )
-                                                                    }
+          handleOpenModalCombinationCode(
+            disCode,
+            res,
+            "valid"
+          )
+        }
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
           {res}</Badge>)
       return sectionMapArr
@@ -4911,27 +4937,27 @@ const Details = ({ }) => {
                       <div className="col-xl-1 col-sm-12">
                         <div className={visitStyles.priorityStatus}>
                           {patienIdDetails.priority == "URGENT" ?
-                        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
-        </> :patienIdDetails.priority == "HIGH" ?
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>High</span>{" "}
-        </>:patienIdDetails.priority == "NORMAL" ?
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
-        </>:patienIdDetails.priority == "LOW" ?
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Low</span>{" "}
-        </>:null}
+                            <>
+                              <i>{SVGICON.alert}</i>{" "}
+                              <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
+                            </> : patienIdDetails.priority == "HIGH" ?
+                              <>
+                                <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+                                <span style={{ fontSize: "13px" }}>High</span>{" "}
+                              </> : patienIdDetails.priority == "NORMAL" ?
+                                <>
+                                  <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+                                  <span style={{ fontSize: "13px" }}>Normal</span>{" "}
+                                </> : 
+                                  <>
+                                    <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+                                    <span style={{ fontSize: "13px" }}>Low</span>{" "}
+                                  </> }
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">
                         <div className={visitStyles.priorityStatus}>
-                          
+
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">
@@ -5390,134 +5416,134 @@ const Details = ({ }) => {
                                                     </div>
                                                   </div>
                                                   <div className={visitStyles.container}>
-                                                  <div className={visitStyles.hccStickey_head}>
+                                                    <div className={visitStyles.hccStickey_head}>
 
-                                                    {newValidDiseaseList.map(
-                                                      (data, i) => (
-                                                        <li>
-                                                          <div
-                                                            className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                                          >
+                                                      {newValidDiseaseList.map(
+                                                        (data, i) => (
+                                                          <li>
                                                             <div
-                                                              className={`${visitStyles.hcc_card_nameHead}`}
+                                                              className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                             >
                                                               <div
-                                                                className="media-body"
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    data.diagnosisCode,
-                                                                    data.actualDescription,
-                                                                    "valid2"
-                                                                  )
-                                                                }
-                                                              >
-                                                                <span className="mb-1 disease-name d-flex">
-
-                                                                  <span className="valid-dis-name">
-
-
-                                                                    {
-                                                                      data.diagnosisCode
-                                                                    }
-                                                                  </span>{" "}
-                                                                  -{" "}
-                                                                  {
-                                                                    data.actualDescription
-                                                                  }
-
-                                                                </span>
-                                                              </div>
-
-                                                              {data.defaultPosition == "VALID" ?
-                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span>
-                                                                  : data.defaultPosition == "DELETED" ?
-
-                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                    </span> : null}
-                                                              <Popover
-                                                                onClick={() =>
-                                                                  getValidHccDetails(
-                                                                    data.actualDescription,
-                                                                    data.diagnosisCode
-                                                                  )
-                                                                }
-                                                                content={
-                                                                  validHccDetails
-                                                                }
-                                                                title={
-                                                                  data.diagnosisCode
-                                                                }
-                                                                placement="bottom"
-                                                                trigger="click"
-                                                              >
-                                                                <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                                                  <i className="cr-pointer">
-                                                                    {SVGICON.infoIcon}
-                                                                  </i>
-                                                                </Tooltip>
-                                                              </Popover>
-
-
-                                                              <Popconfirm
-                                                                title="Choose an action"
-                                                                icon={
-                                                                  <QuestionCircleOutlined
-                                                                    style={{
-                                                                      color: "blue",
-                                                                    }}
-                                                                  />
-                                                                }
-                                                                okText="Move to Deleted"
-                                                                cancelText="Move to Suggested"
-                                                                onCancel={
-                                                                  validToSuggested
-                                                                }
-                                                                okButtonProps={{
-                                                                  type: buttonClicked
-                                                                    ? "primary"
-                                                                    : "default",
-                                                                }}
-                                                                cancelButtonProps={{
-                                                                  type: buttonClicked
-                                                                    ? "danger"
-                                                                    : "default",
-                                                                }}
-                                                                description={
-                                                                  data.diagnosisCode
-                                                                }
-                                                                onConfirm={
-                                                                  confirmvalid
-                                                                }
-                                                                placement="leftTop"
-                                                                onOpenChange={() =>
-                                                                  onchangeValid(
-                                                                    data.diagnosisCode,
-                                                                    data
-                                                                  )
-                                                                }
+                                                                className={`${visitStyles.hcc_card_nameHead}`}
                                                               >
                                                                 <div
-                                                                  className={
-                                                                    visitStyles.close_icon
+                                                                  className="media-body"
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      data.diagnosisCode,
+                                                                      data.actualDescription,
+                                                                      "valid2"
+                                                                    )
                                                                   }
                                                                 >
-                                                                  {<FontAwesomeIcon
-                                                                    icon={faArrowsAlt}
-                                                                    style={{ size: 8, color: "#a80404" }}
-                                                                  />}
+                                                                  <span className="mb-1 disease-name d-flex">
+
+                                                                    <span className="valid-dis-name">
+
+
+                                                                      {
+                                                                        data.diagnosisCode
+                                                                      }
+                                                                    </span>{" "}
+                                                                    -{" "}
+                                                                    {
+                                                                      data.actualDescription
+                                                                    }
+
+                                                                  </span>
                                                                 </div>
-                                                              </Popconfirm>
-                                                            </div>
-                                                            <div  className={`${visitStyles.hoverActiveHcc}`}>
-                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                {/* <Tooltip title={patientDocumentResult.patientName}>
+
+                                                                {data.defaultPosition == "VALID" ?
+                                                                  <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                    <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span>
+                                                                    : data.defaultPosition == "DELETED" ?
+
+                                                                      <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                      </span> : null}
+                                                                <Popover
+                                                                  onClick={() =>
+                                                                    getValidHccDetails(
+                                                                      data.actualDescription,
+                                                                      data.diagnosisCode
+                                                                    )
+                                                                  }
+                                                                  content={
+                                                                    validHccDetails
+                                                                  }
+                                                                  title={
+                                                                    data.diagnosisCode
+                                                                  }
+                                                                  placement="bottom"
+                                                                  trigger="click"
+                                                                >
+                                                                  <Tooltip title="HCC Veriosn Details" placement="bottom">
+                                                                    <i className="cr-pointer">
+                                                                      {SVGICON.infoIcon}
+                                                                    </i>
+                                                                  </Tooltip>
+                                                                </Popover>
+
+
+                                                                <Popconfirm
+                                                                  title="Choose an action"
+                                                                  icon={
+                                                                    <QuestionCircleOutlined
+                                                                      style={{
+                                                                        color: "blue",
+                                                                      }}
+                                                                    />
+                                                                  }
+                                                                  okText="Move to Deleted"
+                                                                  cancelText="Move to Suggested"
+                                                                  onCancel={
+                                                                    validToSuggested
+                                                                  }
+                                                                  okButtonProps={{
+                                                                    type: buttonClicked
+                                                                      ? "primary"
+                                                                      : "default",
+                                                                  }}
+                                                                  cancelButtonProps={{
+                                                                    type: buttonClicked
+                                                                      ? "danger"
+                                                                      : "default",
+                                                                  }}
+                                                                  description={
+                                                                    data.diagnosisCode
+                                                                  }
+                                                                  onConfirm={
+                                                                    confirmvalid
+                                                                  }
+                                                                  placement="leftTop"
+                                                                  onOpenChange={() =>
+                                                                    onchangeValid(
+                                                                      data.diagnosisCode,
+                                                                      data
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  <div
+                                                                    className={
+                                                                      visitStyles.close_icon
+                                                                    }
+                                                                  >
+                                                                    {<FontAwesomeIcon
+                                                                      icon={faArrowsAlt}
+                                                                      style={{ size: 8, color: "#a80404" }}
+                                                                    />}
+                                                                  </div>
+                                                                </Popconfirm>
+                                                              </div>
+                                                              <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                                <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                  {/* <Tooltip title={patientDocumentResult.patientName}>
                                                          <Avatar className={visitStyles.provider_name_style}>U</Avatar>
                                                          </Tooltip> */}
-                                                                {/* <Popover
+                                                                  {/* <Popover
                                                             placement="topLeft"
                                                             title=""
                                                             content={
@@ -5538,25 +5564,25 @@ const Details = ({ }) => {
                                                             </Badge>
                                                           </Popover> */}
 
-                                                                {getEncounterDateBackground(data.encounterDate)}
-                                                                {data.isManuallyAdded == true ?
-                                                                  <Popover
-                                                                    placement="topLeft"
-                                                                    content={
-                                                                      "Manually Added"
-                                                                    }
-                                                                  >
-                                                                    <Badge
-                                                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                                                  {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                  {data.isManuallyAdded == true ?
+                                                                    <Popover
+                                                                      placement="topLeft"
+                                                                      content={
+                                                                        "Manually Added"
+                                                                      }
                                                                     >
-                                                                      Manually Added
+                                                                      <Badge
+                                                                        className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                                                      >
+                                                                        Manually Added
 
-                                                                    </Badge>
-                                                                  </Popover> : null}
+                                                                      </Badge>
+                                                                    </Popover> : null}
 
 
-                                                                {/* {getCaptureSectionBackground(data.capturedSections)} */}
-                                                                {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                                  {/* {getCaptureSectionBackground(data.capturedSections)} */}
+                                                                  {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
                                                       <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
                                                           icon={faSearch}
@@ -5565,17 +5591,17 @@ const Details = ({ }) => {
                                                         HPI Test Urlplan
                                                       </Badge>
                                                       </Popover> */}
-                                                              </div>
-                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                {getCaptureSectionBackground(data.capturedSections)}
+                                                                </div>
+                                                                <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                  {getCaptureSectionBackground(data.capturedSections)}
+                                                                </div>
                                                               </div>
                                                             </div>
-                                                          </div>
-                                                        </li>
+                                                          </li>
 
-                                                      )
-                                                    )}
-                                                  </div>
+                                                        )
+                                                      )}
+                                                    </div>
                                                   </div>
                                                 </ul>
                                               </div>
@@ -5598,217 +5624,217 @@ const Details = ({ }) => {
                                                     </div>
                                                   </div>
                                                   <div className={visitStyles.suggestedcontainer}>
-                                                  <div className={visitStyles.hccStickey_head}>
-                                                    {suggestedHccList?.map((data) => {
-                                                      return (
-                                                        <>
-                                                          {data.isHccValid == true ? (
-                                                            <li>
-                                                              <div
-                                                                className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                                              >
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {suggestedHccList?.map((data) => {
+                                                        return (
+                                                          <>
+                                                            {data.isHccValid == true ? (
+                                                              <li>
                                                                 <div
-                                                                  className={`${visitStyles.hcc_card_nameHead}`}
+                                                                  className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                                 >
                                                                   <div
-                                                                    className="media-body"
-                                                                    onClick={() =>
-                                                                      handleOpenModalCombinationCode(
-                                                                        data.diagnosisCode,
-                                                                        data.actualDescription,
-                                                                        "valid2"
-                                                                      )
-                                                                    }
+                                                                    className={`${visitStyles.hcc_card_nameHead}`}
                                                                   >
-                                                                    <span className="mb-1 disease-name d-flex">
-                                                                      <span className="valid-dis-name">
+                                                                    <div
+                                                                      className="media-body"
+                                                                      onClick={() =>
+                                                                        handleOpenModalCombinationCode(
+                                                                          data.diagnosisCode,
+                                                                          data.actualDescription,
+                                                                          "valid2"
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      <span className="mb-1 disease-name d-flex">
+                                                                        <span className="valid-dis-name">
+                                                                          {
+                                                                            data.diagnosisCode
+                                                                          }
+                                                                        </span>{" "}
+                                                                        -{" "}
                                                                         {
+                                                                          data.actualDescription
+                                                                        }
+                                                                      </span>
+                                                                    </div>
+                                                                    {data.defaultPosition == "VALID" ?
+                                                                      <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                      </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                        <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                        </span>
+                                                                        : data.defaultPosition == "DELETED" ?
+
+                                                                          <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                          </span> : null}
+                                                                    <Popover
+                                                                      onClick={() =>
+                                                                        getValidHccDetails(
+                                                                          data.actualDescription,
+                                                                          data.diagnosisCode
+                                                                        )
+                                                                      }
+                                                                      content={
+                                                                        validHccDetails
+                                                                      }
+                                                                      title={
+                                                                        data.diagnosisCode
+                                                                      }
+                                                                      placement="bottom"
+                                                                      trigger="click"
+                                                                    >
+                                                                      <i>
+                                                                        {
+                                                                          SVGICON.infoIcon
+                                                                        }
+                                                                      </i>
+                                                                    </Popover>
+                                                                    {data.getPlace ==
+                                                                      "Radio" || data.getPlace ==
+                                                                      "Lab" ?
+                                                                      <Popconfirm
+                                                                        title="Choose an action"
+                                                                        icon={
+                                                                          <QuestionCircleOutlined
+                                                                            style={{
+                                                                              color:
+                                                                                "blue",
+                                                                            }}
+                                                                          />
+                                                                        }
+                                                                        okText="Move to Deleted"
+
+                                                                        okButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "primary"
+                                                                            : "default",
+                                                                        }}
+
+                                                                        description={
                                                                           data.diagnosisCode
                                                                         }
-                                                                      </span>{" "}
-                                                                      -{" "}
-                                                                      {
-                                                                        data.actualDescription
-                                                                      }
-                                                                    </span>
-                                                                  </div>
-                                                                  {data.defaultPosition == "VALID" ?
-                                                                    <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                    </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                                      <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                      </span>
-                                                                      : data.defaultPosition == "DELETED" ?
-
-                                                                        <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                        </span> : null}
-                                                                  <Popover
-                                                                    onClick={() =>
-                                                                      getValidHccDetails(
-                                                                        data.actualDescription,
-                                                                        data.diagnosisCode
-                                                                      )
-                                                                    }
-                                                                    content={
-                                                                      validHccDetails
-                                                                    }
-                                                                    title={
-                                                                      data.diagnosisCode
-                                                                    }
-                                                                    placement="bottom"
-                                                                    trigger="click"
-                                                                  >
-                                                                    <i>
-                                                                      {
-                                                                        SVGICON.infoIcon
-                                                                      }
-                                                                    </i>
-                                                                  </Popover>
-                                                                  {data.getPlace ==
-                                                                    "Radio" || data.getPlace ==
-                                                                    "Lab" ?
-                                                                    <Popconfirm
-                                                                      title="Choose an action"
-                                                                      icon={
-                                                                        <QuestionCircleOutlined
-                                                                          style={{
-                                                                            color:
-                                                                              "blue",
-                                                                          }}
-                                                                        />
-                                                                      }
-                                                                      okText="Move to Deleted"
-
-                                                                      okButtonProps={{
-                                                                        type: buttonClicked
-                                                                          ? "primary"
-                                                                          : "default",
-                                                                      }}
-
-                                                                      description={
-                                                                        data.diagnosisCode
-                                                                      }
-                                                                      onConfirm={
-                                                                        suggestedToDeleted
-                                                                      }
-                                                                      placement="leftTop"
-                                                                      onOpenChange={() =>
-                                                                        onchangeValid(
-                                                                          data.diagnosisCode,
-                                                                          data
-                                                                        )
-                                                                      }
-                                                                    >
-                                                                      <div
-                                                                        className={
-                                                                          visitStyles.close_icon
+                                                                        onConfirm={
+                                                                          suggestedToDeleted
+                                                                        }
+                                                                        placement="leftTop"
+                                                                        onOpenChange={() =>
+                                                                          onchangeValid(
+                                                                            data.diagnosisCode,
+                                                                            data
+                                                                          )
                                                                         }
                                                                       >
-                                                                        <FontAwesomeIcon
-                                                                          icon={faArrowsAlt}
-                                                                          style={{ size: 8, color: "#a80404" }}
-                                                                        />
-                                                                      </div>
-                                                                    </Popconfirm>
+                                                                        <div
+                                                                          className={
+                                                                            visitStyles.close_icon
+                                                                          }
+                                                                        >
+                                                                          <FontAwesomeIcon
+                                                                            icon={faArrowsAlt}
+                                                                            style={{ size: 8, color: "#a80404" }}
+                                                                          />
+                                                                        </div>
+                                                                      </Popconfirm>
 
-                                                                    : <Popconfirm
-                                                                      title="Choose an action"
-                                                                      icon={
-                                                                        <QuestionCircleOutlined
-                                                                          style={{
-                                                                            color:
-                                                                              "blue",
-                                                                          }}
-                                                                        />
-                                                                      }
-                                                                      okText="Move to Deleted"
-                                                                      cancelText="Move to HCC"
-                                                                      onCancel={
-                                                                        suggestedToValid
-                                                                      }
-                                                                      okButtonProps={{
-                                                                        type: buttonClicked
-                                                                          ? "primary"
-                                                                          : "default",
-                                                                      }}
-                                                                      cancelButtonProps={{
-                                                                        type: buttonClicked
-                                                                          ? "danger"
-                                                                          : "default",
-                                                                      }}
-                                                                      description={
-                                                                        data.diagnosisCode
-                                                                      }
-                                                                      onConfirm={
-                                                                        suggestedToDeleted
-                                                                      }
-                                                                      placement="leftTop"
-                                                                      onOpenChange={() =>
-                                                                        onchangeValid(
-                                                                          data.diagnosisCode,
-                                                                          data
-                                                                        )
-                                                                      }
-                                                                    >
-                                                                      <div
-                                                                        className={
-                                                                          visitStyles.close_icon
+                                                                      : <Popconfirm
+                                                                        title="Choose an action"
+                                                                        icon={
+                                                                          <QuestionCircleOutlined
+                                                                            style={{
+                                                                              color:
+                                                                                "blue",
+                                                                            }}
+                                                                          />
+                                                                        }
+                                                                        okText="Move to Deleted"
+                                                                        cancelText="Move to HCC"
+                                                                        onCancel={
+                                                                          suggestedToValid
+                                                                        }
+                                                                        okButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "primary"
+                                                                            : "default",
+                                                                        }}
+                                                                        cancelButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "danger"
+                                                                            : "default",
+                                                                        }}
+                                                                        description={
+                                                                          data.diagnosisCode
+                                                                        }
+                                                                        onConfirm={
+                                                                          suggestedToDeleted
+                                                                        }
+                                                                        placement="leftTop"
+                                                                        onOpenChange={() =>
+                                                                          onchangeValid(
+                                                                            data.diagnosisCode,
+                                                                            data
+                                                                          )
                                                                         }
                                                                       >
-                                                                        <FontAwesomeIcon
-                                                                          icon={faArrowsAlt}
-                                                                          style={{ size: 8, color: "#a80404" }}
-                                                                        />
-                                                                      </div>
-                                                                    </Popconfirm>}
-                                                                </div>
-                                                                <div  className={`${visitStyles.hoverActiveHcc}`}>
-                                                                  <div className="">
-
-                                                                    {getEncounterDateBackground(data.encounterDate)}
-                                                                    {data.getPlace ==
-                                                                      "Lab" ? (
-                                                                      <Tooltip title="LAB">
-                                                                        <span
-                                                                          className={` mt-2 ${visitStyles.labStatus}`}
-                                                                          bg={`  mt-2 bg-bg-seven `}
+                                                                        <div
+                                                                          className={
+                                                                            visitStyles.close_icon
+                                                                          }
                                                                         >
-                                                                          Lap
-                                                                        </span>
-                                                                      </Tooltip>
-                                                                    ) : data.getPlace ==
-                                                                      "Radio" ? (
-                                                                      <Tooltip title="RADIOLOGY">
-                                                                        <span
-                                                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                                                          bg={`  mt-2 bg-bg-eight `}
-                                                                        >
-                                                                          Radiology
-                                                                        </span>
-                                                                      </Tooltip>
-                                                                    ) : (
-                                                                      <Tooltip title="HCC">
-                                                                        <span
-                                                                          className={` mt-2 ${visitStyles.hccStatus}`}
-                                                                          bg={` mt-2 bg-bg-five `}
-                                                                        >
-                                                                          HCC
-                                                                        </span>
-                                                                      </Tooltip>
-                                                                    )}
-
+                                                                          <FontAwesomeIcon
+                                                                            icon={faArrowsAlt}
+                                                                            style={{ size: 8, color: "#a80404" }}
+                                                                          />
+                                                                        </div>
+                                                                      </Popconfirm>}
                                                                   </div>
-                                                                  <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                    {getCaptureSectionBackground(data.capturedSections)}
+                                                                  <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                                    <div className="">
+
+                                                                      {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                      {data.getPlace ==
+                                                                        "Lab" ? (
+                                                                        <Tooltip title="LAB">
+                                                                          <span
+                                                                            className={` mt-2 ${visitStyles.labStatus}`}
+                                                                            bg={`  mt-2 bg-bg-seven `}
+                                                                          >
+                                                                            Lap
+                                                                          </span>
+                                                                        </Tooltip>
+                                                                      ) : data.getPlace ==
+                                                                        "Radio" ? (
+                                                                        <Tooltip title="RADIOLOGY">
+                                                                          <span
+                                                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                                            bg={`  mt-2 bg-bg-eight `}
+                                                                          >
+                                                                            Radiology
+                                                                          </span>
+                                                                        </Tooltip>
+                                                                      ) : (
+                                                                        <Tooltip title="HCC">
+                                                                          <span
+                                                                            className={` mt-2 ${visitStyles.hccStatus}`}
+                                                                            bg={` mt-2 bg-bg-five `}
+                                                                          >
+                                                                            HCC
+                                                                          </span>
+                                                                        </Tooltip>
+                                                                      )}
+
+                                                                    </div>
+                                                                    <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                      {getCaptureSectionBackground(data.capturedSections)}
+                                                                    </div>
                                                                   </div>
                                                                 </div>
-                                                              </div>
-                                                            </li>
-                                                          ) : null}
-                                                        </>
-                                                      );
-                                                    })}
-                                                  </div>
+                                                              </li>
+                                                            ) : null}
+                                                          </>
+                                                        );
+                                                      })}
+                                                    </div>
                                                   </div>
                                                 </ul>
                                               </div>
@@ -5832,108 +5858,108 @@ const Details = ({ }) => {
                                                     </div>
                                                   </div>
                                                   <div className={visitStyles.container}>
-                                                  <div className={visitStyles.hccStickey_head}>
-                                                    {deletedHccList.map((data, i) => (
-                                                      <li>
-                                                        <div
-                                                          className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                                        >
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {deletedHccList.map((data, i) => (
+                                                        <li>
                                                           <div
-                                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                                            className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                           >
-                                                            <div className="media-body">
-                                                              <span className="mb-1 disease-name d-flex">
-                                                                <span className="valid-dis-name">
-                                                                  {data.diagnosisCode}
-                                                                </span>{" "}
-                                                                -{" "}
-                                                                {
-                                                                  data.actualDescription
-                                                                }
-                                                              </span>
-                                                            </div>
-                                                            {data.defaultPosition == "VALID" ?
-                                                              <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                              </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                                <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                            <div
+                                                              className={`${visitStyles.hcc_card_nameHead}`}
+                                                            >
+                                                              <div className="media-body">
+                                                                <span className="mb-1 disease-name d-flex">
+                                                                  <span className="valid-dis-name">
+                                                                    {data.diagnosisCode}
+                                                                  </span>{" "}
+                                                                  -{" "}
+                                                                  {
+                                                                    data.actualDescription
+                                                                  }
                                                                 </span>
-                                                                : data.defaultPosition == "DELETED" ?
+                                                              </div>
+                                                              {data.defaultPosition == "VALID" ?
+                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span> : data.defaultPosition == "SUGGESTED" ?
 
-                                                                  <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span> : null}
-                                                            <Popover
-                                                              content={
-                                                                data.dbDescription
-                                                              }
-                                                              title={
-                                                                data.diagnosisCode
-                                                              }
-                                                              placement="bottom"
-                                                              trigger="click"
-                                                            >
-                                                              <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                                                <i>
-                                                                  {SVGICON.infoIcon}
-                                                                </i>
-                                                              </Tooltip>
-                                                            </Popover>
-                                                            <Popconfirm
-                                                              title="Choose an action"
-                                                              icon={
-                                                                <QuestionCircleOutlined
-                                                                  style={{
-                                                                    color: "blue",
-                                                                  }}
-                                                                />
-                                                              }
-                                                              okText="Move to Suggested"
-                                                              cancelText="Move to HCC"
-                                                              onCancel={
-                                                                deletedToValid
-                                                              }
-                                                              okButtonProps={{
-                                                                type: buttonClicked
-                                                                  ? "primary"
-                                                                  : "default",
-                                                              }}
-                                                              cancelButtonProps={{
-                                                                type: buttonClicked
-                                                                  ? "danger"
-                                                                  : "default",
-                                                              }}
-                                                              description={
-                                                                data.diagnosisCode
-                                                              }
-                                                              onConfirm={
-                                                                deletedToSuggested
-                                                              }
-                                                              placement="leftTop"
-                                                              onOpenChange={() =>
-                                                                onchangeValid(
-                                                                  data.diagnosisCode,
-                                                                  data
-                                                                )
-                                                              }
-                                                            >
-                                                              <div
-                                                                className={
-                                                                  visitStyles.close_icon
+                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span>
+                                                                  : data.defaultPosition == "DELETED" ?
+
+                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : null}
+                                                              <Popover
+                                                                content={
+                                                                  data.dbDescription
+                                                                }
+                                                                title={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                placement="bottom"
+                                                                trigger="click"
+                                                              >
+                                                                <Tooltip title="HCC Veriosn Details" placement="bottom">
+                                                                  <i>
+                                                                    {SVGICON.infoIcon}
+                                                                  </i>
+                                                                </Tooltip>
+                                                              </Popover>
+                                                              <Popconfirm
+                                                                title="Choose an action"
+                                                                icon={
+                                                                  <QuestionCircleOutlined
+                                                                    style={{
+                                                                      color: "blue",
+                                                                    }}
+                                                                  />
+                                                                }
+                                                                okText="Move to Suggested"
+                                                                cancelText="Move to HCC"
+                                                                onCancel={
+                                                                  deletedToValid
+                                                                }
+                                                                okButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "primary"
+                                                                    : "default",
+                                                                }}
+                                                                cancelButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "danger"
+                                                                    : "default",
+                                                                }}
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  deletedToSuggested
+                                                                }
+                                                                placement="leftTop"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
                                                                 }
                                                               >
-                                                                <FontAwesomeIcon
-                                                                  icon={faArrowsAlt}
-                                                                  style={{ size: 8, color: "#a80404" }}
-                                                                />
-                                                              </div>
-                                                            </Popconfirm>
-                                                          </div>
-                                                          <div  className={`${visitStyles.hoverActiveHcc}`}>
-                                                            <div className="">
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
+                                                                >
+                                                                  <FontAwesomeIcon
+                                                                    icon={faArrowsAlt}
+                                                                    style={{ size: 8, color: "#a80404" }}
+                                                                  />
+                                                                </div>
+                                                              </Popconfirm>
+                                                            </div>
+                                                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                              <div className="">
 
-                                                              {getEncounterDateBackground(data.encounterDate)}
+                                                                {getEncounterDateBackground(data.encounterDateSplit)}
 
-                                                              {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                                {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
                                                       <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
                                                           icon={faSearch}
@@ -5942,15 +5968,15 @@ const Details = ({ }) => {
                                                         HPI Test Urlplan
                                                       </Badge>
                                                       </Popover> */}
-                                                            </div>
-                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                              {getCaptureSectionBackground(data.capturedSections)}
+                                                              </div>
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                {getCaptureSectionBackground(data.capturedSections)}
+                                                              </div>
                                                             </div>
                                                           </div>
-                                                        </div>
-                                                      </li>
-                                                    ))}
-                                                  </div>
+                                                        </li>
+                                                      ))}
+                                                    </div>
                                                   </div>
                                                 </ul>
                                               </div>
@@ -6107,80 +6133,80 @@ const Details = ({ }) => {
                                                   </div>
                                                 </div>
                                                 {comboDiseaseCodesList.length != 0 ?
-                                                <div className={visitStyles.container}>
-                                                  <div className={visitStyles.hccStickey_head}>
-                                                    {comboDiseaseCodesList?.map(
-                                                      (item) => {
-                                                        return (
-                                                          <div
-                                                            className={
-                                                              visitStyles.combo_details_card
-                                                            }
-                                                          >
-                                                            <div className="row">
-                                                              <div className="col-xl-3">
-                                                                <span className="font-bold">
-                                                                  {
-                                                                    item.diagnosisCodeCombo
-                                                                  }
-                                                                </span>
-                                                              </div>
-                                                              <div className="col-xl-3">
-                                                                <span className="font-bold">
-                                                                  {item.addOnCode}
-                                                                </span>
-                                                              </div>
-                                                              <div
-                                                                className="col-xl-5 cr-pointer"
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    item.diagnosisCodeCombo,
-                                                                    item.diseaseName
-                                                                  )
-                                                                }
-                                                              >
-                                                                <span>
-                                                                  {item.diseaseName}
-                                                                </span>
-                                                              </div>
-                                                              <div className="col-xl-1 comboclose">
-                                                                <Popconfirm
-                                                                  title="You want move to Invalid?"
-                                                                  description={
-                                                                    item.diseaseName
-                                                                  }
-                                                                  onConfirm={
-                                                                    confirmComboInvalid
-                                                                  }
-                                                                  placement="leftTop"
-                                                                  okText="Yes"
-                                                                  cancelText="No"
-                                                                  onOpenChange={() =>
-                                                                    onchangeCombo(
-                                                                      item.diseaseName,
-                                                                      item.addOnCode
+                                                  <div className={visitStyles.container}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {comboDiseaseCodesList?.map(
+                                                        (item) => {
+                                                          return (
+                                                            <div
+                                                              className={
+                                                                visitStyles.combo_details_card
+                                                              }
+                                                            >
+                                                              <div className="row">
+                                                                <div className="col-xl-3">
+                                                                  <span className="font-bold">
+                                                                    {
+                                                                      item.diagnosisCodeCombo
+                                                                    }
+                                                                  </span>
+                                                                </div>
+                                                                <div className="col-xl-3">
+                                                                  <span className="font-bold">
+                                                                    {item.addOnCode}
+                                                                  </span>
+                                                                </div>
+                                                                <div
+                                                                  className="col-xl-5 cr-pointer"
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      item.diagnosisCodeCombo,
+                                                                      item.diseaseName
                                                                     )
                                                                   }
                                                                 >
-                                                                  <div
-                                                                    className={
-                                                                      visitStyles.close_icon
+                                                                  <span>
+                                                                    {item.diseaseName}
+                                                                  </span>
+                                                                </div>
+                                                                <div className="col-xl-1 comboclose">
+                                                                  <Popconfirm
+                                                                    title="You want move to Invalid?"
+                                                                    description={
+                                                                      item.diseaseName
+                                                                    }
+                                                                    onConfirm={
+                                                                      confirmComboInvalid
+                                                                    }
+                                                                    placement="leftTop"
+                                                                    okText="Yes"
+                                                                    cancelText="No"
+                                                                    onOpenChange={() =>
+                                                                      onchangeCombo(
+                                                                        item.diseaseName,
+                                                                        item.addOnCode
+                                                                      )
                                                                     }
                                                                   >
-                                                                    <FontAwesomeIcon
-                                                                      icon={faArrowsAlt}
-                                                                      style={{ size: 8, color: "#a80404" }}
-                                                                    />
-                                                                  </div>
-                                                                </Popconfirm>
+                                                                    <div
+                                                                      className={
+                                                                        visitStyles.close_icon
+                                                                      }
+                                                                    >
+                                                                      <FontAwesomeIcon
+                                                                        icon={faArrowsAlt}
+                                                                        style={{ size: 8, color: "#a80404" }}
+                                                                      />
+                                                                    </div>
+                                                                  </Popconfirm>
+                                                                </div>
                                                               </div>
                                                             </div>
-                                                          </div>
-                                                        );
-                                                      }
-                                                    )}
-                                                  </div> 
-                                                  </div>:null}
+                                                          );
+                                                        }
+                                                      )}
+                                                    </div>
+                                                  </div> : null}
 
                                                 {comboDiseaseCodesList.length == 0 ? (
 
@@ -6219,76 +6245,76 @@ const Details = ({ }) => {
                                                 {invalidComboDiseaseCodesList.length !=
                                                   0 ? (
                                                   <>
-                                                  <div className={visitStyles.container}>
-                                                    <div className={visitStyles.hccStickey_head}>
-                                                      {invalidComboDiseaseCodesList?.map(
-                                                        (item) => {
-                                                          return (
-                                                            <div
-                                                              className={
-                                                                visitStyles.combo_details_card
-                                                              }
-                                                            >
-                                                              <div className="row">
-                                                                <div className="col-xl-3">
-                                                                  <span className="font-bold">
-                                                                    {
-                                                                      item.diagnosisCodeCombo
-                                                                    }
-                                                                  </span>
-                                                                </div>
-                                                                <div className="col-xl-3">
-                                                                  <span className="font-bold">
-                                                                    {item.addOnCode}
-                                                                  </span>
-                                                                </div>
-                                                                <div
-                                                                  className="col-xl-5 cr-pointer"
-                                                                  onClick={() =>
-                                                                    handleOpenModalCombinationCode(
-                                                                      item.diagnosisCodeCombo,
-                                                                      item.diseaseName
-                                                                    )
-                                                                  }
-                                                                >
-                                                                  <span>
-                                                                    {item.diseaseName}
-                                                                  </span>
-                                                                </div>
-                                                                <div className="col-xl-1 comboclose">
-                                                                  <Popconfirm
-                                                                    title="You want move to Valid?"
-                                                                    description={
-                                                                      item.diseaseName
-                                                                    }
-                                                                    onConfirm={
-                                                                      confirmComboValid
-                                                                    }
-                                                                    placement="leftTop"
-                                                                    okText="Yes"
-                                                                    cancelText="No"
-                                                                    onOpenChange={() =>
-                                                                      onchangeCombo(
-                                                                        item.diseaseName,
-                                                                        item.addOnCode
+                                                    <div className={visitStyles.container}>
+                                                      <div className={visitStyles.hccStickey_head}>
+                                                        {invalidComboDiseaseCodesList?.map(
+                                                          (item) => {
+                                                            return (
+                                                              <div
+                                                                className={
+                                                                  visitStyles.combo_details_card
+                                                                }
+                                                              >
+                                                                <div className="row">
+                                                                  <div className="col-xl-3">
+                                                                    <span className="font-bold">
+                                                                      {
+                                                                        item.diagnosisCodeCombo
+                                                                      }
+                                                                    </span>
+                                                                  </div>
+                                                                  <div className="col-xl-3">
+                                                                    <span className="font-bold">
+                                                                      {item.addOnCode}
+                                                                    </span>
+                                                                  </div>
+                                                                  <div
+                                                                    className="col-xl-5 cr-pointer"
+                                                                    onClick={() =>
+                                                                      handleOpenModalCombinationCode(
+                                                                        item.diagnosisCodeCombo,
+                                                                        item.diseaseName
                                                                       )
                                                                     }
                                                                   >
-                                                                    <div
-                                                                      className={
-                                                                        visitStyles.tick_icon
+                                                                    <span>
+                                                                      {item.diseaseName}
+                                                                    </span>
+                                                                  </div>
+                                                                  <div className="col-xl-1 comboclose">
+                                                                    <Popconfirm
+                                                                      title="You want move to Valid?"
+                                                                      description={
+                                                                        item.diseaseName
+                                                                      }
+                                                                      onConfirm={
+                                                                        confirmComboValid
+                                                                      }
+                                                                      placement="leftTop"
+                                                                      okText="Yes"
+                                                                      cancelText="No"
+                                                                      onOpenChange={() =>
+                                                                        onchangeCombo(
+                                                                          item.diseaseName,
+                                                                          item.addOnCode
+                                                                        )
                                                                       }
                                                                     >
-                                                                      {SVGICON.tickIcon}
-                                                                    </div>
-                                                                  </Popconfirm>
+                                                                      <div
+                                                                        className={
+                                                                          visitStyles.tick_icon
+                                                                        }
+                                                                      >
+                                                                        {SVGICON.tickIcon}
+                                                                      </div>
+                                                                    </Popconfirm>
+                                                                  </div>
                                                                 </div>
                                                               </div>
-                                                            </div>
-                                                          );
-                                                        }
-                                                      )}
-                                                    </div> </div>
+                                                            );
+                                                          }
+                                                        )}
+                                                      </div> </div>
 
                                                   </>
                                                 ) : null}
@@ -6331,566 +6357,566 @@ const Details = ({ }) => {
                                             </div>
                                           </div>
                                           {meatCriteriaList.length != 0 ?
-                                             <div className={visitStyles.container}>
-                                            <div
-                                              className={visitStyles.hccStickey_head}
-                                            >
-                                              {meatCriteriaList?.map((item) => {
-                                                return (
-                                                  <div
-                                                    className={
-                                                      item.isMeatCriteriaPresent ===
-                                                        true
-                                                        ? `${visitStyles.meat_details_card}`
-                                                        : `${visitStyles.meat_details_card_false}`
-                                                    }
-                                                  >
-                                                    <div className="row">
-                                                      {/* <div className="col-xl-1">
+                                            <div className={visitStyles.container}>
+                                              <div
+                                                className={visitStyles.hccStickey_head}
+                                              >
+                                                {meatCriteriaList?.map((item) => {
+                                                  return (
+                                                    <div
+                                                      className={
+                                                        item.isMeatCriteriaPresent ===
+                                                          true
+                                                          ? `${visitStyles.meat_details_card}`
+                                                          : `${visitStyles.meat_details_card_false}`
+                                                      }
+                                                    >
+                                                      <div className="row">
+                                                        {/* <div className="col-xl-1">
                                                   <span className="font-bold">{item.diagnosisCode}</span>
                                                 </div> */}
-                                                      <div className="col-xl-1 d-grid">
-                                                        <span className="font-bold meat-name-details">
-                                                          {item.diagnosisCode}
-                                                        </span>
-                                                        {item.category == "Valid" ? (
+                                                        <div className="col-xl-1 d-grid">
+                                                          <span className="font-bold meat-name-details">
+                                                            {item.diagnosisCode}
+                                                          </span>
+                                                          {item.category == "Valid" ? (
+                                                            <Badge
+                                                              className="valid-meat badge-circle mt-2"
+                                                              bg={` badge-circle mt-2 bg-validmeat`}
+                                                            >
+                                                              {item.category}
+                                                            </Badge>
+                                                          ) : (
+                                                            <Badge
+                                                              className="valid-meat badge-circle mt-2"
+                                                              bg={` badge-circle mt-2 bg-validUnmatch`}
+                                                            >
+                                                              {item.category}
+                                                            </Badge>
+                                                          )}
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <Popover
+                                                            placement="topLeft"
+                                                            title="Description"
+                                                            content={item.diseaseName}
+                                                          >
+                                                            <span className="meat-name-details">
+                                                              {item.diseaseName}
+                                                            </span>
+                                                          </Popover>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.monitor != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Monitor"
+                                                              content={item.monitor}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.monitor}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
+                                                            </span>
+                                                          )}
                                                           <Badge
-                                                            className="valid-meat badge-circle mt-2"
-                                                            bg={` badge-circle mt-2 bg-validmeat`}
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.monitorCapturedFromHeader,
+                                                                item.monitor
+                                                              )
+                                                            }
                                                           >
-                                                            {item.category}
+                                                            {
+                                                              item.monitorCapturedFromHeader
+                                                            }
                                                           </Badge>
-                                                        ) : (
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.evaluate != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Evaluation"
+                                                              content={item.evaluate}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.evaluate}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
+                                                            </span>
+                                                          )}
                                                           <Badge
-                                                            className="valid-meat badge-circle mt-2"
-                                                            bg={` badge-circle mt-2 bg-validUnmatch`}
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.evaluateCapturedFromHeader,
+                                                                item.evaluate
+                                                              )
+                                                            }
                                                           >
-                                                            {item.category}
+                                                            {
+                                                              item.evaluateCapturedFromHeader
+                                                            }
                                                           </Badge>
-                                                        )}
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <Popover
-                                                          placement="topLeft"
-                                                          title="Description"
-                                                          content={item.diseaseName}
-                                                        >
-                                                          <span className="meat-name-details">
-                                                            {item.diseaseName}
-                                                          </span>
-                                                        </Popover>
-                                                      </div>
-                                                      <div className="col-xl-2 d-grid">
-                                                        {item.monitor != "" ? (
-                                                          <Popover
-                                                            placement="topLeft"
-                                                            title="Monitor"
-                                                            content={item.monitor}
-                                                          >
-                                                            <span className="meat-name-details">
-                                                              {item.monitor}
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.assessment != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Assessment"
+                                                              content={item.assessment}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.assessment}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
                                                             </span>
-                                                          </Popover>
-                                                        ) : (
-                                                          <span className="meat-name-details text-center font-bold">
-                                                            -
-                                                          </span>
-                                                        )}
-                                                        <Badge
-                                                          className="badge-meat cr-pointer badge-circle mt-2"
-                                                          bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
-                                                          onClick={() =>
-                                                            handleOpenModal(
-                                                              item.monitorCapturedFromHeader,
-                                                              item.monitor
-                                                            )
-                                                          }
-                                                        >
-                                                          {
-                                                            item.monitorCapturedFromHeader
-                                                          }
-                                                        </Badge>
-                                                      </div>
-                                                      <div className="col-xl-2 d-grid">
-                                                        {item.evaluate != "" ? (
-                                                          <Popover
-                                                            placement="topLeft"
-                                                            title="Evaluation"
-                                                            content={item.evaluate}
+                                                          )}
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.assessmentCapturedFromHeader,
+                                                                item.assessment
+                                                              )
+                                                            }
                                                           >
-                                                            <span className="meat-name-details">
-                                                              {item.evaluate}
+                                                            {
+                                                              item.assessmentCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.treatment != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Treatment"
+                                                              content={item.treatment}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.treatment}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
                                                             </span>
-                                                          </Popover>
-                                                        ) : (
-                                                          <span className="meat-name-details text-center font-bold">
-                                                            -
-                                                          </span>
-                                                        )}
-                                                        <Badge
-                                                          className="badge-meat cr-pointer badge-circle mt-2"
-                                                          bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
-                                                          onClick={() =>
-                                                            handleOpenModal(
-                                                              item.evaluateCapturedFromHeader,
-                                                              item.evaluate
-                                                            )
-                                                          }
-                                                        >
-                                                          {
-                                                            item.evaluateCapturedFromHeader
-                                                          }
-                                                        </Badge>
-                                                      </div>
-                                                      <div className="col-xl-2 d-grid">
-                                                        {item.assessment != "" ? (
-                                                          <Popover
-                                                            placement="topLeft"
-                                                            title="Assessment"
-                                                            content={item.assessment}
-                                                          >
-                                                            <span className="meat-name-details">
-                                                              {item.assessment}
-                                                            </span>
-                                                          </Popover>
-                                                        ) : (
-                                                          <span className="meat-name-details text-center font-bold">
-                                                            -
-                                                          </span>
-                                                        )}
-                                                        <Badge
-                                                          className="badge-meat cr-pointer badge-circle mt-2"
-                                                          bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
-                                                          onClick={() =>
-                                                            handleOpenModal(
-                                                              item.assessmentCapturedFromHeader,
-                                                              item.assessment
-                                                            )
-                                                          }
-                                                        >
-                                                          {
-                                                            item.assessmentCapturedFromHeader
-                                                          }
-                                                        </Badge>
-                                                      </div>
-                                                      <div className="col-xl-2 d-grid">
-                                                        {item.treatment != "" ? (
-                                                          <Popover
-                                                            placement="topLeft"
-                                                            title="Treatment"
-                                                            content={item.treatment}
-                                                          >
-                                                            <span className="meat-name-details">
-                                                              {item.treatment}
-                                                            </span>
-                                                          </Popover>
-                                                        ) : (
-                                                          <span className="meat-name-details text-center font-bold">
-                                                            -
-                                                          </span>
-                                                        )}
+                                                          )}
 
-                                                        <Badge
-                                                          className="badge-meat cr-pointer badge-circle mt-2"
-                                                          bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
-                                                          onClick={() =>
-                                                            handleOpenModal(
-                                                              item.treatmentCapturedFromHeader,
-                                                              item.treatment
-                                                            )
-                                                          }
-                                                        >
-                                                          {
-                                                            item.treatmentCapturedFromHeader
-                                                          }
-                                                        </Badge>
-                                                      </div>
-                                                      <div className="col-xl-1 meatclose">
-                                                        {/* {item.isMeatCriteriaPresent === true ?
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.treatmentCapturedFromHeader,
+                                                                item.treatment
+                                                              )
+                                                            }
+                                                          >
+                                                            {
+                                                              item.treatmentCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-1 meatclose">
+                                                          {/* {item.isMeatCriteriaPresent === true ?
                                              <span  className="badge badge-rounded badge-warning badge-meat">
                                              True
                                            </span>:
                                             <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
-                                                        <Popconfirm
-                                                          title="You want move to Invalid?"
-                                                          description={item.diseaseName}
-                                                          onConfirm={confirmInvalidMeat}
-                                                          placement="leftTop"
-                                                          okText="Yes"
-                                                          cancelText="No"
-                                                          onOpenChange={() =>
-                                                            onchangeMeat(
-                                                              item.diseaseName,
-                                                              item.diagnosisCode
-                                                            )
-                                                          }
-                                                        >
-                                                          <div
-                                                            className={
-                                                              visitStyles.close_icon
+                                                          <Popconfirm
+                                                            title="You want move to Invalid?"
+                                                            description={item.diseaseName}
+                                                            onConfirm={confirmInvalidMeat}
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeMeat(
+                                                                item.diseaseName,
+                                                                item.diagnosisCode
+                                                              )
                                                             }
                                                           >
-                                                            <FontAwesomeIcon
-                                                              icon={faArrowsAlt}
-                                                              style={{ size: 8, color: "#a80404" }}
-                                                            />
-                                                          </div>
-                                                        </Popconfirm>
+                                                            <div
+                                                              className={
+                                                                visitStyles.close_icon
+                                                              }
+                                                            >
+                                                              <FontAwesomeIcon
+                                                                icon={faArrowsAlt}
+                                                                style={{ size: 8, color: "#a80404" }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  );
+                                                })}
+
+                                                {meatCriteriaList.length == 0 ? (
+                                                  <div className="card combo-card">
+                                                    <div className="col-xl-12">
+                                                      <div>
+                                                        <span className="no-patient-data">
+                                                          NO DATA
+                                                        </span>
                                                       </div>
                                                     </div>
                                                   </div>
-                                                );
-                                              })}
-
-                                              {meatCriteriaList.length == 0 ? (
-                                                <div className="card combo-card">
-                                                  <div className="col-xl-12">
-                                                    <div>
-                                                      <span className="no-patient-data">
-                                                        NO DATA
-                                                      </span>
+                                                ) : null}
+                                                {invalidMeatCriteriaList.length != 0 ? (
+                                                  <>
+                                                    <div className="invalid-combo">
+                                                      <span>Invalid MeatCriteria</span>
                                                     </div>
-                                                  </div>
-                                                </div>
-                                              ) : null}
-                                              {invalidMeatCriteriaList.length != 0 ? (
-                                                <>
-                                                  <div className="invalid-combo">
-                                                    <span>Invalid MeatCriteria</span>
-                                                  </div>
 
-                                                  {invalidMeatCriteriaList?.map(
-                                                    (item) => {
-                                                      return (
-                                                        <div
-                                                          className={
-                                                            visitStyles.meat_details_card
-                                                          }
-                                                        >
-                                                          <div className="row">
-                                                            <div className="col-xl-1">
-                                                              <span className="font-bold">
-                                                                {item.diagnosisCode}
-                                                              </span>
-                                                            </div>
-                                                            <div className="col-xl-2">
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                title="Description"
-                                                                content={
-                                                                  item.diseaseName
-                                                                }
-                                                              >
-                                                                <span className="meat-name-details">
-                                                                  {item.diseaseName}
+                                                    {invalidMeatCriteriaList?.map(
+                                                      (item) => {
+                                                        return (
+                                                          <div
+                                                            className={
+                                                              visitStyles.meat_details_card
+                                                            }
+                                                          >
+                                                            <div className="row">
+                                                              <div className="col-xl-1">
+                                                                <span className="font-bold">
+                                                                  {item.diagnosisCode}
                                                                 </span>
-                                                              </Popover>
-                                                            </div>
-                                                            <div className="col-xl-2 d-grid">
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                title="Monitor"
-                                                                content={item.monitor}
-                                                              >
-                                                                <span className="meat-name-details">
-                                                                  {item.monitor}
-                                                                </span>
-                                                              </Popover>
-                                                              <Badge
-                                                                className="badge-meat cr-pointer"
-                                                                bg={
-                                                                  item.monitorCapturedFromHeader ===
-                                                                    "HPI" ||
+                                                              </div>
+                                                              <div className="col-xl-2">
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  title="Description"
+                                                                  content={
+                                                                    item.diseaseName
+                                                                  }
+                                                                >
+                                                                  <span className="meat-name-details">
+                                                                    {item.diseaseName}
+                                                                  </span>
+                                                                </Popover>
+                                                              </div>
+                                                              <div className="col-xl-2 d-grid">
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  title="Monitor"
+                                                                  content={item.monitor}
+                                                                >
+                                                                  <span className="meat-name-details">
+                                                                    {item.monitor}
+                                                                  </span>
+                                                                </Popover>
+                                                                <Badge
+                                                                  className="badge-meat cr-pointer"
+                                                                  bg={
                                                                     item.monitorCapturedFromHeader ===
-                                                                    "Plan: Hypertensive heart disease without heart failure" ||
-                                                                    item.monitorCapturedFromHeader ===
-                                                                    "Vital Signs"
-                                                                    ? "third badge-circle mt-2"
-                                                                    : item.monitorCapturedFromHeader ===
-                                                                      "Impression" ||
+                                                                      "HPI" ||
                                                                       item.monitorCapturedFromHeader ===
-                                                                      "Plan: COPD" ||
+                                                                      "Plan: Hypertensive heart disease without heart failure" ||
                                                                       item.monitorCapturedFromHeader ===
-                                                                      "Assessments" ||
-                                                                      item.monitorCapturedFromHeader ===
-                                                                      "Assessment"
-                                                                      ? "bg-eight badge-circle mt-2"
+                                                                      "Vital Signs"
+                                                                      ? "third badge-circle mt-2"
                                                                       : item.monitorCapturedFromHeader ===
-                                                                        "Recommendations" ||
+                                                                        "Impression" ||
                                                                         item.monitorCapturedFromHeader ===
-                                                                        "Plan: GERD without esophagitis" ||
+                                                                        "Plan: COPD" ||
                                                                         item.monitorCapturedFromHeader ===
-                                                                        "Treatment"
-                                                                        ? "bgshodowcolor badge-circle mt-2"
+                                                                        "Assessments" ||
+                                                                        item.monitorCapturedFromHeader ===
+                                                                        "Assessment"
+                                                                        ? "bg-eight badge-circle mt-2"
                                                                         : item.monitorCapturedFromHeader ===
-                                                                          "Plan / Discussion" ||
+                                                                          "Recommendations" ||
                                                                           item.monitorCapturedFromHeader ===
-                                                                          "Plan: Arteriosclerotic cardiovascular disease"
-                                                                          ? "bg-four badge-circle mt-2"
+                                                                          "Plan: GERD without esophagitis" ||
+                                                                          item.monitorCapturedFromHeader ===
+                                                                          "Treatment"
+                                                                          ? "bgshodowcolor badge-circle mt-2"
                                                                           : item.monitorCapturedFromHeader ===
-                                                                            "Patient Instructions" ||
+                                                                            "Plan / Discussion" ||
                                                                             item.monitorCapturedFromHeader ===
-                                                                            "Plan: Hyperlipidemia, acquired"
-                                                                            ? "bg-five badge-circle mt-2"
+                                                                            "Plan: Arteriosclerotic cardiovascular disease"
+                                                                            ? "bg-four badge-circle mt-2"
                                                                             : item.monitorCapturedFromHeader ===
-                                                                              "N/A"
-                                                                              ? "bg-six badge-circle mt-2"
+                                                                              "Patient Instructions" ||
+                                                                              item.monitorCapturedFromHeader ===
+                                                                              "Plan: Hyperlipidemia, acquired"
+                                                                              ? "bg-five badge-circle mt-2"
                                                                               : item.monitorCapturedFromHeader ===
-                                                                                "Plan"
-                                                                                ? "bg-seven badge-circle mt-2"
-                                                                                : "primary badge-circle mt-2"
-                                                                }
-                                                                onClick={() =>
-                                                                  handleOpenModal(
-                                                                    item.monitorCapturedFromHeader,
-                                                                    item.monitor
-                                                                  )
-                                                                }
-                                                              >
-                                                                {
-                                                                  item.monitorCapturedFromHeader
-                                                                }
-                                                              </Badge>
-                                                            </div>
-                                                            <div className="col-xl-2 d-grid">
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                title="Evaluation"
-                                                                content={item.evaluate}
-                                                              >
-                                                                <span className="meat-name-details">
-                                                                  {item.evaluate}
-                                                                </span>
-                                                              </Popover>
-                                                              <Badge
-                                                                className="badge-meat cr-pointer"
-                                                                bg={
-                                                                  item.evaluateCapturedFromHeader ===
-                                                                    "HPI" ||
+                                                                                "N/A"
+                                                                                ? "bg-six badge-circle mt-2"
+                                                                                : item.monitorCapturedFromHeader ===
+                                                                                  "Plan"
+                                                                                  ? "bg-seven badge-circle mt-2"
+                                                                                  : "primary badge-circle mt-2"
+                                                                  }
+                                                                  onClick={() =>
+                                                                    handleOpenModal(
+                                                                      item.monitorCapturedFromHeader,
+                                                                      item.monitor
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  {
+                                                                    item.monitorCapturedFromHeader
+                                                                  }
+                                                                </Badge>
+                                                              </div>
+                                                              <div className="col-xl-2 d-grid">
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  title="Evaluation"
+                                                                  content={item.evaluate}
+                                                                >
+                                                                  <span className="meat-name-details">
+                                                                    {item.evaluate}
+                                                                  </span>
+                                                                </Popover>
+                                                                <Badge
+                                                                  className="badge-meat cr-pointer"
+                                                                  bg={
                                                                     item.evaluateCapturedFromHeader ===
-                                                                    "Plan: Hypertensive heart disease without heart failure" ||
-                                                                    item.evaluateCapturedFromHeader ===
-                                                                    "Vital Signs"
-                                                                    ? "third badge-circle mt-2"
-                                                                    : item.evaluateCapturedFromHeader ===
-                                                                      "Impression" ||
+                                                                      "HPI" ||
                                                                       item.evaluateCapturedFromHeader ===
-                                                                      "Plan: COPD" ||
+                                                                      "Plan: Hypertensive heart disease without heart failure" ||
                                                                       item.evaluateCapturedFromHeader ===
-                                                                      "Assessments" ||
-                                                                      item.evaluateCapturedFromHeader ===
-                                                                      "Assessment"
-                                                                      ? "bg-eight badge-circle mt-2"
+                                                                      "Vital Signs"
+                                                                      ? "third badge-circle mt-2"
                                                                       : item.evaluateCapturedFromHeader ===
-                                                                        "Recommendations" ||
+                                                                        "Impression" ||
                                                                         item.evaluateCapturedFromHeader ===
-                                                                        "Plan: GERD without esophagitis" ||
+                                                                        "Plan: COPD" ||
                                                                         item.evaluateCapturedFromHeader ===
-                                                                        "Treatment"
-                                                                        ? "bgshodowcolor badge-circle mt-2"
+                                                                        "Assessments" ||
+                                                                        item.evaluateCapturedFromHeader ===
+                                                                        "Assessment"
+                                                                        ? "bg-eight badge-circle mt-2"
                                                                         : item.evaluateCapturedFromHeader ===
-                                                                          "Plan / Discussion" ||
+                                                                          "Recommendations" ||
                                                                           item.evaluateCapturedFromHeader ===
-                                                                          "Plan: Arteriosclerotic cardiovascular disease"
-                                                                          ? "bg-four badge-circle mt-2"
+                                                                          "Plan: GERD without esophagitis" ||
+                                                                          item.evaluateCapturedFromHeader ===
+                                                                          "Treatment"
+                                                                          ? "bgshodowcolor badge-circle mt-2"
                                                                           : item.evaluateCapturedFromHeader ===
-                                                                            "Patient Instructions" ||
+                                                                            "Plan / Discussion" ||
                                                                             item.evaluateCapturedFromHeader ===
-                                                                            "Plan: Hyperlipidemia, acquired"
-                                                                            ? "bg-five badge-circle mt-2"
+                                                                            "Plan: Arteriosclerotic cardiovascular disease"
+                                                                            ? "bg-four badge-circle mt-2"
                                                                             : item.evaluateCapturedFromHeader ===
-                                                                              "N/A"
-                                                                              ? "bg-six badge-circle mt-2"
+                                                                              "Patient Instructions" ||
+                                                                              item.evaluateCapturedFromHeader ===
+                                                                              "Plan: Hyperlipidemia, acquired"
+                                                                              ? "bg-five badge-circle mt-2"
                                                                               : item.evaluateCapturedFromHeader ===
-                                                                                "Plan"
-                                                                                ? "bg-seven badge-circle mt-2"
-                                                                                : "primary badge-circle mt-2"
-                                                                }
-                                                                onClick={() =>
-                                                                  handleOpenModal(
-                                                                    item.evaluateCapturedFromHeader,
-                                                                    item.evaluate
-                                                                  )
-                                                                }
-                                                              >
-                                                                {
-                                                                  item.evaluateCapturedFromHeader
-                                                                }
-                                                              </Badge>
-                                                            </div>
-                                                            <div className="col-xl-2 d-grid">
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                title="Assessment"
-                                                                content={
-                                                                  item.assessment
-                                                                }
-                                                              >
-                                                                <span className="meat-name-details">
-                                                                  {item.assessment}
-                                                                </span>
-                                                              </Popover>
-                                                              <Badge
-                                                                className="badge-meat cr-pointer"
-                                                                bg={
-                                                                  item.assessmentCapturedFromHeader ===
-                                                                    "HPI" ||
-                                                                    item.assessmentCapturedFromHeader ===
-                                                                    "Plan: Hypertensive heart disease without heart failure" ||
-                                                                    item.assessmentCapturedFromHeader ===
-                                                                    "Vital Signs"
-                                                                    ? "third badge-circle mt-2"
-                                                                    : item.assessmentCapturedFromHeader ===
-                                                                      "Impression" ||
-                                                                      item.assessmentCapturedFromHeader ===
-                                                                      "Plan: COPD" ||
-                                                                      item.assessmentCapturedFromHeader ===
-                                                                      "Assessments" ||
-                                                                      item.assessmentCapturedFromHeader ===
-                                                                      "Assessment"
-                                                                      ? "bg-eight badge-circle mt-2"
-                                                                      : item.assessmentCapturedFromHeader ===
-                                                                        "Recommendations" ||
-                                                                        item.assessmentCapturedFromHeader ===
-                                                                        "Plan: GERD without esophagitis" ||
-                                                                        item.assessmentCapturedFromHeader ===
-                                                                        "Treatment"
-                                                                        ? "bgshodowcolor badge-circle mt-2"
-                                                                        : item.assessmentCapturedFromHeader ===
-                                                                          "Plan / Discussion" ||
-                                                                          item.assessmentCapturedFromHeader ===
-                                                                          "Plan: Arteriosclerotic cardiovascular disease"
-                                                                          ? "bg-four badge-circle mt-2"
-                                                                          : item.assessmentCapturedFromHeader ===
-                                                                            "Patient Instructions" ||
-                                                                            item.assessmentCapturedFromHeader ===
-                                                                            "Plan: Hyperlipidemia, acquired"
-                                                                            ? "bg-five badge-circle mt-2"
-                                                                            : item.assessmentCapturedFromHeader ===
-                                                                              "N/A"
-                                                                              ? "bg-six badge-circle mt-2"
-                                                                              : item.assessmentCapturedFromHeader ===
-                                                                                "Plan"
-                                                                                ? "bg-seven badge-circle mt-2"
-                                                                                : "primary badge-circle mt-2"
-                                                                }
-                                                                onClick={() =>
-                                                                  handleOpenModal(
-                                                                    item.assessmentCapturedFromHeader,
+                                                                                "N/A"
+                                                                                ? "bg-six badge-circle mt-2"
+                                                                                : item.evaluateCapturedFromHeader ===
+                                                                                  "Plan"
+                                                                                  ? "bg-seven badge-circle mt-2"
+                                                                                  : "primary badge-circle mt-2"
+                                                                  }
+                                                                  onClick={() =>
+                                                                    handleOpenModal(
+                                                                      item.evaluateCapturedFromHeader,
+                                                                      item.evaluate
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  {
+                                                                    item.evaluateCapturedFromHeader
+                                                                  }
+                                                                </Badge>
+                                                              </div>
+                                                              <div className="col-xl-2 d-grid">
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  title="Assessment"
+                                                                  content={
                                                                     item.assessment
-                                                                  )
-                                                                }
-                                                              >
-                                                                {
-                                                                  item.assessmentCapturedFromHeader
-                                                                }
-                                                              </Badge>
-                                                            </div>
-                                                            <div className="col-xl-2 d-grid">
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                title="Treatment"
-                                                                content={item.treatment}
-                                                              >
-                                                                <span className="meat-name-details">
-                                                                  {item.treatment}
-                                                                </span>
-                                                              </Popover>
+                                                                  }
+                                                                >
+                                                                  <span className="meat-name-details">
+                                                                    {item.assessment}
+                                                                  </span>
+                                                                </Popover>
+                                                                <Badge
+                                                                  className="badge-meat cr-pointer"
+                                                                  bg={
+                                                                    item.assessmentCapturedFromHeader ===
+                                                                      "HPI" ||
+                                                                      item.assessmentCapturedFromHeader ===
+                                                                      "Plan: Hypertensive heart disease without heart failure" ||
+                                                                      item.assessmentCapturedFromHeader ===
+                                                                      "Vital Signs"
+                                                                      ? "third badge-circle mt-2"
+                                                                      : item.assessmentCapturedFromHeader ===
+                                                                        "Impression" ||
+                                                                        item.assessmentCapturedFromHeader ===
+                                                                        "Plan: COPD" ||
+                                                                        item.assessmentCapturedFromHeader ===
+                                                                        "Assessments" ||
+                                                                        item.assessmentCapturedFromHeader ===
+                                                                        "Assessment"
+                                                                        ? "bg-eight badge-circle mt-2"
+                                                                        : item.assessmentCapturedFromHeader ===
+                                                                          "Recommendations" ||
+                                                                          item.assessmentCapturedFromHeader ===
+                                                                          "Plan: GERD without esophagitis" ||
+                                                                          item.assessmentCapturedFromHeader ===
+                                                                          "Treatment"
+                                                                          ? "bgshodowcolor badge-circle mt-2"
+                                                                          : item.assessmentCapturedFromHeader ===
+                                                                            "Plan / Discussion" ||
+                                                                            item.assessmentCapturedFromHeader ===
+                                                                            "Plan: Arteriosclerotic cardiovascular disease"
+                                                                            ? "bg-four badge-circle mt-2"
+                                                                            : item.assessmentCapturedFromHeader ===
+                                                                              "Patient Instructions" ||
+                                                                              item.assessmentCapturedFromHeader ===
+                                                                              "Plan: Hyperlipidemia, acquired"
+                                                                              ? "bg-five badge-circle mt-2"
+                                                                              : item.assessmentCapturedFromHeader ===
+                                                                                "N/A"
+                                                                                ? "bg-six badge-circle mt-2"
+                                                                                : item.assessmentCapturedFromHeader ===
+                                                                                  "Plan"
+                                                                                  ? "bg-seven badge-circle mt-2"
+                                                                                  : "primary badge-circle mt-2"
+                                                                  }
+                                                                  onClick={() =>
+                                                                    handleOpenModal(
+                                                                      item.assessmentCapturedFromHeader,
+                                                                      item.assessment
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  {
+                                                                    item.assessmentCapturedFromHeader
+                                                                  }
+                                                                </Badge>
+                                                              </div>
+                                                              <div className="col-xl-2 d-grid">
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  title="Treatment"
+                                                                  content={item.treatment}
+                                                                >
+                                                                  <span className="meat-name-details">
+                                                                    {item.treatment}
+                                                                  </span>
+                                                                </Popover>
 
-                                                              <Badge
-                                                                className="badge-meat cr-pointer"
-                                                                bg={
-                                                                  item.treatmentCapturedFromHeader ===
-                                                                    "HPI" ||
+                                                                <Badge
+                                                                  className="badge-meat cr-pointer"
+                                                                  bg={
                                                                     item.treatmentCapturedFromHeader ===
-                                                                    "Plan: Hypertensive heart disease without heart failure" ||
-                                                                    item.treatmentCapturedFromHeader ===
-                                                                    "Vital Signs"
-                                                                    ? "third badge-circle mt-2"
-                                                                    : item.treatmentCapturedFromHeader ===
-                                                                      "Impression" ||
+                                                                      "HPI" ||
                                                                       item.treatmentCapturedFromHeader ===
-                                                                      "Plan: COPD" ||
+                                                                      "Plan: Hypertensive heart disease without heart failure" ||
                                                                       item.treatmentCapturedFromHeader ===
-                                                                      "Assessments" ||
-                                                                      item.treatmentCapturedFromHeader ===
-                                                                      "Assessment"
-                                                                      ? "bg-eight badge-circle mt-2"
+                                                                      "Vital Signs"
+                                                                      ? "third badge-circle mt-2"
                                                                       : item.treatmentCapturedFromHeader ===
-                                                                        "Recommendations" ||
+                                                                        "Impression" ||
                                                                         item.treatmentCapturedFromHeader ===
-                                                                        "Plan: GERD without esophagitis" ||
+                                                                        "Plan: COPD" ||
                                                                         item.treatmentCapturedFromHeader ===
-                                                                        "Treatment"
-                                                                        ? "bgshodowcolor badge-circle mt-2"
+                                                                        "Assessments" ||
+                                                                        item.treatmentCapturedFromHeader ===
+                                                                        "Assessment"
+                                                                        ? "bg-eight badge-circle mt-2"
                                                                         : item.treatmentCapturedFromHeader ===
-                                                                          "Plan / Discussion" ||
+                                                                          "Recommendations" ||
                                                                           item.treatmentCapturedFromHeader ===
-                                                                          "Plan: Arteriosclerotic cardiovascular disease"
-                                                                          ? "bg-four badge-circle mt-2"
+                                                                          "Plan: GERD without esophagitis" ||
+                                                                          item.treatmentCapturedFromHeader ===
+                                                                          "Treatment"
+                                                                          ? "bgshodowcolor badge-circle mt-2"
                                                                           : item.treatmentCapturedFromHeader ===
-                                                                            "Patient Instructions" ||
+                                                                            "Plan / Discussion" ||
                                                                             item.treatmentCapturedFromHeader ===
-                                                                            "Plan: Hyperlipidemia, acquired"
-                                                                            ? "bg-five badge-circle mt-2"
+                                                                            "Plan: Arteriosclerotic cardiovascular disease"
+                                                                            ? "bg-four badge-circle mt-2"
                                                                             : item.treatmentCapturedFromHeader ===
-                                                                              "N/A"
-                                                                              ? "bg-six badge-circle mt-2"
+                                                                              "Patient Instructions" ||
+                                                                              item.treatmentCapturedFromHeader ===
+                                                                              "Plan: Hyperlipidemia, acquired"
+                                                                              ? "bg-five badge-circle mt-2"
                                                                               : item.treatmentCapturedFromHeader ===
-                                                                                "Plan"
-                                                                                ? "bg-seven badge-circle mt-2"
-                                                                                : "primary badge-circle mt-2"
-                                                                }
-                                                                onClick={() =>
-                                                                  handleOpenModal(
-                                                                    item.treatmentCapturedFromHeader,
-                                                                    item.treatment
-                                                                  )
-                                                                }
-                                                              >
-                                                                {
-                                                                  item.treatmentCapturedFromHeader
-                                                                }
-                                                              </Badge>
-                                                            </div>
-                                                            <div className="col-xl-1 meatclose">
-                                                              <Popconfirm
-                                                                title="You want move to Valid?"
-                                                                description={
-                                                                  item.diseaseName
-                                                                }
-                                                                onConfirm={
-                                                                  confirmValidMeat
-                                                                }
-                                                                placement="leftTop"
-                                                                okText="Yes"
-                                                                cancelText="No"
-                                                                onOpenChange={() =>
-                                                                  onchangeMeat(
-                                                                    item.diseaseName,
-                                                                    item.diagnosisCode
-                                                                  )
-                                                                }
-                                                              >
-                                                                <div className="icon-box  bg-danger-light me-1">
-                                                                  <FontAwesomeIcon
-                                                                    icon={faCheck}
-                                                                    style={{
-                                                                      color: "orange",
-                                                                    }}
-                                                                  />
-                                                                </div>
-                                                              </Popconfirm>
+                                                                                "N/A"
+                                                                                ? "bg-six badge-circle mt-2"
+                                                                                : item.treatmentCapturedFromHeader ===
+                                                                                  "Plan"
+                                                                                  ? "bg-seven badge-circle mt-2"
+                                                                                  : "primary badge-circle mt-2"
+                                                                  }
+                                                                  onClick={() =>
+                                                                    handleOpenModal(
+                                                                      item.treatmentCapturedFromHeader,
+                                                                      item.treatment
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  {
+                                                                    item.treatmentCapturedFromHeader
+                                                                  }
+                                                                </Badge>
+                                                              </div>
+                                                              <div className="col-xl-1 meatclose">
+                                                                <Popconfirm
+                                                                  title="You want move to Valid?"
+                                                                  description={
+                                                                    item.diseaseName
+                                                                  }
+                                                                  onConfirm={
+                                                                    confirmValidMeat
+                                                                  }
+                                                                  placement="leftTop"
+                                                                  okText="Yes"
+                                                                  cancelText="No"
+                                                                  onOpenChange={() =>
+                                                                    onchangeMeat(
+                                                                      item.diseaseName,
+                                                                      item.diagnosisCode
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  <div className="icon-box  bg-danger-light me-1">
+                                                                    <FontAwesomeIcon
+                                                                      icon={faCheck}
+                                                                      style={{
+                                                                        color: "orange",
+                                                                      }}
+                                                                    />
+                                                                  </div>
+                                                                </Popconfirm>
+                                                              </div>
                                                             </div>
                                                           </div>
-                                                        </div>
-                                                      );
-                                                    }
-                                                  )}
-                                                </>
-                                              ) : null}
-                                            </div> 
-                                            </div>:null}
+                                                        );
+                                                      }
+                                                    )}
+                                                  </>
+                                                ) : null}
+                                              </div>
+                                            </div> : null}
                                         </div>
                                       </Tab.Pane>
                                       <Tab.Pane id="my-posts" eventKey="RafScore">
@@ -7279,187 +7305,187 @@ const Details = ({ }) => {
                                       </Tab.Pane>
                                       <Tab.Pane id="my-posts" eventKey="file">
                                         <div className="my-post-content pt-3 row">
-                                        <div className="col-xl-2">
-                                                <ul className="timeline">
-                                                  <div
-                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                          <div className="col-xl-2">
+                                            <ul className="timeline">
+                                              <div
+                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                              >
+                                                <span
+                                                  className={`${visitStyles.hcc_title_name}`}
+                                                >
+
+                                                  HCC
+                                                  <FontAwesomeIcon onClick={() =>
+                                                    addValidDiseases()
+                                                  }
+                                                    icon={faPlus}
+                                                  />
+                                                </span>
+                                                <div className="d-flex justify-content-center">
+                                                  <span
+                                                    className={`${visitStyles.hcc_title_badge}`}
                                                   >
-                                                    <span
-                                                      className={`${visitStyles.hcc_title_name}`}
-                                                    >
+                                                    {newValidDiseaseList.length}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <div className={visitStyles.container}>
+                                                <div className={visitStyles.hccStickey_head}>
 
-                                                      HCC
-                                                      <FontAwesomeIcon onClick={() =>
-                                                        addValidDiseases()
-                                                      }
-                                                        icon={faPlus}
-                                                      />
-                                                    </span>
-                                                    <div className="d-flex justify-content-center">
-                                                      <span
-                                                        className={`${visitStyles.hcc_title_badge}`}
-                                                      >
-                                                        {newValidDiseaseList.length}
-                                                      </span>
-                                                    </div>
-                                                  </div>
-                                                  <div className={visitStyles.container}>
-                                                  <div className={visitStyles.hccStickey_head}>
-
-                                                    {newValidDiseaseList.map(
-                                                      (data, i) => (
-                                                        <li>
+                                                  {newValidDiseaseList.map(
+                                                    (data, i) => (
+                                                      <li>
+                                                        <div
+                                                          className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                                        >
                                                           <div
-                                                            className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                                            className={`${visitStyles.hcc_card_nameHead}`}
                                                           >
                                                             <div
-                                                              className={`${visitStyles.hcc_card_nameHead}`}
+                                                              className="media-body"
+                                                              onClick={() =>
+                                                                handleOpenModalCombinationCode(
+                                                                  data.diagnosisCode,
+                                                                  data.actualDescription,
+                                                                  "valid2"
+                                                                )
+                                                              }
+                                                            >
+                                                              <span className="mb-1 disease-name d-flex">
+
+                                                                <span className="valid-dis-name">
+
+
+                                                                  {
+                                                                    data.diagnosisCode
+                                                                  }
+                                                                </span>{" "}
+                                                                -{" "}
+                                                                {
+                                                                  data.actualDescription
+                                                                }
+
+                                                              </span>
+                                                            </div>
+
+                                                            {data.defaultPosition == "VALID" ?
+                                                              <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span>
+                                                                : data.defaultPosition == "DELETED" ?
+
+                                                                  <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span> : null}
+                                                            <Popover
+                                                              onClick={() =>
+                                                                getValidHccDetails(
+                                                                  data.actualDescription,
+                                                                  data.diagnosisCode
+                                                                )
+                                                              }
+                                                              content={
+                                                                validHccDetails
+                                                              }
+                                                              title={
+                                                                data.diagnosisCode
+                                                              }
+                                                              placement="bottom"
+                                                              trigger="click"
+                                                            >
+                                                              <Tooltip title="HCC Veriosn Details" placement="bottom">
+                                                                <i className="cr-pointer">
+                                                                  {SVGICON.infoIcon}
+                                                                </i>
+                                                              </Tooltip>
+                                                            </Popover>
+
+
+                                                            <Popconfirm
+                                                              title="Choose an action"
+                                                              icon={
+                                                                <QuestionCircleOutlined
+                                                                  style={{
+                                                                    color: "blue",
+                                                                  }}
+                                                                />
+                                                              }
+                                                              okText="Move to Deleted"
+                                                              cancelText="Move to Suggested"
+                                                              onCancel={
+                                                                validToSuggested
+                                                              }
+                                                              okButtonProps={{
+                                                                type: buttonClicked
+                                                                  ? "primary"
+                                                                  : "default",
+                                                              }}
+                                                              cancelButtonProps={{
+                                                                type: buttonClicked
+                                                                  ? "danger"
+                                                                  : "default",
+                                                              }}
+                                                              description={
+                                                                data.diagnosisCode
+                                                              }
+                                                              onConfirm={
+                                                                confirmvalid
+                                                              }
+                                                              placement="leftTop"
+                                                              onOpenChange={() =>
+                                                                onchangeValid(
+                                                                  data.diagnosisCode,
+                                                                  data
+                                                                )
+                                                              }
                                                             >
                                                               <div
-                                                                className="media-body"
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    data.diagnosisCode,
-                                                                    data.actualDescription,
-                                                                    "valid2"
-                                                                  )
+                                                                className={
+                                                                  visitStyles.close_icon
                                                                 }
                                                               >
-                                                                <span className="mb-1 disease-name d-flex">
-
-                                                                  <span className="valid-dis-name">
-
-
-                                                                    {
-                                                                      data.diagnosisCode
-                                                                    }
-                                                                  </span>{" "}
-                                                                  -{" "}
-                                                                  {
-                                                                    data.actualDescription
-                                                                  }
-
-                                                                </span>
+                                                                {<FontAwesomeIcon
+                                                                  icon={faArrowsAlt}
+                                                                  style={{ size: 8, color: "#a80404" }}
+                                                                />}
                                                               </div>
+                                                            </Popconfirm>
+                                                          </div>
+                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
 
-                                                              {data.defaultPosition == "VALID" ?
-                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span>
-                                                                  : data.defaultPosition == "DELETED" ?
-
-                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                    </span> : null}
-                                                              <Popover
-                                                                onClick={() =>
-                                                                  getValidHccDetails(
-                                                                    data.actualDescription,
-                                                                    data.diagnosisCode
-                                                                  )
-                                                                }
-                                                                content={
-                                                                  validHccDetails
-                                                                }
-                                                                title={
-                                                                  data.diagnosisCode
-                                                                }
-                                                                placement="bottom"
-                                                                trigger="click"
-                                                              >
-                                                                <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                                                  <i className="cr-pointer">
-                                                                    {SVGICON.infoIcon}
-                                                                  </i>
-                                                                </Tooltip>
-                                                              </Popover>
-
-
-                                                              <Popconfirm
-                                                                title="Choose an action"
-                                                                icon={
-                                                                  <QuestionCircleOutlined
-                                                                    style={{
-                                                                      color: "blue",
-                                                                    }}
-                                                                  />
-                                                                }
-                                                                okText="Move to Deleted"
-                                                                cancelText="Move to Suggested"
-                                                                onCancel={
-                                                                  validToSuggested
-                                                                }
-                                                                okButtonProps={{
-                                                                  type: buttonClicked
-                                                                    ? "primary"
-                                                                    : "default",
-                                                                }}
-                                                                cancelButtonProps={{
-                                                                  type: buttonClicked
-                                                                    ? "danger"
-                                                                    : "default",
-                                                                }}
-                                                                description={
-                                                                  data.diagnosisCode
-                                                                }
-                                                                onConfirm={
-                                                                  confirmvalid
-                                                                }
-                                                                placement="leftTop"
-                                                                onOpenChange={() =>
-                                                                  onchangeValid(
-                                                                    data.diagnosisCode,
-                                                                    data
-                                                                  )
-                                                                }
-                                                              >
-                                                                <div
-                                                                  className={
-                                                                    visitStyles.close_icon
+                                                              {getEncounterDateBackground(data.encounterDateSplit)}
+                                                              {data.isManuallyAdded == true ?
+                                                                <Popover
+                                                                  placement="topLeft"
+                                                                  content={
+                                                                    "Manually Added"
                                                                   }
                                                                 >
-                                                                  {<FontAwesomeIcon
-                                                                    icon={faArrowsAlt}
-                                                                    style={{ size: 8, color: "#a80404" }}
-                                                                  />}
-                                                                </div>
-                                                              </Popconfirm>
-                                                            </div>
-                                                            <div  className={`${visitStyles.hoverActiveHcc}`}>
-                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
-
-                                                                {getEncounterDateBackground(data.encounterDate)}
-                                                                {data.isManuallyAdded == true ?
-                                                                  <Popover
-                                                                    placement="topLeft"
-                                                                    content={
-                                                                      "Manually Added"
-                                                                    }
+                                                                  <Badge
+                                                                    className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                                                   >
-                                                                    <Badge
-                                                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                                                    >
-                                                                      Manually Added
+                                                                    Manually Added
 
-                                                                    </Badge>
-                                                                  </Popover> : null}
-                                                              </div>
-                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                {getCaptureSectionBackground(data.capturedSections)}
-                                                              </div>
+                                                                  </Badge>
+                                                                </Popover> : null}
+                                                            </div>
+                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                              {getCaptureSectionBackground(data.capturedSections)}
                                                             </div>
                                                           </div>
-                                                        </li>
+                                                        </div>
+                                                      </li>
 
-                                                      )
-                                                    )}
-                                                  </div>
-                                                  </div>
-                                                </ul>
+                                                    )
+                                                  )}
+                                                </div>
                                               </div>
-                                              <div className="col-xl-8">
-                                              {/* <div>
+                                            </ul>
+                                          </div>
+                                          <div className="col-xl-8">
+                                            {/* <div>
                                             <button
                                               onClick={() =>
                                                 openNewTabDownloadPdf()
@@ -7469,42 +7495,42 @@ const Details = ({ }) => {
                                               Open New Tab
                                             </button>
                                           </div> */}
-                                          <div className="card-body p-0">
-                                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                                              <div
-                                                style={{
-                                                  height: "70vh",
-                                                  maxWidth: "800px",
-                                                  marginLeft: "auto",
-                                                  marginRight: "auto",
-                                                }}
-                                              >
-                                                {" "}
-                                                <Viewer
-                                                  fileUrl={selectFileURL}
-                                                  plugins={[
-                                                    defaultLayoutPluginInstance,
-                                                  ]}
-                                                  onDocumentLoad={
-                                                    handleDocumentLoad
-                                                  }
-                                                  renderLoader={(percentages) => (
-                                                    <div
-                                                      style={{ width: "240px" }}
-                                                    >
-                                                      <ProgressBar
-                                                        progress={Math.round(
-                                                          percentages
-                                                        )}
-                                                      />
-                                                    </div>
-                                                  )}
-                                                />
-                                              </div>
-                                            </Worker>
+                                            <div className="card-body p-0">
+                                              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                                                <div
+                                                  style={{
+                                                    height: "70vh",
+                                                    maxWidth: "800px",
+                                                    marginLeft: "auto",
+                                                    marginRight: "auto",
+                                                  }}
+                                                >
+                                                  {" "}
+                                                  <Viewer
+                                                    fileUrl={selectFileURL}
+                                                    plugins={[
+                                                      defaultLayoutPluginInstance,
+                                                    ]}
+                                                    onDocumentLoad={
+                                                      handleDocumentLoad
+                                                    }
+                                                    renderLoader={(percentages) => (
+                                                      <div
+                                                        style={{ width: "240px" }}
+                                                      >
+                                                        <ProgressBar
+                                                          progress={Math.round(
+                                                            percentages
+                                                          )}
+                                                        />
+                                                      </div>
+                                                    )}
+                                                  />
+                                                </div>
+                                              </Worker>
+                                            </div>
                                           </div>
-                                              </div>
-                                      
+
                                         </div>
                                       </Tab.Pane>
                                     </Tab.Content>
@@ -7587,83 +7613,83 @@ const Details = ({ }) => {
                                                     </div>
                                                   </div>
                                                   <div className={visitStyles.container}>
-                                                  {newInValidDiseaseList.map(
-                                                    (data, i) => (
-                                                      <li>
-                                                        <div
-                                                          className={`${visitStyles.hcc_card}`}
-                                                        >
+                                                    {newInValidDiseaseList.map(
+                                                      (data, i) => (
+                                                        <li>
                                                           <div
-                                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                                            className={`${visitStyles.hcc_card}`}
                                                           >
                                                             <div
-                                                              className="media-body"
-                                                              onClick={() =>
-                                                                handleOpenModalCombinationCode(
-                                                                  data.diagnosisCode,
-                                                                  data.actualDescription,
-                                                                  "valid2",
-                                                                  "nonHcc"
-                                                                )
-                                                              }
-                                                            >
-                                                              <span className="mb-1 disease-name d-flex">
-                                                                <span className="valid-dis-name">
-                                                                  {
-                                                                    data.diagnosisCode
-                                                                  }
-                                                                </span>{" "}
-                                                                -{" "}
-                                                                {
-                                                                  data.actualDescription
-                                                                }
-                                                              </span>
-                                                            </div>
-
-                                                            <Popconfirm
-                                                              title="You want move to valid?"
-                                                              description={
-                                                                data.diagnosisCode
-                                                              }
-                                                              onConfirm={
-                                                                confirmInvalid
-                                                              }
-                                                              placement="leftTop"
-                                                              okText="Yes"
-                                                              cancelText="No"
-                                                              onOpenChange={() =>
-                                                                onchangeValid(
-                                                                  data.diagnosisCode,
-                                                                  data
-                                                                )
-                                                              }
+                                                              className={`${visitStyles.hcc_card_nameHead}`}
                                                             >
                                                               <div
-                                                                className={
-                                                                  visitStyles.close_icon
+                                                                className="media-body"
+                                                                onClick={() =>
+                                                                  handleOpenModalCombinationCode(
+                                                                    data.diagnosisCode,
+                                                                    data.actualDescription,
+                                                                    "valid2",
+                                                                    "nonHcc"
+                                                                  )
                                                                 }
                                                               >
-                                                                <FontAwesomeIcon
-                                                                  icon={faArrowsAlt}
-                                                                  style={{ size: 8, color: "#a80404" }}
-                                                                />
+                                                                <span className="mb-1 disease-name d-flex">
+                                                                  <span className="valid-dis-name">
+                                                                    {
+                                                                      data.diagnosisCode
+                                                                    }
+                                                                  </span>{" "}
+                                                                  -{" "}
+                                                                  {
+                                                                    data.actualDescription
+                                                                  }
+                                                                </span>
                                                               </div>
-                                                            </Popconfirm>
-                                                          </div>
-                                                          <div
-                                                            className={`${visitStyles.hoverActiveHcc}`}
-                                                          >
-                                                            {getEncounterDateBackground(data.encounterDate)}
-                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                              {getCaptureSectionBackground(data.capturedSections)}
+
+                                                              <Popconfirm
+                                                                title="You want move to valid?"
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  confirmInvalid
+                                                                }
+                                                                placement="leftTop"
+                                                                okText="Yes"
+                                                                cancelText="No"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
+                                                                }
+                                                              >
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
+                                                                >
+                                                                  <FontAwesomeIcon
+                                                                    icon={faArrowsAlt}
+                                                                    style={{ size: 8, color: "#a80404" }}
+                                                                  />
+                                                                </div>
+                                                              </Popconfirm>
+                                                            </div>
+                                                            <div
+                                                              className={`${visitStyles.hoverActiveHcc}`}
+                                                            >
+                                                              {getEncounterDateBackground(data.encounterDateSplit)}
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                {getCaptureSectionBackground(data.capturedSections)}
+                                                              </div>
+
                                                             </div>
 
                                                           </div>
-
-                                                        </div>
-                                                      </li>
-                                                    )
-                                                  )}
+                                                        </li>
+                                                      )
+                                                    )}
                                                   </div>
                                                 </ul>
                                               </div>
@@ -7687,138 +7713,138 @@ const Details = ({ }) => {
                                                     </div>
                                                   </div>
                                                   <div className={visitStyles.container}>
-                                                  <div className={visitStyles.hccStickey_head}>
-                                                    {suggestedNonHccList?.map((data) => {
-                                                      return (
-                                                        <>
-                                                          {data.isHccValid == false || data.isHccValid == null ? (
-                                                            <li>
-                                                              <div
-                                                                className={`${visitStyles.hcc_card}`}
-                                                              >
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {suggestedNonHccList?.map((data) => {
+                                                        return (
+                                                          <>
+                                                            {data.isHccValid == false || data.isHccValid == null ? (
+                                                              <li>
                                                                 <div
-                                                                  className={`${visitStyles.hcc_card_nameHead}`}
+                                                                  className={`${visitStyles.hcc_card}`}
                                                                 >
                                                                   <div
-                                                                    className="media-body"
-                                                                    onClick={() =>
-                                                                      handleOpenModalCombinationCode(
-                                                                        data.diagnosisCode,
-                                                                        data.actualDescription,
-                                                                        "valid2"
-                                                                      )
-                                                                    }
-                                                                  >
-                                                                    <span className="mb-1 disease-name d-flex">
-                                                                      <span className="valid-dis-name">
-                                                                        {
-                                                                          data.diagnosisCode
-                                                                        }
-                                                                      </span>{" "}
-                                                                      -{" "}
-                                                                      {
-                                                                        data.actualDescription
-                                                                      }
-                                                                    </span>
-                                                                  </div>
-
-
-                                                                  <Popconfirm
-                                                                    title="Choose an action"
-                                                                    icon={
-                                                                      <QuestionCircleOutlined
-                                                                        style={{
-                                                                          color:
-                                                                            "blue",
-                                                                        }}
-                                                                      />
-                                                                    }
-                                                                    okText="Move to Deleted"
-                                                                    cancelText="Move to HCC"
-                                                                    onCancel={
-                                                                      suggestedToValid
-                                                                    }
-                                                                    okButtonProps={{
-                                                                      type: buttonClicked
-                                                                        ? "primary"
-                                                                        : "default",
-                                                                    }}
-                                                                    cancelButtonProps={{
-                                                                      type: buttonClicked
-                                                                        ? "danger"
-                                                                        : "default",
-                                                                    }}
-                                                                    description={
-                                                                      data.diagnosisCode
-                                                                    }
-                                                                    onConfirm={
-                                                                      suggestedToDeleted
-                                                                    }
-                                                                    placement="leftTop"
-                                                                    onOpenChange={() =>
-                                                                      onchangeValid(
-                                                                        data.diagnosisCode,
-                                                                        data
-                                                                      )
-                                                                    }
+                                                                    className={`${visitStyles.hcc_card_nameHead}`}
                                                                   >
                                                                     <div
-                                                                      className={
-                                                                        visitStyles.close_icon
+                                                                      className="media-body"
+                                                                      onClick={() =>
+                                                                        handleOpenModalCombinationCode(
+                                                                          data.diagnosisCode,
+                                                                          data.actualDescription,
+                                                                          "valid2"
+                                                                        )
                                                                       }
                                                                     >
-                                                                      <FontAwesomeIcon
-                                                                        icon={faArrowsAlt}
-                                                                        style={{ size: 8, color: "#a80404" }}
-                                                                      />
+                                                                      <span className="mb-1 disease-name d-flex">
+                                                                        <span className="valid-dis-name">
+                                                                          {
+                                                                            data.diagnosisCode
+                                                                          }
+                                                                        </span>{" "}
+                                                                        -{" "}
+                                                                        {
+                                                                          data.actualDescription
+                                                                        }
+                                                                      </span>
                                                                     </div>
-                                                                  </Popconfirm>
-                                                                </div>
-                                                                <div className="">
 
 
-                                                                  {getEncounterDateBackground(data.encounterDate)}
-                                                                  {data.getPlace ==
-                                                                    "Lab" ? (
-                                                                    <Tooltip title="LAB">
-                                                                      <span
-                                                                        className={` mt-2 ${visitStyles.labStatus}`}
-                                                                        bg={`  mt-2 bg-bg-seven `}
+                                                                    <Popconfirm
+                                                                      title="Choose an action"
+                                                                      icon={
+                                                                        <QuestionCircleOutlined
+                                                                          style={{
+                                                                            color:
+                                                                              "blue",
+                                                                          }}
+                                                                        />
+                                                                      }
+                                                                      okText="Move to Deleted"
+                                                                      cancelText="Move to HCC"
+                                                                      onCancel={
+                                                                        suggestedToValid
+                                                                      }
+                                                                      okButtonProps={{
+                                                                        type: buttonClicked
+                                                                          ? "primary"
+                                                                          : "default",
+                                                                      }}
+                                                                      cancelButtonProps={{
+                                                                        type: buttonClicked
+                                                                          ? "danger"
+                                                                          : "default",
+                                                                      }}
+                                                                      description={
+                                                                        data.diagnosisCode
+                                                                      }
+                                                                      onConfirm={
+                                                                        suggestedToDeleted
+                                                                      }
+                                                                      placement="leftTop"
+                                                                      onOpenChange={() =>
+                                                                        onchangeValid(
+                                                                          data.diagnosisCode,
+                                                                          data
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      <div
+                                                                        className={
+                                                                          visitStyles.close_icon
+                                                                        }
                                                                       >
-                                                                        Lap
-                                                                      </span>
-                                                                    </Tooltip>
-                                                                  ) : data.getPlace ==
-                                                                    "Radio" ? (
-                                                                    <Tooltip title="RADIOLOGY">
-                                                                      <span
-                                                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                                                        bg={`  mt-2 bg-bg-eight `}
-                                                                      >
-                                                                        Radiology
-                                                                      </span>
-                                                                    </Tooltip>
-                                                                  ) : (
-                                                                    <Tooltip title="HCC">
-                                                                      <span
-                                                                        className={` mt-2 ${visitStyles.hccStatus}`}
-                                                                        bg={` mt-2 bg-bg-five `}
-                                                                      >
-                                                                        HCC
-                                                                      </span>
-                                                                    </Tooltip>
-                                                                  )}
-                                                                  <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                    {getCaptureSectionBackground(data.capturedSections)}
+                                                                        <FontAwesomeIcon
+                                                                          icon={faArrowsAlt}
+                                                                          style={{ size: 8, color: "#a80404" }}
+                                                                        />
+                                                                      </div>
+                                                                    </Popconfirm>
+                                                                  </div>
+                                                                  <div className="">
+
+
+                                                                    {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                    {data.getPlace ==
+                                                                      "Lab" ? (
+                                                                      <Tooltip title="LAB">
+                                                                        <span
+                                                                          className={` mt-2 ${visitStyles.labStatus}`}
+                                                                          bg={`  mt-2 bg-bg-seven `}
+                                                                        >
+                                                                          Lap
+                                                                        </span>
+                                                                      </Tooltip>
+                                                                    ) : data.getPlace ==
+                                                                      "Radio" ? (
+                                                                      <Tooltip title="RADIOLOGY">
+                                                                        <span
+                                                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                                          bg={`  mt-2 bg-bg-eight `}
+                                                                        >
+                                                                          Radiology
+                                                                        </span>
+                                                                      </Tooltip>
+                                                                    ) : (
+                                                                      <Tooltip title="HCC">
+                                                                        <span
+                                                                          className={` mt-2 ${visitStyles.hccStatus}`}
+                                                                          bg={` mt-2 bg-bg-five `}
+                                                                        >
+                                                                          HCC
+                                                                        </span>
+                                                                      </Tooltip>
+                                                                    )}
+                                                                    <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                      {getCaptureSectionBackground(data.capturedSections)}
+                                                                    </div>
                                                                   </div>
                                                                 </div>
-                                                              </div>
-                                                            </li>
-                                                          ) : null}
-                                                        </>
-                                                      );
-                                                    })}
-                                                  </div>
+                                                              </li>
+                                                            ) : null}
+                                                          </>
+                                                        );
+                                                      })}
+                                                    </div>
                                                   </div>
                                                 </ul>
                                               </div>
@@ -8137,80 +8163,80 @@ const Details = ({ }) => {
                                                   </div>
                                                 </div>
                                                 {comboDiseaseCodesListNonHcc.length != 0 ?
-                                                <div className={visitStyles.container}>
-                                                  <div className={visitStyles.hccStickey_head}>
-                                                    {comboDiseaseCodesListNonHcc?.map(
-                                                      (item) => {
-                                                        return (
-                                                          <div
-                                                            className={
-                                                              visitStyles.combo_details_card
-                                                            }
-                                                          >
-                                                            <div className="row">
-                                                              <div className="col-xl-3">
-                                                                <span className="font-bold">
-                                                                  {
-                                                                    item.diagnosisCodeCombo
-                                                                  }
-                                                                </span>
-                                                              </div>
-                                                              <div className="col-xl-3">
-                                                                <span className="font-bold">
-                                                                  {item.addOnCode}
-                                                                </span>
-                                                              </div>
-                                                              <div
-                                                                className="col-xl-5 cr-pointer"
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    item.diagnosisCodeCombo,
-                                                                    item.diseaseName
-                                                                  )
-                                                                }
-                                                              >
-                                                                <span>
-                                                                  {item.diseaseName}
-                                                                </span>
-                                                              </div>
-                                                              <div className="col-xl-1 comboclose">
-                                                                <Popconfirm
-                                                                  title="You want move to Invalid?"
-                                                                  description={
-                                                                    item.diseaseName
-                                                                  }
-                                                                  onConfirm={
-                                                                    confirmComboInvalid
-                                                                  }
-                                                                  placement="leftTop"
-                                                                  okText="Yes"
-                                                                  cancelText="No"
-                                                                  onOpenChange={() =>
-                                                                    onchangeCombo(
-                                                                      item.diseaseName,
-                                                                      item.addOnCode
+                                                  <div className={visitStyles.container}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {comboDiseaseCodesListNonHcc?.map(
+                                                        (item) => {
+                                                          return (
+                                                            <div
+                                                              className={
+                                                                visitStyles.combo_details_card
+                                                              }
+                                                            >
+                                                              <div className="row">
+                                                                <div className="col-xl-3">
+                                                                  <span className="font-bold">
+                                                                    {
+                                                                      item.diagnosisCodeCombo
+                                                                    }
+                                                                  </span>
+                                                                </div>
+                                                                <div className="col-xl-3">
+                                                                  <span className="font-bold">
+                                                                    {item.addOnCode}
+                                                                  </span>
+                                                                </div>
+                                                                <div
+                                                                  className="col-xl-5 cr-pointer"
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      item.diagnosisCodeCombo,
+                                                                      item.diseaseName
                                                                     )
                                                                   }
                                                                 >
-                                                                  <div
-                                                                    className={
-                                                                      visitStyles.close_icon
+                                                                  <span>
+                                                                    {item.diseaseName}
+                                                                  </span>
+                                                                </div>
+                                                                <div className="col-xl-1 comboclose">
+                                                                  <Popconfirm
+                                                                    title="You want move to Invalid?"
+                                                                    description={
+                                                                      item.diseaseName
+                                                                    }
+                                                                    onConfirm={
+                                                                      confirmComboInvalid
+                                                                    }
+                                                                    placement="leftTop"
+                                                                    okText="Yes"
+                                                                    cancelText="No"
+                                                                    onOpenChange={() =>
+                                                                      onchangeCombo(
+                                                                        item.diseaseName,
+                                                                        item.addOnCode
+                                                                      )
                                                                     }
                                                                   >
-                                                                    <FontAwesomeIcon
-                                                                      icon={faArrowsAlt}
-                                                                      style={{ size: 8, color: "#a80404" }}
-                                                                    />
-                                                                  </div>
-                                                                </Popconfirm>
+                                                                    <div
+                                                                      className={
+                                                                        visitStyles.close_icon
+                                                                      }
+                                                                    >
+                                                                      <FontAwesomeIcon
+                                                                        icon={faArrowsAlt}
+                                                                        style={{ size: 8, color: "#a80404" }}
+                                                                      />
+                                                                    </div>
+                                                                  </Popconfirm>
+                                                                </div>
                                                               </div>
                                                             </div>
-                                                          </div>
-                                                        );
-                                                      }
-                                                    )}
-                                                  </div>
-                                                  </div>:null}
+                                                          );
+                                                        }
+                                                      )}
+                                                    </div>
+                                                  </div> : null}
 
 
                                                 {comboDiseaseCodesListNonHcc.length == 0 ? (
@@ -8252,76 +8278,76 @@ const Details = ({ }) => {
                                                 {invalidComboDiseaseCodesList.length !=
                                                   0 ? (
                                                   <>
-                                                  <div className={visitStyles.container}>
-                                                    <div className={visitStyles.hccStickey_head}>
-                                                      {invalidComboDiseaseCodesList?.map(
-                                                        (item) => {
-                                                          return (
-                                                            <div
-                                                              className={
-                                                                visitStyles.combo_details_card
-                                                              }
-                                                            >
-                                                              <div className="row">
-                                                                <div className="col-xl-3">
-                                                                  <span className="font-bold">
-                                                                    {
-                                                                      item.diagnosisCodeCombo
-                                                                    }
-                                                                  </span>
-                                                                </div>
-                                                                <div className="col-xl-3">
-                                                                  <span className="font-bold">
-                                                                    {item.addOnCode}
-                                                                  </span>
-                                                                </div>
-                                                                <div
-                                                                  className="col-xl-5 cr-pointer"
-                                                                  onClick={() =>
-                                                                    handleOpenModalCombinationCode(
-                                                                      item.diagnosisCodeCombo,
-                                                                      item.diseaseName
-                                                                    )
-                                                                  }
-                                                                >
-                                                                  <span>
-                                                                    {item.diseaseName}
-                                                                  </span>
-                                                                </div>
-                                                                <div className="col-xl-1 comboclose">
-                                                                  <Popconfirm
-                                                                    title="You want move to Valid?"
-                                                                    description={
-                                                                      item.diseaseName
-                                                                    }
-                                                                    onConfirm={
-                                                                      confirmComboValid
-                                                                    }
-                                                                    placement="leftTop"
-                                                                    okText="Yes"
-                                                                    cancelText="No"
-                                                                    onOpenChange={() =>
-                                                                      onchangeCombo(
-                                                                        item.diseaseName,
-                                                                        item.addOnCode
+                                                    <div className={visitStyles.container}>
+                                                      <div className={visitStyles.hccStickey_head}>
+                                                        {invalidComboDiseaseCodesList?.map(
+                                                          (item) => {
+                                                            return (
+                                                              <div
+                                                                className={
+                                                                  visitStyles.combo_details_card
+                                                                }
+                                                              >
+                                                                <div className="row">
+                                                                  <div className="col-xl-3">
+                                                                    <span className="font-bold">
+                                                                      {
+                                                                        item.diagnosisCodeCombo
+                                                                      }
+                                                                    </span>
+                                                                  </div>
+                                                                  <div className="col-xl-3">
+                                                                    <span className="font-bold">
+                                                                      {item.addOnCode}
+                                                                    </span>
+                                                                  </div>
+                                                                  <div
+                                                                    className="col-xl-5 cr-pointer"
+                                                                    onClick={() =>
+                                                                      handleOpenModalCombinationCode(
+                                                                        item.diagnosisCodeCombo,
+                                                                        item.diseaseName
                                                                       )
                                                                     }
                                                                   >
-                                                                    <div
-                                                                      className={
-                                                                        visitStyles.tick_icon
+                                                                    <span>
+                                                                      {item.diseaseName}
+                                                                    </span>
+                                                                  </div>
+                                                                  <div className="col-xl-1 comboclose">
+                                                                    <Popconfirm
+                                                                      title="You want move to Valid?"
+                                                                      description={
+                                                                        item.diseaseName
+                                                                      }
+                                                                      onConfirm={
+                                                                        confirmComboValid
+                                                                      }
+                                                                      placement="leftTop"
+                                                                      okText="Yes"
+                                                                      cancelText="No"
+                                                                      onOpenChange={() =>
+                                                                        onchangeCombo(
+                                                                          item.diseaseName,
+                                                                          item.addOnCode
+                                                                        )
                                                                       }
                                                                     >
-                                                                      {SVGICON.tickIcon}
-                                                                    </div>
-                                                                  </Popconfirm>
+                                                                      <div
+                                                                        className={
+                                                                          visitStyles.tick_icon
+                                                                        }
+                                                                      >
+                                                                        {SVGICON.tickIcon}
+                                                                      </div>
+                                                                    </Popconfirm>
+                                                                  </div>
                                                                 </div>
                                                               </div>
-                                                            </div>
-                                                          );
-                                                        }
-                                                      )}
-                                                    </div>
+                                                            );
+                                                          }
+                                                        )}
+                                                      </div>
                                                     </div>
                                                   </>
                                                 ) : null}
@@ -8364,189 +8390,189 @@ const Details = ({ }) => {
                                             </div>
                                           </div>
                                           {meatCriteriaListNonHcc.length != 0 ?
-                                          <div className={visitStyles.container}>
-                                            <div className={visitStyles.hccStickey_head}>
-                                              {meatCriteriaListNonHcc?.map((item) => {
-                                                return (
-                                                  <div
-                                                    className={
-                                                      item.isMeatCriteriaPresent ===
-                                                        true
-                                                        ? "card meat-card"
-                                                        : "card meat-card-false"
-                                                    }
-                                                  >
-                                                    <div className="row">
-                                                      <div className="col-xl-1">
-                                                        <span className="font-bold">
-                                                          {item.diagnosisCode}
-                                                        </span>
-                                                      </div>
-                                                      <div className="col-xl-2">
-                                                        <Popover
-                                                          placement="topLeft"
-                                                          title="Description"
-                                                          content={item.diseaseName}
-                                                        >
-                                                          <span className="meat-name-details">
-                                                            {item.diseaseName}
+                                            <div className={visitStyles.container}>
+                                              <div className={visitStyles.hccStickey_head}>
+                                                {meatCriteriaListNonHcc?.map((item) => {
+                                                  return (
+                                                    <div
+                                                      className={
+                                                        item.isMeatCriteriaPresent ===
+                                                          true
+                                                          ? "card meat-card"
+                                                          : "card meat-card-false"
+                                                      }
+                                                    >
+                                                      <div className="row">
+                                                        <div className="col-xl-1">
+                                                          <span className="font-bold">
+                                                            {item.diagnosisCode}
                                                           </span>
-                                                        </Popover>
-                                                      </div>
-                                                      <div className="col-xl-2 d-grid">
-                                                        {item.monitor != "" ? (
+                                                        </div>
+                                                        <div className="col-xl-2">
                                                           <Popover
                                                             placement="topLeft"
-                                                            title="Monitor"
-                                                            content={item.monitor}
+                                                            title="Description"
+                                                            content={item.diseaseName}
                                                           >
                                                             <span className="meat-name-details">
-                                                              {item.monitor}
+                                                              {item.diseaseName}
                                                             </span>
                                                           </Popover>
-                                                        ) : (
-                                                          <span className="meat-name-details text-center font-bold">
-                                                            -
-                                                          </span>
-                                                        )}
-                                                        <Badge
-                                                          className="badge-meat cr-pointer badge-circle mt-2"
-                                                          bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
-                                                          onClick={() =>
-                                                            handleOpenModal(
-                                                              item.monitorCapturedFromHeader,
-                                                              item.monitor
-                                                            )
-                                                          }
-                                                        >
-                                                          {
-                                                            item.monitorCapturedFromHeader
-                                                          }
-                                                        </Badge>
-                                                      </div>
-                                                      <div className="col-xl-2 d-grid">
-                                                        {item.evaluate != "" ? (
-                                                          <Popover
-                                                            placement="topLeft"
-                                                            title="Evaluation"
-                                                            content={item.evaluate}
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.monitor != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Monitor"
+                                                              content={item.monitor}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.monitor}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
+                                                            </span>
+                                                          )}
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.monitorCapturedFromHeader,
+                                                                item.monitor
+                                                              )
+                                                            }
                                                           >
-                                                            <span className="meat-name-details">
-                                                              {item.evaluate}
+                                                            {
+                                                              item.monitorCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.evaluate != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Evaluation"
+                                                              content={item.evaluate}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.evaluate}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
                                                             </span>
-                                                          </Popover>
-                                                        ) : (
-                                                          <span className="meat-name-details text-center font-bold">
-                                                            -
-                                                          </span>
-                                                        )}
-                                                        <Badge
-                                                          className="badge-meat cr-pointer badge-circle mt-2"
-                                                          bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
-                                                          onClick={() =>
-                                                            handleOpenModal(
-                                                              item.evaluateCapturedFromHeader,
-                                                              item.evaluate
-                                                            )
-                                                          }
-                                                        >
-                                                          {
-                                                            item.evaluateCapturedFromHeader
-                                                          }
-                                                        </Badge>
-                                                      </div>
-                                                      <div className="col-xl-2 d-grid">
-                                                        {item.assessment != "" ? (
-                                                          <Popover
-                                                            placement="topLeft"
-                                                            title="Assessment"
-                                                            content={item.assessment}
+                                                          )}
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.evaluateCapturedFromHeader,
+                                                                item.evaluate
+                                                              )
+                                                            }
                                                           >
-                                                            <span className="meat-name-details">
-                                                              {item.assessment}
+                                                            {
+                                                              item.evaluateCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.assessment != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Assessment"
+                                                              content={item.assessment}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.assessment}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
                                                             </span>
-                                                          </Popover>
-                                                        ) : (
-                                                          <span className="meat-name-details text-center font-bold">
-                                                            -
-                                                          </span>
-                                                        )}
-                                                        <Badge
-                                                          className="badge-meat cr-pointer badge-circle mt-2"
-                                                          bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
-                                                          onClick={() =>
-                                                            handleOpenModal(
-                                                              item.assessmentCapturedFromHeader,
-                                                              item.assessment
-                                                            )
-                                                          }
-                                                        >
-                                                          {
-                                                            item.assessmentCapturedFromHeader
-                                                          }
-                                                        </Badge>
-                                                      </div>
-                                                      <div className="col-xl-2 d-grid">
-                                                        {item.treatment != "" ? (
-                                                          <Popover
-                                                            placement="topLeft"
-                                                            title="Treatment"
-                                                            content={item.treatment}
+                                                          )}
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.assessmentCapturedFromHeader,
+                                                                item.assessment
+                                                              )
+                                                            }
                                                           >
-                                                            <span className="meat-name-details">
-                                                              {item.treatment}
+                                                            {
+                                                              item.assessmentCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.treatment != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Treatment"
+                                                              content={item.treatment}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.treatment}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
                                                             </span>
-                                                          </Popover>
-                                                        ) : (
-                                                          <span className="meat-name-details text-center font-bold">
-                                                            -
-                                                          </span>
-                                                        )}
+                                                          )}
 
-                                                        <Badge
-                                                          className="badge-meat cr-pointer badge-circle mt-2"
-                                                          bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
-                                                          onClick={() =>
-                                                            handleOpenModal(
-                                                              item.treatmentCapturedFromHeader,
-                                                              item.treatment
-                                                            )
-                                                          }
-                                                        >
-                                                          {
-                                                            item.treatmentCapturedFromHeader
-                                                          }
-                                                        </Badge>
-                                                      </div>
-                                                      <div className="col-xl-1 meatclose">
-                                                        <Popconfirm
-                                                          title="You want move to Invalid?"
-                                                          description={item.diseaseName}
-                                                          onConfirm={confirmInvalidMeat}
-                                                          placement="leftTop"
-                                                          okText="Yes"
-                                                          cancelText="No"
-                                                          onOpenChange={() =>
-                                                            onchangeMeat(
-                                                              item.diseaseName,
-                                                              item.diagnosisCode
-                                                            )
-                                                          }
-                                                        >
-                                                          <div className="icon-box  bg-danger-light me-1">
-                                                            <FontAwesomeIcon
-                                                              icon={faClose}
-                                                              style={{ color: "red" }}
-                                                            />
-                                                          </div>
-                                                        </Popconfirm>
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.treatmentCapturedFromHeader,
+                                                                item.treatment
+                                                              )
+                                                            }
+                                                          >
+                                                            {
+                                                              item.treatmentCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-1 meatclose">
+                                                          <Popconfirm
+                                                            title="You want move to Invalid?"
+                                                            description={item.diseaseName}
+                                                            onConfirm={confirmInvalidMeat}
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeMeat(
+                                                                item.diseaseName,
+                                                                item.diagnosisCode
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faClose}
+                                                                style={{ color: "red" }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
+                                                        </div>
                                                       </div>
                                                     </div>
-                                                  </div>
-                                                );
-                                              })}
-                                            </div> 
-                                            </div>:null}
+                                                  );
+                                                })}
+                                              </div>
+                                            </div> : null}
                                           {meatCriteriaListNonHcc.length == 0 ? (
                                             <div className="col-xl-12">
                                               <div>
@@ -9058,7 +9084,7 @@ const Details = ({ }) => {
                                                               </span>
                                                             </div>
 
-                                                            
+
 
                                                             <Popconfirm
                                                               title="You want to delete?"
@@ -9089,17 +9115,17 @@ const Details = ({ }) => {
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
-                                                          <div  className={`${visitStyles.hoverActiveHcc}`}>
-                                                           
-                                                          {getEncounterDateBackground(data.encounterDate)}
-                                                          <div>
-                                                          {getCaptureSectionBackground(data.capturedSections)}
+                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
 
+                                                            {getEncounterDateBackground(data.encounterDateSplit)}
+                                                            <div>
+                                                              {getCaptureSectionBackground(data.capturedSections)}
+
+                                                            </div>
                                                           </div>
-                                                          </div>
-                                                        
-                                                          
-                                                          
+
+
+
                                                         </div>
                                                       </li>
                                                     )
@@ -9412,80 +9438,80 @@ const Details = ({ }) => {
                                                   </div>
                                                 </div>
                                                 {comboDiseaseCodesListRadiology.length != 0 ?
-                                                <div className={visitStyles.container}>
-                                                  <div className={visitStyles.hccStickey_head}>
-                                                    {comboDiseaseCodesListRadiology?.map(
-                                                      (item) => {
-                                                        return (
-                                                          <div
-                                                            className={
-                                                              visitStyles.combo_details_card
-                                                            }
-                                                          >
-                                                            <div className="row">
-                                                              <div className="col-xl-3">
-                                                                <span className="font-bold">
-                                                                  {
-                                                                    item.diagnosisCodeCombo
-                                                                  }
-                                                                </span>
-                                                              </div>
-                                                              <div className="col-xl-3">
-                                                                <span className="font-bold">
-                                                                  {item.addOnCode}
-                                                                </span>
-                                                              </div>
-                                                              <div
-                                                                className="col-xl-5 cr-pointer"
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    item.diagnosisCodeCombo,
-                                                                    item.diseaseName
-                                                                  )
-                                                                }
-                                                              >
-                                                                <span>
-                                                                  {item.diseaseName}
-                                                                </span>
-                                                              </div>
-                                                              <div className="col-xl-1 comboclose">
-                                                                <Popconfirm
-                                                                  title="You want move to Invalid?"
-                                                                  description={
-                                                                    item.diseaseName
-                                                                  }
-                                                                  onConfirm={
-                                                                    confirmComboInvalid
-                                                                  }
-                                                                  placement="leftTop"
-                                                                  okText="Yes"
-                                                                  cancelText="No"
-                                                                  onOpenChange={() =>
-                                                                    onchangeCombo(
-                                                                      item.diseaseName,
-                                                                      item.addOnCode
+                                                  <div className={visitStyles.container}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {comboDiseaseCodesListRadiology?.map(
+                                                        (item) => {
+                                                          return (
+                                                            <div
+                                                              className={
+                                                                visitStyles.combo_details_card
+                                                              }
+                                                            >
+                                                              <div className="row">
+                                                                <div className="col-xl-3">
+                                                                  <span className="font-bold">
+                                                                    {
+                                                                      item.diagnosisCodeCombo
+                                                                    }
+                                                                  </span>
+                                                                </div>
+                                                                <div className="col-xl-3">
+                                                                  <span className="font-bold">
+                                                                    {item.addOnCode}
+                                                                  </span>
+                                                                </div>
+                                                                <div
+                                                                  className="col-xl-5 cr-pointer"
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      item.diagnosisCodeCombo,
+                                                                      item.diseaseName
                                                                     )
                                                                   }
                                                                 >
-                                                                  <div
-                                                                    className={
-                                                                      visitStyles.close_icon
+                                                                  <span>
+                                                                    {item.diseaseName}
+                                                                  </span>
+                                                                </div>
+                                                                <div className="col-xl-1 comboclose">
+                                                                  <Popconfirm
+                                                                    title="You want move to Invalid?"
+                                                                    description={
+                                                                      item.diseaseName
+                                                                    }
+                                                                    onConfirm={
+                                                                      confirmComboInvalid
+                                                                    }
+                                                                    placement="leftTop"
+                                                                    okText="Yes"
+                                                                    cancelText="No"
+                                                                    onOpenChange={() =>
+                                                                      onchangeCombo(
+                                                                        item.diseaseName,
+                                                                        item.addOnCode
+                                                                      )
                                                                     }
                                                                   >
-                                                                    <FontAwesomeIcon
-                                                                      icon={faArrowsAlt}
-                                                                      style={{ size: 8, color: "#a80404" }}
-                                                                    />
-                                                                  </div>
-                                                                </Popconfirm>
+                                                                    <div
+                                                                      className={
+                                                                        visitStyles.close_icon
+                                                                      }
+                                                                    >
+                                                                      <FontAwesomeIcon
+                                                                        icon={faArrowsAlt}
+                                                                        style={{ size: 8, color: "#a80404" }}
+                                                                      />
+                                                                    </div>
+                                                                  </Popconfirm>
+                                                                </div>
                                                               </div>
                                                             </div>
-                                                          </div>
-                                                        );
-                                                      }
-                                                    )}
-                                                  </div> 
-                                                  </div>:null}
+                                                          );
+                                                        }
+                                                      )}
+                                                    </div>
+                                                  </div> : null}
 
                                                 {comboDiseaseCodesListRadiology.length == 0 ? (
 
@@ -9524,76 +9550,76 @@ const Details = ({ }) => {
                                                 {invalidComboDiseaseCodesList.length !=
                                                   0 ? (
                                                   <>
-                                                  <div className={visitStyles.container}>
-                                                    <div className={visitStyles.hccStickey_head}>
-                                                      {invalidComboDiseaseCodesList?.map(
-                                                        (item) => {
-                                                          return (
-                                                            <div
-                                                              className={
-                                                                visitStyles.combo_details_card
-                                                              }
-                                                            >
-                                                              <div className="row">
-                                                                <div className="col-xl-3">
-                                                                  <span className="font-bold">
-                                                                    {
-                                                                      item.diagnosisCodeCombo
-                                                                    }
-                                                                  </span>
-                                                                </div>
-                                                                <div className="col-xl-3">
-                                                                  <span className="font-bold">
-                                                                    {item.addOnCode}
-                                                                  </span>
-                                                                </div>
-                                                                <div
-                                                                  className="col-xl-5 cr-pointer"
-                                                                  onClick={() =>
-                                                                    handleOpenModalCombinationCode(
-                                                                      item.diagnosisCodeCombo,
-                                                                      item.diseaseName
-                                                                    )
-                                                                  }
-                                                                >
-                                                                  <span>
-                                                                    {item.diseaseName}
-                                                                  </span>
-                                                                </div>
-                                                                <div className="col-xl-1 comboclose">
-                                                                  <Popconfirm
-                                                                    title="You want move to Valid?"
-                                                                    description={
-                                                                      item.diseaseName
-                                                                    }
-                                                                    onConfirm={
-                                                                      confirmComboValid
-                                                                    }
-                                                                    placement="leftTop"
-                                                                    okText="Yes"
-                                                                    cancelText="No"
-                                                                    onOpenChange={() =>
-                                                                      onchangeCombo(
-                                                                        item.diseaseName,
-                                                                        item.addOnCode
+                                                    <div className={visitStyles.container}>
+                                                      <div className={visitStyles.hccStickey_head}>
+                                                        {invalidComboDiseaseCodesList?.map(
+                                                          (item) => {
+                                                            return (
+                                                              <div
+                                                                className={
+                                                                  visitStyles.combo_details_card
+                                                                }
+                                                              >
+                                                                <div className="row">
+                                                                  <div className="col-xl-3">
+                                                                    <span className="font-bold">
+                                                                      {
+                                                                        item.diagnosisCodeCombo
+                                                                      }
+                                                                    </span>
+                                                                  </div>
+                                                                  <div className="col-xl-3">
+                                                                    <span className="font-bold">
+                                                                      {item.addOnCode}
+                                                                    </span>
+                                                                  </div>
+                                                                  <div
+                                                                    className="col-xl-5 cr-pointer"
+                                                                    onClick={() =>
+                                                                      handleOpenModalCombinationCode(
+                                                                        item.diagnosisCodeCombo,
+                                                                        item.diseaseName
                                                                       )
                                                                     }
                                                                   >
-                                                                    <div
-                                                                      className={
-                                                                        visitStyles.tick_icon
+                                                                    <span>
+                                                                      {item.diseaseName}
+                                                                    </span>
+                                                                  </div>
+                                                                  <div className="col-xl-1 comboclose">
+                                                                    <Popconfirm
+                                                                      title="You want move to Valid?"
+                                                                      description={
+                                                                        item.diseaseName
+                                                                      }
+                                                                      onConfirm={
+                                                                        confirmComboValid
+                                                                      }
+                                                                      placement="leftTop"
+                                                                      okText="Yes"
+                                                                      cancelText="No"
+                                                                      onOpenChange={() =>
+                                                                        onchangeCombo(
+                                                                          item.diseaseName,
+                                                                          item.addOnCode
+                                                                        )
                                                                       }
                                                                     >
-                                                                      {SVGICON.tickIcon}
-                                                                    </div>
-                                                                  </Popconfirm>
+                                                                      <div
+                                                                        className={
+                                                                          visitStyles.tick_icon
+                                                                        }
+                                                                      >
+                                                                        {SVGICON.tickIcon}
+                                                                      </div>
+                                                                    </Popconfirm>
+                                                                  </div>
                                                                 </div>
                                                               </div>
-                                                            </div>
-                                                          );
-                                                        }
-                                                      )}
-                                                    </div>
+                                                            );
+                                                          }
+                                                        )}
+                                                      </div>
                                                     </div>
                                                   </>
                                                 ) : null}
@@ -10418,15 +10444,15 @@ const Details = ({ }) => {
                                                               </span>
                                                             </div>
                                                           </div>
-                                                          <div  className={`${visitStyles.hoverActiveHcc}`}>
-                                                           
-                                                          {getEncounterDateBackground(data.encounterDate)}
-                                                          <div  className={`${visitStyles.encounterAndSectionHeader}`} > 
-                                                               {getCaptureSectionBackground(data.capturedSections)}                                                               
-                                                              </div>
-                                                           
+                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
+
+                                                            {getEncounterDateBackground(data.encounterDateSplit)}
+                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                              {getCaptureSectionBackground(data.capturedSections)}
+                                                            </div>
+
                                                           </div>
-                                                         
+
                                                         </div>
                                                       </li>
                                                     )
@@ -12672,7 +12698,7 @@ const Details = ({ }) => {
                                           item.action == "MOVED_VALID_TO_DELETED" ?
                                             <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved valid to deleted</span> :
                                             item.action == "COMPLETED" ?
-                                              <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Completed</span> :
+                                              <span className={visitStyles.timelineheading}>You saved to completed</span> :
                                               item.action == "MOVED_DELETED_TO_VALID" ?
                                                 <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved deleted to valid</span> :
                                                 item.action == "MOVED_DELETED_TO_SUGGESTED" ?
@@ -12684,9 +12710,9 @@ const Details = ({ }) => {
                                                       item.action == "ENCOUNTER_FILE_ADDED" ?
                                                         <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Encounter file added</span> :
                                                         item.action == "HOLD" ?
-                                                          <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Hold</span> :
+                                                          <span className={visitStyles.timelineheading}>You saved to hold</span> :
                                                           item.action == "DECLINED" ?
-                                                            <span className={visitStyles.timelineheading}>{item.diagnosisCode} - </span> :
+                                                            <span className={visitStyles.timelineheading}> You saved to decline </span> :
                                                             null
                                   }
                                   <span className={visitStyles.timelineDate} > {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
@@ -12849,20 +12875,27 @@ const Details = ({ }) => {
                             </div>
                           </div>
 
-                          <div className={visitStyles.nameList}>
-                            <ul>
+                          <div className={visitStyles.patientListHead}>
+                            <ul className={`${visitStyles.patientDetailsHead}`} >
                               {patientList.map((data, index) => (
-                                <li className={visitStyles.nameList} key={index} onClick={() => getPatientDetails(data.patientId, localOrgId, localTenantId)}>
+                                <li className={`${visitStyles.nameList} ${visitStyles.patientList}`} key={index} onClick={() => getPatientDetails(data.patientId, localOrgId, localTenantId)}>
                                   {data.patientId} - {data.patientName}
                                   {data.processedStatus == "COMPLETED" ?
-                                    <i className={visitStyles.filterCompletedIcon}>
-                                      <CheckCircleOutlined />
-                                    </i> : null}
+                                    <span
+                                    className={visitStyles.completed}
+                                    style={{ background: "#3a9b94 !important" }}
+                                  ></span>
+                                   : data.processedStatus == "PENDING" || data.processedStatus == "COMPUTED" ?
+                                  <span className={visitStyles.pending}></span>
+                                   : data.processedStatus == "HOLD"  ?
+                                   <span className={visitStyles.hold}></span> : data.processedStatus == "DECLINED"  ?
+                                   <span className={visitStyles.declined}></span>:null}
                                 </li>
                               ))}
-                            </ul>
-                            {patientList.length == 0 ?
+                               {patientList.length == 0 ?
                               <h5 className="text-center">NO DATA</h5> : null}
+                            </ul>
+                           
                           </div>
                         </div> : flagContainerActive == "Comments" ?
 
