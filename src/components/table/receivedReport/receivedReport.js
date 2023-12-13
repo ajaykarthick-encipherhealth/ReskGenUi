@@ -3,6 +3,7 @@ import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
 import { ArrowUpOutlined,ArrowDownOutlined } from '@ant-design/icons';
+import Footer from "../../../jsx/layouts/Footer";
 
 function ReceivedReport(details, onReceivedPageChange) {
   const [sortOrder, setSortOrder] = useState("asc");
@@ -108,6 +109,7 @@ function ReceivedReport(details, onReceivedPageChange) {
           Total count: {details?.details?.totalElements}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

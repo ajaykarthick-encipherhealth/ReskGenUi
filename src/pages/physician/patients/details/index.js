@@ -68,6 +68,7 @@ import { useRouter } from "next/navigation";
 
 import { Avatar, Tooltip } from 'antd';
 import Spinner from "../../../../components/spinner/spinner";
+import Footer from "../../../../jsx/layouts/Footer";
 
 
 
@@ -10645,7 +10646,9 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                             </ul>
                           </div>
                         </div>
+                  
                       </div>
+                  
                     </div>
                   </div>
 

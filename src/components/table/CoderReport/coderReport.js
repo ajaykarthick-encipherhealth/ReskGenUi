@@ -6,6 +6,7 @@ import { SVGICON } from "../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
+import Footer from "../../../jsx/layouts/Footer";
 
 function CoderReport({
   setModal,
@@ -295,6 +296,7 @@ function CoderReport({
           Total count: {ReportPatientDetails?.totalElements}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

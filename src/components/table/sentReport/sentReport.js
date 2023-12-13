@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TableStyle from "../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { Modal, Popover } from "antd";
+import Footer from "../../../jsx/layouts/Footer";
 
 function SentReportTable(details, onSentPageChange) {
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -130,6 +131,7 @@ function SentReportTable(details, onSentPageChange) {
             : 0}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }
