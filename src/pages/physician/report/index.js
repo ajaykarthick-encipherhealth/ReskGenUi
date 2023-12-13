@@ -337,7 +337,7 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-2" style={{ zIndex: "999" }}>
+                            {activeTab === "CoderReport" ?  <div className="col-xl-2" >
                               <div class="form-group has-search">
                                 {/* <InputText
                                   type="text"
@@ -356,7 +356,9 @@ const index = () => {
                                   />
                                 )}
                               </div>
-                            </div>
+                            </div> : null}
+                            
+                           
                             <div className="col-xl-2">
                               <div>
                                 <RangePicker

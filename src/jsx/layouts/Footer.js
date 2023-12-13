@@ -106,7 +106,7 @@ const Footer = () => {
   return (
     <footer className="text-center" >
       <div className="d-flex">
-        <div className="container d-flex flex-column align-items-center justify-content-center" style={{marginTop:"0px !important"}}>
+        <div className=" d-flex flex-column align-items-center justify-content-center" style={{margin:"0 auto"}}>
           <div className="d-flex align-items-center mb-3">
             <Image
               src={IMAGES.Hcc_LOGO}

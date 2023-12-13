@@ -1,10 +1,8 @@
 .maincontainer {
   display: flex;
-  position: relative;
-  top: 19px;
-  height: 100vh;
-  padding-top: 40px;
+  padding-top: 100px;
   background-color: #F0F6FE;
+  height: 95vh;
 }
 .innerdiv {
   height: 700px;

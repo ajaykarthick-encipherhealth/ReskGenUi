@@ -33,6 +33,7 @@ const router=useRouter()
   return (
     <div style={{backgroundColor: "#F0F6FE"}}>
       <Header />
+     
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
           <Row className={styles.RowCon} gutter={8}>
@@ -60,8 +61,9 @@ const router=useRouter()
             </Col>
           </Row>
         </div>
-        <Footer/>
+   
       </div>
+      <Footer/>
     </div>
   );
 };
