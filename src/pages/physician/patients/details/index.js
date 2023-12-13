@@ -655,12 +655,7 @@ const Details = ({ }) => {
         var validDisArray=[];
         var validEncounterDateArray=[];
         validDiseaseNewRes.map((res, index) => {
-
-          // for (var key in res.encounterDate) {
-          //   validEncounterDateArray.push({ name: res.encounterDate[key] });
-          // }
           const encounterDatearray = res.encounterDate.split(',');
-
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -674,7 +669,19 @@ const Details = ({ }) => {
         });
 
         if (result.deletedDiseases != null) {
-          deleteHccList = result.deletedDiseases;
+          result.deletedDiseases.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
+            deleteHccList.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition:res.defaultPosition
+            });
+  
+          });
         }
         if (result.suggestRadiology != null) {
           // var checkDosRadio = [];
@@ -683,11 +690,12 @@ const Details = ({ }) => {
           // }
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
+              encounterDate:encounterDatearray,
               getPlace: "Radio",
               isHccValid: true,
             });
@@ -697,11 +705,12 @@ const Details = ({ }) => {
         if (result.suggestLab != null) {
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
+              encounterDate: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
             });
@@ -711,6 +720,7 @@ const Details = ({ }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -718,7 +728,7 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
+                encounterDate: encounterDatearray,
                 getPlace: "Hcc",
               });
             } else {
@@ -737,7 +747,7 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
+                encounterDate: encounterDatearray,
                 getPlace: "Hcc",
               });
             }
@@ -4705,7 +4715,7 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-2 col-sm-12">
+                      <div className="col-xl-3 col-sm-12">
                         <div className="card-body">
                           <div className="row">
                             <div className="col-xl-12 col-sm-12">
@@ -4746,7 +4756,7 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-2 col-sm-12">
+                      <div className="col-xl-1 col-sm-12">
                         <div className={`${visitStyles.actionbtnContainer}`}>
                           {patienIdDetails.processedStatus == "COMPLETED" ?
 
@@ -5307,7 +5317,9 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                                                               }
                                                             </Badge>
                                                           </Popover> */}
-                                                                {data.isManuallyAdded == true ?
+                                                               
+                                                                  {getEncounterDateBackground(data.encounterDate)}
+                                                                  {data.isManuallyAdded == true ?
                                                                   <Popover
                                                                     placement="topLeft"
                                                                     content={
@@ -5321,7 +5333,6 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
 
                                                                     </Badge>
                                                                   </Popover> : null}
-                                                                  {getEncounterDateBackground(data.encounterDate)}
                                                               
 
                                                                    {/* {getCaptureSectionBackground(data.capturedSections)} */}
@@ -5530,7 +5541,9 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                                                                     </Popconfirm>}
                                                                 </div>
                                                                 <div className="hoverActiveHcc">
-                                                                  <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                                  <div className="">
+                                                                    
+                                                                    {getEncounterDateBackground(data.encounterDate)}
                                                                     {data.getPlace ==
                                                                       "Lab" ? (
                                                                       <Tooltip title="LAB">
@@ -5561,46 +5574,11 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                                                                         </span>
                                                                       </Tooltip>
                                                                     )}
-                                                                    {data.encounterDate != null ?
-                                                                      <Popover
-                                                                        placement="topLeft"
-                                                                        content={
-                                                                          data.encounterDate
-                                                                        }
-                                                                      >
-                                                                        <Badge
-                                                                          className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                                        >
-                                                                          <i>
-                                                                            <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                          </i>
-                                                                          {replaceString(
-                                                                            data.encounterDate
-                                                                          )}
-                                                                        </Badge>
-                                                                      </Popover> : null}
-                                                                    <Popover
-                                                                      placement="topLeft"
-                                                                      content={
-                                                                        data.capturedSections
-                                                                      }
-                                                                    >
-                                                                      <Badge
-                                                                        className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
-                                                                        onClick={() =>
-                                                                          handleOpenModalCombinationCode(
-                                                                            data.diagnosisCode,
-                                                                            data.capturedSections,
-                                                                            "valid"
-                                                                          )
-                                                                        }
-                                                                      >
-                                                                        {replaceCaptureSection(
-                                                                          data.capturedSections
-                                                                        )}
-                                                                      </Badge>
-                                                                    </Popover>
+                                                                   
                                                                   </div>
+                                                                  <div  className={`${visitStyles.encounterAndSectionHeader}`} > 
+                                                               {getCaptureSectionBackground(data.capturedSections)}                                                               
+                                                              </div>
                                                                 </div>
                                                               </div>
                                                             </li>
@@ -5727,69 +5705,10 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                                                             </Popconfirm>
                                                           </div>
                                                           <div className="hoverActiveHcc">
-                                                            <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                              {/* <Tooltip title={patientDocumentResult.patientName}>
-                                                         <Avatar className={visitStyles.provider_name_style}>U</Avatar>
-                                                         </Tooltip> */}
-                                                              {/* <Popover
-                                                            placement="topLeft"
-                                                            title=""
-                                                            content={
-                                                              patientDocumentResult.patientName
-                                                            }
-                                                          >
-                                                            <Badge
-                                                               className={`mt-2 text-start w-100px ${visitStyles.provider_name}`}
-                                                            >
-                                                              <i>
-                                                                {
-                                                                  SVGICON.patientNameIcon
-                                                                }
-                                                              </i>
-                                                              {
-                                                                patientDocumentResult.patientName
-                                                              }
-                                                            </Badge>
-                                                          </Popover> */}
-                                                              {data.encounterDate != null ?
-                                                                <Popover
-                                                                  placement="topLeft"
-                                                                  content={
-                                                                    data.encounterDate
-                                                                  }
-                                                                >
-                                                                  <Badge
-                                                                    className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                                  >
-                                                                    <i>
-                                                                      <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                    </i>
-                                                                    {replaceString(
-                                                                      data.encounterDate
-                                                                    )}
-                                                                  </Badge>
-                                                                </Popover> : null}
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                content={
-                                                                  data.capturedSections
-                                                                }
-                                                              >
-                                                                <Badge
-                                                                  className={`mt-2 text-start  w-100px ${visitStyles.captureheader}`}
-                                                                  onClick={() =>
-                                                                    handleOpenModalCombinationCode(
-                                                                      data.diagnosisCode,
-                                                                      data.capturedSections,
-                                                                      "valid"
-                                                                    )
-                                                                  }
-                                                                >
-                                                                  {replaceCaptureSection(
-                                                                    data.capturedSections
-                                                                  )}
-                                                                </Badge>
-                                                              </Popover>
+                                                            <div className="">
+                                                             
+                                                              {getEncounterDateBackground(data.encounterDate)}
+                                                             
                                                               {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
                                                       <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
@@ -5800,6 +5719,9 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
                                                       </Badge>
                                                       </Popover> */}
                                                             </div>
+                                                            <div  className={`${visitStyles.encounterAndSectionHeader}`} > 
+                                                               {getCaptureSectionBackground(data.capturedSections)}                                                               
+                                                              </div>
                                                           </div>
                                                         </div>
                                                       </li>
