@@ -50,6 +50,7 @@ import Spinner from "../../../components/spinner/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { getSearchPatients } from "../../../store/actions/PatientsActions";
 import visitStyles from "../../../styles/visitdata.module.css";
+import { Label } from "recharts";
 
 
 export default function Patient() {
@@ -673,14 +674,14 @@ if(searchtext ){
       case "NOTCOMPUTED":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
+            <span className={`badge processing-text`}>Not Computed</span>
 
           </div>
         );
       case "COMPUTED":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
+            <span className={`badge processing-text`}  >Computed</span>
 
           </div>
         );
@@ -863,198 +864,235 @@ if(searchtext ){
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
                         <div className="tbl-caption  align-items-center">
-                          <div className="row filter-contain">
-                            <div className="col-xl-2">
-                              <div class="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-                                <InputText
-                                  type="text"
-                                  onChange={(e) => getNameSearch(e.target.value)}
-                                  className="form-control new-form-control"
-                                  placeholder="Search"
-                                />
+                            <div className="row filter-contain">
+                              <div className="col-xl-2">
+                              <label>Search by Name or ID</label>
+                                <div class="form-group has-search">
+                                  <FontAwesomeIcon
+                                    className="fa fa-search form-control-feedback"
+                                    icon={faSearch}
+                                  />
+                                  <InputText
+                                    type="text"
+                                    onChange={(e) => getNameSearch(e.target.value)}
+                                    className="form-control new-form-control"
+                                    placeholder="Search"
+                                  />
+                                </div>
                               </div>
-                            </div>
-                            <div className="col-xl-2" style={{ zIndex: "999" }}>
-                              <div class="form-group has-search">
-                                {/* <InputText
-                                  type="text"
-                                  onChange={(e) => filterChangePatientName(e)}
-                                  className="form-control new-form-control"
-                                  placeholder="Status"
-                                /> */}
-                                <Select
-                                  onChange={(selectedOption) =>
-                                    dosOnChange(selectedOption)
-                                  }
-                                  options={statusOptions}
-                                  className="custom-react-select"
-                                  isSearchable={false}
-                                />
+                              <div className="col-xl-2" >
+                              <label>Select Status</label>
+                                <div class="form-group has-search">
+                                  {/* <InputText
+                                    type="text"
+                                    onChange={(e) => filterChangePatientName(e)}
+                                    className="form-control new-form-control"
+                                    placeholder="Status"
+                                  /> */}
+                                  <Select
+                                    onChange={(selectedOption) =>
+                                      dosOnChange(selectedOption)
+                                    }
+                                    options={statusOptions}
+                                    className="custom-react-select"
+                                    isSearchable={false}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                            {/* <div className="col-xl-2">
-                              <div class="form-group has-search">
 
-                                <Calendar
-                                  className="form-control new-form-control calender-pri-input"
-                                  value={dates}
-                                  onChange={(e) => setDates(e.value)}
-                                  selectionMode="range"
-                                  readOnlyInput
-                                  placeholder="Due Date"
+                              {/* <div className="col-xl-2">
+                                <div class="form-group has-search">
 
-                                />
+                                  <Calendar
+                                    className="form-control new-form-control calender-pri-input"
+                                    value={dates}
+                                    onChange={(e) => setDates(e.value)}
+                                    selectionMode="range"
+                                    readOnlyInput
+                                    placeholder="Due Date"
+
+                                  />
 
 
-                              </div>
-                            </div> */}
-                            <div className="col-xl-3">
-                              <div
-                                onClick={handleOpenModal}
-                                className={styles.dateDisplay}
-                              >
-                                {dueDateStart != null ?
-                                <div>
-                                {moment(dueDateStart).format("MM-DD-YYYY")}&nbsp;- &nbsp;{moment(dueDateEnd).format("MM-DD-YYYY")}
-                                </div> :<div></div>}
-                                <Image src={calender} />
-                              </div>
-                              <Modal
-                                title=""
-                                visible={modalVisible}
-                                onOk={handleOk}
-                                mask={false}
-                                // onCancel={false}
-                                closable={false}
-                                width="45%"
-                                height="800px"
-                                style={{ marginTop: "30px" }}
-                              >
+                                </div>
+                              </div> */}
+                              {/* <div className="col-xl-3">
                                 <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    height: "400px",
-                                  }}
+                                  onClick={handleOpenModal}
+                                  className={styles.dateDisplay}
                                 >
-                                  <div style={{ display: "block" }}>
-                                    <div style={{ margin: "20px 0" }}>
-                                      <Button onClick={() => setIsDueDateCalender(true)} type="ghost">Due Date</Button>
+                                  {dueDateStart != null ?
+                                  <div>
+                                  {moment(dueDateStart).format("MM-DD-YYYY")}&nbsp;- &nbsp;{moment(dueDateEnd).format("MM-DD-YYYY")}
+                                  </div> :<div></div>}
+                                  <Image src={calender} />
+                                </div>
+                                <Modal
+                                  title=""
+                                  visible={modalVisible}
+                                  onOk={handleOk}
+                                  mask={false}
+                                  // onCancel={false}
+                                  closable={false}
+                                  width="45%"
+                                  height="800px"
+                                  style={{ marginTop: "30px" }}
+                                >
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      height: "400px",
+                                    }}
+                                  >
+                                    <div style={{ display: "block" }}>
+                                      <div style={{ margin: "20px 0" }}>
+                                        <Button onClick={() => setIsDueDateCalender(true)} type="ghost">Due Date</Button>
 
+                                      </div>
+                                      <div>
+                                        <Button onClick={() => setIsDueDateCalender(false)}>Completed Date</Button>
+                                      </div>
                                     </div>
+                                    {isDueDateCalender ?
                                     <div>
-                                      <Button onClick={() => setIsDueDateCalender(false)}>Completed Date</Button>
-                                    </div>
+                                      <RangePicker
+
+                                        getPopupContainer={() =>
+                                          document.getElementById("date-popup")
+                                        }
+                                        popupStyle={{
+                                          marginTop: "-259px",
+                                          marginLeft: "-78px"
+                                        }}
+                                        onChange={(dates, dateStrings) => {
+                                          handleDatePickerChange(dateStrings);
+                                        }}
+                                        open={true}
+                                        showNow={false}
+                                        style={{ visibility: "hidden", boxShadow: "none" }}
+                                      />
+                                    </div> :
+                                    <div>
+                                      <RangePicker
+
+                                        getPopupContainer={() =>
+                                          document.getElementById("date-popup")
+                                        }
+                                        popupStyle={{
+                                          marginTop: "-259px",
+                                          marginLeft: "-78px"
+                                        }}
+                                        onChange={(dates, dateStrings) => {
+                                          handleDatePickerChangeProcesseDate(dateStrings);
+                                        }}
+                                        open={true}
+                                        showNow={false}
+                                        style={{ visibility: "hidden", boxShadow: "none" }}
+                                      />
+                                    </div>}
                                   </div>
-                                  {isDueDateCalender ?
-                                  <div>
-                                    <RangePicker
-
-                                      getPopupContainer={() =>
-                                        document.getElementById("date-popup")
-                                      }
-                                      popupStyle={{
-                                        marginTop: "-259px",
-                                        marginLeft: "-78px"
-                                      }}
-                                      onChange={(dates, dateStrings) => {
-                                        handleDatePickerChange(dateStrings);
-                                      }}
-                                      open={true}
-                                      showNow={false}
-                                      style={{ visibility: "hidden", boxShadow: "none" }}
-                                    />
-                                  </div> :
-                                  <div>
-                                    <RangePicker
-
-                                      getPopupContainer={() =>
-                                        document.getElementById("date-popup")
-                                      }
-                                      popupStyle={{
-                                        marginTop: "-259px",
-                                        marginLeft: "-78px"
-                                      }}
-                                      onChange={(dates, dateStrings) => {
-                                        handleDatePickerChangeProcesseDate(dateStrings);
-                                      }}
-                                      open={true}
-                                      showNow={false}
-                                      style={{ visibility: "hidden", boxShadow: "none" }}
-                                    />
-                                  </div>}
-                                </div>
-                                <div
-                                  id="date-popup"
-                                  style={{ position: "relative" }}
-                                />
-                              </Modal>
-                            </div>
-                            <div className="col-xl-2" >
-                              <div className={visitStyles.flags}>
-                                <div className={visitStyles.flags}>
-                                  <span
-                                    className={visitStyles.completed}
-                                    style={{ background: "#3a9b94 !important" }}
-                                  ></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Completed
-                                  </span>
-                                </div>
-                                <div className={visitStyles.flags}>
-                                  <span className={visitStyles.pending}></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Pending
-                                  </span>
-                                </div>
-                                <div className={visitStyles.flags}>
-                                  <span className={visitStyles.hold}></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Hold
-                                  </span>
-                                </div>
-                                <div className={visitStyles.flags}>
-                                  <span className={visitStyles.declined}></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Declined
-                                  </span>
+                                  <div
+                                    id="date-popup"
+                                    style={{ position: "relative" }}
+                                  />
+                                </Modal>
+                              </div> */}
+                              <div className="col-xl-2">
+                              <label>Due Date</label>
+                                <div>
+                                  <RangePicker
+                                    // value={selectedDates}
+                                    // onChange={
+                                    //   activeTab === "SentReport"
+                                    //     ? handleDatePickerChange
+                                    //     : activeTab === "ReceivedReport"
+                                    //     ? handleReceivedDatePicker
+                                    //     : handleCoderPicker
+                                    // }
+                                  />
                                 </div>
                               </div>
+
+                              <div className="col-xl-2">
+                              <label>Completed Date</label>
+                                <div>
+                                  <RangePicker
+                                    // value={selectedDates}
+                                    // onChange={
+                                    //   activeTab === "SentReport"
+                                    //     ? handleDatePickerChange
+                                    //     : activeTab === "ReceivedReport"
+                                    //     ? handleReceivedDatePicker
+                                    //     : handleCoderPicker
+                                    // }
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-xl-2" >
+                              <label></label>
+                                <div className={visitStyles.flags} style={{marginTop:"15px", marginLeft:"265px"}}>
+                                  <div className={visitStyles.flags}  >
+                                    <span
+                                      className={visitStyles.completed}
+                                      style={{ background: "#3a9b94 !important" }}
+                                    ></span>
+                                    <span className={visitStyles.flagCodes}>
+                                      Completed
+                                    </span>
+                                  </div>
+                                  <div className={visitStyles.flags}>
+                                    <span className={visitStyles.pending}></span>
+                                    <span className={visitStyles.flagCodes}>
+                                      Pending
+                                    </span>
+                                  </div>
+                                  <div className={visitStyles.flags}>
+                                    <span className={visitStyles.hold}></span>
+                                    <span className={visitStyles.flagCodes}>
+                                      Hold
+                                    </span>
+                                  </div>
+                                  <div className={visitStyles.flags}>
+                                    <span className={visitStyles.declined}></span>
+                                    <span className={visitStyles.flagCodes}>
+                                      Declined
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              {/* <div className="col-xl-2">
+                                <div class="form-group has-search"> */}
+                              {/* <Calendar
+                                    className="form-control new-form-control calender-pri-input"
+                                    value={compledtedDate}
+                                    onChange={(e) => setCompletedDate(e.value)}
+                                    selectionMode="range"
+                                    readOnlyInput
+                                    placeholder="Completed Date"
+                                  /> */}
+                              {/* <Button type="primary" onClick={showModal}>
+          Open Modal
+        </Button> */}
+                              {/* <div>
+                                    <RangePicker />
+                                  </div> */}
+                              {/* </div>
+                              </div> */}
+
+                              <div className="col-xl-2"  style={{width:"14% !important"}}>
+                             
+                                <Button
+                                  onClick={addPatientFormId}
+                                  className="btn btn-primary btn-sm ms-2 flr"
+                                >
+                                  + Add Patient Id
+                                </Button>
+                              </div>
                             </div>
-
-
-                            {/* <div className="col-xl-2">
-                              <div class="form-group has-search"> */}
-                            {/* <Calendar
-                                  className="form-control new-form-control calender-pri-input"
-                                  value={compledtedDate}
-                                  onChange={(e) => setCompletedDate(e.value)}
-                                  selectionMode="range"
-                                  readOnlyInput
-                                  placeholder="Completed Date"
-                                /> */}
-                            {/* <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button> */}
-                            {/* <div>
-                                  <RangePicker />
-                                </div> */}
-                            {/* </div>
-                            </div> */}
-
-                            <div className="col-xl-3" >
-                              <Button
-                                onClick={addPatientFormId}
-                                className="btn btn-primary btn-sm ms-2 flr"
-                              >
-                                + Add Patient Id
-                              </Button>
-                            </div>
-                          </div>
                         </div>
 
                         <div

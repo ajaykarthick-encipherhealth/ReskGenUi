@@ -31,7 +31,7 @@ function PatientTable({
       label: (
         <>
           <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
+          <span style={{ fontSize: "13px", color:'red' }}>Urgent</span>{" "}
         </>
       ),
     },
@@ -40,7 +40,7 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>High</span>{" "}
+          <span style={{ fontSize: "13px", color:'#cf940a'  }}>High</span>{" "}
         </>
       ),
     },
@@ -49,7 +49,7 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
+          <span style={{ fontSize: "13px", color:"#4466ff "}}>Normal</span>{" "}
         </>
       ),
     },
@@ -58,7 +58,7 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Low</span>{" "}
+          <span style={{ fontSize: "13px", color:"#87909e" }}>Low</span>{" "}
         </>
       ),
     },
@@ -217,7 +217,7 @@ function PatientTable({
                     label: (
                       <>
                         <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-                        <span style={{ fontSize: "13px" }}>Low</span>{" "}
+                        <span style={{ fontSize: "13px", color:"#87909e" }}>Low</span>{" "}
                       </>
                     ),
                     value: "low", // Set the actual value based on your priorityOptions

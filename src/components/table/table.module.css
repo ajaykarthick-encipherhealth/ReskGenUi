@@ -99,7 +99,7 @@
 .classTable tbody tr td {
     font-size: 13px;
     font-weight: 400;
-    padding: 3px 15px;
+    padding: 2px 15px;
     color: #000 !important;
     
 
@@ -148,6 +148,9 @@
 
 .customAntSelect > span{
   display: none !important;
+}
+.customAntSelect > div:nth-child(1){
+ 
 }
 
 

@@ -339,28 +339,29 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            {activeTab === "CoderReport" ?  <div className="col-xl-2" >
-                              <div class="form-group has-search">
-                                {/* <InputText
+                            {activeTab === "CoderReport" ? (
+                              <div className="col-xl-2">
+                                <div class="form-group has-search">
+                                  {/* <InputText
                                   type="text"
                                   onChange={(e) => filterChangePatientName(e)}
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                                {activeTab === "CoderReport" && (
-                                  <Select
-                                    onChange={(selectedOption) =>
-                                      dosOnChange(selectedOption)
-                                    }
-                                    options={statusOptions}
-                                    className="custom-react-select"
-                                    isSearchable={false}
-                                  />
-                                )}
+                                  {activeTab === "CoderReport" && (
+                                    <Select
+                                      onChange={(selectedOption) =>
+                                        dosOnChange(selectedOption)
+                                      }
+                                      options={statusOptions}
+                                      className="custom-react-select"
+                                      isSearchable={false}
+                                    />
+                                  )}
+                                </div>
                               </div>
-                            </div> : null}
-                            
-                           
+                            ) : null}
+
                             <div className="col-xl-2">
                               <div>
                                 <RangePicker
@@ -519,7 +520,9 @@ const index = () => {
                                   >
                                     {ReceivedReportDetails?.content && (
                                       <ReceivedReport
-                                        paginationFirst={paginationReceivedFirst}
+                                        paginationFirst={
+                                          paginationReceivedFirst
+                                        }
                                         details={ReceivedReportDetails}
                                         onPageChange={onReceivedPageChange}
                                         receivedPageNo={receivedPageNo}
@@ -616,7 +619,6 @@ const index = () => {
                     </div>
                   </div>
                 </div>
-             
               </div>
             </div>
           )}
