@@ -1,7 +1,7 @@
 import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
 
-export const PatientsList = async (page,url) => {
+export const PatientsList = async (page, url) => {
   var uId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   try {
@@ -20,7 +20,7 @@ export const PatientsList = async (page,url) => {
   }
 };
 
-export const SearchPatientsList = async (pagenum,search) => {
+export const SearchPatientsList = async (pagenum, search) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
@@ -37,3 +37,22 @@ export const SearchPatientsList = async (pagenum,search) => {
     console.log(err);
   }
 };
+export const ChangePriority = async (patientId, year, priority) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.put(
+      `${ENDPOINTS?.apiEndoint}dbservice/change/priority?patietnId=${patientId}&year=${year}&priority=${priority}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+

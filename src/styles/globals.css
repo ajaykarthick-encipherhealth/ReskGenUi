@@ -11576,7 +11576,8 @@ span.mb-1.disease-name {
 
 .ant-popover .ant-popover-content {
   position: relative;
-  width: 370px;
+  width: auto;
+  left:-170px !important;
 }
 
 .raf-main-card {
@@ -11999,6 +12000,28 @@ tbody > tr {
   line-height: normal;
   letter-spacing: 0.78px;
   background: #dfd8f3 !important;
+  border-radius: 6px !important;
+}
+.computed-text {
+  color: #285563;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  background: #cceeff !important;
+  border-radius: 6px !important;
+}
+.notComputed-text {
+  color: #ff5e5e;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  background: #e8cfcf !important;
   border-radius: 6px !important;
 }
 .hold-text {
@@ -12823,5 +12846,16 @@ tbody > tr {
   border: 1px solid rgb(222 226 230) !important;
 }
 
+ .CircularProgressbar-path {
+  stroke: green !important;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease 0s;
+}
+ .CircularProgressbar-text {
+  fill: green !important;
+ 
+}
 
-
+.ant-modal .ant-modal-content {
+  height:80% !important;
+}

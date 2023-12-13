@@ -186,15 +186,21 @@
   margin-right: 20px;
 }
 .displayDiv{
-  width:50%;
+  width:90%;
   height:150px;
-  margin-right: 10px;
+  display: block;
+ margin-left: 50px;
   border-radius: 8px;
+  margin-bottom: 20px;
   /* overflow-y: scroll; */
   padding:5px;
   box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
 }
-
+/* .innerdiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
 .userName{
   display: flex;
   padding:10px;

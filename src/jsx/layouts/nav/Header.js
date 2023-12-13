@@ -11,7 +11,9 @@ import Swal from 'sweetalert2'
 import { MenuList, PhysicanMenuList ,L2AuditMenuList} from "./Menu";
 import ENDPOINTS from '../../../utility/enpoints';
 import axios from "../../../utility/axiosConfig";
-
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { Tooltip } from "antd";
 
 const Header = ({ onNote }) => {
 	const [headerFix, setheaderFix] = useState(false);
@@ -105,7 +107,7 @@ const Header = ({ onNote }) => {
 		setUserIdDetails(response.data)
 	  }
 	
-  
+	  const percentage = 95;
   return ( 
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -141,6 +143,14 @@ const Header = ({ onNote }) => {
 							<div className="header-profile2 cr-pointer">
 								<div className="nav-link i-false" as="div">
 									<div className="header-info2 d-flex align-items-center">
+										<Tooltip title={`${percentage}%`}>
+											<div className="notificationIcon">
+									<div style={{ width: 30, height: 30 }}>
+  <CircularProgressbar value={percentage} text={`${percentage}%`} />
+</div>
+									   </div>
+										</Tooltip>
+									
 									   <div className="notificationIcon">
 									   {SVGICON.notificationIcon}
 									   </div>

@@ -13161,9 +13161,13 @@ const Details = ({ }) => {
                 </div>
               </div>
             )}
+                <Footer/>
           </div>
+      
         </div>
+     
       </div>
+    
     </>
   );
 }
