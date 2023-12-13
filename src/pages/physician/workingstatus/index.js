@@ -72,6 +72,8 @@ const index = () => {
   return (
     <>
       <Header />
+      <div  style={{backgroundColor: "#F0F6FE"}} >
+  
       <div className={styles.maincontainer}>
         <div className={styles.innerdiv}>
           <div className={styles.div1}>
@@ -130,8 +132,12 @@ const index = () => {
       
         </div>
     
+    
       </div>
-      
+      <Footer/> 
+      </div>
+    
+   
     </>
   );
 };
