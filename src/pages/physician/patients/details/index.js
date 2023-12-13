@@ -4237,6 +4237,7 @@ const Details = ({ }) => {
       dosFiltered: patientDocumentResult.dosFiltered,
       fileDetailDTO: patientDocumentResult.fileDetailDTO,
       deletedDiseases: deletedObject,
+      dos:selectedDosValue
     };
 
     console.log(postData)
