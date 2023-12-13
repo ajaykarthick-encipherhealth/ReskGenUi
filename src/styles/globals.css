@@ -12630,7 +12630,7 @@ tbody > tr {
   color: #3a9b94 !important;
 }
 .declinedBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-  color: #3a9b94 !important;
+  color: red !important;
 }
 .holdBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   color: #d8c11b !important;
@@ -12655,7 +12655,7 @@ tbody > tr {
 }
 
 .declinedBtnHcc button.ant-btn.ant-btn-compact-first-item {
-  color: #3a9b94;
+  color: red;
   background: #fcc!important;
   border: none !important;
   box-shadow: none !important;
@@ -12664,7 +12664,7 @@ tbody > tr {
 }
 
 .declinedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
-  color: #3a9b94;
+  color: red;
   background: #fcc!important;
   border: none !important;
   border-radius: 6px;

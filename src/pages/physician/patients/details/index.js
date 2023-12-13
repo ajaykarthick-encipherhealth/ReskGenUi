@@ -4078,6 +4078,8 @@ const Details = ({ }) => {
         });
         setConfirmNotesModalHold(false);
         setDeclineBtnTitle("Decline");
+        getPatientIdDetails(localPatientId);
+        
       } else {
       }
     } catch (e) {
@@ -4105,7 +4107,9 @@ const Details = ({ }) => {
           duration: 1
         });
         setConfirmNotesModalHold(false);
+        setConfirmNotesModalDecline(false);
         setDeclineBtnTitle("Decline");
+        getPatientIdDetails(localPatientId);
       } else {
       }
     } catch (e) {
