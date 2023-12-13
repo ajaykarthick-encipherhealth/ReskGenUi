@@ -213,6 +213,7 @@ function PatientTable({
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
+        <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
       </tr>
     ));
   };
@@ -253,6 +254,7 @@ console.log(selectedPriority,"priority");
             <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th>STATUS</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>{renderRows()}</tbody>

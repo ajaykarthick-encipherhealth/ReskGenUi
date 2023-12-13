@@ -7,6 +7,7 @@ import NavBar from "../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import Footer from "../../../jsx/layouts/Footer";
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -452,6 +453,7 @@ const Screen = () => {
                 </div>
                         </div>
                     </div>
+               
                 </div>
             </div>
         </>
