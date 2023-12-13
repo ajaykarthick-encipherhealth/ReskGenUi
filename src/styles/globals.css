@@ -12823,16 +12823,14 @@ tbody > tr {
   border: 1px solid rgb(222 226 230) !important;
 }
 
-.CircularProgressbar .CircularProgressbar-path {
+ .CircularProgressbar-path {
   stroke: green !important;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.5s ease 0s;
 }
-.CircularProgressbar .CircularProgressbar-text {
+ .CircularProgressbar-text {
   fill: green !important;
-  font-size: 24px;
-  dominant-baseline: middle;
-  text-anchor: middle;
+ 
 }
 
 

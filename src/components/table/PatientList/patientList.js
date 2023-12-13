@@ -175,20 +175,21 @@ function PatientTable({
           {data.patientName}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          {data.allocatedOn
+            ? moment(data.allocatedOn).format("MM-DD-YYYY")
+            : "---"}
+        </td>
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.dueDate
             ? moment(data.dueDate).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
+            : "---"}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.processedStatus === "COMPLETED"
             ? moment(data.processedDate).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
+            : "---"}
         </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.allocatedOn
-            ? moment(data.allocatedOn).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
-        </td>
+      
         <td className={TableStyle.childBorder}>
           <Tooltip title={data.allocatedBy ? data.allocatedBy : "null"}>
             <Avatar
@@ -242,6 +243,7 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
+            <th>ALLOCATED DATE</th>
             <th onClick={() => requestSort("dueDate")}>
               DUE DATE
               <span style={{ padding: "10px" }}>
@@ -266,7 +268,7 @@ function PatientTable({
                 />
               </span>
             </th>
-            <th>ALLOCATED DATE</th>
+           
             <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th>STATUS</th>

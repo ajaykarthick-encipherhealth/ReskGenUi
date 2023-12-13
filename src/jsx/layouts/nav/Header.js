@@ -13,6 +13,7 @@ import ENDPOINTS from '../../../utility/enpoints';
 import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { Tooltip } from "antd";
 
 const Header = ({ onNote }) => {
 	const [headerFix, setheaderFix] = useState(false);
@@ -142,11 +143,14 @@ const Header = ({ onNote }) => {
 							<div className="header-profile2 cr-pointer">
 								<div className="nav-link i-false" as="div">
 									<div className="header-info2 d-flex align-items-center">
-									<div className="notificationIcon">
+										<Tooltip title={`${percentage}%`}>
+											<div className="notificationIcon">
 									<div style={{ width: 30, height: 30 }}>
   <CircularProgressbar value={percentage} text={`${percentage}%`} />
 </div>
 									   </div>
+										</Tooltip>
+									
 									   <div className="notificationIcon">
 									   {SVGICON.notificationIcon}
 									   </div>
