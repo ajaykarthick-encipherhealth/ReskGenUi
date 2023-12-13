@@ -13,6 +13,10 @@ import { useRouter } from "next/navigation";
 import AllocatedUserCard from "../../allocatedUserDetails/AllocatedUserCard";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { SVGICON } from "../../../jsx/constant/theme";
+import { getPriorityChange } from "../../../store/actions/PatientsActions";
+import dayjs from "dayjs";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+
 
 const { Option } = AntSelect;
 
@@ -22,6 +26,10 @@ function PatientTable({
   statusBodyTemplate,
   patientDetails,
 }) {
+  const [sortDueOrder, setSortDueOrder] = useState("asc");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
+  const [detailsContent, setDetailsContent] = useState(patinetListAll);
+
   const dispatch = useDispatch();
   const navigate = useRouter();
 
@@ -63,36 +71,6 @@ function PatientTable({
       ),
     },
   ];
-  const getPriorityLabel = (priority) => {
-    const priorityMap = {
-      HIGH: (
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>High</span>{" "}
-        </>
-      ),
-      URGENT: (
-        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
-        </>
-      ),
-      LOW: (
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Low</span>{" "}
-        </>
-      ),
-      NORMAL: (
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
-        </>
-      ),
-    };
-
-    return priorityMap[priority] || priorityMap.NORMAL;
-  };
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -164,9 +142,31 @@ function PatientTable({
     <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
   );
 
-  console.log(selectedPriority);
+  const sortTableByDate = (value) => {
+    const sortedContent = [...detailsContent];
+    if(value==='dueDate'){
+      if (sortDueOrder === "asc") {
+        sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
+        setSortDueOrder("desc");
+      } else {
+        sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
+        setSortDueOrder("asc");
+      }
+    }if(value==='completeDate'){
+      if (sortCompleteOrder === "asc") {
+        sortedContent.sort((a, b) => dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate)));
+        setSortCompleteOrder("desc");
+      } else {
+        sortedContent.sort((a, b) => dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate)));
+        setSortCompleteOrder("asc");
+      }
+    }
+    setDetailsContent(sortedContent);
+  };
+
+
   const renderRows = () => {
-    return patinetListAll?.map((data, index) => (
+    return detailsContent?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           {data.patientId}
@@ -208,22 +208,23 @@ function PatientTable({
         <td className={TableStyle.childBorder}>
           <AntSelect
             options={priorityOptions}
-            placeholder="Set priority"
+            placeholder="set priority"
             className={`custom-ant-select ${TableStyle.customAntSelect}`}
             showSearch={false}
-            defaultValue={
-              data?.priority
-                ? data.priority
-                : {
-                    label: (
-                      <>
-                        <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-                        <span style={{ fontSize: "13px", color:"#87909e" }}>Low</span>{" "}
-                      </>
-                    ),
-                    value: "low", // Set the actual value based on your priorityOptions
-                  }
-            }
+            defaultValue={data?.priority ? data.priority : "set Priority"}
+            disabled={!data?.priority?true:false}
+            onChange={(value) => {
+              handlePriorityChange(data?.patientId, value);
+              dispatch(
+                getPriorityChange(
+                  data?.patientId,
+                  dayjs(data?.lastModifiedDate)?.format("YYYY"),
+                  value
+                )
+              );
+            }}
+            style={{ width: "80%" }}
+
           />
         </td>
 
@@ -234,7 +235,7 @@ function PatientTable({
       </tr>
     ));
   };
-  console.log(selectedPriority, "priority");
+
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -244,28 +245,33 @@ function PatientTable({
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th>ALLOCATED DATE</th>
-            <th onClick={() => requestSort("dueDate")}>
+            <th onClick={() => {
+              requestSort("dueDate")
+              sortTableByDate("dueDate")
+              }}>
+
+
               DUE DATE
-              <span style={{ padding: "10px" }}>
-                <FontAwesomeIcon
-                  icon={
-                    getClassNamesFor("dueDate") === "asc"
-                      ? faSortUp
-                      : faSortDown
-                  }
-                />
+              <span style={{ padding: "10px" ,cursor:"pointer"}}>
+              {sortDueOrder === "asc" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
               </span>
             </th>
-            <th onClick={() => requestSort("lastModifiedDate")}>
+            <th onClick={() =>{
+
+              requestSort("lastModifiedDate")
+              sortTableByDate("completeDate")
+            } }>
               COMPLETED DATE
-              <span style={{ padding: "10px" }}>
-                <FontAwesomeIcon
-                  icon={
-                    getClassNamesFor("lastModifiedDate") === "asc"
-                      ? faSortUp
-                      : faSortDown
-                  }
-                />
+              <span style={{ padding: "10px",cursor:"pointer" }}>
+              {sortCompleteOrder === "asc" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
               </span>
             </th>
            

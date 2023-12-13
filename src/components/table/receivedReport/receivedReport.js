@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
 import styles from "./receivedReport.module.css";
@@ -19,6 +19,10 @@ function ReceivedReport({
   const [reportUser, setReportUser] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [detailsContent, setDetailsContent] = useState(details?.content);
+
+  useEffect(()=>{
+    setDetailsContent(details?.content)
+  },[details])
 
   const sortTableByDate = () => {
     const sortedContent = [...detailsContent];
@@ -138,6 +142,7 @@ function ReceivedReport({
         <IndividualReceiverReport
           reportUser={reportUser}
           // ReceivedDetails={details}
+          setReportUser={setReportUser}
           receivedPageNo={receivedPageNo}
           receivedStartDate={receivedStartDate}
           receivedEndDate={receivedEndDate}

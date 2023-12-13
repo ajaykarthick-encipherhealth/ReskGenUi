@@ -3,6 +3,7 @@ import TableStyle from "../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { Modal, Popover } from "antd";
 import Footer from "../../../jsx/layouts/Footer";
+import dayjs from "dayjs";
 
 function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -14,9 +15,9 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
   const popCOntent = (
     <div style={{ width: "100%" }}>
       <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
-          <tr>
-            <th>USER</th>
+        <thead  style={{padding:"10px",height:"30px",color:"white"}}>
+          <tr >
+            <th style={{padding:"10px",}}>USER</th>
             <th>ROLE</th>
           </tr>
         </thead>
@@ -63,10 +64,9 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
 
         <tbody>
           {details?.data?.map((row, index) => {
-            const formattedDate = row.receiveDate
-              ? dayjs(row.receiveDate).format("DD/MM/YY")
+            const formattedDate = row.sendDate
+              ? dayjs(row?.sendDate).format("DD/MM/YYYY")
               : "Invalid Date";
-
             return (
               <tr key={index} style={{ height: "40px" }}>
                 <td
@@ -102,7 +102,9 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
                     <div
                       onClick={() => displayReceivedUsers(row.receivedUsers)}
                     >
-                      ...
+                      {selectedUsers?.slice(0,2)?.map(data=>(
+                        <ul><li>{data.user}</li></ul>
+                      ))}
                     </div>
                   </Popover>
                 </td>

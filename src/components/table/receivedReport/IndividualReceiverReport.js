@@ -28,6 +28,7 @@ const IndividualReceiverReport = ({
   receivedPageNo,
   receivedStartDate,
   receivedEndDate,
+  setReportUser
 }) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const selectedRow = useSelector((state) => state.report.getReport);
@@ -46,8 +47,10 @@ const IndividualReceiverReport = ({
   );
   useEffect(() => {
     setDetailsContent(ReceivedReportDetails?.content);
-    fetchData(fileUrl);
-  }, [ReceivedReportDetails?.content]);
+    if(fileUrl){
+      fetchData(fileUrl);
+    }
+  }, [ReceivedReportDetails?.content,fileUrl]);
 
   const sortTableByDate = () => {
     const sortedContent = [...detailsContent];
@@ -117,10 +120,11 @@ const IndividualReceiverReport = ({
   const filterChange = (e) => {
     debouncedSearch(e.target.value);
   };
+  
   return (
     <div className={styles.container} style={{ marginTop: "30px" }}>
       <div className={styles.cont1}>
-        <div>
+        <div >
           <div className={styles.container}>
             <div className={styles.divContainer}>
               <InputText
@@ -139,10 +143,11 @@ const IndividualReceiverReport = ({
           {/* users */}
           <div>
             {detailsContent
-              ?.filter((item) => item?.reportId !== selectedRow?.reportId)
+              // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
               .map((item) => (
                 <div key={item.reportId}>
-                  <div style={{ display: "flex" }}>
+                  <div style={{ display: "flex" ,cursor:"pointer"}}
+                  onClick={()=>{setReportUser(item)}}>
                     <div className={styles.user}>
                       {item?.reportName}
                       {item.type && (
@@ -204,6 +209,7 @@ const IndividualReceiverReport = ({
             {dayjs(reportUser?.receiveDate).format("DD/MM/YYYY")}
           </div>
           <div>
+            {reportUser?.role==="download"?
             <Button
               onClick={() => {
                 exportToExcel;
@@ -217,7 +223,14 @@ const IndividualReceiverReport = ({
                 style={{ marginRight: "5px" }}
               />
               Download
-            </Button>
+            </Button>:
+            <Button
+            
+            className={styles.readOption}
+          >
+            
+            Read
+          </Button>}
           </div>
         </div>
         <div>

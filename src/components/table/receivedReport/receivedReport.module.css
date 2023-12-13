@@ -1,6 +1,8 @@
 .classModal {
   width: 95% !important;
   border-radius: 18px;
+  height:100% !important;
+  overflow-y: scroll !important;
 }
 .exceltable {
   width: 100%;
@@ -29,6 +31,8 @@ tbody.csvBody tr:nth-child(odd) td {
 }
 .cont1 {
   width: 20%;
+  height:550px;
+  overflow-y: scroll;
   border-right: 0.5px solid #c7c7c7;
   margin-right: 20px;
   font-weight: 700;
@@ -124,6 +128,20 @@ tbody.csvBody tr:nth-child(odd) td {
   font-size: 12px;
   font-weight: 400;
   padding-top: 2px;
+ 
+}
+.readOption, .readOption:hover, .readOption:focus,
+.readOption:focus {
+  width: 110px;
+  height: 32px;
+  border-radius: 8px;
+  background: #FFDA99;
+  color: #FFA400 !important;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  padding-top: 2px;
+  border:none !important;
  
 }
 .download1 {

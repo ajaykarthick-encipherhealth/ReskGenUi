@@ -11577,6 +11577,7 @@ span.mb-1.disease-name {
 .ant-popover .ant-popover-content {
   position: relative;
   width: 370px;
+  left:-170px !important;
 }
 
 .raf-main-card {
@@ -12833,4 +12834,6 @@ tbody > tr {
  
 }
 
-
+.ant-modal .ant-modal-content {
+  height:80% !important;
+}

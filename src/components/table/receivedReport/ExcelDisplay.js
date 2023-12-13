@@ -18,7 +18,7 @@ const ExcelDisplay = ({ tableData }) => {
     ));
   };
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%" ,height:"100%"}}>
       <table className={styles.exceltable}>
         <thead>
         <tr>
