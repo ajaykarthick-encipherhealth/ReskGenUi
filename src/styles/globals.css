@@ -12002,6 +12002,28 @@ tbody > tr {
   background: #dfd8f3 !important;
   border-radius: 6px !important;
 }
+.computed-text {
+  color: #285563;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  background: #cceeff !important;
+  border-radius: 6px !important;
+}
+.notComputed-text {
+  color: #ff5e5e;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  background: #e8cfcf !important;
+  border-radius: 6px !important;
+}
 .hold-text {
   background-color: rgb(253, 227, 207);
   color: rgb(245, 106, 0);

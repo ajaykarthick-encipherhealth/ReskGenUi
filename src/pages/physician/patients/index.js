@@ -681,7 +681,7 @@ if(searchtext ){
       case "COMPUTED":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}  >Computed</span>
+            <span className={`badge computed-text`}  >Computed</span>
 
           </div>
         );
