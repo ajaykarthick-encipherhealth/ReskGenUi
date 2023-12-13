@@ -31,7 +31,7 @@ tbody.csvBody tr:nth-child(odd) td {
 }
 .cont1 {
   width: 20%;
-  height:550px;
+  height:500px;
   overflow-y: scroll;
   border-right: 0.5px solid #c7c7c7;
   margin-right: 20px;
@@ -83,7 +83,7 @@ tbody.csvBody tr:nth-child(odd) td {
   box-shadow: none !important;
 }
 .user {
-  height: 30px;
+  min-height: 30px;
   width: 100%;
   margin-top: 20px;
   font-size: 18px;

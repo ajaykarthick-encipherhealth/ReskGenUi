@@ -102,8 +102,8 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
                     <div
                       onClick={() => displayReceivedUsers(row.receivedUsers)}
                     >
-                      {selectedUsers?.slice(0,2)?.map(data=>(
-                        <ul><li>{data.user}</li></ul>
+                      {row?.receivedUsers?.slice(0,2)?.map(data=>(
+                        <ul><li style={{marginBottom:"5px"}}>{data.user}</li></ul>
                       ))}
                     </div>
                   </Popover>

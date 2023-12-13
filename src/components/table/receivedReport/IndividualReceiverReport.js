@@ -146,10 +146,10 @@ const IndividualReceiverReport = ({
               // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
               .map((item) => (
                 <div key={item.reportId}>
-                  <div style={{ display: "flex" ,cursor:"pointer"}}
+                  <div style={{ display: "flex" ,cursor:"pointer",marginBottom:"10px"}}
                   onClick={()=>{setReportUser(item)}}>
                     <div className={styles.user}>
-                      {item?.reportName}
+                      <div>{item?.reportName}</div>
                       {item.type && (
                         <div
                           style={{ margin: "5px 0 0 5px" }}

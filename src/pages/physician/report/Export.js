@@ -162,7 +162,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   };
 
   const deleteUser = (user) => {
-    setSelectedUser(selectedUser?.filter((item) => item.user != user));
+    setUsersList(userList?.filter((item) => item.user != user));
   };
  
   return (
