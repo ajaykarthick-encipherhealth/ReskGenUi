@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
-import { ArrowUpOutlined,ArrowDownOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import Footer from "../../../jsx/layouts/Footer";
 
 function ReceivedReport(details, onReceivedPageChange) {
@@ -23,11 +23,11 @@ function ReceivedReport(details, onReceivedPageChange) {
     setDetailsContent(sortedContent);
   };
 
-  console.log(details)
+  console.log(details);
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
+        <thead className={TableStyle.classTTotalhead}>
           <tr>
             <th>REPORT ID</th>
             <th>REPORT NAME</th>
@@ -39,20 +39,21 @@ function ReceivedReport(details, onReceivedPageChange) {
             </th>
           </tr>
         </thead>
-        <tbody>
-          { details?.details?.content?.map((row, index) => {
+        <tbody className={TableStyle.bodytable}>
+          {details?.details?.content?.map((row, index) => {
             const formattedDate = row.receiveDate
               ? dayjs(row.sendDate).format("DD/MM/YY")
               : "Invalid Date";
 
             return (
-              <tr key={index}>
+              <tr key={index} style={{ height: "40px" }}>
                 <td
                   style={{
                     borderTop: "0.2px solid #e1e1e1",
                     borderLeft: "0.2px solid #e1e1e1",
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.reportId}
                 </td>
@@ -62,6 +63,7 @@ function ReceivedReport(details, onReceivedPageChange) {
 
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.reportName}
                 </td>
@@ -71,6 +73,7 @@ function ReceivedReport(details, onReceivedPageChange) {
 
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.role}
                 </td>
@@ -80,6 +83,7 @@ function ReceivedReport(details, onReceivedPageChange) {
 
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.sender}
                 </td>
@@ -90,6 +94,7 @@ function ReceivedReport(details, onReceivedPageChange) {
                     borderBottom: "  0.2px solid #e1e1e1",
                     borderRight: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {formattedDate}
                 </td>
@@ -109,7 +114,7 @@ function ReceivedReport(details, onReceivedPageChange) {
           Total count: {details?.details?.totalElements}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
