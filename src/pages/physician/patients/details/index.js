@@ -12300,7 +12300,7 @@ const Details = ({ }) => {
                                 onChange={handleChange}
                               />
                               {addValidCodeCheck == false ?
-                                <span className={visitStyles.ivalidHccCodeError}>
+                                <span className={visitStyles.invalidHccCodeError}>
                                   Invalid Hcc Code
                                 </span> : addValidCodeCheck == true ? <span className={visitStyles.validHccCodeError}>
                                   Valid Hcc Code
