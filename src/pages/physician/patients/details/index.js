@@ -936,7 +936,7 @@ const Details = ({ }) => {
           dublicateRemoveArr.map((res3, index) => {
             allMeatHeadColor.push({
               header: res3.header,
-              color: COLORS[index],
+              color: COLORS3[index],
             });
           });
           allMeatHeadColorArr = allMeatHeadColor;

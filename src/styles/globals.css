@@ -11355,11 +11355,16 @@ tr {
 }
 
 span.badge-meat.badge {
-  height: 27px;
+  height: 20px;
   width: max-content;
   text-overflow: ellipsis;
   overflow: hidden;
-  width: 150px;
+  /* width: 150px; */
+  font-size: 11px !important;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .raf-card {
