@@ -256,6 +256,7 @@ const Details = ({ }) => {
   const [deletedHccList, setDeletedHccList] = useState([]);
   const [isModalComments, setIsModalComments] = useState(false);
   const [flagContainerActive, setFlagContainerActive] = useState("");
+  const [flagContainerActiveTitle, setFlagContainerActiveTitle] = useState("");
   const [showIcons, setShowIcons] = useState(false);
   const [filter, setFilter] = useState("");
   const [showCard, setShowCard] = useState(false);
@@ -4404,23 +4405,28 @@ const Details = ({ }) => {
     setIsModalComments(true);
     setFlagContainerActive(value);
     if (value == "Filter") {
+      setFlagContainerActiveTitle("My Work Qyeue")
       const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${20}`);
       var result = response.data.content;
       setPatientList(result)
     }
 
     if (value == "Timeline") {
+      setFlagContainerActiveTitle("Timeline")
       const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/actioneventaudit?patientid=${localPatientId}&pageno=${0}&pagesize=${20}`);
       var result = response.data.content;
-      setTimeLineData(result)
+      setTimeLineData(result);
     }
     if (value == "Notes") {
+      setFlagContainerActiveTitle("Notes")
       getNotesList();
     }
     if (value == "Comments") {
+      setFlagContainerActiveTitle("Comments")
       getCommentsList();
     }
     if (value == "Flag") {
+      setFlagContainerActiveTitle("Flag The File")
       getFlagList();
     }
 
@@ -12577,7 +12583,7 @@ const Details = ({ }) => {
                   >
                     <div className="offcanvas-header">
                       <h5 className="modal-title" id="#gridSystemModal">
-                        {flagContainerActive}
+                        {flagContainerActiveTitle}
                       </h5>
                       <button
                         type="button"
