@@ -46,6 +46,7 @@ const IndividualReceiverReport = ({
   );
   useEffect(() => {
     setDetailsContent(ReceivedReportDetails?.content);
+    fetchData(fileUrl);
   }, [ReceivedReportDetails?.content]);
 
   const sortTableByDate = () => {
@@ -100,9 +101,6 @@ const IndividualReceiverReport = ({
     dispatch(
       getReceivedDetails(receivedPageNo, receivedStartDate, receivedEndDate)
     );
-    if (fileUrl) {
-      fetchData(fileUrl);
-    }
   }, [reportUser?.reportId, selectedRow?.reportPath]);
 
   const performanceSearch = (value) => {
