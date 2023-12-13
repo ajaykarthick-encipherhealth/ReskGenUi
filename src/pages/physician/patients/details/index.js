@@ -4491,6 +4491,12 @@ const Details = ({ }) => {
   };
 
 
+  const getPatientListToDetails = (userId,orgId,tenantId) =>{
+            getPatientDetails(userId,orgId, tenantId);
+            getPatientIdDetails(userId);
+
+  }
+
   const getFiltePatientListStatus = async (value) => {
 
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`);
@@ -12870,7 +12876,7 @@ const Details = ({ }) => {
                           <div className={visitStyles.patientListHead}>
                             <ul className={`${visitStyles.patientDetailsHead}`} >
                               {patientList.map((data, index) => (
-                                <li className={`${visitStyles.nameList} ${visitStyles.patientList}`} key={index} onClick={() => getPatientDetails(data.patientId, localOrgId, localTenantId)}>
+                                <li className={`${visitStyles.nameList} ${visitStyles.patientList}`} key={index} onClick={() => getPatientListToDetails(data.patientId, localOrgId, localTenantId)}>
                                   {data.patientId} - {data.patientName}
                                   {data.processedStatus == "COMPLETED" ?
                                     <span
