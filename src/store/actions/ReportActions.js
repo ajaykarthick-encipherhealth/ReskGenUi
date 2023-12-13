@@ -5,7 +5,7 @@ import {
   GetSelectedReport,
   exportData,
   usersList,
-  getFile
+  getFile,
 } from "../../services/ReportService";
 
 export const REPORT_PATIENTS_DETAILS = "REPORT_PATIENTS_DETAILS";
@@ -15,17 +15,18 @@ export const REPORT_DETAILS = "REPORT_DETAILS";
 export const SELECTEDROW = "SELECTEDROW";
 export const EXPORT = "EXPORT";
 export const SEARCH = "SEARCH";
-export const FILEPATH='FILEPATH'
+export const FILEPATH = "FILEPATH";
+export const FILEDETAILS = "FILEDETAILS";
 
 export const selectedRow = (val) => ({
   type: SELECTEDROW,
   payload: val,
 });
 
-export const getReportDetails = (pagenum,startDate,endDate,search) => {
+export const getReportDetails = (pagenum, startDate, endDate, search) => {
   return (dispatch) => {
     try {
-      patientDetails(pagenum,startDate,endDate,search).then((response) => {
+      patientDetails(pagenum, startDate, endDate, search).then((response) => {
         if (response) {
           dispatch({
             type: REPORT_PATIENTS_DETAILS,
@@ -69,10 +70,10 @@ export const getUsersList = (id, search) => {
   };
 };
 
-export const getSentDetails = (pagenum,startDate,endDate,search) => {
+export const getSentDetails = (pagenum, startDate, endDate, search) => {
   return (dispatch) => {
     try {
-      SentReport(pagenum,startDate,endDate,search).then((response) => {
+      SentReport(pagenum, startDate, endDate, search).then((response) => {
         if (response) {
           dispatch({
             type: SENT_REPORT,
@@ -85,10 +86,10 @@ export const getSentDetails = (pagenum,startDate,endDate,search) => {
     }
   };
 };
-export const getReceivedDetails = (pagenum,startDate,endDate,search) => {
+export const getReceivedDetails = (pagenum, startDate, endDate, search) => {
   return (dispatch) => {
     try {
-      ReceivedReport(pagenum,startDate,endDate,search).then((response) => {
+      ReceivedReport(pagenum, startDate, endDate, search).then((response) => {
         if (response) {
           dispatch({
             type: RECEIVED_REPORT,
@@ -118,18 +119,21 @@ export const getSelectedReportDetails = (reportId) => {
   };
 };
 export const getFileDetails = (pathname) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     try {
-      getFile(pathname).then((response) => {
+      if (pathname) {
+        const response = await getFile(pathname);
         if (response) {
           dispatch({
-            type: FILEPATH,
-            payload: response,
+            type: FILEDETAILS,
+            payload: response.data,
           });
+          // window.open(response.data)
         }
-      });
+      }
     } catch (err) {
       console.log(err);
     }
   };
 };
+

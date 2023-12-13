@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFileDetails,
+  getReceivedDetails,
   getSelectedReportDetails,
 } from "../../../store/actions/ReportActions";
 import ExcelDisplay, { exportToExcel } from "./ExcelDisplay";
@@ -19,10 +20,23 @@ import send from "../../../images/report/send.svg";
 import download from "../../../images/report/download.svg";
 import Image from "next/image";
 import { Button } from "antd";
+import { debounce } from "../../../pages/physician/report/Export";
+import csvToJson from "csvtojson";
+import * as XLSX from "xlsx";
 
-const IndividualReceiverReport = ({ reportUser, ReceivedDetails }) => {
+const IndividualReceiverReport = ({
+  reportUser,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
+}) => {
+  const ReceivedReportDetails = useSelector(
+    (state) => state.report?.receivedDetails
+  );
   const [sortOrder, setSortOrder] = useState("asc");
-  const usersList = ReceivedDetails?.content?.filter(
+  const selectedRow = useSelector((state) => state.report.getReport);
+  const [tableData,setTableData]=useState([])
+  const usersList = ReceivedReportDetails?.content?.filter(
     (item) => item?.reportId !== selectedRow?.reportId
   );
   const [detailsContent, setDetailsContent] = useState(usersList);
@@ -37,13 +51,17 @@ const IndividualReceiverReport = ({ reportUser, ReceivedDetails }) => {
     }
     setDetailsContent(sortedContent);
   };
+
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getSelectedReportDetails(reportUser?.reportId));
-    // dispatch(getFileDetails(reportUser?.reportPath))
-  }, [reportUser?.reportId, reportUser?.reportPath]);
+    if (reportUser?.reportId) {
+      dispatch(getSelectedReportDetails(reportUser?.reportId));
+    }
+    if (selectedRow?.reportPath) {
+      dispatch(getFileDetails(selectedRow?.reportPath));
+    }
+  }, [reportUser?.reportId, selectedRow?.reportPath]);
 
-  const type = "EXCEL";
   const data = [
     // Define data to be exported as CSV
     { name: "John", age: 30 },
@@ -57,11 +75,55 @@ const IndividualReceiverReport = ({ reportUser, ReceivedDetails }) => {
     { label: "Age", key: "age" },
     // Add more headers according to your data structure
   ];
-  const selectedRow = useSelector((state) => state.report.getReport);
 
-  const filterChange = (e) => {
-    console.log(e);
+  const performanceSearch = (value) => {
+    console.log(value);
+    // dispatch(
+    //   getReceivedDetails(
+    //     receivedPageNo,
+    //     receivedStartDate,
+    //     receivedEndDate,
+    //     value
+    //   )
+    // );
   };
+  const debouncedSearch = debounce(performanceSearch, 500);
+  const filterChange = (e) => {
+    debouncedSearch(e.target.value);
+  };
+
+  const fileUrl = useSelector((state) => state.report);
+  const fileExtension = fileUrl?.uploadFile?.split(".").pop();
+  const extention = fileExtension?.split("?").shift();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(fileUrl?.uploadFile);
+
+        if (extention === "csv") {
+          const text = await response.text();
+          const jsonArray = await csvToJson().fromString(text);
+
+          setTableData(jsonArray);
+        } else {
+          const arrayBuffer = await response.arrayBuffer();
+          const data = new Uint8Array(arrayBuffer);
+          const workbook = XLSX.read(data, { type: "array" });
+
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          setTableData(jsonData);
+        }
+      } catch (error) {
+        console.error("Error fetching CSV data:", error);
+      }
+    }
+
+    fetchData();
+  }, [extention, fileUrl]);
 
   return (
     <div className={styles.container} style={{ marginTop: "30px" }}>
@@ -95,16 +157,16 @@ const IndividualReceiverReport = ({ reportUser, ReceivedDetails }) => {
       </div>
       <div className={styles.tablediv}>
         <div className={styles.container1}>
-          <div>
+          <div className={styles.header}>
             {" "}
             <Image src={id} alt="noimg" />
             &nbsp; Id: &nbsp;
-            {selectedRow?.reportName}
+            {reportUser?.reportId}
           </div>
           <div>
             {" "}
             <Image src={file} alt="noimg" /> &nbsp;Name:&nbsp;
-            {selectedRow?.reportName}
+            {reportUser?.reportName}
           </div>
           <div>
             {" "}
@@ -119,45 +181,36 @@ const IndividualReceiverReport = ({ reportUser, ReceivedDetails }) => {
             {dayjs(reportUser?.receiveDate).format("DD/MM/YYYY")}
           </div>
           <div>
-            {type === "EXCEL" ? (
-              <Button onClick={exportToExcel} className={styles.download}>
-                <Image
-                  src={download}
-                  alt="noimg"
-                  style={{ marginRight: "5px" }}
-                />
-                Download
-              </Button>
-            ) : (
-              <CSVLink
-                data={data}
-                headers={headers}
-                filename={"export.csv"}
-                className={styles.downlaod}
-              >
-                <Image
-                  src={download}
-                  alt="noimg"
-                  style={{ marginRight: "5px" }}
-                />
-                Download
-              </CSVLink>
-            )}
+            <Button onClick={()=>{
+                exportToExcel
+                window.open(fileUrl?.uploadFile)}} className={styles.download}>
+              <Image
+                src={download}
+                alt="noimg"
+                style={{ marginRight: "5px" }}
+               
+              />
+              Download
+            </Button>
           </div>
         </div>
         <div>
           <div className={styles.innerFlex}>
             <div
-              className={type === "EXCEL" ? styles.excelStyle : styles.csvStyle}
+              className={
+                selectedRow?.type === "CSV"
+                  ? styles.csvSTyle
+                  : styles.excelStyle
+              }
             >
-              {type}
+              {selectedRow?.type}
             </div>
           </div>
           <div>
-            {type === "EXCEL" ? (
-              <ExcelDisplay headers={headers} data={data} />
+            {selectedRow?.type === "CSV" ? (
+              <ExcelDisplay tableData={tableData} />
             ) : (
-              <CSVDisplay />
+              <CSVDisplay tableData={tableData}/>
             )}
           </div>
         </div>

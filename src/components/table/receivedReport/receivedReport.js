@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
-import styles from './receivedReport.module.css'
+import styles from "./receivedReport.module.css";
 import { Paginator } from "primereact/paginator";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import IndividualReceiverReport from "./IndividualReceiverReport";
 
-
-function ReceivedReport({details, onReceivedPageChange}) {
+function ReceivedReport({
+  details,
+  onReceivedPageChange,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
+}) {
   const [sortOrder, setSortOrder] = useState("asc");
-  const [reportUser,setReportUser]=useState(null)
-  const[openModal,setOpenModal]=useState(false)
-  const [detailsContent, setDetailsContent] = useState(
-    details?.content
-  );
+  const [reportUser, setReportUser] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [detailsContent, setDetailsContent] = useState(details?.content);
 
   const sortTableByDate = () => {
     const sortedContent = [...detailsContent];
@@ -29,8 +32,8 @@ function ReceivedReport({details, onReceivedPageChange}) {
   };
 
   const handleReceiverReport = (row) => {
-    setReportUser(row)
-    setOpenModal(true)
+    setReportUser(row);
+    setOpenModal(true);
   };
   return (
     <div className={TableStyle.classContaineer}>
@@ -43,7 +46,11 @@ function ReceivedReport({details, onReceivedPageChange}) {
             <th>SENDER</th>
             <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
               DATE{" "}
-              {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+              {sortOrder === "asc" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
             </th>
           </tr>
         </thead>
@@ -113,15 +120,21 @@ function ReceivedReport({details, onReceivedPageChange}) {
           totalRecords={details?.totalElements}
           onPageChange={onReceivedPageChange}
         />
-        <div className="total-pages">
-          Total count: {details?.totalElements}
-        </div>
+        <div className="total-pages">Total count: {details?.totalElements}</div>
       </div>
-      <Modal open={openModal} footer={false} 
-         className={styles.classModal}
-         onCancel={()=>setOpenModal(false)}
+      <Modal
+        open={openModal}
+        footer={false}
+        className={styles.classModal}
+        onCancel={() => setOpenModal(false)}
       >
-        <IndividualReceiverReport reportUser={reportUser} ReceivedDetails={details}/>
+        <IndividualReceiverReport
+          reportUser={reportUser}
+          // ReceivedDetails={details}
+          receivedPageNo={receivedPageNo}
+          receivedStartDate={receivedStartDate}
+          receivedEndDate={receivedEndDate}
+        />
       </Modal>
     </div>
   );
