@@ -26,9 +26,15 @@
   margin-top: 20px;
 }
 .description {
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+}
+.time{
   font-size: 12px;
   font-weight: 400;
   color: #000;
+  margin-top: 5px;
 }
 .anchor {
   color: #133dd4;

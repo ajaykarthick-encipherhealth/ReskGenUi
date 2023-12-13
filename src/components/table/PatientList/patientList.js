@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import AllocatedUserCard from "../../allocatedUserDetails/AllocatedUserCard";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { SVGICON } from "../../../jsx/constant/theme";
+import { getPriorityChange } from "../../../store/actions/PatientsActions";
+import dayjs from "dayjs";
 
 const { Option } = AntSelect;
 
@@ -63,47 +65,23 @@ function PatientTable({
       ),
     },
   ];
-  const getPriorityLabel = (priority) => {
-    const priorityMap = {
-      HIGH: (
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>High</span>{" "}
-        </>
-      ),
-      URGENT: (
-        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
-        </>
-      ),
-      LOW: (
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Low</span>{" "}
-        </>
-      ),
-      NORMAL: (
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
-        </>
-      ),
-    };
-  
-    return priorityMap[priority] || priorityMap.NORMAL;
-  };
-  
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: null,
   });
   const [hoveredAvatar, setHoveredAvatar] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState({id:"meat-01",value:"HIGH"}) ;
+  const [selectedPriority, setSelectedPriority] = useState({
+    id: "meat-01",
+    value: "HIGH",
+  });
 
   const handlePriorityChange = (patientId, selectedValue) => {
-    setSelectedPriority((prev) => ({ ...prev, id:patientId, value:selectedValue }));
+    setSelectedPriority((prev) => ({
+      ...prev,
+      id: patientId,
+      value: selectedValue,
+    }));
   };
 
   const handleAvatarHover = (data) => {
@@ -157,7 +135,6 @@ function PatientTable({
     <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
   );
 
-  console.log(selectedPriority)
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr key={index}>
@@ -198,17 +175,20 @@ function PatientTable({
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
-  <AntSelect
-    options={priorityOptions}
-    placeholder="set priority"
-    className={`custom-ant-select ${TableStyle.customAntSelect}`}
-    showSearch={false}
-
-    defaultValue={data?.priority?data.priority:"set Priority"}
-    onChange={(value) => handlePriorityChange(data.patientId, value)}
-    style={{ width: "80%" }}
-  />
-</td>
+          <AntSelect
+            options={priorityOptions}
+            placeholder="set priority"
+            className={`custom-ant-select ${TableStyle.customAntSelect}`}
+            showSearch={false}
+            defaultValue={data?.priority ? data.priority : "set Priority"}
+            onChange={(value) => {
+              handlePriorityChange(data.patientId, value);
+              console.log(value)
+              dispatch(getPriorityChange(data?.patientId,dayjs(data?.dueDate)?.format('YYYY'),value));
+            }}
+            style={{ width: "80%" }}
+          />
+        </td>
 
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
@@ -217,7 +197,6 @@ function PatientTable({
       </tr>
     ));
   };
-console.log(selectedPriority,"priority");
 
   return (
     <div className={TableStyle.classContaineer}>

@@ -17,8 +17,10 @@ export const debounce = (func, delay) => {
   };
 };
 const Export = ({ isModalVisible, closeModal, rowsLength }) => {
-  const [selectedUser, setSelectedUser] = useState([]);
+  const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
+  const [display, setDisplay] = useState(false);
+  const[userList,setUsersList]=useState([])
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -86,10 +88,18 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
     },
   ];
   const handleSelectedOption = (value) => {
-    setSelectedUser((prev) => ({ ...prev, user: value, role: "" }));
+    setSelectedUser((prevUsers) => [{ ...prevUsers, user: value,role:"" }]);
+
   };
-  const handleSelectedRole = (value) => {
-    setSelectedUser((prevUsers) => ({ ...prevUsers, role: value }));
+  const handleSelectedRole = (value,selectedUserName) => {
+    setSelectedUser((prevUsers) => prevUsers?.map(item => {
+     
+      if (value) {
+        return { ...item, role:value }; 
+      }
+      return item;
+    }));
+;
   };
 
   const filteredOptions =
@@ -104,9 +114,9 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   };
 
   const onFinish = (values) => {
-    const patientIds = rowsLength.map((item) => item.patientId);
-    const userAndAccess = selectedUser.user.reduce((result, user, index) => {
-      result[user] = selectedUser.role[index];
+    const patientIds = rowsLength?.data?.map((item) => item?.patientId);
+    const userAndAccess = userList.reduce((result, { user, role }) => {
+      result[user] = role; // Assign the role directly to the user key
       return result;
     }, {});
     const data = {
@@ -151,6 +161,10 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
     dispatch(getExportDetails(data));
   };
 
+  const deleteUser = (user) => {
+    setSelectedUser(selectedUser?.filter((item) => item.user != user));
+  };
+ 
   return (
     <Modal
       title="Export "
@@ -222,7 +236,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
         </Form.Item>
 
         <div style={{ display: "flex", marginBottom: "20px" }}>
-          <div style={{ width: "100%" }}>
+          <div style={{width: "100%" }}>
             <Form.Item
               label="Sender"
               name="User"
@@ -235,67 +249,90 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
             >
               <div
                 style={{
-                  width: "auto",
+                  width: "99%",
                   display: "flex",
                   justifyContent: "space-between",
                 }}
               >
                 <Select
-                  mode="multiple"
+                  // mode="multiple"
                   placeholder="Please select"
                   onChange={handleSelectedOption}
                   onSearch={handleSearch}
                   className={styles.selectDiv}
+                  value={selectedUser?.map(item=>item.user)}
+
                 >
                   {filteredOptions?.map((data) => (
                     <Option value={data.label}>{data.label}</Option>
                   ))}
                 </Select>
                 <Select
+                  // mode="multiple"
                   placeholder="Please select"
-                  onChange={handleSelectedRole}
+                  onChange={(value) => handleSelectedRole(value, selectedUser[selectedUser.length - 1]?.user)}
                   className={styles.selectDiv}
+                  value={selectedUser?.map(item=>item.role)}
                 >
                   <Option value="READ">Read</Option>
                   <Option value="DOWNLOAD">Download</Option>
                 </Select>
+                <Button
+                onClick={() => {
+                  setDisplay(true);
+                  setSelectedUser([])
+                  setUsersList(prev=>[...prev,...selectedUser])
+                 
+                }}
+              >
+                add
+              </Button>
               </div>
+              
             </Form.Item>
           </div>
-          {/* <div className={styles.displayDiv}>
-            {selectedUser?.length > 0 ? (
-              <>
-                {selectedUser?.map((item, index) => (
-                  <div className={styles.userName}>
-                    <div key={index} className={styles.userRoleContainer}>
-                      {item.user}
-                    </div>
-                    <div key={index} className={styles.userRoleContainer}>
-                      {item.role}
-                    </div>
-                    <div
-                      style={{ cursor: "pointer" }}
-                      onClick={() => deleteUser(item.user)}
-                    >
-                      X
-                    </div>
-                  </div>
-                ))}
-              </>
-            ) : (
-              "No Users Selected"
-            )}
-          </div> */}
         </div>
+        <div className={styles.displayDiv}>
+          {display ? (
+            <div>
+              {userList?.map((item, index) => (
+                <div className={styles.userName}>
+                  <div key={index} className={styles.userRoleContainer}>
+                    {item.user}
+                  </div>
+                  <div key={index} className={styles.userRoleContainer}>
+                    {item.role}
+                  </div>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => deleteUser(item.user)}
+                  >
+                    X
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            "No Users Selected"
+          )}
+        </div>
+
         <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
+          // wrapperCol={{
+          //   offset: 8,
+          //   span: 16,
+          // }}
           className={styles.footerBtn}
         >
-          <Button type="primary" htmlType="submit"  style={{backgroundColor:"#04306f", width: "100px"
-,  height: "40px"}}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{
+              backgroundColor: "#04306f",
+              width: "100px",
+              height: "40px",
+            }}
+          >
             Generate
           </Button>
         </Form.Item>

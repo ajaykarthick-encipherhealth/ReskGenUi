@@ -3,6 +3,7 @@ import TableStyle from "../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { Modal, Popover } from "antd";
 import Footer from "../../../jsx/layouts/Footer";
+import dayjs from "dayjs";
 
 function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -63,10 +64,9 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
 
         <tbody>
           {details?.data?.map((row, index) => {
-            const formattedDate = row.receiveDate
-              ? dayjs(row.receiveDate).format("DD/MM/YY")
+            const formattedDate = row.sendDate
+              ? dayjs(row?.sendDate).format("DD/MM/YYYY")
               : "Invalid Date";
-
             return (
               <tr key={index} style={{ height: "40px" }}>
                 <td

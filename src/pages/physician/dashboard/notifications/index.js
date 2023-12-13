@@ -66,7 +66,7 @@ const Notifications = () => {
       <div style={{ marginTop: "10px" }}> {SVGICON.dashboardNotification}</div>
       <div className={styles.msgCOntainer}>
         <span className={styles.description}>{info.message}</span>
-        <div>
+        <div className={styles.time}>
           {info.date}&nbsp;.{info.time} &nbsp;.{info.person}
         </div>
       </div>
