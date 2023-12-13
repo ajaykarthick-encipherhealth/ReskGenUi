@@ -8972,7 +8972,7 @@ button:focus {
   /* left: 0px !important; */
   /* margin-left: 20px !important; */
   padding-left: 0 !important;
-  /* z-index: 9999; */
+  z-index: 999 !important;
 }
 
 .nav-header {
@@ -12151,6 +12151,7 @@ tbody > tr {
   height: 42px !important;
   flex-shrink: 0;
   border: none !important;
+  z-index: 11;
 }
 
 .custom-react-select > div:nth-child(4) > div {
@@ -12595,7 +12596,7 @@ tbody > tr {
   display: none !important; 
 }
 
-.pendingBtn button.ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
+.pendingBtn button.ant-btn.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
   color: #452b90;
   background: #dfd8f3!important;
   border: none !important;
@@ -12604,7 +12605,7 @@ tbody > tr {
     width: 140px!important;
 }
 
-.pendingBtn > .ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+.pendingBtn > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
   color: #452b90;
   background: #dfd8f3!important;
   border-radius: 6px;
@@ -12612,7 +12613,68 @@ tbody > tr {
 
 }
 
-.holdBtnHcc button.ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
+.completedBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #3a9b94;
+  background: #daf1ef!important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px;
+    width: 140px!important;
+}
+.completedBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #3a9b94 !important;
+}
+.declinedBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #3a9b94 !important;
+}
+.holdBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #d8c11b !important;
+}
+
+
+.completedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+  color: #3a9b94;
+  background: #daf1ef!important;
+  border: none !important;
+  border-radius: 6px;
+  box-shadow: none;
+
+}
+
+.completedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+  height: calc(100% + 1px) !important;
+    background: #daf1ef!important;
+    border: none !important;
+    box-shadow: none !important;
+
+}
+
+.declinedBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #3a9b94;
+  background: #fcc!important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px;
+    width: 140px!important;
+}
+
+.declinedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+  color: #3a9b94;
+  background: #fcc!important;
+  border: none !important;
+  border-radius: 6px;
+  box-shadow: none;
+
+}
+
+.declinedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+  height: calc(100% + 1px) !important;
+    background: #fcc!important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.holdBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #d8c11b;
   background: #faead1!important;
   border: none !important;
@@ -12621,7 +12683,7 @@ tbody > tr {
     width: 140px!important;
 }
 
-.holdBtnHcc > .ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+.holdBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
   color: #d8c11b;
   background: #faead1!important;
   border: none !important;
@@ -12630,7 +12692,7 @@ tbody > tr {
 
 }
 
-.holdBtnHcc > .ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+.holdBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
   height: calc(100% + 1px) !important;
     background: #faead1!important;
     background: #f1dbb9!important;
