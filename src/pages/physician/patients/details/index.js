@@ -32,7 +32,8 @@ import {
   faCalendarAlt,
   faIdCardClip,
   faCog,
-  faClock
+  faClock,
+  faArrowsAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   CalendarOutlined
@@ -65,8 +66,9 @@ import { connect } from "react-redux";
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 
-import { Avatar,Tooltip } from 'antd';
+import { Avatar, Tooltip } from 'antd';
 import Spinner from "../../../../components/spinner/spinner";
+import Footer from "../../../../jsx/layouts/Footer";
 
 
 
@@ -273,6 +275,8 @@ const Details = ({ }) => {
   const [userDetails, setUserDetails] = useState("");
   const [currentTime, setCurrentTime] = useState("");
   const [commentsTrigger, setCommentsTrigger] = useState(false);
+  const [captureSectionMatching, setCaptureSectionMatching] = useState(false);
+  const [encounterDateMatching, setEncounterDateMatching] = useState(false);
 
 
 
@@ -396,99 +400,15 @@ const Details = ({ }) => {
     setLocalPatientId(patientId);
 
 
-    const menu = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
 
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-
-    const menu2 = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='4' onClick={() => handleActionClick("ADD RADIOLOGY")}>
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>+ ADD RADIOLOGY</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-    const menu3 = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='4' onClick={() => handleActionClick("ADD LAB")}>
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-
-
-
-    setActionItems(menu);
-    setActionItems2(menu2);
-    setActionItems3(menu3);
 
     var userSpinner = (
       <div className={visitStyles.userDetailsCard}>
-         <div className="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+        <div className="bouncing-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
 
@@ -528,7 +448,118 @@ const Details = ({ }) => {
       ENDPOINTS.apiEndoint +
       `dbservice/patient/get?patientId=${patientId}`
     );
-    setPatienIdDetails(response.data)
+    setPatienIdDetails(response.data);
+    console.log(response.data)
+    var result = response.data;
+
+
+    const menu = (
+      <Menu>
+        {result.processedStatus != "HOLD" ?
+          <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+            <div className="patient-status">
+              <span className={`badge hold-text`} >HOLD</span>
+            </div>
+          </Menu.Item> : null}
+        {result.processedStatus != "PENDING" ?
+          <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+            <div className="patient-status">
+              <span className={`badge processing-text`}>PENDING</span>
+            </div>
+          </Menu.Item> : null}
+        {result.processedStatus != "DECLINE" ?
+          <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+            <div className="patient-status">
+              <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+            </div>
+          </Menu.Item> : null}
+
+        {result.processedStatus != "COMPLETE" ?
+          <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+            <div className="patient-status">
+              <span className={`badge processed-text`}>COMPLETE</span>
+            </div>
+          </Menu.Item> : null}
+      </Menu>
+    );
+
+    const menu2 = (
+      <Menu>
+        {result.processedStatus != "HOLD" ?
+          <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+            <div className="patient-status">
+              <span className={`badge hold-text`} >HOLD</span>
+            </div>
+          </Menu.Item> : null}
+        {result.processedStatus != "PENDING" ?
+          <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+            <div className="patient-status">
+              <span className={`badge processing-text`}>PENDING</span>
+            </div>
+          </Menu.Item> : null}
+        {result.processedStatus != "DECLINE" ?
+          <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+            <div className="patient-status">
+              <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+            </div>
+          </Menu.Item> : null}
+
+        {result.processedStatus != "COMPLETE" ?
+          <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+            <div className="patient-status">
+              <span className={`badge processed-text`}>COMPLETE</span>
+            </div>
+          </Menu.Item> : null}
+        <Menu.Item key='5' onClick={() => handleActionClick("ADD RADIOLOGY")}>
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD RADIOLOGY</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+    const menu3 = (
+      <Menu>
+        {result.processedStatus != "HOLD" ?
+          <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+            <div className="patient-status">
+              <span className={`badge hold-text`} >HOLD</span>
+            </div>
+          </Menu.Item> : null}
+        {result.processedStatus != "PENDING" ?
+          <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+            <div className="patient-status">
+              <span className={`badge processing-text`}>PENDING</span>
+            </div>
+          </Menu.Item> : null}
+        {result.processedStatus != "DECLINE" ?
+          <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+            <div className="patient-status">
+              <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+            </div>
+          </Menu.Item> : null}
+
+        {result.processedStatus != "COMPLETE" ?
+          <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+            <div className="patient-status">
+              <span className={`badge processed-text`}>COMPLETE</span>
+            </div>
+          </Menu.Item> : null}
+        <Menu.Item key='5' onClick={() => handleActionClick("ADD LAB")}>
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+
+
+
+    setActionItems(menu);
+    setActionItems2(menu2);
+    setActionItems3(menu3);
   }
 
   const getYearOfServiceDetails = async (year) => {
@@ -602,13 +633,14 @@ const Details = ({ }) => {
         });
 
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        setSelectedDosValue(dosYearArr[0].value);
+        // setSelectedDosValue(dosYearArr[0].value);
         // console.log(highestDOS)
 
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
         );
         setDosYearDefalutSelect(highestDosValue[0]);
+        setSelectedDosValue(highestDosValue[0].value);
 
 
         if (result.rafScore != null) {
@@ -619,9 +651,52 @@ const Details = ({ }) => {
 
         validDis = result.validDisease;
         validDiseaseNewRes = result.validDisease;
-        invalidDiseaseNewRes = result.invalidDisease;
+        // invalidDiseaseNewRes = result.invalidDisease;
+        var validDisArray = [];
+        var validEncounterDateArray = [];
+        validDiseaseNewRes.map((res, index) => {
+          const encounterDatearray = res.encounterDate.split(',');
+          validDisArray.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition
+          });
+
+        });
+
+        result.invalidDisease.map((res, index) => {
+          const encounterDatearray = res.encounterDate.split(',');
+          invalidDiseaseNewRes.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition
+          });
+
+        });
+
+
         if (result.deletedDiseases != null) {
-          deleteHccList = result.deletedDiseases;
+          result.deletedDiseases.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
+            deleteHccList.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition: res.defaultPosition
+            });
+
+          });
         }
         if (result.suggestRadiology != null) {
           // var checkDosRadio = [];
@@ -630,11 +705,12 @@ const Details = ({ }) => {
           // }
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
+              encounterDate: encounterDatearray,
               getPlace: "Radio",
               isHccValid: true,
             });
@@ -644,11 +720,12 @@ const Details = ({ }) => {
         if (result.suggestLab != null) {
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
+              encounterDate: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
             });
@@ -658,6 +735,7 @@ const Details = ({ }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -665,7 +743,7 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
+                encounterDate: encounterDatearray,
                 getPlace: "Hcc",
               });
             } else {
@@ -684,7 +762,7 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
+                encounterDate: encounterDatearray,
                 getPlace: "Hcc",
               });
             }
@@ -733,7 +811,8 @@ const Details = ({ }) => {
         //   validDiseasesArray.push({ name: validDis[key] });
         // }
 
-        setNewValidDiseaseList(validDiseaseNewRes);
+
+        setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
         setValidDiseasesList(validDiseasesArray);
@@ -744,6 +823,13 @@ const Details = ({ }) => {
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
+
+
+        console.log(validDisArray);
+
+
+        var capturedSectionsColorsMatching = [];
+        var capturedSectionsArr = [];
 
 
 
@@ -758,6 +844,78 @@ const Details = ({ }) => {
           "bg-bg-ten",
           "bg-bg-leven",
         ];
+
+        const COLORS2 = [
+          "sectionTag1",
+          "sectionTag2",
+          "sectionTag3",
+          "sectionTag4",
+          "sectionTag5",
+          "sectionTag6",
+          "sectionTag7",
+          "sectionTag8"
+        ];
+
+
+        const COLORS3 = [
+          "encounterDateTag1",
+          "encounterDateTag2",
+          "encounterDateTag3",
+          "encounterDateTag4",
+          "encounterDateTag5",
+          "encounterDateTag6",
+          "encounterDateTag7",
+          "encounterDateTag8"
+        ];
+
+        validDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2, index) => {
+            capturedSectionsArr.push({
+              name: res2,
+              "diagnosisCode": res.diagnosisCode,
+            });
+
+          })
+        })
+
+        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
+
+        dublicateSectionArr.map((res, index) => {
+          capturedSectionsColorsMatching.push({
+            "name": res.name,
+            "diagnosisCode": res.diagnosisCode,
+            "colors": COLORS2[index]
+          });
+        })
+        setCaptureSectionMatching(capturedSectionsColorsMatching);
+
+
+        var encounterDateColorsMatching = [];
+        var encounterDateArr = [];
+
+        validDiseaseNewRes.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+
+        var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
+
+        encounterDateArrDublicatesRemove.map((res, index) => {
+          encounterDateColorsMatching.push({
+            "name": res.name,
+            "colors": COLORS3[index]
+          });
+        })
+
+        setEncounterDateMatching(encounterDateColorsMatching);
+
+
+
 
         var meatListArr = [];
         var meatMoniterHead = [];
@@ -803,7 +961,7 @@ const Details = ({ }) => {
           dublicateRemoveArr.map((res3, index) => {
             allMeatHeadColor.push({
               header: res3.header,
-              color: COLORS[index],
+              color: COLORS3[index],
             });
           });
           allMeatHeadColorArr = allMeatHeadColor;
@@ -893,14 +1051,14 @@ const Details = ({ }) => {
     }
   };
   const getPatientDetailsYear = async (patientId, orgId, tenId, year) => {
-    console.log("dajdg")
+    setSelectedDosValue(year);
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
     setNewUnMatchHccList([]);
     setValidDiseasesList([]);
     setInvalidDiseasesList([]);
     setComboDiseaseCodesList([]);
-    setDosYear([]);
+    // setDosYear([]);
     setRAFScore([]);
     setSuggestedNonHccList([]);
     setSuggestedHccList([]);
@@ -947,17 +1105,17 @@ const Details = ({ }) => {
         setSelectMeatFileId(response.data.fileId);
         // setPatientDocumentResult(result);
 
-        result.encounterYears.map((res) => {
-          dosYearArr.push({ value: res, label: res });
-        });
+        // result.encounterYears.map((res) => {
+        //   dosYearArr.push({ value: res, label: res });
+        // });
 
         // const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        setSelectedDosValue(dosYearArr[0].value);
+        // setSelectedDosValue(dosYearArr[0].value);
 
         // const highestDosValue = dosYearArr.filter(
         //   (i) => parseInt(i.value) === highestDOS
         // );
-        setDosYearDefalutSelect(dosYearArr[0]);
+        // setDosYearDefalutSelect(dosYearArr[0]);
 
 
         if (result.rafScore != null) {
@@ -1090,7 +1248,7 @@ const Details = ({ }) => {
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
         setComboDiseaseCodesList(comboDis);
-        setDosYear(dosYearArr);
+        // setDosYear(dosYearArr);
         setRAFScore(rafScore);
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
@@ -3525,11 +3683,11 @@ const Details = ({ }) => {
 
     data = (
       <div className={visitStyles.userDetailsCard}>
-         <div className="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+        <div className="bouncing-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
     setvalidHccDetails(data);
@@ -3538,7 +3696,7 @@ const Details = ({ }) => {
     );
     if (response.data) {
       result = response.data;
-       data = (
+      data = (
         <div className="validhcc-details">
           {/* <Spin className='ml-2 ms-1' size="small" /> */}
           {/* <div>{value}</div> */}
@@ -3565,9 +3723,9 @@ const Details = ({ }) => {
         </div>
       );
     }
-   
 
-  
+
+
     setvalidHccDetails(data);
   };
 
@@ -3786,9 +3944,9 @@ const Details = ({ }) => {
 
   const replaceString = (value) => {
     var removeComma = null;
-    if (value != null) {
-      removeComma = value.replace(/,/g, "");
-    }
+    // if (value != null) {
+    //   removeComma = value.replace(/,/g, "");
+    // }
     return removeComma;
   };
 
@@ -3945,6 +4103,8 @@ const Details = ({ }) => {
         });
         setConfirmNotesModalHold(false);
         setDeclineBtnTitle("Decline");
+        getPatientIdDetails(localPatientId);
+
       } else {
       }
     } catch (e) {
@@ -3972,7 +4132,9 @@ const Details = ({ }) => {
           duration: 1
         });
         setConfirmNotesModalHold(false);
+        setConfirmNotesModalDecline(false);
         setDeclineBtnTitle("Decline");
+        getPatientIdDetails(localPatientId);
       } else {
       }
     } catch (e) {
@@ -4402,11 +4564,11 @@ const Details = ({ }) => {
 
     data = (
       <div className={visitStyles.userDetailsCard}>
-         <div className="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+        <div className="bouncing-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
 
@@ -4441,6 +4603,47 @@ const Details = ({ }) => {
 
     setUserDetails(data);
   };
+
+
+  const getCaptureSectionBackground = (value) => {
+    return value.map((res) => {
+      const result = captureSectionMatching.filter(
+        (res2) => res2.name == res
+      );
+      var backColor = result[0].colors;
+      var sectionMapArr =
+        (<Badge
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
+          {res}</Badge>)
+      return sectionMapArr
+    });
+  }
+
+
+  const getEncounterDateBackground = (value) => {
+    return value.map((res) => {
+      const result = encounterDateMatching.filter(
+        (res2) => res2.name == res
+      );
+      var backColor = result[0].colors;
+      var sectionMapArr =
+        // (<Badge
+        // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
+        // {res}</Badge>)
+
+        (<Badge
+          className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+        >
+          <i>
+            <CalendarOutlined className={visitStyles.calenderIcon} />
+          </i>
+          {moment(res).format("MM/DD")}
+        </Badge>
+        )
+      return sectionMapArr
+    });
+  }
+
 
 
 
@@ -4571,24 +4774,26 @@ const Details = ({ }) => {
                       <div className="col-xl-2 col-sm-12">
                         <div className={`${visitStyles.actionbtnContainer}`}>
                           {patienIdDetails.processedStatus == "COMPLETED" ?
-                            <div className={`col-xl-12`}
+
+                            <Dropdown.Button
+                              type="primary"
+                              className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                              icon={<DownOutlined />}
+                              overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
                             >
-                              {/* <i className={visitStyles.completedStatus}>
-                            {SVGICON.completedStatusIcon  }
-
-                            </i> */}
-                              <div className="patient-status">
-                                <span className={`badge processed-text`}>COMPLETED</span>
-
-
-                              </div>
-                            </div> : patienIdDetails.processedStatus == "DECLINED" ?
+                              COMPLETED
+                            </Dropdown.Button>
+                            : patienIdDetails.processedStatus == "DECLINED" ?
                               <div className={`col-xl-12`}
                               >
-                                <div className="patient-status">
-                                  <span className={`badge failed-text`} style={{ color: "red" }}>DECLINED</span>
-
-                                </div>
+                                <Dropdown.Button
+                                  type="primary"
+                                  className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
+                                  icon={<DownOutlined />}
+                                  overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
+                                >
+                                  DECLINED
+                                </Dropdown.Button>
 
                               </div> :
                               patienIdDetails.processedStatus == "HOLD" ?
@@ -4612,84 +4817,8 @@ const Details = ({ }) => {
                                     icon={<DownOutlined />}
                                     overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
                                   >
-                                    {/* <div className="patient-status">
-            <span className={`badge processed-text`}>PENDING</span>
-              
-         
-          </div> */}
                                     PENDING
                                   </Dropdown.Button>
-
-
-                                  {/* <Button
-                            onClick={handleSubmitHccDecline}
-                            className={`ms-2 ${visitStyles.declineBtn}`}
-                          >
-                            <i>{SVGICON.delclineIcon}</i>
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              setConfirmNotesModalDecline(true);
-                              setIsValidAction("holdFunction");
-                            }}
-                            className={`ms-2 ${visitStyles.holdBtn}`}
-                          >
-                            <i>{SVGICON.holdBtnIcon}</i>
-                          </Button>
-
-                          <Button
-                            onClick={handleSubmitHccComplete}
-                            className={`ms-2 ${visitStyles.completedBtn}`}
-                          >
-                            <i>{SVGICON.completedBtnIcon}</i>
-
-                          </Button> */}
-
-                                  {/* <Button
-                            onClick={handleSubmitHccComplete}
-                            className={`ms-2 ${visitStyles.completedBtn}`}
-                          >
-                            <i>{SVGICON.completedBtnIcon}</i>
-
-                          </Button> */}
-
-
-                                  {/* {activeTab == 3 ? (
-
-                            <Button
-                              onClick={addPatientFile}
-                              className={`ms-2 ${visitStyles.addPatientBtn}`}
-                            >
-                              <FontAwesomeIcon
-                                icon={
-                                  faPlus
-                                }
-                                style={{
-                                  color:
-                                    "rgb(38 50 107)",
-                                }}
-                              />
-                            </Button>
-                          ) : null}
-                          {activeTab == 4 ? (
-
-                            <Button
-                              onClick={addLabReport}
-                              className={`ms-2 ${visitStyles.addPatientBtn}`}
-                            >
-                              <FontAwesomeIcon
-                                icon={
-                                  faPlus
-                                }
-                                style={{
-                                  color:
-                                    "rgb(38 50 107)",
-                                }}
-                              />
-                            </Button>
-
-                          ) : null}
- */}
 
 
                                 </div>}
@@ -4997,13 +5126,13 @@ const Details = ({ }) => {
                                                 HCC
                                               </span>
                                             </div>
-                                            <div className={visitStyles.flags} >
+                                            {/* <div className={visitStyles.flags} >
                                               <span className={visitStyles.nonHccFlag}>
                                               </span>
                                               <span className={visitStyles.flagCodes}>
                                                 NON HCC
                                               </span>
-                                            </div>
+                                            </div> */}
                                             <div className={visitStyles.flags}   >
                                               <span className={visitStyles.suggestedFlag}>
                                               </span>
@@ -5094,21 +5223,16 @@ const Details = ({ }) => {
                                                                 </span>
                                                               </div>
 
-                                                              {data.defaultPosition == "VALID" || data.defaultPosition == null ?
-                                                                <Tooltip title="HCC" placement="bottom">
-                                                                  <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span></Tooltip> : data.defaultPosition == "SUGGESTED" ?
-                                                                  <Tooltip title="SUGGESTED" placement="bottom">
-                                                                    <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                    </span></Tooltip>
-                                                                  : data.defaultPosition == "INVALID" ?
-                                                                    <Tooltip title="NON-HCC" placement="bottom">
-                                                                      <span className={`${visitStyles.nonHccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                      </span></Tooltip>
-                                                                    : data.defaultPosition == "DELETED" ?
-                                                                      <Tooltip title="DELETED" placement="bottom">
-                                                                        <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                        </span> </Tooltip> : null}
+                                                              {data.defaultPosition == "VALID" ?
+                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span>
+                                                                  : data.defaultPosition == "DELETED" ?
+
+                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : null}
                                                               <Popover
                                                                 onClick={() =>
                                                                   getValidHccDetails(
@@ -5176,12 +5300,15 @@ const Details = ({ }) => {
                                                                     visitStyles.close_icon
                                                                   }
                                                                 >
-                                                                  {SVGICON.closeIcon}
+                                                                  {<FontAwesomeIcon
+                                                                    icon={faArrowsAlt}
+                                                                    style={{ size: 8, color: "#a80404" }}
+                                                                  />}
                                                                 </div>
                                                               </Popconfirm>
                                                             </div>
                                                             <div className="hoverActiveHcc">
-                                                              <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
                                                                 {/* <Tooltip title={patientDocumentResult.patientName}>
                                                          <Avatar className={visitStyles.provider_name_style}>U</Avatar>
                                                          </Tooltip> */}
@@ -5205,6 +5332,8 @@ const Details = ({ }) => {
                                                               }
                                                             </Badge>
                                                           </Popover> */}
+
+                                                                {getEncounterDateBackground(data.encounterDate)}
                                                                 {data.isManuallyAdded == true ?
                                                                   <Popover
                                                                     placement="topLeft"
@@ -5213,51 +5342,15 @@ const Details = ({ }) => {
                                                                     }
                                                                   >
                                                                     <Badge
-                                                                      className={`mt-2 text-start w-100px ${visitStyles.manuallyAdded}`}
+                                                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                                                     >
                                                                       Manually Added
 
                                                                     </Badge>
                                                                   </Popover> : null}
-                                                                {data.encounterDate != null ?
-                                                                  <Popover
-                                                                    placement="topLeft"
-                                                                    content={
-                                                                      data.encounterDate
-                                                                    }
-                                                                  >
-                                                                    <Badge
-                                                                      className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                                    >
-                                                                      <i>
-                                                                        <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                      </i>
-                                                                      {replaceString(
-                                                                        data.encounterDate
-                                                                      )}
-                                                                    </Badge>
-                                                                  </Popover> : null}
-                                                                <Popover
-                                                                  placement="topLeft"
-                                                                  content={
-                                                                    data.capturedSections
-                                                                  }
-                                                                >
-                                                                  <Badge
-                                                                    className={`mt-2 text-start cr-pointer  w-100px ${visitStyles.captureheader}`}
-                                                                    onClick={() =>
-                                                                      handleOpenModalCombinationCode(
-                                                                        data.diagnosisCode,
-                                                                        data.capturedSections,
-                                                                        "valid"
-                                                                      )
-                                                                    }
-                                                                  >
-                                                                    {replaceCaptureSection(
-                                                                      data.capturedSections
-                                                                    )}
-                                                                  </Badge>
-                                                                </Popover>
+
+
+                                                                {/* {getCaptureSectionBackground(data.capturedSections)} */}
                                                                 {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
                                                       <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
@@ -5267,6 +5360,9 @@ const Details = ({ }) => {
                                                         HPI Test Urlplan
                                                       </Badge>
                                                       </Popover> */}
+                                                              </div>
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                {getCaptureSectionBackground(data.capturedSections)}
                                                               </div>
                                                             </div>
                                                           </div>
@@ -5329,17 +5425,16 @@ const Details = ({ }) => {
                                                                       }
                                                                     </span>
                                                                   </div>
-                                                                  {data.defaultPosition == "VALID" || data.defaultPosition == null ?
-                                                                    <Tooltip title="HCC" placement="bottom">
-                                                                      <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                      </span></Tooltip> : data.defaultPosition == "VALID" ?
-                                                                      <Tooltip title="SUGGESTED" placement="bottom">
-                                                                        <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                        </span></Tooltip>
+                                                                  {data.defaultPosition == "VALID" ?
+                                                                    <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                      <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                      </span>
                                                                       : data.defaultPosition == "DELETED" ?
-                                                                        <Tooltip title="DELETED" placement="bottom">
-                                                                          <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                          </span> </Tooltip> : null}
+
+                                                                        <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                        </span> : null}
                                                                   <Popover
                                                                     onClick={() =>
                                                                       getValidHccDetails(
@@ -5402,9 +5497,10 @@ const Details = ({ }) => {
                                                                           visitStyles.close_icon
                                                                         }
                                                                       >
-                                                                        {
-                                                                          SVGICON.closeIcon
-                                                                        }
+                                                                        <FontAwesomeIcon
+                                                                          icon={faArrowsAlt}
+                                                                          style={{ size: 8, color: "#a80404" }}
+                                                                        />
                                                                       </div>
                                                                     </Popconfirm>
 
@@ -5452,14 +5548,17 @@ const Details = ({ }) => {
                                                                           visitStyles.close_icon
                                                                         }
                                                                       >
-                                                                        {
-                                                                          SVGICON.closeIcon
-                                                                        }
+                                                                        <FontAwesomeIcon
+                                                                          icon={faArrowsAlt}
+                                                                          style={{ size: 8, color: "#a80404" }}
+                                                                        />
                                                                       </div>
                                                                     </Popconfirm>}
                                                                 </div>
                                                                 <div className="hoverActiveHcc">
-                                                                  <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                                  <div className="">
+
+                                                                    {getEncounterDateBackground(data.encounterDate)}
                                                                     {data.getPlace ==
                                                                       "Lab" ? (
                                                                       <Tooltip title="LAB">
@@ -5490,45 +5589,10 @@ const Details = ({ }) => {
                                                                         </span>
                                                                       </Tooltip>
                                                                     )}
-                                                                    {data.encounterDate != null ?
-                                                                      <Popover
-                                                                        placement="topLeft"
-                                                                        content={
-                                                                          data.encounterDate
-                                                                        }
-                                                                      >
-                                                                        <Badge
-                                                                          className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                                        >
-                                                                          <i>
-                                                                            <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                          </i>
-                                                                          {replaceString(
-                                                                            data.encounterDate
-                                                                          )}
-                                                                        </Badge>
-                                                                      </Popover> : null}
-                                                                    <Popover
-                                                                      placement="topLeft"
-                                                                      content={
-                                                                        data.capturedSections
-                                                                      }
-                                                                    >
-                                                                      <Badge
-                                                                        className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
-                                                                        onClick={() =>
-                                                                          handleOpenModalCombinationCode(
-                                                                            data.diagnosisCode,
-                                                                            data.capturedSections,
-                                                                            "valid"
-                                                                          )
-                                                                        }
-                                                                      >
-                                                                        {replaceCaptureSection(
-                                                                          data.capturedSections
-                                                                        )}
-                                                                      </Badge>
-                                                                    </Popover>
+
+                                                                  </div>
+                                                                  <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                    {getCaptureSectionBackground(data.capturedSections)}
                                                                   </div>
                                                                 </div>
                                                               </div>
@@ -5579,17 +5643,16 @@ const Details = ({ }) => {
                                                                 }
                                                               </span>
                                                             </div>
-                                                            {data.defaultPosition == "VALID" || data.defaultPosition == null ?
-                                                              <Tooltip title="HCC" placement="bottom">
-                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                </span></Tooltip> : data.defaultPosition == "VALID" ?
-                                                                <Tooltip title="SUGGESTED" placement="bottom">
-                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span></Tooltip>
+                                                            {data.defaultPosition == "VALID" ?
+                                                              <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span>
                                                                 : data.defaultPosition == "DELETED" ?
-                                                                  <Tooltip title="DELETED" placement="bottom">
-                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                    </span> </Tooltip> : null}
+
+                                                                  <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span> : null}
                                                             <Popover
                                                               content={
                                                                 data.dbDescription
@@ -5649,74 +5712,18 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                                  icon={faArrowsAlt}
+                                                                  style={{ size: 8, color: "#a80404" }}
+                                                                />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
                                                           <div className="hoverActiveHcc">
-                                                            <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                              {/* <Tooltip title={patientDocumentResult.patientName}>
-                                                         <Avatar className={visitStyles.provider_name_style}>U</Avatar>
-                                                         </Tooltip> */}
-                                                              {/* <Popover
-                                                            placement="topLeft"
-                                                            title=""
-                                                            content={
-                                                              patientDocumentResult.patientName
-                                                            }
-                                                          >
-                                                            <Badge
-                                                               className={`mt-2 text-start w-100px ${visitStyles.provider_name}`}
-                                                            >
-                                                              <i>
-                                                                {
-                                                                  SVGICON.patientNameIcon
-                                                                }
-                                                              </i>
-                                                              {
-                                                                patientDocumentResult.patientName
-                                                              }
-                                                            </Badge>
-                                                          </Popover> */}
-                                                              {data.encounterDate != null ?
-                                                                <Popover
-                                                                  placement="topLeft"
-                                                                  content={
-                                                                    data.encounterDate
-                                                                  }
-                                                                >
-                                                                  <Badge
-                                                                    className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                                  >
-                                                                    <i>
-                                                                      <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                    </i>
-                                                                    {replaceString(
-                                                                      data.encounterDate
-                                                                    )}
-                                                                  </Badge>
-                                                                </Popover> : null}
-                                                              <Popover
-                                                                placement="topLeft"
-                                                                content={
-                                                                  data.capturedSections
-                                                                }
-                                                              >
-                                                                <Badge
-                                                                  className={`mt-2 text-start  w-100px ${visitStyles.captureheader}`}
-                                                                  onClick={() =>
-                                                                    handleOpenModalCombinationCode(
-                                                                      data.diagnosisCode,
-                                                                      data.capturedSections,
-                                                                      "valid"
-                                                                    )
-                                                                  }
-                                                                >
-                                                                  {replaceCaptureSection(
-                                                                    data.capturedSections
-                                                                  )}
-                                                                </Badge>
-                                                              </Popover>
+                                                            <div className="">
+
+                                                              {getEncounterDateBackground(data.encounterDate)}
+
                                                               {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
                                                       <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
@@ -5726,6 +5733,9 @@ const Details = ({ }) => {
                                                         HPI Test Urlplan
                                                       </Badge>
                                                       </Popover> */}
+                                                            </div>
+                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                              {getCaptureSectionBackground(data.capturedSections)}
                                                             </div>
                                                           </div>
                                                         </div>
@@ -5946,7 +5956,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                    <FontAwesomeIcon
+                                                                      icon={faArrowsAlt}
+                                                                      style={{ size: 8, color: "#a80404" }}
+                                                                    />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -5961,7 +5974,7 @@ const Details = ({ }) => {
 
                                                   <div>
                                                     <span className="no-patient-data">
-                                                      NO DATA
+                                                      No Combination Codes
                                                     </span>
                                                   </div>
 
@@ -6302,7 +6315,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                            <FontAwesomeIcon
+                                                              icon={faArrowsAlt}
+                                                              style={{ size: 8, color: "#a80404" }}
+                                                            />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
@@ -7018,15 +7034,15 @@ const Details = ({ }) => {
                                                   </>
                                                 ) : null}
                                                 {rafScore == null ? (
-                                                  <div className="card box-shadow-none">
-                                                    <div className="card combo-card">
-                                                      <div className="col-xl-12">
-                                                        <span className="no-patient-data">
-                                                          NO DATA
-                                                        </span>
-                                                      </div>
-                                                    </div>
+                                                  // <div className="card box-shadow-none">
+                                                  //   <div className="card combo-card">
+                                                  <div className="col-xl-12">
+                                                    <span className="no-patient-data">
+                                                      No RAF Score
+                                                    </span>
                                                   </div>
+                                                  //   </div>
+                                                  // </div>
                                                 ) : null}
                                               </div>
                                             </div>
@@ -7228,50 +7244,21 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                                  icon={faArrowsAlt}
+                                                                  style={{ size: 8, color: "#a80404" }}
+                                                                />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
-                                                          <div className="d-flex justify-content-sm-between valid-providerdocument ">
-                                                            <Popover
-                                                              placement="topLeft"
-                                                              content={
-                                                                data.encounterDate
-                                                              }
-                                                            >
-                                                              <Badge
-                                                                className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                              >
-                                                                <i>
-                                                                  <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                </i>
-                                                                {replaceString(
-                                                                  data.encounterDate
-                                                                )}
-                                                              </Badge>
-                                                            </Popover>
-                                                            <Popover
-                                                              placement="topLeft"
-                                                              content={
-                                                                data.capturedSections
-                                                              }
-                                                            >
-                                                              <Badge
-                                                                className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    data.diagnosisCode,
-                                                                    data.capturedSections,
-                                                                    "valid"
-                                                                  )
-                                                                }
-                                                              >
-                                                                {replaceCaptureSection(
-                                                                  data.capturedSections
-                                                                )}
-                                                              </Badge>
-                                                            </Popover>
+                                                          <div className="">
+                                                            {getEncounterDateBackground(data.encounterDate)}
+                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                              {getCaptureSectionBackground(data.capturedSections)}
+                                                            </div>
+
                                                           </div>
+
                                                         </div>
                                                       </li>
                                                     )
@@ -7374,77 +7361,53 @@ const Details = ({ }) => {
                                                                   >
                                                                     <div
                                                                       className={
-                                                                        visitStyles.tick_icon
+                                                                        visitStyles.close_icon
                                                                       }
                                                                     >
-                                                                      {SVGICON.tickIcon}
+                                                                      <FontAwesomeIcon
+                                                                        icon={faArrowsAlt}
+                                                                        style={{ size: 8, color: "#a80404" }}
+                                                                      />
                                                                     </div>
                                                                   </Popconfirm>
                                                                 </div>
-                                                                <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                                <div className="">
+
+
+                                                                  {getEncounterDateBackground(data.encounterDate)}
                                                                   {data.getPlace ==
                                                                     "Lab" ? (
-                                                                    <Badge
-                                                                      className="badge-meat  badge-circle mt-2 text-white"
-                                                                      bg={` badge-circle mt-2 bg-bg-seven `}
-                                                                    >
-                                                                      Lab
-                                                                    </Badge>
+                                                                    <Tooltip title="LAB">
+                                                                      <span
+                                                                        className={` mt-2 ${visitStyles.labStatus}`}
+                                                                        bg={`  mt-2 bg-bg-seven `}
+                                                                      >
+                                                                        Lap
+                                                                      </span>
+                                                                    </Tooltip>
                                                                   ) : data.getPlace ==
                                                                     "Radio" ? (
-                                                                    <Badge
-                                                                      className="badge-meat  badge-circle mt-2 text-white"
-                                                                      bg={` badge-circle mt-2 bg-bg-five `}
-                                                                    >
-                                                                      Radiology
-                                                                    </Badge>
+                                                                    <Tooltip title="RADIOLOGY">
+                                                                      <span
+                                                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                                        bg={`  mt-2 bg-bg-eight `}
+                                                                      >
+                                                                        Radiology
+                                                                      </span>
+                                                                    </Tooltip>
                                                                   ) : (
-                                                                    <Badge
-                                                                      className="badge-meat  badge-circle mt-2 text-white"
-                                                                      bg={` badge-circle mt-2 bg-bg-five `}
-                                                                    >
-                                                                      Hcc
-                                                                    </Badge>
+                                                                    <Tooltip title="HCC">
+                                                                      <span
+                                                                        className={` mt-2 ${visitStyles.hccStatus}`}
+                                                                        bg={` mt-2 bg-bg-five `}
+                                                                      >
+                                                                        HCC
+                                                                      </span>
+                                                                    </Tooltip>
                                                                   )}
-
-                                                                  <Popover
-                                                                    placement="topLeft"
-                                                                    content={
-                                                                      data.encounterDate
-                                                                    }
-                                                                  >
-                                                                    <Badge
-                                                                      className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                                    >
-                                                                      <i>
-                                                                        <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                      </i>
-                                                                      {replaceString(
-                                                                        data.encounterDate
-                                                                      )}
-                                                                    </Badge>
-                                                                  </Popover>
-                                                                  <Popover
-                                                                    placement="topLeft"
-                                                                    content={
-                                                                      data.capturedSections
-                                                                    }
-                                                                  >
-                                                                    <Badge
-                                                                      className={`mt-2 text-start w-100px ${visitStyles.captureheader}`}
-                                                                      onClick={() =>
-                                                                        handleOpenModalCombinationCode(
-                                                                          data.diagnosisCode,
-                                                                          data.capturedSections,
-                                                                          "valid"
-                                                                        )
-                                                                      }
-                                                                    >
-                                                                      {replaceCaptureSection(
-                                                                        data.capturedSections
-                                                                      )}
-                                                                    </Badge>
-                                                                  </Popover>
+                                                                  <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                    {getCaptureSectionBackground(data.capturedSections)}
+                                                                  </div>
                                                                 </div>
                                                               </div>
                                                             </li>
@@ -7829,7 +7792,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                    <FontAwesomeIcon
+                                                                      icon={faArrowsAlt}
+                                                                      style={{ size: 8, color: "#a80404" }}
+                                                                    />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -8731,7 +8697,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                                  icon={faArrowsAlt}
+                                                                  style={{ size: 8, color: "#a80404" }}
+                                                                />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -8866,7 +8835,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                                  icon={faArrowsAlt}
+                                                                  style={{ size: 8, color: "#a80404" }}
+                                                                />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -9163,7 +9135,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                    <FontAwesomeIcon
+                                                                      icon={faArrowsAlt}
+                                                                      style={{ size: 8, color: "#a80404" }}
+                                                                    />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -9683,7 +9658,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                            <FontAwesomeIcon
+                                                              icon={faArrowsAlt}
+                                                              style={{ size: 8, color: "#a80404" }}
+                                                            />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
@@ -10394,7 +10372,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                            <FontAwesomeIcon
+                                                              icon={faArrowsAlt}
+                                                              style={{ size: 8, color: "#a80404" }}
+                                                            />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
@@ -10550,7 +10531,9 @@ const Details = ({ }) => {
                             </ul>
                           </div>
                         </div>
+
                       </div>
+
                     </div>
                   </div>
 
@@ -12731,30 +12714,30 @@ const Details = ({ }) => {
                                       <span className={visitStyles.commentsName}>
                                         {data.flag}
                                         {data.flag == "PATIENT_NAME_MISSED" ?
-                                        <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PATIENT_DOB_MISSED" ?
-                                        <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "MRN_ID_MISMATCH" ?
-                                        <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PROVIDER_SIGN_MISSED" ?
-                                        <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PROVIDER_SIGNATURE_MISSED" ?
-                                        <i className={visitStyles.signature_missed}>{SVGICON.emptyFlagSmall}</i>:                                       
-                                        data.flag == "PROVIDER_CREDENTIAL_MISSED" ?
-                                        <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PROVIDER_SIGN_STATUS_PENDING" ?
-                                        <i className={visitStyles.sign_status}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "NO_HCC_FOUND" ?
-                                        <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "NO_VALID_DOCUMENT_FOUND" ?
-                                        <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PATIENT_DISEASED" ?
-                                        <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlagSmall}</i>:
-                                        
-                                        
-                                        
-                                        
-                                        null}
+                                          <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                          data.flag == "PATIENT_DOB_MISSED" ?
+                                            <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                            data.flag == "MRN_ID_MISMATCH" ?
+                                              <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                              data.flag == "PROVIDER_SIGN_MISSED" ?
+                                                <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                                data.flag == "PROVIDER_SIGNATURE_MISSED" ?
+                                                  <i className={visitStyles.signature_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                                  data.flag == "PROVIDER_CREDENTIAL_MISSED" ?
+                                                    <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                                    data.flag == "PROVIDER_SIGN_STATUS_PENDING" ?
+                                                      <i className={visitStyles.sign_status}>{SVGICON.emptyFlagSmall}</i> :
+                                                      data.flag == "NO_HCC_FOUND" ?
+                                                        <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmall}</i> :
+                                                        data.flag == "NO_VALID_DOCUMENT_FOUND" ?
+                                                          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmall}</i> :
+                                                          data.flag == "PATIENT_DISEASED" ?
+                                                            <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlagSmall}</i> :
+
+
+
+
+                                                            null}
 
 
                                       </span>

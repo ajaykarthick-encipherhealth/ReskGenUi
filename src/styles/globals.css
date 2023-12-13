@@ -8972,7 +8972,7 @@ button:focus {
   /* left: 0px !important; */
   /* margin-left: 20px !important; */
   padding-left: 0 !important;
-  /* z-index: 9999; */
+  z-index: 999 !important;
 }
 
 .nav-header {
@@ -11355,11 +11355,16 @@ tr {
 }
 
 span.badge-meat.badge {
-  height: 27px;
+  height: 20px;
   width: max-content;
   text-overflow: ellipsis;
   overflow: hidden;
-  width: 150px;
+  /* width: 150px; */
+  font-size: 11px !important;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .raf-card {
@@ -12151,6 +12156,7 @@ tbody > tr {
   height: 42px !important;
   flex-shrink: 0;
   border: none !important;
+  z-index: 11;
 }
 
 .custom-react-select > div:nth-child(4) > div {
@@ -12595,7 +12601,7 @@ tbody > tr {
   display: none !important; 
 }
 
-.pendingBtn button.ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
+.pendingBtn button.ant-btn.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
   color: #452b90;
   background: #dfd8f3!important;
   border: none !important;
@@ -12604,7 +12610,7 @@ tbody > tr {
     width: 140px!important;
 }
 
-.pendingBtn > .ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+.pendingBtn > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
   color: #452b90;
   background: #dfd8f3!important;
   border-radius: 6px;
@@ -12612,7 +12618,68 @@ tbody > tr {
 
 }
 
-.holdBtnHcc button.ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
+.completedBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #3a9b94;
+  background: #daf1ef!important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px;
+    width: 140px!important;
+}
+.completedBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #3a9b94 !important;
+}
+.declinedBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: red !important;
+}
+.holdBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #d8c11b !important;
+}
+
+
+.completedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+  color: #3a9b94;
+  background: #daf1ef!important;
+  border: none !important;
+  border-radius: 6px;
+  box-shadow: none;
+
+}
+
+.completedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+  height: calc(100% + 1px) !important;
+    background: #daf1ef!important;
+    border: none !important;
+    box-shadow: none !important;
+
+}
+
+.declinedBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: red;
+  background: #fcc!important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px;
+    width: 140px!important;
+}
+
+.declinedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+  color: red;
+  background: #fcc!important;
+  border: none !important;
+  border-radius: 6px;
+  box-shadow: none;
+
+}
+
+.declinedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+  height: calc(100% + 1px) !important;
+    background: #fcc!important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.holdBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #d8c11b;
   background: #faead1!important;
   border: none !important;
@@ -12621,7 +12688,7 @@ tbody > tr {
     width: 140px!important;
 }
 
-.holdBtnHcc > .ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+.holdBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
   color: #d8c11b;
   background: #faead1!important;
   border: none !important;
@@ -12630,7 +12697,7 @@ tbody > tr {
 
 }
 
-.holdBtnHcc > .ant-btn.css-dev-only-do-not-override-zcfrx9.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+.holdBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
   height: calc(100% + 1px) !important;
     background: #faead1!important;
     background: #f1dbb9!important;
@@ -12677,5 +12744,79 @@ tbody > tr {
   background: #04306f;
   border-color: #04306f;
 }
+
+.sectionTag1{
+  background-color: rgba(201, 52, 210, 0.2) !important ;
+  color: rgb(201, 52, 210) !important;
+}
+.sectionTag2{
+  background-color: rgba(84, 217, 43, 0.2) !important;
+  color: rgb(84, 217, 43) !important;
+}
+
+.sectionTag3{
+  background-color: rgba(15, 158, 46, 0.2) !important;
+  color: rgb(15, 158, 46) !important;
+}
+.sectionTag4{
+  background-color: rgba(42, 182, 17, 0.2) !important;
+  color: rgb(42, 182, 17) !important;
+
+}
+.sectionTag5{
+  background-color: rgba(85, 219, 224, 0.2) !important;
+  color: rgb(85, 219, 224) !important;
+}
+.sectionTag6{
+  background-color: rgba(64, 52, 56, 0.2) !important;
+  color: rgb(64, 52, 56) !important;
+}
+.sectionTag7{
+  background-color: rgba(148, 236, 49, 0.2) !important;
+  color: rgb(148, 236, 49) !important;
+}
+.sectionTag8{
+  background-color:rgba(154, 125, 165, 0.2) !important;
+  color: rgb(154, 125, 165) !important;
+}
+
+.encounterDateTag1{
+  background-color: rgba(6, 252, 126, 0.2) !important;
+  color: rgb(6, 252, 126) !important;
+}
+.encounterDateTag2{
+  background-color: rgba(125, 117, 129, 0.2) !important;
+  color: rgb(125, 117, 129) !important;
+  
+}
+.encounterDateTag3{
+  background-color: rgba(221, 90, 224, 0.2) !important;
+  color: rgb(221, 90, 224) !important;
+}
+.encounterDateTag4{
+  background-color: rgba(37, 138, 62, 0.2) !important;
+  color: rgb(37, 138, 62) !important;
+  
+}
+.encounterDateTag5{
+  background-color: rgba(108, 30, 179, 0.2) !important;
+  color: rgb(108, 30, 179) !important;
+  
+}
+.encounterDateTag6{
+  background-color: rgba(229, 254, 78, 0.2) !important;
+  color: rgb(218, 254, 2) !important;
+}
+.encounterDateTag7{
+  background-color: rgba(72, 204, 225, 0.2) !important;
+  color: rgb(72, 204, 225) !important;
+  
+}
+.encounterDateTag8{
+  background-color: rgba(236, 175, 165, 0.2);
+  color: rgb(236, 175, 165) !important;
+  
+}
+
 
 

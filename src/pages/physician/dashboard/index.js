@@ -12,6 +12,7 @@ import { getWorkFlow } from "../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import Footer from "../../../jsx/layouts/Footer";
 
 const index = () => {
   const currentDate = dayjs();
@@ -59,6 +60,7 @@ const router=useRouter()
             </Col>
           </Row>
         </div>
+        <Footer/>
       </div>
     </div>
   );

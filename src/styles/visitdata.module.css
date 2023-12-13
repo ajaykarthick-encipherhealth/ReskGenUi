@@ -277,12 +277,19 @@ margin-left: 10px !important;
 }
 
 .encounterDate{
-  background: #edf8f7!important;
-  color:#2d383aaa !important;
+  /* background: #edf8f7!important; */
+  color: #2d383aaa !important;
   font-weight: 500;
   font-size: 10px;
   border-radius: 30px !important;
-  padding: 4px 4px 3px 14px;
+  margin: 0px 0px 0px 5px;
+    height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.encounterDate i{
+  margin-right: 3px !important;
 }
 .calenderIcon{
   font-size: 10px;
@@ -290,13 +297,17 @@ margin-left: 10px !important;
 
 }
 .captureheader{
-  background: #fffaee!important;
-  color:#2d383aaa !important;
-  font-size: 12px !important;
+  /* background: #fffaee!important; */
+  /* color: #2d383aaa !important; */
+  font-size: 11px !important;
   font-weight: 500;
-  padding: 4px 4px 3px 14px;
   border-radius: 30px !important;
-  padding: 4px 4px 3px 14px;
+  margin: 4px 3px 10px 5px;
+  text-align: center !important;
+  height: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -306,22 +317,29 @@ margin-left: 10px !important;
   font-weight: 500;
   font-size: 10px;
   border-radius: 30px !important;
-  padding: 4px 4px 3px 14px;
+  display: inline-flex;
+  align-items: center;
+  float: right;
+  margin-right: 5px;
+  height: 20px;
 }
 
 
 .close_icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 15px;
   border-radius: 4px;
   background: #fee1e1;
   text-align: center;
-  margin-left: -4px;
-  margin-top: 4px;
+  margin-left: -8px;
+  margin-top: 7px;
   cursor: pointer;
 }
 .close_icon svg {
-  vertical-align: baseline !important;
+  text-align: center;
+  display: flex;
+  font-size: 10px;
+  margin: 2px 0px 0px 3px;
 }
 .hcc_title_name svg{
   color: #fff;
@@ -417,7 +435,7 @@ margin-top: 15px;
     z-index: 1;
 }
 .hccStickey_head{
-    min-height: 10vh;
+    /* min-height: 10vh; */
     max-height: 64vh;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -430,7 +448,7 @@ margin-top: 15px;
 }
 
 
-.hccStickey_head::-webkit-scrollbar-track, .hccStickeyRaf_head::-webkit-scrollbar-track {
+/* .hccStickey_head::-webkit-scrollbar-track, .hccStickeyRaf_head::-webkit-scrollbar-track {
   background: transparent; 
 }
  
@@ -439,22 +457,22 @@ margin-top: 15px;
 }
 .hccStickey_head::-webkit-scrollbar-thumb:hover,.hccStickeyRaf_head::-webkit-scrollbar-thumb:hover {
   background:transparent; 
-}
+} */
 
 /* .hccStickey_head::-webkit-scrollbar-track, .hccStickeyRaf_head::-webkit-scrollbar-track {
-  background: rgb(177, 165, 165); 
+  background: rgb(219, 212, 212); 
   width: 100px !important;
   border-radius: 10px !important;
 }
  
 .hccStickey_head::-webkit-scrollbar-thumb,.hccStickeyRaf_head::-webkit-scrollbar-thumb {
-  background: red; 
+  background: rgb(197, 214, 220); 
   width: 5px !important;
   border-radius: 10px !important;
 }
 
 .hccStickey_head::-webkit-scrollbar-thumb:hover,.hccStickeyRaf_head::-webkit-scrollbar-thumb:hover {
-  background:red; 
+  background:rgb(200, 212, 216); 
   border-radius: 10px !important;
 } */
 
@@ -545,7 +563,7 @@ line-height: normal;
 
 .hcc_card_nameHead {
   display: flex;
-  margin: 10px;
+  margin: 5px 10px 0px 10px;
 }
 .navColor {
   color: black !important;
@@ -582,6 +600,7 @@ line-height: normal;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  margin-top: 1px;
 }
 .nameList{
     color: #221C1C;
@@ -810,29 +829,63 @@ margin-left: 20px;
   background-color: #46c263;
 }
 .hccFlag{
+  height: 13px;
+  width: 13px;
+    background: #04b700;
+    margin-right: 3px;
+    margin-top: 2px;
+    border-radius: 2px;
+}
+
+.suggestedFlag{
+  height: 13px;
+  width: 13px;
+    background: #ff9209;
+    margin-right: 3px;
+    margin-top: 2px;
+    border-radius: 2px;
+}
+.deleteFlag{
+  height: 13px;
+    width: 13px;
+    background: #be3144;
+    margin-right: 3px;
+    margin-top: 2px;
+    border-radius: 2px;
+}
+.completed{
   height: 10px;
     width: 10px;
-    background: #04b700;
-    padding: 7px;
+    background: #3a9b94;
+    
     margin-right: 5px;
     margin-top: 2px;
     border-radius: 20px;
 }
 
-.suggestedFlag{
+.pending{
   height: 10px;
     width: 10px;
-    background: #ff9209;
-    padding: 7px;
+    background: #452b90;
+    
     margin-right: 5px;
     margin-top: 2px;
     border-radius: 20px;
 }
-.deleteFlag{
+.declined{
   height: 10px;
     width: 10px;
     background: #be3144;
-    padding: 7px;
+    
+    margin-right: 5px;
+    margin-top: 2px;
+    border-radius: 20px;
+}
+.hold{
+  height: 10px;
+    width: 10px;
+    background: #d8c11b;
+    
     margin-right: 5px;
     margin-top: 2px;
     border-radius: 20px;
@@ -909,9 +962,11 @@ margin-left: 20px;
   padding: 4px;
   border-radius: 30px;
   color: #d6b997 !important;
-  width: 56px;
   text-align: center;
   font-weight: 500;
+  float: right;
+  margin-right: 10px;
+
 }
 .labStatus{
   background: #eff6fc;
@@ -919,9 +974,12 @@ margin-left: 20px;
   padding: 4px;
   border-radius: 30px;
   color: #cea576 !important;
-  width: 56px;
   text-align: center;
   font-weight: 500;
+  float: right;
+  margin-right: 10px;
+
+
 }
 .hccStatus{
   background: #04b70026;
@@ -929,9 +987,11 @@ margin-left: 20px;
   padding: 4px;
   border-radius: 30px;
   color: #cea576 !important;
-  width: 56px;
   text-align: center;
   font-weight: 500;
+  float: right;
+  margin-right: 10px;
+
 }
 .userDetailsCard{
   min-height: 50px;
@@ -995,9 +1055,9 @@ margin-left: 20px;
 }
 
 .flagDetailsChange{
-  margin-top: 6px !important;
-    height: 17px !important;
-    width: 17px !important;
+  margin-top: 8px !important;
+    /* height: 17px !important;
+    width: 17px !important; */
     display: block;
 }
 .nonHccFlag{
@@ -1039,6 +1099,32 @@ margin-left: 20px;
   width: 150px!important;
 
 }
+.completedBtnHcc{
+  font-size: 13px;
+  color: #3a9b94;
+  background: #daf1ef !important;
+  border-radius: 6px!important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 150px!important;
+
+}
+
+.declinedBtnHcc{
+  font-size: 13px;
+  color: #3a9b94;
+  background: #fcc !important;
+  border-radius: 6px!important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 150px!important;
+
+}
+
+
+
+
+
 .name_missed path{
   fill: #7ad2e5;
 }

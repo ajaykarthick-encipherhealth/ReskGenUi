@@ -6,6 +6,7 @@ import { Paginator } from "primereact/paginator";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import IndividualReceiverReport from "./IndividualReceiverReport";
+import Footer from "../../../jsx/layouts/Footer";
 
 function ReceivedReport({
   details,
@@ -136,6 +137,8 @@ function ReceivedReport({
           receivedEndDate={receivedEndDate}
         />
       </Modal>
+      <Footer/>
+
     </div>
   );
 }

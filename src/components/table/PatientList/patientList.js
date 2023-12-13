@@ -27,7 +27,7 @@ function PatientTable({
 
   const priorityOptions = [
     {
-      value: "Urgent",
+      value: "URGENT",
       label: (
         <>
           <i>{SVGICON.alert}</i>{" "}
@@ -36,7 +36,7 @@ function PatientTable({
       ),
     },
     {
-      value: "High",
+      value: "HIGH",
       label: (
         <>
           <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
@@ -45,7 +45,7 @@ function PatientTable({
       ),
     },
     {
-      value: "Normal",
+      value: "NORMAL",
       label: (
         <>
           <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
@@ -54,7 +54,7 @@ function PatientTable({
       ),
     },
     {
-      value: "Low",
+      value: "LOW",
       label: (
         <>
           <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
@@ -63,16 +63,47 @@ function PatientTable({
       ),
     },
   ];
+  const getPriorityLabel = (priority) => {
+    const priorityMap = {
+      HIGH: (
+        <>
+          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+          <span style={{ fontSize: "13px" }}>High</span>{" "}
+        </>
+      ),
+      URGENT: (
+        <>
+          <i>{SVGICON.alert}</i>{" "}
+          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
+        </>
+      ),
+      LOW: (
+        <>
+          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+          <span style={{ fontSize: "13px" }}>Low</span>{" "}
+        </>
+      ),
+      NORMAL: (
+        <>
+          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
+        </>
+      ),
+    };
+  
+    return priorityMap[priority] || priorityMap.NORMAL;
+  };
+  
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: null,
   });
   const [hoveredAvatar, setHoveredAvatar] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState([]);
+  const [selectedPriority, setSelectedPriority] = useState({id:"meat-01",value:"HIGH"}) ;
 
   const handlePriorityChange = (patientId, selectedValue) => {
-    setSelectedPriority((prev) => ({ ...prev, [patientId]: selectedValue }));
+    setSelectedPriority((prev) => ({ ...prev, id:patientId, value:selectedValue }));
   };
 
   const handleAvatarHover = (data) => {
@@ -126,6 +157,7 @@ function PatientTable({
     <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
   );
 
+  console.log(selectedPriority)
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr key={index}>
@@ -151,7 +183,7 @@ function PatientTable({
             : "MM-DD-YYYY"}
         </td>
         <td className={TableStyle.childBorder}>
-          <Tooltip title={data.allocatedBy ? data.allocatedBy : "null" }>
+          <Tooltip title={data.allocatedBy ? data.allocatedBy : "null"}>
             <Avatar
               style={{
                 backgroundColor: "#fde3cf",
@@ -162,31 +194,30 @@ function PatientTable({
               {data.allocatedBy
                 ? data.allocatedBy.charAt(0).toUpperCase()
                 : "N"}
-
-              {console.log(data, "test")}
             </Avatar>
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
-          <AntSelect
-            options={priorityOptions}
-            placeholder="set priority"
-            className={`custom-ant-select ${TableStyle.customAntSelect}`}
-            showSearch={false}
-            value={
-              selectedPriority[data.patientId] ||
-              (data.priority ? data.priority : "Normal")
-            }
-            onChange={(value) => handlePriorityChange(data.patientId, value)}
-            style={{ width: "80%" }}
-          />
-        </td>
+  <AntSelect
+    options={priorityOptions}
+    placeholder="set priority"
+    className={`custom-ant-select ${TableStyle.customAntSelect}`}
+    showSearch={false}
+
+    defaultValue={data?.priority?data.priority:"set Priority"}
+    onChange={(value) => handlePriorityChange(data.patientId, value)}
+    style={{ width: "80%" }}
+  />
+</td>
+
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
+        <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
       </tr>
     ));
   };
+console.log(selectedPriority,"priority");
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -223,6 +254,7 @@ function PatientTable({
             <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th>STATUS</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>{renderRows()}</tbody>

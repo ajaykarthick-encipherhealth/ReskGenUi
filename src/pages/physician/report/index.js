@@ -517,9 +517,7 @@ const index = () => {
                                   >
                                     {ReceivedReportDetails?.content && (
                                       <ReceivedReport
-                                        paginationFirst={
-                                          paginationReceivedFirst
-                                        }
+                                        paginationFirst={paginationReceivedFirst}
                                         details={ReceivedReportDetails}
                                         onPageChange={onReceivedPageChange}
                                         receivedPageNo={receivedPageNo}
@@ -616,6 +614,7 @@ const index = () => {
                     </div>
                   </div>
                 </div>
+             
               </div>
             </div>
           )}
