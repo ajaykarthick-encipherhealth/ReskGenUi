@@ -266,6 +266,8 @@ export default function Patient() {
           createdAt: res.createdAt,
           lastModifiedDate: res.lastModifiedDate,
           dueDate: res.dueDate,
+          allocatedBy: res.allocatedBy,
+          priority: res.priority,
           processedStatus: res.processedStatus,
           createdAt: res.createdAt,
         });
@@ -296,15 +298,17 @@ export default function Patient() {
  
        result.map((res) => {
          resultMap.push({
-           patientId: res.patientId,
-           patientName: res.patientName,
-           fileName: res.fileName,
-           computing: res.computing,
-           createdAt: res.createdAt,
-           lastModifiedDate: res.lastModifiedDate,
-           dueDate: res.dueDate,
-           processedStatus: res.processedStatus,
-           createdAt: res.createdAt,
+          patientId: res.patientId,
+          patientName: res.patientName,
+          fileName: res.fileName,
+          computing: res.computing,
+          createdAt: res.createdAt,
+          lastModifiedDate: res.lastModifiedDate,
+          dueDate: res.dueDate,
+          allocatedBy: res.allocatedBy,
+          priority: res.priority,
+          processedStatus: res.processedStatus,
+          createdAt: res.createdAt,
          });
        });
        var newArray = [];

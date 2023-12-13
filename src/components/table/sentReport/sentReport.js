@@ -4,7 +4,7 @@ import { Paginator } from "primereact/paginator";
 import { Modal, Popover } from "antd";
 import Footer from "../../../jsx/layouts/Footer";
 
-function SentReportTable(details, onSentPageChange) {
+function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const displayReceivedUsers = (list) => {
@@ -60,8 +60,9 @@ function SentReportTable(details, onSentPageChange) {
             <th>DATE</th>
           </tr>
         </thead>
-        <tbody className={TableStyle.bodytable}>
-          {details?.details?.map((row, index) => {
+
+        <tbody>
+          {details?.data?.map((row, index) => {
             const formattedDate = row.receiveDate
               ? dayjs(row.receiveDate).format("DD/MM/YY")
               : "Invalid Date";
@@ -123,13 +124,15 @@ function SentReportTable(details, onSentPageChange) {
       </table>
       <div className="pagination-container">
         <Paginator
+          first={paginationFirst}
           rows={15}
-          totalRecords={details?.details?.length}
+          totalRecords={details?.totalElements}
           onPageChange={onSentPageChange}
         />
         <div className="total-pages">
-          Total count:{" "}
-          {details?.details?.length > 0 ? details?.details?.length : 0}
+
+          Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
+
         </div>
       </div>
       <Footer />
