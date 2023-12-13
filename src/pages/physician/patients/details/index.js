@@ -4,7 +4,7 @@ import NavBar from "../../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
-import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
+// import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { InputText } from "primereact/inputtext";
 import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
@@ -69,9 +69,10 @@ import Image from 'next/image';
 import { useRouter } from "next/navigation";
 
 import { Avatar, Tooltip } from 'antd';
-import Spinner from "../../../../components/spinner/spinner";
+// import Spinner from "../../../../components/spinner/spinner";
 import Footer from "../../../../jsx/layouts/Footer";
 
+import Spinner from "../../../../components/spinner/spinner";
 
 
 
@@ -4865,7 +4866,7 @@ const Details = ({ }) => {
 
           <div class="content-body">
             {isLoading ? (
-              <LoadingSpinner />
+              <Spinner />
             ) : (
               <div
                 className={`container-fluid ${visitStyles.container_fluid_patient}`}
