@@ -4608,7 +4608,7 @@ className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
 <i>
   <CalendarOutlined className={visitStyles.calenderIcon} />
 </i>
-{res}
+{moment(res).format("MM/DD")}
 </Badge>
     )
       return sectionMapArr  
