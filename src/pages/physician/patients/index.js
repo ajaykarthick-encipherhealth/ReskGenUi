@@ -225,6 +225,7 @@ export default function Patient() {
 
 
   const getFilteApi = async (pageNo, pageSize,statusValue,pStart,pEnd,dStart,dEnd) => {
+    setIsLoading(true);
     console.log(pStart,pEnd,dStart,dEnd)
     var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
     if (statusValue != null) {
@@ -238,15 +239,15 @@ export default function Patient() {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`
     }
 
-    if (pStart != null && statusValue != null) {
+    if (pStart != null && statusValue != null && statusValue != "ALL") {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`
     }
 
-    if (dStart != null && statusValue == null && pStart ==  null) {
+    if (dStart != null && statusValue == null && pStart ==  null && statusValue != "ALL") {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`
     }
 
-    if (dStart != null && statusValue != null && pStart !=  null) {
+    if (dStart != null && statusValue != null && pStart !=  null && statusValue != "ALL") {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`
     }
 
@@ -293,6 +294,7 @@ export default function Patient() {
 
   const getNameSearch = async (searchtext) => {
     console.log(searchtext)
+    setIsLoading(true);
 
     // dispatch(getSearchPatients(0,searchtext));
 if(searchtext ){
@@ -320,6 +322,7 @@ if(searchtext ){
        });
        var newArray = [];
        newArray = [...patinetListAll, ...resultMap];
+       console.log(resultMap);
        setPatinetListAll(resultMap);
  
        // console.log(newArray)
@@ -854,9 +857,7 @@ if(searchtext ){
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
         <div class="content-body">
-          {isLoading ? (
-            <Spinner />
-          ) : (
+         
             <div className="container-fluid">
               <div className="row">
                 <div className="col-xl-12">
@@ -1002,14 +1003,9 @@ if(searchtext ){
                               <label>Due Date</label>
                                 <div>
                                   <RangePicker
-                                    // value={selectedDates}
-                                    // onChange={
-                                    //   activeTab === "SentReport"
-                                    //     ? handleDatePickerChange
-                                    //     : activeTab === "ReceivedReport"
-                                    //     ? handleReceivedDatePicker
-                                    //     : handleCoderPicker
-                                    // }
+                                     onChange={(dates, dateStrings) => {
+                                      handleDatePickerChange(dateStrings);
+                                    }}
                                   />
                                 </div>
                               </div>
@@ -1018,14 +1014,9 @@ if(searchtext ){
                               <label>Completed Date</label>
                                 <div>
                                   <RangePicker
-                                    // value={selectedDates}
-                                    // onChange={
-                                    //   activeTab === "SentReport"
-                                    //     ? handleDatePickerChange
-                                    //     : activeTab === "ReceivedReport"
-                                    //     ? handleReceivedDatePicker
-                                    //     : handleCoderPicker
-                                    // }
+                                     onChange={(dates, dateStrings) => {
+                                      handleDatePickerChangeProcesseDate(dateStrings);
+                                    }}
                                   />
                                 </div>
                               </div>
@@ -1175,6 +1166,10 @@ if(searchtext ){
                               }}
                             />
                           </DataTable> */}
+                           {isLoading ? (
+            <Spinner />
+          ) : (
+                          <>
                           <PatientTable
                             patinetListAll={patinetListAll}
                             actionBodyTemplate={actionBodyTemplate}
@@ -1200,6 +1195,8 @@ if(searchtext ){
 
                           <Footer/>
 
+                          </>)}
+                         
 
 
 
@@ -1210,7 +1207,7 @@ if(searchtext ){
                 </div>
               </div>
             </div>
-          )}
+          
         </div>
         <Offcanvas
           onHide={setAddPatient}
