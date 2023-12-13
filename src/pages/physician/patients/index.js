@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button } from "react-bootstrap";
-import visitStyles from "../../../styles/visitdata.module.css";
-
 import { Badge } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Select from "react-select";
@@ -16,8 +14,8 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLoading from "react-facebook-loading";
-import "react-facebook-loading/dist/react-facebook-loading.css";
+import FacebookLoading from 'react-facebook-loading';
+import 'react-facebook-loading/dist/react-facebook-loading.css';
 import {
   faAngleLeft,
   faAngleRight,
@@ -50,6 +48,10 @@ import Image from "next/image";
 import calender from "../../../images/dashboard/calender.png";
 import Spinner from "../../../components/spinner/spinner";
 import Footer from "../../../jsx/layouts/Footer";
+import { getSearchPatients } from "../../../store/actions/PatientsActions";
+import visitStyles from "../../../styles/visitdata.module.css";
+
+
 export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -107,17 +109,20 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
+  const [pageSize, setPageSize] = useState(13);
   const [paginationFirst, setPaginationFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const currentDate = dayjs();
-  const [startDate, setStartDate] = useState(
-    currentDate.startOf("month").format("DD MMM YY")
-  );
-  const [endDate, setEndDate] = useState(currentDate.format("DD MMM YY"));
+  const [dueDateStart, setDueDateStart] = useState(null);
+  const [dueDateEnd, setDueDateEnd] = useState(null);
+  const [processedStart, setProcessedStart] = useState(null);
+  const [processedEnd, setProcessedEnd] = useState(null);
+  const [isDueDateCalender, setIsDueDateCalender] = useState(true);
+  const [statusSelectedValue, setStausSelectedValue] = useState(null);
+
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -217,8 +222,34 @@ export default function Patient() {
   };
 
 
-  const getFilteApi= async (pageNo, pageSize,processedStatus,processedStart,processedEnd,dueDateStart,dueDateEnd   ) => {
-    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${processedStart}&processedEnd=${processedEnd}`;
+  const getFilteApi = async (pageNo, pageSize,statusValue,pStart,pEnd,dStart,dEnd) => {
+    console.log(pStart,pEnd,dStart,dEnd)
+    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+    if (statusValue != null) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`
+    }
+    if (pStart != null && statusValue == null) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`
+    }
+
+    if (pStart != null && statusValue != null) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`
+    }
+
+    if (dStart != null && statusValue == null && pStart ==  null) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`
+    }
+
+    if (dStart != null && statusValue != null && pStart !=  null) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`
+    }
+
+    console.log(resoureUrl)
+
+
+
+    // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
+
 
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
@@ -251,6 +282,44 @@ export default function Patient() {
       // }, 3000);
     }
   };
+
+  const getNameSearch = async (searchtext) => {
+    console.log(searchtext)
+    // dispatch(getSearchPatients(0,searchtext));
+
+    var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
+     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+     if (response.data) {
+       var resultMap = [];
+       var result = response.data.content;
+       setTotalElements(response.data.totalElements);
+ 
+       result.map((res) => {
+         resultMap.push({
+           patientId: res.patientId,
+           patientName: res.patientName,
+           fileName: res.fileName,
+           computing: res.computing,
+           createdAt: res.createdAt,
+           lastModifiedDate: res.lastModifiedDate,
+           dueDate: res.dueDate,
+           processedStatus: res.processedStatus,
+           createdAt: res.createdAt,
+         });
+       });
+       var newArray = [];
+       newArray = [...patinetListAll, ...resultMap];
+       setPatinetListAll(resultMap);
+ 
+       // console.log(newArray)
+       setIsLoading(false);
+       setTableLoading(false);
+       //     setTimeout(() => {
+       //     subscribe(resultMap);
+       // }, 3000);
+    }
+  }
+
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -567,6 +636,8 @@ export default function Patient() {
         return (
           <div className="patient-status">
             <span className={`badge processed-text`}>Completed</span>
+
+
           </div>
         );
 
@@ -574,15 +645,15 @@ export default function Patient() {
         return (
           <div className="patient-status">
             <span className={`badge processing-text`}>Pending</span>
+
           </div>
         );
 
       case "DECLINED":
         return (
           <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
+            <span className={`badge failed-text`} style={{ color: "red" }}>Declined</span>
+
           </div>
         );
 
@@ -590,27 +661,33 @@ export default function Patient() {
         return (
           <div className="patient-status">
             <span className={`badge processing-text`}>Pending</span>
+
           </div>
         );
       case "COMPUTED":
         return (
           <div className="patient-status">
             <span className={`badge processing-text`}>Pending</span>
+
           </div>
         );
       case "HOLD":
         return (
           <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
+            <span className={`badge hold-text`} >Hold</span>
+
           </div>
         );
       case null:
         return (
           <div className="patient-status">
             <span className={`badge processing-text`}>Pending</span>
+
           </div>
         );
+
     }
+
   };
 
   const actionBodyTemplate = (rowData) => {
@@ -659,7 +736,7 @@ export default function Patient() {
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload
+      `aiservice/ai/upload
       `,
       formData,
       headers
@@ -698,7 +775,7 @@ export default function Patient() {
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload/radiology
+      `aiservice/ai/upload/radiology
     `,
       formData,
       headers
@@ -733,33 +810,29 @@ export default function Patient() {
     { label: "HOLD", value: "HOLD" },
   ];
   const dosOnChange = (selectedOption) => {
-    const selectedValue = selectedOption.value;
-    // Do something with the selected value
-    console.log(selectedValue);
-    getFilteApi(0, 10, selectedValue);
+    const value = selectedOption.value;
+    setStausSelectedValue(value);
+    getFilteApi(0, 10,value,processedStart,processedEnd,dueDateStart,dueDateEnd)
   };
   const handleOk = () => {
     setModalVisible(false);
   };
   const handleDatePickerChange = (dateString) => {
-    console.log(dateString);
-    console.log(dateString);
+    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
+    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z";
+    setDueDateStart(convertStartDate )
+    setDueDateEnd(convertEndDate )
+    getFilteApi(0, 10,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
 
-    let utcISOTimestamp = moment.utc(dateString[0]).toDate();
-    console.log(utcISOTimestamp);
-    let utcISOTimestamp2 = moment.utc(dateString[1]).toDate();
-    console.log(utcISOTimestamp);
+  };
 
-    setStartDate(dateString[0]);
-    setEndDate(dateString[1]);
+  const handleDatePickerChangeProcesseDate = (dateString) => {
+    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
+    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z"
+    setProcessedStart(convertStartDate )
+    setProcessedEnd(convertEndDate )
+    getFilteApi(0, 10,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
 
-    getFilteApi(
-      0,
-      10,
-      "COMPLETED",
-      "2023-11-15T05%3A07%3A59.016Z",
-      "2023-11-16T23%3A07%3A59.016Z"
-    );
   };
   return (
     <>
@@ -785,7 +858,7 @@ export default function Patient() {
                                 />
                                 <InputText
                                   type="text"
-                                  onChange={(e) => filterChangePatientId(e)}
+                                  onChange={(e) => getNameSearch(e.target.value)}
                                   className="form-control new-form-control"
                                   placeholder="Search"
                                 />
@@ -809,7 +882,6 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
-
                             {/* <div className="col-xl-2">
                               <div class="form-group has-search">
 
@@ -826,14 +898,15 @@ export default function Patient() {
 
                               </div>
                             </div> */}
-                            <div className="col-xl-2">
+                            <div className="col-xl-3">
                               <div
                                 onClick={handleOpenModal}
                                 className={styles.dateDisplay}
                               >
+                                {dueDateStart != null ?
                                 <div>
-                                  {startDate}&nbsp;- &nbsp;{endDate}
-                                </div>
+                                {moment(dueDateStart).format("MM-DD-YYYY")}&nbsp;- &nbsp;{moment(dueDateEnd).format("MM-DD-YYYY")}
+                                </div> :<div></div>}
                                 <Image src={calender} />
                               </div>
                               <Modal
@@ -856,32 +929,50 @@ export default function Patient() {
                                 >
                                   <div style={{ display: "block" }}>
                                     <div style={{ margin: "20px 0" }}>
-                                      <Button type="ghost">Due Date</Button>
+                                      <Button onClick={() => setIsDueDateCalender(true)} type="ghost">Due Date</Button>
+
                                     </div>
                                     <div>
-                                      <Button>Completed Date</Button>
+                                      <Button onClick={() => setIsDueDateCalender(false)}>Completed Date</Button>
                                     </div>
                                   </div>
+                                  {isDueDateCalender ?
                                   <div>
                                     <RangePicker
+
                                       getPopupContainer={() =>
                                         document.getElementById("date-popup")
                                       }
                                       popupStyle={{
                                         marginTop: "-259px",
-                                        marginLeft: "-78px",
+                                        marginLeft: "-78px"
                                       }}
                                       onChange={(dates, dateStrings) => {
                                         handleDatePickerChange(dateStrings);
                                       }}
                                       open={true}
                                       showNow={false}
-                                      style={{
-                                        visibility: "hidden",
-                                        boxShadow: "none",
-                                      }}
+                                      style={{ visibility: "hidden", boxShadow: "none" }}
                                     />
-                                  </div>
+                                  </div> :
+                                  <div>
+                                    <RangePicker
+
+                                      getPopupContainer={() =>
+                                        document.getElementById("date-popup")
+                                      }
+                                      popupStyle={{
+                                        marginTop: "-259px",
+                                        marginLeft: "-78px"
+                                      }}
+                                      onChange={(dates, dateStrings) => {
+                                        handleDatePickerChangeProcesseDate(dateStrings);
+                                      }}
+                                      open={true}
+                                      showNow={false}
+                                      style={{ visibility: "hidden", boxShadow: "none" }}
+                                    />
+                                  </div>}
                                 </div>
                                 <div
                                   id="date-popup"
@@ -889,27 +980,7 @@ export default function Patient() {
                                 />
                               </Modal>
                             </div>
-
-                            {/* <div className="col-xl-2">
-                              <div class="form-group has-search"> */}
-                            {/* <Calendar
-                                  className="form-control new-form-control calender-pri-input"
-                                  value={compledtedDate}
-                                  onChange={(e) => setCompletedDate(e.value)}
-                                  selectionMode="range"
-                                  readOnlyInput
-                                  placeholder="Completed Date"
-                                /> */}
-                            {/* <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button> */}
-                            {/* <div>
-                                  <RangePicker />
-                                </div> */}
-                            {/* </div>
-                            </div> */}
-
-                            <div className="col-xl-2" style={{ width: "30%" }}>
+                            <div className="col-xl-2" >
                               <div className={visitStyles.flags}>
                                 <div className={visitStyles.flags}>
                                   <span
@@ -941,7 +1012,27 @@ export default function Patient() {
                               </div>
                             </div>
 
-                            <div className="col-xl-2" style={{ width: "" }}>
+
+                            {/* <div className="col-xl-2">
+                              <div class="form-group has-search"> */}
+                            {/* <Calendar
+                                  className="form-control new-form-control calender-pri-input"
+                                  value={compledtedDate}
+                                  onChange={(e) => setCompletedDate(e.value)}
+                                  selectionMode="range"
+                                  readOnlyInput
+                                  placeholder="Completed Date"
+                                /> */}
+                            {/* <Button type="primary" onClick={showModal}>
+        Open Modal
+      </Button> */}
+                            {/* <div>
+                                  <RangePicker />
+                                </div> */}
+                            {/* </div>
+                            </div> */}
+
+                            <div className="col-xl-3" >
                               <Button
                                 onClick={addPatientFormId}
                                 className="btn btn-primary btn-sm ms-2 flr"
@@ -1038,12 +1129,13 @@ export default function Patient() {
                             statusBodyTemplate={processstatusBodyTemplate}
                             gotoPatientDetails={gotoPatientDetails}
                             patientDetails={patientDetails}
+
                           />
-                          <div>
+                          <div >
                             <div className="pagination-container">
                               <Paginator
                                 first={paginationFirst}
-                                rows={15}
+                                rows={13}
                                 totalRecords={totalElements}
                                 onPageChange={onPageChange}
                               />
@@ -1051,8 +1143,14 @@ export default function Patient() {
                                 Total count: {totalElements}
                               </div>
                             </div>
+
                           </div>
+
                           <Footer/>
+
+
+
+
                         </div>
                       </div>
                     </div>

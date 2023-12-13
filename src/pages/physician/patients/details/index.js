@@ -32,7 +32,8 @@ import {
   faCalendarAlt,
   faIdCardClip,
   faCog,
-  faClock
+  faClock,
+  faArrowsAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   CalendarOutlined
@@ -65,7 +66,7 @@ import { connect } from "react-redux";
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 
-import { Avatar,Tooltip } from 'antd';
+import { Avatar, Tooltip } from 'antd';
 import Spinner from "../../../../components/spinner/spinner";
 import Footer from "../../../../jsx/layouts/Footer";
 
@@ -397,99 +398,15 @@ const Details = ({ }) => {
     setLocalPatientId(patientId);
 
 
-    const menu = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-
-    const menu2 = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='4' onClick={() => handleActionClick("ADD RADIOLOGY")}>
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>+ ADD RADIOLOGY</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-    const menu3 = (
-      <Menu>
-        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
-          <div className="patient-status">
-            <span className={`badge hold-text`} >HOLD</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='2' onClick={() => handleActionClick("DECLINE")}>
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleActionClick("COMPLETE")}>
-          <div className="patient-status">
-            <span className={`badge processed-text`}>COMPLETE</span>
-
-
-          </div>
-        </Menu.Item>
-        <Menu.Item key='4' onClick={() => handleActionClick("ADD LAB")}>
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-
-
-
-    setActionItems(menu);
-    setActionItems2(menu2);
-    setActionItems3(menu3);
+   
 
     var userSpinner = (
       <div className={visitStyles.userDetailsCard}>
-         <div className="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+        <div className="bouncing-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
 
@@ -529,7 +446,118 @@ const Details = ({ }) => {
       ENDPOINTS.apiEndoint +
       `dbservice/patient/get?patientId=${patientId}`
     );
-    setPatienIdDetails(response.data)
+    setPatienIdDetails(response.data);
+    console.log(response.data)
+    var result = response.data;
+
+
+    const menu = (
+      <Menu>
+         {result.processedStatus != "HOLD" ?
+        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+          <div className="patient-status">
+            <span className={`badge hold-text`} >HOLD</span>
+          </div>
+        </Menu.Item>: null}
+        {result.processedStatus != "PENDING" ?
+        <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+          <div className="patient-status">
+            <span className={`badge processing-text`}>PENDING</span>
+          </div>
+        </Menu.Item>:null}
+        {result.processedStatus != "DECLINE" ?
+        <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+          </div>
+        </Menu.Item>:null}
+        
+        {result.processedStatus != "COMPLETE" ?
+        <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+          <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+          </div>
+        </Menu.Item>:null}
+      </Menu>
+    );
+
+    const menu2 = (
+      <Menu>
+        {result.processedStatus != "HOLD" ?
+        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+          <div className="patient-status">
+            <span className={`badge hold-text`} >HOLD</span>
+          </div>
+        </Menu.Item>: null}
+        {result.processedStatus != "PENDING" ?
+        <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+          <div className="patient-status">
+            <span className={`badge processing-text`}>PENDING</span>
+          </div>
+        </Menu.Item>:null}
+        {result.processedStatus != "DECLINE" ?
+        <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+          </div>
+        </Menu.Item>:null}
+        
+        {result.processedStatus != "COMPLETE" ?
+        <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+          <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+          </div>
+        </Menu.Item>:null}
+        <Menu.Item key='5' onClick={() => handleActionClick("ADD RADIOLOGY")}>
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD RADIOLOGY</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+    const menu3 = (
+      <Menu>
+         {result.processedStatus != "HOLD" ?
+        <Menu.Item key='1' onClick={() => handleActionClick("HOLD")}>
+          <div className="patient-status">
+            <span className={`badge hold-text`} >HOLD</span>
+          </div>
+        </Menu.Item>: null}
+        {result.processedStatus != "PENDING" ?
+        <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
+          <div className="patient-status">
+            <span className={`badge processing-text`}>PENDING</span>
+          </div>
+        </Menu.Item>:null}
+        {result.processedStatus != "DECLINE" ?
+        <Menu.Item key='3' onClick={() => handleActionClick("DECLINE")}>
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>DECLINE</span>
+
+          </div>
+        </Menu.Item>:null}
+        
+        {result.processedStatus != "COMPLETE" ?
+        <Menu.Item key='4' onClick={() => handleActionClick("COMPLETE")}>
+          <div className="patient-status">
+            <span className={`badge processed-text`}>COMPLETE</span>
+          </div>
+        </Menu.Item>:null}
+        <Menu.Item key='5' onClick={() => handleActionClick("ADD LAB")}>
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+
+
+
+    setActionItems(menu);
+    setActionItems2(menu2);
+    setActionItems3(menu3);
   }
 
   const getYearOfServiceDetails = async (year) => {
@@ -603,13 +631,14 @@ const Details = ({ }) => {
         });
 
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        setSelectedDosValue(dosYearArr[0].value);
+        // setSelectedDosValue(dosYearArr[0].value);
         // console.log(highestDOS)
 
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
         );
         setDosYearDefalutSelect(highestDosValue[0]);
+        setSelectedDosValue(highestDosValue[0].value);
 
 
         if (result.rafScore != null) {
@@ -733,6 +762,7 @@ const Details = ({ }) => {
         // for (var key in validDis) {
         //   validDiseasesArray.push({ name: validDis[key] });
         // }
+        
 
         setNewValidDiseaseList(validDiseaseNewRes);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -745,6 +775,31 @@ const Details = ({ }) => {
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
+
+
+        console.log(validDiseaseNewRes);
+
+        
+        var capturedSectionsColorsMatching = [];
+
+        validDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2) => {
+            console.log(res2)
+            capturedSectionsColorsMatching.push({
+              name:res2,
+              "parentDisCode":res.diagnosisCode
+            })
+           
+          })
+        })
+        
+
+       var test =  colorCodeMatch(
+        validDiseaseNewRes,
+          "hpi"
+        )
+
+        console.log(capturedSectionsColorsMatching)
 
 
 
@@ -894,14 +949,14 @@ const Details = ({ }) => {
     }
   };
   const getPatientDetailsYear = async (patientId, orgId, tenId, year) => {
-    console.log("dajdg")
+    setSelectedDosValue(year);
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
     setNewUnMatchHccList([]);
     setValidDiseasesList([]);
     setInvalidDiseasesList([]);
     setComboDiseaseCodesList([]);
-    setDosYear([]);
+    // setDosYear([]);
     setRAFScore([]);
     setSuggestedNonHccList([]);
     setSuggestedHccList([]);
@@ -948,17 +1003,17 @@ const Details = ({ }) => {
         setSelectMeatFileId(response.data.fileId);
         // setPatientDocumentResult(result);
 
-        result.encounterYears.map((res) => {
-          dosYearArr.push({ value: res, label: res });
-        });
+        // result.encounterYears.map((res) => {
+        //   dosYearArr.push({ value: res, label: res });
+        // });
 
         // const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        setSelectedDosValue(dosYearArr[0].value);
+        // setSelectedDosValue(dosYearArr[0].value);
 
         // const highestDosValue = dosYearArr.filter(
         //   (i) => parseInt(i.value) === highestDOS
         // );
-        setDosYearDefalutSelect(dosYearArr[0]);
+        // setDosYearDefalutSelect(dosYearArr[0]);
 
 
         if (result.rafScore != null) {
@@ -1091,7 +1146,7 @@ const Details = ({ }) => {
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
         setComboDiseaseCodesList(comboDis);
-        setDosYear(dosYearArr);
+        // setDosYear(dosYearArr);
         setRAFScore(rafScore);
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
@@ -3526,11 +3581,11 @@ const Details = ({ }) => {
 
     data = (
       <div className={visitStyles.userDetailsCard}>
-         <div className="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+        <div className="bouncing-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
     setvalidHccDetails(data);
@@ -3539,7 +3594,7 @@ const Details = ({ }) => {
     );
     if (response.data) {
       result = response.data;
-       data = (
+      data = (
         <div className="validhcc-details">
           {/* <Spin className='ml-2 ms-1' size="small" /> */}
           {/* <div>{value}</div> */}
@@ -3566,9 +3621,9 @@ const Details = ({ }) => {
         </div>
       );
     }
-   
 
-  
+
+
     setvalidHccDetails(data);
   };
 
@@ -4403,11 +4458,11 @@ const Details = ({ }) => {
 
     data = (
       <div className={visitStyles.userDetailsCard}>
-         <div className="bouncing-loader">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+        <div className="bouncing-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
 
@@ -4572,24 +4627,26 @@ const Details = ({ }) => {
                       <div className="col-xl-2 col-sm-12">
                         <div className={`${visitStyles.actionbtnContainer}`}>
                           {patienIdDetails.processedStatus == "COMPLETED" ?
-                            <div className={`col-xl-12`}
+
+                            <Dropdown.Button
+                              type="primary"
+                              className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                              icon={<DownOutlined />}
+                              overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
                             >
-                              {/* <i className={visitStyles.completedStatus}>
-                            {SVGICON.completedStatusIcon  }
-
-                            </i> */}
-                              <div className="patient-status">
-                                <span className={`badge processed-text`}>COMPLETED</span>
-
-
-                              </div>
-                            </div> : patienIdDetails.processedStatus == "DECLINED" ?
+                              COMPLETED
+                            </Dropdown.Button>
+                            : patienIdDetails.processedStatus == "DECLINED" ?
                               <div className={`col-xl-12`}
                               >
-                                <div className="patient-status">
-                                  <span className={`badge failed-text`} style={{ color: "red" }}>DECLINED</span>
-
-                                </div>
+                                <Dropdown.Button
+                                  type="primary"
+                                  className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
+                                  icon={<DownOutlined />}
+                                  overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
+                                >
+                                  DECLINED
+                                </Dropdown.Button>
 
                               </div> :
                               patienIdDetails.processedStatus == "HOLD" ?
@@ -4613,84 +4670,8 @@ const Details = ({ }) => {
                                     icon={<DownOutlined />}
                                     overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
                                   >
-                                    {/* <div className="patient-status">
-            <span className={`badge processed-text`}>PENDING</span>
-              
-         
-          </div> */}
                                     PENDING
                                   </Dropdown.Button>
-
-
-                                  {/* <Button
-                            onClick={handleSubmitHccDecline}
-                            className={`ms-2 ${visitStyles.declineBtn}`}
-                          >
-                            <i>{SVGICON.delclineIcon}</i>
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              setConfirmNotesModalDecline(true);
-                              setIsValidAction("holdFunction");
-                            }}
-                            className={`ms-2 ${visitStyles.holdBtn}`}
-                          >
-                            <i>{SVGICON.holdBtnIcon}</i>
-                          </Button>
-
-                          <Button
-                            onClick={handleSubmitHccComplete}
-                            className={`ms-2 ${visitStyles.completedBtn}`}
-                          >
-                            <i>{SVGICON.completedBtnIcon}</i>
-
-                          </Button> */}
-
-                                  {/* <Button
-                            onClick={handleSubmitHccComplete}
-                            className={`ms-2 ${visitStyles.completedBtn}`}
-                          >
-                            <i>{SVGICON.completedBtnIcon}</i>
-
-                          </Button> */}
-
-
-                                  {/* {activeTab == 3 ? (
-
-                            <Button
-                              onClick={addPatientFile}
-                              className={`ms-2 ${visitStyles.addPatientBtn}`}
-                            >
-                              <FontAwesomeIcon
-                                icon={
-                                  faPlus
-                                }
-                                style={{
-                                  color:
-                                    "rgb(38 50 107)",
-                                }}
-                              />
-                            </Button>
-                          ) : null}
-                          {activeTab == 4 ? (
-
-                            <Button
-                              onClick={addLabReport}
-                              className={`ms-2 ${visitStyles.addPatientBtn}`}
-                            >
-                              <FontAwesomeIcon
-                                icon={
-                                  faPlus
-                                }
-                                style={{
-                                  color:
-                                    "rgb(38 50 107)",
-                                }}
-                              />
-                            </Button>
-
-                          ) : null}
- */}
 
 
                                 </div>}
@@ -4998,13 +4979,13 @@ const Details = ({ }) => {
                                                 HCC
                                               </span>
                                             </div>
-                                            <div className={visitStyles.flags} >
+                                            {/* <div className={visitStyles.flags} >
                                               <span className={visitStyles.nonHccFlag}>
                                               </span>
                                               <span className={visitStyles.flagCodes}>
                                                 NON HCC
                                               </span>
-                                            </div>
+                                            </div> */}
                                             <div className={visitStyles.flags}   >
                                               <span className={visitStyles.suggestedFlag}>
                                               </span>
@@ -5095,21 +5076,16 @@ const Details = ({ }) => {
                                                                 </span>
                                                               </div>
 
-                                                              {data.defaultPosition == "VALID" || data.defaultPosition == null ?
-                                                                <Tooltip title="HCC" placement="bottom">
-                                                                  <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span></Tooltip> : data.defaultPosition == "SUGGESTED" ?
-                                                                  <Tooltip title="SUGGESTED" placement="bottom">
-                                                                    <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                    </span></Tooltip>
-                                                                  : data.defaultPosition == "INVALID" ?
-                                                                    <Tooltip title="NON-HCC" placement="bottom">
-                                                                      <span className={`${visitStyles.nonHccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                      </span></Tooltip>
-                                                                    : data.defaultPosition == "DELETED" ?
-                                                                      <Tooltip title="DELETED" placement="bottom">
-                                                                        <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                        </span> </Tooltip> : null}
+                                                              {data.defaultPosition == "VALID" ?
+                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span>
+                                                                  : data.defaultPosition == "DELETED" ?
+
+                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : null}
                                                               <Popover
                                                                 onClick={() =>
                                                                   getValidHccDetails(
@@ -5177,7 +5153,10 @@ const Details = ({ }) => {
                                                                     visitStyles.close_icon
                                                                   }
                                                                 >
-                                                                  {SVGICON.closeIcon}
+                                                                  {<FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />}
                                                                 </div>
                                                               </Popconfirm>
                                                             </div>
@@ -5330,17 +5309,16 @@ const Details = ({ }) => {
                                                                       }
                                                                     </span>
                                                                   </div>
-                                                                  {data.defaultPosition == "VALID" || data.defaultPosition == null ?
-                                                                    <Tooltip title="HCC" placement="bottom">
-                                                                      <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                      </span></Tooltip> : data.defaultPosition == "VALID" ?
-                                                                      <Tooltip title="SUGGESTED" placement="bottom">
-                                                                        <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                        </span></Tooltip>
+                                                                  {data.defaultPosition == "VALID" ?
+                                                                    <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                      <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                      </span>
                                                                       : data.defaultPosition == "DELETED" ?
-                                                                        <Tooltip title="DELETED" placement="bottom">
-                                                                          <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                          </span> </Tooltip> : null}
+
+                                                                        <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                        </span> : null}
                                                                   <Popover
                                                                     onClick={() =>
                                                                       getValidHccDetails(
@@ -5403,9 +5381,10 @@ const Details = ({ }) => {
                                                                           visitStyles.close_icon
                                                                         }
                                                                       >
-                                                                        {
-                                                                          SVGICON.closeIcon
-                                                                        }
+                                                                       <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                                       </div>
                                                                     </Popconfirm>
 
@@ -5453,9 +5432,10 @@ const Details = ({ }) => {
                                                                           visitStyles.close_icon
                                                                         }
                                                                       >
-                                                                        {
-                                                                          SVGICON.closeIcon
-                                                                        }
+                                                                        <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                                       </div>
                                                                     </Popconfirm>}
                                                                 </div>
@@ -5580,17 +5560,16 @@ const Details = ({ }) => {
                                                                 }
                                                               </span>
                                                             </div>
-                                                            {data.defaultPosition == "VALID" || data.defaultPosition == null ?
-                                                              <Tooltip title="HCC" placement="bottom">
-                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                </span></Tooltip> : data.defaultPosition == "VALID" ?
-                                                                <Tooltip title="SUGGESTED" placement="bottom">
-                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span></Tooltip>
+                                                            {data.defaultPosition == "VALID" ?
+                                                              <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                              </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span>
                                                                 : data.defaultPosition == "DELETED" ?
-                                                                  <Tooltip title="DELETED" placement="bottom">
-                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                    </span> </Tooltip> : null}
+
+                                                                  <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span> : null}
                                                             <Popover
                                                               content={
                                                                 data.dbDescription
@@ -5650,7 +5629,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                               <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -5947,7 +5929,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                   <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -5962,7 +5947,7 @@ const Details = ({ }) => {
 
                                                   <div>
                                                     <span className="no-patient-data">
-                                                      NO DATA
+                                                      No Combination Codes
                                                     </span>
                                                   </div>
 
@@ -6303,7 +6288,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                           <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
@@ -7229,7 +7217,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -7830,7 +7821,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                   <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -8732,7 +8726,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -8867,7 +8864,10 @@ const Details = ({ }) => {
                                                                   visitStyles.close_icon
                                                                 }
                                                               >
-                                                                {SVGICON.closeIcon}
+                                                                <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
@@ -9164,7 +9164,10 @@ const Details = ({ }) => {
                                                                       visitStyles.close_icon
                                                                     }
                                                                   >
-                                                                    {SVGICON.closeIcon}
+                                                                    <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                                   </div>
                                                                 </Popconfirm>
                                                               </div>
@@ -9684,7 +9687,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                            <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
@@ -10395,7 +10401,10 @@ const Details = ({ }) => {
                                                               visitStyles.close_icon
                                                             }
                                                           >
-                                                            {SVGICON.closeIcon}
+                                                            <FontAwesomeIcon
+                                                          icon={faArrowsAlt}
+                                                          style={{ size:8, color:"#a80404" }}
+                                                        />
                                                           </div>
                                                         </Popconfirm>
                                                       </div>
@@ -12734,30 +12743,30 @@ const Details = ({ }) => {
                                       <span className={visitStyles.commentsName}>
                                         {data.flag}
                                         {data.flag == "PATIENT_NAME_MISSED" ?
-                                        <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PATIENT_DOB_MISSED" ?
-                                        <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "MRN_ID_MISMATCH" ?
-                                        <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PROVIDER_SIGN_MISSED" ?
-                                        <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PROVIDER_SIGNATURE_MISSED" ?
-                                        <i className={visitStyles.signature_missed}>{SVGICON.emptyFlagSmall}</i>:                                       
-                                        data.flag == "PROVIDER_CREDENTIAL_MISSED" ?
-                                        <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PROVIDER_SIGN_STATUS_PENDING" ?
-                                        <i className={visitStyles.sign_status}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "NO_HCC_FOUND" ?
-                                        <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "NO_VALID_DOCUMENT_FOUND" ?
-                                        <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmall}</i>:
-                                        data.flag == "PATIENT_DISEASED" ?
-                                        <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlagSmall}</i>:
-                                        
-                                        
-                                        
-                                        
-                                        null}
+                                          <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                          data.flag == "PATIENT_DOB_MISSED" ?
+                                            <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                            data.flag == "MRN_ID_MISMATCH" ?
+                                              <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                              data.flag == "PROVIDER_SIGN_MISSED" ?
+                                                <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                                data.flag == "PROVIDER_SIGNATURE_MISSED" ?
+                                                  <i className={visitStyles.signature_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                                  data.flag == "PROVIDER_CREDENTIAL_MISSED" ?
+                                                    <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmall}</i> :
+                                                    data.flag == "PROVIDER_SIGN_STATUS_PENDING" ?
+                                                      <i className={visitStyles.sign_status}>{SVGICON.emptyFlagSmall}</i> :
+                                                      data.flag == "NO_HCC_FOUND" ?
+                                                        <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmall}</i> :
+                                                        data.flag == "NO_VALID_DOCUMENT_FOUND" ?
+                                                          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmall}</i> :
+                                                          data.flag == "PATIENT_DISEASED" ?
+                                                            <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlagSmall}</i> :
+
+
+
+
+                                                            null}
 
 
                                       </span>
