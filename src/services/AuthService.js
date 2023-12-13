@@ -5,6 +5,7 @@ import {
     Logout,
 } from '../store/actions/AuthActions';
 import axiosApi from '../utility/axiosConfig';
+import ENDPOINTS from '../utility/enpoints';
 
 
 export function signUp(email, password) {
@@ -26,7 +27,7 @@ export function login(email, password) {
        password: password,
         returnSecureToken: true,
     };
-    return axiosApi.post(
+    return axiosApi.post(ENDPOINTS.apiEndoint+
         `auth/login`,
         postData,
     );

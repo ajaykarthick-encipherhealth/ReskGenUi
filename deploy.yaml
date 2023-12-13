@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cogentai-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cogentai-ui
+  template:
+    metadata:
+      labels:
+        app: cogentai-ui
+    spec:
+      containers:
+        - name: cogentai-ui
+          image: hccregistry.azurecr.io/cogentai-ui
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: my-volume
+              mountPath: /mnt/data
+      volumes:
+      - name: my-volume
+        persistentVolumeClaim:
+              claimName: my-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cogentai-ui
+spec:
+  selector:
+    app: cogentai-ui
+  ports:
+  - protocol: TCP
+    port: 80  # The port you want to expose on
+    targetPort: 3000  # The port your Next.js app is listening on

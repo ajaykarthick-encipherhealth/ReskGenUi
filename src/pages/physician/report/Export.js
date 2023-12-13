@@ -1,0 +1,307 @@
+import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
+import React, { useEffect, useState } from "react";
+import styles from "./report.module.css";
+import {
+  getExportDetails,
+  getUsersList,
+} from "../../../store/actions/ReportActions";
+import { useDispatch, useSelector } from "react-redux";
+const { Option } = Select;
+
+export const debounce = (func, delay) => {
+  let timer;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timer);
+    timer = setTimeout(() => func.apply(context, args), delay);
+  };
+};
+const Export = ({ isModalVisible, closeModal, rowsLength }) => {
+  const [selectedUser, setSelectedUser] = useState([]);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    var orgId = localStorage.getItem("orgId");
+    dispatch(getUsersList(orgId, search));
+  }, [search]);
+  const dispatch = useDispatch();
+  const usersList = useSelector((state) => state.report.usersList);
+  const options = usersList?.map((data) => ({
+    label: data.userName,
+    value: data.userName,
+  }));
+
+  const checkBoxData = [
+    {
+      id: 1,
+      title: "patientId",
+    },
+    {
+      id: 2,
+      title: "patientName",
+    },
+    {
+      id: 3,
+      title: "dob",
+    },
+    {
+      id: 4,
+      title: "processedDate",
+    },
+    {
+      id: 5,
+      title: "providerName",
+    },
+    {
+      id: 6,
+      title: "allocatedOn",
+    },
+    {
+      id: 7,
+      title: "noOfValidCodes",
+    },
+    {
+      id: 8,
+      title: "noOfSuggestedCodes",
+    },
+    {
+      id: 9,
+      title: "noOfDeletedCodes",
+    },
+    {
+      id: 10,
+      title: "totalCodes",
+    },
+    {
+      id: 11,
+      title: "allocatedUserId",
+    },
+    {
+      id: 12,
+      title: "comments",
+    },
+    {
+      id: 13,
+      title: "validDisease",
+    },
+  ];
+  const handleSelectedOption = (value) => {
+    setSelectedUser((prev) => ({ ...prev, user: value, role: "" }));
+  };
+  const handleSelectedRole = (value) => {
+    setSelectedUser((prevUsers) => ({ ...prevUsers, role: value }));
+  };
+
+  const filteredOptions =
+    options &&
+    options.filter((option) => !selectedUser?.user?.includes(option.value));
+
+  const debouncedSearch = debounce((value) => {
+    setSearch(value);
+  }, 300);
+  const handleSearch = (e) => {
+    debouncedSearch(e);
+  };
+
+  const onFinish = (values) => {
+    const patientIds = rowsLength.map((item) => item.patientId);
+    const userAndAccess = selectedUser.user.reduce((result, user, index) => {
+      result[user] = selectedUser.role[index];
+      return result;
+    }, {});
+    const data = {
+      fields: {
+        patientId: values.ReportFields?.includes("patientId") ? true : false,
+        patientName: values.ReportFields?.includes("patientName")
+          ? true
+          : false,
+        dob: values.ReportFields?.includes("dob") ? true : false,
+        processedDate: values.ReportFields?.includes("processedDate")
+          ? true
+          : false,
+        providerName: values.ReportFields?.includes("providerName")
+          ? true
+          : false,
+        allocatedOn: values.ReportFields?.includes("allocatedOn")
+          ? true
+          : false,
+        noOfValidCodes: values.ReportFields?.includes("noOfValidCodes")
+          ? true
+          : false,
+        noOfSuggestedCodes: values.ReportFields?.includes("noOfSuggestedCodes")
+          ? true
+          : false,
+        noOfDeletedCodes: values.ReportFields?.includes("noOfDeletedCodes")
+          ? true
+          : false,
+        totalCodes: values.ReportFields?.includes("totalCodes") ? true : false,
+        allocatedUserId: values.ReportFields?.includes("allocatedUserId")
+          ? true
+          : false,
+        comments: values.ReportFields?.includes("comments") ? true : false,
+        validDisease: values.ReportFields?.includes("validDisease")
+          ? true
+          : false,
+      },
+      patientIds: patientIds,
+      fileType: values.ReportTYpe,
+      reportName: values.ReportName,
+      userAndAccess: userAndAccess,
+    };
+    dispatch(getExportDetails(data));
+  };
+
+  return (
+    <Modal
+      title="Export "
+      visible={isModalVisible}
+      onCancel={closeModal}
+      footer={false}
+      className={styles.modelCon}
+    >
+      <Form name="basic" onFinish={onFinish}>
+        <Form.Item
+          label="Report Name"
+          name="ReportName"
+          rules={[
+            {
+              required: true,
+              message: "Please input your ReportName!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Report Type"
+          name="ReportTYpe"
+          rules={[
+            {
+              required: true,
+              message: "Please Select your Option!",
+            },
+          ]}
+        >
+          <Radio.Group>
+            <Radio.Button value="EXCEL" className={styles.excel}>
+              Excel
+            </Radio.Button>
+            <Radio.Button value="CSV" className={styles.excel}>
+              CSV
+            </Radio.Button>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          label="Report Fields"
+          name="ReportFields"
+          rules={[
+            {
+              required: true,
+              message: "Please Select your Option!",
+            },
+          ]}
+        >
+          <Checkbox.Group>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "16px",
+                margin: "0px 0",
+              }}
+            >
+              {checkBoxData?.map((data) => (
+                <Checkbox key={data.id} value={data.title}>
+                  {data.title}
+                </Checkbox>
+              ))}
+            </div>
+          </Checkbox.Group>
+        </Form.Item>
+
+        <div style={{ display: "flex", marginBottom: "20px" }}>
+          <div style={{ width: "100%" }}>
+            <Form.Item
+              label="Sender"
+              name="User"
+              rules={[
+                {
+                  required: false,
+                  message: "Select User",
+                },
+              ]}
+            >
+              <div
+                style={{
+                  width: "auto",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Select
+                  mode="multiple"
+                  placeholder="Please select"
+                  onChange={handleSelectedOption}
+                  onSearch={handleSearch}
+                  className={styles.selectDiv}
+                >
+                  {filteredOptions?.map((data) => (
+                    <Option value={data.label}>{data.label}</Option>
+                  ))}
+                </Select>
+                <Select
+                  placeholder="Please select"
+                  onChange={handleSelectedRole}
+                  className={styles.selectDiv}
+                >
+                  <Option value="READ">Read</Option>
+                  <Option value="DOWNLOAD">Download</Option>
+                </Select>
+              </div>
+            </Form.Item>
+          </div>
+          {/* <div className={styles.displayDiv}>
+            {selectedUser?.length > 0 ? (
+              <>
+                {selectedUser?.map((item, index) => (
+                  <div className={styles.userName}>
+                    <div key={index} className={styles.userRoleContainer}>
+                      {item.user}
+                    </div>
+                    <div key={index} className={styles.userRoleContainer}>
+                      {item.role}
+                    </div>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => deleteUser(item.user)}
+                    >
+                      X
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              "No Users Selected"
+            )}
+          </div> */}
+        </div>
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+          className={styles.footerBtn}
+        >
+          <Button type="primary" htmlType="submit"  style={{backgroundColor:"#04306f", width: "100px"
+,  height: "40px"}}>
+            Generate
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+export default Export;

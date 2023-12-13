@@ -5,6 +5,7 @@ import {
     LOGOUT_ACTION,
     SIGNUP_CONFIRMED_ACTION,
     SIGNUP_FAILED_ACTION,
+    PATIENT_DETAILS
     
 } from '../actions/AuthActions';
 
@@ -20,6 +21,10 @@ const initialState = {
     successMessage: '',
     showLoading: false,
     // count : false, 
+};
+
+const initialStatePatient = {
+    patientDetails: {},
 };
 
 export function AuthReducer(state = initialState, action) {
@@ -82,6 +87,25 @@ export function AuthReducer(state = initialState, action) {
     //         count: !state.count,
     //     };
         
+    // if (action.type === PATIENT_DETAILS) {
+    //     return {
+    //         ...state,
+    //         auth: action.payload,
+    //         errorMessage: '',
+    //         successMessage: 'Patient Details Completed',
+    //         showLoading: false,
+    //     };
+    // }
+    // }
+    return state;
+}
+export function PatientStore(state = initialStatePatient, action) {   
+        
+    if (action.type === PATIENT_DETAILS) {
+        return {
+            patientDetails: action.payload,
+        };
+    }
     // }
     return state;
 }

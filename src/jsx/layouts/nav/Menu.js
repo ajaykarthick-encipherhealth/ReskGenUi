@@ -1,44 +1,73 @@
 import { SVGICON } from "../../constant/theme";
+import workingstatusActive from "../../../images/workingstatus/workingstatusInactive.png";
 
 export const MenuList = [
-    {   
-        title:'Dashboard',
-        iconStyle: SVGICON.Home,
-        to: '/dashboard',
-    },
-    {   
-        title:'User Management',
-        iconStyle:SVGICON.Apps,
-        to: '/user-list',
-    },
-    // {   
-    //     title:'PatientList',
-    //     iconStyle:SVGICON.Apps,
-    //     to: '/patient-list',
-    // },
-    {   
-        title:'File Management',
-        iconStyle:SVGICON.TaskIcon,
-        to: '/file-management',
-    },
-    {   
-        title:'File View',
-        iconStyle:SVGICON.TaskIcon,
-        to: '/file-view',
-    },
-    
-]
+  {
+    title: "User Management",
+    iconStyle: SVGICON.Usermanagement,
+    to: "/admin/user",
+  },
+  {
+    title: "Patient File",
+    iconStyle: SVGICON.Apps,
+    to: "/admin/patient",
+  },
+  {
+    title: "File Management",
+    iconStyle: SVGICON.File,
+    to: "/admin/file-management",
+  },
+  {
+    title: "File View",
+    iconStyle: SVGICON.TaskIcon,
+    to: "/admin/file-view",
+  },
+];
 
 export const PhysicanMenuList = [
-    {   
-        title:'Dashboard',
-        iconStyle: SVGICON.Home,
-        to: '/dashboard',
-    },
-    {   
-        title:'PatientList',
-        iconStyle:SVGICON.Apps,
-        to: '/patient-list',
-    }
-    
-]
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/physician/dashboard",
+  },
+  // {
+  //     title:'Patient List1',
+  //     iconStyle:SVGICON.patientListIcon,
+  //     to: '/physician/patient',
+  // },
+  {
+    title: "My Work Queue",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/physician/patients",
+    childRoute: "/physician/patients/details",
+  },
+  {
+    title: "Report",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/physician/report",
+  },
+  {
+    title: "Working Status",
+    iconStyle: SVGICON.workingStatus,
+    to: "/physician/workingstatus",
+  },
+];
+
+export const L2AuditMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/coder/dashboard",
+  },
+
+  {
+    title: "My Works",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/coder/myworks",
+  },
+  {
+    title: "Auditing Window",
+    iconStyle: SVGICON.Usermanagement,
+    to: "/coder/auditing",
+  },
+];
