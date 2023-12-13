@@ -109,7 +109,7 @@ function CoderReport({
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classTTotalhead}>
-          <tr>
+          <tr style={{textAlign:"center"}}>
             <>
               <th></th>
               <th>PATIENT ID</th>
@@ -147,7 +147,7 @@ function CoderReport({
         <tbody className={TableStyle.bodytable}>
           {reportListAll?.data?.length > 0 &&
             reportListAll?.data?.map((row, index) => (
-              <tr key={index} style={{ padding: " 22px!important" }}>
+              <tr key={index} style={{ padding: " 22px !important" ,textAlign:"center"}}>
                 {row?.auditedBy && (
                   <td className={TableStyle.firstTdBorder}>
                     <Badge.Ribbon

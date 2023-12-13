@@ -16,7 +16,7 @@ import { getpatientsList } from "../../../../store/actions/PatientsActions";
 
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const[selectedDate,setSelectedDate]=useState()
+  const [selectedDate, setSelectedDate] = useState();
 
   const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
   const currentDate = dayjs();
@@ -90,24 +90,23 @@ const DailyTask = () => {
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday"
+    "Saturday",
   ];
 
   const getCurrentWeekDates = () => {
     const today = new Date();
-    const currentDay = today.getDay(); 
-    const weekStart = new Date(today); 
-    weekStart.setDate(today.getDate() - currentDay); 
-  
+    const currentDay = today.getDay();
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - currentDay);
+
     const weekDates = [];
     for (let i = 0; i < 7; i++) {
       const nextDay = new Date(weekStart);
       nextDay.setDate(weekStart.getDate() + i);
-      weekDates.push(nextDay.toISOString().split('T')[0]); 
+      weekDates.push(nextDay.toISOString().split("T")[0]);
     }
     return weekDates;
   };
-  
 
   const currentWeek = getCurrentWeekDates();
 
@@ -120,7 +119,7 @@ const DailyTask = () => {
     decline: dailyStatusData[index]?.decline || 0,
     allocated: dailyStatusData[index]?.allocated || 0,
   }));
-  
+
   const getChartOption = (allocated, pending, hold, decline, completed) => {
     return {
       tooltip: {
@@ -205,11 +204,40 @@ const DailyTask = () => {
     };
   };
   const handleDays = (status) => {
-    if(status){
-      const url=`processedStatus=${status?.toUpperCase()}&processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`
-      dispatch(getpatientsList(0,url))
+    if (status) {
+      const url = `processedStatus=${status?.toUpperCase()}&processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`;
+      dispatch(getpatientsList(0, url));
     }
   };
+  const today = new Date().toISOString().split("T")[0];
+  const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
+    .toISOString()
+    .split("T")[0];
+  const dayAfterTomorrow = new Date(
+    new Date().setDate(new Date().getDate() + 2)
+  )
+    .toISOString()
+    .split("T")[0];
+
+  const rearrangedCard2Data = [
+    ...card2Data.filter(
+      (data) => data.day === daysOfWeek[new Date(today).getDay()]
+    ),
+    ...card2Data.filter(
+      (data) => data.day === daysOfWeek[new Date(tomorrow).getDay()]
+    ),
+    ...card2Data.filter(
+      (data) => data.day === daysOfWeek[new Date(dayAfterTomorrow).getDay()]
+    ),
+    ...card2Data.filter(
+      (data) =>
+        ![
+          daysOfWeek[new Date(today).getDay()],
+          daysOfWeek[new Date(tomorrow).getDay()],
+          daysOfWeek[new Date(dayAfterTomorrow).getDay()],
+        ].includes(data.day)
+    ),
+  ];
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -223,21 +251,21 @@ const DailyTask = () => {
             </Col>
             <Col span={22}>
               <Row style={{ display: "flex", justifyContent: "space-between" }}>
-                {card2Data
+                {rearrangedCard2Data
                   .slice(currentIndex, currentIndex + 3)
                   .map((data, index) => (
                     <Col
                       key={index}
                       span={7}
                       className={styles.sliderdiv}
-                      onClick={()=>setSelectedDate(currentWeek[index])}
+                      onClick={() => setSelectedDate(currentWeek[index])}
                     >
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
-                        onClick={()=>{
-                          const url=`processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`
-                          dispatch(getpatientsList(0,url))
+                        onClick={() => {
+                          const url = `processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`;
+                          dispatch(getpatientsList(0, url));
                         }}
                       >
                         {data.day}

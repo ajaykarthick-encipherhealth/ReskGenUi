@@ -6,13 +6,13 @@ import HeadTitle from "../../../../components/headtitle";
 import { Modal } from "antd";
 import { getHoldStatusData } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
-import TableStyle from "../../../../components/table/table.module.css"
+import TableStyle from "../../../../components/table/table.module.css";
 import { useRouter } from "next/router";
 
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
   const dispatch = useDispatch();
-  const router=useRouter()
+  const router = useRouter();
   useEffect(() => {
     dispatch(getHoldStatusData(router));
   }, []);
@@ -25,8 +25,26 @@ const HoldStatus = () => {
     setOpenHoldStatus(false);
   };
 
+  const processedData = holdStatusData?.map((item) => {
+    let testValue = "no data"; 
+
+    if (item.holdNotes && item.holdNotes.length > 0) {
+      item.holdNotes.forEach((obj) => {
+        Object.keys(obj).forEach((key) => {
+          if (obj[key] === "test") {
+            testValue = obj[key];
+          }
+        });
+      });
+    }
+
+    return {
+      patientId: item.patientId,
+      testValue: testValue,
+    };
+  });
   const TableData = (
-    <table  className={styles.classTable}>
+    <table className={styles.classTable}>
       <thead className={styles.tableHead}>
         <tr>
           <th>Patient Id</th>
@@ -34,18 +52,16 @@ const HoldStatus = () => {
         </tr>
       </thead>
       <tbody>
-        {holdStatusData?.length > 0 ? (
-          holdStatusData?.map((item) => (
-            <tr className={styles.tabelCell}>
-              <td className={styles.description}>{item?.patientId}</td>
-              <td className={styles.description}>
-                {item?.notes ? item?.notes : "no data"}
-              </td>
+        {processedData?.length > 0 ? (
+          processedData?.map((item, index) => (
+            <tr key={index} className={styles.tabelCell}>
+              <td className={styles.description}>{item.patientId}</td>
+              <td className={styles.description}>{item.testValue}</td>
             </tr>
           ))
         ) : (
           <tr>
-            <td colSpan="2">No datas found</td>
+            <td colSpan="2">No data found</td>
           </tr>
         )}
       </tbody>
