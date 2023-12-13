@@ -5567,19 +5567,14 @@ const Details = ({ }) => {
 
                                                                   {getEncounterDateBackground(data.encounterDateSplit)}
                                                                   {data.isManuallyAdded == true ?
-                                                                    <Popover
-                                                                      placement="topLeft"
-                                                                      content={
-                                                                        "Manually Added"
-                                                                      }
-                                                                    >
+                                                                  
                                                                       <Badge
                                                                         className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                                                       >
                                                                         Manually Added
 
-                                                                      </Badge>
-                                                                    </Popover> : null}
+                                                                      </Badge>:
+                                                                    null}
 
 
                                                                   {/* {getCaptureSectionBackground(data.capturedSections)} */}
@@ -7458,19 +7453,14 @@ const Details = ({ }) => {
 
                                                               {getEncounterDateBackground(data.encounterDateSplit)}
                                                               {data.isManuallyAdded == true ?
-                                                                <Popover
-                                                                  placement="topLeft"
-                                                                  content={
-                                                                    "Manually Added"
-                                                                  }
-                                                                >
+                                                             
                                                                   <Badge
                                                                     className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                                                   >
                                                                     Manually Added
 
                                                                   </Badge>
-                                                                </Popover> : null}
+                                                               : null}
                                                             </div>
                                                             <div className={`${visitStyles.encounterAndSectionHeader}`} >
                                                               {getCaptureSectionBackground(data.capturedSections)}
