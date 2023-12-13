@@ -616,7 +616,7 @@ export default function Patient() {
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex justify-content-center">
-        {rowData.computing == 2 ? (
+        {/* {rowData.computing == 2 ? (
           <button
             onClick={() => gotoPatientDetails(rowData)}
             className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
@@ -630,7 +630,7 @@ export default function Patient() {
           >
             <EyeInvisibleOutlined className="text-white" />
           </button>
-        )}
+        )} */}
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
