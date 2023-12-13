@@ -4284,7 +4284,7 @@ textarea.form-control.is-invalid {
 body {
   -ms-overflow-style: none;
   scrollbar-width: none;
-  background-color: #f3f0ec;
+  background-color: #f0f6fe;
 }
 
 body::-webkit-scrollbar {

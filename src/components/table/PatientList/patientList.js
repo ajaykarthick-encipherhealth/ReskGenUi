@@ -90,20 +90,26 @@ function PatientTable({
         </>
       ),
     };
-  
+
     return priorityMap[priority] || priorityMap.NORMAL;
   };
-  
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: null,
   });
   const [hoveredAvatar, setHoveredAvatar] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState({id:"meat-01",value:"HIGH"}) ;
+  const [selectedPriority, setSelectedPriority] = useState({
+    id: "meat-01",
+    value: "HIGH",
+  });
 
   const handlePriorityChange = (patientId, selectedValue) => {
-    setSelectedPriority((prev) => ({ ...prev, id:patientId, value:selectedValue }));
+    setSelectedPriority((prev) => ({
+      ...prev,
+      id: patientId,
+      value: selectedValue,
+    }));
   };
 
   const handleAvatarHover = (data) => {
@@ -158,7 +164,7 @@ function PatientTable({
     <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
   );
 
-  console.log(selectedPriority)
+  console.log(selectedPriority);
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr key={index}>
@@ -174,8 +180,8 @@ function PatientTable({
             : "MM-DD-YYYY"}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.lastModifiedDate
-            ? moment(data.lastModifiedDate).format("MM-DD-YYYY")
+          {data.processedStatus === "COMPLETED"
+            ? moment(data.processedDate).format("MM-DD-YYYY")
             : "MM-DD-YYYY"}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
@@ -193,32 +199,41 @@ function PatientTable({
               }}
             >
               {data.allocatedBy
-                ? data.allocatedBy.charAt(0).toUpperCase()
+                ? data.allocatedBy.slice(0, 2).toUpperCase()
                 : "N"}
             </Avatar>
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
-  <AntSelect
-    options={priorityOptions}
-    placeholder="set priority"
-    className={`custom-ant-select ${TableStyle.customAntSelect}`}
-    showSearch={false}
-
-    defaultValue={data?.priority?data.priority:"set Priority"}
-    onChange={(value) => handlePriorityChange(data.patientId, value)}
-    style={{ width: "80%" }}
-  />
-</td>
+          <AntSelect
+            options={priorityOptions}
+            placeholder="Set priority"
+            className={`custom-ant-select ${TableStyle.customAntSelect}`}
+            showSearch={false}
+            defaultValue={
+              data?.priority
+                ? data.priority
+                : {
+                    label: (
+                      <>
+                        <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+                        <span style={{ fontSize: "13px" }}>Low</span>{" "}
+                      </>
+                    ),
+                    value: "low", // Set the actual value based on your priorityOptions
+                  }
+            }
+          />
+        </td>
 
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
-        <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
+        <td className={TableStyle.lastBorder} onClick={handleTableRowClick}>{actionBodyTemplate(data)}</td>
       </tr>
     ));
   };
-console.log(selectedPriority,"priority");
+  console.log(selectedPriority, "priority");
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -258,7 +273,7 @@ console.log(selectedPriority,"priority");
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>{renderRows()}</tbody>
+        <tbody >{renderRows()}</tbody>
       </table>
     </div>
   );

@@ -203,6 +203,7 @@ export default function Patient() {
           lastModifiedDate: res.lastModifiedDate,
           dueDate: res.dueDate,
           allocatedBy: res.allocatedBy,
+          allocatedOn: res.allocatedOn,
           priority: res.priority,
           processedStatus: res.processedStatus,
           createdAt: res.createdAt,
