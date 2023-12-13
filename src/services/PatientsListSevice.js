@@ -37,12 +37,12 @@ export const SearchPatientsList = async (pagenum, search) => {
     console.log(err);
   }
 };
-export const ChangePriority = async (patientId,year,priority) => {
+export const ChangePriority = async (patientId, year, priority) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.put(
-      `
-       ${ENDPOINTS?.apiEndoint}dbservice/change/priority?patietnId=${patientId}&year=${year}&priority=${priority}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/change/priority?patietnId=${patientId}&year=${year}&priority=${priority}`,
+      {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -52,5 +52,7 @@ export const ChangePriority = async (patientId,year,priority) => {
     return response.data;
   } catch (err) {
     console.log(err);
+    throw err; 
   }
 };
+

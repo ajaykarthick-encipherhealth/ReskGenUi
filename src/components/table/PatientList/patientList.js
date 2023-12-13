@@ -15,6 +15,8 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import { SVGICON } from "../../../jsx/constant/theme";
 import { getPriorityChange } from "../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+
 
 const { Option } = AntSelect;
 
@@ -24,6 +26,10 @@ function PatientTable({
   statusBodyTemplate,
   patientDetails,
 }) {
+  const [sortDueOrder, setSortDueOrder] = useState("asc");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
+  const [detailsContent, setDetailsContent] = useState(patinetListAll);
+
   const dispatch = useDispatch();
   const navigate = useRouter();
 
@@ -134,9 +140,29 @@ function PatientTable({
   const TickMark = () => (
     <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
   );
-
+  const sortTableByDate = (value) => {
+    const sortedContent = [...detailsContent];
+    if(value==='dueDate'){
+      if (sortDueOrder === "asc") {
+        sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
+        setSortDueOrder("desc");
+      } else {
+        sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
+        setSortDueOrder("asc");
+      }
+    }if(value==='completeDate'){
+      if (sortCompleteOrder === "asc") {
+        sortedContent.sort((a, b) => dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate)));
+        setSortCompleteOrder("desc");
+      } else {
+        sortedContent.sort((a, b) => dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate)));
+        setSortCompleteOrder("asc");
+      }
+    }
+    setDetailsContent(sortedContent);
+  };
   const renderRows = () => {
-    return patinetListAll?.map((data, index) => (
+    return detailsContent?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           {data.patientId}
@@ -181,10 +207,16 @@ function PatientTable({
             className={`custom-ant-select ${TableStyle.customAntSelect}`}
             showSearch={false}
             defaultValue={data?.priority ? data.priority : "set Priority"}
+            disabled={!data?.priority?true:false}
             onChange={(value) => {
-              handlePriorityChange(data.patientId, value);
-              console.log(value)
-              dispatch(getPriorityChange(data?.patientId,dayjs(data?.dueDate)?.format('YYYY'),value));
+              handlePriorityChange(data?.patientId, value);
+              dispatch(
+                getPriorityChange(
+                  data?.patientId,
+                  dayjs(data?.lastModifiedDate)?.format("YYYY"),
+                  value
+                )
+              );
             }}
             style={{ width: "80%" }}
           />
@@ -205,28 +237,31 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th onClick={() => requestSort("dueDate")}>
+            <th onClick={() => {
+              requestSort("dueDate")
+              sortTableByDate("dueDate")
+              }}>
               DUE DATE
-              <span style={{ padding: "10px" }}>
-                <FontAwesomeIcon
-                  icon={
-                    getClassNamesFor("dueDate") === "asc"
-                      ? faSortUp
-                      : faSortDown
-                  }
-                />
+              <span style={{ padding: "10px" ,cursor:"pointer"}}>
+              {sortDueOrder === "asc" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
               </span>
             </th>
-            <th onClick={() => requestSort("lastModifiedDate")}>
+            <th onClick={() =>{
+
+              requestSort("lastModifiedDate")
+              sortTableByDate("completeDate")
+            } }>
               COMPLETED DATE
-              <span style={{ padding: "10px" }}>
-                <FontAwesomeIcon
-                  icon={
-                    getClassNamesFor("lastModifiedDate") === "asc"
-                      ? faSortUp
-                      : faSortDown
-                  }
-                />
+              <span style={{ padding: "10px",cursor:"pointer" }}>
+              {sortCompleteOrder === "asc" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
               </span>
             </th>
             <th>ALLOCATED DATE</th>
