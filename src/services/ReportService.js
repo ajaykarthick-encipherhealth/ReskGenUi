@@ -60,7 +60,7 @@ export const GetSelectedReport = async (reportId) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/get?reportId=d4b1fc8d-40ba-4aea-8be7-132dd4f1b3db`,
+      `${ENDPOINTS?.apiEndoint}dbservice/reportdetails/get?reportId=${reportId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

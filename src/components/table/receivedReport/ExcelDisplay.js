@@ -1,50 +1,38 @@
 import React from "react";
-import * as XLSX from "xlsx";
 import styles from "./receivedReport.module.css";
-
-// export const exportToExcel = ({ data }) => {
-//   const ws = XLSX.utils.json_to_sheet(data);
-//   const wb = XLSX.utils.book_new();
-//   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-//   const excelBuffer = XLSX.write(wb, {
-//     bookType: "xlsx",
-//     type: "array",
-//     compression: true,
-//   });
-
-//   const blob = new Blob([excelBuffer], {
-//     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-//   });
-//   const dataExcel = URL.createObjectURL(blob);
-//   const link = document.createElement("a");
-//   link.href = dataExcel;
-//   link.download = "export.xlsx";
-//   link.click();
-// };
+import dayjs from "dayjs";
 
 const ExcelDisplay = ({ tableData }) => {
+  const renderRows = () => {
+    return tableData?.map((data, index) => (
+      <tr key={index}>
+        <td>{data.patientId}</td>
+        <td>{data.patientName}</td>
+        <td>{data.noOfValidCodes}</td>
+        <td>{dayjs(data?.processedDate).format("DD/MM/YYYY")}</td>
+        <td>{data.comments ? data.comments : ""}</td>
+        <td>{data.auditorname ? data.auditorname : ""}</td>
+        <td>{data.rafscore ? data.rafscore : ""}</td>
+        <td>{data.flag ? data.flag : ""}</td>
+      </tr>
+    ));
+  };
   return (
     <div style={{ width: "100%" }}>
       <table className={styles.exceltable}>
         <thead>
-          <tr>
-            {tableData.map((header, index) =>
-              Object.keys(header).map((value, index) => (
-                <th key={index}>{value}</th>
-              ))
-            )}
-          </tr>
+        <tr>
+          <th>PATIENT ID</th>
+          <th>PATIENT NAME</th>
+          <th>HCC</th>
+          <th>COMPLETED DATE</th>
+          <th>COMMENTS</th>
+          <th>AUDITOR NAME</th>
+          <th>Raf score</th>
+          <th>Flag</th>
+        </tr>
         </thead>
-        <tbody>
-          {tableData.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {Object.values(row).map((value, index) => (
-                <td key={index}>{value}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{renderRows()}</tbody>
       </table>
     </div>
   );

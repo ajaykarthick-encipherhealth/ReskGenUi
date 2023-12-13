@@ -5,19 +5,27 @@
 .exceltable {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #000;
+  border: 2px solid #c7c7c7;
   font-family: Arial, sans-serif;
 }
 
 .exceltable th,
 .exceltable td {
-  border: 1px solid #000;
+  border: 2px solid #c7c7c7;
   padding: 5px;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: start;
+  background-color: #fff;
 }
 
 .exceltable th {
-  background-color: #f0f0f0;
-  font-weight: bold;
+  background-color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+tbody.csvBody tr:nth-child(odd) td {
+  background-color: #F6F8FE;
 }
 .cont1 {
   width: 20%;
@@ -76,6 +84,7 @@
   margin-top: 20px;
   font-size: 18px;
   font-weight: 600;
+  display:flex;
   /* padding-left: 10px; */
 }
 .date {
@@ -115,7 +124,32 @@
   font-size: 12px;
   font-weight: 400;
   padding-top: 2px;
+ 
 }
+.download1 {
+    width: auto;
+    height: 22px;
+    border-radius: 8px;
+    background: #b8e0cc;
+    color: #48a878;
+    font-size: 12px;
+    font-weight: 400;
+    padding:2px 5px 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+  }
+.read {
+    width: auto;
+    height: 22px;
+    border-radius: 8px;
+    background: #FFDA99;
+    color: #FFA400;
+    font-size: 12px;
+    font-weight: 400;
+    padding:2px 5px 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+  }
 .download:active,
 .download:hover {
   background: #b8e0cc;
@@ -127,4 +161,3 @@
   font-weight: 400;
   font-size: 14px;
 }
-
