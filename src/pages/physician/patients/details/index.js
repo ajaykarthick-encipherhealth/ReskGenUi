@@ -274,6 +274,8 @@ const Details = ({ }) => {
   const [userDetails, setUserDetails] = useState("");
   const [currentTime, setCurrentTime] = useState("");
   const [commentsTrigger, setCommentsTrigger] = useState(false);
+  const [captureSectionMatching, setCaptureSectionMatching] = useState(false);
+  const [encounterDateMatching, setEncounterDateMatching] = useState(false);
 
 
 
@@ -649,6 +651,27 @@ const Details = ({ }) => {
         validDis = result.validDisease;
         validDiseaseNewRes = result.validDisease;
         invalidDiseaseNewRes = result.invalidDisease;
+        var validDisArray=[];
+        var validEncounterDateArray=[];
+        validDiseaseNewRes.map((res, index) => {
+
+          // for (var key in res.encounterDate) {
+          //   validEncounterDateArray.push({ name: res.encounterDate[key] });
+          // }
+          const encounterDatearray = res.encounterDate.split(',');
+
+          validDisArray.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition:res.defaultPosition
+          });
+
+        });
+
         if (result.deletedDiseases != null) {
           deleteHccList = result.deletedDiseases;
         }
@@ -763,7 +786,7 @@ const Details = ({ }) => {
         // }
         
 
-        setNewValidDiseaseList(validDiseaseNewRes);
+        setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
         setValidDiseasesList(validDiseasesArray);
@@ -776,32 +799,14 @@ const Details = ({ }) => {
         setDeletedHccList(deleteHccList);
 
 
-        console.log(validDiseaseNewRes);
+        console.log(validDisArray);
 
         
         var capturedSectionsColorsMatching = [];
+        var capturedSectionsArr = [];
 
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2) => {
-            console.log(res2)
-            capturedSectionsColorsMatching.push({
-              name:res2,
-              "parentDisCode":res.diagnosisCode
-            })
-           
-          })
-        })
+
         
-
-       var test =  colorCodeMatch(
-        validDiseaseNewRes,
-          "hpi"
-        )
-
-        console.log(capturedSectionsColorsMatching)
-
-
-
         const COLORS = [
           "bg-bg-seven",
           "bg-third",
@@ -813,6 +818,78 @@ const Details = ({ }) => {
           "bg-bg-ten",
           "bg-bg-leven",
         ];
+
+        const COLORS2 = [
+          "sectionTag1",
+          "sectionTag2",
+          "sectionTag3",
+          "sectionTag4",
+          "sectionTag5",
+          "sectionTag6",
+          "sectionTag7",
+          "sectionTag8"
+        ];
+
+
+        const COLORS3 = [
+          "encounterDateTag1",
+          "encounterDateTag2",
+          "encounterDateTag3",
+          "encounterDateTag4",
+          "encounterDateTag5",
+          "encounterDateTag6",
+          "encounterDateTag7",
+          "encounterDateTag8"
+        ];
+
+        validDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2,index) => {
+            capturedSectionsArr.push({
+              name:res2,
+              "diagnosisCode":res.diagnosisCode,
+            });
+           
+          })
+        }) 
+
+        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
+
+        dublicateSectionArr.map((res,index) =>{
+          capturedSectionsColorsMatching.push({
+            "name":res.name,
+            "diagnosisCode":res.diagnosisCode,
+            "colors":COLORS2[index]
+          });         
+        })
+        setCaptureSectionMatching(capturedSectionsColorsMatching);
+
+
+        var encounterDateColorsMatching = [];
+        var encounterDateArr = [];
+
+        validDiseaseNewRes.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name:res2,
+            });           
+          })
+        }) 
+
+
+        var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
+
+        encounterDateArrDublicatesRemove.map((res,index) =>{
+          encounterDateColorsMatching.push({
+            "name":res.name,
+            "colors":COLORS3[index]
+          });         
+        })
+
+        setEncounterDateMatching(encounterDateColorsMatching);
+
+
+
 
         var meatListArr = [];
         var meatMoniterHead = [];
@@ -4498,6 +4575,47 @@ const Details = ({ }) => {
   };
 
 
+  const getCaptureSectionBackground = (value)=> {
+    return  value.map((res) => {
+      const result = captureSectionMatching.filter(
+        (res2) => res2.name == res
+      );
+      var backColor = result[0].colors;
+     var sectionMapArr =
+      (<Badge
+      className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
+      {res}</Badge>)
+      return sectionMapArr  
+    });
+  }
+
+
+  const getEncounterDateBackground = (value)=> {
+    return  value.map((res) => {
+      const result = encounterDateMatching.filter(
+        (res2) => res2.name == res
+      );
+      var backColor = result[0].colors;
+     var sectionMapArr =
+      // (<Badge
+      // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
+      // {res}</Badge>)
+
+(<Badge
+className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+>
+<i>
+  <CalendarOutlined className={visitStyles.calenderIcon} />
+</i>
+{res}
+</Badge>
+    )
+      return sectionMapArr  
+    });
+  }
+
+
+
 
 
 
@@ -5160,7 +5278,7 @@ const Details = ({ }) => {
                                                               </Popconfirm>
                                                             </div>
                                                             <div className="hoverActiveHcc">
-                                                              <div className="d-flex justify-content-sm-between valid-providerdocument ">
+                                                              <div  className={`${visitStyles.encounterAndSectionHeader}`} >
                                                                 {/* <Tooltip title={patientDocumentResult.patientName}>
                                                          <Avatar className={visitStyles.provider_name_style}>U</Avatar>
                                                          </Tooltip> */}
@@ -5192,51 +5310,16 @@ const Details = ({ }) => {
                                                                     }
                                                                   >
                                                                     <Badge
-                                                                      className={`mt-2 text-start w-100px ${visitStyles.manuallyAdded}`}
+                                                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                                                     >
                                                                       Manually Added
 
                                                                     </Badge>
                                                                   </Popover> : null}
-                                                                {data.encounterDate != null ?
-                                                                  <Popover
-                                                                    placement="topLeft"
-                                                                    content={
-                                                                      data.encounterDate
-                                                                    }
-                                                                  >
-                                                                    <Badge
-                                                                      className={`mt-2 text-start w-100px ${visitStyles.encounterDate}`}
-                                                                    >
-                                                                      <i>
-                                                                        <CalendarOutlined className={visitStyles.calenderIcon} />
-                                                                      </i>
-                                                                      {replaceString(
-                                                                        data.encounterDate
-                                                                      )}
-                                                                    </Badge>
-                                                                  </Popover> : null}
-                                                                <Popover
-                                                                  placement="topLeft"
-                                                                  content={
-                                                                    data.capturedSections
-                                                                  }
-                                                                >
-                                                                  <Badge
-                                                                    className={`mt-2 text-start cr-pointer  w-100px ${visitStyles.captureheader}`}
-                                                                    onClick={() =>
-                                                                      handleOpenModalCombinationCode(
-                                                                        data.diagnosisCode,
-                                                                        data.capturedSections,
-                                                                        "valid"
-                                                                      )
-                                                                    }
-                                                                  >
-                                                                    {replaceCaptureSection(
-                                                                      data.capturedSections
-                                                                    )}
-                                                                  </Badge>
-                                                                </Popover>
+                                                                  {getEncounterDateBackground(data.encounterDate)}
+                                                              
+
+                                                                   {/* {getCaptureSectionBackground(data.capturedSections)} */}
                                                                 {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
                                                       <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
@@ -5246,6 +5329,9 @@ const Details = ({ }) => {
                                                         HPI Test Urlplan
                                                       </Badge>
                                                       </Popover> */}
+                                                              </div>
+                                                              <div  className={`${visitStyles.encounterAndSectionHeader}`} > 
+                                                               {getCaptureSectionBackground(data.capturedSections)}                                                               
                                                               </div>
                                                             </div>
                                                           </div>

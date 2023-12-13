@@ -12740,4 +12740,78 @@ tbody > tr {
   border-color: #04306f;
 }
 
+.sectionTag1{
+  background-color: rgba(201, 52, 210, 0.2) !important ;
+  color: rgb(201, 52, 210) !important;
+}
+.sectionTag2{
+  background-color: rgba(84, 217, 43, 0.2) !important;
+  color: rgb(84, 217, 43) !important;
+}
+
+.sectionTag3{
+  background-color: rgba(15, 158, 46, 0.2) !important;
+  color: rgb(15, 158, 46) !important;
+}
+.sectionTag4{
+  background-color: rgba(42, 182, 17, 0.2) !important;
+  color: rgb(42, 182, 17) !important;
+
+}
+.sectionTag5{
+  background-color: rgba(85, 219, 224, 0.2) !important;
+  color: rgb(85, 219, 224) !important;
+}
+.sectionTag6{
+  background-color: rgba(64, 52, 56, 0.2) !important;
+  color: rgb(64, 52, 56) !important;
+}
+.sectionTag7{
+  background-color: rgba(148, 236, 49, 0.2) !important;
+  color: rgb(148, 236, 49) !important;
+}
+.sectionTag8{
+  background-color:rgba(154, 125, 165, 0.2) !important;
+  color: rgb(154, 125, 165) !important;
+}
+
+.encounterDateTag1{
+  background-color: rgba(6, 252, 126, 0.2) !important;
+  color: rgb(6, 252, 126) !important;
+}
+.encounterDateTag2{
+  background-color: rgba(125, 117, 129, 0.2) !important;
+  color: rgb(125, 117, 129) !important;
+  
+}
+.encounterDateTag3{
+  background-color: rgba(221, 90, 224, 0.2) !important;
+  color: rgb(221, 90, 224) !important;
+}
+.encounterDateTag4{
+  background-color: rgba(37, 138, 62, 0.2) !important;
+  color: rgb(37, 138, 62) !important;
+  
+}
+.encounterDateTag5{
+  background-color: rgba(108, 30, 179, 0.2) !important;
+  color: rgb(108, 30, 179) !important;
+  
+}
+.encounterDateTag6{
+  background-color: rgba(229, 254, 78, 0.2) !important;
+  color: rgb(218, 254, 2) !important;
+}
+.encounterDateTag7{
+  background-color: rgba(72, 204, 225, 0.2) !important;
+  color: rgb(72, 204, 225) !important;
+  
+}
+.encounterDateTag8{
+  background-color: rgba(236, 175, 165, 0.2);
+  color: rgb(236, 175, 165) !important;
+  
+}
+
+
 
