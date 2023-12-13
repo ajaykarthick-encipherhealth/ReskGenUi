@@ -129,11 +129,11 @@ const CompletedStatus = () => {
   const bullets = [
     {
       color: "#4A3AFF",
-      name: "Allocated",
+      name: "Completed",
     },
     {
       color: "#FF718B",
-      name: "Completed",
+      name: "Allocated",
     },
   ];
 

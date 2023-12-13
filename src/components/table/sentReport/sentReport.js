@@ -51,7 +51,7 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
+        <thead className={TableStyle.classTTotalhead}>
           <tr>
             <th>REPORT ID</th>
             <th>REPORT NAME</th>
@@ -60,6 +60,7 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
             <th>DATE</th>
           </tr>
         </thead>
+
         <tbody>
           {details?.data?.map((row, index) => {
             const formattedDate = row.receiveDate
@@ -67,13 +68,14 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
               : "Invalid Date";
 
             return (
-              <tr key={index}>
+              <tr key={index} style={{ height: "40px" }}>
                 <td
                   style={{
                     borderTop: "  0.2px solid #e1e1e1",
                     borderLeft: "  0.2px solid #e1e1e1",
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row._id}
                 </td>
@@ -83,6 +85,7 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
 
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.reportName}
                 </td>
@@ -93,6 +96,7 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
                     cursor: "pointer",
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   <Popover trigger="click" content={popCOntent}>
                     <div
@@ -109,6 +113,7 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
                     borderBottom: "  0.2px solid #e1e1e1",
                     borderRight: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {formattedDate}
                 </td>
@@ -125,10 +130,12 @@ function SentReportTable({ details, onSentPageChange ,paginationFirst}) {
           onPageChange={onSentPageChange}
         />
         <div className="total-pages">
+
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
+
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

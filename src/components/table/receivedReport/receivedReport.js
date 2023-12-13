@@ -36,10 +36,11 @@ function ReceivedReport({
     setReportUser(row);
     setOpenModal(true);
   };
+
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
+        <thead className={TableStyle.classTTotalhead}>
           <tr>
             <th>REPORT ID</th>
             <th>REPORT NAME</th>
@@ -62,13 +63,14 @@ function ReceivedReport({
               : "Invalid Date";
 
             return (
-              <tr key={index} onClick={() => handleReceiverReport(row)}>
+              <tr key={index} style={{ height: "40px" }} onClick={() => handleReceiverReport(row)}>
                 <td
                   style={{
                     borderTop: "0.2px solid #e1e1e1",
                     borderLeft: "0.2px solid #e1e1e1",
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.reportId}
                 </td>
@@ -78,6 +80,7 @@ function ReceivedReport({
 
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.reportName}
                 </td>
@@ -87,6 +90,7 @@ function ReceivedReport({
 
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.role}
                 </td>
@@ -96,6 +100,7 @@ function ReceivedReport({
 
                     borderBottom: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {row.sender}
                 </td>
@@ -106,6 +111,7 @@ function ReceivedReport({
                     borderBottom: "  0.2px solid #e1e1e1",
                     borderRight: "  0.2px solid #e1e1e1",
                   }}
+                  className={TableStyle.childBorder}
                 >
                   {formattedDate}
                 </td>
