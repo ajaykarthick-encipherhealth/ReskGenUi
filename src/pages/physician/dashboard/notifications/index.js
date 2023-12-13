@@ -82,7 +82,9 @@ const Notifications = () => {
 
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
-          <div className={styles.container}>{notificationData}</div>
+          <div className={styles.container}>
+            {notificationData}
+          </div>
         </Card>
       </div>
       <Modal

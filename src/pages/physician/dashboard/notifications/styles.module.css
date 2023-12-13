@@ -12,7 +12,7 @@
 }
 .msgDiv {
   display: flex;
-  height: 75px;
+  height: auto;
 }
 .msgCOntainer {
   width: 100%;
@@ -41,6 +41,7 @@
   overflow: hidden;
   position: relative;
 }
+
 
 .container:hover {
   overflow-y: scroll;
