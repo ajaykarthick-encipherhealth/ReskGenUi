@@ -15,6 +15,8 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
+import TableStyle from "../../../../components/table/table.module.css";
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -944,7 +946,7 @@ const Details = ({ }) => {
             });
           })
         })
-        result.suggestRadiology.map((res) => {
+        result.suggestRadiology?.map((res) => {
           const array = res.encounterDate.split(',');
           array.map((res2) => {
             encounterDateArr.push({
@@ -953,7 +955,7 @@ const Details = ({ }) => {
           })
         })
 
-        result.suggestLab.map((res) => {
+        result.suggestLab?.map((res) => {
           const array = res.encounterDate.split(',');
           array.map((res2) => {
             encounterDateArr.push({
@@ -1189,13 +1191,54 @@ const Details = ({ }) => {
           rafScore = result.rafScore;
         }
 
-        var unMacthResList = [];
-
         validDis = result.validDisease;
         validDiseaseNewRes = result.validDisease;
-        invalidDiseaseNewRes = result.invalidDisease != null ? result.invalidDisease : [];
+        // invalidDiseaseNewRes =validDisArray;
+        var validDisArray = [];
+        var validEncounterDateArray = [];
+        validDiseaseNewRes.map((res, index) => {
+          const encounterDatearray = res.encounterDate.split(',');
+          validDisArray.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition
+          });
+
+        });
+
+        result.invalidDisease.map((res, index) => {
+          const encounterDatearray = res.encounterDate.split(',');
+          invalidDiseaseNewRes.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition
+          });
+
+        });
+
+
         if (result.deletedDiseases != null) {
-          deleteHccList = result.deletedDiseases;
+          result.deletedDiseases.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
+            deleteHccList.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition: res.defaultPosition
+            });
+
+          });
         }
         if (result.suggestRadiology != null) {
           // var checkDosRadio = [];
@@ -1204,11 +1247,12 @@ const Details = ({ }) => {
           // }
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
+              encounterDate: encounterDatearray,
               getPlace: "Radio",
               isHccValid: true,
             });
@@ -1218,11 +1262,12 @@ const Details = ({ }) => {
         if (result.suggestLab != null) {
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
+              encounterDate: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
             });
@@ -1232,6 +1277,7 @@ const Details = ({ }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
+            const encounterDatearray = res.encounterDate.split(',');
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -1239,7 +1285,7 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
+                encounterDate: encounterDatearray,
                 getPlace: "Hcc",
               });
             } else {
@@ -1258,7 +1304,7 @@ const Details = ({ }) => {
                 isHccValid: res.isHccValid,
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
+                encounterDate: encounterDatearray,
                 getPlace: "Hcc",
               });
             }
@@ -1266,8 +1312,8 @@ const Details = ({ }) => {
         }
 
         invalidDis = result.invalidDisease;
-        comboDis = result.comboDisease != null ? result.comboDisease : [];
-        meatCri = result.meatCriteria != null ? result.meatCriteria : [];
+        comboDis = result.comboDisease;
+        meatCri = result.meatCriteria;
 
         // validDiseaseNewRes = validDiseaseNew[2019]
 
@@ -1308,18 +1354,23 @@ const Details = ({ }) => {
         // }
 
 
-        console.log(invalidDiseaseNewRes)
-        setNewValidDiseaseList(validDiseaseNewRes);
+        setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
         setComboDiseaseCodesList(comboDis);
-        // setDosYear(dosYearArr);
         setRAFScore(rafScore);
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
+
+
+        console.log(validDisArray);
+
+
+        var capturedSectionsColorsMatching = [];
+        var capturedSectionsArr = [];
 
 
 
@@ -1334,6 +1385,140 @@ const Details = ({ }) => {
           "bg-bg-ten",
           "bg-bg-leven",
         ];
+
+        const COLORS2 = [
+          "sectionTag1",
+          "sectionTag2",
+          "sectionTag3",
+          "sectionTag4",
+          "sectionTag5",
+          "sectionTag6",
+          "sectionTag7",
+          "sectionTag8"
+        ];
+
+
+        const COLORS3 = [
+          "encounterDateTag1",
+          "encounterDateTag2",
+          "encounterDateTag3",
+          "encounterDateTag4",
+          "encounterDateTag5",
+          "encounterDateTag6",
+          "encounterDateTag7",
+          "encounterDateTag8"
+        ];
+
+        validDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2, index) => {
+            capturedSectionsArr.push({
+              name: res2,
+              "diagnosisCode": res.diagnosisCode,
+            });
+
+          })
+        })
+        invalidDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2, index) => {
+            capturedSectionsArr.push({
+              name: res2,
+              "diagnosisCode": res.diagnosisCode,
+            });
+
+          })
+        })
+
+        suggestListAll.map((res) => {
+          res.capturedSections.map((res2, index) => {
+            capturedSectionsArr.push({
+              name: res2,
+              "diagnosisCode": res.diagnosisCode,
+            });
+
+          })
+        })
+
+        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
+
+        dublicateSectionArr.map((res, index) => {
+          capturedSectionsColorsMatching.push({
+            "name": res.name,
+            "diagnosisCode": res.diagnosisCode,
+            "colors": COLORS2[index]
+          });
+        })
+        setCaptureSectionMatching(capturedSectionsColorsMatching);
+        
+
+
+        var encounterDateColorsMatching = [];
+        var encounterDateArr = [];
+
+        validDiseaseNewRes.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+        result.invalidDisease.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+        result.unMatchedDisease.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+        result.suggestRadiology?.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+        result.suggestLab?.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+
+        console.log(encounterDateArr)
+
+
+        var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
+
+        encounterDateArrDublicatesRemove.map((res, index) => {
+          encounterDateColorsMatching.push({
+            "name": res.name,
+            "colors": COLORS3[index]
+          });
+        })
+
+        setEncounterDateMatching(encounterDateColorsMatching);
+
+
+        console.log(capturedSectionsColorsMatching)
+        console.log(encounterDateColorsMatching)
+
+
+
 
         var meatListArr = [];
         var meatMoniterHead = [];
@@ -1379,7 +1564,7 @@ const Details = ({ }) => {
           dublicateRemoveArr.map((res3, index) => {
             allMeatHeadColor.push({
               header: res3.header,
-              color: COLORS[index],
+              color: COLORS3[index],
             });
           });
           allMeatHeadColorArr = allMeatHeadColor;
@@ -1462,154 +1647,6 @@ const Details = ({ }) => {
         });
         setMeatCriteriaList(meatListArr);
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
-        setIsLoadingDos(false);
-      } else {
-        setIsLoading(false);
-      }
-    }
-  };
-
-  const getPatientDetailsRadiology = async (orgId, tenId) => {
-    // setIsLoadingDos(true);
-    var patientId = localStorage.getItem("patientId");
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
-    );
-    if (response.data) {
-      setRadiologyResCheck(true);
-      var result = response.data;
-      if (result.radiologyFileDetail != null) {
-        getPatientPdfFileRadiology(
-          result.radiologyFileDetail.azureBlobPath,
-          tenId
-        );
-      }
-      if (result.validDisease != null) {
-        setNewValidDiseaseListRadiology(result.validDisease);
-      }
-      if (result.invalidDisease != null) {
-        setInNewValidDiseaseListRadiology(result.invalidDisease);
-      }
-
-      if (result.comboDisease != null) {
-        setComboDiseaseCodesListRadiology(result.comboDisease);
-      }
-      if (result.meatCriteria != null) {
-        var meatCri = result.meatCriteria;
-
-        // const COLORS = [
-        //   "bg-bg-seven",
-        //   "bg-third",
-        //   "bg-bg-four",
-        //   "bg-bg-five",
-        //   "bg-bg-six",
-        //   "bg-bg-eight",
-        //   "bg-bg-nine",
-        //   "bg-bg-ten",
-        //   "bg-bg-leven",
-        // ];
-
-        const COLORS = [
-          "encounterDateTag1",
-          "encounterDateTag2",
-          "encounterDateTag3",
-          "encounterDateTag4",
-          "encounterDateTag5",
-          "encounterDateTag6",
-          "encounterDateTag7",
-          "encounterDateTag8"
-        ];
-
-        var meatListArr = [];
-        var meatMoniterHead = [];
-        var meatEvaluteHead = [];
-        var meatAssesmentHead = [];
-        var meatTreatMentHead = [];
-        var allMeatHead = [];
-        var allMeatHeadColorArr = [];
-        var allMeatHeadColor = [];
-        var dublicateRemoveSecondArr = [];
-
-        meatCri.map((res, index) => {
-          if (res.monitorCapturedFromHeader != "") {
-            meatMoniterHead.push({
-              header: res.monitorCapturedFromHeader,
-            });
-          }
-          if (res.evaluateCapturedFromHeader != "") {
-            meatEvaluteHead.push({
-              header: res.evaluateCapturedFromHeader,
-            });
-          }
-          if (res.assessmentCapturedFromHeader != "") {
-            meatAssesmentHead.push({
-              header: res.assessmentCapturedFromHeader,
-            });
-          }
-          if (res.treatmentCapturedFromHeader != "") {
-            meatTreatMentHead.push({
-              header: res.treatmentCapturedFromHeader,
-            });
-          }
-          var newArray = [];
-          newArray = [
-            ...allMeatHead,
-            ...meatMoniterHead,
-            ...meatEvaluteHead,
-            ...meatAssesmentHead,
-            ...meatTreatMentHead,
-          ];
-          var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-          dublicateRemoveArr.map((res3, index) => {
-            allMeatHeadColor.push({
-              header: res3.header,
-              color: COLORS[index],
-            });
-          });
-          allMeatHeadColorArr = allMeatHeadColor;
-
-          dublicateRemoveSecondArr = getUniqueListBy(
-            allMeatHeadColor,
-            "header"
-          );
-          setMeatColorCodeList(dublicateRemoveSecondArr);
-        });
-
-        meatCri.map((res, index) => {
-          meatListArr.push({
-            diagnosisCode: res.diagnosisCode,
-            diseaseName: res.diseaseName,
-            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-            monitorCapturedFromHeaderColor: colorCodeMatch(
-              dublicateRemoveSecondArr,
-              res.monitorCapturedFromHeader
-            ),
-            assessmentCapturedFromHeaderColor: colorCodeMatch(
-              dublicateRemoveSecondArr,
-              res.assessmentCapturedFromHeader
-            ),
-            evaluateCapturedFromHeaderColor: colorCodeMatch(
-              dublicateRemoveSecondArr,
-              res.evaluateCapturedFromHeader
-            ),
-            treatmentCapturedFromHeaderColor: colorCodeMatch(
-              dublicateRemoveSecondArr,
-              res.treatmentCapturedFromHeader
-            ),
-            monitorColor: COLORS[index],
-            meatColor: COLORS[index],
-            assessment: res.assessment,
-            monitor: res.monitor,
-            evaluate: res.evaluate,
-            treatment: res.treatment,
-            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-          });
-        });
-        setMeatCriteriaListRadiology(meatListArr);
         setIsLoadingDos(false);
 
         // setMeatCriteriaListRadiology(result.meatCriteria)
@@ -3022,7 +3059,7 @@ const Details = ({ }) => {
     if (check === "valid") {
       setSelectActiveCode(value);
       var splitPoint = "";
-      splitPoint = disDescription[0];
+      splitPoint = disDescription;
       setTimeout(() => {
         highlight({
           keyword: splitPoint,
@@ -4729,8 +4766,16 @@ const Details = ({ }) => {
         (res2) => res2.name == res
       );
       var backColor = result[0]?.colors;
+      var disCode = result[0]?.diagnosisCode;
+    
       var sectionMapArr =
-        (<Badge
+        (<Badge onClick={() =>
+                                                                      handleOpenModalCombinationCode(
+                                                                        disCode,
+                                                                        res,
+                                                                        "valid"
+                                                                      )
+                                                                    }
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
           {res}</Badge>)
       return sectionMapArr
@@ -4848,7 +4893,33 @@ const Details = ({ }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-2 col-sm-12">
+                      <div className="col-xl-1 col-sm-12">
+                        <div className={visitStyles.priorityStatus}>
+                          {patienIdDetails.priority == "URGENT" ?
+                        <>
+          <i>{SVGICON.alert}</i>{" "}
+          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
+        </> :patienIdDetails.priority == "HIGH" ?
+        <>
+          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+          <span style={{ fontSize: "13px" }}>High</span>{" "}
+        </>:patienIdDetails.priority == "NORMAL" ?
+        <>
+          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
+        </>:patienIdDetails.priority == "LOW" ?
+        <>
+          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+          <span style={{ fontSize: "13px" }}>Low</span>{" "}
+        </>:null}
+                        </div>
+                      </div>
+                      <div className="col-xl-1 col-sm-12">
+                        <div className={visitStyles.priorityStatus}>
+                          
+                        </div>
+                      </div>
+                      <div className="col-xl-1 col-sm-12">
                         <div className="card-body">
                           <div className="row">
                             <div className="col-xl-12 col-sm-12">
@@ -4861,7 +4932,7 @@ const Details = ({ }) => {
                                     <Select
                                       onChange={(e) => dosOnChange(e)}
                                       options={dosYearRadiology}
-                                      className="custom-react-select"
+                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
                                       defaultValue={dosYearDefalutSelectRadiology}
                                       isSearchable={false}
 
@@ -4870,7 +4941,7 @@ const Details = ({ }) => {
                                     <Select
                                       onChange={(e) => dosOnChange(e)}
                                       options={labFileDosList}
-                                      className="custom-react-select"
+                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
                                       defaultValue={labFileDosListDefaultSelect}
                                       isSearchable={false}
                                     />
@@ -4878,7 +4949,7 @@ const Details = ({ }) => {
                                     <Select
                                       onChange={(e) => dosOnChange(e)}
                                       options={dosYear}
-                                      className="custom-react-select"
+                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
                                       defaultValue={dosYearDefalutSelect}
                                       isSearchable={false}
                                     />
@@ -4889,7 +4960,7 @@ const Details = ({ }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-2 col-sm-12">
+                      <div className="col-xl-1 col-sm-12">
                         <div className={`${visitStyles.actionbtnContainer}`}>
                           {patienIdDetails.processedStatus == "COMPLETED" ?
 
@@ -5303,6 +5374,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.container}>
                                                   <div className={visitStyles.hccStickey_head}>
 
                                                     {newValidDiseaseList.map(
@@ -5425,7 +5497,7 @@ const Details = ({ }) => {
                                                                 </div>
                                                               </Popconfirm>
                                                             </div>
-                                                            <div className="hoverActiveHcc">
+                                                            <div  className={`${visitStyles.hoverActiveHcc}`}>
                                                               <div className={`${visitStyles.encounterAndSectionHeader}`} >
                                                                 {/* <Tooltip title={patientDocumentResult.patientName}>
                                                          <Avatar className={visitStyles.provider_name_style}>U</Avatar>
@@ -5489,6 +5561,7 @@ const Details = ({ }) => {
                                                       )
                                                     )}
                                                   </div>
+                                                  </div>
                                                 </ul>
                                               </div>
                                               <div className="col-xl-4">
@@ -5509,6 +5582,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.suggestedcontainer}>
                                                   <div className={visitStyles.hccStickey_head}>
                                                     {suggestedHccList?.map((data) => {
                                                       return (
@@ -5673,7 +5747,7 @@ const Details = ({ }) => {
                                                                       </div>
                                                                     </Popconfirm>}
                                                                 </div>
-                                                                <div className="hoverActiveHcc">
+                                                                <div  className={`${visitStyles.hoverActiveHcc}`}>
                                                                   <div className="">
 
                                                                     {getEncounterDateBackground(data.encounterDate)}
@@ -5720,6 +5794,7 @@ const Details = ({ }) => {
                                                       );
                                                     })}
                                                   </div>
+                                                  </div>
                                                 </ul>
                                               </div>
 
@@ -5741,6 +5816,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.container}>
                                                   <div className={visitStyles.hccStickey_head}>
                                                     {deletedHccList.map((data, i) => (
                                                       <li>
@@ -5837,7 +5913,7 @@ const Details = ({ }) => {
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
-                                                          <div className="hoverActiveHcc">
+                                                          <div  className={`${visitStyles.hoverActiveHcc}`}>
                                                             <div className="">
 
                                                               {getEncounterDateBackground(data.encounterDate)}
@@ -5859,6 +5935,7 @@ const Details = ({ }) => {
                                                         </div>
                                                       </li>
                                                     ))}
+                                                  </div>
                                                   </div>
                                                 </ul>
                                               </div>
@@ -6015,6 +6092,7 @@ const Details = ({ }) => {
                                                   </div>
                                                 </div>
                                                 {comboDiseaseCodesList.length != 0 ?
+                                                <div className={visitStyles.container}>
                                                   <div className={visitStyles.hccStickey_head}>
                                                     {comboDiseaseCodesList?.map(
                                                       (item) => {
@@ -6086,7 +6164,8 @@ const Details = ({ }) => {
                                                         );
                                                       }
                                                     )}
-                                                  </div> : null}
+                                                  </div> 
+                                                  </div>:null}
 
                                                 {comboDiseaseCodesList.length == 0 ? (
 
@@ -6125,6 +6204,7 @@ const Details = ({ }) => {
                                                 {invalidComboDiseaseCodesList.length !=
                                                   0 ? (
                                                   <>
+                                                  <div className={visitStyles.container}>
                                                     <div className={visitStyles.hccStickey_head}>
                                                       {invalidComboDiseaseCodesList?.map(
                                                         (item) => {
@@ -6193,7 +6273,8 @@ const Details = ({ }) => {
                                                           );
                                                         }
                                                       )}
-                                                    </div>
+                                                    </div> </div>
+
                                                   </>
                                                 ) : null}
                                               </div>
@@ -6235,6 +6316,7 @@ const Details = ({ }) => {
                                             </div>
                                           </div>
                                           {meatCriteriaList.length != 0 ?
+                                             <div className={visitStyles.container}>
                                             <div
                                               className={visitStyles.hccStickey_head}
                                             >
@@ -6792,7 +6874,8 @@ const Details = ({ }) => {
                                                   )}
                                                 </>
                                               ) : null}
-                                            </div> : null}
+                                            </div> 
+                                            </div>:null}
                                         </div>
                                       </Tab.Pane>
                                       <Tab.Pane id="my-posts" eventKey="RafScore">
@@ -7180,8 +7263,188 @@ const Details = ({ }) => {
                                         </div>
                                       </Tab.Pane>
                                       <Tab.Pane id="my-posts" eventKey="file">
-                                        <div className="my-post-content pt-3">
-                                          <div>
+                                        <div className="my-post-content pt-3 row">
+                                        <div className="col-xl-2">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.hcc_title_name}`}
+                                                    >
+
+                                                      HCC
+                                                      <FontAwesomeIcon onClick={() =>
+                                                        addValidDiseases()
+                                                      }
+                                                        icon={faPlus}
+                                                      />
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.hcc_title_badge}`}
+                                                      >
+                                                        {newValidDiseaseList.length}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={visitStyles.container}>
+                                                  <div className={visitStyles.hccStickey_head}>
+
+                                                    {newValidDiseaseList.map(
+                                                      (data, i) => (
+                                                        <li>
+                                                          <div
+                                                            className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                                          >
+                                                            <div
+                                                              className={`${visitStyles.hcc_card_nameHead}`}
+                                                            >
+                                                              <div
+                                                                className="media-body"
+                                                                onClick={() =>
+                                                                  handleOpenModalCombinationCode(
+                                                                    data.diagnosisCode,
+                                                                    data.actualDescription,
+                                                                    "valid2"
+                                                                  )
+                                                                }
+                                                              >
+                                                                <span className="mb-1 disease-name d-flex">
+
+                                                                  <span className="valid-dis-name">
+
+
+                                                                    {
+                                                                      data.diagnosisCode
+                                                                    }
+                                                                  </span>{" "}
+                                                                  -{" "}
+                                                                  {
+                                                                    data.actualDescription
+                                                                  }
+
+                                                                </span>
+                                                              </div>
+
+                                                              {data.defaultPosition == "VALID" ?
+                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span>
+                                                                  : data.defaultPosition == "DELETED" ?
+
+                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : null}
+                                                              <Popover
+                                                                onClick={() =>
+                                                                  getValidHccDetails(
+                                                                    data.actualDescription,
+                                                                    data.diagnosisCode
+                                                                  )
+                                                                }
+                                                                content={
+                                                                  validHccDetails
+                                                                }
+                                                                title={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                placement="bottom"
+                                                                trigger="click"
+                                                              >
+                                                                <Tooltip title="HCC Veriosn Details" placement="bottom">
+                                                                  <i className="cr-pointer">
+                                                                    {SVGICON.infoIcon}
+                                                                  </i>
+                                                                </Tooltip>
+                                                              </Popover>
+
+
+                                                              <Popconfirm
+                                                                title="Choose an action"
+                                                                icon={
+                                                                  <QuestionCircleOutlined
+                                                                    style={{
+                                                                      color: "blue",
+                                                                    }}
+                                                                  />
+                                                                }
+                                                                okText="Move to Deleted"
+                                                                cancelText="Move to Suggested"
+                                                                onCancel={
+                                                                  validToSuggested
+                                                                }
+                                                                okButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "primary"
+                                                                    : "default",
+                                                                }}
+                                                                cancelButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "danger"
+                                                                    : "default",
+                                                                }}
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  confirmvalid
+                                                                }
+                                                                placement="leftTop"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
+                                                                }
+                                                              >
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
+                                                                >
+                                                                  {<FontAwesomeIcon
+                                                                    icon={faArrowsAlt}
+                                                                    style={{ size: 8, color: "#a80404" }}
+                                                                  />}
+                                                                </div>
+                                                              </Popconfirm>
+                                                            </div>
+                                                            <div  className={`${visitStyles.hoverActiveHcc}`}>
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+
+                                                                {getEncounterDateBackground(data.encounterDate)}
+                                                                {data.isManuallyAdded == true ?
+                                                                  <Popover
+                                                                    placement="topLeft"
+                                                                    content={
+                                                                      "Manually Added"
+                                                                    }
+                                                                  >
+                                                                    <Badge
+                                                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                                                    >
+                                                                      Manually Added
+
+                                                                    </Badge>
+                                                                  </Popover> : null}
+                                                              </div>
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                {getCaptureSectionBackground(data.capturedSections)}
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </li>
+
+                                                      )
+                                                    )}
+                                                  </div>
+                                                  </div>
+                                                </ul>
+                                              </div>
+                                              <div className="col-xl-8">
+                                              {/* <div>
                                             <button
                                               onClick={() =>
                                                 openNewTabDownloadPdf()
@@ -7190,13 +7453,13 @@ const Details = ({ }) => {
                                             >
                                               Open New Tab
                                             </button>
-                                          </div>
+                                          </div> */}
                                           <div className="card-body p-0">
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                               <div
                                                 style={{
                                                   height: "70vh",
-                                                  maxWidth: "900px",
+                                                  maxWidth: "800px",
                                                   marginLeft: "auto",
                                                   marginRight: "auto",
                                                 }}
@@ -7225,6 +7488,8 @@ const Details = ({ }) => {
                                               </div>
                                             </Worker>
                                           </div>
+                                              </div>
+                                      
                                         </div>
                                       </Tab.Pane>
                                     </Tab.Content>
@@ -7306,6 +7571,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.container}>
                                                   {newInValidDiseaseList.map(
                                                     (data, i) => (
                                                       <li>
@@ -7369,7 +7635,9 @@ const Details = ({ }) => {
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
-                                                          <div className="">
+                                                          <div
+                                                            className={`${visitStyles.hoverActiveHcc}`}
+                                                          >
                                                             {getEncounterDateBackground(data.encounterDate)}
                                                             <div className={`${visitStyles.encounterAndSectionHeader}`} >
                                                               {getCaptureSectionBackground(data.capturedSections)}
@@ -7381,6 +7649,7 @@ const Details = ({ }) => {
                                                       </li>
                                                     )
                                                   )}
+                                                  </div>
                                                 </ul>
                                               </div>
 
@@ -7402,6 +7671,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.container}>
                                                   <div className={visitStyles.hccStickey_head}>
                                                     {suggestedNonHccList?.map((data) => {
                                                       return (
@@ -7533,6 +7803,7 @@ const Details = ({ }) => {
                                                         </>
                                                       );
                                                     })}
+                                                  </div>
                                                   </div>
                                                 </ul>
                                               </div>
@@ -7851,6 +8122,7 @@ const Details = ({ }) => {
                                                   </div>
                                                 </div>
                                                 {comboDiseaseCodesListNonHcc.length != 0 ?
+                                                <div className={visitStyles.container}>
                                                   <div className={visitStyles.hccStickey_head}>
                                                     {comboDiseaseCodesListNonHcc?.map(
                                                       (item) => {
@@ -7922,7 +8194,8 @@ const Details = ({ }) => {
                                                         );
                                                       }
                                                     )}
-                                                  </div> : null}
+                                                  </div>
+                                                  </div>:null}
 
 
                                                 {comboDiseaseCodesListNonHcc.length == 0 ? (
@@ -7964,6 +8237,7 @@ const Details = ({ }) => {
                                                 {invalidComboDiseaseCodesList.length !=
                                                   0 ? (
                                                   <>
+                                                  <div className={visitStyles.container}>
                                                     <div className={visitStyles.hccStickey_head}>
                                                       {invalidComboDiseaseCodesList?.map(
                                                         (item) => {
@@ -8033,6 +8307,7 @@ const Details = ({ }) => {
                                                         }
                                                       )}
                                                     </div>
+                                                    </div>
                                                   </>
                                                 ) : null}
                                               </div>
@@ -8074,6 +8349,7 @@ const Details = ({ }) => {
                                             </div>
                                           </div>
                                           {meatCriteriaListNonHcc.length != 0 ?
+                                          <div className={visitStyles.container}>
                                             <div className={visitStyles.hccStickey_head}>
                                               {meatCriteriaListNonHcc?.map((item) => {
                                                 return (
@@ -8254,7 +8530,8 @@ const Details = ({ }) => {
                                                   </div>
                                                 );
                                               })}
-                                            </div> : null}
+                                            </div> 
+                                            </div>:null}
                                           {meatCriteriaListNonHcc.length == 0 ? (
                                             <div className="col-xl-12">
                                               <div>
@@ -8797,14 +9074,15 @@ const Details = ({ }) => {
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
-                                                          <div className="">
+                                                          <div  className={`${visitStyles.hoverActiveHcc}`}>
                                                            
                                                           {getEncounterDateBackground(data.encounterDate)}
-                                                          </div>
                                                           <div>
                                                           {getCaptureSectionBackground(data.capturedSections)}
 
                                                           </div>
+                                                          </div>
+                                                        
                                                           
                                                           
                                                         </div>
@@ -9119,6 +9397,7 @@ const Details = ({ }) => {
                                                   </div>
                                                 </div>
                                                 {comboDiseaseCodesListRadiology.length != 0 ?
+                                                <div className={visitStyles.container}>
                                                   <div className={visitStyles.hccStickey_head}>
                                                     {comboDiseaseCodesListRadiology?.map(
                                                       (item) => {
@@ -9190,7 +9469,8 @@ const Details = ({ }) => {
                                                         );
                                                       }
                                                     )}
-                                                  </div> : null}
+                                                  </div> 
+                                                  </div>:null}
 
                                                 {comboDiseaseCodesListRadiology.length == 0 ? (
 
@@ -9229,6 +9509,7 @@ const Details = ({ }) => {
                                                 {invalidComboDiseaseCodesList.length !=
                                                   0 ? (
                                                   <>
+                                                  <div className={visitStyles.container}>
                                                     <div className={visitStyles.hccStickey_head}>
                                                       {invalidComboDiseaseCodesList?.map(
                                                         (item) => {
@@ -9297,6 +9578,7 @@ const Details = ({ }) => {
                                                           );
                                                         }
                                                       )}
+                                                    </div>
                                                     </div>
                                                   </>
                                                 ) : null}
@@ -10121,15 +10403,15 @@ const Details = ({ }) => {
                                                               </span>
                                                             </div>
                                                           </div>
-                                                          <div className="">
+                                                          <div  className={`${visitStyles.hoverActiveHcc}`}>
                                                            
                                                           {getEncounterDateBackground(data.encounterDate)}
-
-                                                           
-                                                          </div>
                                                           <div  className={`${visitStyles.encounterAndSectionHeader}`} > 
                                                                {getCaptureSectionBackground(data.capturedSections)}                                                               
                                                               </div>
+                                                           
+                                                          </div>
+                                                         
                                                         </div>
                                                       </li>
                                                     )

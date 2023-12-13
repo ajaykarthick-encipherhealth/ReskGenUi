@@ -109,7 +109,7 @@ export default function Patient() {
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(13);
+  const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
@@ -226,7 +226,11 @@ export default function Patient() {
     console.log(pStart,pEnd,dStart,dEnd)
     var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
     if (statusValue != null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`
+      if(statusValue == "ALL"){
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`
+      }else{
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`
+      }
     }
     if (pStart != null && statusValue == null) {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`
@@ -287,8 +291,9 @@ export default function Patient() {
 
   const getNameSearch = async (searchtext) => {
     console.log(searchtext)
-    // dispatch(getSearchPatients(0,searchtext));
 
+    // dispatch(getSearchPatients(0,searchtext));
+if(searchtext ){
     var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
      if (response.data) {
@@ -322,6 +327,9 @@ export default function Patient() {
        //     subscribe(resultMap);
        // }, 3000);
     }
+  }else{
+    getAllList(localUserId, pageNo, pageSize);
+  }
   }
 
 
@@ -808,6 +816,7 @@ export default function Patient() {
     console.log("test");
   };
   const statusOptions = [
+    { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "PENDING", value: "PENDING" },
     { label: "DECLINED", value: "DECLINED" },
@@ -816,7 +825,7 @@ export default function Patient() {
   const dosOnChange = (selectedOption) => {
     const value = selectedOption.value;
     setStausSelectedValue(value);
-    getFilteApi(0, 10,value,processedStart,processedEnd,dueDateStart,dueDateEnd)
+    getFilteApi(0, 15,value,processedStart,processedEnd,dueDateStart,dueDateEnd)
   };
   const handleOk = () => {
     setModalVisible(false);
@@ -826,7 +835,7 @@ export default function Patient() {
     let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z";
     setDueDateStart(convertStartDate )
     setDueDateEnd(convertEndDate )
-    getFilteApi(0, 10,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
+    getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
 
   };
 
@@ -835,7 +844,7 @@ export default function Patient() {
     let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z"
     setProcessedStart(convertStartDate )
     setProcessedEnd(convertEndDate )
-    getFilteApi(0, 10,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
+    getFilteApi(0, 15,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
 
   };
   return (
@@ -1139,7 +1148,7 @@ export default function Patient() {
                             <div className="pagination-container">
                               <Paginator
                                 first={paginationFirst}
-                                rows={13}
+                                rows={15}
                                 totalRecords={totalElements}
                                 onPageChange={onPageChange}
                               />

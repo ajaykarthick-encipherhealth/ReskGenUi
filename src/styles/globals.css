@@ -12140,6 +12140,7 @@ tbody > tr {
   box-shadow: 0 0 0 1px transparent !important;
   flex-shrink: 0;
   border: none !important;
+  min-height: 35px !important;
 }
 .css-t3ipsp-control {
   box-shadow: 0 0 0 1px transparent !important;
@@ -12816,6 +12817,10 @@ tbody > tr {
   background-color: rgba(236, 175, 165, 0.2);
   color: rgb(236, 175, 165) !important;
   
+}
+
+.rpv-default-layout__container {
+  border: 1px solid rgb(222 226 230) !important;
 }
 
 

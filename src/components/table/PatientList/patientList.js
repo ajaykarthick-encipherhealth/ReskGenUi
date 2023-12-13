@@ -115,6 +115,7 @@ function PatientTable({
   };
 
   const requestSort = (key) => {
+    console.log(key)
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
