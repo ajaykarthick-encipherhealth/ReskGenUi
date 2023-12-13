@@ -109,7 +109,7 @@ function CoderReport({
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classTTotalhead}>
-          <tr>
+          <tr style={{textAlign:"center"}}>
             <>
               <th></th>
               <th>PATIENT ID</th>
