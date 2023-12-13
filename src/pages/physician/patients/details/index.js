@@ -4953,25 +4953,29 @@ const Details = ({ }) => {
                           {patienIdDetails.priority == "URGENT" ?
                             <>
                               <i>{SVGICON.alert}</i>{" "}
-                              <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
+                              <span style={{ fontSize: "13px",fontWeight:500 }}>Urgent</span>{" "}
                             </> : patienIdDetails.priority == "HIGH" ?
                               <>
                                 <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-                                <span style={{ fontSize: "13px" }}>High</span>{" "}
+                                <span style={{ fontSize: "13px",fontWeight:500 }}>High</span>{" "}
                               </> : patienIdDetails.priority == "NORMAL" ?
                                 <>
                                   <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-                                  <span style={{ fontSize: "13px" }}>Normal</span>{" "}
+                                  <span style={{ fontSize: "13px",fontWeight:500 }}>Normal</span>{" "}
                                 </> : 
                                   <>
                                     <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-                                    <span style={{ fontSize: "13px" }}>Low</span>{" "}
+                                    <span style={{ fontSize: "13px",fontWeight:500 }}>Low</span>{" "}
                                   </> }
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">
-                        <div className={visitStyles.priorityStatus}>
+                        <div className={`${visitStyles.rafscoreheader} `}>
+                                <label>Score</label>
+                                <h6 className="ageDtails">
+                                {(patientDetails.rafScore?.score).toFixed(3)}
 
+                                </h6>
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">

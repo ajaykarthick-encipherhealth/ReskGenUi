@@ -21,6 +21,20 @@
   font-weight: 500 !important;
   font-size: 13px !important;
 }
+.rafscoreheader{
+  padding-top: 1.25rem;
+}
+.rafscoreheader label{
+  font-size: 13px !important;
+  color: #66686B !important;
+  font-weight: 500 !important;
+
+}
+.rafscoreheader h6{
+  color: #221C1C !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+}
 .dob_icon svg{
   width: 18px;
     padding: 0 !important;
@@ -1191,6 +1205,7 @@ margin-left: 20px;
 }
 .priorityStatus{
   padding-top: 1.25rem;
+  width: 70px;
 }
 .dosSelectPicker{
   width: 100px !important;
