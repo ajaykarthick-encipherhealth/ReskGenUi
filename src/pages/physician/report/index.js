@@ -144,7 +144,9 @@ const index = () => {
       );
     }
 
-    dispatch(getReportDetails(pageNo, coderStartDate, coderEndDate));
+    if (activeTab === "CoderReport") {
+      dispatch(getReportDetails(pageNo, coderStartDate, coderEndDate));
+    }
     if (ExportResponse) {
       setIsModalVisible(false);
       notification.success({
@@ -518,6 +520,9 @@ const index = () => {
                                         paginationFirst={paginationReceivedFirst}
                                         details={ReceivedReportDetails}
                                         onPageChange={onReceivedPageChange}
+                                        receivedPageNo={receivedPageNo}
+                                        receivedStartDate={receivedStartDate}
+                                        receivedEndDate={receivedEndDate}
                                       />
                                     )}
                                   </Tab.Pane>
