@@ -231,7 +231,7 @@ function PatientTable({
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
-        <td className={TableStyle.lastBorder} onClick={handleTableRowClick}>{actionBodyTemplate(data)}</td>
+        <td className={TableStyle.lastBorder} >{actionBodyTemplate(data)}</td>
       </tr>
     ));
   };

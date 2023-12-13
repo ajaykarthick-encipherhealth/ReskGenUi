@@ -674,7 +674,7 @@ if(searchtext ){
       case "NOTCOMPUTED":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Not Computed</span>
+            <span className={`badge notComputed-text`}>Not Computed</span>
 
           </div>
         );
