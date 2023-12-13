@@ -164,6 +164,7 @@ margin-left: 10px !important;
   margin: 0 0px;
   position: relative;
   transition: all 0.5s;
+  margin-right: 1px;
 }
 .hcc_card > .timeline-panel {
   display: flex;
@@ -302,7 +303,7 @@ margin-left: 10px !important;
   font-size: 11px !important;
   font-weight: 500;
   border-radius: 30px !important;
-  margin: 4px 3px 10px 5px;
+  margin: 4px 3px 0px 5px;
   text-align: center !important;
   height: 20px;
   display: inline-flex;
@@ -435,10 +436,10 @@ margin-top: 15px;
     z-index: 1;
 }
 .hccStickey_head{
-    /* min-height: 10vh; */
+    /* min-height: 10vh;
     max-height: 64vh;
     overflow-y: scroll;
-    overflow-x: hidden;
+    overflow: hidden; */
 }
 .hccStickeyRaf_head{
   min-height: 10vh;
@@ -446,6 +447,35 @@ margin-top: 15px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+/* .hccStickey_head :hover{
+  min-height: 10vh;
+  max-height: 64vh;
+  overflow-y: scroll;
+} */
+
+.container,.suggestedcontainer {
+  min-height: 64vh;
+  max-height: 64vh;
+  /* overflow-y: scroll; */
+  overflow: hidden;
+  /* position: relative; */
+}
+
+
+.container:hover,.suggestedcontainer:hover {
+  overflow-y: scroll; 
+  position: inherit;
+}
+
+.container::-webkit-scrollbar,.suggestedcontainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.container::-webkit-scrollbar-thumb,.suggestedcontainer::-webkit-scrollbar {
+  border-radius: 4px;
+}
+
 
 
 /* .hccStickey_head::-webkit-scrollbar-track, .hccStickeyRaf_head::-webkit-scrollbar-track {
@@ -678,6 +708,7 @@ background: #E1EDFE;
 }
 .patientListHead{
   margin: 0 !important;
+  /* overflow-y: scroll; */
 }
 
 .sideNav ul{
@@ -1157,4 +1188,49 @@ margin-left: 20px;
 }
 .patient_diseased path{
   fill: #b8a8bd
+}
+.priorityStatus{
+  padding-top: 1.25rem;
+}
+.dosSelectPicker{
+  width: 100px !important;
+  margin-left: -65px;
+  height: 35px !important;
+}
+
+.dosSelectPicker > div:nth-child(3) {
+  height: 35px !important;
+}
+.dosSelectPicker > .css-13cymwt-control{
+  min-height: 35px !important;
+}
+.hoverActiveHcc{
+  margin-bottom: 10px;
+}
+.file_name_listcontainer {
+  background: #eefcfd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+.patientList{
+  /* background: #f7f7f7; */
+  border-radius: 4px;
+  margin-bottom: 10px;
+  margin-right: 2px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 3px 10px rgba(220, 199, 199, 0.2);
+  border: 1px solid rgba(220, 199, 199, 0.2);
+  border-radius: 10px;
+}
+.patientDetailsHead{
+  height: 75vh;
+    overflow: hidden;
+    margin-right: 0px;
+}
+.patientDetailsHead:hover{
+  height: 75vh;
+    overflow-y: scroll;
+    margin-right: 0px;
 }

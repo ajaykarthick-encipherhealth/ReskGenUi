@@ -114,11 +114,12 @@ function CoderReport({
               <th></th>
               <th>PATIENT ID</th>
               <th>PATIENT NAME</th>
-              <th>HCC </th>
+             
               <th>COMPLETE DATE </th>
               <th>COMMENTS </th>
               <th>AUDITOR NAME </th>
               <th>RAF SCORE </th>
+              <th>HCC </th>
               <th>Flag </th>
               <th>Status</th>
               <th>
@@ -171,9 +172,7 @@ function CoderReport({
                     <td className={TableStyle.childBorder}>
                       {row?.patientName ? row?.patientName : "---"}
                     </td>
-                    <td className={TableStyle.childBorder}>
-                      {row?.validDisease ? row?.validDisease : "000"}
-                    </td>
+                   
                     <td
                       onClick={setModal(false)}
                       className={TableStyle.childBorder}
@@ -192,6 +191,9 @@ function CoderReport({
                     </td>
                     <td className={TableStyle.childBorder}>
                       {row?.rafSum ? row?.rafSum : "000"}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.validDisease ? row?.validDisease : "000"}
                     </td>
                     <td className={TableStyle.childBorder}>
                       {row?.flag ? SVGICON.filledFlag : SVGICON.emptyFlag}
@@ -234,9 +236,7 @@ function CoderReport({
                     <td className={TableStyle.childBorder}>
                       {row?.patientName ? row?.patientName : "---"}
                     </td>
-                    <td className={TableStyle.childBorder}>
-                      {row?.validDiseaseCount ? row?.validDiseaseCount : "000"}
-                    </td>
+                   
                     <td
                       onClick={setModal(false)}
                       className={TableStyle.childBorder}
@@ -253,6 +253,9 @@ function CoderReport({
                     </td>
                     <td className={TableStyle.childBorder}>
                       {row?.rafSum ? row?.rafSum : "000"}{" "}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.validDiseaseCount ? row?.validDiseaseCount : "000"}
                     </td>
                     <td className={TableStyle.childBorder}>
                       {row?.flag ? SVGICON.filledFlag : SVGICON.emptyFlag}

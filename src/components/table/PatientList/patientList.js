@@ -39,7 +39,7 @@ function PatientTable({
       label: (
         <>
           <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
+          <span style={{ fontSize: "13px", color:'red' }}>Urgent</span>{" "}
         </>
       ),
     },
@@ -48,7 +48,7 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>High</span>{" "}
+          <span style={{ fontSize: "13px", color:'#cf940a'  }}>High</span>{" "}
         </>
       ),
     },
@@ -57,7 +57,7 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
+          <span style={{ fontSize: "13px", color:"#4466ff "}}>Normal</span>{" "}
         </>
       ),
     },
@@ -66,7 +66,7 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Low</span>{" "}
+          <span style={{ fontSize: "13px", color:"#87909e" }}>Low</span>{" "}
         </>
       ),
     },
@@ -99,6 +99,7 @@ function PatientTable({
   };
 
   const requestSort = (key) => {
+    console.log(key)
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
@@ -140,6 +141,7 @@ function PatientTable({
   const TickMark = () => (
     <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
   );
+
   const sortTableByDate = (value) => {
     const sortedContent = [...detailsContent];
     if(value==='dueDate'){
@@ -161,6 +163,8 @@ function PatientTable({
     }
     setDetailsContent(sortedContent);
   };
+
+
   const renderRows = () => {
     return detailsContent?.map((data, index) => (
       <tr key={index}>
@@ -171,20 +175,21 @@ function PatientTable({
           {data.patientName}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.dueDate
-            ? moment(data.dueDate).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.lastModifiedDate
-            ? moment(data.lastModifiedDate).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.allocatedOn
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
+            : "---"}
         </td>
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          {data.dueDate
+            ? moment(data.dueDate).format("MM-DD-YYYY")
+            : "---"}
+        </td>
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          {data.processedStatus === "COMPLETED"
+            ? moment(data.processedDate).format("MM-DD-YYYY")
+            : "---"}
+        </td>
+      
         <td className={TableStyle.childBorder}>
           <Tooltip title={data.allocatedBy ? data.allocatedBy : "null"}>
             <Avatar
@@ -195,7 +200,7 @@ function PatientTable({
               }}
             >
               {data.allocatedBy
-                ? data.allocatedBy.charAt(0).toUpperCase()
+                ? data.allocatedBy.slice(0, 2).toUpperCase()
                 : "N"}
             </Avatar>
           </Tooltip>
@@ -219,16 +224,18 @@ function PatientTable({
               );
             }}
             style={{ width: "80%" }}
+
           />
         </td>
 
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
-        <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
+        <td className={TableStyle.lastBorder} onClick={handleTableRowClick}>{actionBodyTemplate(data)}</td>
       </tr>
     ));
   };
+
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -237,10 +244,13 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
+            <th>ALLOCATED DATE</th>
             <th onClick={() => {
               requestSort("dueDate")
               sortTableByDate("dueDate")
               }}>
+
+
               DUE DATE
               <span style={{ padding: "10px" ,cursor:"pointer"}}>
               {sortDueOrder === "asc" ? (
@@ -264,14 +274,14 @@ function PatientTable({
               )}
               </span>
             </th>
-            <th>ALLOCATED DATE</th>
+           
             <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th>STATUS</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>{renderRows()}</tbody>
+        <tbody >{renderRows()}</tbody>
       </table>
     </div>
   );

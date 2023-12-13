@@ -45,13 +45,11 @@ const index = () => {
 
     series: [
       {
-        data: [
-          120, 932, 901, 934, 1290, 530, 1320, 1000, 567, 879, 1234, 100,
-        ],
+        data: [120, 932, 901, 934, 1290, 530, 1320, 1000, 567, 879, 1234, 100],
         type: "line",
         lineStyle: {
-          color:'#BD83B8'
-          },
+          color: "#BD83B8",
+        },
         smooth: true,
         showSymbol: false,
         areaStyle: {
@@ -70,75 +68,75 @@ const index = () => {
   };
 
   return (
-    <>
+    <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-      <div  style={{backgroundColor: "#F0F6FE"}} >
-  
-      <div className={styles.maincontainer}>
-        <div className={styles.innerdiv}>
-          <div className={styles.div1}>
-            <Card borderRadius="30px" Bgcolor="#fff">
-              <div className={styles.mainDiv}>
+      <div style={{ backgroundColor: "#F0F6FE" }}>
+        <div className={styles.maincontainer}>
+          <div className={styles.innerdiv}>
+            <div className={styles.div1}>
+              <Card borderRadius="30px" Bgcolor="#fff">
+                <div className={styles.mainDiv}>
+                  <div>
+                    <YearPicker type="year" onChange={onYearChange} />
+                  </div>
+                  <Buttonscroller
+                    Buttons={Buttons}
+                    handleButtonClick={handleButtonClick}
+                    activeButton={activeButton}
+                  />
+                </div>
                 <div>
-                  <YearPicker type="year" onChange={onYearChange} />
+                  <ReactECharts option={option} style={{ height: "450px" }} />
                 </div>
-                <Buttonscroller
-                  Buttons={Buttons}
-                  handleButtonClick={handleButtonClick}
-                  activeButton={activeButton}
-                />
-              </div>
-              <div>
-                <ReactECharts option={option} style={{ height: "450px" }} />
-              </div>
-            </Card>
-          </div>
+              </Card>
+            </div>
 
-          <div className={styles.div2}>
-            {cardsData?.map((info) => {
-              return (
-                <div className={styles.innerCard}>
-                  <Card Bgcolor="#133DD4" padding="0.4px 0" borderRadius="30px">
-                    <div className={styles.innercardDiv}>
-                      <Card
-                        Bgcolor="#fff"
-                        padding="0px 0px 0px 20px"
-                        borderRadius="25px"
-                      >
-                        <div className={styles.cardDetails}>
-                          <div>
-                            <Image src={info.icon} alt="no img" />
+            <div className={styles.div2}>
+              {cardsData?.map((info) => {
+                return (
+                  <div className={styles.innerCard}>
+                    <Card
+                      Bgcolor="#133DD4"
+                      padding="0.4px 0"
+                      borderRadius="30px"
+                    >
+                      <div className={styles.innercardDiv}>
+                        <Card
+                          Bgcolor="#fff"
+                          padding="0px 0px 0px 20px"
+                          borderRadius="25px"
+                        >
+                          <div className={styles.cardDetails}>
+                            <div>
+                              <Image src={info.icon} alt="no img" />
+                            </div>
+                            <div className={styles.contentDiv}>
+                              <span>
+                                <h5>{info.title}</h5>
+                              </span>
+                              <span>{info.day}</span>
+                              <span className={styles.status}>
+                                {info.status}
+                              </span>
+                            </div>
                           </div>
-                          <div className={styles.contentDiv}>
-                            <span>
-                              <h5>{info.title}</h5>
-                            </span>
-                            <span>{info.day}</span>
-                            <span className={styles.status}>{info.status}</span>
-                          </div>
-                        </div>
-                      </Card>
-                      <Image
-                        src={arrow}
-                        className={styles.imgDiv}
-                        alt="no img"
-                      />
-                    </div>
-                  </Card>
-                </div>
-              );
-            })}
+                        </Card>
+                        <Image
+                          src={arrow}
+                          className={styles.imgDiv}
+                          alt="no img"
+                        />
+                      </div>
+                    </Card>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-      
         </div>
-    
-    
+        <Footer />
       </div>
-      <Footer/> 
-      </div>
-    
-   
-    </>
+    </div>
   );
 };
 
@@ -169,7 +167,7 @@ const cardsData = [
   },
 ];
 
- export const Buttons = [
+export const Buttons = [
   {
     id: 1,
     title: "Daily",

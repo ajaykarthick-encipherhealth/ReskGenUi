@@ -4284,7 +4284,7 @@ textarea.form-control.is-invalid {
 body {
   -ms-overflow-style: none;
   scrollbar-width: none;
-  background-color: #f3f0ec;
+  background-color: #f0f6fe;
 }
 
 body::-webkit-scrollbar {
@@ -12141,6 +12141,7 @@ tbody > tr {
   box-shadow: 0 0 0 1px transparent !important;
   flex-shrink: 0;
   border: none !important;
+  min-height: 35px !important;
 }
 .css-t3ipsp-control {
   box-shadow: 0 0 0 1px transparent !important;
@@ -12535,7 +12536,7 @@ tbody > tr {
 .VALID_DISEASE_ADDED + .timeline-panel,
 .COMPLETED + .timeline-panel,
 .MOVED_DELETED_TO_VALID + .timeline-panel {
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
   border-color: #bbe6e3;
   line-height: 24px;
 }
@@ -12819,6 +12820,19 @@ tbody > tr {
   
 }
 
+.rpv-default-layout__container {
+  border: 1px solid rgb(222 226 230) !important;
+}
+
+ .CircularProgressbar-path {
+  stroke: green !important;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease 0s;
+}
+ .CircularProgressbar-text {
+  fill: green !important;
+ 
+}
 
 .ant-modal .ant-modal-content {
   height:80% !important;

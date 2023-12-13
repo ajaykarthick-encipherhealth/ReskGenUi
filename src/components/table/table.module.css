@@ -99,7 +99,7 @@
 .classTable tbody tr td {
     font-size: 13px;
     font-weight: 400;
-    padding: 3px 15px;
+    padding: 2px 15px;
     color: #000 !important;
     
 
@@ -117,9 +117,13 @@
 
 }
 .classTable tbody tr:hover  {
-  box-shadow: 0px 13px 18px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out;
-  cursor: pointer;
+
+    cursor: pointer;
+    /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 
+    0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15); */
+    border-radius: 10px 10px 10px 10px !important;
+    /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 20px 7px -19px #8298b7, 0 1px 3px 1px rgba(60,64,67,.15); */
+  background-color: #ffff !important;
 }
 .highFlag path{
   fill: #cf940a;
@@ -139,10 +143,14 @@
 
 .customAntSelect > div{
   border: none !important;
+  background-color: transparent !important;
 }
 
 .customAntSelect > span{
   display: none !important;
+}
+.customAntSelect > div:nth-child(1){
+ 
 }
 
 
