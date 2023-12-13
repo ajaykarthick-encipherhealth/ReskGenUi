@@ -4972,10 +4972,14 @@ const Details = ({ }) => {
                       <div className="col-xl-1 col-sm-12">
                         <div className={`${visitStyles.rafscoreheader} `}>
                                 <label>Score</label>
+                                {patientDetails.rafScore != null ?
                                 <h6 className="ageDtails">
                                 {(patientDetails.rafScore?.score).toFixed(3)}
 
-                                </h6>
+                                </h6>:<h6 className="ageDtails">
+                                0.00
+
+                                </h6>}
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">
