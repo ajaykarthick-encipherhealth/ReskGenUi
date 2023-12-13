@@ -104,40 +104,36 @@ import Image from "next/image";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="p-4 text-center" style={{ backgroundColor: "#f0f6fe" }}>
+    <footer className="text-center" >
       <div className="d-flex">
-        <div className="container d-flex flex-column align-items-center justify-content-center">
+        <div className="container d-flex flex-column align-items-center justify-content-center" style={{marginTop:"0px !important"}}>
           <div className="d-flex align-items-center mb-3">
             <Image
               src={IMAGES.Hcc_LOGO}
               style={{ height: "30px", width: "30px", padding: "4px" }}
             />
-            <p className="mb-0">&copy; {currentYear} Encipherhealth, Inc.</p>
+            <p className="mb-0" style={{fontSize:"14px"}}>&copy; {currentYear} Encipherhealth, Inc.</p>
             <ul className="list-inline mb-0">
               <li className="list-inline-item">
-                <a href="#">Terms</a>
+                <span href="#" style={{fontSize:"14px"}}>Terms</span>
               </li>
               <li className="list-inline-item">
-                <a href="#">Privacy</a>
+                <span href="#" style={{fontSize:"14px"}}>Privacy</span>
               </li>
               <li className="list-inline-item">
-                <a href="#">Security</a>
+                <span href="#" style={{fontSize:"14px"}}>Security</span>
               </li>
               <li className="list-inline-item">
-                <a href="#">Status</a>
+                <span href="#" style={{fontSize:"14px"}}>Status</span>
               </li>
               <li className="list-inline-item">
-                <a href="#">Docs</a>
+                <span href="#" style={{fontSize:"14px"}}>Docs</span>
               </li>
               <li className="list-inline-item">
-                <a href="#">Contact &nbsp; </a>
+                <span href="#" style={{fontSize:"14px"}}>Contact &nbsp; </span>
               </li>
             </ul>
-            <p className="mb-0">
-              <a href="#">Manage cookies</a>
-              <span className="mx-2">|</span>
-              <a href="#">Do not share my personal information</a>
-            </p>
+         
           </div>
         </div>
       </div>

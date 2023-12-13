@@ -11,6 +11,7 @@ import ReactECharts from "echarts-for-react";
 import Buttonscroller from "../../../components/buttonSroller/index";
 import YearPicker from "../../../components/yearpicker/index";
 import * as echarts from "echarts";
+import Footer from "../../../jsx/layouts/Footer";
 
 const index = () => {
   const [activeButton, setActiveButton] = useState(0);
@@ -126,8 +127,11 @@ const index = () => {
               );
             })}
           </div>
+      
         </div>
+    
       </div>
+      
     </>
   );
 };
