@@ -4,6 +4,7 @@ import {
   accuracyScore,
   CompletedScore,
   HoldStatus,
+  ChatBot
 } from "../../services/DashboardService";
 
 export const WORKFLOWDATA = "WORKFLOWDATA";
@@ -13,6 +14,7 @@ export const ACCURACY = "ACCURACY";
 export const COMPLETED = "COMPLETED";
 export const HOLD_STATUS = "HOLD_STATUS";
 export const SELECTED_DAY = "SELECTED_DAY";
+export const CHATBOT='CHATBOT'
 
 export const getSelectedDay = (day) => ({
   type: SELECTED_DAY,
@@ -80,3 +82,15 @@ export const getHoldStatusData = (router) => {
     });
   };
 };
+
+export const getChatReply = (msg) => {
+  return (dispatch) => {
+    ChatBot(msg).then((response) => {
+      dispatch({
+        type: CHATBOT,
+        payload: response,
+      });
+    });
+  };
+};
+

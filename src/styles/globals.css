@@ -12856,6 +12856,32 @@ tbody > tr {
  
 }
 
-/* .ant-modal .ant-modal-content {
-  height:80% !important;
-} */
+.rcw-launcher{
+  background-color: #04306F !important;
+  width:40px !important;
+  height: 40px !important;
+ 
+}
+.rcw-conversation-container .rcw-header {
+  background-color: #04306F !important;
+
+}
+.rcw-title{
+  color:#fff !important;
+  font-weight: 700;
+}
+.rcw-open-launcher{
+  width:25px !important; 
+
+}
+.rcw-widget-container {
+  top: -5px;
+  right:-15px !important;
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px 20px 0;
+  position: fixed;
+  right: 0;
+  z-index: 9999;
+}
+
