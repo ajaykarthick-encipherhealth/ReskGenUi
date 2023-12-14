@@ -14,10 +14,10 @@ import { IMAGES } from "../jsx/constant/theme";
 
 export default function UserLogin() {
     const router = useRouter();
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('ranjith01@encipherhealth.onmicrosoft.com');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState('@Asdf123');
     // const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -59,12 +59,14 @@ export default function UserLogin() {
 
                     router.push("/physician/dashboard");
                     notification.success({
-                        message: "Login Success"
+                        message: "Login Success",
+                        duration: 1
                     });
                 } else {
                     setIsLoading(false);
                     notification.error({
-                        message: "Login Failed"
+                        message: "Login Failed",
+                        duration: 1
                     });
                 }
             } catch (e) {
