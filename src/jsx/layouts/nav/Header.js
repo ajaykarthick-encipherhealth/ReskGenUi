@@ -273,7 +273,7 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
                           title="CogentAI"
                           subtitle="Chat with CogentAI"
                         />
-                        <Tooltip title={`${percentage}%`}>
+                        <Tooltip title={` Quality : ${percentage}%`}>
                           <div className="notificationIcon">
                             <div style={{ width: 40, height: 40 }}>
 

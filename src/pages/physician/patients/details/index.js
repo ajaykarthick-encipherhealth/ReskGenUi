@@ -900,7 +900,7 @@ const Details = ({ }) => {
               name: res2,
               "diagnosisCode": res.diagnosisCode,
             });
-            
+
           })
         })
         invalidDiseaseNewRes.map((res) => {
