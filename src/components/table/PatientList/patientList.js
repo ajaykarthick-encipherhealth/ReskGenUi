@@ -7,7 +7,7 @@ import {
   faSortDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Tooltip, notification, Select as AntSelect } from "antd";
+import { Avatar, Tooltip, notification, Select as AntSelect, Empty } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import AllocatedUserCard from "../../allocatedUserDetails/AllocatedUserCard";
@@ -18,7 +18,6 @@ import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { Paginator } from "primereact/paginator";
 
-
 const { Option } = AntSelect;
 
 function PatientTable({
@@ -28,7 +27,7 @@ function PatientTable({
   patientDetails,
   paginationFirst,
   totalElements,
-  onPageChange
+  onPageChange,
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
@@ -43,7 +42,7 @@ function PatientTable({
       label: (
         <>
           <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color:'red' }}>Urgent</span>{" "}
+          <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
         </>
       ),
     },
@@ -52,7 +51,7 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color:'#cf940a'  }}>High</span>{" "}
+          <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
         </>
       ),
     },
@@ -61,7 +60,9 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color:"#4466ff "}}>Normal</span>{" "}
+          <span style={{ fontSize: "13px", color: "#4466ff " }}>
+            Normal
+          </span>{" "}
         </>
       ),
     },
@@ -70,7 +71,7 @@ function PatientTable({
       label: (
         <>
           <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color:"#87909e" }}>Low</span>{" "}
+          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
         </>
       ),
     },
@@ -103,7 +104,7 @@ function PatientTable({
   };
 
   const requestSort = (key) => {
-    console.log(key)
+    console.log(key);
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
@@ -148,7 +149,7 @@ function PatientTable({
 
   const sortTableByDate = (value) => {
     const sortedContent = [...detailsContent];
-    if(value==='dueDate'){
+    if (value === "dueDate") {
       if (sortDueOrder === "asc") {
         sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
         setSortDueOrder("desc");
@@ -156,18 +157,22 @@ function PatientTable({
         sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
         setSortDueOrder("asc");
       }
-    }if(value==='completeDate'){
+    }
+    if (value === "completeDate") {
       if (sortCompleteOrder === "asc") {
-        sortedContent.sort((a, b) => dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate)));
+        sortedContent.sort((a, b) =>
+          dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate))
+        );
         setSortCompleteOrder("desc");
       } else {
-        sortedContent.sort((a, b) => dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate)));
+        sortedContent.sort((a, b) =>
+          dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate))
+        );
         setSortCompleteOrder("asc");
       }
     }
     setDetailsContent(sortedContent);
   };
-
 
   const renderRows = () => {
     return detailsContent?.map((data, index) => (
@@ -184,16 +189,14 @@ function PatientTable({
             : "---"}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.dueDate
-            ? moment(data.dueDate).format("MM-DD-YYYY")
-            : "---"}
+          {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.processedStatus === "COMPLETED"
             ? moment(data.processedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-      
+
         <td className={TableStyle.childBorder}>
           <Tooltip title={data.allocatedBy ? data.allocatedBy : "null"}>
             <Avatar
@@ -216,7 +219,7 @@ function PatientTable({
             className={`custom-ant-select ${TableStyle.customAntSelect}`}
             showSearch={false}
             defaultValue={data?.priority ? data.priority : "set Priority"}
-            disabled={!data?.priority?true:false}
+            disabled={!data?.priority ? true : false}
             onChange={(value) => {
               handlePriorityChange(data?.patientId, value);
               dispatch(
@@ -228,18 +231,16 @@ function PatientTable({
               );
             }}
             style={{ width: "80%" }}
-
           />
         </td>
 
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
-        <td className={TableStyle.lastBorder} >{actionBodyTemplate(data)}</td>
+        <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
       </tr>
     ));
   };
-
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -249,57 +250,57 @@ function PatientTable({
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th>ALLOCATED DATE</th>
-            <th onClick={() => {
-              requestSort("dueDate")
-              sortTableByDate("dueDate")
-              }}>
-
-
+            <th
+              onClick={() => {
+                requestSort("dueDate");
+                sortTableByDate("dueDate");
+              }}
+            >
               DUE DATE
-              <span style={{ padding: "10px" ,cursor:"pointer"}}>
-              {sortDueOrder === "asc" ? (
-                <ArrowUpOutlined />
-              ) : (
-                <ArrowDownOutlined />
-              )}
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {sortDueOrder === "asc" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
               </span>
             </th>
-            <th onClick={() =>{
-
-              requestSort("lastModifiedDate")
-              sortTableByDate("completeDate")
-            } }>
+            <th
+              onClick={() => {
+                requestSort("lastModifiedDate");
+                sortTableByDate("completeDate");
+              }}
+            >
               COMPLETED DATE
-              <span style={{ padding: "10px",cursor:"pointer" }}>
-              {sortCompleteOrder === "asc" ? (
-                <ArrowUpOutlined />
-              ) : (
-                <ArrowDownOutlined />
-              )}
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {sortCompleteOrder === "asc" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
               </span>
             </th>
-           
+
             <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th>STATUS</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody >{renderRows()}</tbody>
+        
+        <tbody>
+          {detailsContent.length <= 0 ? (
+            <tr>
+              <td colSpan="9">
+                <Empty  />
+              </td>
+            </tr>
+          ) : (
+            renderRows()
+          )}
+        </tbody>       
       </table>
-      <div>
-                              <div className="pagination-container">
-                                <Paginator
-                                  first={paginationFirst}
-                                  rows={15}
-                                  totalRecords={totalElements}
-                                  onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  Total count: {totalElements}
-                                </div>
-                              </div>
-                            </div>
+      <div></div>
     </div>
   );
 }
