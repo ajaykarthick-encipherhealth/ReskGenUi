@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./receivedReport.module.css";
 import dayjs from "dayjs";
+import { Spin } from "antd";
 
 const ExcelDisplay = ({ tableData }) => {
   const renderRows = () => {
@@ -17,22 +18,34 @@ const ExcelDisplay = ({ tableData }) => {
       </tr>
     ));
   };
+
   return (
-    <div style={{ width: "100%" ,height:"100%"}}>
+    <div style={{ width: "100%", height: "100%" }}>
       <table className={styles.exceltable}>
         <thead>
-        <tr>
-          <th>PATIENT ID</th>
-          <th>PATIENT NAME</th>
-          <th>HCC</th>
-          <th>COMPLETED DATE</th>
-          <th>COMMENTS</th>
-          <th>AUDITOR NAME</th>
-          <th>Raf score</th>
-          <th>Flag</th>
-        </tr>
+          <tr>
+            <th>PATIENT ID</th>
+            <th>PATIENT NAME</th>
+            <th>HCC</th>
+            <th>COMPLETED DATE</th>
+            <th>COMMENTS</th>
+            <th>AUDITOR NAME</th>
+            <th>Raf score</th>
+            <th>Flag</th>
+          </tr>
         </thead>
-        <tbody>{renderRows()}</tbody>
+
+        <tbody>
+          {tableData?.length === 0 ? (
+            <tr>
+              <td colSpan="8">
+                <Spin loading={true}></Spin>
+              </td>
+            </tr>
+          ) : (
+            renderRows()
+          )}
+        </tbody>
       </table>
     </div>
   );

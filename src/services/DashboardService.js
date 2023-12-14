@@ -105,3 +105,19 @@ export const HoldStatus = async(router) => {
     }
   }
 };
+
+export const ChatBot = async(msg) => {
+  const token = localStorage.getItem("token");
+  try{
+   const response=await axios.post(
+      `${ENDPOINTS?.apiEndoint}aiservice/ai/chat?input=${msg}`,{},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );return response.data
+  }catch(err){
+console.log(err)
+  }
+};

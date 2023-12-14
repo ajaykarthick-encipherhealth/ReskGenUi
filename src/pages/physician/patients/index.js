@@ -814,6 +814,21 @@ export default function Patient() {
     setSelectFileRadiology(null);
   };
 
+
+  const onPageChange = (e) => {
+    setIsLoading(true);
+    
+    console.log(dates);
+    console.log(compledtedDate);
+    console.log(e);
+    setPaginationFirst(e.first);
+    setPageNo(e.page);
+    setPageSize(e.rows);
+    setTableLoading(true);
+    getAllList(localUserId, e.page, e.rows);
+    console.log("test");
+  };
+
   const statusOptions = [
     { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },

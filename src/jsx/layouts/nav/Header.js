@@ -14,8 +14,14 @@ import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Modal, Popover, Select, Tooltip } from "antd";
+import { Tooltip } from "antd";
+import { useDispatch } from "react-redux";
+import "react-chat-widget/lib/styles.css";
+import dynamic from "next/dynamic";
+import { useSelector } from "react-redux";
+import { getChatReply } from "../../../store/actions/DashboardActions";
 
-const Header = ({ onNote }) => {
+  const Header = ({ onNote }) => {
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
   const router = useRouter();
@@ -23,16 +29,13 @@ const Header = ({ onNote }) => {
   const [userRole, setUserRole] = useState("");
   const [menuList, setMenuList] = useState([]);
   const [userIdDetails, setUserIdDetails] = useState("");
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleIconClick = () => {
-    setIsModalVisible(!isModalVisible);
-  };
+
+
+
 
   useEffect(() => {
-    console.log(ENDPOINTS);
 
-    console.log(stateActive);
     var loginCheck = localStorage.getItem("loginCheck");
     var userName = localStorage.getItem("userName");
     const userRoleLocal = localStorage.getItem("userRole");
@@ -98,6 +101,7 @@ const Header = ({ onNote }) => {
       }
     });
   };
+
   const options = [
     {
       value: "jack",
@@ -113,12 +117,14 @@ const Header = ({ onNote }) => {
     },
   ];
 
+
   const getUserIdDetails = async (userId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
     );
     setUserIdDetails(response.data);
   };
+
   const onChange = (value) => {
     console.log(`selected ${value}`);
   };
@@ -188,6 +194,33 @@ const Header = ({ onNote }) => {
       </div>
     </>
   );
+
+  const TerminalComponent = dynamic(
+    () => import("react-chat-widget").then((mod) => mod.Widget),
+    {
+      ssr: false,
+    }
+  );
+
+  const dispatch = useDispatch();
+  const msgReply = useSelector((state) => state.workFlow.chatReply);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const { addResponseMessage } = require("react-chat-widget");
+      addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
+    }
+  }, [msgReply]);
+
+  const handleNewUserMessage = (newMessage) => {
+    dispatch(getChatReply(newMessage));
+  };
+
+  const handleQuickButtonClicked = (data) => {
+    console.log(data);
+  };
+  const percentage = 95;
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -229,16 +262,32 @@ const Header = ({ onNote }) => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
+
                      
 
                         <Tooltip title={`Quality:${percentage}%`}>
                           <div className="notificationIcon">
                             <div style={{ width: 40, height: 40 }}>
+
+                        <TerminalComponent
+                          handleNewUserMessage={handleNewUserMessage}
+                          handleQuickButtonClicked={handleQuickButtonClicked}
+                          showBadge={false}
+                          emojis={true}
+                          title="CogentAI"
+                          subtitle="Chat with CogentAI"
+                        />
+                        <Tooltip title={`${percentage}%`}>
+                          <div className="notificationIcon">
+                            <div style={{ width: 30, height: 30 }}>
+
                               <CircularProgressbar
                                 value={percentage}
                                 text={`${percentage}%`}
                               />
+
                               {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
+
                             </div>
                           </div>
                         </Tooltip>

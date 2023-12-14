@@ -35,7 +35,11 @@ const DailyTask = () => {
     },
     {
       color: "#EB5252",
-      name: "Decline",
+      name: "Declined",
+    },
+    {
+      color: "#B4EFBA",
+      name: "Completed",
     },
   ];
 
@@ -103,16 +107,20 @@ const DailyTask = () => {
     for (let i = 0; i < 7; i++) {
       const nextDay = new Date(weekStart);
       nextDay.setDate(weekStart.getDate() + i);
-      weekDates.push(nextDay.toISOString().split("T")[0]);
+      weekDates.push({
+        day: daysOfWeek[nextDay.getDay()],
+        date: nextDay.toISOString().split("T")[0],
+      });
     }
     return weekDates;
   };
 
   const currentWeek = getCurrentWeekDates();
 
-  const card2Data = currentWeek?.map((date, index) => ({
+  const card2Data = currentWeek?.map((dayInfo, index) => ({
     id: index + 1,
-    day: daysOfWeek[new Date(date).getDay()],
+    day: dayInfo?.day,
+    date: dayInfo.date,
     pending: dailyStatusData[index]?.pending || 0,
     hold: dailyStatusData[index]?.hold || 0,
     completed: dailyStatusData[index]?.completed || 0,
@@ -154,7 +162,7 @@ const DailyTask = () => {
             },
             {
               value: decline,
-              name: "Decline",
+              name: "Declined",
               itemStyle: {
                 color: "#EB5252",
               },
@@ -163,7 +171,7 @@ const DailyTask = () => {
               value: completed,
               name: "Completed",
               itemStyle: {
-                color: "#E8FAEA",
+                color: "#B4EFBA",
               },
             },
           ],
@@ -210,32 +218,29 @@ const DailyTask = () => {
     }
   };
   const today = new Date().toISOString().split("T")[0];
-  const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
     .toISOString()
     .split("T")[0];
-  const dayAfterTomorrow = new Date(
-    new Date().setDate(new Date().getDate() + 2)
+  const dayBeforeYesterday = new Date(
+    new Date().setDate(new Date().getDate() - 2)
   )
     .toISOString()
     .split("T")[0];
-
+  
   const rearrangedCard2Data = [
     ...card2Data.filter(
-      (data) => data.day === daysOfWeek[new Date(today).getDay()]
+      (data) => data.date === dayBeforeYesterday
     ),
     ...card2Data.filter(
-      (data) => data.day === daysOfWeek[new Date(tomorrow).getDay()]
+      (data) => data.date === yesterday
     ),
     ...card2Data.filter(
-      (data) => data.day === daysOfWeek[new Date(dayAfterTomorrow).getDay()]
+      (data) => data.date === today
     ),
+  
     ...card2Data.filter(
       (data) =>
-        ![
-          daysOfWeek[new Date(today).getDay()],
-          daysOfWeek[new Date(tomorrow).getDay()],
-          daysOfWeek[new Date(dayAfterTomorrow).getDay()],
-        ].includes(data.day)
+        ![dayBeforeYesterday, yesterday, today].includes(data.date)
     ),
   ];
   return (
@@ -268,7 +273,11 @@ const DailyTask = () => {
                           dispatch(getpatientsList(0, url));
                         }}
                       >
-                        {data.day}
+                       <div className={styles.headerDisplay}>
+                        <span> {data.day}</span>
+                        <span className={styles.dateDisplay}> {`(${data.date})`} </span>
+                       
+                       </div>
                       </h4>
                       <Row>
                         <Col span={12}>
