@@ -26,15 +26,13 @@ const HoldStatus = () => {
   };
 
   const processedData = holdStatusData?.map((item) => {
-    let testValue = "no data"; 
+    let testValue = "no data";
 
     if (item.holdNotes && item.holdNotes.length > 0) {
       item.holdNotes.forEach((obj) => {
-        Object.keys(obj).forEach((key) => {
-          if (obj[key] === "test") {
-            testValue = obj[key];
-          }
-        });
+        if (obj["2023"]) {
+          testValue = obj["2023"];
+        }
       });
     }
 
