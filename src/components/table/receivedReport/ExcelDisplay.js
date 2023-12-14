@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./receivedReport.module.css";
 import dayjs from "dayjs";
-import { Spin } from "antd";
+import Spinner from "../../spinner/spinner";
 
 const ExcelDisplay = ({ tableData }) => {
   const renderRows = () => {
@@ -21,32 +21,26 @@ const ExcelDisplay = ({ tableData }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <table className={styles.exceltable}>
-        <thead>
-          <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
-            <th>HCC</th>
-            <th>COMPLETED DATE</th>
-            <th>COMMENTS</th>
-            <th>AUDITOR NAME</th>
-            <th>Raf score</th>
-            <th>Flag</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {tableData?.length === 0 ? (
+      {tableData?.length === 0 ? (
+        <Spinner />
+      ) : (
+        <table className={styles.exceltable}>
+          <thead>
             <tr>
-              <td colSpan="8">
-                <Spin loading={true}></Spin>
-              </td>
+              <th>PATIENT ID</th>
+              <th>PATIENT NAME</th>
+              <th>HCC</th>
+              <th>COMPLETED DATE</th>
+              <th>COMMENTS</th>
+              <th>AUDITOR NAME</th>
+              <th>Raf score</th>
+              <th>Flag</th>
             </tr>
-          ) : (
-            renderRows()
-          )}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>{renderRows()}</tbody>
+        </table>
+      )}
     </div>
   );
 };
