@@ -12769,13 +12769,17 @@ tbody > tr {
   border-color: #04306f;
 }
 
+.ant-modal-body {
+  overflow: hidden !important;
+}
+
 .sectionTag1{
-  background-color: rgba(201, 52, 210, 0.2) !important ;
-  color: rgb(201, 52, 210) !important;
+  background-color: rgba(79, 189, 41, 0.2) !important ;
+  color: rgb(79, 189, 41) !important;
 }
 .sectionTag2{
-  background-color: rgba(84, 217, 43, 0.2) !important;
-  color: rgb(84, 217, 43) !important;
+  background-color: rgba(183, 85, 240, 0.2) !important;
+  color: rgb(183, 85, 240) !important;
 }
 
 .sectionTag3{
@@ -12805,8 +12809,8 @@ tbody > tr {
 }
 
 .encounterDateTag1{
-  background-color: rgb(117 164 140 / 20%) !important;
-  color: rgb(116 158 137) !important;
+  background-color: rgb(27 83 255 / 16%) !important;
+  color: #3e566e;
 }
 .encounterDateTag2{
   background-color: rgba(125, 117, 129, 0.2) !important;
