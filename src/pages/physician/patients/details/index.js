@@ -5491,7 +5491,7 @@ const Details = ({ }) => {
                                                                             className={` mt-2 ${visitStyles.labStatus}`}
                                                                             bg={`  mt-2 bg-bg-seven `}
                                                                           >
-                                                                            Lap
+                                                                            Lab
                                                                           </span>
                                                                         </Tooltip>
                                                                       ) : data.getPlace ==
@@ -7401,7 +7401,7 @@ const Details = ({ }) => {
                                                                             className={` mt-2 ${visitStyles.labStatus}`}
                                                                             bg={`  mt-2 bg-bg-seven `}
                                                                           >
-                                                                            Lap
+                                                                            Lab
                                                                           </span>
                                                                         </Tooltip>
                                                                       ) : data.getPlace ==
@@ -7856,7 +7856,7 @@ const Details = ({ }) => {
                                                                           className={` mt-2 ${visitStyles.labStatus}`}
                                                                           bg={`  mt-2 bg-bg-seven `}
                                                                         >
-                                                                          Lap
+                                                                          Lab
                                                                         </span>
                                                                       </Tooltip>
                                                                     ) : data.getPlace ==
