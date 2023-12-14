@@ -810,6 +810,8 @@ if(searchtext ){
   };
 
   const onPageChange = (e) => {
+    setIsLoading(true);
+    
     console.log(dates);
     console.log(compledtedDate);
     console.log(e);
