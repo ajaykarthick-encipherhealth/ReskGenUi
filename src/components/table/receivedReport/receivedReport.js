@@ -7,6 +7,7 @@ import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import IndividualReceiverReport from "./IndividualReceiverReport";
 import Footer from "../../../jsx/layouts/Footer";
+import Spinner from "../../spinner/spinner";
 
 function ReceivedReport({
   details,
@@ -20,9 +21,9 @@ function ReceivedReport({
   const [openModal, setOpenModal] = useState(false);
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
-  useEffect(()=>{
-    setDetailsContent(details?.content)
-  },[details])
+  useEffect(() => {
+    setDetailsContent(details?.content);
+  }, [details]);
 
   const sortTableByDate = () => {
     const sortedContent = [...detailsContent];
@@ -43,87 +44,95 @@ function ReceivedReport({
 
   return (
     <div className={TableStyle.classContaineer}>
-      <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classTTotalhead}>
-          <tr>
-            <th>REPORT ID</th>
-            <th>REPORT NAME</th>
-            <th>ACCESS TYPE</th>
-            <th>SENDER</th>
-            <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
-              DATE{" "}
-              {sortOrder === "asc" ? (
-                <ArrowUpOutlined />
-              ) : (
-                <ArrowDownOutlined />
-              )}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {detailsContent?.map((row, index) => {
-            const formattedDate = row.receiveDate
-              ? dayjs(row.sendDate).format("DD/MM/YY")
-              : "Invalid Date";
+      {detailsContent?.length === 0 ? (
+        <Spinner />
+      ) : (
+        <table className={TableStyle.classTable}>
+          <thead className={TableStyle.classTTotalhead}>
+            <tr>
+              <th>REPORT ID</th>
+              <th>REPORT NAME</th>
+              <th>ACCESS TYPE</th>
+              <th>SENDER</th>
+              <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
+                DATE{" "}
+                {sortOrder === "asc" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {detailsContent?.map((row, index) => {
+              const formattedDate = row.receiveDate
+                ? dayjs(row.sendDate).format("DD/MM/YY")
+                : "Invalid Date";
 
-            return (
-              <tr key={index} style={{ height: "40px" }} onClick={() => handleReceiverReport(row)}>
-                <td
-                  style={{
-                    borderTop: "0.2px solid #e1e1e1",
-                    borderLeft: "0.2px solid #e1e1e1",
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                  className={TableStyle.childBorder}
+              return (
+                <tr
+                  key={index}
+                  style={{ height: "40px" }}
+                  onClick={() => handleReceiverReport(row)}
                 >
-                  {row.reportId}
-                </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
+                  <td
+                    style={{
+                      borderTop: "0.2px solid #e1e1e1",
+                      borderLeft: "0.2px solid #e1e1e1",
+                      borderBottom: "  0.2px solid #e1e1e1",
+                    }}
+                    className={TableStyle.childBorder}
+                  >
+                    {row.reportId}
+                  </td>
+                  <td
+                    style={{
+                      borderTop: "  0.2px solid #e1e1e1",
 
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                  className={TableStyle.childBorder}
-                >
-                  {row.reportName}
-                </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
+                      borderBottom: "  0.2px solid #e1e1e1",
+                    }}
+                    className={TableStyle.childBorder}
+                  >
+                    {row.reportName}
+                  </td>
+                  <td
+                    style={{
+                      borderTop: "  0.2px solid #e1e1e1",
 
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                  className={TableStyle.childBorder}
-                >
-                  {row.role}
-                </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
+                      borderBottom: "  0.2px solid #e1e1e1",
+                    }}
+                    className={TableStyle.childBorder}
+                  >
+                    {row.role}
+                  </td>
+                  <td
+                    style={{
+                      borderTop: "  0.2px solid #e1e1e1",
 
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                  className={TableStyle.childBorder}
-                >
-                  {row.sender}
-                </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
+                      borderBottom: "  0.2px solid #e1e1e1",
+                    }}
+                    className={TableStyle.childBorder}
+                  >
+                    {row.sender}
+                  </td>
+                  <td
+                    style={{
+                      borderTop: "  0.2px solid #e1e1e1",
 
-                    borderBottom: "  0.2px solid #e1e1e1",
-                    borderRight: "  0.2px solid #e1e1e1",
-                  }}
-                  className={TableStyle.childBorder}
-                >
-                  {formattedDate}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                      borderBottom: "  0.2px solid #e1e1e1",
+                      borderRight: "  0.2px solid #e1e1e1",
+                    }}
+                    className={TableStyle.childBorder}
+                  >
+                    {formattedDate}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
       <div className="pagination-container">
         <Paginator
           // first={paginationFirst}
@@ -148,8 +157,7 @@ function ReceivedReport({
           receivedEndDate={receivedEndDate}
         />
       </Modal>
-      <Footer/>
-
+      <Footer />
     </div>
   );
 }
