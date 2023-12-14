@@ -14,8 +14,8 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLoading from 'react-facebook-loading';
-import 'react-facebook-loading/dist/react-facebook-loading.css';
+import FacebookLoading from "react-facebook-loading";
+import "react-facebook-loading/dist/react-facebook-loading.css";
 import {
   faAngleLeft,
   faAngleRight,
@@ -51,7 +51,6 @@ import Footer from "../../../jsx/layouts/Footer";
 import { getSearchPatients } from "../../../store/actions/PatientsActions";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { Label } from "recharts";
-
 
 export default function Patient() {
   const dispatch = useDispatch();
@@ -123,7 +122,6 @@ export default function Patient() {
   const [processedEnd, setProcessedEnd] = useState(null);
   const [isDueDateCalender, setIsDueDateCalender] = useState(true);
   const [statusSelectedValue, setStausSelectedValue] = useState(null);
-
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -223,40 +221,54 @@ export default function Patient() {
     }
   };
 
-
-  const getFilteApi = async (pageNo, pageSize,statusValue,pStart,pEnd,dStart,dEnd) => {
+  const getFilteApi = async (
+    pageNo,
+    pageSize,
+    statusValue,
+    pStart,
+    pEnd,
+    dStart,
+    dEnd
+  ) => {
     setIsLoading(true);
-    console.log(pStart,pEnd,dStart,dEnd)
+    console.log(pStart, pEnd, dStart, dEnd);
     var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
     if (statusValue != null) {
-      if(statusValue == "ALL"){
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`
-      }else{
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`
+      if (statusValue == "ALL") {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+      } else {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
       }
     }
     if (pStart != null && statusValue == null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
     }
 
     if (pStart != null && statusValue != null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
     }
 
-    if (dStart != null && statusValue == null && pStart ==  null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`
+    if (
+      dStart != null &&
+      statusValue == null &&
+      pStart == null &&
+      statusValue != "ALL"
+    ) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
     }
 
-    if (dStart != null && statusValue != null && pStart !=  null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`
+    if (
+      dStart != null &&
+      statusValue != null &&
+      pStart != null &&
+      statusValue != "ALL"
+    ) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
     }
 
-    console.log(resoureUrl)
-
-
+    console.log(resoureUrl);
 
     // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
-
 
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
@@ -274,6 +286,7 @@ export default function Patient() {
           lastModifiedDate: res.lastModifiedDate,
           dueDate: res.dueDate,
           allocatedBy: res.allocatedBy,
+          allocatedOn: res.allocatedOn,
           priority: res.priority,
           processedStatus: res.processedStatus,
           createdAt: res.createdAt,
@@ -293,50 +306,50 @@ export default function Patient() {
   };
 
   const getNameSearch = async (searchtext) => {
-    console.log(searchtext)
+    console.log(searchtext);
     setIsLoading(true);
 
     // dispatch(getSearchPatients(0,searchtext));
-if(searchtext ){
-    var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-     if (response.data) {
-       var resultMap = [];
-       var result = response.data.content;
-       setTotalElements(response.data.totalElements);
- 
-       result.map((res) => {
-         resultMap.push({
-          patientId: res.patientId,
-          patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          allocatedBy: res.allocatedBy,
-          priority: res.priority,
-          processedStatus: res.processedStatus,
-          createdAt: res.createdAt,
-         });
-       });
-       var newArray = [];
-       newArray = [...patinetListAll, ...resultMap];
-       console.log(resultMap);
-       setPatinetListAll(resultMap);
- 
-       // console.log(newArray)
-       setIsLoading(false);
-       setTableLoading(false);
-       //     setTimeout(() => {
-       //     subscribe(resultMap);
-       // }, 3000);
-    }
-  }else{
-    getAllList(localUserId, pageNo, pageSize);
-  }
-  }
+    if (searchtext) {
+      var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
+      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+      if (response.data) {
+        var resultMap = [];
+        var result = response.data.content;
+        setTotalElements(response.data.totalElements);
 
+        result.map((res) => {
+          resultMap.push({
+            patientId: res.patientId,
+            patientName: res.patientName,
+            fileName: res.fileName,
+            computing: res.computing,
+            createdAt: res.createdAt,
+            lastModifiedDate: res.lastModifiedDate,
+            dueDate: res.dueDate,
+            allocatedBy: res.allocatedBy,
+            allocatedOn: res.allocatedOn,
+            priority: res.priority,
+            processedStatus: res.processedStatus,
+            createdAt: res.createdAt,
+          });
+        });
+        var newArray = [];
+        newArray = [...patinetListAll, ...resultMap];
+        console.log(resultMap);
+        setPatinetListAll(resultMap);
+
+        // console.log(newArray)
+        setIsLoading(false);
+        setTableLoading(false);
+        //     setTimeout(() => {
+        //     subscribe(resultMap);
+        // }, 3000);
+      }
+    } else {
+      getAllList(localUserId, pageNo, pageSize);
+    }
+  };
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -653,8 +666,6 @@ if(searchtext ){
         return (
           <div className="patient-status">
             <span className={`badge processed-text`}>Completed</span>
-
-
           </div>
         );
 
@@ -662,15 +673,15 @@ if(searchtext ){
         return (
           <div className="patient-status">
             <span className={`badge processing-text`}>Pending</span>
-
           </div>
         );
 
       case "DECLINED":
         return (
           <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>Declined</span>
-
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
           </div>
         );
 
@@ -678,33 +689,27 @@ if(searchtext ){
         return (
           <div className="patient-status">
             <span className={`badge notComputed-text`}>Not Computed</span>
-
           </div>
         );
       case "COMPUTED":
         return (
           <div className="patient-status">
-            <span className={`badge computed-text`}  >Computed</span>
-
+            <span className={`badge computed-text`}>Computed</span>
           </div>
         );
       case "HOLD":
         return (
           <div className="patient-status">
-            <span className={`badge hold-text`} >Hold</span>
-
+            <span className={`badge hold-text`}>Hold</span>
           </div>
         );
       case null:
         return (
           <div className="patient-status">
             <span className={`badge processing-text`}>Pending</span>
-
           </div>
         );
-
     }
-
   };
 
   const actionBodyTemplate = (rowData) => {
@@ -753,7 +758,7 @@ if(searchtext ){
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `aiservice/ai/upload
+        `aiservice/ai/upload
       `,
       formData,
       headers
@@ -792,7 +797,7 @@ if(searchtext ){
     setSelectFile(formData);
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `aiservice/ai/upload/radiology
+        `aiservice/ai/upload/radiology
     `,
       formData,
       headers
@@ -809,17 +814,6 @@ if(searchtext ){
     setSelectFileRadiology(null);
   };
 
-  const onPageChange = (e) => {
-    console.log(dates);
-    console.log(compledtedDate);
-    console.log(e);
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    setPageSize(e.rows);
-    setTableLoading(true);
-    getAllList(localUserId, e.page, e.rows);
-    console.log("test");
-  };
   const statusOptions = [
     { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
@@ -830,78 +824,103 @@ if(searchtext ){
   const dosOnChange = (selectedOption) => {
     const value = selectedOption.value;
     setStausSelectedValue(value);
-    getFilteApi(0, 15,value,processedStart,processedEnd,dueDateStart,dueDateEnd)
+    getFilteApi(
+      0,
+      15,
+      value,
+      processedStart,
+      processedEnd,
+      dueDateStart,
+      dueDateEnd
+    );
   };
   const handleOk = () => {
     setModalVisible(false);
   };
   const handleDatePickerChange = (dateString) => {
-    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
-    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate )
-    setDueDateEnd(convertEndDate )
-    getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
-
+    let convertStartDate =
+      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+    let convertEndDate =
+      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+    setDueDateStart(convertStartDate);
+    setDueDateEnd(convertEndDate);
+    getFilteApi(
+      0,
+      15,
+      statusSelectedValue,
+      processedStart,
+      processedEnd,
+      convertStartDate,
+      convertEndDate
+    );
   };
 
   const handleDatePickerChangeProcesseDate = (dateString) => {
-    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
-    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z"
-    setProcessedStart(convertStartDate )
-    setProcessedEnd(convertEndDate )
-    getFilteApi(0, 15,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
-
+    let convertStartDate =
+      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+    let convertEndDate =
+      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+    setProcessedStart(convertStartDate);
+    setProcessedEnd(convertEndDate);
+    getFilteApi(
+      0,
+      15,
+      statusSelectedValue,
+      convertStartDate,
+      convertEndDate,
+      dueDateStart,
+      dueDateEnd
+    );
   };
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
         <div class="content-body">
-         
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-xl-12">
-                  <div className="">
-                    <div className="card-body p-0">
-                      <div className="table-responsive active-projects task-table">
-                        <div className="tbl-caption  align-items-center">
-                            <div className="row filter-contain">
-                              <div className="col-xl-2">
-                              <label>Search by Name or ID</label>
-                                <div class="form-group has-search">
-                                  <FontAwesomeIcon
-                                    className="fa fa-search form-control-feedback"
-                                    icon={faSearch}
-                                  />
-                                  <InputText
-                                    type="text"
-                                    onChange={(e) => getNameSearch(e.target.value)}
-                                    className="form-control new-form-control"
-                                    placeholder="Search"
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-xl-2" >
-                              <label>Select Status</label>
-                                <div class="form-group has-search">
-                                  {/* <InputText
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-xl-12">
+                <div className="">
+                  <div className="card-body p-0">
+                    <div className="table-responsive active-projects task-table">
+                      <div className="tbl-caption  align-items-center">
+                        <div className="row filter-contain">
+                          <div className="col-xl-2">
+                            <label>Search by Name or ID</label>
+                            <div class="form-group has-search">
+                              <FontAwesomeIcon
+                                className="fa fa-search form-control-feedback"
+                                icon={faSearch}
+                              />
+                              <InputText
+                                type="text"
+                                onChange={(e) => getNameSearch(e.target.value)}
+                                className="form-control new-form-control"
+                                placeholder="Search"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-xl-2">
+                            <label>Select Status</label>
+                            <div class="form-group has-search">
+                              {/* <InputText
                                     type="text"
                                     onChange={(e) => filterChangePatientName(e)}
                                     className="form-control new-form-control"
                                     placeholder="Status"
                                   /> */}
-                                  <Select
-                                    onChange={(selectedOption) =>
-                                      dosOnChange(selectedOption)
-                                    }
-                                    options={statusOptions}
-                                    className="custom-react-select"
-                                    isSearchable={false}
-                                  />
-                                </div>
-                              </div>
+                              <Select
+                                onChange={(selectedOption) =>
+                                  dosOnChange(selectedOption)
+                                }
+                                options={statusOptions}
+                                className="custom-react-select"
+                                isSearchable={false}
+                              />
+                            </div>
+                          </div>
 
-                              {/* <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                                 <div class="form-group has-search">
 
                                   <Calendar
@@ -917,7 +936,7 @@ if(searchtext ){
 
                                 </div>
                               </div> */}
-                              {/* <div className="col-xl-3">
+                          {/* <div className="col-xl-3">
                                 <div
                                   onClick={handleOpenModal}
                                   className={styles.dateDisplay}
@@ -999,65 +1018,69 @@ if(searchtext ){
                                   />
                                 </Modal>
                               </div> */}
-                              <div className="col-xl-2">
-                              <label>Due Date</label>
-                                <div>
-                                  <RangePicker
-                                     onChange={(dates, dateStrings) => {
-                                      handleDatePickerChange(dateStrings);
-                                    }}
-                                  />
-                                </div>
+                          <div className="col-xl-2">
+                            <label>Due Date</label>
+                            <div>
+                              <RangePicker
+                                onChange={(dates, dateStrings) => {
+                                  handleDatePickerChange(dateStrings);
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-xl-2">
+                            <label>Completed Date</label>
+                            <div>
+                              <RangePicker
+                                onChange={(dates, dateStrings) => {
+                                  handleDatePickerChangeProcesseDate(
+                                    dateStrings
+                                  );
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-xl-2">
+                            <label></label>
+                            <div
+                              className={visitStyles.flags}
+                              style={{ marginTop: "15px", marginLeft: "140px" }}
+                            >
+                              <div className={visitStyles.flags}>
+                                <span
+                                  className={visitStyles.completed}
+                                  style={{ background: "#3a9b94 !important" }}
+                                ></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Completed
+                                </span>
                               </div>
-
-                              <div className="col-xl-2">
-                              <label>Completed Date</label>
-                                <div>
-                                  <RangePicker
-                                     onChange={(dates, dateStrings) => {
-                                      handleDatePickerChangeProcesseDate(dateStrings);
-                                    }}
-                                  />
-                                </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.pending}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Pending
+                                </span>
                               </div>
-
-                              <div className="col-xl-2" >
-                              <label></label>
-                                <div className={visitStyles.flags} style={{marginTop:"15px", marginLeft:"265px"}}>
-                                  <div className={visitStyles.flags}  >
-                                    <span
-                                      className={visitStyles.completed}
-                                      style={{ background: "#3a9b94 !important" }}
-                                    ></span>
-                                    <span className={visitStyles.flagCodes}>
-                                      Completed
-                                    </span>
-                                  </div>
-                                  <div className={visitStyles.flags}>
-                                    <span className={visitStyles.pending}></span>
-                                    <span className={visitStyles.flagCodes}>
-                                      Pending
-                                    </span>
-                                  </div>
-                                  <div className={visitStyles.flags}>
-                                    <span className={visitStyles.hold}></span>
-                                    <span className={visitStyles.flagCodes}>
-                                      Hold
-                                    </span>
-                                  </div>
-                                  <div className={visitStyles.flags}>
-                                    <span className={visitStyles.declined}></span>
-                                    <span className={visitStyles.flagCodes}>
-                                      Declined
-                                    </span>
-                                  </div>
-                                </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.hold}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Hold
+                                </span>
                               </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.declined}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Declined
+                                </span>
+                              </div>
+                            </div>
+                          </div>
 
-
-                              {/* <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                                 <div class="form-group has-search"> */}
-                              {/* <Calendar
+                          {/* <Calendar
                                     className="form-control new-form-control calender-pri-input"
                                     value={compledtedDate}
                                     onChange={(e) => setCompletedDate(e.value)}
@@ -1065,32 +1088,34 @@ if(searchtext ){
                                     readOnlyInput
                                     placeholder="Completed Date"
                                   /> */}
-                              {/* <Button type="primary" onClick={showModal}>
+                          {/* <Button type="primary" onClick={showModal}>
           Open Modal
         </Button> */}
-                              {/* <div>
+                          {/* <div>
                                     <RangePicker />
                                   </div> */}
-                              {/* </div>
+                          {/* </div>
                               </div> */}
 
-                              <div className="col-xl-2"  style={{width:"14% !important"}}>
-                             
-                                <Button
-                                  onClick={addPatientFormId}
-                                  className="btn btn-primary btn-sm ms-2 flr"
-                                >
-                                  + Add Patient Id
-                                </Button>
-                              </div>
-                            </div>
+                          <div
+                            className="col-xl-2"
+                            style={{ width: "14% !important" }}
+                          >
+                            <Button
+                              onClick={addPatientFormId}
+                              className="btn btn-primary btn-sm ms-2 flr"
+                            >
+                              + Add Patient Id
+                            </Button>
+                          </div>
                         </div>
+                      </div>
 
-                        <div
-                          id="task-tbl_wrapper"
-                          className="dataTables_wrapper no-footer"
-                        >
-                          {/* <DataTable
+                      <div
+                        id="task-tbl_wrapper"
+                        className="dataTables_wrapper no-footer"
+                      >
+                        {/* <DataTable
                             value={patinetListAll}
                             paginator={false}
                             rows={10}
@@ -1166,48 +1191,30 @@ if(searchtext ){
                               }}
                             />
                           </DataTable> */}
-                           {isLoading ? (
-            <Spinner />
-          ) : (
+                        {isLoading ? (
+                          <Spinner />
+                        ) : (
                           <>
-                          <PatientTable
-                            patinetListAll={patinetListAll}
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            gotoPatientDetails={gotoPatientDetails}
-                            patientDetails={patientDetails}
+                            <PatientTable
+                              patinetListAll={patinetListAll}
+                              actionBodyTemplate={actionBodyTemplate}
+                              statusBodyTemplate={processstatusBodyTemplate}
+                              gotoPatientDetails={gotoPatientDetails}
+                              patientDetails={patientDetails}
+                              paginationFirst={paginationFirst}
+                              totalElements={totalElements}
+                            />
 
-                          />
-                          <div >
-                            <div className="pagination-container">
-                              <Paginator
-                                first={paginationFirst}
-                                rows={15}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count: {totalElements}
-                              </div>
-                            </div>
-
-                          </div>
-
-                          <Footer/>
-
-                          </>)}
-                         
-
-
-
-                        </div>
+                            <Footer />
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          
+          </div>
         </div>
         <Offcanvas
           onHide={setAddPatient}

@@ -12621,9 +12621,9 @@ tbody > tr {
 
 
 /* Display the clear icon when input field is focused */
-.ant-picker-clear {
+/* .ant-picker-clear {
   display: none !important; 
-}
+} */
 
 .pendingBtn button.ant-btn.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
   color: #452b90;
@@ -12853,7 +12853,13 @@ tbody > tr {
 }
  .CircularProgressbar-text {
   fill: green !important;
+  font-size: 30px !important;
+  padding: 1px !important;
  
+}
+.popCodes{
+  position: relative !important;
+   left: 170px !important
 }
 
 /* .ant-modal .ant-modal-content {
