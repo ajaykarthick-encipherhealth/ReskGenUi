@@ -8,7 +8,7 @@ WORKDIR /
 COPY * /
 
 # Install project dependencies
-RUN npm install
+# RUN npm install
 
 RUN npm install --legacy-peer-deps
 
