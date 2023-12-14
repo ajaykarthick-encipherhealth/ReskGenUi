@@ -168,6 +168,14 @@ const Header = ({ onNote }) => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
+                        <TerminalComponent
+                          handleNewUserMessage={handleNewUserMessage}
+                          handleQuickButtonClicked={handleQuickButtonClicked}
+                          showBadge={false}
+                          emojis={true}
+                          title="CogentAI"
+                          subtitle="Chat with CogentAI"
+                        />
                         <Tooltip title={`${percentage}%`}>
                           <div className="notificationIcon">
                             <div style={{ width: 30, height: 30 }}>
@@ -234,14 +242,6 @@ const Header = ({ onNote }) => {
           </div>
         </nav>
       </div>
-      <TerminalComponent
-        handleNewUserMessage={handleNewUserMessage}
-        handleQuickButtonClicked={handleQuickButtonClicked}
-        showBadge={false}
-        emojis={true}
-        title="CogentAI"
-        subtitle="Chat with CogentAI"
-      />
     </div>
   );
 };

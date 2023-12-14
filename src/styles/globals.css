@@ -12874,14 +12874,20 @@ tbody > tr {
   width:25px !important; 
 
 }
-.rcw-widget-container {
+/* .rcw-widget-container {
   top: -5px;
-  right:-15px !important;
+  right:250px !important;
   display: flex;
   flex-direction: column;
   margin: 0 20px 20px 0;
   position: fixed;
   right: 0;
   z-index: 9999;
-}
+} */
+/* .rcw-conversation-container.active{
+
+  position: relative;
+  top:300px;
+  left:250px;
+} */
 
