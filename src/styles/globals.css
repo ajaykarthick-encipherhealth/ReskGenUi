@@ -12807,9 +12807,14 @@ tbody > tr {
   color: rgb(154, 125, 165) !important;
 }
 
+/* <<<<<<< CHATBOT_WITH_uierrors
 .encounterDateTag1 {
   background-color: rgba(6, 252, 126, 0.2) !important;
   color: rgb(6, 252, 126) !important;
+======= */
+.encounterDateTag1{
+  background-color: rgb(117 164 140 / 20%) !important;
+  color: rgb(116 158 137) !important;
 }
 .encounterDateTag2 {
   background-color: rgba(125, 117, 129, 0.2) !important;
@@ -12829,7 +12834,7 @@ tbody > tr {
 }
 .encounterDateTag6 {
   background-color: rgba(229, 254, 78, 0.2) !important;
-  color: rgb(218, 254, 2) !important;
+  color: rgb(136 143 96) !important;
 }
 .encounterDateTag7 {
   background-color: rgba(72, 204, 225, 0.2) !important;
