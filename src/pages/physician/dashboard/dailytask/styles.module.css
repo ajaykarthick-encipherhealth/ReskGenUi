@@ -54,6 +54,13 @@
   margin: 15px;
   color: #000000;
 }
+.headerDisplay{
+  display :flex;
+}
+.dateDisplay{
+  font-weight: 700;
+  margin-left: 10px;
+}
 .headerTitle {
   display: flex;
   justify-content: center;

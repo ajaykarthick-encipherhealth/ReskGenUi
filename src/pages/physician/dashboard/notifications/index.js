@@ -31,29 +31,29 @@ const Notifications = () => {
       time: "10:00 am",
       person: "Rahul(manager)",
     },
-    {
-      key: "4",
-      message:
-        " Needs to validate surgical history for any amputation status and PE for laterality of diagnosis (ulcer, paralysis, atherosclerosis of LE, etc.). ",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
-    {
-      key: "5",
-      message:
-        " We need minimal support (stable, continue X medication with dosage, is acceptable) for the diagnosis found in the assessment plan to confirm the diagnosis; if support is not sufficient, query the diagnosis.",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
-    {
-      key: "6",
-      message: " We should give priority to the more specific diagnosis",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
+    // {
+    //   key: "4",
+    //   message:
+    //     " Needs to validate surgical history for any amputation status and PE for laterality of diagnosis (ulcer, paralysis, atherosclerosis of LE, etc.). ",
+    //   date: "18/10/2023",
+    //   time: "10:00 am",
+    //   person: "Rahul(manager)",
+    // },
+    // {
+    //   key: "5",
+    //   message:
+    //     " We need minimal support (stable, continue X medication with dosage, is acceptable) for the diagnosis found in the assessment plan to confirm the diagnosis; if support is not sufficient, query the diagnosis.",
+    //   date: "18/10/2023",
+    //   time: "10:00 am",
+    //   person: "Rahul(manager)",
+    // },
+    // {
+    //   key: "6",
+    //   message: " We should give priority to the more specific diagnosis",
+    //   date: "18/10/2023",
+    //   time: "10:00 am",
+    //   person: "Rahul(manager)",
+    // },
   ];
   const handleOpen = () => {
     setOpenNotification(!openNotifications);
@@ -67,7 +67,7 @@ const Notifications = () => {
       <div className={styles.msgCOntainer}>
         <span className={styles.description}>{info.message}</span>
         <div className={styles.time}>
-          {info.date}&nbsp;.{info.time} &nbsp;.{info.person}
+          {info.date}&nbsp; {info.time} &nbsp; {info.person}
         </div>
       </div>
     </div>
