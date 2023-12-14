@@ -21,8 +21,26 @@
   font-weight: 500 !important;
   font-size: 13px !important;
 }
+.hccCountHeader{
+  padding-left: 12px;
+    text-align: center;
+}
+.priorityStatusIcon{
+  padding-top: 1px;
+}
+.hccCountHeader label{
+  font-size: 13px !important;
+  color: #66686B !important;
+  font-weight: 500 !important;
+
+}
+.hccCountHeader h6{
+  color: #221C1C !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+}
 .rafscoreheader{
-  padding-top: 1.25rem;
+  padding-top: 15px
 }
 .rafscoreheader label{
   font-size: 13px !important;
@@ -323,6 +341,7 @@ margin-left: 10px !important;
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  text-transform: capitalize;
 }
 
 
@@ -477,10 +496,6 @@ margin-top: 15px;
 }
 
 
-.container:hover,.suggestedcontainer:hover {
-  overflow-y: scroll; 
-  position: inherit;
-}
 
 .container::-webkit-scrollbar,.suggestedcontainer::-webkit-scrollbar {
   width: 4px;
@@ -488,6 +503,23 @@ margin-top: 15px;
 
 .container::-webkit-scrollbar-thumb,.suggestedcontainer::-webkit-scrollbar {
   border-radius: 4px;
+}
+
+.suggestedcontainer2{
+  min-height: 10vh;
+  max-height: 30vh;
+  overflow: hidden;
+}
+
+.container:hover,.suggestedcontainer:hover,.suggestedcontainer2:hover,.deletedContainer:hover {
+  overflow-y: scroll; 
+  position: inherit;
+}
+
+.deletedContainer{
+  min-height: 10vh;
+  max-height: 30vh;
+  overflow: hidden;
 }
 
 
@@ -1204,8 +1236,9 @@ margin-left: 20px;
   fill: #b8a8bd
 }
 .priorityStatus{
-  padding-top: 1.25rem;
+  padding-top: 17px;
   width: 70px;
+  display: flex;
 }
 .dosSelectPicker{
   width: 100px !important;
@@ -1248,4 +1281,21 @@ margin-left: 20px;
   height: 75vh;
     overflow-y: scroll;
     margin-right: 0px;
+}
+.raflablehead{
+  box-shadow: 0 3px 10px rgba(220, 199, 199, 0.2);
+  border: 1px solid rgba(220, 199, 199, 0.2);
+  background: #3c3c4533;
+  display: inline-flex;
+  align-items: center;
+  height: 25px;
+  padding: 10px;
+  border-radius: 4px;
+}
+.statusFLag{
+  padding-top: 5px;
+  padding-left: 16px;
+}
+.addValidCodeFormFooter{
+  margin-top: 10px;
 }

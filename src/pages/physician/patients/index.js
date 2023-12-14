@@ -240,15 +240,25 @@ export default function Patient() {
     }
 
     if (pStart != null && statusValue != null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
     }
 
-    if (dStart != null && statusValue == null && pStart ==  null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`
+    if (
+      dStart != null &&
+      statusValue == null &&
+      pStart == null &&
+      statusValue != "ALL"
+    ) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
     }
 
-    if (dStart != null && statusValue != null && pStart !=  null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`
+    if (
+      dStart != null &&
+      statusValue != null &&
+      pStart != null &&
+      statusValue != "ALL"
+    ) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
     }
 
     console.log(resoureUrl)
@@ -434,20 +444,33 @@ if(searchtext ){
         inputValuePatientId
       );
       if (response?.status == 200) {
-        notification.success({
-          message: "Patient Id Created Successfully!",
-        });
-        setAddPatientId(false);
-        setIsLoadingBtn(false);
+        console.log(response.data)
+        if(response.data.message == "patient Already Present"){
+          setIsLoadingBtn(false);
+          notification.warning({
+            message: "Patient Id Already Present",
+            duration:1
+          });
+        }else{
+          notification.success({
+            message: "Patient Id Created Successfully!",
+            duration:1
+          });
+          setAddPatientId(false);
+          setIsLoadingBtn(false);
+
+        }
+      
       } else {
         setIsLoadingBtn(false);
       }
-      setAddPatientId(false);
+      // setAddPatientId(false);
       getAllList(localUserId, pageNo, pageSize);
     }
 
     setValidated(true);
   };
+
 
   const gotoPatientDetails = (data) => {
     console.log("Clicked on patient details:", data);

@@ -89,16 +89,24 @@ const Details = ({ }) => {
   // // ],
   // })
 
-  const searchPluginInstance = searchPlugin({
-    // keyword: 'Plan / Discussion',
-    matchCase: true,
-    wholeWords: true,
-  });
+
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
+  const { searchPluginInstance } = toolbarPluginInstance;
+  const { highlight } = searchPluginInstance;
+
+
+
+  // const searchPluginInstance = searchPlugin({
+  //   // keyword: 'Plan / Discussion',
+  //   matchCase: true,
+  //   wholeWords: true,
+  // });
   const { RangePicker } = DatePicker;
-  const { highlight, Search } = searchPluginInstance;
-  const { ShowSearchPopoverButton } = searchPluginInstance;
-  const [searchPluginInstanceLocal, setSearchPluginInstanceLocal] =
-    useState(searchPluginInstance);
+  // const { highlight, Search } = searchPluginInstance;
+  // const { ShowSearchPopoverButton } = searchPluginInstance;
+  // const [searchPluginInstanceLocal, setSearchPluginInstanceLocal] =
+  //   useState(searchPluginInstance);
 
   const sideMenu = useSelector((state) => state.sideMenu);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,7 +128,13 @@ const Details = ({ }) => {
   // );
   const storeDetails = useSelector((state) => state);
 
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  // const defaultLayoutPluginInstance = searchPluginInstance();
+
+
+ 
+
+
+  
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSection, setIsLoadingSection] = useState(true);
   const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
@@ -179,6 +193,8 @@ const Details = ({ }) => {
   );
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
+  const [isModalOpenLab, setIsModalOpenLab] = useState(false);
+
   const [radiologyResCheck, setRadiologyResCheck] = useState(false);
   const [radiologyFileProcessing, setRadiologyFileProcessing] = useState(
     "Please wait file processing..."
@@ -281,6 +297,9 @@ const Details = ({ }) => {
   const [commentsTrigger, setCommentsTrigger] = useState(false);
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
+  const [flagFirstData, setFlagFirstData] = useState([]);
+  const [fileModalHeader, setFileModalHeader] = useState("");
+
 
   // const [captureValidSuggested, setCaptureValidSuggested] = useState([]);
   // const [encounterDateValidSuggested, setEncounterDateValidSuggested] = useState([]);
@@ -736,6 +755,7 @@ const Details = ({ }) => {
               encounterDateSplit: encounterDatearray,
               getPlace: "Radio",
               isHccValid: true,
+              defaultPosition:res.defaultPosition
             });
           });
         }
@@ -752,6 +772,7 @@ const Details = ({ }) => {
               encounterDateSplit: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
+              defaultPosition:res.defaultPosition
             });
           });
         }
@@ -770,6 +791,7 @@ const Details = ({ }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
+                defaultPosition:res.defaultPosition
               });
             } else {
               // suggestListAll.push({
@@ -837,6 +859,9 @@ const Details = ({ }) => {
         //   validDiseasesArray.push({ name: validDis[key] });
         // }
 
+
+
+        console.log(suggestListAll)
 
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -1133,6 +1158,7 @@ const Details = ({ }) => {
         setMeatCriteriaList(meatListArr);
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
         setIsLoadingDos(false);
+        getFlagListLastDetails(patientId,highestDosValue[0].value);
       } else {
         setIsLoading(false);
       }
@@ -1294,6 +1320,7 @@ const Details = ({ }) => {
               encounterDateSplit: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
+              
             });
           });
         }
@@ -1310,8 +1337,9 @@ const Details = ({ }) => {
                 capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCode,
                 encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+                encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
+                defaultPosition:res.defaultPosition
               });
             } else {
               // suggestListAll.push({
@@ -1332,6 +1360,7 @@ const Details = ({ }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
+                defaultPosition:res.defaultPosition
               });
             }
           });
@@ -1770,9 +1799,25 @@ const Details = ({ }) => {
 
         });
 
+        var invalidDisArray = [];
+        invalidDiseaseNewRes.map((res, index) => {
+          const encounterDatearray = res.encounterDate.split(',');
+          invalidDisArray.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition
+          });
+
+        });
+
 
         setNewValidDiseaseListRadiology(validDisArray);
-        setInNewValidDiseaseListRadiology(invalidDiseaseNewRes);
+        setInNewValidDiseaseListRadiology(invalidDisArray);
         setUnMatchHccListRadiology(unMatchRes);
         setComboDiseaseCodesListRadiology(comboDis);
         setDosYearRadiology(dosYearArr);
@@ -1987,16 +2032,16 @@ const Details = ({ }) => {
         //   })
         // })
 
-        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
+        // var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
-        dublicateSectionArr.map((res, index) => {
-          capturedSectionsColorsMatching.push({
-            "name": res.name,
-            "diagnosisCode": res.diagnosisCode,
-            "colors": COLORS2[index]
-          });
-        })
-        setCaptureSectionMatching(capturedSectionsColorsMatching);
+        // dublicateSectionArr.map((res, index) => {
+        //   capturedSectionsColorsMatching.push({
+        //     "name": res.name,
+        //     "diagnosisCode": res.diagnosisCode,
+        //     "colors": COLORS2[index]
+        //   });
+        // })
+        // setCaptureSectionMatching(capturedSectionsColorsMatching);
 
 
 
@@ -2540,6 +2585,7 @@ const Details = ({ }) => {
     setIsModalComments(false);
     setFlagContainerActive("");
     setConfirmCompleteModal(false);
+    setIsModalOpenLab(false);
   };
   const handleOpenModal = (value, disDescription) => {
     var splitPoint = disDescription.substring(" ", 40);
@@ -2561,54 +2607,28 @@ const Details = ({ }) => {
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
+  const findValueDocument = (value,disDescription,) => {
+    var splitPoint = disDescription.substring(" ", 40);
+   
+      highlight({
+        keyword: splitPoint,
+        // matchCase: true,
+        // wholeWords:true
+      });
+   
+  };
   const handleOpenModalCombinationCode = (
     value,
     disDescription,
     check,
-    whereCome
+    whereCome,
+    documentPlace
   ) => {
-    if (whereCome == "nonHcc") {
-      setNonHccActiveCodes(true);
-    } else {
-      setNonHccActiveCodes(false);
-    }
-    if (check === "valid") {
-      setSelectActiveCode(value);
-      var splitPoint = "";
-      splitPoint = disDescription;
-      setTimeout(() => {
-        highlight({
-          keyword: splitPoint,
-        });
-        var dataset = value + " - (" + splitPoint + ")";
-        setSelectMeatName(dataset);
-      }, 2000);
-      setDocumentLoaded(true);
-      var dataset = value + " - (" + splitPoint + ")";
-      setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsLoadingSection(true);
-      setIsModalOpenCaptureSection(true);
-    } else if (check == "valid2") {
-      setSelectActiveCode(value);
-      var splitPoint = "";
-      splitPoint = disDescription;
-      setTimeout(() => {
-        highlight({
-          keyword: splitPoint,
-          matchCase: true,
-        });
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset);
-      }, 2000);
-      setDocumentLoaded(true);
-      var dataset = value + " - (" + disDescription + ")";
-      setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsLoadingSection(true);
-      setIsModalOpenValidCodes(true);
-    } else {
-      setSelectActiveCode(value);
-      var splitPoint = "";
-      splitPoint = disDescription.substring(" ", 20);
+    console.log(documentPlace)
+    if(documentPlace == "Radio"){
+      handleOpenModalRadiology(value,disDescription,true,)
+    }else if(documentPlace == "Lab"){
+      var splitPoint = disDescription.substring(" ", 40);
       setTimeout(() => {
         highlight({
           keyword: splitPoint,
@@ -2620,10 +2640,80 @@ const Details = ({ }) => {
       }, 2000);
       setDocumentLoaded(true);
       var dataset = value + " - (" + disDescription + ")";
+      // setSelectMeatName(dataset);
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
-      setIsModalOpen(true);
+      setIsModalOpenLab(true);
+      
+    }else{
+      if (whereCome == "nonHcc") {
+        setNonHccActiveCodes(true);
+      } else {
+        setNonHccActiveCodes(false);
+      }
+      if (check === "valid") {
+        setSelectActiveCode(value);
+        var splitPoint = "";
+        splitPoint = disDescription;
+        setTimeout(() => {
+          highlight({
+            keyword: splitPoint,
+          });
+          var dataset = value + " - (" + splitPoint + ")";
+          setSelectMeatName(dataset);
+          var headerName = patientDocumentResult.patientId +" / "+patientDocumentResult.patientName +" / " + dataset;
+          setFileModalHeader(headerName)
+        }, 2000);
+        setDocumentLoaded(true);
+        var dataset = value + " - (" + splitPoint + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        setIsLoadingSection(true);
+        var headerName = patientDocumentResult.patientId +" / "+patientDocumentResult.patientName +" / " + dataset + " -  " + "Loading...";
+        setFileModalHeader(headerName)
+        setIsModalOpenCaptureSection(true);
+      } else if (check == "valid2") {
+        setSelectActiveCode(value);
+        var splitPoint = "";
+        splitPoint = disDescription;
+        setTimeout(() => {
+          highlight({
+            keyword: splitPoint,
+            matchCase: true,
+          });
+          var dataset = value + " - (" + disDescription + ")";
+          setSelectMeatName(dataset);
+          var headerName = patientDocumentResult.patientId +" / "+patientDocumentResult.patientName +" / " + dataset;
+          setFileModalHeader(headerName)
+        }, 2000);
+        setDocumentLoaded(true);
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        var headerName = patientDocumentResult.patientId +" / "+patientDocumentResult.patientName +" / " + dataset + " -  " + "Loading...";
+        setFileModalHeader(headerName)
+  
+        setIsLoadingSection(true);
+        setIsModalOpenValidCodes(true);
+      } else {
+        setSelectActiveCode(value);
+        var splitPoint = "";
+        splitPoint = disDescription.substring(" ", 20);
+        setTimeout(() => {
+          highlight({
+            keyword: splitPoint,
+            matchCase: true,
+            // wholeWords:true
+          });
+          var dataset = value + " - (" + disDescription + ")";
+          setSelectMeatName(dataset);
+        }, 2000);
+        setDocumentLoaded(true);
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        setIsLoadingSection(true);
+        setIsModalOpen(true);
+      }
     }
+   
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
@@ -4199,12 +4289,27 @@ const Details = ({ }) => {
     setNotesList(response.data)
   }
 
+  const getFlagListLastDetails = async (patientId,dos) => {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/flagdetails?patientId=${patientId}&year=${dos}`
+    );
+    if(response.data.length != 0){
+      setFlagFirstData(response.data[0])
+
+    }
+  }
+
   const getFlagList = async () => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
       `dbservice/flagdetails?patientId=${localPatientId}&year=${selectedDosValue}`
     );
     setFlagResultList(response.data)
+    if(response.data.length != 0){
+      setFlagFirstData(response.data[0])
+
+    }
   }
 
   const handleDatePickerChange = (dateString) => {
@@ -4299,11 +4404,31 @@ const Details = ({ }) => {
 
   }
 
-
-  const getCaptureSectionBackground = (value) => {
-    console.log(value)
+  const getCaptureSectionBackgroundFile = (value) => {
     var dublicateCaptureDelete = removeDuplicates(value);
-    console.log(dublicateCaptureDelete)
+    return dublicateCaptureDelete.map((res) => {
+      const result = captureSectionMatching.filter(
+        (res2) => res2.name == res
+      );
+      var backColor = result[0]?.colors;
+      var disCode = result[0]?.diagnosisCode;
+
+      var sectionMapArr =
+        (<Badge onClick={() =>
+          findValueDocument(
+            disCode,
+            res,
+          )
+        }
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
+          {res}</Badge>)
+      return sectionMapArr
+    });
+  }
+
+
+  const getCaptureSectionBackground = (value,documentPlace) => {
+    var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.name == res
@@ -4316,7 +4441,9 @@ const Details = ({ }) => {
           handleOpenModalCombinationCode(
             disCode,
             res,
-            "valid"
+            "valid",
+            "null",
+            documentPlace
           )
         }
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
@@ -4439,22 +4566,82 @@ const Details = ({ }) => {
                       <div className="col-xl-1 col-sm-12">
                         <div className={visitStyles.priorityStatus}>
                           {patienIdDetails.priority == "URGENT" ?
-                            <>
-                              <i>{SVGICON.alert}</i>{" "}
-                              <span style={{ fontSize: "13px",fontWeight:500 }}>Urgent</span>{" "}
-                            </> : patienIdDetails.priority == "HIGH" ?
-                              <>
+                           
+                             <div className={visitStyles.priorityStatusIcon}>
+                             <i>{SVGICON.alert}</i>{" "}
+                              <span style={{ fontSize: "13px",fontWeight:500,color:'red' }}>Urgent</span>{" "}
+                             </div>
+                          : patienIdDetails.priority == "HIGH" ?
+                          <div className={visitStyles.priorityStatusIcon}>
                                 <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-                                <span style={{ fontSize: "13px",fontWeight:500 }}>High</span>{" "}
-                              </> : patienIdDetails.priority == "NORMAL" ?
-                                <>
+                                <span style={{ fontSize: "13px",fontWeight:500,color:'#cf940a' }}>High</span>{" "}
+                              </div> : patienIdDetails.priority == "NORMAL" ?
+                               <div className={visitStyles.priorityStatusIcon}>
                                   <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-                                  <span style={{ fontSize: "13px",fontWeight:500 }}>Normal</span>{" "}
-                                </> : 
-                                  <>
+                                  <span style={{ fontSize: "13px",fontWeight:500,color:"#4466ff " }}>Normal</span>{" "}
+                                </div> : 
+                                  <div className={visitStyles.priorityStatusIcon}>
                                     <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-                                    <span style={{ fontSize: "13px",fontWeight:500 }}>Low</span>{" "}
-                                  </> }
+                                    <span style={{ fontSize: "13px",fontWeight:500,color:"#87909e" }}>Low</span>{" "}
+                                  </div> }
+                                 
+                                      <div className={`${visitStyles.hccCountHeader} `}>
+                                <label>HCC</label>
+                               
+                                <h6 className="ageDtails">
+                                {newValidDiseaseList.length}
+                                </h6>
+                        </div>
+                        <span className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}>
+                                        {/* {flagFirstData.flag} */}
+                                        {flagFirstData.flag == "PATIENT_NAME_MISSED" ?
+                                         <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
+                                          <i className={visitStyles.name_missed}>{SVGICON.emptyFlag}</i> 
+                                          </Tooltip>:
+                                          flagFirstData.flag == "PATIENT_DOB_MISSED" ?
+                                          <Tooltip title="PATIENT_DOB_MISSED" placement="bottom">
+                                            <i className={visitStyles.dob_missed}>{SVGICON.emptyFlag}</i>
+                                            </Tooltip> :
+                                            flagFirstData.flag == "MRN_ID_MISMATCH" ?
+                                            <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
+                                              <i className={visitStyles.id_missed}>{SVGICON.emptyFlag}</i>
+                                              </Tooltip> :
+                                              flagFirstData.flag == "PROVIDER_SIGN_MISSED" ?
+                                              <Tooltip title="PROVIDER_SIGN_MISSED" placement="bottom">
+                                                <i className={visitStyles.sign_missed}>{SVGICON.emptyFlag}</i>
+                                                </Tooltip> :
+                                                flagFirstData.flag == "PROVIDER_SIGNATURE_MISSED" ?
+                                                <Tooltip title="PROVIDER_SIGNATURE_MISSED" placement="bottom">
+                                                  <i className={visitStyles.signature_missed}>{SVGICON.emptyFlag}</i>
+                                                  </Tooltip> :
+                                                  flagFirstData.flag == "PROVIDER_CREDENTIAL_MISSED" ?
+                                                  <Tooltip title="PROVIDER_CREDENTIAL_MISSED" placement="bottom">
+                                                    <i className={visitStyles.cred_missed}>{SVGICON.emptyFlag}</i>
+                                                    </Tooltip> :
+                                                    flagFirstData.flag == "PROVIDER_SIGN_STATUS_PENDING" ?
+                                                    <Tooltip title="PROVIDER_SIGN_STATUS_PENDING" placement="bottom">
+                                                      <i className={visitStyles.sign_status}>{SVGICON.emptyFlag}</i>
+                                                      </Tooltip> :
+                                                      flagFirstData.flag == "NO_HCC_FOUND" ?
+                                                      <Tooltip title="NO_HCC_FOUND" placement="bottom">
+                                                        <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlag}</i>
+                                                        </Tooltip> :
+                                                        flagFirstData.flag == "NO_VALID_DOCUMENT_FOUND" ?
+                                                        <Tooltip title="NO_VALID_DOCUMENT_FOUND" placement="bottom">
+                                                          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlag}</i>
+                                                          </Tooltip> :
+                                                          flagFirstData.flag == "PATIENT_DISEASED" ?
+                                                          <Tooltip title="PATIENT_DISEASED" placement="bottom">
+                                                            <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlag}</i>
+                                                            </Tooltip> :
+
+
+
+
+                                                            null}
+
+
+                                      </span>
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">
@@ -5317,20 +5504,12 @@ const Details = ({ }) => {
                                                                             Radiology
                                                                           </span>
                                                                         </Tooltip>
-                                                                      ) : (
-                                                                        <Tooltip title="HCC">
-                                                                          <span
-                                                                            className={` mt-2 ${visitStyles.hccStatus}`}
-                                                                            bg={` mt-2 bg-bg-five `}
-                                                                          >
-                                                                            HCC
-                                                                          </span>
-                                                                        </Tooltip>
-                                                                      )}
+                                                                      ) : null
+                                                                      }
 
                                                                     </div>
                                                                     <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                      {getCaptureSectionBackground(data.capturedSections)}
+                                                                      {getCaptureSectionBackground(data.capturedSections,data.getPlace)}
                                                                     </div>
                                                                   </div>
                                                                 </div>
@@ -6439,7 +6618,7 @@ const Details = ({ }) => {
                                                             (rafScoreMapResult) => {
                                                               return (
                                                                 <>
-                                                                  <label className={`${visitStyles.labelStyle}`}>{rafScoreMapResult.hcc_model.version}</label>
+                                                                  <label className={`${visitStyles.labelStyle} ${visitStyles.raflablehead}`}>{rafScoreMapResult.hcc_model.version}</label>
                                                                   <div className="row raf-main-card">
                                                                     {/* <div className="col-xl-3">
                                                           <div className="card">
@@ -6562,17 +6741,17 @@ const Details = ({ }) => {
                                                                     <div className="col-xl-4">
                                                                       <div className="raf-card">
                                                                         <div className="row raf-head">
-                                                                          <div className="col-xl-4">
+                                                                          {/* <div className="col-xl-4">
                                                                             <label className={`${visitStyles.labelStyle}`}>
                                                                               Trumped By
                                                                             </label>
-                                                                          </div>
-                                                                          <div className="col-xl-4">
+                                                                          </div> */}
+                                                                          <div className="col-xl-6">
                                                                             <label className={`${visitStyles.labelStyle}`}>
                                                                               RAF
                                                                             </label>
                                                                           </div>
-                                                                          <div className="col-xl-4">
+                                                                          <div className="col-xl-6">
                                                                             <label className={`${visitStyles.labelStyle}`}>
                                                                               Monthly
                                                                               Premium
@@ -6587,19 +6766,19 @@ const Details = ({ }) => {
                                                                               ) => {
                                                                                 return (
                                                                                   <div className="row  raf-details">
-                                                                                    <div className="col-xl-4">
+                                                                                    {/* <div className="col-xl-4">
                                                                                       <span>
                                                                                         -
                                                                                       </span>
-                                                                                    </div>
-                                                                                    <div className="col-xl-4">
+                                                                                    </div> */}
+                                                                                    <div className="col-xl-6">
                                                                                       <span>
                                                                                         {
                                                                                           res1.hcc_raf
                                                                                         }
                                                                                       </span>
                                                                                     </div>
-                                                                                    <div className="col-xl-4">
+                                                                                    <div className="col-xl-6">
                                                                                       <span>
                                                                                         $
                                                                                         {
@@ -6624,7 +6803,7 @@ const Details = ({ }) => {
                                                       ) : null}
                                                     </div>
                                                     <div className="col-xl-3">
-                                                      <label className={`${visitStyles.labelStyle}`}>Overall score</label>
+                                                      <label className={`${visitStyles.labelStyle} ${visitStyles.raflablehead}`}>Overall score</label>
                                                       <div className={`row raf-main-card ${visitStyles.overallScoreContainer}`}>
                                                         <div className="raf-card ">
                                                           <div className="row raf-head">
@@ -6635,7 +6814,7 @@ const Details = ({ }) => {
                                                             </div>
                                                             <div className="col-xl-4">
                                                               <label className={`${visitStyles.labelStyle}`}>
-                                                                v24Score(70%)
+                                                                v24Score(70%) 
                                                               </label>
                                                             </div>
                                                           </div>
@@ -6647,11 +6826,10 @@ const Details = ({ }) => {
                                                               </span>
                                                             </div>
                                                             <div className="col-xl-4">
+                                                            {rafScore.v24Score70Percent != null ?
                                                               <span>
-                                                                {
-                                                                  rafScore.v24Score70Percent
-                                                                }
-                                                              </span>
+                                                                  {rafScore.v24Score70Percent.toFixed(3)}
+                                                              </span>:null}
                                                             </div>
                                                           </div>
                                                         </div>
@@ -6676,11 +6854,10 @@ const Details = ({ }) => {
                                                               </span>
                                                             </div>
                                                             <div className="col-xl-4">
+                                                            {rafScore.v28Score30Percent != null ?
                                                               <span>
-                                                                {
-                                                                  rafScore.v28Score30Percent
-                                                                }
-                                                              </span>
+                                                              {rafScore.v28Score30Percent.toFixed(3)}
+                                                              </span>:null}
                                                             </div>
                                                           </div>
                                                         </div>
@@ -6694,11 +6871,10 @@ const Details = ({ }) => {
                                                           </div>
 
                                                           <div className="row  raf-details">
+                                                            {rafScore.score != null ?
                                                             <span>
-                                                              {
-                                                                rafScore.score
-                                                              }
-                                                            </span>
+                                                            {rafScore.score.toFixed(3)}
+                                                            </span>:null}
                                                           </div>
                                                         </div>
                                                       </div>
@@ -6849,7 +7025,7 @@ const Details = ({ }) => {
                                                             <div
                                                               className="media-body"
                                                               onClick={() =>
-                                                                handleOpenModalCombinationCode(
+                                                                findValueDocument(
                                                                   data.diagnosisCode,
                                                                   data.actualDescription,
                                                                   "valid2"
@@ -6972,7 +7148,7 @@ const Details = ({ }) => {
                                                                : null}
                                                             </div>
                                                             <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                              {getCaptureSectionBackground(data.capturedSections)}
+                                                              {getCaptureSectionBackgroundFile(data.capturedSections)}
                                                             </div>
                                                           </div>
                                                         </div>
@@ -7029,6 +7205,375 @@ const Details = ({ }) => {
                                                 </div>
                                               </Worker>
                                             </div>
+                                          </div>
+                                          <div className="col-xl-2">
+                                          <div className="">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.suggested_title_name}`}
+                                                    >
+                                                      SUGGESTED CODES
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.suggested_title_badge}`}
+                                                      >
+                                                        {suggestedHccList.length}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={visitStyles.suggestedcontainer2}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {suggestedHccList?.map((data) => {
+                                                        return (
+                                                          <>
+                                                            {data.isHccValid == true ? (
+                                                              <li>
+                                                                <div
+                                                                  className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                                                >
+                                                                  <div
+                                                                    className={`${visitStyles.hcc_card_nameHead}`}
+                                                                  >
+                                                                    <div
+                                                                      className="media-body"
+                                                                      onClick={() =>
+                                                                        findValueDocument(
+                                                                          data.diagnosisCode,
+                                                                          data.actualDescription,
+                                                                          "valid2"
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      <span className="mb-1 disease-name d-flex">
+                                                                        <span className="valid-dis-name">
+                                                                          {
+                                                                            data.diagnosisCode
+                                                                          }
+                                                                        </span>{" "}
+                                                                        -{" "}
+                                                                        {
+                                                                          data.actualDescription
+                                                                        }
+                                                                      </span>
+                                                                    </div>
+                                                                    {data.defaultPosition == "VALID" ?
+                                                                      <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                      </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                        <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                        </span>
+                                                                        : data.defaultPosition == "DELETED" ?
+
+                                                                          <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                          </span> : null}
+                                                                    <Popover
+                                                                      onClick={() =>
+                                                                        getValidHccDetails(
+                                                                          data.actualDescription,
+                                                                          data.diagnosisCode
+                                                                        )
+                                                                      }
+                                                                      content={
+                                                                        validHccDetails
+                                                                      }
+                                                                      title={
+                                                                        data.diagnosisCode
+                                                                      }
+                                                                      placement="bottom"
+                                                                      trigger="click"
+                                                                    >
+                                                                      <i>
+                                                                        {
+                                                                          SVGICON.infoIcon
+                                                                        }
+                                                                      </i>
+                                                                    </Popover>
+                                                                    {data.getPlace ==
+                                                                      "Radio" || data.getPlace ==
+                                                                      "Lab" ?
+                                                                      <Popconfirm
+                                                                        title="Choose an action"
+                                                                        icon={
+                                                                          <QuestionCircleOutlined
+                                                                            style={{
+                                                                              color:
+                                                                                "blue",
+                                                                            }}
+                                                                          />
+                                                                        }
+                                                                        okText="Move to Deleted"
+
+                                                                        okButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "primary"
+                                                                            : "default",
+                                                                        }}
+
+                                                                        description={
+                                                                          data.diagnosisCode
+                                                                        }
+                                                                        onConfirm={
+                                                                          suggestedToDeleted
+                                                                        }
+                                                                        placement="leftTop"
+                                                                        onOpenChange={() =>
+                                                                          onchangeValid(
+                                                                            data.diagnosisCode,
+                                                                            data
+                                                                          )
+                                                                        }
+                                                                      >
+                                                                        <div
+                                                                          className={
+                                                                            visitStyles.close_icon
+                                                                          }
+                                                                        >
+                                                                          <FontAwesomeIcon
+                                                                            icon={faArrowsAlt}
+                                                                            style={{ size: 8, color: "#a80404" }}
+                                                                          />
+                                                                        </div>
+                                                                      </Popconfirm>
+
+                                                                      : <Popconfirm
+                                                                        title="Choose an action"
+                                                                        icon={
+                                                                          <QuestionCircleOutlined
+                                                                            style={{
+                                                                              color:
+                                                                                "blue",
+                                                                            }}
+                                                                          />
+                                                                        }
+                                                                        okText="Move to Deleted"
+                                                                        cancelText="Move to HCC"
+                                                                        onCancel={
+                                                                          suggestedToValid
+                                                                        }
+                                                                        okButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "primary"
+                                                                            : "default",
+                                                                        }}
+                                                                        cancelButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "danger"
+                                                                            : "default",
+                                                                        }}
+                                                                        description={
+                                                                          data.diagnosisCode
+                                                                        }
+                                                                        onConfirm={
+                                                                          suggestedToDeleted
+                                                                        }
+                                                                        placement="leftTop"
+                                                                        onOpenChange={() =>
+                                                                          onchangeValid(
+                                                                            data.diagnosisCode,
+                                                                            data
+                                                                          )
+                                                                        }
+                                                                      >
+                                                                        <div
+                                                                          className={
+                                                                            visitStyles.close_icon
+                                                                          }
+                                                                        >
+                                                                          <FontAwesomeIcon
+                                                                            icon={faArrowsAlt}
+                                                                            style={{ size: 8, color: "#a80404" }}
+                                                                          />
+                                                                        </div>
+                                                                      </Popconfirm>}
+                                                                  </div>
+                                                                  <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                                    <div className="">
+
+                                                                      {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                      {data.getPlace ==
+                                                                        "Lab" ? (
+                                                                        <Tooltip title="LAB">
+                                                                          <span
+                                                                            className={` mt-2 ${visitStyles.labStatus}`}
+                                                                            bg={`  mt-2 bg-bg-seven `}
+                                                                          >
+                                                                            Lap
+                                                                          </span>
+                                                                        </Tooltip>
+                                                                      ) : data.getPlace ==
+                                                                        "Radio" ? (
+                                                                        <Tooltip title="RADIOLOGY">
+                                                                          <span
+                                                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                                            bg={`  mt-2 bg-bg-eight `}
+                                                                          >
+                                                                            Radiology
+                                                                          </span>
+                                                                        </Tooltip>
+                                                                      ) : null
+                                                                      }
+
+                                                                    </div>
+                                                                    <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                      {getCaptureSectionBackground(data.capturedSections)}
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </li>
+                                                            ) : null}
+                                                          </>
+                                                        );
+                                                      })}
+                                                    </div>
+                                                  </div>
+                                                </ul>
+                                              </div>
+
+                                              <div className="">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.deleted_title_name}`}
+                                                    >
+                                                      DELETED CODES
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.deleted_title_badge}`}
+                                                      >
+                                                        {deletedHccList.length}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={visitStyles.deletedContainer}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {deletedHccList.map((data, i) => (
+                                                        <li>
+                                                          <div
+                                                            className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                                          >
+                                                            <div
+                                                              className={`${visitStyles.hcc_card_nameHead}`}
+                                                            >
+                                                              <div className="media-body">
+                                                                <span className="mb-1 disease-name d-flex">
+                                                                  <span className="valid-dis-name">
+                                                                    {data.diagnosisCode}
+                                                                  </span>{" "}
+                                                                  -{" "}
+                                                                  {
+                                                                    data.actualDescription
+                                                                  }
+                                                                </span>
+                                                              </div>
+                                                              {data.defaultPosition == "VALID" ?
+                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span>
+                                                                  : data.defaultPosition == "DELETED" ?
+
+                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : null}
+                                                              <Popover
+                                                                content={
+                                                                  data.dbDescription
+                                                                }
+                                                                title={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                placement="bottom"
+                                                                trigger="click"
+                                                              >
+                                                                <Tooltip title="HCC Veriosn Details" placement="bottom">
+                                                                  <i>
+                                                                    {SVGICON.infoIcon}
+                                                                  </i>
+                                                                </Tooltip>
+                                                              </Popover>
+                                                              <Popconfirm
+                                                                title="Choose an action"
+                                                                icon={
+                                                                  <QuestionCircleOutlined
+                                                                    style={{
+                                                                      color: "blue",
+                                                                    }}
+                                                                  />
+                                                                }
+                                                                okText="Move to Suggested"
+                                                                cancelText="Move to HCC"
+                                                                onCancel={
+                                                                  deletedToValid
+                                                                }
+                                                                okButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "primary"
+                                                                    : "default",
+                                                                }}
+                                                                cancelButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "danger"
+                                                                    : "default",
+                                                                }}
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  deletedToSuggested
+                                                                }
+                                                                placement="leftTop"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
+                                                                }
+                                                              >
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
+                                                                >
+                                                                  <FontAwesomeIcon
+                                                                    icon={faArrowsAlt}
+                                                                    style={{ size: 8, color: "#a80404" }}
+                                                                  />
+                                                                </div>
+                                                              </Popconfirm>
+                                                            </div>
+                                                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                              <div className="">
+
+                                                                {getEncounterDateBackground(data.encounterDateSplit)}
+
+                                                                {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                      <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
+                                                      <FontAwesomeIcon
+                                                          icon={faSearch}
+                                                          style={{ color: "#fff" }}
+                                                        />
+                                                        HPI Test Urlplan
+                                                      </Badge>
+                                                      </Popover> */}
+                                                              </div>
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                {getCaptureSectionBackground(data.capturedSections)}
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </li>
+                                                      ))}
+                                                    </div>
+                                                  </div>
+                                                </ul>
+                                              </div>
                                           </div>
 
                                         </div>
@@ -8619,7 +9164,7 @@ const Details = ({ }) => {
 
                                                             {getEncounterDateBackground(data.encounterDateSplit)}
                                                             <div>
-                                                              {getCaptureSectionBackground(data.capturedSections)}
+                                                              {getCaptureSectionBackground(data.capturedSections,"Radio")}
 
                                                             </div>
                                                           </div>
@@ -8662,7 +9207,16 @@ const Details = ({ }) => {
                                                           <div
                                                             className={`${visitStyles.hcc_card_nameHead}`}
                                                           >
-                                                            <div className="media-body">
+                                                            <div
+                                                              className="media-body"
+                                                              onClick={() =>
+                                                                handleOpenModalRadiology(
+                                                                  data.diagnosisCode,
+                                                                  data.actualDescription,
+                                                                  true
+                                                                )
+                                                              }
+                                                            >
                                                               <span className="mb-1 disease-name d-flex">
                                                                 <span className="valid-dis-name">
                                                                   {
@@ -8675,13 +9229,16 @@ const Details = ({ }) => {
                                                                 }
                                                               </span>
                                                             </div>
+
+
+
                                                             <Popconfirm
-                                                              title="You want move to valid?"
+                                                              title="You want to delete?"
                                                               description={
                                                                 data.diagnosisCode
                                                               }
                                                               onConfirm={
-                                                                confirmInvalid
+                                                                confirmvalid
                                                               }
                                                               placement="leftTop"
                                                               okText="Yes"
@@ -8704,6 +9261,17 @@ const Details = ({ }) => {
                                                               </div>
                                                             </Popconfirm>
                                                           </div>
+                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
+
+                                                            {getEncounterDateBackground(data.encounterDateSplit)}
+                                                            <div>
+                                                              {getCaptureSectionBackground(data.capturedSections,"Radio")}
+
+                                                            </div>
+                                                          </div>
+
+
+
                                                         </div>
                                                       </li>
                                                     )
@@ -9807,7 +10375,110 @@ const Details = ({ }) => {
                                               Open New Tab
                                             </button>
                                           </div>
-                                          <div className="card-body p-0 z-index-low">
+                                          <div className="row">
+                                          <div className="col-xl-2">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.hcc_title_name}`}
+                                                    >
+                                                      HCC
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.hcc_title_badge}`}
+                                                      >
+                                                        {
+                                                          newValidDiseaseListRadiology.length
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                  </div>
+
+                                                  {newValidDiseaseListRadiology.map(
+                                                    (data, i) => (
+                                                      <li>
+                                                        <div
+                                                          className={`${visitStyles.hcc_card}`}
+                                                        >
+                                                          <div
+                                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                                          >
+                                                            <div
+                                                              className="media-body"
+                                                              onClick={() =>
+                                                                handleOpenModalRadiology(
+                                                                  data.diagnosisCode,
+                                                                  data.actualDescription,
+                                                                  true
+                                                                )
+                                                              }
+                                                            >
+                                                              <span className="mb-1 disease-name d-flex">
+                                                                <span className="valid-dis-name">
+                                                                  {
+                                                                    data.diagnosisCode
+                                                                  }
+                                                                </span>{" "}
+                                                                -{" "}
+                                                                {
+                                                                  data.actualDescription
+                                                                }
+                                                              </span>
+                                                            </div>
+
+
+
+                                                            <Popconfirm
+                                                              title="You want to delete?"
+                                                              description={
+                                                                data.diagnosisCode
+                                                              }
+                                                              onConfirm={
+                                                                confirmvalid
+                                                              }
+                                                              placement="leftTop"
+                                                              okText="Yes"
+                                                              cancelText="No"
+                                                              onOpenChange={() =>
+                                                                onchangeValid(
+                                                                  data.diagnosisCode
+                                                                )
+                                                              }
+                                                            >
+                                                              <div
+                                                                className={
+                                                                  visitStyles.close_icon
+                                                                }
+                                                              >
+                                                                <FontAwesomeIcon
+                                                                  icon={faArrowsAlt}
+                                                                  style={{ size: 8, color: "#a80404" }}
+                                                                />
+                                                              </div>
+                                                            </Popconfirm>
+                                                          </div>
+                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
+
+                                                            {getEncounterDateBackground(data.encounterDateSplit)}
+                                                            <div>
+                                                              {getCaptureSectionBackground(data.capturedSections,"Radio")}
+
+                                                            </div>
+                                                          </div>
+
+
+
+                                                        </div>
+                                                      </li>
+                                                    )
+                                                  )}
+                                                </ul>
+                                              </div>
+                                              <div className="col-xl-8">
+                                              <div className="card-body p-0 z-index-low">
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                               <div
                                                 style={{
@@ -9841,6 +10512,207 @@ const Details = ({ }) => {
                                               </div>
                                             </Worker>
                                           </div>
+                                              </div>
+                                              <div className="col-xl-2">
+                                              <div className="">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.suggested_title_name}`}
+                                                    >
+                                                      NON-HCC
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.suggested_title_badge}`}
+                                                      >
+                                                        {
+                                                          newInValidDiseaseListRadiology.length
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={visitStyles.suggestedcontainer2}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                  {newInValidDiseaseListRadiology.map(
+                                                    (data, i) => (
+                                                      <li>
+                                                        <div
+                                                          className={`${visitStyles.hcc_card}`}
+                                                        >
+                                                          <div
+                                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                                          >
+                                                            <div
+                                                              className="media-body"
+                                                              onClick={() =>
+                                                                handleOpenModalRadiology(
+                                                                  data.diagnosisCode,
+                                                                  data.actualDescription,
+                                                                  true
+                                                                )
+                                                              }
+                                                            >
+                                                              <span className="mb-1 disease-name d-flex">
+                                                                <span className="valid-dis-name">
+                                                                  {
+                                                                    data.diagnosisCode
+                                                                  }
+                                                                </span>{" "}
+                                                                -{" "}
+                                                                {
+                                                                  data.actualDescription
+                                                                }
+                                                              </span>
+                                                            </div>
+
+
+
+                                                            <Popconfirm
+                                                              title="You want to delete?"
+                                                              description={
+                                                                data.diagnosisCode
+                                                              }
+                                                              onConfirm={
+                                                                confirmvalid
+                                                              }
+                                                              placement="leftTop"
+                                                              okText="Yes"
+                                                              cancelText="No"
+                                                              onOpenChange={() =>
+                                                                onchangeValid(
+                                                                  data.diagnosisCode
+                                                                )
+                                                              }
+                                                            >
+                                                              <div
+                                                                className={
+                                                                  visitStyles.close_icon
+                                                                }
+                                                              >
+                                                                <FontAwesomeIcon
+                                                                  icon={faArrowsAlt}
+                                                                  style={{ size: 8, color: "#a80404" }}
+                                                                />
+                                                              </div>
+                                                            </Popconfirm>
+                                                          </div>
+                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
+
+                                                            {getEncounterDateBackground(data.encounterDateSplit)}
+                                                            <div>
+                                                              {getCaptureSectionBackground(data.capturedSections,"Radio")}
+
+                                                            </div>
+                                                          </div>
+
+
+
+                                                        </div>
+                                                      </li>
+                                                    )
+                                                  )}
+                                                  </div>
+                                                  </div>
+                                                </ul>
+                                              </div>
+
+                                              <div className="">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.deleted_title_name}`}
+                                                    >
+                                                      DELETED CODES
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.deleted_title_badge}`}
+                                                      >
+                                                        {
+                                                          invalidMoveDiseasesList.length
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={visitStyles.suggestedcontainer2}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                  {invalidMoveDiseasesList.map(
+                                                    (data, i) => (
+                                                      <li>
+                                                        <div className="timeline-panel invalid-disease">
+                                                          <div className="media-body">
+                                                            <span className="mb-1 disease-name d-flex">
+                                                              <span className="valid-dis-name">
+                                                                {data.diagnosisCode}
+                                                              </span>{" "}
+                                                              -{" "}
+                                                              {
+                                                                data.actualDescription
+                                                              }
+                                                            </span>
+                                                          </div>
+                                                          <Popover
+                                                            content={
+                                                              data.dbDescription
+                                                            }
+                                                            title={
+                                                              data.diagnosisCode
+                                                            }
+                                                            placement="bottom"
+                                                            trigger="click"
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faInfo}
+                                                                style={{
+                                                                  color: "blue",
+                                                                }}
+                                                              />
+                                                            </div>
+                                                          </Popover>
+                                                          <Popconfirm
+                                                            title="You want move to valid?"
+                                                            description={
+                                                              data.diagnosisCode
+                                                            }
+                                                            onConfirm={
+                                                              confirmInvalidMoveDis
+                                                            }
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(
+                                                                data.diagnosisCode
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faCheck}
+                                                                style={{
+                                                                  color: "orange",
+                                                                }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
+                                                        </div>
+                                                      </li>
+                                                    )
+                                                  )}
+                                                  </div>
+                                                  </div>
+                                                </ul>
+                                              </div>
+                                              </div>
+
+                                          </div>
+                                         
                                         </div>
                                       </Tab.Pane>
                                     </Tab.Content>
@@ -9948,11 +10820,97 @@ const Details = ({ }) => {
 
                                                             {getEncounterDateBackground(data.encounterDateSplit)}
                                                             <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                              {getCaptureSectionBackground(data.capturedSections)}
+                                                              {getCaptureSectionBackground(data.capturedSections,"Lab")}
                                                             </div>
 
                                                           </div>
 
+                                                        </div>
+                                                      </li>
+                                                    )
+                                                  )}
+                                                </ul>
+                                              </div>
+                                              <div className="col-xl-4">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.deleted_title_name}`}
+                                                    >
+                                                      DELETED CODES
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.deleted_title_badge}`}
+                                                      >
+                                                        {
+                                                          invalidMoveDiseasesList.length
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  {invalidMoveDiseasesList.map(
+                                                    (data, i) => (
+                                                      <li>
+                                                        <div className="timeline-panel invalid-disease">
+                                                          <div className="media-body">
+                                                            <span className="mb-1 disease-name d-flex">
+                                                              <span className="valid-dis-name">
+                                                                {data.diagnosisCode}
+                                                              </span>{" "}
+                                                              -{" "}
+                                                              {
+                                                                data.actualDescription
+                                                              }
+                                                            </span>
+                                                          </div>
+                                                          <Popover
+                                                            content={
+                                                              data.dbDescription
+                                                            }
+                                                            title={
+                                                              data.diagnosisCode
+                                                            }
+                                                            placement="bottom"
+                                                            trigger="click"
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faInfo}
+                                                                style={{
+                                                                  color: "blue",
+                                                                }}
+                                                              />
+                                                            </div>
+                                                          </Popover>
+                                                          <Popconfirm
+                                                            title="You want move to valid?"
+                                                            description={
+                                                              data.diagnosisCode
+                                                            }
+                                                            onConfirm={
+                                                              confirmInvalidMoveDis
+                                                            }
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(
+                                                                data.diagnosisCode
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faCheck}
+                                                                style={{
+                                                                  color: "orange",
+                                                                }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
                                                         </div>
                                                       </li>
                                                     )
@@ -10245,7 +11203,69 @@ const Details = ({ }) => {
                                               Open New Tab
                                             </button>
                                           </div>
-                                          <div className="card-body p-0 z-index-low">
+                                          <div className="row">
+                                          <div className="col-xl-2">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.hcc_title_name}`}
+                                                    >
+                                                      HCC
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.hcc_title_badge}`}
+                                                      >
+                                                        {labReportValidList.length}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+
+                                                  {labReportValidList.map(
+                                                    (data, i) => (
+                                                      <li>
+                                                        <div
+                                                          className={`${visitStyles.hcc_card}`}
+                                                        >
+                                                          <div
+                                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                                          >
+                                                            <div
+                                                              className="media-body"
+
+                                                            >
+                                                              <span className="mb-1 disease-name d-flex">
+                                                                <span className="valid-dis-name">
+                                                                  {
+                                                                    data.diagnosisCode
+                                                                  }
+                                                                </span>{" "}
+                                                                -{" "}
+                                                                {
+                                                                  data.actualDescription
+                                                                }
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
+
+                                                            {getEncounterDateBackground(data.encounterDateSplit)}
+                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                              {getCaptureSectionBackground(data.capturedSections,"Lab")}
+                                                            </div>
+
+                                                          </div>
+
+                                                        </div>
+                                                      </li>
+                                                    )
+                                                  )}
+                                                </ul>
+                                              </div>
+                                              <div className="col-xl-8">
+                                              <div className="card-body p-0 z-index-low">
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                               <div
                                                 style={{
@@ -10279,6 +11299,98 @@ const Details = ({ }) => {
                                               </div>
                                             </Worker>
                                           </div>
+                                              </div>
+                                              <div className="col-xl-2">
+                                              <div className="">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.deleted_title_name}`}
+                                                    >
+                                                      DELETED CODES
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.deleted_title_badge}`}
+                                                      >
+                                                        {
+                                                          invalidMoveDiseasesList.length
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  {invalidMoveDiseasesList.map(
+                                                    (data, i) => (
+                                                      <li>
+                                                        <div className="timeline-panel invalid-disease">
+                                                          <div className="media-body">
+                                                            <span className="mb-1 disease-name d-flex">
+                                                              <span className="valid-dis-name">
+                                                                {data.diagnosisCode}
+                                                              </span>{" "}
+                                                              -{" "}
+                                                              {
+                                                                data.actualDescription
+                                                              }
+                                                            </span>
+                                                          </div>
+                                                          <Popover
+                                                            content={
+                                                              data.dbDescription
+                                                            }
+                                                            title={
+                                                              data.diagnosisCode
+                                                            }
+                                                            placement="bottom"
+                                                            trigger="click"
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faInfo}
+                                                                style={{
+                                                                  color: "blue",
+                                                                }}
+                                                              />
+                                                            </div>
+                                                          </Popover>
+                                                          <Popconfirm
+                                                            title="You want move to valid?"
+                                                            description={
+                                                              data.diagnosisCode
+                                                            }
+                                                            onConfirm={
+                                                              confirmInvalidMoveDis
+                                                            }
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(
+                                                                data.diagnosisCode
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faCheck}
+                                                                style={{
+                                                                  color: "orange",
+                                                                }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
+                                                        </div>
+                                                      </li>
+                                                    )
+                                                  )}
+                                                </ul>
+                                              </div>
+                                              </div>
+                                             
+                                          </div>
+                                       
                                         </div>
                                       </Tab.Pane>
                                     </Tab.Content>
@@ -10637,45 +11749,49 @@ const Details = ({ }) => {
                   )}
                   {isModalOpenValidCodes && (
                     <Modal
-                      title={selectMeatName}
+                      title={fileModalHeader}
                       // title="Pdf Test"
                       centered
                       open={isModalOpenValidCodes}
                       // style={{ top: 5 }}
                       onOk={handleCloseModal}
                       onCancel={handleCloseModal}
-                      width={1300}
-                      height={400}
+                      width="90%"
+                      // height={400}
                     >
                       <div className="section-container">
                         <div class="d-flex justify-content-end m-4">
-                          <button
+                          {/* <button
                             class="btn btn-primary"
                             onClick={handleAddButtonClick}
                           >
                             Add
-                          </button>
+                          </button> */}
+                          <Button  onClick={handleAddButtonClick}  className="btn btn-primary btn-sm me-1">
+                          Add
+                  </Button>
+                 
                         </div>
 
                         <div className="row">
                           <div className="col-xl-8">
                             <div
-                              className="rpv-core__viewer"
-                              style={{
-                                border: "1px solid rgba(0, 0, 0, 0.3)",
-                                display: "flex",
-                                flexDirection: "column",
-                                margin: "0 82px 10px 73px",
-                              }}
+                              // className="rpv-core__viewer"
+                              // style={{
+                              //   border: "1px solid rgba(0, 0, 0, 0.3)",
+                              //   display: "flex",
+                              //   flexDirection: "column",
+                              //   margin: "0 82px 10px 73px",
+                              // }}
                             >
                               <div
-                                style={{
-                                  alignItems: "center",
-                                  backgroundColor: "#eeeeee",
-                                  borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
-                                  display: "flex",
-                                  padding: "4px",
-                                }}
+                                // style={{
+                                //   alignItems: "center",
+                                //   backgroundColor: "#eeeeee",
+                                //   borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+                                //   display: "flex",
+                                //   padding: "4px",
+                                // }}
                               >
                                 {/* <Search>
                                 {(renderSearchProps) => {
@@ -10838,7 +11954,7 @@ const Details = ({ }) => {
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                               <div
                                 style={{
-                                  height: "400px",
+                                  height: "60vh",
                                   // width: "1000px",
                                   marginLeft: "auto",
                                   marginRight: "auto",
@@ -10930,7 +12046,7 @@ const Details = ({ }) => {
                                     rows="5"
                                   ></textarea>
                                 </div>
-                                <div className="d-flex justify-content-between">
+                                {/* <div className="d-flex justify-content-between">
                                   <button
                                     type="submit"
                                     className="btn btn-success"
@@ -10944,7 +12060,19 @@ const Details = ({ }) => {
                                   >
                                     Cancel
                                   </button>
-                                </div>
+                                </div> */}
+                                
+                                <div className={visitStyles.addValidCodeFormFooter}>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    {isLoadingBtn ? "Loading..." : "Submit"}
+                  </Button>
+                  <Button
+                    onClick={handleCloseForm}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </div>
                               </form>
                             </div>
                           )}
@@ -11026,36 +12154,36 @@ const Details = ({ }) => {
                   )}
                   {isModalOpenCaptureSection && (
                     <Modal
-                      title={selectMeatName}
+                      title={fileModalHeader}
                       // title="Pdf Test"
                       centered
                       open={isModalOpenCaptureSection}
-                      // style={{ top: 5 }}
+                      style={{ top: 1 }}
                       onOk={handleCloseModal}
                       onCancel={handleCloseModal}
-                      width={1000}
-                      height={400}
+                      width="90%"
+                      // height={500}
                     >
                       <div className="section-container">
                         <div className="row">
                           <div className="col-xl-12">
                             <div
-                              className="rpv-core__viewer"
-                              style={{
-                                border: "1px solid rgba(0, 0, 0, 0.3)",
-                                display: "flex",
-                                flexDirection: "column",
-                                margin: "0 82px 10px 73px",
-                              }}
+                              // className="rpv-core__viewer"
+                              // style={{
+                              //   border: "1px solid rgba(0, 0, 0, 0.3)",
+                              //   display: "flex",
+                              //   flexDirection: "column",
+                              //   margin: "0 82px 10px 73px",
+                              // }}
                             >
                               <div
-                                style={{
-                                  alignItems: "center",
-                                  backgroundColor: "#eeeeee",
-                                  borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
-                                  display: "flex",
-                                  padding: "4px",
-                                }}
+                                // style={{
+                                //   alignItems: "center",
+                                //   backgroundColor: "#eeeeee",
+                                //   borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+                                //   display: "flex",
+                                //   padding: "4px",
+                                // }}
                               >
                                 {/* <Search>
                                 {(renderSearchProps) => {
@@ -11218,8 +12346,8 @@ const Details = ({ }) => {
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                               <div
                                 style={{
-                                  height: "400px",
-                                  // width: "1000px",
+                                  height: "70vh",
+                                  width: "900px",
                                   marginLeft: "auto",
                                   marginRight: "auto",
                                 }}
@@ -11275,228 +12403,15 @@ const Details = ({ }) => {
                       // style={{ top: 5 }}
                       onOk={handleCloseModal}
                       onCancel={handleCloseModal}
-                      width={1000}
-                      height={400}
+                      width="70%"
+                      // height={400}
                     >
-                      <div className="section-container">
-                        {/* <button onClick={changeSearch}>Check
-        
-        </button> */}
-                        {/* {isLoadingSection ?
-                      <Spin className='ml-2 ms-1 section-spin' size="medium" />
-                      : <>
-                        {sectionList?.map((item) => {
-                          return (
-
-                            <div className="card meat-card">
-                              <span className="combodiseaseText">{item}</span>
-                            </div>
-
-
-                          );
-                        })}
-                      </>} */}
-                        {/* <div
-        className="rpv-core__viewer"
-        style={{
-            border: '1px solid rgba(0, 0, 0, 0.3)',
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            marginBottom:"50px"
-        }}
-    >
-        <div
-            style={{
-                alignItems: 'center',
-                backgroundColor: '#eeeeee',
-                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-                display: 'flex',
-                padding: '4px',
-            }}
-        >
-            <ShowSearchPopoverButton />
-        </div>
-        </div> */}
-                        <div
-                          className="rpv-core__viewer"
-                          style={{
-                            border: "1px solid rgba(0, 0, 0, 0.3)",
-                            display: "flex",
-                            flexDirection: "column",
-                            height: "100%",
-                            margin: "0 82px 10px 73px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              alignItems: "center",
-                              backgroundColor: "#eeeeee",
-                              borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
-                              display: "flex",
-                              padding: "4px",
-                            }}
-                          >
-                            {/* <Search>
-                            {(renderSearchProps) => {
-                              const [readyToSearch, setReadyToSearch] =
-                                useState(false);
-                              return (
-                                <>
-                                  <div
-                                    style={{
-                                      border: "1px solid rgba(0, 0, 0, 0.3)",
-                                      display: "flex",
-                                      padding: "0 2px",
-                                    }}
-                                  >
-                                    <input
-                                      style={{
-                                        border: "none",
-                                        padding: "8px",
-                                        width: "200px",
-                                      }}
-                                      placeholder="Enter to search"
-                                      type="text"
-                                      value={renderSearchProps.keyword}
-                                      onChange={(e) => {
-                                        setReadyToSearch(false);
-                                        renderSearchProps.setKeyword(
-                                          e.target.value
-                                        );
-                                      }}
-                                      onKeyDown={(e) => {
-                                        if (
-                                          e.keyCode === 13 &&
-                                          renderSearchProps.keyword
-                                        ) {
-                                          setReadyToSearch(true);
-                                          renderSearchProps.search();
-                                        }
-                                      }}
-                                    />
-                                    <Tooltip
-                                      position={Position.BottomCenter}
-                                      target={
-                                        <button
-                                          style={{
-                                            background: "#fff",
-                                            border: "none",
-                                            borderBottom: `2px solid ${renderSearchProps.matchCase
-                                              ? "blue"
-                                              : "transparent"
-                                              }`,
-                                            height: "100%",
-                                            padding: "0 2px",
-                                          }}
-                                          onClick={() =>
-                                            renderSearchProps.changeMatchCase(
-                                              !renderSearchProps.matchCase
-                                            )
-                                          }
-                                        >
-                                          <Icon>
-                                            <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
-                                            <path d="M4.383 14.725L13.59 14.725" />
-                                            <path d="M0.5 21.725L3.52 21.725" />
-                                            <path d="M14.479 21.725L17.5 21.725" />
-                                            <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
-                                            <path d="M16.92 16.725L20.794 16.725" />
-                                            <path d="M21.516 21.725L23.5 21.725" />
-                                          </Icon>
-                                        </button>
-                                      }
-                                      content={() => "Match case"}
-                                      offset={{ left: 0, top: 8 }}
-                                    />
-                                    <Tooltip
-                                      position={Position.BottomCenter}
-                                      target={
-                                        <button
-                                          style={{
-                                            background: "#fff",
-                                            border: "none",
-                                            borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                              ? "blue"
-                                              : "transparent"
-                                              }`,
-                                            height: "100%",
-                                            padding: "0 2px",
-                                          }}
-                                          onClick={() =>
-                                            renderSearchProps.changeWholeWords(
-                                              !renderSearchProps.wholeWords
-                                            )
-                                          }
-                                        >
-                                          <Icon>
-                                            <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
-                                            <path d="M3.5 9.498L3.5 14.498" />
-                                          </Icon>
-                                        </button>
-                                      }
-                                      content={() => "Match whole word"}
-                                      offset={{ left: 0, top: 8 }}
-                                    />
-                                  </div>
-                                  {readyToSearch &&
-                                    renderSearchProps.keyword &&
-                                    renderSearchProps.numberOfMatches === 0 && (
-                                      <div style={{ padding: "0 8px" }}>
-                                        Not found
-                                      </div>
-                                    )}
-                                  {readyToSearch &&
-                                    renderSearchProps.keyword &&
-                                    renderSearchProps.numberOfMatches > 0 && (
-                                      <div style={{ padding: "0 8px" }}>
-                                        {renderSearchProps.currentMatch} of{" "}
-                                        {renderSearchProps.numberOfMatches}
-                                      </div>
-                                    )}
-                                  <div style={{ padding: "0 2px" }}>
-                                    <Tooltip
-                                      position={Position.BottomCenter}
-                                      target={
-                                        <MinimalButton
-                                          onClick={
-                                            renderSearchProps.jumpToPreviousMatch
-                                          }
-                                        >
-                                          <PreviousIcon />
-                                        </MinimalButton>
-                                      }
-                                      content={() => "Previous match"}
-                                      offset={{ left: 0, top: 8 }}
-                                    />
-                                  </div>
-                                  <div style={{ padding: "0 2px" }}>
-                                    <Tooltip
-                                      position={Position.BottomCenter}
-                                      target={
-                                        <MinimalButton
-                                          onClick={
-                                            renderSearchProps.jumpToNextMatch
-                                          }
-                                        >
-                                          <NextIcon />
-                                        </MinimalButton>
-                                      }
-                                      content={() => "Next match"}
-                                      offset={{ left: 0, top: 8 }}
-                                    />
-                                  </div>
-                                </>
-                              );
-                            }}
-                          </Search> */}
-                          </div>
-                        </div>
+                      <div className="section-container">                        
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                           <div
                             style={{
-                              height: "400px",
-                              maxWidth: "1300px",
+                              height: "70vh",
+                              // width: "900px",
                               marginLeft: "auto",
                               marginRight: "auto",
                             }}
@@ -11504,7 +12419,40 @@ const Details = ({ }) => {
                             {" "}
                             <Viewer
                               fileUrl={selectFileURLRadiology}
-                              plugins={[searchPluginInstance]}
+                              plugins={[defaultLayoutPluginInstance]}
+                              onDocumentLoad={handleDocumentLoad}
+                            />
+                          </div>
+                        </Worker>
+                      </div>
+                    </Modal>
+                  )}
+                     {isModalOpenLab && (
+                    <Modal
+                      title={selectMeatName}
+                      // title="Pdf Test"
+                      centered
+                      open={isModalOpenLab}
+                      // style={{ top: 5 }}
+                      onOk={handleCloseModal}
+                      onCancel={handleCloseModal}
+                      width="70%"
+                      // height={400}
+                    >
+                      <div className="section-container">
+                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                          <div
+                            style={{
+                              height: "70vh",
+                              // width: "900px",
+                              marginLeft: "auto",
+                              marginRight: "auto",
+                            }}
+                          >
+                            {" "}
+                            <Viewer
+                              fileUrl={labReportFile}
+                              plugins={[defaultLayoutPluginInstance]}
                               onDocumentLoad={handleDocumentLoad}
                             />
                           </div>
@@ -12661,7 +13609,7 @@ const Details = ({ }) => {
                 </div>
               </div>
             )}
-                <Footer/>
+                {/* <Footer/> */}
           </div>
       
         </div>
