@@ -1,8 +1,10 @@
 import React from "react";
 import styles from "./receivedReport.module.css";
 import Spinner from "../../spinner/spinner";
+import dayjs from 'dayjs'
 
 const CSVDisplay = ({ tableData }) => {
+  console.log(tableData)
   const renderRows = () => {
     return tableData?.map((data, index) => (
       <tr key={index}>

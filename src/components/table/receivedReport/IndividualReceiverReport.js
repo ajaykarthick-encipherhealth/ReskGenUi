@@ -28,7 +28,7 @@ const IndividualReceiverReport = ({
   receivedPageNo,
   receivedStartDate,
   receivedEndDate,
-  setReportUser
+  setReportUser,
 }) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const selectedRow = useSelector((state) => state.report.getReport);
@@ -47,10 +47,10 @@ const IndividualReceiverReport = ({
   );
   useEffect(() => {
     setDetailsContent(ReceivedReportDetails?.content);
-    if(fileUrl){
+    if (fileUrl) {
       fetchData(fileUrl);
     }
-  }, [ReceivedReportDetails?.content,fileUrl]);
+  }, [ReceivedReportDetails?.content, fileUrl]);
 
   const sortTableByDate = () => {
     const sortedContent = [...detailsContent];
@@ -72,7 +72,6 @@ const IndividualReceiverReport = ({
   const fetchData = async (fileUrl) => {
     try {
       const response = await fetch(fileUrl?.uploadFile);
-
       if (extention === "csv") {
         const text = await response.text();
         const jsonArray = await csvToJson().fromString(text);
@@ -120,11 +119,11 @@ const IndividualReceiverReport = ({
   const filterChange = (e) => {
     debouncedSearch(e.target.value);
   };
-  
+
   return (
     <div className={styles.container} style={{ marginTop: "30px" }}>
       <div className={styles.cont1}>
-        <div >
+        <div>
           <div className={styles.container}>
             <div className={styles.divContainer}>
               <InputText
@@ -146,8 +145,16 @@ const IndividualReceiverReport = ({
               // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
               .map((item) => (
                 <div key={item.reportId}>
-                  <div style={{ display: "flex" ,cursor:"pointer",marginBottom:"10px"}}
-                  onClick={()=>{setReportUser(item)}}>
+                  <div
+                    style={{
+                      display: "flex",
+                      cursor: "pointer",
+                      marginBottom: "10px",
+                    }}
+                    onClick={() => {
+                      setReportUser(item);
+                    }}
+                  >
                     <div className={styles.user}>
                       <div>{item?.reportName}</div>
                       {item.type && (
@@ -209,28 +216,24 @@ const IndividualReceiverReport = ({
             {dayjs(reportUser?.receiveDate).format("DD/MM/YYYY")}
           </div>
           <div>
-            {reportUser?.role==="download"?
-            <Button
-              onClick={() => {
-                exportToExcel;
-                window.open(fileUrl?.uploadFile);
-              }}
-              className={styles.download}
-            >
-              <Image
-                src={download}
-                alt="noimg"
-                style={{ marginRight: "5px" }}
-              />
-              Download
-            </Button>:
-            <Button
-            
-            className={styles.readOption}
-          >
-            
-            Read
-          </Button>}
+            {reportUser?.role === "download" ? (
+              <Button
+                onClick={() => {
+                  exportToExcel;
+                  window.open(fileUrl?.uploadFile);
+                }}
+                className={styles.download}
+              >
+                <Image
+                  src={download}
+                  alt="noimg"
+                  style={{ marginRight: "5px" }}
+                />
+                Download
+              </Button>
+            ) : (
+              <Button className={styles.readOption}>Read</Button>
+            )}
           </div>
         </div>
         <div>
@@ -245,9 +248,9 @@ const IndividualReceiverReport = ({
           </div>
           <div>
             {extention === "csv" ? (
-              <ExcelDisplay tableData={tableData} />
-            ) : (
               <CSVDisplay tableData={tableData} />
+            ) : (
+              <ExcelDisplay tableData={tableData} />
             )}
           </div>
         </div>

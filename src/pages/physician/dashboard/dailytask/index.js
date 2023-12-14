@@ -28,19 +28,33 @@ const DailyTask = () => {
     {
       color: "#FFB54D",
       name: "Pending",
+      title: "pending",
     },
     {
       color: "#AD94FA",
       name: "Hold",
+      title: "hold",
     },
     {
       color: "#EB5252",
       name: "Declined",
+      title: "declined",
     },
     {
       color: "#B4EFBA",
       name: "Completed",
+      title: "completed",
     },
+  ];
+
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   const currentWeekDates = [];
@@ -53,6 +67,43 @@ const DailyTask = () => {
     currentWeekDates?.push(dateIterator.format("YYYY-MM-DD"));
     dateIterator = dateIterator?.add(1, "day");
   }
+  const getCurrentWeekDates = () => {
+    const today = new Date();
+    const currentDay = today.getDay();
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - currentDay);
+
+    const weekDates = [];
+    for (let i = 0; i < 7; i++) {
+      const nextDay = new Date(weekStart);
+      nextDay.setDate(weekStart.getDate() + i);
+      weekDates.push({
+        day: daysOfWeek[nextDay.getDay()],
+        date: nextDay.toISOString().split("T")[0],
+        dateString: nextDay.toISOString(),
+      });
+    }
+    return weekDates;
+  };
+
+  const currentWeek = getCurrentWeekDates();
+
+  const card2Data = currentWeek?.map((dayInfo, index) => {
+    const matchingStatusData = dailyStatusData?.find((data) => {
+      return dayjs(data?.response?.date).format("YYYY-MM-DD") === dayInfo?.date;
+    });
+    return {
+      id: index + 1,
+      day: dayInfo?.day,
+      date: dayInfo.date,
+      dateString: dayInfo.dateString,
+      pending: matchingStatusData?.response?.pending || 0,
+      hold: matchingStatusData?.response?.hold || 0,
+      completed: matchingStatusData?.response?.completed || 0,
+      decline: matchingStatusData?.response?.declined || 0,
+      allocated: matchingStatusData?.response?.allocated || 0,
+    };
+  });
 
   const WeekDays = currentWeekDates?.map((date) => {
     const formattedDate = dayjs(date)
@@ -66,9 +117,28 @@ const DailyTask = () => {
   });
 
   const router = useRouter();
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+    .toISOString()
+    .split("T")[0];
+  const dayBeforeYesterday = new Date(
+    new Date().setDate(new Date().getDate() - 2)
+  )
+    .toISOString()
+    .split("T")[0];
+
+  const rearrangedCard2Data = [
+    ...card2Data.filter((data) => data.date === dayBeforeYesterday),
+    ...card2Data.filter((data) => data.date === yesterday),
+    ...card2Data.filter((data) => data.date === today),
+
+    ...card2Data.filter(
+      (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
+    ),
+  ];
   useEffect(() => {
-    WeekDays?.slice(0, 3)?.map((date) => {
-      dispatch(getDailyTaskDatas(date, router));
+    rearrangedCard2Data?.slice(0, 3)?.map((data) => {
+      dispatch(getDailyTaskDatas(data.dateString, router));
     });
   }, []);
 
@@ -86,47 +156,6 @@ const DailyTask = () => {
       // setWeekDays(prevDays => [...prevDays.slice(1), nextDay]);
     }
   };
-
-  const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  const getCurrentWeekDates = () => {
-    const today = new Date();
-    const currentDay = today.getDay();
-    const weekStart = new Date(today);
-    weekStart.setDate(today.getDate() - currentDay);
-
-    const weekDates = [];
-    for (let i = 0; i < 7; i++) {
-      const nextDay = new Date(weekStart);
-      nextDay.setDate(weekStart.getDate() + i);
-      weekDates.push({
-        day: daysOfWeek[nextDay.getDay()],
-        date: nextDay.toISOString().split("T")[0],
-      });
-    }
-    return weekDates;
-  };
-
-  const currentWeek = getCurrentWeekDates();
-
-  const card2Data = currentWeek?.map((dayInfo, index) => ({
-    id: index + 1,
-    day: dayInfo?.day,
-    date: dayInfo.date,
-    pending: dailyStatusData[index]?.pending || 0,
-    hold: dailyStatusData[index]?.hold || 0,
-    completed: dailyStatusData[index]?.completed || 0,
-    decline: dailyStatusData[index]?.decline || 0,
-    allocated: dailyStatusData[index]?.allocated || 0,
-  }));
 
   const getChartOption = (allocated, pending, hold, decline, completed) => {
     return {
@@ -217,32 +246,7 @@ const DailyTask = () => {
       dispatch(getpatientsList(0, url));
     }
   };
-  const today = new Date().toISOString().split("T")[0];
-  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
-    .toISOString()
-    .split("T")[0];
-  const dayBeforeYesterday = new Date(
-    new Date().setDate(new Date().getDate() - 2)
-  )
-    .toISOString()
-    .split("T")[0];
-  
-  const rearrangedCard2Data = [
-    ...card2Data.filter(
-      (data) => data.date === dayBeforeYesterday
-    ),
-    ...card2Data.filter(
-      (data) => data.date === yesterday
-    ),
-    ...card2Data.filter(
-      (data) => data.date === today
-    ),
-  
-    ...card2Data.filter(
-      (data) =>
-        ![dayBeforeYesterday, yesterday, today].includes(data.date)
-    ),
-  ];
+
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -273,11 +277,13 @@ const DailyTask = () => {
                           dispatch(getpatientsList(0, url));
                         }}
                       >
-                       <div className={styles.headerDisplay}>
-                        <span> {data.day}</span>
-                        <span className={styles.dateDisplay}> {`(${data.date})`} </span>
-                       
-                       </div>
+                        <div className={styles.headerDisplay}>
+                          <span> {data.day}</span>
+                          <span className={styles.dateDisplay}>
+                            {" "}
+                            {`(${data.date})`}{" "}
+                          </span>
+                        </div>
                       </h4>
                       <Row>
                         <Col span={12}>
@@ -296,28 +302,43 @@ const DailyTask = () => {
                         </Col>
                         <Col span={12} className={styles.headerTitle}>
                           <div style={{ paddingLeft: "10px" }}>
-                            {bullets?.map((item) => (
-                              <div
-                                className={styles.container}
-                                onClick={() => {
-                                  handleDays(item?.name);
-                                }}
-                              >
-                                <div style={{ display: "flex" }}>
-                                  {" "}
-                                  <div
-                                    className={styles.bgColor}
-                                    style={{
-                                      backgroundColor: item.color,
-                                    }}
-                                  ></div>{" "}
-                                  {item.name}
+                            {bullets?.map((item) => {
+                              const matchingStatus = dailyStatusData.find(
+                                (status) =>
+                                  status.response[item?.title.toLowerCase()] !==
+                                  undefined
+                              );
+
+                              return (
+                                <div
+                                  className={styles.container}
+                                  onClick={() => {
+                                    handleDays(item?.name);
+                                  }}
+                                >
+                                  <div style={{ display: "flex" }}>
+                                    <div
+                                      className={styles.bgColor}
+                                      style={{
+                                        backgroundColor: item.color,
+                                      }}
+                                    ></div>
+                                    {item.name}
+                                  </div>
+                                  <div className={styles.subText}>
+                                    {item.title === "pending"
+                                      ? data.pending
+                                      : item.title === "declined"
+                                      ? data?.decline
+                                      : item.title === "hold"
+                                      ? data.hold
+                                      : item.title === "completed"
+                                      ? data?.completed
+                                      : "No data"}
+                                  </div>
                                 </div>
-                                <div className={styles.subText}>
-                                  {data.pending}
-                                </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </Col>
                       </Row>

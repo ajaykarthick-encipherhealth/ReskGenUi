@@ -5,16 +5,20 @@ import Spinner from "../../spinner/spinner";
 
 const ExcelDisplay = ({ tableData }) => {
   const renderRows = () => {
-    return tableData?.map((data, index) => (
+    const filteredData = tableData.filter((data) =>
+      data.some((value) => value !== "")
+    );
+
+    return filteredData.map((data, index) => (
       <tr key={index}>
-        <td>{data.patientId}</td>
-        <td>{data.patientName}</td>
-        <td>{data.noOfValidCodes}</td>
-        <td>{dayjs(data?.processedDate).format("DD/MM/YYYY")}</td>
-        <td>{data.comments ? data.comments : ""}</td>
-        <td>{data.auditorname ? data.auditorname : ""}</td>
-        <td>{data.rafscore ? data.rafscore : ""}</td>
-        <td>{data.flag ? data.flag : ""}</td>
+        <td>{data[0] || ""}</td>
+        <td>{data[1] || ""}</td>
+        <td>{data[2] || ""}</td>
+        <td>{data[3] ? dayjs(data[3]).format("DD/MM/YYYY") : ""}</td>
+        <td>{data[4] || ""}</td>
+        <td>{data[5] || ""}</td>
+        <td>{data[6] || ""}</td>
+        <td>{data[7] || ""}</td>
       </tr>
     ));
   };
@@ -37,7 +41,6 @@ const ExcelDisplay = ({ tableData }) => {
               <th>Flag</th>
             </tr>
           </thead>
-
           <tbody>{renderRows()}</tbody>
         </table>
       )}
