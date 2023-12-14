@@ -11480,7 +11480,7 @@ img.login-logo {
 
 .ant-modal-body {
   min-height: 10px !important;
-  height:auto !important;
+  height: auto !important;
   /* max-height: 400px !important; */
   overflow: scroll !important;
 }
@@ -11577,7 +11577,7 @@ span.mb-1.disease-name {
 .ant-popover .ant-popover-content {
   position: relative;
   width: auto;
-  left:-170px !important;
+  left: -170px !important;
 }
 
 .raf-main-card {
@@ -12619,115 +12619,117 @@ tbody > tr {
   align-items: center !important;
 }
 
-
 /* Display the clear icon when input field is focused */
 .ant-picker-clear {
-  display: none !important; 
+  display: none !important;
 }
 
-.pendingBtn button.ant-btn.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item{
+.pendingBtn
+  button.ant-btn.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item {
   color: #452b90;
-  background: #dfd8f3!important;
+  background: #dfd8f3 !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
-    width: 140px!important;
+  width: 140px !important;
 }
 
-.pendingBtn > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+.pendingBtn
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
   color: #452b90;
-  background: #dfd8f3!important;
+  background: #dfd8f3 !important;
   border-radius: 6px;
   box-shadow: none;
-
 }
 
 .completedBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #3a9b94;
-  background: #daf1ef!important;
+  background: #daf1ef !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
-    width: 140px!important;
+  width: 140px !important;
 }
-.completedBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+.completedBtnHcc
+  button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   color: #3a9b94 !important;
 }
-.declinedBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+.declinedBtnHcc
+  button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   color: red !important;
 }
 .holdBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   color: #d8c11b !important;
 }
 
-
-.completedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+.completedBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
   color: #3a9b94;
-  background: #daf1ef!important;
+  background: #daf1ef !important;
   border: none !important;
   border-radius: 6px;
   box-shadow: none;
-
 }
 
-.completedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+.completedBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
   height: calc(100% + 1px) !important;
-    background: #daf1ef!important;
-    border: none !important;
-    box-shadow: none !important;
-
+  background: #daf1ef !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .declinedBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: red;
-  background: #fcc!important;
+  background: #fcc !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
-    width: 140px!important;
+  width: 140px !important;
 }
 
-.declinedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+.declinedBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
   color: red;
-  background: #fcc!important;
+  background: #fcc !important;
   border: none !important;
   border-radius: 6px;
   box-shadow: none;
-
 }
 
-.declinedBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+.declinedBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
   height: calc(100% + 1px) !important;
-    background: #fcc!important;
-    border: none !important;
-    box-shadow: none !important;
+  background: #fcc !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .holdBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #d8c11b;
-  background: #faead1!important;
+  background: #faead1 !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
-    width: 140px!important;
+  width: 140px !important;
 }
 
-.holdBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger{
+.holdBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
   color: #d8c11b;
-  background: #faead1!important;
+  background: #faead1 !important;
   border: none !important;
   border-radius: 6px;
   box-shadow: none;
-
 }
 
-.holdBtnHcc > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before{
+.holdBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
   height: calc(100% + 1px) !important;
-    background: #faead1!important;
-    background: #f1dbb9!important;
-    border: none !important;
-    box-shadow: none !important;
-
+  background: #faead1 !important;
+  background: #f1dbb9 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .bouncing-loader {
@@ -12759,7 +12761,9 @@ tbody > tr {
 .bouncing-loader > div:nth-child(3) {
   animation-delay: 0.4s;
 }
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{
+.ant-radio-button-wrapper-checked:not(
+    .ant-radio-button-wrapper-disabled
+  ):hover {
   color: white;
 }
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
@@ -12769,93 +12773,122 @@ tbody > tr {
   border-color: #04306f;
 }
 
-.sectionTag1{
+.sectionTag1 {
   background-color: rgba(201, 52, 210, 0.2) !important ;
   color: rgb(201, 52, 210) !important;
 }
-.sectionTag2{
+.sectionTag2 {
   background-color: rgba(84, 217, 43, 0.2) !important;
   color: rgb(84, 217, 43) !important;
 }
 
-.sectionTag3{
+.sectionTag3 {
   background-color: rgba(15, 158, 46, 0.2) !important;
   color: rgb(15, 158, 46) !important;
 }
-.sectionTag4{
+.sectionTag4 {
   background-color: rgba(42, 182, 17, 0.2) !important;
   color: rgb(42, 182, 17) !important;
-
 }
-.sectionTag5{
+.sectionTag5 {
   background-color: rgba(85, 219, 224, 0.2) !important;
   color: rgb(85, 219, 224) !important;
 }
-.sectionTag6{
+.sectionTag6 {
   background-color: rgba(64, 52, 56, 0.2) !important;
   color: rgb(64, 52, 56) !important;
 }
-.sectionTag7{
+.sectionTag7 {
   background-color: rgba(148, 236, 49, 0.2) !important;
   color: rgb(148, 236, 49) !important;
 }
-.sectionTag8{
-  background-color:rgba(154, 125, 165, 0.2) !important;
+.sectionTag8 {
+  background-color: rgba(154, 125, 165, 0.2) !important;
   color: rgb(154, 125, 165) !important;
 }
 
+/* <<<<<<< CHATBOT_WITH_uierrors
+.encounterDateTag1 {
+  background-color: rgba(6, 252, 126, 0.2) !important;
+  color: rgb(6, 252, 126) !important;
+======= */
 .encounterDateTag1{
   background-color: rgb(117 164 140 / 20%) !important;
   color: rgb(116 158 137) !important;
 }
-.encounterDateTag2{
+.encounterDateTag2 {
   background-color: rgba(125, 117, 129, 0.2) !important;
   color: rgb(125, 117, 129) !important;
-  
 }
-.encounterDateTag3{
+.encounterDateTag3 {
   background-color: rgba(221, 90, 224, 0.2) !important;
   color: rgb(221, 90, 224) !important;
 }
-.encounterDateTag4{
+.encounterDateTag4 {
   background-color: rgba(37, 138, 62, 0.2) !important;
   color: rgb(37, 138, 62) !important;
-  
 }
-.encounterDateTag5{
+.encounterDateTag5 {
   background-color: rgba(108, 30, 179, 0.2) !important;
   color: rgb(108, 30, 179) !important;
-  
 }
-.encounterDateTag6{
+.encounterDateTag6 {
   background-color: rgba(229, 254, 78, 0.2) !important;
   color: rgb(136 143 96) !important;
 }
-.encounterDateTag7{
+.encounterDateTag7 {
   background-color: rgba(72, 204, 225, 0.2) !important;
   color: rgb(72, 204, 225) !important;
-  
 }
-.encounterDateTag8{
+.encounterDateTag8 {
   background-color: rgba(236, 175, 165, 0.2);
   color: rgb(236, 175, 165) !important;
-  
 }
 
 .rpv-default-layout__container {
   border: 1px solid rgb(222 226 230) !important;
 }
 
- .CircularProgressbar-path {
+.CircularProgressbar-path {
   stroke: green !important;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.5s ease 0s;
 }
- .CircularProgressbar-text {
+.CircularProgressbar-text {
   fill: green !important;
- 
 }
 
-/* .ant-modal .ant-modal-content {
-  height:80% !important;
+.rcw-launcher {
+  background-color: #04306f !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.rcw-conversation-container .rcw-header {
+  background-color: #04306f !important;
+  padding: 0px;
+}
+.rcw-title {
+  height: 100%;
+  color: #fff !important;
+  font-weight: 700;
+}
+.rcw-open-launcher {
+  width: 25px !important;
+}
+.rcw-messages-container::-webkit-scrollbar-thumb {
+  background: #04306f;
+}
+/* .rcw-widget-container {
+  top: -5px;
+  right:250px !important;
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px 20px 0;
+  position: fixed;
+  right: 0;
+  z-index: 9999;
 } */
+.rcw-conversation-container.active {
+  width: 450px !important;
+}
