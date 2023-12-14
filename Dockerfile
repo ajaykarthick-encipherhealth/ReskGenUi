@@ -10,6 +10,8 @@ COPY * /
 # Install project dependencies
 RUN npm install
 
+RUN npm install --legacy-peer-deps
+
 # Build your React.js application
 RUN npm run build
 
@@ -18,3 +20,5 @@ EXPOSE 3000
 
 # Start the application
 CMD ["npm", "start"]
+
+
