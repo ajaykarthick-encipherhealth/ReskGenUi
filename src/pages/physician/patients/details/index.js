@@ -4592,59 +4592,10 @@ const Details = ({ }) => {
                                 {newValidDiseaseList.length}
                                 </h6>
                         </div>
-                        <span className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}>
-                                        {/* {flagFirstData.flag} */}
-                                        {flagFirstData.flag == "PATIENT_NAME_MISSED" ?
-                                         <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
-                                          <i className={visitStyles.name_missed}>{SVGICON.emptyFlag}</i> 
-                                          </Tooltip>:
-                                          flagFirstData.flag == "PATIENT_DOB_MISSED" ?
-                                          <Tooltip title="PATIENT_DOB_MISSED" placement="bottom">
-                                            <i className={visitStyles.dob_missed}>{SVGICON.emptyFlag}</i>
-                                            </Tooltip> :
-                                            flagFirstData.flag == "MRN_ID_MISMATCH" ?
-                                            <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
-                                              <i className={visitStyles.id_missed}>{SVGICON.emptyFlag}</i>
-                                              </Tooltip> :
-                                              flagFirstData.flag == "PROVIDER_SIGN_MISSED" ?
-                                              <Tooltip title="PROVIDER_SIGN_MISSED" placement="bottom">
-                                                <i className={visitStyles.sign_missed}>{SVGICON.emptyFlag}</i>
-                                                </Tooltip> :
-                                                flagFirstData.flag == "PROVIDER_SIGNATURE_MISSED" ?
-                                                <Tooltip title="PROVIDER_SIGNATURE_MISSED" placement="bottom">
-                                                  <i className={visitStyles.signature_missed}>{SVGICON.emptyFlag}</i>
-                                                  </Tooltip> :
-                                                  flagFirstData.flag == "PROVIDER_CREDENTIAL_MISSED" ?
-                                                  <Tooltip title="PROVIDER_CREDENTIAL_MISSED" placement="bottom">
-                                                    <i className={visitStyles.cred_missed}>{SVGICON.emptyFlag}</i>
-                                                    </Tooltip> :
-                                                    flagFirstData.flag == "PROVIDER_SIGN_STATUS_PENDING" ?
-                                                    <Tooltip title="PROVIDER_SIGN_STATUS_PENDING" placement="bottom">
-                                                      <i className={visitStyles.sign_status}>{SVGICON.emptyFlag}</i>
-                                                      </Tooltip> :
-                                                      flagFirstData.flag == "NO_HCC_FOUND" ?
-                                                      <Tooltip title="NO_HCC_FOUND" placement="bottom">
-                                                        <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlag}</i>
-                                                        </Tooltip> :
-                                                        flagFirstData.flag == "NO_VALID_DOCUMENT_FOUND" ?
-                                                        <Tooltip title="NO_VALID_DOCUMENT_FOUND" placement="bottom">
-                                                          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlag}</i>
-                                                          </Tooltip> :
-                                                          flagFirstData.flag == "PATIENT_DISEASED" ?
-                                                          <Tooltip title="PATIENT_DISEASED" placement="bottom">
-                                                            <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlag}</i>
-                                                            </Tooltip> :
-
-
-
-
-                                                            null}
-
-
-                                      </span>
+                   
                         </div>
                       </div>
-                      <div className="col-xl-1 col-sm-12">
+                      <div className="col-xl-1 col-sm-12 d-flex">
                         <div className={`${visitStyles.rafscoreheader} `}>
                                 <label>Score</label>
                                 {patientDetails.rafScore != null ?
@@ -4656,6 +4607,56 @@ const Details = ({ }) => {
 
                                 </h6>}
                         </div>
+                        <span className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}>
+                                        {/* {flagFirstData.flag} */}
+                                        {flagFirstData.flag == "PATIENT_NAME_MISSED" ?
+                                         <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
+                                          <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmallLarge}</i> 
+                                          </Tooltip>:
+                                          flagFirstData.flag == "PATIENT_DOB_MISSED" ?
+                                          <Tooltip title="PATIENT_DOB_MISSED" placement="bottom">
+                                            <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmallLarge}</i>
+                                            </Tooltip> :
+                                            flagFirstData.flag == "MRN_ID_MISMATCH" ?
+                                            <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
+                                              <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmallLarge}</i>
+                                              </Tooltip> :
+                                              flagFirstData.flag == "PROVIDER_SIGN_MISSED" ?
+                                              <Tooltip title="PROVIDER_SIGN_MISSED" placement="bottom">
+                                                <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmallLarge}</i>
+                                                </Tooltip> :
+                                                flagFirstData.flag == "PROVIDER_SIGNATURE_MISSED" ?
+                                                <Tooltip title="PROVIDER_SIGNATURE_MISSED" placement="bottom">
+                                                  <i className={visitStyles.signature_missed}>{SVGICON.emptyFlagSmallLarge}</i>
+                                                  </Tooltip> :
+                                                  flagFirstData.flag == "PROVIDER_CREDENTIAL_MISSED" ?
+                                                  <Tooltip title="PROVIDER_CREDENTIAL_MISSED" placement="bottom">
+                                                    <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmallLarge}</i>
+                                                    </Tooltip> :
+                                                    flagFirstData.flag == "PROVIDER_SIGN_STATUS_PENDING" ?
+                                                    <Tooltip title="PROVIDER_SIGN_STATUS_PENDING" placement="bottom">
+                                                      <i className={visitStyles.sign_status}>{SVGICON.emptemptyFlagSmallLargeyFlag}</i>
+                                                      </Tooltip> :
+                                                      flagFirstData.flag == "NO_HCC_FOUND" ?
+                                                      <Tooltip title="NO_HCC_FOUND" placement="bottom">
+                                                        <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmallLarge}</i>
+                                                        </Tooltip> :
+                                                        flagFirstData.flag == "NO_VALID_DOCUMENT_FOUND" ?
+                                                        <Tooltip title="NO_VALID_DOCUMENT_FOUND" placement="bottom">
+                                                          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmallLarge}</i>
+                                                          </Tooltip> :
+                                                          flagFirstData.flag == "PATIENT_DISEASED" ?
+                                                          <Tooltip title="PATIENT_DISEASED" placement="bottom">
+                                                            <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlagSmallLarge}</i>
+                                                            </Tooltip> :
+
+
+
+
+                                                            null}
+
+
+                                      </span>
                       </div>
                       <div className="col-xl-1 col-sm-12">
                         <div className="card-body">
@@ -5076,6 +5077,7 @@ const Details = ({ }) => {
                                             </div>
                                           </div>
                                         </div> : null}
+                                       
 
                                     </div>
 
@@ -7176,7 +7178,7 @@ const Details = ({ }) => {
                                                 <div
                                                   style={{
                                                     height: "70vh",
-                                                    maxWidth: "800px",
+                                                    maxWidth: "1000px",
                                                     marginLeft: "auto",
                                                     marginRight: "auto",
                                                   }}
@@ -8976,7 +8978,7 @@ const Details = ({ }) => {
                                               <div
                                                 style={{
                                                   height: "70vh",
-                                                  maxWidth: "900px",
+                                                  maxWidth: "1000px",
                                                   marginLeft: "auto",
                                                   marginRight: "auto",
                                                 }}
@@ -9019,7 +9021,9 @@ const Details = ({ }) => {
                               >
                                 <div className="custom-tab-1">
                                   <Tab.Container defaultActiveKey={activeTabHead}>
-                                    <Nav as="ul" className="nav nav-tabs">
+                                    <div className="row">
+                                      <div className="col-xl-11">
+                                      <Nav as="ul" className="nav nav-tabs">
                                       <Nav.Item as="li" className="nav-item">
                                         <Nav.Link
                                           to="#my-posts"
@@ -9056,18 +9060,18 @@ const Details = ({ }) => {
                                           File
                                         </Nav.Link>
                                       </Nav.Item>
-
-                                      {/* {activeTab == 3 ? (
-                                        <div>
-                                          <Button
-                                            onClick={addPatientFile}
-                                            className="btn btn-primary btn-sm ms-2 flr radiologyBtn"
-                                          >
-                                            + Add Patient Radiology
-                                          </Button>
-                                        </div>
-                                      ) : null} */}
+                                      
                                     </Nav>
+                                      </div>
+                                      <div className="col-xl-1">
+                                      <div className={visitStyles.sideHeaderTitle}>
+                                          <span>RADIOLOGY</span>
+                                          </div>
+                                      </div>
+
+                                    </div>
+                                  
+                                    
                                     <Tab.Content>
                                       <Tab.Pane
                                         id="my-posts"
@@ -10482,8 +10486,8 @@ const Details = ({ }) => {
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                               <div
                                                 style={{
-                                                  height: "70vh",
-                                                  maxWidth: "900px",
+                                                  height: "62vh",
+                                                  maxWidth: "1000px",
                                                   marginLeft: "auto",
                                                   marginRight: "auto",
                                                 }}
@@ -10717,6 +10721,7 @@ const Details = ({ }) => {
                                       </Tab.Pane>
                                     </Tab.Content>
                                   </Tab.Container>
+                                      
                                 </div>
                               </div>
                             </div>
@@ -10727,7 +10732,9 @@ const Details = ({ }) => {
                               >
                                 <div className="custom-tab-1">
                                   <Tab.Container defaultActiveKey={activeTabHead}>
-                                    <Nav as="ul" className="nav nav-tabs">
+                                    <div className="row">
+                                      <div className="col-xl-11">
+                                      <Nav as="ul" className="nav nav-tabs">
                                       <Nav.Item as="li" className="nav-item">
                                         <Nav.Link
                                           to="#my-posts"
@@ -10763,6 +10770,15 @@ const Details = ({ }) => {
                                       </Button>
                                     </div> */}
                                     </Nav>
+                                      </div>
+                                      <div className="col-xl-1">
+                                      <div className={visitStyles.sideHeaderTitleLab}>
+                                          <span>LAB</span>
+                                          </div>
+                                      </div>
+
+                                    </div>
+                                  
                                     <Tab.Content>
                                       <Tab.Pane
                                         id="my-posts"
@@ -11269,8 +11285,8 @@ const Details = ({ }) => {
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                               <div
                                                 style={{
-                                                  height: "70vh",
-                                                  maxWidth: "900px",
+                                                  height: "62vh",
+                                                  maxWidth: "1000px",
                                                   marginLeft: "auto",
                                                   marginRight: "auto",
                                                 }}

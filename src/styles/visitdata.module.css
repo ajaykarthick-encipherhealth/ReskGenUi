@@ -27,6 +27,7 @@
 }
 .priorityStatusIcon{
   padding-top: 1px;
+  display: grid;
 }
 .hccCountHeader label{
   font-size: 13px !important;
@@ -1237,8 +1238,9 @@ margin-left: 20px;
 }
 .priorityStatus{
   padding-top: 17px;
-  width: 70px;
+  /* width: 70px; */
   display: flex;
+  justify-content: space-evenly;
 }
 .dosSelectPicker{
   width: 100px !important;
@@ -1293,9 +1295,23 @@ margin-left: 20px;
   border-radius: 4px;
 }
 .statusFLag{
-  padding-top: 5px;
+  padding-top: 20px;
   padding-left: 16px;
 }
 .addValidCodeFormFooter{
   margin-top: 10px;
+}
+.sideHeaderTitle{
+  padding-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid;
+  width: 80px;
+}
+.sideHeaderTitleLab{
+  padding-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid;
+  width: 40px;
 }
