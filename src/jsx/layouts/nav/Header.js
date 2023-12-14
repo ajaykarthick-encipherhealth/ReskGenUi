@@ -14,7 +14,6 @@ import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Modal, Popover, Select, Tooltip } from "antd";
-import { Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import "react-chat-widget/lib/styles.css";
 import dynamic from "next/dynamic";
@@ -219,7 +218,6 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
   const handleQuickButtonClicked = (data) => {
     console.log(data);
   };
-  const percentage = 95;
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -265,9 +263,7 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
 
                      
 
-                        <Tooltip title={`Quality:${percentage}%`}>
-                          <div className="notificationIcon">
-                            <div style={{ width: 40, height: 40 }}>
+                       
 
                         <TerminalComponent
                           handleNewUserMessage={handleNewUserMessage}
@@ -279,7 +275,7 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
                         />
                         <Tooltip title={`${percentage}%`}>
                           <div className="notificationIcon">
-                            <div style={{ width: 30, height: 30 }}>
+                            <div style={{ width: 40, height: 40 }}>
 
                               <CircularProgressbar
                                 value={percentage}
