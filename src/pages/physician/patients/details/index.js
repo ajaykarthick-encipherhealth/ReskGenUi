@@ -7420,9 +7420,22 @@ const Details = ({ }) => {
                                                                       }
 
                                                                     </div>
-                                                                    <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                      {getCaptureSectionBackground(data.capturedSections)}
-                                                                    </div>
+
+                                                                    {data.getPlace ==
+                                                                        "Lab" ? 
+                                                                        <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                        {getCaptureSectionBackground(data.capturedSections,"Lab")}
+                                                                      </div>
+                                                                        : data.getPlace ==
+                                                                        "Radio" ? 
+                                                                        <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                        {getCaptureSectionBackground(data.capturedSections,"Radio")}
+                                                                      </div>
+                                                                       :   <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                       {getCaptureSectionBackgroundFile(data.capturedSections)}
+                                                                     </div>
+                                                                      }
+                                                                   
                                                                   </div>
                                                                 </div>
                                                               </li>
@@ -10411,12 +10424,12 @@ const Details = ({ }) => {
                                                             className={`${visitStyles.hcc_card_nameHead}`}
                                                           >
                                                             <div
-                                                              className="media-body"
+                                                              className="media-body"                                                            
+
                                                               onClick={() =>
-                                                                handleOpenModalRadiology(
+                                                                findValueDocument(
                                                                   data.diagnosisCode,
                                                                   data.actualDescription,
-                                                                  true
                                                                 )
                                                               }
                                                             >
@@ -10468,7 +10481,7 @@ const Details = ({ }) => {
 
                                                             {getEncounterDateBackground(data.encounterDateSplit)}
                                                             <div>
-                                                              {getCaptureSectionBackground(data.capturedSections,"Radio")}
+                                                              {getCaptureSectionBackgroundFile(data.capturedSections,"Radio")}
 
                                                             </div>
                                                           </div>
@@ -10552,10 +10565,9 @@ const Details = ({ }) => {
                                                             <div
                                                               className="media-body"
                                                               onClick={() =>
-                                                                handleOpenModalRadiology(
+                                                                findValueDocument(
                                                                   data.diagnosisCode,
                                                                   data.actualDescription,
-                                                                  true
                                                                 )
                                                               }
                                                             >
@@ -10607,7 +10619,7 @@ const Details = ({ }) => {
 
                                                             {getEncounterDateBackground(data.encounterDateSplit)}
                                                             <div>
-                                                              {getCaptureSectionBackground(data.capturedSections,"Radio")}
+                                                              {getCaptureSectionBackgroundFile(data.capturedSections,"Radio")}
 
                                                             </div>
                                                           </div>
@@ -11251,6 +11263,13 @@ const Details = ({ }) => {
                                                             <div
                                                               className="media-body"
 
+                                                              onClick={() =>
+                                                                findValueDocument(
+                                                                  data.diagnosisCode,
+                                                                  data.actualDescription,
+                                                                )
+                                                              }
+
                                                             >
                                                               <span className="mb-1 disease-name d-flex">
                                                                 <span className="valid-dis-name">
@@ -11269,7 +11288,7 @@ const Details = ({ }) => {
 
                                                             {getEncounterDateBackground(data.encounterDateSplit)}
                                                             <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                              {getCaptureSectionBackground(data.capturedSections,"Lab")}
+                                                              {getCaptureSectionBackgroundFile(data.capturedSections,"Lab")}
                                                             </div>
 
                                                           </div>
@@ -13332,6 +13351,35 @@ const Details = ({ }) => {
                       </div> : flagContainerActive == "Filter" ?
 
                         <div className={`row ${visitStyles.patientListHead}`}>
+                            <div className={visitStyles.flags} style={{marginTop:"15px",marginBottom:"20px"}}>
+                                  <div className={visitStyles.flags}  >
+                                    <span
+                                      className={visitStyles.completed}
+                                      style={{ background: "#3a9b94 !important" }}
+                                    ></span>
+                                    <span className={visitStyles.flagCodes}>
+                                      Completed
+                                    </span>
+                                  </div>
+                                  <div className={visitStyles.flags}>
+                                    <span className={visitStyles.pending}></span>
+                                    <span className={visitStyles.flagCodes}>
+                                      Pending
+                                    </span>
+                                  </div>
+                                  <div className={visitStyles.flags}>
+                                    <span className={visitStyles.hold}></span>
+                                    <span className={visitStyles.flagCodes}>
+                                      Hold
+                                    </span>
+                                  </div>
+                                  <div className={visitStyles.flags}>
+                                    <span className={visitStyles.declined}></span>
+                                    <span className={visitStyles.flagCodes}>
+                                      Declined
+                                    </span>
+                                  </div>
+                                </div>
                           <div className="col-xl-9">
                             <div class="form-group has-search">
                               <FontAwesomeIcon
@@ -13357,6 +13405,7 @@ const Details = ({ }) => {
                               />
                             </div>
                           </div>
+                        
                           <div className="col-xl-3">
                             <div className={visitStyles.content}>
                               <span

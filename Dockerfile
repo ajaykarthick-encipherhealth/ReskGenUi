@@ -8,9 +8,9 @@ WORKDIR /
 COPY * /
 
 # Install project dependencies
-RUN npm install
+# RUN npm install
 
-# RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # Build your React.js application
 RUN npm run build
