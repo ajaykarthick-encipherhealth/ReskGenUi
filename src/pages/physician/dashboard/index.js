@@ -60,10 +60,13 @@ const router=useRouter()
               <HoldStatus />
             </Col>
           </Row>
+          <Row className={styles.lastRow}>
+          <Footer/>
+          </Row>
         </div>
    
       </div>
-      <Footer/>
+  
     </div>
   );
 };
