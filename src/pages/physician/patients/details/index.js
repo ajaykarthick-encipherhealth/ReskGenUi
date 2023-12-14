@@ -12127,42 +12127,111 @@ const Details = ({ }) => {
                                   ))}
                                 </div>
                               </ul>
+                              {/* <div className={visitStyles.container}>
+                                                    <div className={visitStyles.hccStickey_head}>
+
+                                                      {newValidDiseaseList.map(
+                                                        (data, i) => (
+                                                          <li>
+                                                            <div
+                                                              className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                                            >
+                                                              <div
+                                                                className={`${visitStyles.hcc_card_nameHead}`}
+                                                              >
+                                                                <div
+                                                                  className="media-body"
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      data.diagnosisCode,
+                                                                      data.actualDescription,
+                                                                      "valid2"
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  <span className="mb-1 disease-name d-flex">
+
+                                                                    <span className="valid-dis-name">
+
+
+                                                                      {
+                                                                        data.diagnosisCode
+                                                                      }
+                                                                    </span>{" "}
+                                                                    -{" "}
+                                                                    {
+                                                                      data.actualDescription
+                                                                    }
+
+                                                                  </span>
+                                                                </div>
+
+                                                               
+                                                              
+
+
+                                                              </div>
+                                                              <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                                <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                      {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                  {data.isManuallyAdded == true ?
+                                                                  
+                                                                      <Badge
+                                                                        className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                                                      >
+                                                                        Manually Added
+
+                                                                      </Badge>:
+                                                                    null}
+                                                                </div>
+                                                                <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                  {getCaptureSectionBackground(data.capturedSections)}
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </li>
+
+                                                        )
+                                                      )}
+                                                    </div>
+                                                  </div> */}
                             </div>
                           ) : (
-                            <div className="col-xl-4">
-                              <ul className="timeline">
-                                <div className="modal-valid-container">
-                                  {newInValidDiseaseList.map((data, i) => (
-                                    <li>
-                                      <div
-                                        onClick={() =>
-                                          activeValidDisCode(
-                                            data.diagnosisCode,
-                                            data.actualDescription
-                                          )
-                                        }
-                                        className={
-                                          selectActiveCode == data.diagnosisCode
-                                            ? "new_valid-dis cr-pointer modal-valid-active"
-                                            : "new_valid-dis cr-pointer modal-valid"
-                                        }
-                                      >
-                                        <div className="timeline-panel">
-                                          <div className="media-body">
-                                            <span className="mb-1 disease-name d-flex">
-                                              <span className="valid-dis-name">
-                                                {data.diagnosisCode}
-                                              </span>{" "}
-                                              - {data.actualDescription}
-                                            </span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </li>
-                                  ))}
-                                </div>
-                              </ul>
-                            </div>
+                            null
+                            // <div className="col-xl-4">
+                            //   <ul className="timeline">
+                            //     <div className="modal-valid-container">
+                            //       {newInValidDiseaseList.map((data, i) => (
+                            //         <li>
+                            //           <div
+                            //             onClick={() =>
+                            //               activeValidDisCode(
+                            //                 data.diagnosisCode,
+                            //                 data.actualDescription
+                            //               )
+                            //             }
+                            //             className={
+                            //               selectActiveCode == data.diagnosisCode
+                            //                 ? "new_valid-dis cr-pointer modal-valid-active"
+                            //                 : "new_valid-dis cr-pointer modal-valid"
+                            //             }
+                            //           >
+                            //             <div className="timeline-panel">
+                            //               <div className="media-body">
+                            //                 <span className="mb-1 disease-name d-flex">
+                            //                   <span className="valid-dis-name">
+                            //                     {data.diagnosisCode}
+                            //                   </span>{" "}
+                            //                   - {data.actualDescription}
+                            //                 </span>
+                            //               </div>
+                            //             </div>
+                            //           </div>
+                            //         </li>
+                            //       ))}
+                            //     </div>
+                            //   </ul>
+                            // </div>
                           )}
                         </div>
                       </div>
@@ -12177,7 +12246,7 @@ const Details = ({ }) => {
                       style={{ top: 1 }}
                       onOk={handleCloseModal}
                       onCancel={handleCloseModal}
-                      width="90%"
+                      width="95%"
                       // height={500}
                     >
                       <div className="section-container">

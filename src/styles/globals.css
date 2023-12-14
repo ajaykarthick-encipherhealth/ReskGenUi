@@ -11879,10 +11879,10 @@ div[aria-describedby="rpv-core__tooltip-body-get-file"] {
 }
 .modal-valid-active {
   padding: 0.8rem 0.75rem !important;
-  background: #8ed2ce;
+  background: #8ed2ce33;
 }
 .modal-valid-container {
-  border: 1px solid #cdd2e3;
+  /* border: 1px solid #cdd2e3; */
   padding: 10px;
   border-radius: 10px;
   margin-right: 10px;
@@ -12899,4 +12899,7 @@ tbody > tr {
 } */
 .rcw-conversation-container.active {
   width: 450px !important;
+}
+.section-container{
+  height: 80vh;
 }
