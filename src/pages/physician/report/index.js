@@ -201,6 +201,7 @@ const index = () => {
     // getAllList(localUserId, e.page, e.rows);
     // setPageNo(e?.pageCount);
   };
+ 
   const onReceivedPageChange = (e) => {
     setPaginationReceivedFirst(e.first);
     setReceivedPageNo(e.page);

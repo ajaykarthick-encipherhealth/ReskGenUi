@@ -13,6 +13,7 @@ import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { Modal, Popover, Select, Tooltip } from "antd";
 import { Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import "react-chat-widget/lib/styles.css";
@@ -20,7 +21,7 @@ import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import { getChatReply } from "../../../store/actions/DashboardActions";
 
-const Header = ({ onNote }) => {
+  const Header = ({ onNote }) => {
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
   const router = useRouter();
@@ -29,7 +30,12 @@ const Header = ({ onNote }) => {
   const [menuList, setMenuList] = useState([]);
   const [userIdDetails, setUserIdDetails] = useState("");
 
+
+
+
+
   useEffect(() => {
+
     var loginCheck = localStorage.getItem("loginCheck");
     var userName = localStorage.getItem("userName");
     const userRoleLocal = localStorage.getItem("userRole");
@@ -96,12 +102,99 @@ const Header = ({ onNote }) => {
     });
   };
 
+  const options = [
+    {
+      value: "jack",
+      label: "Jack",
+    },
+    {
+      value: "lucy",
+      label: "Lucy",
+    },
+    {
+      value: "tom",
+      label: "Tom",
+    },
+  ];
+
+
   const getUserIdDetails = async (userId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
     );
     setUserIdDetails(response.data);
   };
+
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+
+  // Filter `option.label` match the user type `input`
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
+  const percentage = 95;
+
+  const PopContent = (
+    <>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <button
+          style={{
+            marginRight: "10px",
+            border: "0.2px solid #241571",
+            borderRadius: "8px",
+            background: "#04306F",
+            boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.08)",
+            width: "90px",
+            height: "35px",
+            borderRadius: "6px",
+            color: "#FFF",
+          }}
+        >
+          ICD - 10
+        </button>
+
+        <button
+          style={{
+            marginRight: "10px",
+            border: "0.2px solid #241571",
+            borderRadius: "8px",
+            background: "white",
+            boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.08)",
+            width: "90px",
+            height: "35px",
+            borderRadius: "6px",
+            color: "black",
+          }}
+        >
+          ICD - 10
+        </button>
+      </div>
+      <div
+        style={{
+          margin: "10px 50px",
+          width: "146px",
+          height: "22px",
+        }}
+      >
+        <Select
+          showSearch
+          placeholder="Select a person"
+          optionFilterProp="children"
+          onChange={onChange}
+          onSearch={onSearch}
+          filterOption={filterOption}
+          options={options}
+          // style={{ width: "180px", height: "30px" }}
+        />
+      </div>
+    </>
+  );
+
   const TerminalComponent = dynamic(
     () => import("react-chat-widget").then((mod) => mod.Widget),
     {
@@ -127,6 +220,7 @@ const Header = ({ onNote }) => {
     console.log(data);
   };
   const percentage = 95;
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -168,6 +262,13 @@ const Header = ({ onNote }) => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
+
+                     
+
+                        <Tooltip title={`Quality:${percentage}%`}>
+                          <div className="notificationIcon">
+                            <div style={{ width: 40, height: 40 }}>
+
                         <TerminalComponent
                           handleNewUserMessage={handleNewUserMessage}
                           handleQuickButtonClicked={handleQuickButtonClicked}
@@ -179,10 +280,14 @@ const Header = ({ onNote }) => {
                         <Tooltip title={`${percentage}%`}>
                           <div className="notificationIcon">
                             <div style={{ width: 30, height: 30 }}>
+
                               <CircularProgressbar
                                 value={percentage}
                                 text={`${percentage}%`}
                               />
+
+                              {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
+
                             </div>
                           </div>
                         </Tooltip>

@@ -16,6 +16,7 @@ import { SVGICON } from "../../../jsx/constant/theme";
 import { getPriorityChange } from "../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { Paginator } from "primereact/paginator";
 
 
 const { Option } = AntSelect;
@@ -25,6 +26,9 @@ function PatientTable({
   actionBodyTemplate,
   statusBodyTemplate,
   patientDetails,
+  paginationFirst,
+  totalElements,
+  onPageChange
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
@@ -283,6 +287,19 @@ function PatientTable({
         </thead>
         <tbody >{renderRows()}</tbody>
       </table>
+      <div>
+                              <div className="pagination-container">
+                                <Paginator
+                                  first={paginationFirst}
+                                  rows={15}
+                                  totalRecords={totalElements}
+                                  onPageChange={onPageChange}
+                                />
+                                <div className="total-pages">
+                                  Total count: {totalElements}
+                                </div>
+                              </div>
+                            </div>
     </div>
   );
 }
