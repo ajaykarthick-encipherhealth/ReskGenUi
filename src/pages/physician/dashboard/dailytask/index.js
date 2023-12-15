@@ -17,7 +17,7 @@ import { getpatientsList } from "../../../../store/actions/PatientsActions";
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState();
-  const [cardDetails,setCardDetails]=useState([])
+
   const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
   const currentDate = dayjs();
   const startWeekDate = currentDate.startOf("week");
@@ -28,33 +28,19 @@ const DailyTask = () => {
     {
       color: "#FFB54D",
       name: "Pending",
-      title: "pending",
     },
     {
       color: "#AD94FA",
       name: "Hold",
-      title: "hold",
     },
     {
       color: "#EB5252",
       name: "Declined",
-      title: "declined",
     },
     {
       color: "#B4EFBA",
       name: "Completed",
-      title: "completed",
     },
-  ];
-
-  const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
   ];
 
   const currentWeekDates = [];
@@ -67,6 +53,55 @@ const DailyTask = () => {
     currentWeekDates?.push(dateIterator.format("YYYY-MM-DD"));
     dateIterator = dateIterator?.add(1, "day");
   }
+
+  const WeekDays = currentWeekDates?.map((date) => {
+    const formattedDate = dayjs(date)
+      .startOf("day")
+      .add(6, "hour")
+      .add(39, "minute")
+      .add(22, "second")
+      .add(786, "millisecond")
+      .toISOString();
+    return formattedDate;
+  });
+
+  const router = useRouter();
+  useEffect(() => {
+    {
+      rearrangedCard2Data
+        .slice(currentIndex, currentIndex + 3)
+        .map((data, index) => {
+          console.log(data);
+          return dispatch(getDailyTaskDatas(data?.dateString, router));
+        });
+    }
+  }, []);
+
+  const showPrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const showNext = () => {
+    if (currentIndex < card2Data.length - 3) {
+      setCurrentIndex(currentIndex + 1);
+      const nextDay = WeekDays[currentIndex + 3];
+      dispatch(getDailyTaskDatas(nextDay));
+      // setWeekDays(prevDays => [...prevDays.slice(1), nextDay]);
+    }
+  };
+
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
   const getCurrentWeekDates = () => {
     const today = new Date();
     const currentDay = today.getDay();
@@ -79,7 +114,7 @@ const DailyTask = () => {
       nextDay.setDate(weekStart.getDate() + i);
       weekDates.push({
         day: daysOfWeek[nextDay.getDay()],
-        date: dayjs(nextDay).format("MM-DD-YYYY"),
+        date: nextDay.toISOString().split("T")[0],
         dateString: nextDay.toISOString(),
       });
     }
@@ -104,64 +139,6 @@ const DailyTask = () => {
       allocated: matchingStatusData?.response?.allocated || 0,
     };
   });
-
-  const WeekDays = currentWeekDates?.map((date) => {
-    const formattedDate = dayjs(date)
-      .startOf("day")
-      .add(6, "hour")
-      .add(39, "minute")
-      .add(22, "second")
-      .add(786, "millisecond")
-      .toISOString();
-    return formattedDate;
-  });
-
-  const router = useRouter();
-  const today = new Date().toISOString().split("T")[0];
-  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
-    .toISOString()
-    .split("T")[0];
-  const dayBeforeYesterday = new Date(
-    new Date().setDate(new Date().getDate() - 2)
-  )
-    .toISOString()
-    .split("T")[0];
-
-  const rearrangedCard2Data = [
-    ...card2Data.filter((data) => data.date === dayBeforeYesterday),
-    ...card2Data.filter((data) => data.date === yesterday),
-    ...card2Data.filter((data) => data.date === today),
-
-    ...card2Data.filter(
-      (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
-    ),
-  ];
-  useEffect(() => {
-    rearrangedCard2Data?.slice(0, 3)?.map((data) => {
-      dispatch(getDailyTaskDatas(data.dateString, router));
-    });
-  }, []);
-
-  const showPrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1); 
-    }
-  };
-
-  const showNext = () => {
-    const maxIndex = card2Data.length - 3; 
-
-    if (currentIndex < maxIndex) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const isNextDisabled = () => {
-    const today=new Date()
-    const currentDateIndex = currentWeek.findIndex((day) => day.date === today);
-
-    return currentDateIndex >= 16;
-  };
 
   const getChartOption = (allocated, pending, hold, decline, completed) => {
     return {
@@ -252,7 +229,25 @@ const DailyTask = () => {
       dispatch(getpatientsList(0, url));
     }
   };
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+    .toISOString()
+    .split("T")[0];
+  const dayBeforeYesterday = new Date(
+    new Date().setDate(new Date().getDate() - 2)
+  )
+    .toISOString()
+    .split("T")[0];
 
+  const rearrangedCard2Data = [
+    ...card2Data.filter((data) => data.date === dayBeforeYesterday),
+    ...card2Data.filter((data) => data.date === yesterday),
+    ...card2Data.filter((data) => data.date === today),
+
+    ...card2Data.filter(
+      (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
+    ),
+  ];
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -309,12 +304,6 @@ const DailyTask = () => {
                         <Col span={12} className={styles.headerTitle}>
                           <div style={{ paddingLeft: "10px" }}>
                             {bullets?.map((item) => {
-                              const matchingStatus = dailyStatusData.find(
-                                (status) =>
-                                  status.response[item?.title.toLowerCase()] !==
-                                  undefined
-                              );
-
                               return (
                                 <div
                                   className={styles.container}
@@ -332,13 +321,13 @@ const DailyTask = () => {
                                     {item.name}
                                   </div>
                                   <div className={styles.subText}>
-                                    {item.title === "pending"
+                                    {item.name === "Pending"
                                       ? data.pending
-                                      : item.title === "declined"
+                                      : item.name === "Declined"
                                       ? data?.decline
-                                      : item.title === "hold"
+                                      : item.name === "Hold"
                                       ? data.hold
-                                      : item.title === "completed"
+                                      : item.name === "Completed"
                                       ? data?.completed
                                       : "No data"}
                                   </div>
@@ -351,12 +340,13 @@ const DailyTask = () => {
                     </Col>
                   ))}
               </Row>
+
               <div className={styles.infoCards}>
                 <Legends bullets={bullets} />
               </div>
             </Col>
             <Col span={1}>
-              <div onClick={showNext} className={styles.ImgDIv} disabled={isNextDisabled()}>
+              <div onClick={showNext} className={styles.ImgDIv}>
                 {" "}
                 <Image src={right} />
               </div>
