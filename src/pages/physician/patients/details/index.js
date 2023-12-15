@@ -11189,7 +11189,7 @@ const highlightPluginInstance = highlightPlugin({
                                                         </Popover>
                                                       </div>
                                                       <div className="col-xl-2 d-grid">
-                                                        {item.monitor != "" ? (
+                                                        {item.monitor != ""  && item.monitor != null ? (
                                                           <Popover
                                                             placement="topLeft"
                                                             title="Monitor"
@@ -11204,6 +11204,7 @@ const highlightPluginInstance = highlightPlugin({
                                                             -
                                                           </span>
                                                         )}
+                                                         {item.monitor != "" && item.monitor != null ?
                                                         <Badge
                                                           className="badge-meat cr-pointer badge-circle mt-2"
                                                           bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
@@ -11218,10 +11219,10 @@ const highlightPluginInstance = highlightPlugin({
                                                           {
                                                             item.monitorCapturedFromHeader
                                                           }
-                                                        </Badge>
+                                                        </Badge>:null}
                                                       </div>
                                                       <div className="col-xl-2 d-grid">
-                                                        {item.evaluate != "" ? (
+                                                        {item.evaluate != "" && item.evaluate != null ? (
                                                           <Popover
                                                             placement="topLeft"
                                                             title="Evaluation"
@@ -11236,6 +11237,7 @@ const highlightPluginInstance = highlightPlugin({
                                                             -
                                                           </span>
                                                         )}
+                                                         {item.evaluate != "" && item.evaluate != null ? 
                                                         <Badge
                                                           className="badge-meat cr-pointer badge-circle mt-2"
                                                           bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
@@ -11250,7 +11252,7 @@ const highlightPluginInstance = highlightPlugin({
                                                           {
                                                             item.evaluateCapturedFromHeader
                                                           }
-                                                        </Badge>
+                                                        </Badge>:null}
                                                       </div>
                                                       <div className="col-xl-2 d-grid">
                                                         {item.assessment != "" ? (
@@ -11268,6 +11270,7 @@ const highlightPluginInstance = highlightPlugin({
                                                             -
                                                           </span>
                                                         )}
+                                                         {item.assessment != "" && item.assessment != null ? 
                                                         <Badge
                                                           className="badge-meat cr-pointer badge-circle mt-2"
                                                           bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
@@ -11282,10 +11285,10 @@ const highlightPluginInstance = highlightPlugin({
                                                           {
                                                             item.assessmentCapturedFromHeader
                                                           }
-                                                        </Badge>
+                                                        </Badge>:null}
                                                       </div>
                                                       <div className="col-xl-2 d-grid">
-                                                        {item.treatment != "" ? (
+                                                        {item.treatment != "" && item.treatment != null ? (
                                                           <Popover
                                                             placement="topLeft"
                                                             title="Treatment"
@@ -11300,7 +11303,7 @@ const highlightPluginInstance = highlightPlugin({
                                                             -
                                                           </span>
                                                         )}
-
+                                                        {item.treatment != "" && item.treatment != null ?
                                                         <Badge
                                                           className="badge-meat cr-pointer badge-circle mt-2"
                                                           bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
@@ -11315,7 +11318,7 @@ const highlightPluginInstance = highlightPlugin({
                                                           {
                                                             item.treatmentCapturedFromHeader
                                                           }
-                                                        </Badge>
+                                                        </Badge>:null}
                                                       </div>
                                                       <div className="col-xl-1 meatclose">
                                                         <Popconfirm
