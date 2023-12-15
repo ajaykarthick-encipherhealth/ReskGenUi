@@ -7,7 +7,13 @@ import {
   faSortDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Tooltip, notification, Select as AntSelect, Empty } from "antd";
+import {
+  Avatar,
+  Tooltip,
+  notification,
+  Select as AntSelect,
+  Empty,
+} from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import AllocatedUserCard from "../../allocatedUserDetails/AllocatedUserCard";
@@ -173,8 +179,10 @@ function PatientTable({
     }
     setDetailsContent(sortedContent);
   };
-  const dummyProfileImageUrl = "https://avatars.githubusercontent.com/u/68529028?s=64&v=4"
-
+  const dummyProfileImageUrl =
+    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
+  const nullImg =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
     return detailsContent?.map((data, index) => (
       <tr key={index}>
@@ -199,7 +207,7 @@ function PatientTable({
         </td>
 
         <td className={TableStyle.childBorder}>
-          <Tooltip title={data.allocatedBy ? data.allocatedBy : "null"}>
+          <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
             {/* <Avatar
               style={{
                 backgroundColor: "#fde3cf",
@@ -211,24 +219,32 @@ function PatientTable({
                 ? data.allocatedBy.slice(0, 2).toUpperCase()
                 : "N"}
             </Avatar> */}
-      
-      <img
-        src={dummyProfileImageUrl}
-        alt="User Avatar"
-        width={30}
-        height={30}
-        style={{borderRadius:"50%"}}
-      />
-
+            {data.allocatedBy ? (
+              <img
+                src={dummyProfileImageUrl}
+                alt="User Avatar"
+                width={30}
+                height={30}
+                style={{ borderRadius: "50%" }}
+              />
+            ) : (
+              <img
+                src={nullImg}
+                alt="User Avatar"
+                width={30}
+                height={30}
+                style={{ borderRadius: "50%" }}
+              />
+            )}
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
           <AntSelect
             options={priorityOptions}
-            placeholder="set priority"
+            placeholder="Set priority"
             className={`custom-ant-select ${TableStyle.customAntSelect}`}
             showSearch={false}
-            defaultValue={data?.priority ? data.priority : "set Priority"}
+            defaultValue={data?.priority ? data.priority : "Set Priority"}
             disabled={!data?.priority ? true : false}
             onChange={(value) => {
               handlePriorityChange(data?.patientId, value);
@@ -297,18 +313,18 @@ function PatientTable({
             <th>Action</th>
           </tr>
         </thead>
-        
+
         <tbody>
           {detailsContent.length <= 0 ? (
             <tr>
               <td colSpan="9">
-                <Empty  />
+                <Empty />
               </td>
             </tr>
           ) : (
             renderRows()
           )}
-        </tbody>       
+        </tbody>
       </table>
       <div></div>
     </div>
