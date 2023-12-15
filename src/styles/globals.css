@@ -12903,3 +12903,11 @@ tbody > tr {
 .section-container{
   height: 80vh;
 }
+.hovered-text:hover{
+  color: blue;
+ }
+ .hovered-text{
+  color: #000;
+  font-weight: 600;
+ }
+ 
