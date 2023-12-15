@@ -12911,3 +12911,6 @@ tbody > tr {
   font-weight: 600;
  }
  
+ :where(.css-dev-only-do-not-override-p7e5j5)[class^="ant-picker"] [class^="ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class*=" ant-picker"] [class^="ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class^="ant-picker"] [class*=" ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class*=" ant-picker"] [class*=" ant-picker"] {
+  box-shadow: none;
+ }
