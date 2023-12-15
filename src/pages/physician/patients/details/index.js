@@ -770,6 +770,23 @@ const Details = ({ }) => {
               defaultPosition:res.defaultPosition
             });
           });
+
+          if (result.suggestRadiologyCombo != null) {
+            result.suggestRadiologyCombo.map((res, index) => {
+              const encounterDatearray = res.encounterDate.split(',');
+              suggestListAll.push({
+                actualDescription: res.diseaseName,
+                capturedSections: [],
+                diagnosisCode: res.diagnosisCodeCombo,
+                encounterDate: res.encounterDate,
+                encounterDateSplit: encounterDatearray,
+                getPlace: "Radio-combo",
+                isHccValid: true,
+                // defaultPosition:res.defaultPosition
+              });
+            });
+
+          }
         }
 
         if (result.suggestLab != null) {
@@ -5537,7 +5554,17 @@ const Details = ({ }) => {
                                                                             Radiology
                                                                           </span>
                                                                         </Tooltip>
-                                                                      ) : null
+                                                                      ) : data.getPlace ==
+                                                                      "Radio-combo" ? (
+                                                                      <Tooltip title="RADIOLOGY COMBO CODES">
+                                                                        <span
+                                                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                                          bg={`  mt-2 bg-bg-eight `}
+                                                                        >
+                                                                          Radiology - Combo Codes
+                                                                        </span>
+                                                                      </Tooltip>
+                                                                    ) : null
                                                                       }
 
                                                                     </div>
@@ -8338,7 +8365,7 @@ const Details = ({ }) => {
                                                   //   <div className="col-xl-12">
                                                   <div>
                                                     <span className="no-patient-data">
-                                                      NO DATA
+                                                      No Combination Codes
                                                     </span>
                                                   </div>
                                                   //   </div>
@@ -8671,7 +8698,7 @@ const Details = ({ }) => {
                                             <div className="col-xl-12">
                                               <div>
                                                 <span className="no-patient-data">
-                                                  NO DATA
+                                                  No MEAT Criteria
                                                 </span>
                                               </div>
                                             </div>
@@ -12955,7 +12982,7 @@ const Details = ({ }) => {
                                           item.action == "MOVED_VALID_TO_DELETED" ?
                                             <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved from valid to deleted</span> :
                                             item.action == "COMPLETED" ?
-                                              <span className={visitStyles.timelineheading}>You saved to completed</span> :
+                                              <span className={visitStyles.timelineheading}>Changed from {item.previousProcessedState} to COMPLETD</span> :
                                               item.action == "MOVED_DELETED_TO_VALID" ?
                                                 <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved from deleted to valid</span> :
                                                 item.action == "MOVED_DELETED_TO_SUGGESTED" ?
@@ -12967,9 +12994,9 @@ const Details = ({ }) => {
                                                       item.action == "ENCOUNTER_FILE_ADDED" ?
                                                         <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Encounter file added</span> :
                                                         item.action == "HOLD" ?
-                                                          <span className={visitStyles.timelineheading}>You saved to hold</span> :
+                                                          <span className={visitStyles.timelineheading}>Changed from {item.previousProcessedState} to HOLD</span> :
                                                           item.action == "DECLINED" ?
-                                                            <span className={visitStyles.timelineheading}> You saved to decline </span> :
+                                                            <span className={visitStyles.timelineheading}> Changed from {item.previousProcessedState} to DECLINED </span> :
                                                             null
                                   }
                                   <span className={visitStyles.timelineDate} > {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}

@@ -254,6 +254,13 @@ export default function Patient() {
 
     if (
       dStart != null &&
+      pStart != null 
+    ) {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
+    }
+
+    if (
+      dStart != null &&
       statusValue != null &&
       pStart != null &&
       statusValue != "ALL"
@@ -1030,6 +1037,7 @@ if(searchtext ){
                               <label>Due Date</label>
                                 <div>
                                   <RangePicker
+                                  format="MM-DD-YYYY"
                                      onChange={(dates, dateStrings) => {
                                       handleDatePickerChange(dateStrings);
                                     }}
@@ -1041,6 +1049,7 @@ if(searchtext ){
                               <label>Completed Date</label>
                                 <div>
                                   <RangePicker
+                                    format="MM-DD-YYYY"
                                      onChange={(dates, dateStrings) => {
                                       handleDatePickerChangeProcesseDate(dateStrings);
                                     }}

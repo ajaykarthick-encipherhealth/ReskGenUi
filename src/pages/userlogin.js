@@ -14,10 +14,10 @@ import { IMAGES } from "../jsx/constant/theme";
 
 export default function UserLogin() {
     const router = useRouter();
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('ranjith01@encipherhealth.onmicrosoft.com');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState('@Asdf123');
     // const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -85,7 +85,7 @@ export default function UserLogin() {
                         <div className="account-info-area"  style={{backgroundImage: "url("+ LoginBack +")"}}>
                             <div className="login-content">
                                 <p className="sub-title"></p>
-                                <Image className='login-logo' src={IMAGES.hccLogo}/>
+                                <Image className='login-logo' src={IMAGES.loginPageLogo}/>
                             </div>
                         </div>
                     </div>
