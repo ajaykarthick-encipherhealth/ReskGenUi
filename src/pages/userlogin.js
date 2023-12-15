@@ -7,6 +7,7 @@ import LoginBack from '../images/logo/login-back.jpg';
 import { notification } from 'antd';
 import Image from 'next/image';
 import { IMAGES } from "../jsx/constant/theme";
+import Footer from '../jsx/layouts/Footer';
 
 
 
@@ -78,7 +79,7 @@ export default function UserLogin() {
     }
 
     return (
-        <div className="page-wraper">
+       
             <div className="login-account">
                 <div className="row h-100">
                     <div className="col-lg-6 align-self-start">
@@ -130,9 +131,13 @@ export default function UserLogin() {
 
                         </div>
                     </div>
+                   <div style={{marginTop:"-50px"}}> <Footer/></div>
                 </div>
+                
             </div>
-        </div>
+          
+
+     
 
     )
 }
