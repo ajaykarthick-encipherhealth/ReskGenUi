@@ -1071,7 +1071,7 @@ if(searchtext ){
 
                               <div className="col-xl-2" >
                               <label></label>
-                                <div className={visitStyles.flags} style={{marginTop:"15px", marginLeft:"265px"}}>
+                                <div className={visitStyles.flags} style={{marginTop:"15px", marginLeft:"155px"}}>
                                   <div className={visitStyles.flags}  >
                                     <span
                                       className={visitStyles.completed}
