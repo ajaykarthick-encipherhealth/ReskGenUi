@@ -205,7 +205,6 @@ function PatientTable({
             ? moment(data.processedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-
         <td className={TableStyle.childBorder}>
           <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
             {/* <Avatar
@@ -225,7 +224,7 @@ function PatientTable({
                 alt="User Avatar"
                 width={30}
                 height={30}
-                style={{ borderRadius: "50%", marginRight: "10px" }}
+                style={{ borderRadius: "50%" , marginRight:"5px"}}
               />
             ) : (
               <img
@@ -233,10 +232,17 @@ function PatientTable({
                 alt="User Avatar"
                 width={30}
                 height={30}
-                style={{ borderRadius: "50%", marginRight: "10px" }}
+                style={{ borderRadius: "50%", marginRight:"10px"}}
               />
             )}
-            {data.allocatedBy.split("@")[0]}
+            {data.allocatedBy ?
+            <>
+                      {  data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +  data.allocatedBy.split("@")[0].slice(1)}
+
+            </>:
+            <>
+            Praveen
+            </>}
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
