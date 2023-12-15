@@ -17,7 +17,7 @@ import { getpatientsList } from "../../../../store/actions/PatientsActions";
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState();
-
+  const [cardDetails,setCardDetails]=useState([])
   const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
   const currentDate = dayjs();
   const startWeekDate = currentDate.startOf("week");
@@ -144,17 +144,23 @@ const DailyTask = () => {
 
   const showPrevious = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      setCurrentIndex(currentIndex - 1); 
     }
   };
 
   const showNext = () => {
-    if (currentIndex < card2Data.length - 3) {
+    const maxIndex = card2Data.length - 3; 
+
+    if (currentIndex < maxIndex) {
       setCurrentIndex(currentIndex + 1);
-      const nextDay = WeekDays[currentIndex + 3];
-      dispatch(getDailyTaskDatas(nextDay));
-      // setWeekDays(prevDays => [...prevDays.slice(1), nextDay]);
     }
+  };
+
+  const isNextDisabled = () => {
+    const today=new Date()
+    const currentDateIndex = currentWeek.findIndex((day) => day.date === today);
+
+    return currentDateIndex >= 16;
   };
 
   const getChartOption = (allocated, pending, hold, decline, completed) => {
@@ -350,7 +356,7 @@ const DailyTask = () => {
               </div>
             </Col>
             <Col span={1}>
-              <div onClick={showNext} className={styles.ImgDIv}>
+              <div onClick={showNext} className={styles.ImgDIv} disabled={isNextDisabled()}>
                 {" "}
                 <Image src={right} />
               </div>

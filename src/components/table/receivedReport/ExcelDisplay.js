@@ -1,24 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./receivedReport.module.css";
 import dayjs from "dayjs";
 import Spinner from "../../spinner/spinner";
 
 const ExcelDisplay = ({ tableData }) => {
-  const renderRows = () => {
-    const filteredData = tableData.filter((data) =>
-      data.some((value) => value !== "")
-    );
+  const [tableHead, setTableHead] = useState([]);
 
-    return filteredData.map((data, index) => (
-      <tr key={index}>
-        <td>{data[0] || ""}</td>
-        <td>{data[1] || ""}</td>
-        <td>{data[2] || ""}</td>
-        <td>{data[3] ? dayjs(data[3]).format("DD/MM/YYYY") : ""}</td>
-        <td>{data[4] || ""}</td>
-        <td>{data[5] || ""}</td>
-        <td>{data[6] || ""}</td>
-        <td>{data[7] || ""}</td>
+  useEffect(() => {
+    if (tableData?.length > 0) {
+      const filteredData = tableData?.filter((data) =>
+        data?.some((value) => value !== "")
+      );
+      setTableHead(filteredData);
+    }
+  }, [tableData]);
+
+  const headers = tableHead.length > 0 ? tableHead[0] : [];
+  const dataRows = tableHead.slice(1);
+
+  // Transform the data
+  const transformedData = dataRows.map((row) => {
+    const obj = {};
+    row.forEach((value, index) => {
+      obj[headers[index]] = value;
+    });
+    return obj;
+  });
+
+  const header = Object.keys(
+    transformedData.length > 0 ? transformedData[0] : {}
+  );
+
+  const renderRows = () => {
+    return transformedData.map((row, rowIndex) => (
+      <tr key={rowIndex}>
+        {header.map((header, cellIndex) => (
+          <td key={cellIndex}>{row[header]}</td>
+        ))}
       </tr>
     ));
   };
@@ -31,14 +49,8 @@ const ExcelDisplay = ({ tableData }) => {
         <table className={styles.exceltable}>
           <thead>
             <tr>
-              <th>PATIENT ID</th>
-              <th>PATIENT NAME</th>
-              <th>HCC</th>
-              <th>COMPLETED DATE</th>
-              <th>COMMENTS</th>
-              <th>AUDITOR NAME</th>
-              <th>Raf score</th>
-              <th>Flag</th>
+              {header &&
+                header?.map((header, index) => <th key={index}>{header}</th>)}
             </tr>
           </thead>
           <tbody>{renderRows()}</tbody>

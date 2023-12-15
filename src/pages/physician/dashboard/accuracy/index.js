@@ -112,7 +112,26 @@ const Accuracy = () => {
     yAxis: {
       type: "value",
     },
+    tooltip: {
+      show: true,
 
+      formatter: function (params) {
+        let tooltipContent = '';
+      
+        if (Array.isArray(params)) {
+          params.forEach((item) => {
+            const allocatedValue = Number(item.data).toFixed(2);
+            tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+          });
+        } else if (params.data) {
+          const allocatedValue = Number(params.data).toFixed(2);
+          tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+        }
+      
+        return tooltipContent;
+      },
+      
+    },
     series: [
       {
         data: data,
@@ -193,7 +212,7 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 {accuracyDatas && typeof highlightIndex === "number"
-                  ? `${accuracyDatas[highlightIndex+1]}%`
+                  ? `${accuracyDatas[highlightIndex + 1]}%`
                   : "0%"}
               </div>
             </div>
