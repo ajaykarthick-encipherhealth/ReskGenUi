@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { Badge } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Select from "react-select";
 import { SVGICON } from "../../../jsx/constant/theme";
-import LoadingSpinner from "../../../jsx/components/spinner/spinner";
+// import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 import NavBar from "../../../jsx/layouts/nav";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
@@ -46,7 +46,7 @@ import PatientTable from "../../../components/table/PatientList/patientList";
 import dayjs from "dayjs";
 import Image from "next/image";
 import calender from "../../../images/dashboard/calender.png";
-import Spinner from "../../../components/spinner/spinner";
+import LoadingSpinner from "../../../components/spinner/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { getSearchPatients } from "../../../store/actions/PatientsActions";
 import visitStyles from "../../../styles/visitdata.module.css";
@@ -224,14 +224,14 @@ export default function Patient() {
   };
 
 
-  const getFilteApi = async (pageNo, pageSize,statusValue,pStart,pEnd,dStart,dEnd) => {
+  const getFilteApi = async (pageNo, pageSize, statusValue, pStart, pEnd, dStart, dEnd) => {
     setIsLoading(true);
-    console.log(pStart,pEnd,dStart,dEnd)
+    console.log(pStart, pEnd, dStart, dEnd)
     var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
     if (statusValue != null) {
-      if(statusValue == "ALL"){
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`
-      }else{
+      if (statusValue == "ALL") {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`
+      } else {
         resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`
       }
     }
@@ -254,7 +254,7 @@ export default function Patient() {
 
     if (
       dStart != null &&
-      pStart != null 
+      pStart != null
     ) {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
     }
@@ -315,45 +315,45 @@ export default function Patient() {
     setIsLoading(true);
 
     // dispatch(getSearchPatients(0,searchtext));
-if(searchtext ){
-    var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-     if (response.data) {
-       var resultMap = [];
-       var result = response.data.content;
-       setTotalElements(response.data.totalElements);
- 
-       result.map((res) => {
-         resultMap.push({
-          patientId: res.patientId,
-          patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          allocatedBy: res.allocatedBy,
-          allocatedOn: res.allocatedOn,
-          priority: res.priority,
-          processedStatus: res.processedStatus,
-          createdAt: res.createdAt,
-         });
-       });
-       var newArray = [];
-       newArray = [...patinetListAll, ...resultMap];
-       console.log(resultMap);
-       setPatinetListAll(resultMap);
- 
-       // console.log(newArray)
-       setIsLoading(false);
-       setTableLoading(false);
-       //     setTimeout(() => {
-       //     subscribe(resultMap);
-       // }, 3000);
+    if (searchtext) {
+      var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
+      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+      if (response.data) {
+        var resultMap = [];
+        var result = response.data.content;
+        setTotalElements(response.data.totalElements);
+
+        result.map((res) => {
+          resultMap.push({
+            patientId: res.patientId,
+            patientName: res.patientName,
+            fileName: res.fileName,
+            computing: res.computing,
+            createdAt: res.createdAt,
+            lastModifiedDate: res.lastModifiedDate,
+            dueDate: res.dueDate,
+            allocatedBy: res.allocatedBy,
+            allocatedOn: res.allocatedOn,
+            priority: res.priority,
+            processedStatus: res.processedStatus,
+            createdAt: res.createdAt,
+          });
+        });
+        var newArray = [];
+        newArray = [...patinetListAll, ...resultMap];
+        console.log(resultMap);
+        setPatinetListAll(resultMap);
+
+        // console.log(newArray)
+        setIsLoading(false);
+        setTableLoading(false);
+        //     setTimeout(() => {
+        //     subscribe(resultMap);
+        // }, 3000);
+      }
+    } else {
+      getAllList(localUserId, pageNo, pageSize);
     }
-  }else{
-    getAllList(localUserId, pageNo, pageSize);
-  }
   }
 
 
@@ -452,22 +452,22 @@ if(searchtext ){
       );
       if (response?.status == 200) {
         console.log(response.data)
-        if(response.data.message == "patient Already Present"){
+        if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
             message: "Patient Id Already Present",
-            duration:1
+            duration: 1
           });
-        }else{
+        } else {
           notification.success({
             message: "Patient Id Created Successfully!",
-            duration:1
+            duration: 1
           });
           setAddPatientId(false);
           setIsLoadingBtn(false);
 
         }
-      
+
       } else {
         setIsLoadingBtn(false);
       }
@@ -843,7 +843,7 @@ if(searchtext ){
 
   const onPageChange = (e) => {
     setIsLoading(true);
-    
+
     console.log(dates);
     console.log(compledtedDate);
     console.log(e);
@@ -864,38 +864,38 @@ if(searchtext ){
   const dosOnChange = (selectedOption) => {
     const value = selectedOption.value;
     setStausSelectedValue(value);
-    getFilteApi(0, 15,value,processedStart,processedEnd,dueDateStart,dueDateEnd)
+    getFilteApi(0, 15, value, processedStart, processedEnd, dueDateStart, dueDateEnd)
   };
   const handleOk = () => {
     setModalVisible(false);
   };
   const handleDatePickerChange = (dateString) => {
     console.log(dateString)
-    if(dateString[0] != ""){
+    if (dateString[0] != "") {
       let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
       let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z";
-      setDueDateStart(convertStartDate )
-      setDueDateEnd(convertEndDate )
-      getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
-    }else{
-      getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,null,null)
+      setDueDateStart(convertStartDate)
+      setDueDateEnd(convertEndDate)
+      getFilteApi(0, 15, statusSelectedValue, processedStart, processedEnd, convertStartDate, convertEndDate)
+    } else {
+      getFilteApi(0, 15, statusSelectedValue, processedStart, processedEnd, null, null)
     }
-  
+
 
   };
 
   const handleDatePickerChangeProcesseDate = (dateString) => {
-    if(dateString[0] != ""){
+    if (dateString[0] != "") {
       let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
       let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z"
-      setProcessedStart(convertStartDate )
-      setProcessedEnd(convertEndDate )
-      getFilteApi(0, 15,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
-    }else{
-      getFilteApi(0, 15,statusSelectedValue,null,null,dueDateStart,dueDateEnd)
+      setProcessedStart(convertStartDate)
+      setProcessedEnd(convertEndDate)
+      getFilteApi(0, 15, statusSelectedValue, convertStartDate, convertEndDate, dueDateStart, dueDateEnd)
+    } else {
+      getFilteApi(0, 15, statusSelectedValue, null, null, dueDateStart, dueDateEnd)
 
     }
-   
+
 
   };
   return (
@@ -903,51 +903,51 @@ if(searchtext ){
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
         <div class="content-body">
-         
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-xl-12">
-                  <div className="">
-                    <div className="card-body p-0">
-                      <div className="table-responsive active-projects task-table">
-                        <div className="tbl-caption  align-items-center">
-                            <div className="row filter-contain">
-                              <div className="col-xl-2">
-                              <label>Search by Name or ID</label>
-                                <div class="form-group has-search">
-                                  <FontAwesomeIcon
-                                    className="fa fa-search form-control-feedback"
-                                    icon={faSearch}
-                                  />
-                                  <InputText
-                                    type="text"
-                                    onChange={(e) => getNameSearch(e.target.value)}
-                                    className="form-control new-form-control"
-                                    placeholder="Search"
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-xl-2" >
-                              <label>Select Status</label>
-                                <div class="form-group has-search">
-                                  {/* <InputText
+
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-xl-12">
+                <div className="">
+                  <div className="card-body p-0">
+                    <div className="table-responsive active-projects task-table">
+                      <div className="tbl-caption  align-items-center">
+                        <div className="row filter-contain">
+                          <div className="col-xl-2">
+                            <label>Search by Name or ID</label>
+                            <div class="form-group has-search">
+                              <FontAwesomeIcon
+                                className="fa fa-search form-control-feedback"
+                                icon={faSearch}
+                              />
+                              <InputText
+                                type="text"
+                                onChange={(e) => getNameSearch(e.target.value)}
+                                className="form-control new-form-control"
+                                placeholder="Search"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-xl-2" >
+                            <label>Select Status</label>
+                            <div class="form-group has-search">
+                              {/* <InputText
                                     type="text"
                                     onChange={(e) => filterChangePatientName(e)}
                                     className="form-control new-form-control"
                                     placeholder="Status"
                                   /> */}
-                                  <Select
-                                    onChange={(selectedOption) =>
-                                      dosOnChange(selectedOption)
-                                    }
-                                    options={statusOptions}
-                                    className="custom-react-select"
-                                    isSearchable={false}
-                                  />
-                                </div>
-                              </div>
+                              <Select
+                                onChange={(selectedOption) =>
+                                  dosOnChange(selectedOption)
+                                }
+                                options={statusOptions}
+                                className="custom-react-select"
+                                isSearchable={false}
+                              />
+                            </div>
+                          </div>
 
-                              {/* <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                                 <div class="form-group has-search">
 
                                   <Calendar
@@ -963,7 +963,7 @@ if(searchtext ){
 
                                 </div>
                               </div> */}
-                              {/* <div className="col-xl-3">
+                          {/* <div className="col-xl-3">
                                 <div
                                   onClick={handleOpenModal}
                                   className={styles.dateDisplay}
@@ -1045,67 +1045,67 @@ if(searchtext ){
                                   />
                                 </Modal>
                               </div> */}
-                              <div className="col-xl-2">
-                              <label>Due Date</label>
-                                <div>
-                                  <RangePicker
-                                  format="MM-DD-YYYY"
-                                     onChange={(dates, dateStrings) => {
-                                      handleDatePickerChange(dateStrings);
-                                    }}
-                                  />
-                                </div>
+                          <div className="col-xl-2">
+                            <label>Due Date</label>
+                            <div>
+                              <RangePicker
+                                format="MM-DD-YYYY"
+                                onChange={(dates, dateStrings) => {
+                                  handleDatePickerChange(dateStrings);
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-xl-2">
+                            <label>Completed Date</label>
+                            <div>
+                              <RangePicker
+                                format="MM-DD-YYYY"
+                                onChange={(dates, dateStrings) => {
+                                  handleDatePickerChangeProcesseDate(dateStrings);
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-xl-2" >
+                            <label></label>
+                            <div className={visitStyles.flags} style={{ marginTop: "15px", marginLeft: "265px" }}>
+                              <div className={visitStyles.flags}  >
+                                <span
+                                  className={visitStyles.completed}
+                                  style={{ background: "#3a9b94 !important" }}
+                                ></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Completed
+                                </span>
                               </div>
-
-                              <div className="col-xl-2">
-                              <label>Completed Date</label>
-                                <div>
-                                  <RangePicker
-                                    format="MM-DD-YYYY"
-                                     onChange={(dates, dateStrings) => {
-                                      handleDatePickerChangeProcesseDate(dateStrings);
-                                    }}
-                                  />
-                                </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.pending}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Pending
+                                </span>
                               </div>
-
-                              <div className="col-xl-2" >
-                              <label></label>
-                                <div className={visitStyles.flags} style={{marginTop:"15px", marginLeft:"265px"}}>
-                                  <div className={visitStyles.flags}  >
-                                    <span
-                                      className={visitStyles.completed}
-                                      style={{ background: "#3a9b94 !important" }}
-                                    ></span>
-                                    <span className={visitStyles.flagCodes}>
-                                      Completed
-                                    </span>
-                                  </div>
-                                  <div className={visitStyles.flags}>
-                                    <span className={visitStyles.pending}></span>
-                                    <span className={visitStyles.flagCodes}>
-                                      Pending
-                                    </span>
-                                  </div>
-                                  <div className={visitStyles.flags}>
-                                    <span className={visitStyles.hold}></span>
-                                    <span className={visitStyles.flagCodes}>
-                                      Hold
-                                    </span>
-                                  </div>
-                                  <div className={visitStyles.flags}>
-                                    <span className={visitStyles.declined}></span>
-                                    <span className={visitStyles.flagCodes}>
-                                      Declined
-                                    </span>
-                                  </div>
-                                </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.hold}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Hold
+                                </span>
                               </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.declined}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Declined
+                                </span>
+                              </div>
+                            </div>
+                          </div>
 
 
-                              {/* <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                                 <div class="form-group has-search"> */}
-                              {/* <Calendar
+                          {/* <Calendar
                                     className="form-control new-form-control calender-pri-input"
                                     value={compledtedDate}
                                     onChange={(e) => setCompletedDate(e.value)}
@@ -1113,32 +1113,32 @@ if(searchtext ){
                                     readOnlyInput
                                     placeholder="Completed Date"
                                   /> */}
-                              {/* <Button type="primary" onClick={showModal}>
+                          {/* <Button type="primary" onClick={showModal}>
           Open Modal
         </Button> */}
-                              {/* <div>
+                          {/* <div>
                                     <RangePicker />
                                   </div> */}
-                              {/* </div>
+                          {/* </div>
                               </div> */}
 
-                              <div className="col-xl-2"  style={{width:"14% !important"}}>
-                             
-                                <Button
-                                  onClick={addPatientFormId}
-                                  className="btn btn-primary btn-sm ms-2 flr"
-                                >
-                                  + Add Patient Id
-                                </Button>
-                              </div>
-                            </div>
-                        </div>
+                          <div className="col-xl-2" style={{ width: "14% !important" }}>
 
-                        <div
-                          id="task-tbl_wrapper"
-                          className="dataTables_wrapper no-footer"
-                        >
-                          {/* <DataTable
+                            <Button
+                              onClick={addPatientFormId}
+                              className="btn btn-primary btn-sm ms-2 flr"
+                            >
+                              + Add Patient Id
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        id="task-tbl_wrapper"
+                        className="dataTables_wrapper no-footer"
+                      >
+                        {/* <DataTable
                             value={patinetListAll}
                             paginator={false}
                             rows={10}
@@ -1214,48 +1214,48 @@ if(searchtext ){
                               }}
                             />
                           </DataTable> */}
-                           {isLoading ? (
-            <Spinner />
-          ) : (
+                        {isLoading ? (
+                          <LoadingSpinner />
+                        ) : (
                           <>
-                          <PatientTable
-                            patinetListAll={patinetListAll}
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            gotoPatientDetails={gotoPatientDetails}
-                            patientDetails={patientDetails}
+                            <PatientTable
+                              patinetListAll={patinetListAll}
+                              actionBodyTemplate={actionBodyTemplate}
+                              statusBodyTemplate={processstatusBodyTemplate}
+                              gotoPatientDetails={gotoPatientDetails}
+                              patientDetails={patientDetails}
 
-                          />
-                          <div >
-                            <div className="pagination-container">
-                              <Paginator
-                                first={paginationFirst}
-                                rows={15}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count: {totalElements}
+                            />
+                            <div >
+                              <div className="pagination-container">
+                                <Paginator
+                                  first={paginationFirst}
+                                  rows={15}
+                                  totalRecords={totalElements}
+                                  onPageChange={onPageChange}
+                                />
+                                <div className="total-pages">
+                                  Total count: {totalElements}
+                                </div>
                               </div>
+
                             </div>
 
-                          </div>
-
-                          <Footer/>
+                            <Footer />
 
                           </>)}
-                         
 
 
 
-                        </div>
+
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          
+          </div>
+
         </div>
         <Offcanvas
           onHide={setAddPatient}
@@ -1343,7 +1343,16 @@ if(searchtext ){
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loading..." : "Submit"}
+                    {isLoadingBtn ?
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className={visitStyles.btnSpinner}
+                      /> : null}
+                    {isLoadingBtn ? "Loading" : "Submit"}
                   </Button>
                   <Button
                     onClick={() => setAddPatient(false)}

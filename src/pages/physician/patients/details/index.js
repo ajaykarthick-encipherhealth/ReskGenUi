@@ -17,6 +17,13 @@ import {
 import "react-vertical-timeline-component/style.min.css";
 import TableStyle from "../../../../components/table/table.module.css";
 import { Paginator } from "primereact/paginator";
+import {
+  highlightPlugin,
+  HighlightArea,
+  MessageIcon,
+  RenderHighlightContentProps,
+  RenderHighlightTargetProps,
+} from '@react-pdf-viewer/highlight';
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -312,6 +319,40 @@ const Details = ({ }) => {
   // const [captureSectionInvalidDis, setCaptureInvalidDis] = useState([]);
   // const [encounterDateInvalidDis, setEncounterDateInvalidDis] = useState([]);
 
+
+
+  const renderHighlightTarget = (RenderHighlightTargetProps) => {
+     console.log(RenderHighlightTargetProps.selectedText)
+    //  inputValue.diagnosisCode = RenderHighlightTargetProps.selectedText;
+    //  if(isModalOpenValid == true){
+    //   //  setTimeout(() => {
+    //     setIsModalOpenValid(false);
+    //  }else{
+    //   setIsModalOpenValid(true);
+    //  }
+
+    // }, 1000);
+  }
+
+// const renderHighlightContent = (RenderHighlightContentProps) => {
+//   const addNote = () => {
+//       if (message !== '') {
+//           const note = {
+//               id: ++noteId,
+//               content: message,
+//               highlightAreas: props.highlightAreas,
+//               quote: props.selectedText,
+//           };
+//           setNotes(notes.concat([note]));
+//           props.cancel();
+//       }
+//   };
+// }
+
+
+const highlightPluginInstance = highlightPlugin({
+  renderHighlightTarget,
+});
 
 
 
@@ -1761,6 +1802,7 @@ const Details = ({ }) => {
       var result = response.data;
       setPatientDetailsRadiology(result);
       setRadiologyResult(result);
+      if(result.radiologyFileDetail != null){
       if(result.radiologyFileDetail.length != 0){
         var dosYearArrFile = [];
 
@@ -1770,6 +1812,7 @@ const Details = ({ }) => {
         setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
         getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
       }
+    }
       if (result.validDisease != null) {
         var validDis = "";
         var invalidDis = "";
@@ -2848,6 +2891,9 @@ const Details = ({ }) => {
       if (isValidAction == "holdFunction") {
         handleSubmitHccHold();
       }
+      if (isValidAction == "pendingFunction") {
+        handleSubmitHccPending();
+      }
     }
     setValidated(true);
   };
@@ -3918,6 +3964,36 @@ const Details = ({ }) => {
     }
   };
 
+  const handleSubmitHccPending = async () => {
+    setDeclineBtnTitle("Loading...");
+    var postData = {
+      orgId: localOrgId,
+      patientId: localPatientId,
+      notes: inputValue.notes,
+      dos: selectedDosValue
+    };
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/pending`,
+        postData
+      );
+      if (response?.status == 202) {
+        notification.success({
+          message: "Pending Successfully!",
+          placement: "top",
+          duration: 1
+        });
+        setConfirmNotesModalHold(false);
+        setConfirmNotesModalDecline(false);
+        setDeclineBtnTitle("Decline");
+        getPatientIdDetails(localPatientId);
+      } else {
+      }
+    } catch (e) {
+      setDeclineBtnTitle("Decline");
+    }
+  };
+
   const handleSubmitHccHold = async () => {
     setDeclineBtnTitle("Loading...");
     var postData = {
@@ -4384,6 +4460,10 @@ const Details = ({ }) => {
 
     if (value == "DECLINE") {
       handleSubmitHccDecline();
+    }
+    if(value == "PENDING"){
+      setIsValidAction("pendingFunction");
+      setConfirmNotesModalHold(true);
     }
 
     if (value == "COMPLETE") {
@@ -7252,7 +7332,7 @@ const Details = ({ }) => {
                                                   {" "}
                                                   <Viewer
                                                     fileUrl={selectFileURL}
-                                                    onItemClick={pageClickPdfFile}
+                                                    onChange={pageClickPdfFile}
                                                     plugins={[
                                                       defaultLayoutPluginInstance,
                                                     ]}
@@ -7515,7 +7595,7 @@ const Details = ({ }) => {
                                                 </ul>
                                               </div>
 
-                                              <div className="">
+                                              <div className={visitStyles.deleteFileContainer}>
                                                 <ul className="timeline">
                                                   <div
                                                     className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
@@ -12964,6 +13044,11 @@ const Details = ({ }) => {
                                                             <Popover placement="bottom" content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
                                                               <div className="timeline-badge DECLINED">{splitUserName(item.userName)}</div>
                                                             </Popover></Tooltip> :
+                                                            item.action == "PENDING" ?
+                                                            <Tooltip title={item.userName} placement="bottom">
+                                                              <Popover placement="bottom" content={userDetails} onOpenChange={() => renderUserDetails(item.userName)}>
+                                                                <div className="timeline-badge DECLINED">{splitUserName(item.userName)}</div>
+                                                              </Popover></Tooltip>:
                                                           null
 
 
@@ -13003,6 +13088,8 @@ const Details = ({ }) => {
                                                           <span className={visitStyles.timelineheading}>Changed from {item.previousProcessedState} to HOLD</span> :
                                                           item.action == "DECLINED" ?
                                                             <span className={visitStyles.timelineheading}> Changed from {item.previousProcessedState} to DECLINED </span> :
+                                                            item.action == "PENDING" ?
+                                                            <span className={visitStyles.timelineheading}> Changed from {item.previousProcessedState} to DECLINED </span>:
                                                             null
                                   }
                                   <span className={visitStyles.timelineDate} > {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
