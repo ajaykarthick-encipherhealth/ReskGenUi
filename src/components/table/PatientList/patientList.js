@@ -173,6 +173,7 @@ function PatientTable({
     }
     setDetailsContent(sortedContent);
   };
+  const dummyProfileImageUrl = "https://avatars.githubusercontent.com/u/68529028?s=64&v=4"
 
   const renderRows = () => {
     return detailsContent?.map((data, index) => (
@@ -199,7 +200,7 @@ function PatientTable({
 
         <td className={TableStyle.childBorder}>
           <Tooltip title={data.allocatedBy ? data.allocatedBy : "null"}>
-            <Avatar
+            {/* <Avatar
               style={{
                 backgroundColor: "#fde3cf",
                 color: "#f56a00",
@@ -209,7 +210,16 @@ function PatientTable({
               {data.allocatedBy
                 ? data.allocatedBy.slice(0, 2).toUpperCase()
                 : "N"}
-            </Avatar>
+            </Avatar> */}
+      
+      <img
+        src={dummyProfileImageUrl}
+        alt="User Avatar"
+        width={30}
+        height={30}
+        style={{borderRadius:"50%"}}
+      />
+
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
