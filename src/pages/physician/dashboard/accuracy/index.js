@@ -59,9 +59,9 @@ const Accuracy = () => {
     { length: numberOfWeeks },
     (_, index) => `Week ${index + 1}`
   );
-  const router=useRouter()
+  const router = useRouter();
   useEffect(() => {
-    dispatch(getAccuracyScore(currentBtn, selectedMonth, selectedYear,router));
+    dispatch(getAccuracyScore(currentBtn, selectedMonth, selectedYear, router));
   }, [currentBtn, selectedMonth, selectedYear]);
 
   const handleButtonClick = (index, btn) => {
@@ -69,7 +69,7 @@ const Accuracy = () => {
     setCurrentBtn(btn);
   };
 
-  const handleYearChange = (date,dateString) => {
+  const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
   };
   const handleMonthChange = (date) => {
@@ -112,7 +112,26 @@ const Accuracy = () => {
     yAxis: {
       type: "value",
     },
+    tooltip: {
+      show: true,
 
+      formatter: function (params) {
+        let tooltipContent = '';
+      
+        if (Array.isArray(params)) {
+          params.forEach((item) => {
+            const allocatedValue = Number(item.data).toFixed(2);
+            tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+          });
+        } else if (params.data) {
+          const allocatedValue = Number(params.data).toFixed(2);
+          tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+        }
+      
+        return tooltipContent;
+      },
+      
+    },
     series: [
       {
         data: data,
@@ -131,16 +150,6 @@ const Accuracy = () => {
     ],
   };
 
-  const totalSum =
-    accuracyDatas &&
-    Object.values(accuracyDatas).reduce((acc, curr) => acc + curr, 0);
-
-  const percentages = {};
-  for (const key in accuracyDatas) {
-    const percentage = (accuracyDatas[key] / totalSum) * 100;
-    percentages[key] = percentage;
-  }
-
   return (
     <>
       <HeadTitle header="Accuracy Score" />
@@ -148,9 +157,17 @@ const Accuracy = () => {
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
             <div className={styles.picker}>
-              <YearPicker onChange={handleYearChange} type={"year"}  bgColor="#E6EEFF" />
+              <YearPicker
+                onChange={handleYearChange}
+                type={"year"}
+                bgColor="#E6EEFF"
+              />
               {currentBtn !== "Monthly" && (
-                <YearPicker onChange={handleMonthChange} type={"month"} bgColor="#E6EEFF" />
+                <YearPicker
+                  onChange={handleMonthChange}
+                  type={"month"}
+                  bgColor="#E6EEFF"
+                />
               )}
             </div>
             <div className={styles.btnScroller}>
@@ -193,7 +210,11 @@ const Accuracy = () => {
                   ? `Month ${monthNames[currentDate.getMonth()]}`
                   : `Week ${getDateWeek(currentDate)}`}
               </div>
-              <div className={styles.percentage}>{Math.round(totalSum)}%</div>
+              <div className={styles.percentage}>
+                {accuracyDatas && typeof highlightIndex === "number"
+                  ? `${accuracyDatas[highlightIndex + 1]}%`
+                  : "0%"}
+              </div>
             </div>
           </div>
         </Card>

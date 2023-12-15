@@ -12,24 +12,24 @@ const Notifications = () => {
       key: "1",
       message:
         "Needs to validate surgical history for any amputation status and PE for laterality of diagnosis (ulcer, paralysis, atherosclerosis of LE, etc.). ",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
+      date: "12/13/2023",
+      time: "10:36 am",
+      person: "Hendry(manager)",
     },
     {
       key: "2",
       message:
         " We need minimal support (stable, continue X medication with dosage, is acceptable) for the diagnosis found in the assessment plan to confirm the diagnosis; if support is not sufficient, query the diagnosis.",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
+      date: "12/14/2023",
+      time: "08:20 am",
+      person: "Hendry(manager)",
     },
     {
       key: "3",
       message: "We should give priority to the more specific diagnosis ",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
+      date: "12/15/2023",
+      time: "12:35 pm",
+      person: "Hendry(manager)",
     },
     // {
     //   key: "4",

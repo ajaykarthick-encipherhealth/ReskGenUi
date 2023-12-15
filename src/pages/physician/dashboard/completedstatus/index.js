@@ -92,8 +92,16 @@ const CompletedStatus = () => {
       type: "value",
       show: true,
     },
-    legend: {
+    tooltip: {
       show: true,
+      trigger: "axis",
+      formatter: function (params) {
+        const dataIndex = params[0]?.dataIndex;
+        const allocatedValue = allocatedData[dataIndex];
+        const completedValue = completedData[dataIndex];
+
+        return `Allocated: ${allocatedValue}<br/>Completed: ${completedValue}`;
+      },
     },
     series: [
       {
@@ -110,6 +118,7 @@ const CompletedStatus = () => {
           ]),
         },
       },
+
       {
         data: completedData,
         type: "line",

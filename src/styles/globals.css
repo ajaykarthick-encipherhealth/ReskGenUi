@@ -12578,9 +12578,7 @@ tbody > tr {
   border-color: #bbe6e3;
   line-height: 24px;
 }
-/* .hoverActiveHcc {
-  display: none;
-} */
+
 /* :where(.css-dev-only-do-not-override-zcfrx9).ant-modal .ant-modal-content {
   top: 51px;
   left: 625px;
@@ -12624,9 +12622,9 @@ tbody > tr {
 /* Display the clear icon when input field is focused */
 
 
-.ant-picker-clear {
+/* .ant-picker-clear {
   display: none !important;
-}
+} */
 
 
 .pendingBtn
@@ -12909,3 +12907,14 @@ tbody > tr {
 .section-container{
   height: 80vh;
 }
+.hovered-text:hover{
+  color: blue;
+ }
+ .hovered-text{
+  color: #000;
+  font-weight: 600;
+ }
+ 
+ :where(.css-dev-only-do-not-override-p7e5j5)[class^="ant-picker"] [class^="ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class*=" ant-picker"] [class^="ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class^="ant-picker"] [class*=" ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class*=" ant-picker"] [class*=" ant-picker"] {
+  box-shadow: none;
+ }

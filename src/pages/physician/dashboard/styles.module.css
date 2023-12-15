@@ -32,3 +32,9 @@
     flex: 0 0 60% !important;
     max-width: 60% !important;
   }
+  .lastRow{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:20px;
+  }
