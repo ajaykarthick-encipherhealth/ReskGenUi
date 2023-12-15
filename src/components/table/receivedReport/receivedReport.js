@@ -137,10 +137,10 @@ function ReceivedReport({
         <Paginator
           // first={paginationFirst}
           rows={15}
-          totalRecords={details?.totalElements}
+          totalRecords={details?.pageSize}
           onPageChange={onReceivedPageChange}
         />
-        <div className="total-pages">Total count: {details?.totalElements}</div>
+        <div className="total-pages">Total count: {details?.pageSize}</div>
       </div>
       <Modal
         open={openModal}
