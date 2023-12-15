@@ -11356,15 +11356,16 @@ tr {
 
 span.badge-meat.badge {
   height: 20px;
-  width: max-content;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  /* width: 150px; */
+  width: 150px;
   font-size: 11px !important;
   font-weight: 500;
   display: flex;
   justify-content: center;
   align-items: center;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .raf-card {
@@ -11419,6 +11420,7 @@ span.meat-name-details {
   text-overflow: ellipsis;
   overflow: hidden;
   height: 43px;
+  width: 210px;
 }
 
 .bg-third {
@@ -12629,7 +12631,7 @@ tbody > tr {
 
 .pendingBtn
   button.ant-btn.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item {
-  color: #452b90;
+  color: #746897;
   background: #dfd8f3 !important;
   border: none !important;
   box-shadow: none !important;
@@ -12639,7 +12641,7 @@ tbody > tr {
 
 .pendingBtn
   > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
-  color: #452b90;
+  color: #746897;
   background: #dfd8f3 !important;
   border-radius: 6px;
   box-shadow: none;
@@ -12663,6 +12665,10 @@ tbody > tr {
 }
 .holdBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   color: #d8c11b !important;
+}
+.pendingBtn button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #746897 !important;
+  z-index: 0 !important;
 }
 
 .completedBtnHcc
@@ -12808,7 +12814,7 @@ tbody > tr {
 }
 .sectionTag7 {
   background-color: rgba(148, 236, 49, 0.2) !important;
-  color: rgb(148, 236, 49) !important;
+  color: rgb(141 197 78) !important
 }
 .sectionTag8 {
   background-color: rgba(154, 125, 165, 0.2) !important;

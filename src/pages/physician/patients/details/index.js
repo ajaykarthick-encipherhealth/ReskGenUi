@@ -16,6 +16,7 @@ import {
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 import TableStyle from "../../../../components/table/table.module.css";
+import { Paginator } from "primereact/paginator";
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -299,7 +300,12 @@ const Details = ({ }) => {
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [flagFirstData, setFlagFirstData] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
+  const [filterDataLoading, setFilterDataLoading] = useState(true);
 
+  const [pageNo, setPageNo] = useState(0);
+  const [pageSize, setPageSize] = useState(15);
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [totalElements, setTotalElements] = useState(10);
 
   // const [captureValidSuggested, setCaptureValidSuggested] = useState([]);
   // const [encounterDateValidSuggested, setEncounterDateValidSuggested] = useState([]);
@@ -311,6 +317,11 @@ const Details = ({ }) => {
 
 
 
+
+  const onPageChange = (e) => {
+    console.log(e);
+  
+  };
 
 
   const handleAddButtonClick = () => {
@@ -348,11 +359,11 @@ const Details = ({ }) => {
     setFilter(e.target.value);
     var value = e.target.value;
     if(value){
-    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/search?searchtext=${value}&pageno=${0}&pagesize=${50}`);
+    const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/search?searchtext=${value}&pageno=${0}&pagesize=${100}`);
     var result = response.data.content;
     setPatientList(result)
     }else{
-      const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${20}`);
+      const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${100}`);
       var result = response.data.content;
       setPatientList(result)
     }
@@ -744,6 +755,7 @@ const Details = ({ }) => {
           // for (var key in result.suggestRadiology) {
           //   checkDosRadio.push({ value: key, label: key });
           // }
+          getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res.encounterDate.split(',');
@@ -761,6 +773,7 @@ const Details = ({ }) => {
         }
 
         if (result.suggestLab != null) {
+          getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
             const encounterDatearray = res.encounterDate.split(',');
@@ -1726,17 +1739,26 @@ const Details = ({ }) => {
       var result = response.data;
       setPatientDetailsRadiology(result);
       setRadiologyResult(result);
+      if(result.radiologyFileDetail.length != 0){
+        var dosYearArrFile = [];
+
+        for (var key in result.radiologyFileDetail[0].documentDos) {
+          dosYearArrFile.push({ value: key, label: key });
+        }
+        setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
+        getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
+      }
       if (result.validDisease != null) {
         var validDis = "";
         var invalidDis = "";
         var comboDis = "";
         var meatCri = "";
         var dosYearArr = [];
-        var dosYearArrFile = [];
+        // var dosYearArrFile = [];
         var validDiseaseNewRes = [];
         var invalidDiseaseNewRes = [];
         var unMatchRes = [];
-        getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
+        // getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
         // getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId)
 
         for (var key in result.validDisease) {
@@ -1752,15 +1774,15 @@ const Details = ({ }) => {
         );
         setDosYearDefalutSelectRadiology(dosYearArr[0]);
 
-        if (result.radiologyFileDetail != null) {
-          for (var key in result.radiologyFileDetail[0].documentDos) {
-            dosYearArrFile.push({ value: key, label: key });
-          }
+        // if (result.radiologyFileDetail != null) {
+        //   for (var key in result.radiologyFileDetail[0].documentDos) {
+        //     dosYearArrFile.push({ value: key, label: key });
+        //   }
 
-          // var fileDetails = result.radiologyFileDetail[dateofService];
-          setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
-          getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
-        }
+        //   // var fileDetails = result.radiologyFileDetail[dateofService];
+        //   setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
+        //   getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
+        // }
 
         validDis = result.validDisease[dateofService];
         validDiseaseNewRes = result.validDisease[dateofService];
@@ -2048,7 +2070,7 @@ const Details = ({ }) => {
 
 
         meatRes = result.meatCriteria[dateofService];
-        if (result.labFileDetail != null) {
+        if (result.labFileDetail != null || result.labFileDetail.length != 0 ) {
           for (var key in result.labFileDetail[0].documentDos) {
             dosYearArrFile.push({ value: key, label: key });
           }
@@ -2723,7 +2745,7 @@ const Details = ({ }) => {
       setTimeout(() => {
         highlight({
           keyword: splitPoint,
-          matchCase: true,
+          // matchCase: true,
           // wholeWords:true
         });
         var dataset = value + " - (" + disDescription + ")";
@@ -3980,20 +4002,24 @@ const Details = ({ }) => {
   };
 
   const addComments = async (value) => {
+    setFilterDataLoading(true);
     setIsModalComments(true);
     setFlagContainerActive(value);
     if (value == "Filter") {
-      setFlagContainerActiveTitle("My Work Qyeue")
-      const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${20}`);
+      setFlagContainerActiveTitle("My Work Queue")
+      const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${100}`);
       var result = response.data.content;
       setPatientList(result)
+      setFilterDataLoading(false);
+
     }
 
     if (value == "Timeline") {
       setFlagContainerActiveTitle("Timeline")
-      const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/actioneventaudit?patientid=${localPatientId}&pageno=${0}&pagesize=${20}`);
+      const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/actioneventaudit?patientid=${localPatientId}&pageno=${0}&pagesize=${100}`);
       var result = response.data.content;
       setTimeLineData(result);
+      setFilterDataLoading(false);
     }
     if (value == "Notes") {
       setFlagContainerActiveTitle("Notes")
@@ -4278,6 +4304,7 @@ const Details = ({ }) => {
       `dbservice/comment?patientId=${localPatientId}&year=${selectedDosValue}`
     );
     setCommentList(response.data)
+    setFilterDataLoading(false);
   }
 
 
@@ -4287,6 +4314,7 @@ const Details = ({ }) => {
       `dbservice/notes?patientId=${localPatientId}&year=${selectedDosValue}`
     );
     setNotesList(response.data)
+    setFilterDataLoading(false);
   }
 
   const getFlagListLastDetails = async (patientId,dos) => {
@@ -4297,7 +4325,9 @@ const Details = ({ }) => {
     if(response.data.length != 0){
       setFlagFirstData(response.data[0])
 
+
     }
+    // setFilterDataLoading(false);
   }
 
   const getFlagList = async () => {
@@ -4305,11 +4335,12 @@ const Details = ({ }) => {
       ENDPOINTS.apiEndoint +
       `dbservice/flagdetails?patientId=${localPatientId}&year=${selectedDosValue}`
     );
-    setFlagResultList(response.data)
+    setFlagResultList(response.data);
     if(response.data.length != 0){
       setFlagFirstData(response.data[0])
 
     }
+    setFilterDataLoading(false);
   }
 
   const handleDatePickerChange = (dateString) => {
@@ -6617,10 +6648,13 @@ const Details = ({ }) => {
                                                         null ? (
                                                         <>
                                                           {rafScore.scoreOutputDTOList.map(
-                                                            (rafScoreMapResult) => {
+                                                            (rafScoreMapResult,index) => {
                                                               return (
                                                                 <>
-                                                                  <label className={`${visitStyles.labelStyle} ${visitStyles.raflablehead}`}>{rafScoreMapResult.hcc_model.version}</label>
+                                                                   {index == 0 ?
+                                                                  <label className={`${visitStyles.labelStyle} ${visitStyles.raflablehead2}`}>{rafScoreMapResult.hcc_model.version}</label>:
+                                                                  <label className={`${visitStyles.labelStyle} ${visitStyles.raflablehead1}`}>{rafScoreMapResult.hcc_model.version}</label>}
+
                                                                   <div className="row raf-main-card">
                                                                     {/* <div className="col-xl-3">
                                                           <div className="card">
@@ -6805,7 +6839,7 @@ const Details = ({ }) => {
                                                       ) : null}
                                                     </div>
                                                     <div className="col-xl-3">
-                                                      <label className={`${visitStyles.labelStyle} ${visitStyles.raflablehead}`}>Overall score</label>
+                                                      <label className={`${visitStyles.labelStyle} ${visitStyles.raflableheadOverall}`}>Overall score</label>
                                                       <div className={`row raf-main-card ${visitStyles.overallScoreContainer}`}>
                                                         <div className="raf-card ">
                                                           <div className="row raf-head">
@@ -7177,7 +7211,7 @@ const Details = ({ }) => {
                                               <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                                 <div
                                                   style={{
-                                                    height: "70vh",
+                                                    height: "80vh",
                                                     maxWidth: "1000px",
                                                     marginLeft: "auto",
                                                     marginRight: "auto",
@@ -8990,7 +9024,7 @@ const Details = ({ }) => {
                                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                               <div
                                                 style={{
-                                                  height: "70vh",
+                                                  height: "80vh",
                                                   maxWidth: "1000px",
                                                   marginLeft: "auto",
                                                   marginRight: "auto",
@@ -9113,7 +9147,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
-
+                                                  <div className={visitStyles.container}>
                                                   {newValidDiseaseListRadiology.map(
                                                     (data, i) => (
                                                       <li>
@@ -9192,6 +9226,7 @@ const Details = ({ }) => {
                                                       </li>
                                                     )
                                                   )}
+                                                  </div>
                                                 </ul>
                                               </div>
 
@@ -9215,6 +9250,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.container}>
                                                   {newInValidDiseaseListRadiology.map(
                                                     (data, i) => (
                                                       <li>
@@ -9293,6 +9329,7 @@ const Details = ({ }) => {
                                                       </li>
                                                     )
                                                   )}
+                                                  </div>
                                                 </ul>
                                               </div>
 
@@ -9316,6 +9353,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.container}>
                                                   {invalidMoveDiseasesList.map(
                                                     (data, i) => (
                                                       <li>
@@ -9380,6 +9418,7 @@ const Details = ({ }) => {
                                                       </li>
                                                     )
                                                   )}
+                                                  </div>
                                                 </ul>
                                               </div>
                                             </div>
@@ -9602,7 +9641,7 @@ const Details = ({ }) => {
 
                                                   <div>
                                                     <span className="no-patient-data">
-                                                      NO DATA
+                                                      No Combination Codes
                                                     </span>
                                                   </div>
 
@@ -9911,6 +9950,7 @@ const Details = ({ }) => {
                                               </div>
                                             </div>
                                           </div>
+                                          <div className={visitStyles.container}>
                                           {meatCriteriaListRadiology.length != 0 ?
                                             <div
                                               className={visitStyles.hccStickey_head}
@@ -10134,6 +10174,7 @@ const Details = ({ }) => {
                                               ) : null}
 
                                             </div> : null}
+                                            </div>
                                         </div>
                                         {/* <div className="my-post-content pt-3">
                                         <div
@@ -10817,6 +10858,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.container}>
 
                                                   {labReportValidList.map(
                                                     (data, i) => (
@@ -10857,6 +10899,7 @@ const Details = ({ }) => {
                                                       </li>
                                                     )
                                                   )}
+                                                  </div>
                                                 </ul>
                                               </div>
                                               <div className="col-xl-4">
@@ -10879,6 +10922,7 @@ const Details = ({ }) => {
                                                       </span>
                                                     </div>
                                                   </div>
+                                                  <div className={visitStyles.container}>
                                                   {invalidMoveDiseasesList.map(
                                                     (data, i) => (
                                                       <li>
@@ -10943,6 +10987,7 @@ const Details = ({ }) => {
                                                       </li>
                                                     )
                                                   )}
+                                                  </div>
                                                 </ul>
                                               </div>
                                             </div>
@@ -11515,193 +11560,18 @@ const Details = ({ }) => {
                       // style={{ top: 5 }}
                       onOk={handleCloseModal}
                       onCancel={handleCloseModal}
-                      width={1000}
-                      height={400}
+                      width="90%"
+                      // height={400}
                     >
                       <div className="section-container">
                         <div className="row">
                           <div className="col-xl-12">
-                            <div
-                              className="rpv-core__viewer"
-                              style={{
-                                border: "1px solid rgba(0, 0, 0, 0.3)",
-                                display: "flex",
-                                flexDirection: "column",
-                                margin: "0 82px 10px 73px",
-                              }}
-                            >
-                              <div
-                                style={{
-                                  alignItems: "center",
-                                  backgroundColor: "#eeeeee",
-                                  borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
-                                  display: "flex",
-                                  padding: "4px",
-                                }}
-                              >
-                                {/* <Search>
-                                {(renderSearchProps) => {
-                                  const [readyToSearch, setReadyToSearch] =
-                                    useState(false);
-                                  return (
-                                    <>
-                                      <div
-                                        style={{
-                                          border:
-                                            "1px solid rgba(0, 0, 0, 0.3)",
-                                          display: "flex",
-                                          padding: "0 2px",
-                                        }}
-                                      >
-                                        <input
-                                          style={{
-                                            border: "none",
-                                            padding: "8px",
-                                            width: "200px",
-                                          }}
-                                          placeholder="Enter to search"
-                                          type="text"
-                                          value={renderSearchProps.keyword}
-                                          onChange={(e) => {
-                                            setReadyToSearch(false);
-                                            renderSearchProps.setKeyword(
-                                              e.target.value
-                                            );
-                                          }}
-                                          onKeyDown={(e) => {
-                                            if (
-                                              e.keyCode === 13 &&
-                                              renderSearchProps.keyword
-                                            ) {
-                                              setReadyToSearch(true);
-                                              renderSearchProps.search();
-                                            }
-                                          }}
-                                        />
-                                        <Tooltip
-                                          position={Position.BottomCenter}
-                                          target={
-                                            <button
-                                              style={{
-                                                background: "#fff",
-                                                border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
-                                                height: "100%",
-                                                padding: "0 2px",
-                                              }}
-                                              onClick={() =>
-                                                renderSearchProps.changeMatchCase(
-                                                  !renderSearchProps.matchCase
-                                                )
-                                              }
-                                            >
-                                              <Icon>
-                                                <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
-                                                <path d="M4.383 14.725L13.59 14.725" />
-                                                <path d="M0.5 21.725L3.52 21.725" />
-                                                <path d="M14.479 21.725L17.5 21.725" />
-                                                <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
-                                                <path d="M16.92 16.725L20.794 16.725" />
-                                                <path d="M21.516 21.725L23.5 21.725" />
-                                              </Icon>
-                                            </button>
-                                          }
-                                          content={() => "Match case"}
-                                          offset={{ left: 0, top: 8 }}
-                                        />
-                                        <Tooltip
-                                          position={Position.BottomCenter}
-                                          target={
-                                            <button
-                                              style={{
-                                                background: "#fff",
-                                                border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
-                                                height: "100%",
-                                                padding: "0 2px",
-                                              }}
-                                              onClick={() =>
-                                                renderSearchProps.changeWholeWords(
-                                                  !renderSearchProps.wholeWords
-                                                )
-                                              }
-                                            >
-                                              <Icon>
-                                                <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
-                                                <path d="M3.5 9.498L3.5 14.498" />
-                                              </Icon>
-                                            </button>
-                                          }
-                                          content={() => "Match whole word"}
-                                          offset={{ left: 0, top: 8 }}
-                                        />
-                                      </div>
-                                      {readyToSearch &&
-                                        renderSearchProps.keyword &&
-                                        renderSearchProps.numberOfMatches ===
-                                        0 && (
-                                          <div style={{ padding: "0 8px" }}>
-                                            Not found
-                                          </div>
-                                        )}
-                                      {readyToSearch &&
-                                        renderSearchProps.keyword &&
-                                        renderSearchProps.numberOfMatches >
-                                        0 && (
-                                          <div style={{ padding: "0 8px" }}>
-                                            {renderSearchProps.currentMatch} of{" "}
-                                            {renderSearchProps.numberOfMatches}
-                                          </div>
-                                        )}
-                                      <div style={{ padding: "0 2px" }}>
-                                        <Tooltip
-                                          position={Position.BottomCenter}
-                                          target={
-                                            <MinimalButton
-                                              onClick={
-                                                renderSearchProps.jumpToPreviousMatch
-                                              }
-                                            >
-                                              <PreviousIcon />
-                                            </MinimalButton>
-                                          }
-                                          content={() => "Previous match"}
-                                          offset={{ left: 0, top: 8 }}
-                                        />
-                                      </div>
-                                      <div style={{ padding: "0 2px" }}>
-                                        <Tooltip
-                                          position={Position.BottomCenter}
-                                          target={
-                                            <MinimalButton
-                                              onClick={
-                                                renderSearchProps.jumpToNextMatch
-                                              }
-                                            >
-                                              <NextIcon />
-                                            </MinimalButton>
-                                          }
-                                          content={() => "Next match"}
-                                          offset={{ left: 0, top: 8 }}
-                                        />
-                                      </div>
-                                    </>
-                                  );
-                                }}
-                              </Search> */}
-                              </div>
-                            </div>
+                         
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                               <div
                                 style={{
-                                  height: "400px",
-                                  // width: "1000px",
+                                  height: "80vh",
+                                  width: "900px",
                                   marginLeft: "auto",
                                   marginRight: "auto",
                                 }}
@@ -11709,7 +11579,7 @@ const Details = ({ }) => {
                                 {" "}
                                 <Viewer
                                   fileUrl={selectFileURL}
-                                  plugins={[searchPluginInstance]}
+                                  plugins={[defaultLayoutPluginInstance]}
                                   onDocumentLoad={handleDocumentLoad}
                                 />
                               </div>
@@ -11802,13 +11672,13 @@ const Details = ({ }) => {
                           >
                             Add
                           </button> */}
-                          <Button  onClick={handleAddButtonClick}  className="btn btn-primary btn-sm me-1">
+                          <Button  onClick={handleAddButtonClick}   className={`btn btn-primary btn-sm me-1 ${visitStyles.hccCodeAddBtn}`}  >
                           Add
                   </Button>
                  
                         </div>
 
-                        <div className="row">
+                        <div className={`row ${visitStyles.hccCodeAddContainer}`}>
                           <div className="col-xl-8">
                             <div
                               // className="rpv-core__viewer"
@@ -11989,7 +11859,7 @@ const Details = ({ }) => {
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                               <div
                                 style={{
-                                  height: "60vh",
+                                  height: "80vh",
                                   // width: "1000px",
                                   marginLeft: "auto",
                                   marginRight: "auto",
@@ -12005,7 +11875,7 @@ const Details = ({ }) => {
                             </Worker>
                           </div>
                           {isAddButtonClicked && (
-                            <div className="col-xl-4">
+                            <div className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}>
                               {/* Input fields */}
                               <form onSubmit={handleFormSubmit}>
                                 <div className="form-group">
@@ -12113,8 +11983,8 @@ const Details = ({ }) => {
                           )}
                           {nonHccActiveCodes == false &&
                             isAddButtonClicked == false ? (
-                            <div className="col-xl-4">
-                              <ul className="timeline">
+                            <div className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}>
+                              {/* <ul className="timeline">
                                 <div className="modal-valid-container">
                                   {newValidDiseaseList.map((data, i) => (
                                     <li>
@@ -12145,8 +12015,8 @@ const Details = ({ }) => {
                                     </li>
                                   ))}
                                 </div>
-                              </ul>
-                              {/* <div className={visitStyles.container}>
+                              </ul> */}
+                              <div className={visitStyles.container}>
                                                     <div className={visitStyles.hccStickey_head}>
 
                                                       {newValidDiseaseList.map(
@@ -12185,14 +12055,23 @@ const Details = ({ }) => {
                                                                   </span>
                                                                 </div>
 
-                                                               
-                                                              
+                                                                {data.defaultPosition == "VALID" ?
+                                                                  <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span> : data.defaultPosition == "SUGGESTED" ?
 
+                                                                    <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span>
+                                                                    : data.defaultPosition == "DELETED" ?
 
+                                                                      <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                      </span> : null}
+                                                           
                                                               </div>
                                                               <div className={`${visitStyles.hoverActiveHcc}`}>
                                                                 <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                      {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                
+
+                                                                  {getEncounterDateBackground(data.encounterDateSplit)}
                                                                   {data.isManuallyAdded == true ?
                                                                   
                                                                       <Badge
@@ -12204,7 +12083,7 @@ const Details = ({ }) => {
                                                                     null}
                                                                 </div>
                                                                 <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                  {getCaptureSectionBackground(data.capturedSections)}
+                                                                  {getCaptureSectionBackgroundFile(data.capturedSections)}
                                                                 </div>
                                                               </div>
                                                             </div>
@@ -12213,7 +12092,7 @@ const Details = ({ }) => {
                                                         )
                                                       )}
                                                     </div>
-                                                  </div> */}
+                                                  </div>
                             </div>
                           ) : (
                             null
@@ -12271,186 +12150,11 @@ const Details = ({ }) => {
                       <div className="section-container">
                         <div className="row">
                           <div className="col-xl-12">
-                            <div
-                              // className="rpv-core__viewer"
-                              // style={{
-                              //   border: "1px solid rgba(0, 0, 0, 0.3)",
-                              //   display: "flex",
-                              //   flexDirection: "column",
-                              //   margin: "0 82px 10px 73px",
-                              // }}
-                            >
-                              <div
-                                // style={{
-                                //   alignItems: "center",
-                                //   backgroundColor: "#eeeeee",
-                                //   borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
-                                //   display: "flex",
-                                //   padding: "4px",
-                                // }}
-                              >
-                                {/* <Search>
-                                {(renderSearchProps) => {
-                                  const [readyToSearch, setReadyToSearch] =
-                                    useState(false);
-                                  return (
-                                    <>
-                                      <div
-                                        style={{
-                                          border:
-                                            "1px solid rgba(0, 0, 0, 0.3)",
-                                          display: "flex",
-                                          padding: "0 2px",
-                                        }}
-                                      >
-                                        <input
-                                          style={{
-                                            border: "none",
-                                            padding: "8px",
-                                            width: "200px",
-                                          }}
-                                          placeholder="Enter to search"
-                                          type="text"
-                                          value={renderSearchProps.keyword}
-                                          onChange={(e) => {
-                                            setReadyToSearch(false);
-                                            renderSearchProps.setKeyword(
-                                              e.target.value
-                                            );
-                                          }}
-                                          onKeyDown={(e) => {
-                                            if (
-                                              e.keyCode === 13 &&
-                                              renderSearchProps.keyword
-                                            ) {
-                                              setReadyToSearch(true);
-                                              renderSearchProps.search();
-                                            }
-                                          }}
-                                        />
-                                        <Tooltip
-                                          position={Position.BottomCenter}
-                                          target={
-                                            <button
-                                              style={{
-                                                background: "#fff",
-                                                border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.matchCase
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
-                                                height: "100%",
-                                                padding: "0 2px",
-                                              }}
-                                              onClick={() =>
-                                                renderSearchProps.changeMatchCase(
-                                                  !renderSearchProps.matchCase
-                                                )
-                                              }
-                                            >
-                                              <Icon>
-                                                <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
-                                                <path d="M4.383 14.725L13.59 14.725" />
-                                                <path d="M0.5 21.725L3.52 21.725" />
-                                                <path d="M14.479 21.725L17.5 21.725" />
-                                                <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
-                                                <path d="M16.92 16.725L20.794 16.725" />
-                                                <path d="M21.516 21.725L23.5 21.725" />
-                                              </Icon>
-                                            </button>
-                                          }
-                                          content={() => "Match case"}
-                                          offset={{ left: 0, top: 8 }}
-                                        />
-                                        <Tooltip
-                                          position={Position.BottomCenter}
-                                          target={
-                                            <button
-                                              style={{
-                                                background: "#fff",
-                                                border: "none",
-                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
-                                                  ? "blue"
-                                                  : "transparent"
-                                                  }`,
-                                                height: "100%",
-                                                padding: "0 2px",
-                                              }}
-                                              onClick={() =>
-                                                renderSearchProps.changeWholeWords(
-                                                  !renderSearchProps.wholeWords
-                                                )
-                                              }
-                                            >
-                                              <Icon>
-                                                <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
-                                                <path d="M3.5 9.498L3.5 14.498" />
-                                              </Icon>
-                                            </button>
-                                          }
-                                          content={() => "Match whole word"}
-                                          offset={{ left: 0, top: 8 }}
-                                        />
-                                      </div>
-                                      {readyToSearch &&
-                                        renderSearchProps.keyword &&
-                                        renderSearchProps.numberOfMatches ===
-                                        0 && (
-                                          <div style={{ padding: "0 8px" }}>
-                                            Not found
-                                          </div>
-                                        )}
-                                      {readyToSearch &&
-                                        renderSearchProps.keyword &&
-                                        renderSearchProps.numberOfMatches >
-                                        0 && (
-                                          <div style={{ padding: "0 8px" }}>
-                                            {renderSearchProps.currentMatch} of{" "}
-                                            {renderSearchProps.numberOfMatches}
-                                          </div>
-                                        )}
-                                      <div style={{ padding: "0 2px" }}>
-                                        <Tooltip
-                                          position={Position.BottomCenter}
-                                          target={
-                                            <MinimalButton
-                                              onClick={
-                                                renderSearchProps.jumpToPreviousMatch
-                                              }
-                                            >
-                                              <PreviousIcon />
-                                            </MinimalButton>
-                                          }
-                                          content={() => "Previous match"}
-                                          offset={{ left: 0, top: 8 }}
-                                        />
-                                      </div>
-                                      <div style={{ padding: "0 2px" }}>
-                                        <Tooltip
-                                          position={Position.BottomCenter}
-                                          target={
-                                            <MinimalButton
-                                              onClick={
-                                                renderSearchProps.jumpToNextMatch
-                                              }
-                                            >
-                                              <NextIcon />
-                                            </MinimalButton>
-                                          }
-                                          content={() => "Next match"}
-                                          offset={{ left: 0, top: 8 }}
-                                        />
-                                      </div>
-                                    </>
-                                  );
-                                }}
-                              </Search> */}
-                              </div>
-                            </div>
+                         
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                               <div
                                 style={{
-                                  height: "70vh",
+                                  height: "80vh",
                                   width: "900px",
                                   marginLeft: "auto",
                                   marginRight: "auto",
@@ -12459,7 +12163,7 @@ const Details = ({ }) => {
                                 {" "}
                                 <Viewer
                                   fileUrl={selectFileURL}
-                                  plugins={[searchPluginInstance]}
+                                  plugins={[defaultLayoutPluginInstance]}
                                   onDocumentLoad={handleDocumentLoad}
                                 />
                               </div>
@@ -12514,7 +12218,7 @@ const Details = ({ }) => {
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                           <div
                             style={{
-                              height: "70vh",
+                              height: "80vh",
                               // width: "900px",
                               marginLeft: "auto",
                               marginRight: "auto",
@@ -12547,7 +12251,7 @@ const Details = ({ }) => {
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                           <div
                             style={{
-                              height: "70vh",
+                              height: "80vh",
                               // width: "900px",
                               marginLeft: "auto",
                               marginRight: "auto",
@@ -13143,7 +12847,8 @@ const Details = ({ }) => {
                     </div>
                     {flagContainerActive == "Timeline" ?
                       <div className={visitStyles.timeLine}>
-
+  {!filterDataLoading ?
+                          <>
                         <div
 
                           className="widget-timeline"
@@ -13240,23 +12945,23 @@ const Details = ({ }) => {
                                 >
 
                                   {item.action == "MOVED_INVALID_TO_VALID" ?
-                                    <span className={visitStyles.timelineheading} > {item.diagnosisCode} - Moved invalid to valid</span> :
+                                    <span className={visitStyles.timelineheading} > {item.diagnosisCode} - Moved from invalid to valid</span> :
                                     item.action == "MOVED_SUGGESTED_TO_VALID" ?
-                                      <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved Suggested to valid</span> :
+                                      <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved from Suggested to valid</span> :
                                       item.action == "MOVED_VALID_TO_SUGGESTED" ?
-                                        <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved valid to suggested</span> :
+                                        <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved from valid to suggested</span> :
                                         item.action == "VALID_DISEASE_ADDED" ?
-                                          <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Valid disease added</span> :
+                                          <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Valid from disease added</span> :
                                           item.action == "MOVED_VALID_TO_DELETED" ?
-                                            <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved valid to deleted</span> :
+                                            <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved from valid to deleted</span> :
                                             item.action == "COMPLETED" ?
                                               <span className={visitStyles.timelineheading}>You saved to completed</span> :
                                               item.action == "MOVED_DELETED_TO_VALID" ?
-                                                <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved deleted to valid</span> :
+                                                <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved from deleted to valid</span> :
                                                 item.action == "MOVED_DELETED_TO_SUGGESTED" ?
-                                                  <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved deleted to suggested</span> :
+                                                  <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved from deleted to suggested</span> :
                                                   item.action == "MOVED_SUGGESTED_TO_DELETED" ?
-                                                    <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved suggested to deleted</span> :
+                                                    <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Moved from suggested to deleted</span> :
                                                     item.action == "ENCOUNTER_FILE_UPDATED" ?
                                                       <span className={visitStyles.timelineheading}>{item.diagnosisCode} - Encounter file updated</span> :
                                                       item.action == "ENCOUNTER_FILE_ADDED" ?
@@ -13280,9 +12985,17 @@ const Details = ({ }) => {
                                 </a>
                               </li>
                             ))}
+                            {timelineData.length == 0 ?
+                             <h6 className="text-center">NO DATA</h6> : null}
 
                           </ul>
-                        </div>
+                        </div></>:<div className={visitStyles.userDetailsCard}>
+        <div className="bouncing-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>}
 
                         {/* <VerticalTimeline>
                         {timelineData.map((item, index) => (
@@ -13456,7 +13169,8 @@ const Details = ({ }) => {
                               )}
                             </div>
                           </div>
-
+                          {!filterDataLoading ?
+                          <>
                           <div className={visitStyles.patientListHead}>
                             <ul className={`${visitStyles.patientDetailsHead}`} >
                               {patientList.map((data, index) => (
@@ -13477,8 +13191,27 @@ const Details = ({ }) => {
                                {patientList.length == 0 ?
                               <h5 className="text-center">NO DATA</h5> : null}
                             </ul>
-                           
+                              {/* <div className="pagination-container">
+                              <Paginator
+                                first={paginationFirst}
+                                rows={15}
+                                totalRecords={totalElements}
+                                onPageChange={onPageChange}
+                              />
+                              <div className="total-pages">
+                                Total count: {totalElements}
+                              </div>
+                            </div>
+                            */}
                           </div>
+                        
+                          </>: <div className={visitStyles.userDetailsCard}>
+        <div className="bouncing-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>}
                         </div> : flagContainerActive == "Comments" ?
 
 
