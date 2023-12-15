@@ -1287,8 +1287,8 @@ margin-left: 20px;
 .raflablehead1{
   box-shadow: 0 3px 10px rgba(220, 199, 199, 0.2);
   border: 1px solid rgba(220, 199, 199, 0.2);
-  background-color: rgba(148, 236, 49, 0.2) !important;
-  color: rgb(148, 236, 49) !important;
+  background-color: rgb(191, 64, 191);
+  color: #fff;
   display: inline-flex;
   align-items: center;
   height: 25px;
@@ -1299,8 +1299,8 @@ margin-left: 20px;
 .raflablehead2{
   box-shadow: 0 3px 10px rgba(220, 199, 199, 0.2);
   border: 1px solid rgba(220, 199, 199, 0.2);
-  background-color: rgba(37, 138, 62, 0.2) !important;
-  color: rgb(37, 138, 62) !important;
+  background-color: #873e23;
+  color: #fff;
   display: inline-flex;
   align-items: center;
   height: 25px;
@@ -1312,8 +1312,8 @@ margin-left: 20px;
 .raflableheadOverall{
   box-shadow: 0 3px 10px rgba(220, 199, 199, 0.2);
   border: 1px solid rgba(220, 199, 199, 0.2);
-  background-color: rgba(79, 189, 41, 0.2) !important ;
-  color: rgb(79, 189, 41) !important;
+  background-color: rgb(37, 150, 190);
+  color: #fff!important;
   display: inline-flex;
   align-items: center;
   height: 25px;
@@ -1351,4 +1351,11 @@ margin-left: 20px;
 }
 .hccCodeAddRightContainer{
   border-left: 2px solid #d1c9c9;
+}
+.deleteFileContainer{
+  margin-top: 15px;
+}
+.btnSpinner{
+  margin-right: 5px;
+  font-size: 10px;
 }
