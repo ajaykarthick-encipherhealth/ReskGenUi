@@ -225,7 +225,7 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="header-logo">
-              <Image src={IMAGES.Hcc_LOGO} />
+              <Image src={IMAGES.loginPageLogo} />
             </div>
             {stateActive != "/physician/home" ? (
               <div>

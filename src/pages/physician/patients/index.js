@@ -870,20 +870,32 @@ if(searchtext ){
     setModalVisible(false);
   };
   const handleDatePickerChange = (dateString) => {
-    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
-    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate )
-    setDueDateEnd(convertEndDate )
-    getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
+    console.log(dateString)
+    if(dateString[0] != ""){
+      let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
+      let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z";
+      setDueDateStart(convertStartDate )
+      setDueDateEnd(convertEndDate )
+      getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
+    }else{
+      getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,null,null)
+    }
+  
 
   };
 
   const handleDatePickerChangeProcesseDate = (dateString) => {
-    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
-    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z"
-    setProcessedStart(convertStartDate )
-    setProcessedEnd(convertEndDate )
-    getFilteApi(0, 15,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
+    if(dateString[0] != ""){
+      let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
+      let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z"
+      setProcessedStart(convertStartDate )
+      setProcessedEnd(convertEndDate )
+      getFilteApi(0, 15,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
+    }else{
+      getFilteApi(0, 15,statusSelectedValue,null,null,dueDateStart,dueDateEnd)
+
+    }
+   
 
   };
   return (

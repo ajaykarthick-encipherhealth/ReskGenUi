@@ -418,6 +418,11 @@ const Details = ({ }) => {
     // }, 6000);
   };
 
+  const pageClickPdfFile = (e) => {
+   console.log(e)
+  };
+
+
   const changeSearch = () => {
     //   searchPlugin({
     //     keyword: 'BMP',
@@ -7247,6 +7252,7 @@ const Details = ({ }) => {
                                                   {" "}
                                                   <Viewer
                                                     fileUrl={selectFileURL}
+                                                    onItemClick={pageClickPdfFile}
                                                     plugins={[
                                                       defaultLayoutPluginInstance,
                                                     ]}
