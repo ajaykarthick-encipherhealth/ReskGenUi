@@ -225,7 +225,7 @@ function PatientTable({
                 alt="User Avatar"
                 width={30}
                 height={30}
-                style={{ borderRadius: "50%" , marginRight:"10px"}}
+                style={{ borderRadius: "50%", marginRight: "10px" }}
               />
             ) : (
               <img
@@ -233,10 +233,10 @@ function PatientTable({
                 alt="User Avatar"
                 width={30}
                 height={30}
-                style={{ borderRadius: "50%", marginRight:"10px"}}
+                style={{ borderRadius: "50%", marginRight: "10px" }}
               />
             )}
-          {  data.allocatedBy.split("@")[0]}
+            {data.allocatedBy.split("@")[0]}
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
