@@ -23,10 +23,10 @@ export const selectedRow = (val) => ({
   payload: val,
 });
 
-export const getReportDetails = (pagenum, startDate, endDate, search) => {
+export const getReportDetails = (pagenum, startDate, endDate, search,filter) => {
   return (dispatch) => {
     try {
-      patientDetails(pagenum, startDate, endDate, search).then((response) => {
+      patientDetails(pagenum, startDate, endDate, search,filter).then((response) => {
         if (response) {
           dispatch({
             type: REPORT_PATIENTS_DETAILS,

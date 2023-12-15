@@ -169,6 +169,7 @@ const index = () => {
     { label: "Pending", value: "pending" },
     { label: "Declined", value: "declined" },
     { label: "Hold", value: "hold" },
+    { label: "All", value: "all" },
   ];
   const ReceivedOptions = [];
   ReceivedReportDetails?.content?.map((item) => {
@@ -304,7 +305,13 @@ const index = () => {
     setSelectedDates(date);
     setCoderStartDate(formattedDates[0]);
     setCoderEndDate(formattedDates[1]);
-    dispatch(getReportDetails(pageNo, formattedDates[0], formattedDates[1]));
+    dispatch(
+      getReportDetails(
+        pageNo,
+        date ? formattedDates[0] : null,
+        date ? formattedDates[1] : null
+      )
+    );
   };
 
   const rowsLength = useSelector((state) => state.report.row);
@@ -350,9 +357,11 @@ const index = () => {
                                 /> */}
                                   {activeTab === "CoderReport" && (
                                     <Select
-                                      onChange={(selectedOption) =>
-                                        dosOnChange(selectedOption)
-                                      }
+                                      onChange={(selectedOption) => {
+                                        dosOnChange(selectedOption);
+                                        console.log(selectedOption);
+                                        dispatch(getReportDetails(pageNo,null, null,selectedOption.value==='all'?null:selectedOption.value.toUpperCase()));
+                                      }}
                                       options={statusOptions}
                                       className="custom-react-select"
                                       isSearchable={false}

@@ -30,6 +30,7 @@ const router=useRouter()
     dispatch(getWorkFlow(startDate, lastDate,router));
   }, [startDate, lastDate]);
 
+  console.log(startDate, lastDate)
   return (
     <div style={{backgroundColor: "#F0F6FE"}}>
       <Header />

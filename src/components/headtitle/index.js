@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
-import { DatePicker, Modal } from "antd";
+import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
-import { getDateRange } from "../../store/actions/DashboardActions";
+import {
+  getDateRange,
+  getWorkFlow,
+} from "../../store/actions/DashboardActions";
+import { CloseOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 const { RangePicker } = DatePicker;
 
 const HeadTitle = ({
@@ -17,6 +23,7 @@ const HeadTitle = ({
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
@@ -45,6 +52,8 @@ const HeadTitle = ({
     };
     dispatch(getDateRange(dates));
   };
+
+  const last30thDate = currentDate.subtract(31, "day");
   return (
     <div className={styles.header} style={{ display: anchorTag && "flex" }}>
       <div
@@ -67,6 +76,9 @@ const HeadTitle = ({
                   setSelectedDates([]);
                 }
               }}
+              onMouseOver={() => {
+                setVisible(true);
+              }}
               className={styles.IMG}
             />
           </div>
@@ -85,11 +97,11 @@ const HeadTitle = ({
         style={{ left: "-20%", top: "18%" }}
         onOk={() => {
           setOpenPicker(false);
-          setSelectedDates([]);
+          // setSelectedDates([]);
         }}
         onCancel={() => {
           setOpenPicker(false);
-          setSelectedDates([]);
+          // setSelectedDates([]);
         }}
       >
         <div className={styles.modalDetails}>
@@ -112,8 +124,30 @@ const HeadTitle = ({
             suffixIcon={false}
             className={styles.datepicker}
           />
+           <span
+            style={{
+              cursor: "pointer",
+              position:"relative",
+              left:"280px",
+              top:"-40px"
+            }}
+            onClick={() => {
+              const dates = {
+                startDate: last30thDate.toISOString(),
+                endDate: currentDate.toISOString(),
+              };
+              dispatch(getDateRange(dates));
+              setOpenPicker(false)
+            }}
+          >
+            <Button>Clear</Button>
+            {/* <CloseOutlined style={{width:"15px",height:"15px"}}/> */}
+          </span>
+        
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
+        
+         
       </Modal>
     </div>
   );
