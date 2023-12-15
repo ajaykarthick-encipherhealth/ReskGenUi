@@ -7,9 +7,9 @@ const ExcelDisplay = ({ tableData }) => {
   const [tableHead, setTableHead] = useState([]);
 
   useEffect(() => {
-    if (tableData?.length > 0) {
-      const filteredData = tableData?.filter((data) =>
-        data?.some((value) => value !== "")
+    if (Array.isArray(tableData) && tableData.length > 0) {
+      const filteredData = tableData.filter((data) =>
+        Object.values(data).some((value) => value !== "")
       );
       setTableHead(filteredData);
     }
