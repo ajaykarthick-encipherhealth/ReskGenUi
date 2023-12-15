@@ -50,22 +50,9 @@ const DailyTask = () => {
     dateIterator?.isBefore(endWeekDate) ||
     dateIterator?.isSame(endWeekDate, "day")
   ) {
-    currentWeekDates?.push(dateIterator.format("YYYY-MM-DD"));
+    currentWeekDates?.push(dateIterator.format("MM-DD-YYYY"));
     dateIterator = dateIterator?.add(1, "day");
   }
-
-  const router = useRouter();
-  useEffect(() => {
-    {
-      rearrangedCard2Data
-        .slice(currentIndex, currentIndex + 3)
-        .map((data, index) => {
-          console.log(data);
-          return dispatch(getDailyTaskDatas(data?.dateString, router));
-        });
-    }
-  }, []);
-
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -88,7 +75,8 @@ const DailyTask = () => {
       nextDay.setDate(weekStart.getDate() + i);
       weekDates.push({
         day: daysOfWeek[nextDay.getDay()],
-        date: nextDay.toISOString().split("T")[0],
+        date: dayjs(nextDay).format("MM-DD-YYYY"),
+        //nextDay.toISOString().split("T")[0],
         dateString: nextDay.toISOString(),
       });
     }
@@ -99,7 +87,7 @@ const DailyTask = () => {
 
   const card2Data = currentWeek?.map((dayInfo, index) => {
     const matchingStatusData = dailyStatusData?.find((data) => {
-      return dayjs(data?.response?.date).format("YYYY-MM-DD") === dayInfo?.date;
+      return dayjs(data?.response?.date).format("MM-DD-YYYY") === dayInfo?.date;
     });
     return {
       id: index + 1,
@@ -113,6 +101,46 @@ const DailyTask = () => {
       allocated: matchingStatusData?.response?.allocated || 0,
     };
   });
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+    .toISOString()
+    .split("T")[0];
+  const dayBeforeYesterday = new Date(
+    new Date().setDate(new Date().getDate() - 2)
+  )
+    .toISOString()
+    .split("T")[0];
+
+  const rearrangedCard2Data = [
+    ...card2Data.filter((data) => data.date === dayjs(dayBeforeYesterday).format('MM-DD-YYYY')),
+    ...card2Data.filter((data) => data.date === dayjs(yesterday).format('MM-DD-YYYY')),
+    ...card2Data.filter((data) => data.date === dayjs(today).format('MM-DD-YYYY')),
+
+    ...card2Data.filter(
+      (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
+    ),
+  ];
+  const showPrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const WeekDays = rearrangedCard2Data?.map((date) => {
+    const formattedDate = date?.dateString
+    return formattedDate;
+  });
+
+  const router = useRouter();
+  useEffect(() => {
+    {
+      rearrangedCard2Data
+        .slice(currentIndex, currentIndex + 3)
+        .map((data, index) => {
+          return dispatch(getDailyTaskDatas(data?.dateString, router));
+        });
+    }
+  }, []);
 
   const getChartOption = (allocated, pending, hold, decline, completed) => {
     return {
@@ -203,50 +231,22 @@ const DailyTask = () => {
       dispatch(getpatientsList(0, url));
     }
   };
-  const today = new Date().toISOString().split("T")[0];
-  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
-    .toISOString()
-    .split("T")[0];
-  const dayBeforeYesterday = new Date(
-    new Date().setDate(new Date().getDate() - 2)
-  )
-    .toISOString()
-    .split("T")[0];
 
-  const rearrangedCard2Data = [
-    ...card2Data.filter((data) => data.date === dayBeforeYesterday),
-    ...card2Data.filter((data) => data.date === yesterday),
-    ...card2Data.filter((data) => data.date === today),
+  const uniqueDates = [...new Set(rearrangedCard2Data.map(date => date.dateString))];
 
-    ...card2Data.filter(
-      (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
-    ),
-  ];
-  const showPrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  console.log(WeekDays);
   const showNext = () => {
     if (currentIndex < card2Data.length - 3) {
       setCurrentIndex(currentIndex + 1);
-      const nextDay = WeekDays[currentIndex + 1];
-      console.log(currentIndex, rearrangedCard2Data[currentIndex]);
+      const nextDay = uniqueDates[currentIndex + 3];
       dispatch(getDailyTaskDatas(nextDay));
-      // setWeekDays(prevDays => [...prevDays.slice(1), nextDay]);
     }
   };
-  const WeekDays = rearrangedCard2Data?.map((date) => {
-    const formattedDate = dayjs(date)
-      .startOf("day")
-      .add(6, "hour")
-      .add(39, "minute")
-      .add(22, "second")
-      .add(786, "millisecond"). toISOString();
-    return formattedDate;
-  });
+  
+  const uniqueCardData = rearrangedCard2Data?.filter(
+    (value, index, self) =>
+      self.findIndex((v) => v?.dateString === value?.dateString) === index
+  );
+  
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -260,7 +260,7 @@ const DailyTask = () => {
             </Col>
             <Col span={22}>
               <Row style={{ display: "flex", justifyContent: "space-between" }}>
-                {rearrangedCard2Data
+                {uniqueCardData
                   .slice(currentIndex, currentIndex + 3)
                   .map((data, index) => (
                     <Col
