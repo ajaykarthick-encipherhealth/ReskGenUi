@@ -314,6 +314,9 @@ const Details = ({ }) => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
 
+  const [labFileFilterList, setLabFileFilterList] = useState(10);
+
+
   // const [captureValidSuggested, setCaptureValidSuggested] = useState([]);
   // const [encounterDateValidSuggested, setEncounterDateValidSuggested] = useState([]);
   // const [captureSectionInvalidDis, setCaptureInvalidDis] = useState([]);
@@ -2333,8 +2336,18 @@ if(resultTest.labFileDetail != null){
     var resultTest = response.data;
 
 var dosYearArrFile =[];
+var fileDatesArr =[];
 if(resultTest.labFileDetail != null){
-    if (resultTest.labFileDetail.length != 0 ) {
+    if(resultTest.labFileDetail.length != 0 ) {
+      resultTest.labFileDetail.map((res, index) => {
+      console.log(res)
+
+      for (var key in res.documentDos) {
+        fileDatesArr.push({ value: key, label: key });
+      }
+
+
+      })
       for (var key in resultTest.labFileDetail[0].documentDos) {
         dosYearArrFile.push({ value: key, label: key });
       }
@@ -2344,6 +2357,13 @@ if(resultTest.labFileDetail != null){
       getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
     }
   }
+
+  setLabFileFilterList(fileDatesArr)
+
+
+  console.log(fileDatesArr)
+
+
 
     if (resultTest.labFileDetail != null) {
       var result = resultTest;
@@ -3232,7 +3252,17 @@ if(resultTest.labFileDetail != null){
 
   const dosOnChangeLabFile = async (e) => {
     var dosKeyValue = e.value;
-    // var fileDetails = labResult.labFileDetail[dosKeyValue];
+    labResult.labFileDetail.map((res, index) => {
+      for (var key in res.documentDos) {
+         if(key == dosKeyValue){
+          console.log(res)
+          getLabReportFiles(res.azureBlobPath, localTenantId);
+
+         }
+      }
+      })
+    
+    
     // getLabReportFiles(fileDetails[0].azureBlobPath, localTenantId);
   };
 
@@ -11681,7 +11711,7 @@ if(resultTest.labFileDetail != null){
                                                 onChange={(e) =>
                                                   dosOnChangeLabFile(e)
                                                 }
-                                                options={labFileDateofServieList}
+                                                options={labFileFilterList}
                                                 className="custom-react-select"
                                                 defaultValue={
                                                   labFileDateDefaulteSelect
