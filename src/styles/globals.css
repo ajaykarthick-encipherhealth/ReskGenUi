@@ -8597,7 +8597,7 @@ button:focus {
 }
 
 .login-account .account-info-area {
-  background-color: #b9b1d0;
+ 
   border-radius: 2.5rem;
   display: flex;
   align-items: center;
@@ -8686,8 +8686,8 @@ button:focus {
   z-index: 9;
   position: relative;
   max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 126px;
+  
 }
 
 .login-account .account-info-area .login-content .logo {
@@ -11470,7 +11470,7 @@ span.meat-name-details {
 }
 
 img.login-logo {
-  width: 100%;
+  width: 130%;
   height: 200px;
 }
 
