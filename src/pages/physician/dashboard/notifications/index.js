@@ -12,7 +12,7 @@ const Notifications = () => {
       key: "1",
       message:
         "Needs to validate surgical history for any amputation status and PE for laterality of diagnosis (ulcer, paralysis, atherosclerosis of LE, etc.). ",
-      date: "12/13/2023",
+      date: "12/15/2023",
       time: "10:36 am",
       person: "Hendry(manager)",
     },
@@ -27,7 +27,7 @@ const Notifications = () => {
     {
       key: "3",
       message: "We should give priority to the more specific diagnosis ",
-      date: "12/15/2023",
+      date: "12/13/2023",
       time: "12:35 pm",
       person: "Hendry(manager)",
     },
