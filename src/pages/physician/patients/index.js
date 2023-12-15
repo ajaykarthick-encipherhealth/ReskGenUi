@@ -207,6 +207,7 @@ export default function Patient() {
           allocatedOn: res.allocatedOn,
           priority: res.priority,
           processedStatus: res.processedStatus,
+          processedDate: res.processedDate,
           createdAt: res.createdAt,
         });
       });
@@ -295,6 +296,7 @@ export default function Patient() {
           priority: res.priority,
           processedStatus: res.processedStatus,
           createdAt: res.createdAt,
+          processedDate: res.processedDate,
         });
       });
       var newArray = [];
@@ -337,6 +339,7 @@ if(searchtext ){
           priority: res.priority,
           processedStatus: res.processedStatus,
           createdAt: res.createdAt,
+          processedDate: res.processedDate,
          });
        });
        var newArray = [];

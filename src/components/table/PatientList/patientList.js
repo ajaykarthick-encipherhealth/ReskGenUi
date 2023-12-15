@@ -201,8 +201,8 @@ function PatientTable({
           {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.processedStatus === "COMPLETED"
-            ? moment(data.processedDate).format("MM-DD-YYYY")
+          {data.processedDate ?
+            moment(data.processedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
         <td className={TableStyle.childBorder}>
@@ -292,7 +292,7 @@ function PatientTable({
               DUE DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
                 {sortDueOrder === "asc" ? (
-                  <ArrowUpOutlined />
+                  <ArrowUpOutlined /> 
                 ) : (
                   <ArrowDownOutlined />
                 )}
