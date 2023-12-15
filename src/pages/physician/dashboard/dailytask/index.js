@@ -79,7 +79,7 @@ const DailyTask = () => {
       nextDay.setDate(weekStart.getDate() + i);
       weekDates.push({
         day: daysOfWeek[nextDay.getDay()],
-        date: nextDay.toISOString().split("T")[0],
+        date: dayjs(nextDay).format("MM-DD-YYYY"),
         dateString: nextDay.toISOString(),
       });
     }
