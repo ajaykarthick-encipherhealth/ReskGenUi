@@ -53,10 +53,15 @@
 .percentage {
   /* margin: 10px 0; */
   /* height:50%; */
-  font-size: 1.2rem;
+  /* font-size: 1.2rem;
   color: #000000;
-  font-weight: 600;
+  font-weight: 600; */
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.insideTitle{
+  font-size: 48px;
+  color: #000000;
+  font-weight: 700;
 }
