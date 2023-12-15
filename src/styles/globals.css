@@ -11353,7 +11353,7 @@ tr {
 }
 
 span.badge-meat.badge {
-  height: 20px;
+  /* height: 20px; */
   width: 150px;
   font-size: 11px !important;
   font-weight: 500;
