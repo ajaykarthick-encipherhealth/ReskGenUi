@@ -12789,7 +12789,7 @@ const highlightPluginInstance = highlightPlugin({
                               />
                             </div>
 
-                            <div className="col-xl-12 mb-3">
+                            {/* <div className="col-xl-12 mb-3">
                               <Form.Label>
                                 Patient Name{" "}
                                 <span className="text-danger">*</span>{" "}
@@ -12801,7 +12801,7 @@ const highlightPluginInstance = highlightPlugin({
                                 value={inputValue.name}
                                 onChange={handleChange}
                               />
-                            </div>
+                            </div> */}
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
                                 Year of Service{" "}
@@ -12885,7 +12885,7 @@ const highlightPluginInstance = highlightPlugin({
                               />
                             </div>
 
-                            <div className="col-xl-12 mb-3">
+                            {/* <div className="col-xl-12 mb-3">
                               <Form.Label>
                                 Patient Name{" "}
                                 <span className="text-danger">*</span>{" "}
@@ -12897,7 +12897,7 @@ const highlightPluginInstance = highlightPlugin({
                                 value={inputValue.name}
                                 onChange={handleChange}
                               />
-                            </div>
+                            </div> */}
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
                                 Year of Service{" "}
