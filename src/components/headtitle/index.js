@@ -54,6 +54,8 @@ const HeadTitle = ({
   };
 
   const last30thDate = currentDate.subtract(31, "day");
+  const lastDateWithTime = currentDate.endOf('day').toISOString();
+
   return (
     <div className={styles.header} style={{ display: anchorTag && "flex" }}>
       <div
@@ -134,7 +136,7 @@ const HeadTitle = ({
             onClick={() => {
               const dates = {
                 startDate: last30thDate.toISOString(),
-                endDate: currentDate.toISOString(),
+                endDate: lastDateWithTime,
               };
               dispatch(getDateRange(dates));
               setOpenPicker(false)

@@ -18,19 +18,19 @@ const index = () => {
   const currentDate = dayjs();
   const last30thDate = currentDate.subtract(31, "day");
 
+  const lastDateWithTime = currentDate.endOf('day').toISOString();
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const dispatch = useDispatch();
 
   const startDate = DateRanges
     ? DateRanges?.startDate
     : last30thDate.toISOString();
-  const lastDate = DateRanges ? DateRanges?.endDate : currentDate.toISOString();
+  const lastDate = DateRanges ? DateRanges?.endDate : lastDateWithTime;
 const router=useRouter()
   useEffect(() => {
     dispatch(getWorkFlow(startDate, lastDate,router));
   }, [startDate, lastDate]);
 
-  console.log(startDate, lastDate)
   return (
     <div style={{backgroundColor: "#F0F6FE"}}>
       <Header />
