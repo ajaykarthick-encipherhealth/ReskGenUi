@@ -56,6 +56,7 @@ const index = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [dates, setDates] = useState(null);
   const [compledtedDate, setCompletedDate] = useState(null);
+  const[filteredCOder,setFilteredCoder]=useState([])
 
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -164,6 +165,10 @@ const index = () => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
+  useEffect(()=>{
+    setFilteredCoder(ReportPatientDetails)
+  },[ReportPatientDetails])
+
   const statusOptions = [
     { label: "Completed", value: "completed" },
     { label: "Pending", value: "pending" },
@@ -359,8 +364,7 @@ const index = () => {
                                     <Select
                                       onChange={(selectedOption) => {
                                         dosOnChange(selectedOption);
-                                        console.log(selectedOption);
-                                        dispatch(getReportDetails(pageNo,null, null,selectedOption.value==='all'?null:selectedOption.value.toUpperCase()));
+                                        dispatch(getReportDetails(pageNo,null, null,null,selectedOption.value==='all'?null:selectedOption.value.toUpperCase()));
                                       }}
                                       options={statusOptions}
                                       className="custom-react-select"
@@ -501,7 +505,7 @@ const index = () => {
                                   >
                                     <CoderReport
                                       setModal={setModal}
-                                      reportListAll={ReportPatientDetails}
+                                      reportListAll={filteredCOder}
                                       paginationFirst={paginationFirst}
                                       ReportPatientDetails={
                                         ReportPatientDetails

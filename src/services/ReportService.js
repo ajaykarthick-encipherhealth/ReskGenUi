@@ -5,7 +5,7 @@ export const patientDetails = async (pagenum,startDate,endDate,search,filter) =>
   const token = localStorage.getItem("token");
   const url= search?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&searchstring=${search}`:
   (startDate && endDate) ?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:
-  filter?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&filter${filter}`:`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15`
+  filter?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&filter=${filter}`:`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15`
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}${url}`,

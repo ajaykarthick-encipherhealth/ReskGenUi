@@ -49,7 +49,7 @@ const HoldStatus = () => {
           <th>Reason</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className={styles.body}>
         {processedData?.length > 0 ? (
           processedData?.map((item, index) => (
             <tr key={index} className={styles.tabelCell}>
