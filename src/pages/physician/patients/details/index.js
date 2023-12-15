@@ -801,7 +801,7 @@ const highlightPluginInstance = highlightPlugin({
           // for (var key in result.suggestRadiology) {
           //   checkDosRadio.push({ value: key, label: key });
           // }
-          getPatientDetailsRadiologyYear(orgId,tenId)
+          // getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res.encounterDate.split(',');
@@ -836,7 +836,7 @@ const highlightPluginInstance = highlightPlugin({
         }
 
         if (result.suggestLab != null) {
-          getLabReportDetails(orgId,tenId)
+          // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
             const encounterDatearray = res.encounterDate.split(',');
@@ -1235,6 +1235,15 @@ const highlightPluginInstance = highlightPlugin({
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
         setIsLoadingDos(false);
         getFlagListLastDetails(patientId,highestDosValue[0].value);
+
+        if (result.suggestRadiology != null) {
+          getPatientDetailsRadiologyYear(orgId,tenId)
+        }
+
+        if (result.suggestLab != null) {
+          getLabReportDetailsInititalLoad(orgId,tenId,capturedSectionsColorsMatching,encounterDateColorsMatching)}
+
+
       } else {
         setIsLoading(false);
       }
@@ -2028,7 +2037,7 @@ const highlightPluginInstance = highlightPlugin({
       }
     }
   };
-  const getLabReportDetails = async (orgId, tenId) => {
+  const getLabReportDetailsInititalLoad = async (orgId, tenId,matchCode,encounterData) => {
     var patientId = localStorage.getItem("patientId");
 
     const response = await axios.get(
@@ -2037,6 +2046,19 @@ const highlightPluginInstance = highlightPlugin({
     );
 
     var resultTest = response.data;
+
+var dosYearArrFile =[];
+if(resultTest.labFileDetail != null){
+    if (resultTest.labFileDetail.length != 0 ) {
+      for (var key in resultTest.labFileDetail[0].documentDos) {
+        dosYearArrFile.push({ value: key, label: key });
+      }
+      setFileLabDateofServiceList(dosYearArrFile);
+      setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+      var fileDetails = resultTest.labFileDetail;
+      getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+    }
+  }
 
     if (resultTest.labFileDetail != null) {
       var result = resultTest;
@@ -2052,16 +2074,20 @@ const highlightPluginInstance = highlightPlugin({
 
       setLabFileDosList(dosYearArr);
 
-      var dateofService = dosYearArr[0].value;
+      console.log(dosYearArr)
+
+      var validDisArray = [];
+
+
+      if (dosYearArr.length != 0) {
+        var dateofService = dosYearArr[0].value;
 
       const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
 
       const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
 
-      if (dosYearArr.length != 0) {
         validDiseaseNewRes = result.validDisease[dateofService];
 
-        var validDisArray = [];
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(',');
           validDisArray.push({
@@ -2089,46 +2115,325 @@ const highlightPluginInstance = highlightPlugin({
           "sectionTag8"
         ];
 
+        var capturedSectionsArr =[];
+        var capturedSectionsColorsMatching =[];
+        
 
-        // validDiseaseNewRes.map((res) => {
-        //   res.capturedSections.map((res2, index) => {
-        //     capturedSectionsArr.push({
-        //       name: res2,
-        //       "diagnosisCode": res.diagnosisCode,
-        //     });
 
-        //   })
-        // })
-        // invalidDiseaseNewRes.map((res) => {
-        //   res.capturedSections.map((res2, index) => {
-        //     capturedSectionsArr.push({
-        //       name: res2,
-        //       "diagnosisCode": res.diagnosisCode,
-        //     });
+        validDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2, index) => {
+            capturedSectionsArr.push({
+              name: res2,
+              "diagnosisCode": res.diagnosisCode,
+            });
 
-        //   })
-        // })
+          })
+        })
+      
 
-        // suggestListAll.map((res) => {
-        //   res.capturedSections.map((res2, index) => {
-        //     capturedSectionsArr.push({
-        //       name: res2,
-        //       "diagnosisCode": res.diagnosisCode,
-        //     });
+        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
-        //   })
-        // })
+        dublicateSectionArr.map((res, index) => {
+          capturedSectionsColorsMatching.push({
+            "name": res.name,
+            "diagnosisCode": res.diagnosisCode,
+            "colors": COLORS2[index]
+          });
+        })
 
-        // var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
+        var newArray = [];
+        newArray = [
+          ...matchCode,
+          ...capturedSectionsColorsMatching,
+        ];
 
-        // dublicateSectionArr.map((res, index) => {
-        //   capturedSectionsColorsMatching.push({
-        //     "name": res.name,
-        //     "diagnosisCode": res.diagnosisCode,
-        //     "colors": COLORS2[index]
-        //   });
-        // })
-        // setCaptureSectionMatching(capturedSectionsColorsMatching);
+        console.log(captureSectionMatching)
+        setCaptureSectionMatching(newArray);
+
+
+
+
+        const COLORS3 = [
+          "encounterDateTag1",
+          "encounterDateTag2",
+          "encounterDateTag3",
+          "encounterDateTag4",
+          "encounterDateTag5",
+          "encounterDateTag6",
+          "encounterDateTag7",
+          "encounterDateTag8"
+        ];
+
+
+        var encounterDateColorsMatching = [];
+        var encounterDateArr = [];
+
+        validDiseaseNewRes.map((res) => {
+          const array = res.encounterDate.split(',');
+          array.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          })
+        })
+
+
+        var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
+
+        encounterDateArrDublicatesRemove.map((res, index) => {
+          encounterDateColorsMatching.push({
+            "name": res.name,
+            "colors": COLORS3[index]
+          });
+        })
+
+
+        var newArray2 = [];
+        newArray2 = [
+          ...encounterData,
+          ...encounterDateColorsMatching,
+        ];
+
+        setEncounterDateMatching(newArray2);
+
+
+
+
+
+
+        meatRes = result.meatCriteria[dateofService];
+        if (result.labFileDetail != null || result.labFileDetail.length != 0 ) {
+          for (var key in result.labFileDetail[0].documentDos) {
+            dosYearArrFile.push({ value: key, label: key });
+          }
+          setFileLabDateofServiceList(dosYearArrFile);
+          setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+          var fileDetails = result.labFileDetail;
+          getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+        }
+      }
+
+      const COLORS = [
+        "encounterDateTag1",
+        "encounterDateTag2",
+        "encounterDateTag3",
+        "encounterDateTag4",
+        "encounterDateTag5",
+        "encounterDateTag6",
+        "encounterDateTag7",
+        "encounterDateTag8"
+      ];
+
+      var meatListArr = [];
+      var meatMoniterHead = [];
+      var meatEvaluteHead = [];
+      var meatAssesmentHead = [];
+      var meatTreatMentHead = [];
+      var allMeatHead = [];
+      var allMeatHeadColorArr = [];
+      var allMeatHeadColor = [];
+      var dublicateRemoveSecondArr = [];
+
+      meatRes.map((res, index) => {
+        if (res.monitorCapturedFromHeader != "") {
+          meatMoniterHead.push({
+            header: res.monitorCapturedFromHeader,
+          });
+        }
+        if (res.evaluateCapturedFromHeader != "") {
+          meatEvaluteHead.push({
+            header: res.evaluateCapturedFromHeader,
+          });
+        }
+        if (res.assessmentCapturedFromHeader != "") {
+          meatAssesmentHead.push({
+            header: res.assessmentCapturedFromHeader,
+          });
+        }
+        if (res.treatmentCapturedFromHeader != "") {
+          meatTreatMentHead.push({
+            header: res.treatmentCapturedFromHeader,
+          });
+        }
+        var newArray = [];
+        newArray = [
+          ...allMeatHead,
+          ...meatMoniterHead,
+          ...meatEvaluteHead,
+          ...meatAssesmentHead,
+          ...meatTreatMentHead,
+        ];
+        var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+        dublicateRemoveArr.map((res3, index) => {
+          allMeatHeadColor.push({
+            header: res3.header,
+            color: COLORS[index],
+          });
+        });
+        allMeatHeadColorArr = allMeatHeadColor;
+
+        dublicateRemoveSecondArr = getUniqueListBy(
+          allMeatHeadColor,
+          "header"
+        );
+        setMeatColorCodeList(dublicateRemoveSecondArr);
+      });
+
+      meatRes.map((res, index) => {
+        meatListArr.push({
+          diagnosisCode: res.diagnosisCode,
+          diseaseName: res.diseaseName,
+          monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+          assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+          evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+          treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+          radiology: res.radiology,
+          monitorCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.monitorCapturedFromHeader
+          ),
+          assessmentCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.assessmentCapturedFromHeader
+          ),
+          evaluateCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.evaluateCapturedFromHeader
+          ),
+          treatmentCapturedFromHeaderColor: colorCodeMatch(
+            dublicateRemoveSecondArr,
+            res.treatmentCapturedFromHeader
+          ),
+          monitorColor: COLORS[index],
+          meatColor: COLORS[index],
+          assessment: res.assessment,
+          monitor: res.monitor,
+          evaluate: res.evaluate,
+          treatment: res.treatment,
+          isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+        });
+      });
+
+
+      setLabReportValidList(validDisArray);
+      setLabReportMeatList(meatListArr);
+      setLabFileDosListDefaultSelect(dosYearArr[0]);
+      setLabResultStatus(true);
+      setIsLoadingDos(false);
+    }
+  };
+  const getLabReportDetails = async (orgId, tenId) => {
+    var patientId = localStorage.getItem("patientId");
+
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+    );
+
+    var resultTest = response.data;
+
+var dosYearArrFile =[];
+if(resultTest.labFileDetail != null){
+    if (resultTest.labFileDetail.length != 0 ) {
+      for (var key in resultTest.labFileDetail[0].documentDos) {
+        dosYearArrFile.push({ value: key, label: key });
+      }
+      setFileLabDateofServiceList(dosYearArrFile);
+      setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+      var fileDetails = resultTest.labFileDetail;
+      getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+    }
+  }
+
+    if (resultTest.labFileDetail != null) {
+      var result = resultTest;
+      setLabResult(result);
+      var dosYearArr = [];
+      var dosYearArrFile = [];
+      var validDiseaseNewRes = [];
+      var meatRes = [];
+
+      for (var key in result.validDisease) {
+        dosYearArr.push({ value: key, label: key });
+      }
+
+      setLabFileDosList(dosYearArr);
+
+      console.log(dosYearArr)
+
+      var validDisArray = [];
+
+
+      if (dosYearArr.length != 0) {
+        var dateofService = dosYearArr[0].value;
+
+      const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+
+      const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+
+        validDiseaseNewRes = result.validDisease[dateofService];
+
+        validDiseaseNewRes.map((res, index) => {
+          const encounterDatearray = res.encounterDate.split(',');
+          validDisArray.push({
+            actualDescription: res.actualDescription,
+            capturedSections: res.capturedSections,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: encounterDatearray,
+            isManuallyAdded: res.isManuallyAdded,
+            isHccValid: res.isHccValid,
+            defaultPosition: res.defaultPosition
+          });
+
+        });
+
+
+        const COLORS2 = [
+          "sectionTag1",
+          "sectionTag2",
+          "sectionTag3",
+          "sectionTag4",
+          "sectionTag5",
+          "sectionTag6",
+          "sectionTag7",
+          "sectionTag8"
+        ];
+
+        var capturedSectionsArr =[];
+        var capturedSectionsColorsMatching =[];
+        
+
+
+        validDiseaseNewRes.map((res) => {
+          res.capturedSections.map((res2, index) => {
+            capturedSectionsArr.push({
+              name: res2,
+              "diagnosisCode": res.diagnosisCode,
+            });
+
+          })
+        })
+      
+
+        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
+
+        dublicateSectionArr.map((res, index) => {
+          capturedSectionsColorsMatching.push({
+            "name": res.name,
+            "diagnosisCode": res.diagnosisCode,
+            "colors": COLORS2[index]
+          });
+        })
+
+        var newArray = [];
+        newArray = [
+          ...captureSectionMatching,
+          ...capturedSectionsColorsMatching,
+        ];
+
+        console.log(captureSectionMatching)
+        // setCaptureSectionMatching(newArray);
 
 
 
@@ -4561,6 +4866,7 @@ const highlightPluginInstance = highlightPlugin({
 
 
   const getCaptureSectionBackground = (value,documentPlace) => {
+    // console.log(value)
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
