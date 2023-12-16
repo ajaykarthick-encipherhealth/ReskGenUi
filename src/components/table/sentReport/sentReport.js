@@ -53,7 +53,16 @@ function SentReportTable({ details, onSentPageChange, paginationFirst }) {
   return (
     <div className={TableStyle.classContaineer}>
       {details?.data?.length === 0 ? (
-        <Spinner />
+        // <Spinner />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          loading....
+        </div>
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
@@ -102,9 +111,11 @@ function SentReportTable({ details, onSentPageChange, paginationFirst }) {
                     }}
                     className={TableStyle.childBorder}
                   >
-                    <Popover  content={popCOntent}>
+                    <Popover content={popCOntent}>
                       <div
-                        onMouseOver={() => displayReceivedUsers(row.receivedUsers)}
+                        onMouseOver={() =>
+                          displayReceivedUsers(row.receivedUsers)
+                        }
                       >
                         {row?.receivedUsers?.slice(0, 2)?.map((data) => (
                           <ul>

@@ -45,7 +45,9 @@ function ReceivedReport({
   return (
     <div className={TableStyle.classContaineer}>
       {detailsContent?.length === 0 ? (
-        <Spinner />
+        // <Spinner />
+        <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>loading....</div>
+
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
