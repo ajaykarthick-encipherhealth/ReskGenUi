@@ -147,7 +147,7 @@ const IndividualReceiverReport = ({
           <div>
             {detailsContent
               // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
-              .map((item) => (
+              ?.map((item) => (
                 <div key={item.reportId}>
                   <div
                     style={{
@@ -235,7 +235,7 @@ const IndividualReceiverReport = ({
                 />
                 Download
               </Button>
-            ) : (
+            ) :reportUser?.role === "read"&& (
               <Button className={styles.readOption}>Read</Button>
             )}
           </div>
