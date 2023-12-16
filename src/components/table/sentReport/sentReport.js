@@ -102,9 +102,9 @@ function SentReportTable({ details, onSentPageChange, paginationFirst }) {
                     }}
                     className={TableStyle.childBorder}
                   >
-                    <Popover trigger="click" content={popCOntent}>
+                    <Popover  content={popCOntent}>
                       <div
-                        onClick={() => displayReceivedUsers(row.receivedUsers)}
+                        onMouseOver={() => displayReceivedUsers(row.receivedUsers)}
                       >
                         {row?.receivedUsers?.slice(0, 2)?.map((data) => (
                           <ul>

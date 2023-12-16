@@ -7,6 +7,7 @@ import {
   usersList,
   getFile,
 } from "../../services/ReportService";
+import { notification } from "antd";
 
 export const REPORT_PATIENTS_DETAILS = "REPORT_PATIENTS_DETAILS";
 export const SENT_REPORT = "SENT_REPORT";
@@ -23,17 +24,25 @@ export const selectedRow = (val) => ({
   payload: val,
 });
 
-export const getReportDetails = (pagenum, startDate, endDate, search,filter) => {
+export const getReportDetails = (
+  pagenum,
+  startDate,
+  endDate,
+  search,
+  filter
+) => {
   return (dispatch) => {
     try {
-      patientDetails(pagenum, startDate, endDate, search,filter).then((response) => {
-        if (response) {
-          dispatch({
-            type: REPORT_PATIENTS_DETAILS,
-            payload: response.data,
-          });
+      patientDetails(pagenum, startDate, endDate, search, filter).then(
+        (response) => {
+          if (response) {
+            dispatch({
+              type: REPORT_PATIENTS_DETAILS,
+              payload: response.data,
+            });
+          }
         }
-      });
+      );
     } catch (err) {
       console.log(err);
     }
@@ -47,6 +56,9 @@ export const getExportDetails = (data) => {
         dispatch({
           type: EXPORT,
           payload: response.data,
+        });
+        notification.success({
+          message: "Details Exported Successfully",
         });
       });
     } catch (err) {
@@ -136,4 +148,3 @@ export const getFileDetails = (pathname) => {
     }
   };
 };
-

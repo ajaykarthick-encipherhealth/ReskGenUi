@@ -150,9 +150,6 @@ const index = () => {
     }
     if (ExportResponse) {
       setIsModalVisible(false);
-      notification.success({
-        message: "Details Exported Successfully",
-      });
     }
   }, [pageNo, sentPageNo, receivedPageNo, activeTab, ExportResponse]);
 

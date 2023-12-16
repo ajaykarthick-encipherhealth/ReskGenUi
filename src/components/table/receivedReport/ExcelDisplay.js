@@ -44,7 +44,8 @@ const ExcelDisplay = ({ tableData }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       {tableData?.length === 0 ? (
-        <Spinner />
+        // <Spinner />
+        <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>loading....</div>
       ) : (
         <table className={styles.exceltable}>
           <thead>
