@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
-import styles from "./receivedReport.module.css";
 import { Paginator } from "primereact/paginator";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { Modal } from "antd";
-import IndividualReceiverReport from "./IndividualReceiverReport";
 import Footer from "../../../jsx/layouts/Footer";
-import Spinner from "../../spinner/spinner";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { selectedReport } from "../../../store/actions/ReportActions";
 
 function ReceivedReport({
   details,
@@ -17,10 +16,9 @@ function ReceivedReport({
   receivedEndDate,
 }) {
   const [sortOrder, setSortOrder] = useState("asc");
-  const [reportUser, setReportUser] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
   const [detailsContent, setDetailsContent] = useState(details?.content);
-
+  
+const dispatch=useDispatch()
   useEffect(() => {
     setDetailsContent(details?.content);
   }, [details]);
@@ -37,9 +35,16 @@ function ReceivedReport({
     setDetailsContent(sortedContent);
   };
 
+  const router=useRouter()
   const handleReceiverReport = (row) => {
-    setReportUser(row);
-    setOpenModal(true);
+    const info=({
+      reportUser:row,
+      receivedPageNo:receivedPageNo,
+      receivedStartDate:receivedStartDate,
+      receivedEndDate:receivedEndDate
+  })
+    dispatch(selectedReport(info))
+    router.push("/physician/individualreport")
   };
 
   return (
@@ -144,7 +149,7 @@ function ReceivedReport({
         />
         <div className="total-pages">Total count: {details?.totalElements}</div>
       </div>
-      <Modal
+      {/* <Modal
         open={openModal}
         footer={false}
         className={styles.classModal}
@@ -158,7 +163,7 @@ function ReceivedReport({
           receivedStartDate={receivedStartDate}
           receivedEndDate={receivedEndDate}
         />
-      </Modal>
+      </Modal> */}
       <Footer />
     </div>
   );

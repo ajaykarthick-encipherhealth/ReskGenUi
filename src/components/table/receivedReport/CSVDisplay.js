@@ -19,18 +19,19 @@ const CSVDisplay = ({ tableData }) => {
   const dataRows = tableHead;
 
   const renderRows = () => {
-    return dataRows.map((row, rowIndex) => (
+    return dataRows?.length>0 ? dataRows?.map((row, rowIndex) => (
       <tr key={rowIndex}>
         {headers.map((header, cellIndex) => (
           <td key={cellIndex}>{row[header]}</td>
         ))}
       </tr>
-    ));
+    )):<tr>
+      <td style={{textAlign:"center"}}>No datas Found</td>
+    </tr>;
   };
-
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {tableData?.length === 0 ? (
+      {/* {dataRows?.length === 0 ? (
         <div
           style={{
             display: "flex",
@@ -40,7 +41,7 @@ const CSVDisplay = ({ tableData }) => {
         >
           loading....
         </div>
-      ) : (
+      ) : ( */}
         <table className={styles.exceltable}>
           <thead>
             <tr>
@@ -51,7 +52,7 @@ const CSVDisplay = ({ tableData }) => {
           </thead>
           <tbody className={styles.csvBody}>{renderRows()}</tbody>
         </table>
-      )}
+      {/* )} */}
     </div>
   );
 };

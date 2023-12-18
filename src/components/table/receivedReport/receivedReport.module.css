@@ -31,14 +31,15 @@ tbody.csvBody tr:nth-child(odd) td {
 }
 .cont1 {
   width: 20%;
-  height:500px;
+  height:100vh;
+  margin-top: -80px;
   overflow-y: scroll;
   border-right: 0.5px solid #c7c7c7;
   margin-right: 20px;
   font-weight: 700;
 }
 .tablediv {
-  width: 100%;
+  width: 80%;
 }
 .container1 {
   width: 100%;
@@ -47,8 +48,11 @@ tbody.csvBody tr:nth-child(odd) td {
   margin-bottom: 20px;
 }
 .container {
-  width: 100%;
+  width: auto;
   display: flex;
+  position: relative;
+  top: 50px;
+  margin: 30px 10px;
   justify-content: space-between;
   /* padding:20px; */
 }
@@ -59,6 +63,9 @@ tbody.csvBody tr:nth-child(odd) td {
   margin-bottom: 30px;
 }
 
+.list{
+  margin: 40px 0px 0 20px;
+}
 .divContainer {
   height: 30px;
   display: flex;
@@ -67,6 +74,7 @@ tbody.csvBody tr:nth-child(odd) td {
   border-radius: 8px;
   padding-left: 5px;
   box-shadow: 0 0px 6px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
 }
 .sort {
   border-radius: 8px;
@@ -74,6 +82,7 @@ tbody.csvBody tr:nth-child(odd) td {
   padding: 0 10px;
   margin-right: 10px;
   cursor: pointer;
+  background-color: #fff;
 }
 .search {
   border: none !important;

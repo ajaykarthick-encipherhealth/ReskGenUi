@@ -7,6 +7,7 @@ import {
   RECEIVED_REPORT,
   REPORT_DETAILS,
   FILEDETAILS,
+  REPORT
 } from "../actions/ReportActions";
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   receivedDetails: null,
   getReport: null,
   uploadFile: null,
+  reportInfo:null
 };
 
 export const ReportReducer = (state = initialState, action) => {
@@ -69,6 +71,12 @@ export const ReportReducer = (state = initialState, action) => {
       ...state,
       uploadFile: action.payload,
     };
+  }
+  if(action.type===REPORT){
+    return {
+      ...state,
+      reportInfo:action.payload
+    }
   }
   return state;
 };

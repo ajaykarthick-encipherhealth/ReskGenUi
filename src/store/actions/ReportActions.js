@@ -18,9 +18,15 @@ export const EXPORT = "EXPORT";
 export const SEARCH = "SEARCH";
 export const FILEPATH = "FILEPATH";
 export const FILEDETAILS = "FILEDETAILS";
+export const REPORT='REPORT'
 
 export const selectedRow = (val) => ({
   type: SELECTEDROW,
+  payload: val,
+});
+
+export const selectedReport = (val) => ({
+  type: REPORT,
   payload: val,
 });
 
