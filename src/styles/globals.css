@@ -12926,7 +12926,7 @@ tbody > tr {
   list-style: none;
   font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
   position: absolute;
-  top: -14px;
+  top: 10px;
   width:auto;
   white-space: nowrap;
   background-color: #1677ff;
