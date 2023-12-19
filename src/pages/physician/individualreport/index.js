@@ -36,6 +36,7 @@ const IndividualReceiverReport = () => {
   const fileUrl = useSelector((state) => state.report);
   const fileExtension = fileUrl?.uploadFile?.split(".").pop();
   const extention = fileExtension?.split("?").shift();
+  const [csvTableData,setCSVTableData]=useState([])
 
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
@@ -68,8 +69,7 @@ const IndividualReceiverReport = () => {
       if (extention === "csv") {
         const text = await response.text();
         const jsonArray = await csvToJson().fromString(text);
-
-        setTableData(jsonArray);
+        setCSVTableData(jsonArray);
       } 
       if(extention === "xlsx") {
         const arrayBuffer = await response.arrayBuffer();
@@ -131,7 +131,7 @@ const IndividualReceiverReport = () => {
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-      <div className={styles.container} style={{ margin: "30px 0px" }}>
+      <div className={styles.container} style={{ margin: "30px 0px 50px 0px",height:"auto" }}>
         <div className={styles.cont1}>
           <div>
             <div className={styles.container}>
@@ -227,7 +227,7 @@ const IndividualReceiverReport = () => {
               {dayjs(reportInfo?.reportUser?.receiveDate).format("DD/MM/YYYY")}
             </div>
             <div>
-              {reportInfo?.reportUser?.role === "download" ? (
+              {reportInfo?.reportUser?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
                     exportToExcel;
@@ -259,9 +259,11 @@ const IndividualReceiverReport = () => {
                 {selectedRow?.type}
               </div>
             </div>
-            <div>
+            <div style={{
+              width:"100%",overflowX:"scroll"
+            }}>
               {extention === "csv" ? (
-                <CSVDisplay tableData={tableData} fileUrl={fileUrl?.uploadFile} extention={extention} />
+                <CSVDisplay tableData={csvTableData} fileUrl={fileUrl?.uploadFile} extention={extention} />
               ) : (
                 <ExcelDisplay tableData={tableData} fileUrl={fileUrl?.uploadFile} extention={extention}/>
               )}

@@ -47,7 +47,7 @@ const CSVDisplay = ({ tableData,fileUrl, extention }) => {
         <table className={styles.exceltable}>
           <thead>
             <tr>
-              {headers.map((header, index) => (
+              {headers?.map((header, index) => (
                 <th key={index}>{header}</th>
               ))}
             </tr>

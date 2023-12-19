@@ -5,7 +5,7 @@
   overflow-y: scroll !important;
 }
 .exceltable {
-  width: 100%;
+  width: 100% !important;
   border-collapse: collapse;
   border: 2px solid #c7c7c7;
   font-family: Arial, sans-serif;
@@ -40,6 +40,7 @@ tbody.csvBody tr:nth-child(odd) td {
 }
 .tablediv {
   width: 80%;
+  margin-right: 20px;
 }
 .container1 {
   width: 100%;
