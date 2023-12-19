@@ -161,9 +161,7 @@ const EditableTable = ({ tableData,fileUrl, extention}) => {
           dataSource={data}
           columns={mergedColumns}
           rowClassName="editable-row"
-          pagination={{
-            onChange: cancel,
-          }}
+          pagination={false}
         />
       ) : (
         <div

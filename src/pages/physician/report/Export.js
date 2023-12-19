@@ -115,49 +115,60 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   const onFinish = (values) => {
     const patientIds = rowsLength?.data?.map((item) => item?.patientId);
     const userAndAccess = userList.reduce((result, { user, role }) => {
-      result[user] = role; // Assign the role directly to the user key
+      result[user] = role;
       return result;
     }, {});
+    const selectedFields = values.ReportFields || [];
+
+    const fields = checkBoxData.reduce((acc, data) => {
+      if (data.checked) {
+        acc[data.title] = selectedFields.includes(data.title);
+      }
+      return acc;
+    }, {});
+
     const data = {
-      fields: {
-        patientId: values.ReportFields?.includes("patientId") ? true : false,
-        patientName: values.ReportFields?.includes("patientName")
-          ? true
-          : false,
-        dob: values.ReportFields?.includes("dob") ? true : false,
-        processedDate: values.ReportFields?.includes("processedDate")
-          ? true
-          : false,
-        providerName: values.ReportFields?.includes("providerName")
-          ? true
-          : false,
-        allocatedOn: values.ReportFields?.includes("allocatedOn")
-          ? true
-          : false,
-        noOfValidCodes: values.ReportFields?.includes("noOfValidCodes")
-          ? true
-          : false,
-        noOfSuggestedCodes: values.ReportFields?.includes("noOfSuggestedCodes")
-          ? true
-          : false,
-        noOfDeletedCodes: values.ReportFields?.includes("noOfDeletedCodes")
-          ? true
-          : false,
-        totalCodes: values.ReportFields?.includes("totalCodes") ? true : false,
-        allocatedUserId: values.ReportFields?.includes("allocatedUserId")
-          ? true
-          : false,
-        comments: values.ReportFields?.includes("comments") ? true : false,
-        validDisease: values.ReportFields?.includes("validDisease")
-          ? true
-          : false,
-      },
+      // fields: {
+      //   patientId: values.ReportFields?.includes("patientId") ? true : false,
+      //   patientName: values.ReportFields?.includes("patientName")
+      //     ? true
+      //     : false,
+      //   dob: values.ReportFields?.includes("dob") ? true : false,
+      //   processedDate: values.ReportFields?.includes("processedDate")
+      //     ? true
+      //     : false,
+      //   providerName: values.ReportFields?.includes("providerName")
+      //     ? true
+      //     : false,
+      //   allocatedOn: values.ReportFields?.includes("allocatedOn")
+      //     ? true
+      //     : false,
+      //   noOfValidCodes: values.ReportFields?.includes("noOfValidCodes")
+      //     ? true
+      //     : false,
+      //   noOfSuggestedCodes: values.ReportFields?.includes("noOfSuggestedCodes")
+      //     ? true
+      //     : false,
+      //   noOfDeletedCodes: values.ReportFields?.includes("noOfDeletedCodes")
+      //     ? true
+      //     : false,
+      //   totalCodes: values.ReportFields?.includes("totalCodes") ? true : false,
+      //   allocatedUserId: values.ReportFields?.includes("allocatedUserId")
+      //     ? true
+      //     : false,
+      //   comments: values.ReportFields?.includes("comments") ? true : false,
+      //   validDisease: values.ReportFields?.includes("validDisease")
+      //     ? true
+      //     : false,
+      // },
+      fields: fields,
       patientIds: patientIds,
       fileType: values.ReportTYpe,
       reportName: values.ReportName,
       userAndAccess: userAndAccess,
     };
-    dispatch(getExportDetails(data));
+    console.log(data);
+    // dispatch(getExportDetails(data));
   };
 
   const deleteUser = (user) => {
