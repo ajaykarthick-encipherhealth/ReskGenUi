@@ -99,7 +99,6 @@ const CompletedStatus = () => {
         const dataIndex = params[0]?.dataIndex;
         const allocatedValue = allocatedData[dataIndex];
         const completedValue = completedData[dataIndex];
-
         return `Completed: ${allocatedValue}<br/>Allocated: ${completedValue}`;
       },
     },

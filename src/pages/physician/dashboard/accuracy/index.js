@@ -211,7 +211,7 @@ const Accuracy = () => {
                   : `Week ${getDateWeek(currentDate)}`}
               </div>
               <div className={styles.percentage}>
-                <span className={styles.insideTitle}>{accuracyDatas && typeof highlightIndex === "number"
+                <span className={styles.insideTitle}>{accuracyDatas 
                   ? `${accuracyDatas[highlightIndex + 1]}%`
                   : "0%"}</span>
               </div>

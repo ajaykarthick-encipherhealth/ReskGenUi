@@ -8597,7 +8597,6 @@ button:focus {
 }
 
 .login-account .account-info-area {
- 
   border-radius: 2.5rem;
   display: flex;
   align-items: center;
@@ -8687,7 +8686,6 @@ button:focus {
   position: relative;
   max-width: 500px;
   margin-left: 126px;
-  
 }
 
 .login-account .account-info-area .login-content .logo {
@@ -9018,7 +9016,7 @@ button:focus {
 
 .header-logo img {
   width: 100%;
-  height: 50px; 
+  height: 50px;
 }
 
 .deznav {
@@ -12619,11 +12617,9 @@ tbody > tr {
 
 /* Display the clear icon when input field is focused */
 
-
 /* .ant-picker-clear {
   display: none !important;
 } */
-
 
 .pendingBtn
   button.ant-btn.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item {
@@ -12778,19 +12774,18 @@ tbody > tr {
   border-color: #04306f;
 }
 
-
 .ant-modal-body {
-    overflow: hidden !important;
-  }
-  
-  .sectionTag1{
-    background-color: rgba(79, 189, 41, 0.2) !important ;
-    color: rgb(79, 189, 41) !important;
-  }
-  .sectionTag2{
-    background-color: rgba(183, 85, 240, 0.2) !important;
-    color: rgb(183, 85, 240) !important;
-  }
+  overflow: hidden !important;
+}
+
+.sectionTag1 {
+  background-color: rgba(79, 189, 41, 0.2) !important ;
+  color: rgb(79, 189, 41) !important;
+}
+.sectionTag2 {
+  background-color: rgba(183, 85, 240, 0.2) !important;
+  color: rgb(183, 85, 240) !important;
+}
 
 .sectionTag3 {
   background-color: rgba(15, 158, 46, 0.2) !important;
@@ -12810,19 +12805,18 @@ tbody > tr {
 }
 .sectionTag7 {
   background-color: rgba(148, 236, 49, 0.2) !important;
-  color: rgb(141 197 78) !important
+  color: rgb(141 197 78) !important;
 }
 .sectionTag8 {
   background-color: rgba(154, 125, 165, 0.2) !important;
   color: rgb(154, 125, 165) !important;
 }
 
-.encounterDateTag1{
-    background-color: rgb(27 83 255 / 16%) !important;
-    color: #3e566e;
-  }
-  
-  
+.encounterDateTag1 {
+  background-color: rgb(27 83 255 / 16%) !important;
+  color: #3e566e;
+}
+
 .encounterDateTag2 {
   background-color: rgba(125, 117, 129, 0.2) !important;
   color: rgb(125, 117, 129) !important;
@@ -12864,8 +12858,6 @@ tbody > tr {
 .CircularProgressbar-text {
   fill: green !important;
   font-size: 30px !important;
- 
-
 }
 
 .rcw-launcher {
@@ -12902,21 +12894,28 @@ tbody > tr {
 .rcw-conversation-container.active {
   width: 450px !important;
 }
-.section-container{
+.section-container {
   height: 80vh;
 }
-.hovered-text:hover{
+.hovered-text:hover {
   color: blue;
- }
- .hovered-text{
+}
+.hovered-text {
   color: #000;
   font-weight: 600;
- }
- 
- :where(.css-dev-only-do-not-override-p7e5j5)[class^="ant-picker"] [class^="ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class*=" ant-picker"] [class^="ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class^="ant-picker"] [class*=" ant-picker"], :where(.css-dev-only-do-not-override-p7e5j5)[class*=" ant-picker"] [class*=" ant-picker"] {
+}
+
+:where(.css-dev-only-do-not-override-p7e5j5)[class^="ant-picker"]
+  [class^="ant-picker"],
+:where(.css-dev-only-do-not-override-p7e5j5)[class*=" ant-picker"]
+  [class^="ant-picker"],
+:where(.css-dev-only-do-not-override-p7e5j5)[class^="ant-picker"]
+  [class*=" ant-picker"],
+:where(.css-dev-only-do-not-override-p7e5j5)[class*=" ant-picker"]
+  [class*=" ant-picker"] {
   box-shadow: none;
- }
- .ant-ribbon {
+}
+.ant-ribbon {
   box-sizing: border-box;
   margin: 0;
   padding: 0 8px;
@@ -12924,13 +12923,39 @@ tbody > tr {
   font-size: 14px;
   line-height: 22px;
   list-style: none;
-  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   position: absolute;
-  top: 25px;
-  width:auto;
+  top: 10px;
+  width: auto;
   white-space: nowrap;
   background-color: #1677ff;
   border-radius: 4px;
   left: -44px;
   margin-left: -14px;
- }
+}
+.ant-table {
+  width:99%;
+  height:600px;
+  overflow-y: scroll;
+}
+.ant-table .ant-table-row{
+  border: 2px solid #c7c7c7 !important;
+
+}
+.ant-table-cell {
+  text-align: start;
+}
+.ant-table-row {
+  height: 32px;
+  border: 2px solid #c7c7c7 !important;
+}
+.ant-table-thead tr th {
+  background-color: #fff !important;
+  height: 32px !important;
+  font-family: 32px !important;
+}
+.ant-table-cell:hover {
+  background-color: #fff !important;
+}

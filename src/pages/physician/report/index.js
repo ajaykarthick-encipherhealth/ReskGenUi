@@ -56,7 +56,7 @@ const index = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [dates, setDates] = useState(null);
   const [compledtedDate, setCompletedDate] = useState(null);
-  const[filteredCOder,setFilteredCoder]=useState([])
+  const [filteredCOder, setFilteredCoder] = useState([]);
 
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -150,9 +150,6 @@ const index = () => {
     }
     if (ExportResponse) {
       setIsModalVisible(false);
-      notification.success({
-        message: "Details Exported Successfully",
-      });
     }
   }, [pageNo, sentPageNo, receivedPageNo, activeTab, ExportResponse]);
 
@@ -165,9 +162,9 @@ const index = () => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
-  useEffect(()=>{
-    setFilteredCoder(ReportPatientDetails)
-  },[ReportPatientDetails])
+  useEffect(() => {
+    setFilteredCoder(ReportPatientDetails);
+  }, [ReportPatientDetails]);
 
   const statusOptions = [
     { label: "Completed", value: "completed" },
@@ -285,7 +282,13 @@ const index = () => {
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
     setSelectedDates(date);
-    dispatch(getSentDetails(sentPageNo, formattedDates[0], formattedDates[1]));
+    dispatch(
+      getSentDetails(
+        sentPageNo,
+        date ? formattedDates[0] : null,
+        date ? formattedDates[1] : null
+      )
+    );
   };
 
   const handleReceivedDatePicker = (date, dateString) => {
@@ -298,7 +301,11 @@ const index = () => {
     setReceivedEndDate(formattedDates[1]);
     setSelectedDates(date);
     dispatch(
-      getReceivedDetails(sentPageNo, formattedDates[0], formattedDates[1])
+      getReceivedDetails(
+        sentPageNo,
+        date ? formattedDates[0] : null,
+        date ? formattedDates[1] : null
+      )
     );
   };
   const handleCoderPicker = (date, dateString) => {
@@ -338,6 +345,7 @@ const index = () => {
                         <div className="tbl-caption  align-items-center">
                           <div className="row filter-contain">
                             <div className="col-xl-2">
+                              <label>Search by Name or ID</label>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon
                                   className="fa fa-search form-control-feedback"
@@ -353,6 +361,7 @@ const index = () => {
                             </div>
                             {activeTab === "CoderReport" ? (
                               <div className="col-xl-2">
+                                <label>Select Status</label>
                                 <div class="form-group has-search">
                                   {/* <InputText
                                   type="text"
@@ -364,7 +373,17 @@ const index = () => {
                                     <Select
                                       onChange={(selectedOption) => {
                                         dosOnChange(selectedOption);
-                                        dispatch(getReportDetails(pageNo,null, null,null,selectedOption.value==='all'?null:selectedOption.value.toUpperCase()));
+                                        dispatch(
+                                          getReportDetails(
+                                            pageNo,
+                                            null,
+                                            null,
+                                            null,
+                                            selectedOption.value === "all"
+                                              ? null
+                                              : selectedOption.value.toUpperCase()
+                                          )
+                                        );
                                       }}
                                       options={statusOptions}
                                       className="custom-react-select"
@@ -376,6 +395,7 @@ const index = () => {
                             ) : null}
 
                             <div className="col-xl-2">
+                              <label>Select Range</label>
                               <div>
                                 <RangePicker
                                   value={selectedDates}

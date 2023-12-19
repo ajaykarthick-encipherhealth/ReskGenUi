@@ -20,7 +20,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
-  const[userList,setUsersList]=useState([])
+  const [userList, setUsersList] = useState([]);
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -88,18 +88,17 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
     },
   ];
   const handleSelectedOption = (value) => {
-    setSelectedUser((prevUsers) => [{ ...prevUsers, user: value,role:"" }]);
-
+    setSelectedUser((prevUsers) => [{ ...prevUsers, user: value, role: "" }]);
   };
-  const handleSelectedRole = (value,selectedUserName) => {
-    setSelectedUser((prevUsers) => prevUsers?.map(item => {
-     
-      if (value) {
-        return { ...item, role:value }; 
-      }
-      return item;
-    }));
-;
+  const handleSelectedRole = (value, selectedUserName) => {
+    setSelectedUser((prevUsers) =>
+      prevUsers?.map((item) => {
+        if (value) {
+          return { ...item, role: value };
+        }
+        return item;
+      })
+    );
   };
 
   const filteredOptions =
@@ -116,55 +115,66 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   const onFinish = (values) => {
     const patientIds = rowsLength?.data?.map((item) => item?.patientId);
     const userAndAccess = userList.reduce((result, { user, role }) => {
-      result[user] = role; // Assign the role directly to the user key
+      result[user] = role;
       return result;
     }, {});
+    const selectedFields = values.ReportFields || [];
+
+    const fields = checkBoxData.reduce((acc, data) => {
+      if (data.checked) {
+        acc[data.title] = selectedFields.includes(data.title);
+      }
+      return acc;
+    }, {});
+
     const data = {
-      fields: {
-        patientId: values.ReportFields?.includes("patientId") ? true : false,
-        patientName: values.ReportFields?.includes("patientName")
-          ? true
-          : false,
-        dob: values.ReportFields?.includes("dob") ? true : false,
-        processedDate: values.ReportFields?.includes("processedDate")
-          ? true
-          : false,
-        providerName: values.ReportFields?.includes("providerName")
-          ? true
-          : false,
-        allocatedOn: values.ReportFields?.includes("allocatedOn")
-          ? true
-          : false,
-        noOfValidCodes: values.ReportFields?.includes("noOfValidCodes")
-          ? true
-          : false,
-        noOfSuggestedCodes: values.ReportFields?.includes("noOfSuggestedCodes")
-          ? true
-          : false,
-        noOfDeletedCodes: values.ReportFields?.includes("noOfDeletedCodes")
-          ? true
-          : false,
-        totalCodes: values.ReportFields?.includes("totalCodes") ? true : false,
-        allocatedUserId: values.ReportFields?.includes("allocatedUserId")
-          ? true
-          : false,
-        comments: values.ReportFields?.includes("comments") ? true : false,
-        validDisease: values.ReportFields?.includes("validDisease")
-          ? true
-          : false,
-      },
+      // fields: {
+      //   patientId: values.ReportFields?.includes("patientId") ? true : false,
+      //   patientName: values.ReportFields?.includes("patientName")
+      //     ? true
+      //     : false,
+      //   dob: values.ReportFields?.includes("dob") ? true : false,
+      //   processedDate: values.ReportFields?.includes("processedDate")
+      //     ? true
+      //     : false,
+      //   providerName: values.ReportFields?.includes("providerName")
+      //     ? true
+      //     : false,
+      //   allocatedOn: values.ReportFields?.includes("allocatedOn")
+      //     ? true
+      //     : false,
+      //   noOfValidCodes: values.ReportFields?.includes("noOfValidCodes")
+      //     ? true
+      //     : false,
+      //   noOfSuggestedCodes: values.ReportFields?.includes("noOfSuggestedCodes")
+      //     ? true
+      //     : false,
+      //   noOfDeletedCodes: values.ReportFields?.includes("noOfDeletedCodes")
+      //     ? true
+      //     : false,
+      //   totalCodes: values.ReportFields?.includes("totalCodes") ? true : false,
+      //   allocatedUserId: values.ReportFields?.includes("allocatedUserId")
+      //     ? true
+      //     : false,
+      //   comments: values.ReportFields?.includes("comments") ? true : false,
+      //   validDisease: values.ReportFields?.includes("validDisease")
+      //     ? true
+      //     : false,
+      // },
+      fields: fields,
       patientIds: patientIds,
       fileType: values.ReportTYpe,
       reportName: values.ReportName,
       userAndAccess: userAndAccess,
     };
-    dispatch(getExportDetails(data));
+    console.log(data);
+    // dispatch(getExportDetails(data));
   };
 
   const deleteUser = (user) => {
     setUsersList(userList?.filter((item) => item.user != user));
   };
- 
+
   return (
     <Modal
       title="Export "
@@ -236,7 +246,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
         </Form.Item>
 
         <div style={{ display: "flex", marginBottom: "20px" }}>
-          <div style={{width: "100%" }}>
+          <div style={{ width: "100%" }}>
             <Form.Item
               label="Sender"
               name="User"
@@ -255,40 +265,47 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
                 }}
               >
                 <Select
-                  // mode="multiple"
-                  placeholder="Please select"
+                  mode="multiple"
                   onChange={handleSelectedOption}
                   onSearch={handleSearch}
                   className={styles.selectDiv}
-                  value={selectedUser?.map(item=>item.user)}
-
                 >
                   {filteredOptions?.map((data) => (
-                    <Option value={data.label}>{data.label}</Option>
+                    <Option key={data.value} value={data.value}>
+                      {data.label}
+                    </Option>
                   ))}
                 </Select>
                 <Select
                   // mode="multiple"
                   placeholder="Please select"
-                  onChange={(value) => handleSelectedRole(value, selectedUser[selectedUser.length - 1]?.user)}
+                  onChange={(value) =>
+                    handleSelectedRole(
+                      value,
+                      selectedUser[selectedUser.length - 1]?.user
+                    )
+                  }
                   className={styles.selectDiv}
-                  value={selectedUser?.map(item=>item.role)}
+                  value={selectedUser?.map((item) => item.role)}
                 >
                   <Option value="READ">Read</Option>
                   <Option value="DOWNLOAD">Download</Option>
                 </Select>
                 <Button
-                onClick={() => {
-                  setDisplay(true);
-                  setSelectedUser([])
-                  setUsersList(prev=>[...prev,...selectedUser])
-                 
-                }}
-              >
-                add
-              </Button>
+                  onClick={() => {
+                    setDisplay(true);
+                    setSelectedUser([]);
+                    setUsersList((prev) => [...prev, ...selectedUser]);
+                  }}
+                  style={{
+                    backgroundColor: "#04306f",
+                    width: "100px",
+                    color: "#fff",
+                  }}
+                >
+                  add
+                </Button>
               </div>
-              
             </Form.Item>
           </div>
         </div>
