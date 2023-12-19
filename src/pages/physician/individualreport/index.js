@@ -70,7 +70,8 @@ const IndividualReceiverReport = () => {
         const jsonArray = await csvToJson().fromString(text);
 
         setTableData(jsonArray);
-      } else {
+      } 
+      if(extention === "xlsx") {
         const arrayBuffer = await response.arrayBuffer();
         const data = new Uint8Array(arrayBuffer);
         const workbook = XLSX.read(data, { type: "array" });
@@ -85,7 +86,16 @@ const IndividualReceiverReport = () => {
       console.error("Error fetching CSV data:", error);
     }
   };
+  useEffect(() => {
+    if (ReceivedReportDetails?.content) {
+      setDetailsContent(ReceivedReportDetails.content);
+    }
+    if (fileUrl) {
+      fetchData(fileUrl);
+    }
 
+  }, [ReceivedReportDetails?.content,fileUrl?.uploadFile]);
+  
   useEffect(() => {
     if (reportInfo?.reportUser?.reportId) {
       dispatch(getSelectedReportDetails(reportInfo?.reportUser?.reportId));
@@ -102,14 +112,6 @@ const IndividualReceiverReport = () => {
     );
   }, [reportInfo?.reportUser, selectedRow?.reportPath]);
 
-  useEffect(() => {
-    if (ReceivedReportDetails?.content) {
-      setDetailsContent(ReceivedReportDetails.content);
-    }
-    if (fileUrl) {
-      fetchData(fileUrl);
-    }
-  }, [ReceivedReportDetails?.content]);
 
   const performanceSearch = (value) => {
     dispatch(
@@ -160,6 +162,7 @@ const IndividualReceiverReport = () => {
                         marginBottom: "10px",
                       }}
                       onClick={() => {
+                        console.log("vg")
                         dispatch(selectedReport({ reportUser: item }));
                       }}
                     >
@@ -258,9 +261,9 @@ const IndividualReceiverReport = () => {
             </div>
             <div>
               {extention === "csv" ? (
-                <CSVDisplay tableData={tableData} />
+                <CSVDisplay tableData={tableData} fileUrl={fileUrl?.uploadFile} extention={extention} />
               ) : (
-                <ExcelDisplay tableData={tableData} />
+                <ExcelDisplay tableData={tableData} fileUrl={fileUrl?.uploadFile} extention={extention}/>
               )}
             </div>
           </div>

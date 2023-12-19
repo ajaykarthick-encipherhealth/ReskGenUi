@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./receivedReport.module.css";
-import Spinner from "../../spinner/spinner";
-import dayjs from "dayjs";
 
-const CSVDisplay = ({ tableData }) => {
+const CSVDisplay = ({ tableData,fileUrl, extention }) => {
   const [tableHead, setTableHead] = useState([]);
 
   useEffect(() => {
@@ -19,19 +17,23 @@ const CSVDisplay = ({ tableData }) => {
   const dataRows = tableHead;
 
   const renderRows = () => {
-    return dataRows?.length>0 ? dataRows?.map((row, rowIndex) => (
-      <tr key={rowIndex}>
-        {headers.map((header, cellIndex) => (
-          <td key={cellIndex}>{row[header]}</td>
-        ))}
+    return dataRows?.length > 0 ? (
+      dataRows?.map((row, rowIndex) => (
+        <tr key={rowIndex}>
+          {headers.map((header, cellIndex) => (
+            <td key={cellIndex}>{row[header]}</td>
+          ))}
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td style={{ textAlign: "center" }}>No datas Found</td>
       </tr>
-    )):<tr>
-      <td style={{textAlign:"center"}}>No datas Found</td>
-    </tr>;
+    );
   };
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {/* {dataRows?.length === 0 ? (
+      {!fileUrl && !extention ? (
         <div
           style={{
             display: "flex",
@@ -41,7 +43,7 @@ const CSVDisplay = ({ tableData }) => {
         >
           loading....
         </div>
-      ) : ( */}
+      ) : (
         <table className={styles.exceltable}>
           <thead>
             <tr>
@@ -52,7 +54,7 @@ const CSVDisplay = ({ tableData }) => {
           </thead>
           <tbody className={styles.csvBody}>{renderRows()}</tbody>
         </table>
-      {/* )} */}
+      )}
     </div>
   );
 };

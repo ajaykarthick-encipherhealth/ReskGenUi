@@ -34,7 +34,7 @@ const EditableCell = ({
   );
 };
 
-const EditableTable = ({ tableData }) => {
+const EditableTable = ({ tableData,fileUrl, extention}) => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -45,7 +45,7 @@ const EditableTable = ({ tableData }) => {
         columns.forEach((column, columnIndex) => {
           obj[column] = row[columnIndex] ? row[columnIndex] : "-";
         });
-        obj.key = index; // Assign a unique identifier to the 'key' property
+        obj.key = index;
         return obj;
       });
 
@@ -56,22 +56,21 @@ const EditableTable = ({ tableData }) => {
 
   const isEditing = (record) => record.key === editingKey;
 
-
   const edit = (record) => {
     form.setFieldsValue({ ...record });
     setEditingKey(record.key);
   };
-  
+
   const cancel = () => {
     setEditingKey("");
   };
-  
+
   const save = async (key) => {
     try {
       const row = await form.validateFields();
       const newData = [...data];
       const index = newData.findIndex((item) => key === item.key);
-  
+
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, { ...item, ...row });
@@ -88,26 +87,29 @@ const EditableTable = ({ tableData }) => {
   };
   const columns = [
     {
-      title: "ProcessedDate",
+      title: "PROCESSEDDATE",
       dataIndex: "processedDate",
       editable: true,
     },
     {
-      title: "NoOfSuggestedCodes",
+      title: "NO OF SUGGESTED CODES",
       dataIndex: "noOfSuggestedCodes",
       editable: true,
+      render: (text) => {
+        return <span style={{ textalign: "center" }}>{text}</span>;
+      },
     },
     {
-      title: "Comments",
+      title: "COMMENTS",
       dataIndex: "comments",
       editable: true,
     },
     {
-      title: "Action",
+      title: "ACTION",
       dataIndex: "action",
       render: (_, record) => {
         const editable = isEditing(record);
-        console.log(editable,data)
+
         return editable ? (
           <span>
             <a
@@ -134,35 +136,46 @@ const EditableTable = ({ tableData }) => {
     if (!col.editable) {
       return col;
     }
-  
+
     return {
       ...col,
       onCell: (record) => ({
         record,
-        // inputType: col.dataIndex === "age" ? "number" : "text",
         dataIndex: col.dataIndex,
         title: col.title,
-        editing: isEditing(record), 
+        editing: isEditing(record),
       }),
     };
   });
 
   return (
     <Form form={form} component={false}>
-      <Table
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        bordered
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
-      />
+      {fileUrl && extention? (
+        <Table
+          components={{
+            body: {
+              cell: EditableCell,
+            },
+          }}
+          bordered
+          dataSource={data}
+          columns={mergedColumns}
+          rowClassName="editable-row"
+          pagination={{
+            onChange: cancel,
+          }}
+        />
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          loading....
+        </div>
+      )}
     </Form>
   );
 };
