@@ -3086,10 +3086,10 @@ const Details = ({ }) => {
     whereCome,
     documentPlace
   ) => {
-    console.log(documentPlace)
-    if (documentPlace == "Radio") {
+    console.log(whereCome)
+    if (documentPlace == "Radio" || whereCome == "Radio" || whereCome == "Radio-combo") {
       handleOpenModalRadiology(value, disDescription, true,)
-    } else if (documentPlace == "Lab") {
+    } else if (documentPlace == "Lab" || whereCome == "Lab") {
       var splitPoint = disDescription.substring(" ", 40);
       setTimeout(() => {
         highlight({
@@ -5890,7 +5890,8 @@ const Details = ({ }) => {
                                                                         handleOpenModalCombinationCode(
                                                                           data.diagnosisCode,
                                                                           data.actualDescription,
-                                                                          "valid2"
+                                                                          "valid2",
+                                                                          data.getPlace
                                                                         )
                                                                       }
                                                                     >
