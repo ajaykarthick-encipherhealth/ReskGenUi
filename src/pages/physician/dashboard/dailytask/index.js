@@ -150,9 +150,20 @@ const DailyTask = () => {
     }
   };
 
-  const currentDateIndex = uniqueDates?.findIndex(
+  const uniqueCardData = rearrangedCard2Data?.filter(
+    (value, index, self) =>
+      self.findIndex((v) => v?.dateString === value?.dateString) === index
+  );
+  const sortedData = uniqueCardData.sort((a, b) => {
+    const dateA = new Date(a.dateString);
+    const dateB = new Date(b.dateString);
+    return dateA - dateB;
+  });
+
+  const currentDateIndex = sortedData?.find(
     (info) => info?.date === dayjs(currentDate).format("MM-DD-YYYY")
   );
+
   useEffect(() => {
     {
       rearrangedCard2Data
@@ -161,8 +172,8 @@ const DailyTask = () => {
           return dispatch(getDailyTaskDatas(data?.dateString, router));
         });
     }
-    if (currentDateIndex > 2 && currentDateIndex < 7) {
-      setCurrentIndex(currentIndex - 2);
+    if (currentDateIndex?.id > 2 && currentDateIndex?.id < 7) {
+      setCurrentIndex(currentDateIndex?.id - 3);
     }
   }, []);
 
@@ -256,11 +267,6 @@ const DailyTask = () => {
     }
   };
 
-  const uniqueCardData = rearrangedCard2Data?.filter(
-    (value, index, self) =>
-      self.findIndex((v) => v?.dateString === value?.dateString) === index
-  );
-
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -277,7 +283,7 @@ const DailyTask = () => {
                 <Row
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  {uniqueCardData
+                  {sortedData
                     .slice(currentIndex, currentIndex + 3)
                     .map((data, index) => (
                       <Col
