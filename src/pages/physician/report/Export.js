@@ -21,6 +21,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
   const [userList, setUsersList] = useState([]);
+  const [selectedList, setSelectedList] = useState([]);
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -88,9 +89,12 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
     },
   ];
   const handleSelectedOption = (value) => {
-    setSelectedUser((prevUsers) => [{ ...prevUsers, user: value, role: "" }]);
+    setSelectedList(value);
+
+    setSelectedUser((prevUsers) => [{ ...prevUsers, user: value }]);
   };
-  const handleSelectedRole = (value, selectedUserName) => {
+
+  const handleSelectedRole = (value) => {
     setSelectedUser((prevUsers) =>
       prevUsers?.map((item) => {
         if (value) {
@@ -115,43 +119,17 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   const onFinish = (values) => {
     const patientIds = rowsLength?.data?.map((item) => item?.patientId);
     const userAndAccess = userList.reduce((result, { user, role }) => {
-      result[user] = role; // Assign the role directly to the user key
+      result[user] = role;
       return result;
     }, {});
+    const selectedFields = values.ReportFields || [];
+
+    const fields = checkBoxData?.reduce((acc, data) => {
+      acc[data.title] = selectedFields?.includes(data.title);
+      return acc;
+    }, {});
     const data = {
-      fields: {
-        patientId: values.ReportFields?.includes("patientId") ? true : false,
-        patientName: values.ReportFields?.includes("patientName")
-          ? true
-          : false,
-        dob: values.ReportFields?.includes("dob") ? true : false,
-        processedDate: values.ReportFields?.includes("processedDate")
-          ? true
-          : false,
-        providerName: values.ReportFields?.includes("providerName")
-          ? true
-          : false,
-        allocatedOn: values.ReportFields?.includes("allocatedOn")
-          ? true
-          : false,
-        noOfValidCodes: values.ReportFields?.includes("noOfValidCodes")
-          ? true
-          : false,
-        noOfSuggestedCodes: values.ReportFields?.includes("noOfSuggestedCodes")
-          ? true
-          : false,
-        noOfDeletedCodes: values.ReportFields?.includes("noOfDeletedCodes")
-          ? true
-          : false,
-        totalCodes: values.ReportFields?.includes("totalCodes") ? true : false,
-        allocatedUserId: values.ReportFields?.includes("allocatedUserId")
-          ? true
-          : false,
-        comments: values.ReportFields?.includes("comments") ? true : false,
-        validDisease: values.ReportFields?.includes("validDisease")
-          ? true
-          : false,
-      },
+      fields: fields,
       patientIds: patientIds,
       fileType: values.ReportTYpe,
       reportName: values.ReportName,
@@ -255,9 +233,11 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
               >
                 <Select
                   mode="multiple"
+                  placeholder="Please select"
                   onChange={handleSelectedOption}
                   onSearch={handleSearch}
                   className={styles.selectDiv}
+                  value={selectedList}
                 >
                   {filteredOptions?.map((data) => (
                     <Option key={data.value} value={data.value}>
@@ -268,12 +248,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
                 <Select
                   // mode="multiple"
                   placeholder="Please select"
-                  onChange={(value) =>
-                    handleSelectedRole(
-                      value,
-                      selectedUser[selectedUser.length - 1]?.user
-                    )
-                  }
+                  onChange={(value) => handleSelectedRole(value)}
                   className={styles.selectDiv}
                   value={selectedUser?.map((item) => item.role)}
                 >
@@ -285,6 +260,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
                     setDisplay(true);
                     setSelectedUser([]);
                     setUsersList((prev) => [...prev, ...selectedUser]);
+                    setSelectedList([]);
                   }}
                   style={{
                     backgroundColor: "#04306f",
