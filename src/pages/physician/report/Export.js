@@ -300,23 +300,25 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
         </div>
 
         <Form.Item
-          // wrapperCol={{
-          //   offset: 8,
-          //   span: 16,
-          // }}
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
           className={styles.footerBtn}
         >
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{
-              backgroundColor: "#04306f",
-              width: "100px",
-              height: "40px",
-            }}
-          >
-            Generate
-          </Button>
+
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                backgroundColor: "#04306f",
+                width: "100px",
+                height: "40px",
+              }}
+            >
+              Generate
+            </Button>
+       
         </Form.Item>
       </Form>
     </Modal>
