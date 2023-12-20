@@ -110,19 +110,18 @@
   font-weight: 400;
   line-height: normal;
 } */
-.excel:active{
+.excel:active {
   background-color: #04306f;
-  color:#fff;
-  border:none !important;
+  color: #fff;
+  border: none !important;
 }
-.excel:focus{
+.excel:focus {
   background-color: #04306f;
-  color:#fff;
-  border:none !important;
+  color: #fff;
+  border: none !important;
 }
-.excel:hover{
+.excel:hover {
   color: black;
-
 }
 .csv {
   width: 100px;
@@ -138,10 +137,8 @@
   margin-right: 10px;
   border-radius: 8px;
 }
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)
-{
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
   background-color: #04306f !important;
-
 }
 .excel {
   width: 100px;
@@ -174,39 +171,38 @@
   cursor: pointer;
 }
 .footerBtn {
-  width: 30%;
+  width: 100%;
   display: flex;
-  margin: auto;
+  justify-content: center;
 }
-.modelCon{
-  width:50% !important;
+.modelCon {
+  width: 50% !important;
 }
-.selectDiv{
-  width:85% !important;
+.selectDiv {
+  width: 85% !important;
   margin-right: 20px;
 }
-.displayDiv{
-  width:90%;
-  height:150px;
+.displayDiv {
+  width: 90%;
+  height: 150px;
   display: block;
- margin-left: 50px;
+  margin-left: 50px;
   border-radius: 8px;
   margin-bottom: 20px;
   /* overflow-y: scroll; */
-  padding:5px;
-  box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
+  padding: 5px;
+  box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
 }
 /* .innerdiv{
   display: flex;
   justify-content: center;
   align-items: center;
 } */
-.userName{
+.userName {
   display: flex;
-  padding:10px;
+  padding: 10px;
   justify-content: space-between;
-  box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
+  box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
   border-radius: 8px;
- margin-bottom: 10px;
-
+  margin-bottom: 10px;
 }
