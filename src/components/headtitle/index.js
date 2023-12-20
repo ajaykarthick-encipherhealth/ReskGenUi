@@ -4,13 +4,8 @@ import styles from "./styles.module.css";
 import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
-import {
-  getDateRange,
-  getWorkFlow,
-} from "../../store/actions/DashboardActions";
-import { CloseOutlined } from "@ant-design/icons";
-import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { getDateRange } from "../../store/actions/DashboardActions";
+
 const { RangePicker } = DatePicker;
 
 const HeadTitle = ({
@@ -23,7 +18,6 @@ const HeadTitle = ({
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
-  const [visible, setVisible] = useState(false);
 
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
@@ -34,27 +28,33 @@ const HeadTitle = ({
     ]);
   }, []);
 
-  const handleDatePickerChange = (dateString) => {
-    const convertedDates = dateString?.map((date) => {
-      const formattedDate = dayjs(date)
-        .startOf("day")
-        .add(6, "hour")
-        .add(39, "minute")
-        .add(22, "second")
-        .add(786, "millisecond")
-        .toISOString();
-      return formattedDate;
-    });
+  const handleDatePickerChange = (date, dateString) => {
+    if (dateString) {
+      const convertedDates =
+        dateString &&
+        dateString?.map((date) => {
+          const formattedDate =
+            dateString &&
+            dayjs(date)
+              .startOf("day")
+              .add(6, "hour")
+              .add(39, "minute")
+              .add(22, "second")
+              .add(786, "millisecond")
+              .toISOString();
+          return formattedDate;
+        });
 
-    const dates = {
-      startDate: convertedDates[0],
-      endDate: convertedDates[1],
-    };
-    dispatch(getDateRange(dates));
+      const dates = {
+        startDate: convertedDates[0],
+        endDate: convertedDates[1],
+      };
+      dispatch(getDateRange(dates));
+    }
   };
 
   const last30thDate = currentDate.subtract(31, "day");
-  const lastDateWithTime = currentDate.endOf('day').toISOString();
+  const lastDateWithTime = currentDate.endOf("day").toISOString();
 
   return (
     <div className={styles.header} style={{ display: anchorTag && "flex" }}>
@@ -78,9 +78,6 @@ const HeadTitle = ({
                   setSelectedDates([]);
                 }
               }}
-              onMouseOver={() => {
-                setVisible(true);
-              }}
               className={styles.IMG}
             />
           </div>
@@ -99,11 +96,9 @@ const HeadTitle = ({
         style={{ left: "-20%", top: "18%" }}
         onOk={() => {
           setOpenPicker(false);
-          // setSelectedDates([]);
         }}
         onCancel={() => {
           setOpenPicker(false);
-          // setSelectedDates([]);
         }}
       >
         <div className={styles.modalDetails}>
@@ -126,12 +121,12 @@ const HeadTitle = ({
             suffixIcon={false}
             className={styles.datepicker}
           />
-           <span
+          <span
             style={{
               cursor: "pointer",
-              position:"relative",
-              left:"280px",
-              top:"-40px"
+              position: "relative",
+              left: "280px",
+              top: "-40px",
             }}
             onClick={() => {
               const dates = {
@@ -139,17 +134,13 @@ const HeadTitle = ({
                 endDate: lastDateWithTime,
               };
               dispatch(getDateRange(dates));
-              setOpenPicker(false)
+              setOpenPicker(false);
             }}
           >
             <Button>Clear</Button>
-            {/* <CloseOutlined style={{width:"15px",height:"15px"}}/> */}
           </span>
-        
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
-        
-         
       </Modal>
     </div>
   );

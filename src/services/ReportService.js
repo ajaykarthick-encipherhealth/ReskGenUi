@@ -24,7 +24,7 @@ export const patientDetails = async (pagenum,startDate,endDate,search,filter) =>
 export const SentReport = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
   const url= search?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&searchstring=${search}`:
-  (startDate && endDate) ?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15`
+  (startDate && endDate) ?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&senddate=${startDate}&receiveddate=${endDate}`:`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
@@ -42,7 +42,7 @@ export const SentReport = async (pagenum,startDate,endDate,search) => {
 export const ReceivedReport = async (pagenum,startDate,endDate,search) => {
   const token = localStorage.getItem("token");
   const url= search?`dbservice/reportdetails/received?pageNo=${pagenum}&size=15&searchstring=${search}`:
-  (startDate && endDate) ?`dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:`dbservice/reportdetails/received?pageNo=${pagenum}&size=15`
+  (startDate && endDate) ?`dbservice/reportdetails/received?pageNo=${pagenum}&size=15&senddate=${startDate}&receiveddate=${endDate}`:`dbservice/reportdetails/received?pageNo=${pagenum}&size=15`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,

@@ -112,9 +112,15 @@ const DailyTask = () => {
     .split("T")[0];
 
   const rearrangedCard2Data = [
-    ...card2Data.filter((data) => data.date === dayjs(dayBeforeYesterday).format('MM-DD-YYYY')),
-    ...card2Data.filter((data) => data.date === dayjs(yesterday).format('MM-DD-YYYY')),
-    ...card2Data.filter((data) => data.date === dayjs(today).format('MM-DD-YYYY')),
+    ...card2Data.filter(
+      (data) => data.date === dayjs(dayBeforeYesterday).format("MM-DD-YYYY")
+    ),
+    ...card2Data.filter(
+      (data) => data.date === dayjs(yesterday).format("MM-DD-YYYY")
+    ),
+    ...card2Data.filter(
+      (data) => data.date === dayjs(today).format("MM-DD-YYYY")
+    ),
 
     ...card2Data.filter(
       (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
@@ -127,11 +133,26 @@ const DailyTask = () => {
   };
 
   const WeekDays = rearrangedCard2Data?.map((date) => {
-    const formattedDate = date?.dateString
+    const formattedDate = date?.dateString;
     return formattedDate;
   });
 
   const router = useRouter();
+  const uniqueDates = [
+    ...new Set(rearrangedCard2Data.map((date) => date.dateString)),
+  ];
+
+  const showNext = () => {
+    if (currentIndex < card2Data.length - 3) {
+      setCurrentIndex(currentIndex + 1);
+      const nextDay = uniqueDates[currentIndex + 3];
+      dispatch(getDailyTaskDatas(nextDay));
+    }
+  };
+
+  const currentDateIndex = uniqueDates?.findIndex(
+    (info) => info?.date === dayjs(currentDate).format("MM-DD-YYYY")
+  );
   useEffect(() => {
     {
       rearrangedCard2Data
@@ -139,6 +160,9 @@ const DailyTask = () => {
         .map((data, index) => {
           return dispatch(getDailyTaskDatas(data?.dateString, router));
         });
+    }
+    if (currentDateIndex > 2 && currentDateIndex < 7) {
+      setCurrentIndex(currentIndex - 2);
     }
   }, []);
 
@@ -232,21 +256,11 @@ const DailyTask = () => {
     }
   };
 
-  const uniqueDates = [...new Set(rearrangedCard2Data.map(date => date.dateString))];
-
-  const showNext = () => {
-    if (currentIndex < card2Data.length - 3) {
-      setCurrentIndex(currentIndex + 1);
-      const nextDay = uniqueDates[currentIndex + 3];
-      dispatch(getDailyTaskDatas(nextDay));
-    }
-  };
-  
   const uniqueCardData = rearrangedCard2Data?.filter(
     (value, index, self) =>
       self.findIndex((v) => v?.dateString === value?.dateString) === index
   );
-  
+
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -259,86 +273,92 @@ const DailyTask = () => {
               </div>
             </Col>
             <Col span={22}>
-              <Row style={{ display: "flex", justifyContent: "space-between" }}>
-                {uniqueCardData
-                  .slice(currentIndex, currentIndex + 3)
-                  .map((data, index) => (
-                    <Col
-                      key={index}
-                      span={7}
-                      className={styles.sliderdiv}
-                      onClick={() => setSelectedDate(currentWeek[index])}
-                    >
-                      <h4
-                        className={styles.headerTitle}
-                        style={{ fontSize: "16px" }}
-                        onClick={() => {
-                          const url = `processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`;
-                          dispatch(getpatientsList(0, url));
-                        }}
+              {currentIndex < 7 ? (
+                <Row
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  {uniqueCardData
+                    .slice(currentIndex, currentIndex + 3)
+                    .map((data, index) => (
+                      <Col
+                        key={index}
+                        span={7}
+                        className={styles.sliderdiv}
+                        onClick={() => setSelectedDate(currentWeek[index])}
                       >
-                        <div className={styles.headerDisplay}>
-                          <span> {data.day}</span>
-                          <span className={styles.dateDisplay}>
-                            {" "}
-                            {`(${data.date})`}{" "}
-                          </span>
-                        </div>
-                      </h4>
-                      <Row>
-                        <Col span={12}>
-                          <div className={styles.container}>
-                            <ReactECharts
-                              option={getChartOption(
-                                data?.allocated,
-                                data?.pending,
-                                data?.hold,
-                                data?.decline,
-                                data?.completed
-                              )}
-                              style={{ width: "100%", height: "200px" }}
-                            />
+                        <h4
+                          className={styles.headerTitle}
+                          style={{ fontSize: "16px" }}
+                          onClick={() => {
+                            const url = `processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`;
+                            dispatch(getpatientsList(0, url));
+                          }}
+                        >
+                          <div className={styles.headerDisplay}>
+                            <span> {data.day}</span>
+                            <span className={styles.dateDisplay}>
+                              {" "}
+                              {`(${data.date})`}{" "}
+                            </span>
                           </div>
-                        </Col>
-                        <Col span={12} className={styles.headerTitle}>
-                          <div style={{ paddingLeft: "10px" }}>
-                            {bullets?.map((item) => {
-                              return (
-                                <div
-                                  className={styles.container}
-                                  onClick={() => {
-                                    handleDays(item?.name);
-                                  }}
-                                >
-                                  <div style={{ display: "flex" }}>
-                                    <div
-                                      className={styles.bgColor}
-                                      style={{
-                                        backgroundColor: item.color,
-                                      }}
-                                    ></div>
-                                    {item.name}
+                        </h4>
+                        <Row>
+                          <Col span={12}>
+                            <div className={styles.container}>
+                              <ReactECharts
+                                option={getChartOption(
+                                  data?.allocated,
+                                  data?.pending,
+                                  data?.hold,
+                                  data?.decline,
+                                  data?.completed
+                                )}
+                                style={{ width: "100%", height: "200px" }}
+                              />
+                            </div>
+                          </Col>
+                          <Col span={12} className={styles.headerTitle}>
+                            <div style={{ paddingLeft: "10px" }}>
+                              {bullets?.map((item) => {
+                                return (
+                                  <div
+                                    className={styles.container}
+                                    onClick={() => {
+                                      handleDays(item?.name);
+                                    }}
+                                  >
+                                    <div style={{ display: "flex" }}>
+                                      <div
+                                        className={styles.bgColor}
+                                        style={{
+                                          backgroundColor: item.color,
+                                        }}
+                                      ></div>
+                                      {item.name}
+                                    </div>
+                                    <div className={styles.subText}>
+                                      {item.name === "Pending"
+                                        ? data.pending
+                                        : item.name === "Declined"
+                                        ? data?.decline
+                                        : item.name === "Hold"
+                                        ? data.hold
+                                        : item.name === "Completed"
+                                        ? data?.completed
+                                        : "No data"}
+                                    </div>
                                   </div>
-                                  <div className={styles.subText}>
-                                    {item.name === "Pending"
-                                      ? data.pending
-                                      : item.name === "Declined"
-                                      ? data?.decline
-                                      : item.name === "Hold"
-                                      ? data.hold
-                                      : item.name === "Completed"
-                                      ? data?.completed
-                                      : "No data"}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  ))}
-              </Row>
+                                );
+                              })}
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                    ))}
+                </Row>
+              ) : (
+                "No DateFound"
+              )}
 
               <div className={styles.infoCards}>
                 <Legends bullets={bullets} />

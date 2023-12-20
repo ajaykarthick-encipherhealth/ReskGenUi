@@ -17,10 +17,10 @@ import { useSelector } from "react-redux";
 
 const WorkFlow = () => {
   const worlFlowData = useSelector((state) => state?.workFlow?.data);
-  const [openPicker,setOpenPicker]=useState(false)
-  const handleOpen=()=>{
-    setOpenPicker(!openPicker)
-  }
+  const [openPicker, setOpenPicker] = useState(false);
+  const handleOpen = () => {
+    setOpenPicker(!openPicker);
+  };
   const card1Data = [
     {
       id: 1,
@@ -58,8 +58,13 @@ const WorkFlow = () => {
 
   return (
     <div className={styles.card1}>
-      <HeadTitle header="Last 30 days work flow " icon={calender} handleOpen={handleOpen} openPicker={openPicker} 
-      setOpenPicker={setOpenPicker} />
+      <HeadTitle
+        header="Last 30 days work flow "
+        icon={calender}
+        handleOpen={handleOpen}
+        openPicker={openPicker}
+        setOpenPicker={setOpenPicker}
+      />
       <Card borderRadius="28px">
         <Row className={styles.carddiv}>
           {card1Data?.map((data) => (
@@ -69,16 +74,16 @@ const WorkFlow = () => {
                 backgroundImage: `url(${data?.bg.src})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
-               
               }}
               className={styles.colData}
             >
-              
               <div className={styles.header}>
                 <Image src={data?.icon} className={styles.Img} />
                 <div className={styles.heading}>{data.title}</div>
               </div>
-              <div className={styles.charts}>{`${data?.charts?data?.charts:"0"}  Charts`}</div>
+              <div className={styles.charts}>{`${
+                data?.charts ? data?.charts : "0"
+              }  Charts`}</div>
               <div className={styles.days}>{data.days}</div>
             </Col>
           ))}
