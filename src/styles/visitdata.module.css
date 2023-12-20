@@ -1371,3 +1371,12 @@ margin-left: 20px;
   /* height: 70vh; */
   border-radius: 10px;
 }
+.fileFormDate{
+  display: flex;
+}
+.fileFormDate span{
+  position: absolute;
+  margin-left: 24%;
+  margin-top: 10px;
+  cursor: pointer;
+}

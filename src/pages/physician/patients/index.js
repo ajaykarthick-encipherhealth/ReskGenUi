@@ -854,7 +854,10 @@ if(searchtext ){
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getAllList(localUserId, e.page, e.rows);
+    // getAllList(localUserId, e.page, e.rows);
+    getFilteApi(e.page, e.rows,statusSelectedValue,processedStart,processedEnd,dueDateStart,dueDateEnd)
+
+    
     console.log("test");
   };
   const statusOptions = [

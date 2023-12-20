@@ -44,6 +44,7 @@ import {
   faCog,
   faClock,
   faArrowsAlt,
+  faCalendar
 } from "@fortawesome/free-solid-svg-icons";
 import {
   CalendarOutlined
@@ -316,6 +317,10 @@ const Details = ({ }) => {
 
   const [labFileFilterList, setLabFileFilterList] = useState(10);
   const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] = useState(false);
+  const [dragFileDate, setdragFileDate] = useState(false);
+  const [inputValueFileDate, setInputValueFileDate] = useState('');
+
+
 
 
 
@@ -432,9 +437,22 @@ const Details = ({ }) => {
     if (key == "diagnosisCode") {
       getFindValidDiagnosisCode(e.target.value);
     }
+    if (key == "encodedDate") {
+      setInputValueFileDate(e.target.value)
+
+    }
+
 
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
+  };
+
+  const handleDatePickerChangeFile = (dates, dateString) => {
+    let convertDate = moment(dateString).format('MM-DD-YYYY');
+    setdragFileDate(false);
+    setInputValueFileDate(convertDate)
+    setInputValue({ ...inputValue, ["encodedDate"]: convertDate });
+
   };
 
   const hidePopover = () => {
@@ -673,7 +691,7 @@ const Details = ({ }) => {
     // }
   };
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
-  const getPatientDetails = async (patientId, orgId, tenId,fileloadCondition) => {
+  const getPatientDetails = async (patientId, orgId, tenId, fileloadCondition) => {
 
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
@@ -724,10 +742,10 @@ const Details = ({ }) => {
         var suggestListAllNonHcc = [];
         var deleteHccList = [];
 
-        if(fileloadCondition != "fileNotLoad"){
+        if (fileloadCondition != "fileNotLoad") {
 
-        getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
-        setSelectMeatFileId(response.data.fileId);
+          getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
+          setSelectMeatFileId(response.data.fileId);
         }
         // setPatientDocumentResult(result);
 
@@ -1830,13 +1848,13 @@ const Details = ({ }) => {
 
           result.radiologyFileDetail.map((res, index) => {
             // console.log(res)
-  
+
             for (var key in res.documentDos) {
               console.log(res.documentDos[key])
-              dosYearArrFile.push({ value: key, label: key +" - "+ res.documentDos[key].testName });
+              dosYearArrFile.push({ value: key, label: key + " - " + res.documentDos[key].testName });
             }
-  
-  
+
+
           })
 
           console.log(dosYearArrFile)
@@ -4433,6 +4451,8 @@ const Details = ({ }) => {
     if (addValidCodeCheck == true) {
       setAddValidCodeCheck(null)
       if (form.checkValidity() === true) {
+        let convertDate = moment(inputValue.encodedDate).format('MM-DD-YYYY');
+
         var dataFormatSuggested = {
           patientComputeDetailId: localPatientId,
           year: dos,
@@ -4440,7 +4460,7 @@ const Details = ({ }) => {
             {
               diagnosisCode: inputValue.diagnosisCode,
               actualDescription: inputValue.actualDescription,
-              encounterDate: inputValue.encodedDate,
+              encounterDate: convertDate,
               capturedSections: [inputValue.capturedSections],
             },
           ],
@@ -4458,10 +4478,12 @@ const Details = ({ }) => {
               placement: "top",
               duration: 1
             });
-            form.reset();  
+            form.reset();
             setIsModalOpenValidCodes(false);
             setIsFileFormShow(false)
-            getPatientDetails(localPatientId, localOrgId, localTenantId,"fileNotLoad");
+            setInputValueFileDate('')
+
+            getPatientDetails(localPatientId, localOrgId, localTenantId, "fileNotLoad");
             handleCloseForm();
             setIsModalOpenValid(false)
           } else {
@@ -4472,21 +4494,30 @@ const Details = ({ }) => {
     }
 
     setValidated(true);
-    
 
- 
+
+
     // if(validated ==  true){
     //   setValidated(false);
     // }else{
     //   setValidated(true);
     // }
-    
+
 
     // Add logic for handling form submission
     // You can access the form data and perform actions accordingly
     // For example, you can access the input field values using refs or state
     // After handling the submission, close the form
   };
+  const addValidCodeFile = async (event) => {
+    setIsFileFormShow(true);
+    setValidated(false);
+  }
+
+  const mouseEnter = async (event) => {
+    console.log(event)
+    setdragFileDate("2020-01-02")
+  }
 
   const addComments = async (value) => {
     setFilterDataLoading(true);
@@ -7525,180 +7556,180 @@ const Details = ({ }) => {
                                       <Tab.Pane id="my-posts" eventKey="file">
                                         <div className="my-post-content pt-3 row">
                                           {!isFileFormShow ?
-                                          <div className="col-xl-2">
-                                            <ul className="timeline">
-                                              <div
-                                                className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
-                                              >
-                                                <span
-                                                  className={`${visitStyles.hcc_title_name}`}
+                                            <div className="col-xl-2">
+                                              <ul className="timeline">
+                                                <div
+                                                  className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                                                 >
-
-                                                  HCC
-                                                  <FontAwesomeIcon onClick={() =>
-                                                    setIsFileFormShow(true)
-                                                  }
-                                                    icon={faPlus}
-                                                  />
-                                                </span>
-                                                <div className="d-flex justify-content-center">
                                                   <span
-                                                    className={`${visitStyles.hcc_title_badge}`}
+                                                    className={`${visitStyles.hcc_title_name}`}
                                                   >
-                                                    {newValidDiseaseList.length}
-                                                  </span>
-                                                </div>
-                                              </div>
-                                              <div className={visitStyles.container}>
-                                                <div className={visitStyles.hccStickey_head}>
 
-                                                  {newValidDiseaseList.map(
-                                                    (data, i) => (
-                                                      <li>
-                                                        <div
-                                                          className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                                        >
+                                                    HCC
+                                                    <FontAwesomeIcon onClick={() =>
+                                                      addValidCodeFile()
+                                                    }
+                                                      icon={faPlus}
+                                                    />
+                                                  </span>
+                                                  <div className="d-flex justify-content-center">
+                                                    <span
+                                                      className={`${visitStyles.hcc_title_badge}`}
+                                                    >
+                                                      {newValidDiseaseList.length}
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                                <div className={visitStyles.container}>
+                                                  <div className={visitStyles.hccStickey_head}>
+
+                                                    {newValidDiseaseList.map(
+                                                      (data, i) => (
+                                                        <li>
                                                           <div
-                                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                                            className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                           >
                                                             <div
-                                                              className="media-body"
-                                                              onClick={() =>
-                                                                findValueDocument(
-                                                                  data.diagnosisCode,
-                                                                  data.actualDescription,
-                                                                  "valid2"
-                                                                )
-                                                              }
-                                                            >
-                                                              <span className="mb-1 disease-name d-flex">
-
-                                                                <span className="valid-dis-name">
-
-
-                                                                  {
-                                                                    data.diagnosisCode
-                                                                  }
-                                                                </span>{" "}
-                                                                -{" "}
-                                                                {
-                                                                  data.actualDescription
-                                                                }
-
-                                                              </span>
-                                                            </div>
-
-                                                            {data.defaultPosition == "VALID" ?
-                                                              <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                              </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                                <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                </span>
-                                                                : data.defaultPosition == "DELETED" ?
-
-                                                                  <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span> : null}
-                                                            <Popover
-                                                              onClick={() =>
-                                                                getValidHccDetails(
-                                                                  data.actualDescription,
-                                                                  data.diagnosisCode
-                                                                )
-                                                              }
-                                                              content={
-                                                                validHccDetails
-                                                              }
-                                                              title={
-                                                                data.diagnosisCode
-                                                              }
-                                                              placement="bottom"
-                                                              trigger="click"
-                                                            >
-                                                              <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                                                <i className="cr-pointer">
-                                                                  {SVGICON.infoIcon}
-                                                                </i>
-                                                              </Tooltip>
-                                                            </Popover>
-
-
-                                                            <Popconfirm
-                                                              title="Choose an action"
-                                                              icon={
-                                                                <QuestionCircleOutlined
-                                                                  style={{
-                                                                    color: "blue",
-                                                                  }}
-                                                                />
-                                                              }
-                                                              okText="Move to Deleted"
-                                                              cancelText="Move to Suggested"
-                                                              onCancel={
-                                                                validToSuggested
-                                                              }
-                                                              okButtonProps={{
-                                                                type: buttonClicked
-                                                                  ? "primary"
-                                                                  : "default",
-                                                              }}
-                                                              cancelButtonProps={{
-                                                                type: buttonClicked
-                                                                  ? "danger"
-                                                                  : "default",
-                                                              }}
-                                                              description={
-                                                                data.diagnosisCode
-                                                              }
-                                                              onConfirm={
-                                                                confirmvalid
-                                                              }
-                                                              placement="leftTop"
-                                                              onOpenChange={() =>
-                                                                onchangeValid(
-                                                                  data.diagnosisCode,
-                                                                  data
-                                                                )
-                                                              }
+                                                              className={`${visitStyles.hcc_card_nameHead}`}
                                                             >
                                                               <div
-                                                                className={
-                                                                  visitStyles.close_icon
+                                                                className="media-body"
+                                                                onClick={() =>
+                                                                  findValueDocument(
+                                                                    data.diagnosisCode,
+                                                                    data.actualDescription,
+                                                                    "valid2"
+                                                                  )
                                                                 }
                                                               >
-                                                                {<FontAwesomeIcon
-                                                                  icon={faArrowsAlt}
-                                                                  style={{ size: 8, color: "#a80404" }}
-                                                                />}
+                                                                <span className="mb-1 disease-name d-flex">
+
+                                                                  <span className="valid-dis-name">
+
+
+                                                                    {
+                                                                      data.diagnosisCode
+                                                                    }
+                                                                  </span>{" "}
+                                                                  -{" "}
+                                                                  {
+                                                                    data.actualDescription
+                                                                  }
+
+                                                                </span>
                                                               </div>
-                                                            </Popconfirm>
-                                                          </div>
-                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
-                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
 
-                                                              {getEncounterDateBackground(data.encounterDateSplit)}
-                                                              {data.isManuallyAdded == true ?
+                                                              {data.defaultPosition == "VALID" ?
+                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span> : data.defaultPosition == "SUGGESTED" ?
 
-                                                                <Badge
-                                                                  className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span>
+                                                                  : data.defaultPosition == "DELETED" ?
+
+                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : null}
+                                                              <Popover
+                                                                onClick={() =>
+                                                                  getValidHccDetails(
+                                                                    data.actualDescription,
+                                                                    data.diagnosisCode
+                                                                  )
+                                                                }
+                                                                content={
+                                                                  validHccDetails
+                                                                }
+                                                                title={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                placement="bottom"
+                                                                trigger="click"
+                                                              >
+                                                                <Tooltip title="HCC Veriosn Details" placement="bottom">
+                                                                  <i className="cr-pointer">
+                                                                    {SVGICON.infoIcon}
+                                                                  </i>
+                                                                </Tooltip>
+                                                              </Popover>
+
+
+                                                              <Popconfirm
+                                                                title="Choose an action"
+                                                                icon={
+                                                                  <QuestionCircleOutlined
+                                                                    style={{
+                                                                      color: "blue",
+                                                                    }}
+                                                                  />
+                                                                }
+                                                                okText="Move to Deleted"
+                                                                cancelText="Move to Suggested"
+                                                                onCancel={
+                                                                  validToSuggested
+                                                                }
+                                                                okButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "primary"
+                                                                    : "default",
+                                                                }}
+                                                                cancelButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "danger"
+                                                                    : "default",
+                                                                }}
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  confirmvalid
+                                                                }
+                                                                placement="leftTop"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
+                                                                }
+                                                              >
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
                                                                 >
-                                                                  Manually Added
-
-                                                                </Badge>
-                                                                : null}
+                                                                  {<FontAwesomeIcon
+                                                                    icon={faArrowsAlt}
+                                                                    style={{ size: 8, color: "#a80404" }}
+                                                                  />}
+                                                                </div>
+                                                              </Popconfirm>
                                                             </div>
-                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                              {getCaptureSectionBackgroundFile(data.capturedSections)}
+                                                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+
+                                                                {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                {data.isManuallyAdded == true ?
+
+                                                                  <Badge
+                                                                    className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                                                  >
+                                                                    Manually Added
+
+                                                                  </Badge>
+                                                                  : null}
+                                                              </div>
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                {getCaptureSectionBackgroundFile(data.capturedSections)}
+                                                              </div>
                                                             </div>
                                                           </div>
-                                                        </div>
-                                                      </li>
+                                                        </li>
 
-                                                    )
-                                                  )}
+                                                      )
+                                                    )}
+                                                  </div>
                                                 </div>
-                                              </div>
-                                            </ul>
-                                          </div>:null}
+                                              </ul>
+                                            </div> : null}
                                           <div className="col-xl-8">
                                             {/* <div>
                                             <button
@@ -7747,470 +7778,517 @@ const Details = ({ }) => {
                                             </div>
                                           </div>
                                           {isFileFormShow ?
-                                          <div className="col-xl-4">
+                                            <div className="col-xl-4">
 
-                                            <div className="offcanvas-body">
-                                              <div className={visitStyles.fileFormContianer}>
-                                                <Form
-                                                  noValidate
-                                                  validated={validated}
-                                                  onSubmit={handleFormSubmit}
-                                                >
-                                                  <div className="row">
-                                                    <div className="col-xl-12 mb-3">
-                                                      <Form.Label>
-                                                        Code <span className="text-danger">*</span>{" "}
-                                                      </Form.Label>
-                                                      <Form.Control
-                                                        required
-                                                        type="text"
-                                                        id="diagnosisCode"
-                                                        name="diagnosisCode"
-                                                        onChange={handleChange}
-                                                      />
-                                                      {addValidCodeCheck == false ?
-                                                        <span className={visitStyles.invalidHccCodeError}>
-                                                          Invalid Hcc Code
-                                                        </span> : addValidCodeCheck == true ? <span className={visitStyles.validHccCodeError}>
-                                                          Valid Hcc Code
-                                                        </span> : null}
+                                              <div className="offcanvas-body">
+                                                <div className={visitStyles.fileFormContianer}>
+                                                  <Form
+                                                    noValidate
+                                                    validated={validated}
+                                                    onSubmit={handleFormSubmit}
+                                                  >
+                                                    <div className="row">
+                                                      <div className="col-xl-12 mb-3">
+                                                        <Form.Label>
+                                                          Code <span className="text-danger">*</span>{" "}
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                          required
+                                                          type="text"
+                                                          id="diagnosisCode"
+                                                          name="diagnosisCode"
+                                                          onChange={handleChange}
+                                                        />
+                                                        {addValidCodeCheck == false ?
+                                                          <span className={visitStyles.invalidHccCodeError}>
+                                                            Invalid Hcc Code
+                                                          </span> : addValidCodeCheck == true ? <span className={visitStyles.validHccCodeError}>
+                                                            Valid Hcc Code
+                                                          </span> : null}
 
-                                                    </div>
-                                                    <div className="col-xl-12 mb-3">
-                                                      <Form.Label>
-                                                        Provider name
-                                                      </Form.Label>
-                                                      <Form.Control
-                                                        type="text"
-                                                        id="providerName"
-                                                        name="providerName"
-                                                        onChange={handleChange}
-                                                      />
-                                                    </div>
-                                                    <div className="col-xl-12 mb-3">
-                                                      <Form.Label>
-                                                        Section <span className="text-danger">*</span>{" "}
-                                                      </Form.Label>
-                                                      <Form.Control
-                                                        required
-                                                        type="text"
-                                                        id="capturedSections"
-                                                        name="capturedSections"
-                                                        onChange={handleChange}
-                                                      />
-                                                    </div>
-                                                    <div className="col-xl-12 mb-3">
-                                                      <Form.Label>
-                                                        Encoded date <span className="text-danger">*</span>{" "}
-                                                      </Form.Label>
-                                                      <Form.Control
+                                                      </div>
+                                                      <div className="col-xl-12 mb-3">
+                                                        <Form.Label>
+                                                          Provider name
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                          type="text"
+                                                          id="providerName"
+                                                          name="providerName"
+                                                          onChange={handleChange}
+                                                        />
+                                                      </div>
+                                                      <div className="col-xl-12 mb-3">
+                                                        <Form.Label>
+                                                          Section <span className="text-danger">*</span>{" "}
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                          required
+                                                          type="text"
+                                                          id="capturedSections"
+                                                          name="capturedSections"
+                                                          onChange={handleChange}
+                                                        />
+                                                      </div>
+                                                      <div className={`col-xl-12 mb-3`} >
+                                                        <Form.Label>
+                                                          Encoded date <span className="text-danger">*</span>{" "}
+                                                        </Form.Label>
+
+
+                                                        {/* <Form.Control
                                                         required
                                                         type="date"
                                                         id="encodedDate"
                                                         name="encodedDate"
-                                                        onChange={handleChange}
-                                                      />
+                                                        onChange={handleChange}                                                      
+                                                      /> */}
+                                                        <div className={visitStyles.fileFormDate}>
+                                                          <Form.Control
+                                                            required
+                                                            type="text"
+                                                            id="encodedDate"
+                                                            name="encodedDate"
+                                                            onChange={handleChange}
+                                                            value={inputValueFileDate}
+                                                          />
+                                                        {!dragFileDate ?
+                                                          <span onClick={() =>
+                                                            setdragFileDate(true)
+                                                          }> <FontAwesomeIcon
+                                                              icon={
+                                                                faCalendar
+                                                              }
+                                                              style={{
+                                                                color:
+                                                                  "#918585",
+                                                              }}
+                                                            /></span>:
+                                                            <span onClick={() =>
+                                                              setdragFileDate(false)
+                                                            }> <FontAwesomeIcon
+                                                                icon={
+                                                                  faClose
+                                                                }
+                                                                style={{
+                                                                  color:
+                                                                    "#918585",
+                                                                }}
+                                                              /></span>}
+
+                                                        </div>
+
+                                                      </div>
+                                                      <DatePicker format="MM-DD-YYYY"
+                                                        onChange={(dates, dateStrings) => {
+                                                          handleDatePickerChangeFile(dates, dateStrings);
+                                                        }}
+                                                       
+                                                        open={dragFileDate}
+                                                        showNow={false}
+                                                        style={{ visibility: "hidden", boxShadow: "none", marginBottom: "-45px" }}
+                                                        placeholder="MM-DD-YYYY" className="form-control" />
+                                                      {/* <DatePicker/> */}
+
+                                                      <div className="col-xl-12 mb-3">
+                                                        <Form.Label>
+                                                          Description <span className="text-danger">*</span>{" "}
+                                                        </Form.Label>
+                                                        <textarea
+                                                          className="form-control"
+                                                          id="actualDescription"
+                                                          name="actualDescription"
+                                                          onChange={handleChangeSuggested}
+                                                          // value={inputValue.actualDescription}
+                                                          rows="5"
+                                                          required
+                                                        ></textarea>
+                                                      </div>
                                                     </div>
 
-                                                    <div className="col-xl-12 mb-3">
-                                                      <Form.Label>
-                                                        Description <span className="text-danger">*</span>{" "}
-                                                      </Form.Label>
-                                                      <textarea
-                                                        className="form-control"
-                                                        id="actualDescription"
-                                                        name="actualDescription"
-                                                        onChange={handleChangeSuggested}
-                                                        // value={inputValue.actualDescription}
-                                                        rows="5"
-                                                        required
-                                                      ></textarea>
+                                                    <div>
+                                                      <Button
+                                                        type="submit"
+                                                        className="btn btn-primary btn-sm me-1"
+                                                      >
+                                                        Submit
+                                                      </Button>
+                                                      <Button
+                                                        // type="reset"
+                                                        onClick={() => handleCloseModal()}
+                                                        className="btn btn-danger btn-sm light ms-1"
+                                                      >
+                                                        Cancel
+                                                      </Button>
                                                     </div>
-                                                  </div>
-
-                                                  <div>
-                                                    <Button
-                                                      type="submit"
-                                                      className="btn btn-primary btn-sm me-1"
-                                                    >
-                                                      Submit
-                                                    </Button>
-                                                    <Button
-                                                    // type="reset"
-                                                      onClick={() => handleCloseModal()}
-                                                      className="btn btn-danger btn-sm light ms-1"
-                                                    >
-                                                      Cancel
-                                                    </Button>
-                                                  </div>
-                                                </Form>
-                                              </div>
-                                            </div>
-                                          </div>:null}
-                                          {!isFileFormShow ?
-                                          <div className="col-xl-2">
-
-
-                                            <div className="">
-                                              <ul className="timeline">
-                                                <div
-                                                  className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
-                                                >
-                                                  <span
-                                                    className={`${visitStyles.suggested_title_name}`}
-                                                  >
-                                                    SUGGESTED CODES
-                                                  </span>
-                                                  <div className="d-flex justify-content-center">
-                                                    <span
-                                                      className={`${visitStyles.suggested_title_badge}`}
-                                                    >
-                                                      {suggestedHccList.length}
-                                                    </span>
-                                                  </div>
+                                                  </Form>
                                                 </div>
-                                                <div className={visitStyles.suggestedcontainer2}>
-                                                  <div className={visitStyles.hccStickey_head}>
-                                                    {suggestedHccList?.map((data) => {
-                                                      return (
-                                                        <>
-                                                          {data.isHccValid == true ? (
-                                                            <li>
-                                                              <div
-                                                                className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                                              >
+                                              </div>
+                                            </div> : null}
+                                          {!isFileFormShow ?
+                                            <div className="col-xl-2">
+
+
+                                              <div className="">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.suggested_title_name}`}
+                                                    >
+                                                      SUGGESTED CODES
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.suggested_title_badge}`}
+                                                      >
+                                                        {suggestedHccList.length}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={visitStyles.suggestedcontainer2}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {suggestedHccList?.map((data) => {
+                                                        return (
+                                                          <>
+                                                            {data.isHccValid == true ? (
+                                                              <li>
                                                                 <div
-                                                                  className={`${visitStyles.hcc_card_nameHead}`}
+                                                                  className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                                 >
                                                                   <div
-                                                                    className="media-body"
-                                                                    onClick={() =>
-                                                                      findValueDocument(
-                                                                        data.diagnosisCode,
-                                                                        data.actualDescription,
-                                                                        "valid2"
-                                                                      )
-                                                                    }
+                                                                    className={`${visitStyles.hcc_card_nameHead}`}
                                                                   >
-                                                                    <span className="mb-1 disease-name d-flex">
-                                                                      <span className="valid-dis-name">
+                                                                    <div
+                                                                      className="media-body"
+                                                                      onClick={() =>
+                                                                        findValueDocument(
+                                                                          data.diagnosisCode,
+                                                                          data.actualDescription,
+                                                                          "valid2"
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      <span className="mb-1 disease-name d-flex">
+                                                                        <span className="valid-dis-name">
+                                                                          {
+                                                                            data.diagnosisCode
+                                                                          }
+                                                                        </span>{" "}
+                                                                        -{" "}
                                                                         {
+                                                                          data.actualDescription
+                                                                        }
+                                                                      </span>
+                                                                    </div>
+                                                                    {data.defaultPosition == "VALID" ?
+                                                                      <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                      </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                                        <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                        </span>
+                                                                        : data.defaultPosition == "DELETED" ?
+
+                                                                          <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                          </span> : null}
+                                                                    <Popover
+                                                                      onClick={() =>
+                                                                        getValidHccDetails(
+                                                                          data.actualDescription,
+                                                                          data.diagnosisCode
+                                                                        )
+                                                                      }
+                                                                      content={
+                                                                        validHccDetails
+                                                                      }
+                                                                      title={
+                                                                        data.diagnosisCode
+                                                                      }
+                                                                      placement="bottom"
+                                                                      trigger="click"
+                                                                    >
+                                                                      <i>
+                                                                        {
+                                                                          SVGICON.infoIcon
+                                                                        }
+                                                                      </i>
+                                                                    </Popover>
+                                                                    {data.getPlace ==
+                                                                      "Radio" || data.getPlace ==
+                                                                      "Lab" ?
+                                                                      <Popconfirm
+                                                                        title="Choose an action"
+                                                                        icon={
+                                                                          <QuestionCircleOutlined
+                                                                            style={{
+                                                                              color:
+                                                                                "blue",
+                                                                            }}
+                                                                          />
+                                                                        }
+                                                                        okText="Move to Deleted"
+
+                                                                        okButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "primary"
+                                                                            : "default",
+                                                                        }}
+
+                                                                        description={
                                                                           data.diagnosisCode
                                                                         }
-                                                                      </span>{" "}
-                                                                      -{" "}
-                                                                      {
-                                                                        data.actualDescription
-                                                                      }
-                                                                    </span>
-                                                                  </div>
-                                                                  {data.defaultPosition == "VALID" ?
-                                                                    <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                    </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                                      <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                      </span>
-                                                                      : data.defaultPosition == "DELETED" ?
-
-                                                                        <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                        </span> : null}
-                                                                  <Popover
-                                                                    onClick={() =>
-                                                                      getValidHccDetails(
-                                                                        data.actualDescription,
-                                                                        data.diagnosisCode
-                                                                      )
-                                                                    }
-                                                                    content={
-                                                                      validHccDetails
-                                                                    }
-                                                                    title={
-                                                                      data.diagnosisCode
-                                                                    }
-                                                                    placement="bottom"
-                                                                    trigger="click"
-                                                                  >
-                                                                    <i>
-                                                                      {
-                                                                        SVGICON.infoIcon
-                                                                      }
-                                                                    </i>
-                                                                  </Popover>
-                                                                  {data.getPlace ==
-                                                                    "Radio" || data.getPlace ==
-                                                                    "Lab" ?
-                                                                    <Popconfirm
-                                                                      title="Choose an action"
-                                                                      icon={
-                                                                        <QuestionCircleOutlined
-                                                                          style={{
-                                                                            color:
-                                                                              "blue",
-                                                                          }}
-                                                                        />
-                                                                      }
-                                                                      okText="Move to Deleted"
-
-                                                                      okButtonProps={{
-                                                                        type: buttonClicked
-                                                                          ? "primary"
-                                                                          : "default",
-                                                                      }}
-
-                                                                      description={
-                                                                        data.diagnosisCode
-                                                                      }
-                                                                      onConfirm={
-                                                                        suggestedToDeleted
-                                                                      }
-                                                                      placement="leftTop"
-                                                                      onOpenChange={() =>
-                                                                        onchangeValid(
-                                                                          data.diagnosisCode,
-                                                                          data
-                                                                        )
-                                                                      }
-                                                                    >
-                                                                      <div
-                                                                        className={
-                                                                          visitStyles.close_icon
+                                                                        onConfirm={
+                                                                          suggestedToDeleted
+                                                                        }
+                                                                        placement="leftTop"
+                                                                        onOpenChange={() =>
+                                                                          onchangeValid(
+                                                                            data.diagnosisCode,
+                                                                            data
+                                                                          )
                                                                         }
                                                                       >
-                                                                        <FontAwesomeIcon
-                                                                          icon={faArrowsAlt}
-                                                                          style={{ size: 8, color: "#a80404" }}
-                                                                        />
-                                                                      </div>
-                                                                    </Popconfirm>
+                                                                        <div
+                                                                          className={
+                                                                            visitStyles.close_icon
+                                                                          }
+                                                                        >
+                                                                          <FontAwesomeIcon
+                                                                            icon={faArrowsAlt}
+                                                                            style={{ size: 8, color: "#a80404" }}
+                                                                          />
+                                                                        </div>
+                                                                      </Popconfirm>
 
-                                                                    : <Popconfirm
-                                                                      title="Choose an action"
-                                                                      icon={
-                                                                        <QuestionCircleOutlined
-                                                                          style={{
-                                                                            color:
-                                                                              "blue",
-                                                                          }}
-                                                                        />
-                                                                      }
-                                                                      okText="Move to Deleted"
-                                                                      cancelText="Move to HCC"
-                                                                      onCancel={
-                                                                        suggestedToValid
-                                                                      }
-                                                                      okButtonProps={{
-                                                                        type: buttonClicked
-                                                                          ? "primary"
-                                                                          : "default",
-                                                                      }}
-                                                                      cancelButtonProps={{
-                                                                        type: buttonClicked
-                                                                          ? "danger"
-                                                                          : "default",
-                                                                      }}
-                                                                      description={
-                                                                        data.diagnosisCode
-                                                                      }
-                                                                      onConfirm={
-                                                                        suggestedToDeleted
-                                                                      }
-                                                                      placement="leftTop"
-                                                                      onOpenChange={() =>
-                                                                        onchangeValid(
-                                                                          data.diagnosisCode,
-                                                                          data
-                                                                        )
-                                                                      }
-                                                                    >
-                                                                      <div
-                                                                        className={
-                                                                          visitStyles.close_icon
+                                                                      : <Popconfirm
+                                                                        title="Choose an action"
+                                                                        icon={
+                                                                          <QuestionCircleOutlined
+                                                                            style={{
+                                                                              color:
+                                                                                "blue",
+                                                                            }}
+                                                                          />
+                                                                        }
+                                                                        okText="Move to Deleted"
+                                                                        cancelText="Move to HCC"
+                                                                        onCancel={
+                                                                          suggestedToValid
+                                                                        }
+                                                                        okButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "primary"
+                                                                            : "default",
+                                                                        }}
+                                                                        cancelButtonProps={{
+                                                                          type: buttonClicked
+                                                                            ? "danger"
+                                                                            : "default",
+                                                                        }}
+                                                                        description={
+                                                                          data.diagnosisCode
+                                                                        }
+                                                                        onConfirm={
+                                                                          suggestedToDeleted
+                                                                        }
+                                                                        placement="leftTop"
+                                                                        onOpenChange={() =>
+                                                                          onchangeValid(
+                                                                            data.diagnosisCode,
+                                                                            data
+                                                                          )
                                                                         }
                                                                       >
-                                                                        <FontAwesomeIcon
-                                                                          icon={faArrowsAlt}
-                                                                          style={{ size: 8, color: "#a80404" }}
-                                                                        />
-                                                                      </div>
-                                                                    </Popconfirm>}
-                                                                </div>
-                                                                <div className={`${visitStyles.hoverActiveHcc}`}>
-                                                                  <div className="">
-
-                                                                    {getEncounterDateBackground(data.encounterDateSplit)}
-                                                                    {data.getPlace ==
-                                                                      "Lab" ? (
-                                                                      <Tooltip title="LAB">
-                                                                        <span
-                                                                          className={` mt-2 ${visitStyles.labStatus}`}
-                                                                          bg={`  mt-2 bg-bg-seven `}
+                                                                        <div
+                                                                          className={
+                                                                            visitStyles.close_icon
+                                                                          }
                                                                         >
-                                                                          Lab
-                                                                        </span>
-                                                                      </Tooltip>
-                                                                    ) : data.getPlace ==
-                                                                      "Radio" ? (
-                                                                      <Tooltip title="RADIOLOGY">
-                                                                        <span
-                                                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                                                          bg={`  mt-2 bg-bg-eight `}
-                                                                        >
-                                                                          Radiology
-                                                                        </span>
-                                                                      </Tooltip>
-                                                                    ) : null
-                                                                    }
-
+                                                                          <FontAwesomeIcon
+                                                                            icon={faArrowsAlt}
+                                                                            style={{ size: 8, color: "#a80404" }}
+                                                                          />
+                                                                        </div>
+                                                                      </Popconfirm>}
                                                                   </div>
+                                                                  <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                                    <div className="">
 
-                                                                  {data.getPlace ==
-                                                                    "Lab" ?
-                                                                    <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                      {getCaptureSectionBackground(data.capturedSections, "Lab")}
+                                                                      {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                      {data.getPlace ==
+                                                                        "Lab" ? (
+                                                                        <Tooltip title="LAB">
+                                                                          <span
+                                                                            className={` mt-2 ${visitStyles.labStatus}`}
+                                                                            bg={`  mt-2 bg-bg-seven `}
+                                                                          >
+                                                                            Lab
+                                                                          </span>
+                                                                        </Tooltip>
+                                                                      ) : data.getPlace ==
+                                                                        "Radio" ? (
+                                                                        <Tooltip title="RADIOLOGY">
+                                                                          <span
+                                                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                                            bg={`  mt-2 bg-bg-eight `}
+                                                                          >
+                                                                            Radiology
+                                                                          </span>
+                                                                        </Tooltip>
+                                                                      ) : null
+                                                                      }
+
                                                                     </div>
-                                                                    : data.getPlace ==
-                                                                      "Radio" ?
+
+                                                                    {data.getPlace ==
+                                                                      "Lab" ?
                                                                       <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                        {getCaptureSectionBackground(data.capturedSections, "Radio")}
+                                                                        {getCaptureSectionBackground(data.capturedSections, "Lab")}
                                                                       </div>
-                                                                      : <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                        {getCaptureSectionBackgroundFile(data.capturedSections)}
-                                                                      </div>
-                                                                  }
+                                                                      : data.getPlace ==
+                                                                        "Radio" ?
+                                                                        <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                          {getCaptureSectionBackground(data.capturedSections, "Radio")}
+                                                                        </div>
+                                                                        : <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                          {getCaptureSectionBackgroundFile(data.capturedSections)}
+                                                                        </div>
+                                                                    }
 
+                                                                  </div>
                                                                 </div>
-                                                              </div>
-                                                            </li>
-                                                          ) : null}
-                                                        </>
-                                                      );
-                                                    })}
+                                                              </li>
+                                                            ) : null}
+                                                          </>
+                                                        );
+                                                      })}
+                                                    </div>
                                                   </div>
-                                                </div>
-                                              </ul>
-                                            </div>
+                                                </ul>
+                                              </div>
 
-                                            <div className={visitStyles.deleteFileContainer}>
-                                              <ul className="timeline">
-                                                <div
-                                                  className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
-                                                >
-                                                  <span
-                                                    className={`${visitStyles.deleted_title_name}`}
+                                              <div className={visitStyles.deleteFileContainer}>
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
                                                   >
-                                                    DELETED CODES
-                                                  </span>
-                                                  <div className="d-flex justify-content-center">
                                                     <span
-                                                      className={`${visitStyles.deleted_title_badge}`}
+                                                      className={`${visitStyles.deleted_title_name}`}
                                                     >
-                                                      {deletedHccList.length}
+                                                      DELETED CODES
                                                     </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.deleted_title_badge}`}
+                                                      >
+                                                        {deletedHccList.length}
+                                                      </span>
+                                                    </div>
                                                   </div>
-                                                </div>
-                                                <div className={visitStyles.deletedContainer}>
-                                                  <div className={visitStyles.hccStickey_head}>
-                                                    {deletedHccList.map((data, i) => (
-                                                      <li>
-                                                        <div
-                                                          className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                                        >
+                                                  <div className={visitStyles.deletedContainer}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {deletedHccList.map((data, i) => (
+                                                        <li>
                                                           <div
-                                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                                            className={`hccActiveCard ${visitStyles.hcc_card}`}
                                                           >
-                                                            <div className="media-body">
-                                                              <span className="mb-1 disease-name d-flex">
-                                                                <span className="valid-dis-name">
-                                                                  {data.diagnosisCode}
-                                                                </span>{" "}
-                                                                -{" "}
-                                                                {
-                                                                  data.actualDescription
-                                                                }
-                                                              </span>
-                                                            </div>
-                                                            {data.defaultPosition == "VALID" ?
-                                                              <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                              </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                                <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                            <div
+                                                              className={`${visitStyles.hcc_card_nameHead}`}
+                                                            >
+                                                              <div className="media-body">
+                                                                <span className="mb-1 disease-name d-flex">
+                                                                  <span className="valid-dis-name">
+                                                                    {data.diagnosisCode}
+                                                                  </span>{" "}
+                                                                  -{" "}
+                                                                  {
+                                                                    data.actualDescription
+                                                                  }
                                                                 </span>
-                                                                : data.defaultPosition == "DELETED" ?
+                                                              </div>
+                                                              {data.defaultPosition == "VALID" ?
+                                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                </span> : data.defaultPosition == "SUGGESTED" ?
 
-                                                                  <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                                  </span> : null}
-                                                            <Popover
-                                                              content={
-                                                                data.dbDescription
-                                                              }
-                                                              title={
-                                                                data.diagnosisCode
-                                                              }
-                                                              placement="bottom"
-                                                              trigger="click"
-                                                            >
-                                                              <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                                                <i>
-                                                                  {SVGICON.infoIcon}
-                                                                </i>
-                                                              </Tooltip>
-                                                            </Popover>
-                                                            <Popconfirm
-                                                              title="Choose an action"
-                                                              icon={
-                                                                <QuestionCircleOutlined
-                                                                  style={{
-                                                                    color: "blue",
-                                                                  }}
-                                                                />
-                                                              }
-                                                              okText="Move to Suggested"
-                                                              cancelText="Move to HCC"
-                                                              onCancel={
-                                                                deletedToValid
-                                                              }
-                                                              okButtonProps={{
-                                                                type: buttonClicked
-                                                                  ? "primary"
-                                                                  : "default",
-                                                              }}
-                                                              cancelButtonProps={{
-                                                                type: buttonClicked
-                                                                  ? "danger"
-                                                                  : "default",
-                                                              }}
-                                                              description={
-                                                                data.diagnosisCode
-                                                              }
-                                                              onConfirm={
-                                                                deletedToSuggested
-                                                              }
-                                                              placement="leftTop"
-                                                              onOpenChange={() =>
-                                                                onchangeValid(
-                                                                  data.diagnosisCode,
-                                                                  data
-                                                                )
-                                                              }
-                                                            >
-                                                              <div
-                                                                className={
-                                                                  visitStyles.close_icon
+                                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                  </span>
+                                                                  : data.defaultPosition == "DELETED" ?
+
+                                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                                    </span> : null}
+                                                              <Popover
+                                                                content={
+                                                                  data.dbDescription
+                                                                }
+                                                                title={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                placement="bottom"
+                                                                trigger="click"
+                                                              >
+                                                                <Tooltip title="HCC Veriosn Details" placement="bottom">
+                                                                  <i>
+                                                                    {SVGICON.infoIcon}
+                                                                  </i>
+                                                                </Tooltip>
+                                                              </Popover>
+                                                              <Popconfirm
+                                                                title="Choose an action"
+                                                                icon={
+                                                                  <QuestionCircleOutlined
+                                                                    style={{
+                                                                      color: "blue",
+                                                                    }}
+                                                                  />
+                                                                }
+                                                                okText="Move to Suggested"
+                                                                cancelText="Move to HCC"
+                                                                onCancel={
+                                                                  deletedToValid
+                                                                }
+                                                                okButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "primary"
+                                                                    : "default",
+                                                                }}
+                                                                cancelButtonProps={{
+                                                                  type: buttonClicked
+                                                                    ? "danger"
+                                                                    : "default",
+                                                                }}
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  deletedToSuggested
+                                                                }
+                                                                placement="leftTop"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
                                                                 }
                                                               >
-                                                                <FontAwesomeIcon
-                                                                  icon={faArrowsAlt}
-                                                                  style={{ size: 8, color: "#a80404" }}
-                                                                />
-                                                              </div>
-                                                            </Popconfirm>
-                                                          </div>
-                                                          <div className={`${visitStyles.hoverActiveHcc}`}>
-                                                            <div className="">
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
+                                                                >
+                                                                  <FontAwesomeIcon
+                                                                    icon={faArrowsAlt}
+                                                                    style={{ size: 8, color: "#a80404" }}
+                                                                  />
+                                                                </div>
+                                                              </Popconfirm>
+                                                            </div>
+                                                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                                                              <div className="">
 
-                                                              {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                {getEncounterDateBackground(data.encounterDateSplit)}
 
-                                                              {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
+                                                                {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
                                                       <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
                                                       <FontAwesomeIcon
                                                           icon={faSearch}
@@ -8219,19 +8297,19 @@ const Details = ({ }) => {
                                                         HPI Test Urlplan
                                                       </Badge>
                                                       </Popover> */}
-                                                            </div>
-                                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                              {getCaptureSectionBackground(data.capturedSections)}
+                                                              </div>
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                {getCaptureSectionBackground(data.capturedSections)}
+                                                              </div>
                                                             </div>
                                                           </div>
-                                                        </div>
-                                                      </li>
-                                                    ))}
+                                                        </li>
+                                                      ))}
+                                                    </div>
                                                   </div>
-                                                </div>
-                                              </ul>
-                                            </div>
-                                          </div>:null}
+                                                </ul>
+                                              </div>
+                                            </div> : null}
 
                                         </div>
                                       </Tab.Pane>
@@ -11017,7 +11095,7 @@ const Details = ({ }) => {
                                       <Tab.Pane id="my-posts" eventKey="file">
                                         <div className="my-post-content pt-3">
                                           <div className="radiology-select-dos">
-                                          {radiologyFileDetailCheck ?
+                                            {radiologyFileDetailCheck ?
                                               <Select
                                                 onChange={(e) =>
                                                   dosOnChangeRadiologyFile(e)
@@ -11030,7 +11108,7 @@ const Details = ({ }) => {
                                                   radiologyFileDateDefaulteSelect
                                                 }
                                                 isSearchable={false}
-                                              />:<div></div>}
+                                              /> : <div></div>}
                                             <button
                                               onClick={() =>
                                                 openNewTabDownloadPdfradiology()
