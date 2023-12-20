@@ -7745,7 +7745,7 @@ const Details = ({ }) => {
                                               <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                                                 <div
                                                   style={{
-                                                    height: "80vh",
+                                                    height: "71vh",
                                                     maxWidth: "1000px",
                                                     marginLeft: "auto",
                                                     marginRight: "auto",
@@ -7788,7 +7788,7 @@ const Details = ({ }) => {
                                                     onSubmit={handleFormSubmit}
                                                   >
                                                     <div className="row">
-                                                      <div className="col-xl-12 mb-3">
+                                                      <div className="col-xl-12">
                                                         <Form.Label>
                                                           Code <span className="text-danger">*</span>{" "}
                                                         </Form.Label>
@@ -7807,7 +7807,7 @@ const Details = ({ }) => {
                                                           </span> : null}
 
                                                       </div>
-                                                      <div className="col-xl-12 mb-3">
+                                                      <div className="col-xl-12">
                                                         <Form.Label>
                                                           Provider name
                                                         </Form.Label>
@@ -7818,7 +7818,7 @@ const Details = ({ }) => {
                                                           onChange={handleChange}
                                                         />
                                                       </div>
-                                                      <div className="col-xl-12 mb-3">
+                                                      <div className="col-xl-12">
                                                         <Form.Label>
                                                           Section <span className="text-danger">*</span>{" "}
                                                         </Form.Label>
@@ -7830,7 +7830,7 @@ const Details = ({ }) => {
                                                           onChange={handleChange}
                                                         />
                                                       </div>
-                                                      <div className={`col-xl-12 mb-3`} >
+                                                      <div className={`col-xl-12`} >
                                                         <Form.Label>
                                                           Encoded date <span className="text-danger">*</span>{" "}
                                                         </Form.Label>
