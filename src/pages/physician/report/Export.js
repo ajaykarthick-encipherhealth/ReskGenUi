@@ -22,6 +22,8 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   const [display, setDisplay] = useState(false);
   const [userList, setUsersList] = useState([]);
   const [selectedList, setSelectedList] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -90,8 +92,8 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   ];
   const handleSelectedOption = (value) => {
     setSelectedList(value);
-
     setSelectedUser((prevUsers) => [{ ...prevUsers, user: value }]);
+    setOpen(false)
   };
 
   const handleSelectedRole = (value) => {
@@ -136,12 +138,14 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
       userAndAccess: userAndAccess,
     };
     dispatch(getExportDetails(data));
+    form.resetFields();
+    setUsersList([])
   };
 
   const deleteUser = (user) => {
     setUsersList(userList?.filter((item) => item.user != user));
   };
-
+  
   return (
     <Modal
       title="Export "
@@ -150,7 +154,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
       footer={false}
       className={styles.modelCon}
     >
-      <Form name="basic" onFinish={onFinish}>
+      <Form form={form} name="basic" onFinish={onFinish}>
         <Form.Item
           label="Report Name"
           name="ReportName"
@@ -238,6 +242,8 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
                   onSearch={handleSearch}
                   className={styles.selectDiv}
                   value={selectedList}
+                  open={open}
+                  onDropdownVisibleChange={(visible) => setOpen(visible)}
                 >
                   {filteredOptions?.map((data) => (
                     <Option key={data.value} value={data.value}>
