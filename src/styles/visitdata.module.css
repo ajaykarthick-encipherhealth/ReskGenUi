@@ -1363,3 +1363,11 @@ margin-left: 20px;
   height: 42px !important;
   margin-top: 29px;
 } */
+
+.fileFormContianer{
+  overflow-x: hidden;
+  padding: 10px;
+  border: 2px solid #00000024;
+  /* height: 70vh; */
+  border-radius: 10px;
+}
