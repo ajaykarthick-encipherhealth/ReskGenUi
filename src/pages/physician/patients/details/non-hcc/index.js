@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Tab, Nav, Badge } from "react-bootstrap";
-import NavBar from "../../../../jsx/layouts/nav/Header";
+import NavBar from "../../../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
-import axios from "../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../utility/enpoints";
+import axios from "../../../../../utility/axiosConfig";
+import ENDPOINTS from "../../../../../utility/enpoints";
 // import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
-import visitStyles from "../../../../styles/visitdata.module.css";
+import visitStyles from "../../../../../styles/visitdata.module.css";
 import { InputText } from "primereact/inputtext";
 import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -15,7 +15,6 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
-import TableStyle from "../../../../components/table/table.module.css";
 import { Paginator } from "primereact/paginator";
 import {
   highlightPlugin,
@@ -51,7 +50,7 @@ import {
 } from '@ant-design/icons';
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
-import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
+import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import Select from "react-select";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
@@ -72,29 +71,17 @@ import Link from "next/link";
 import { notification } from "antd";
 // import { C } from "@fullcalendar/core/internal-common";
 
-import { actions as patientActions } from "../../../../stores/patients";
+import { actions as patientActions } from "../../../../../stores/patients";
 import { connect } from "react-redux";
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 
 import { Avatar, Tooltip } from 'antd';
-// import Spinner from "../../../../components/spinner/spinner";
-import Footer from "../../../../jsx/layouts/Footer";
-
-import Spinner from "../../../../components/spinner/spinner";
-
-import Hcc from "./hcc/index";
-import NonHcc from "./non-hcc/index";
-import Radiology from "./radiology/index";
-import Lab from "./lab/index";
 
 
 
 
-
-
-
-const Details = ({ }) => {
+const NonHcc = ({ }) => {
   const navigate = useRouter();
   let searchKeywords = [];
   // const searchPluginInstance = searchPlugin({
@@ -5047,358 +5034,1997 @@ const Details = ({ }) => {
 
 
 
+
+
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
-        <NavBar />
-        <div className={visitStyles.headerFixed}>
-
-
-          <div class="content-body">
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <div
-                className={`container-fluid ${visitStyles.container_fluid_patient}`}
-              >
-                <div className="row patient-file-container">
-                  <div className="col-xl-12">
-                    <div className="row">
-                      <div className="col-xl-1 col-sm-12">
-                        <Button onClick={backToPatientData} className={`ms-2 ${visitStyles.backArrowBtn}`}>
-                          <FontAwesomeIcon
-                            icon={
-                              faArrowLeft
-                            }
-                            style={{
-                              color:
-                                "rgb(38 50 107)",
-                            }}
-                          />
-                        </Button>
-
-                      </div>
-                      <div className="col-xl-7 col-sm-12">
-                        <div className={`${visitStyles.patient_info_details}`}>
-                          <div className="card-body">
-                            <div className="row">
-                              <div className="col-xl-3 col-sm-12">
-                                <FontAwesomeIcon icon={faIdCardClip} />
-                                <label>Patient Id</label>
-                                <h6 className="ageDtails">
-                                  {patientDocumentResult.patientId}
-                                </h6>
-                              </div>
-                              <div className="col-xl-3 col-sm-12">
-                                <FontAwesomeIcon icon={faUserCircle} />
-
-                                <label>Name</label>
-                                <h6 className="ageDtails">
-                                  {patientDocumentResult.patientName}
-                                </h6>
-                              </div>
-                              <div className="col-xl-2 col-sm-12">
-                                <FontAwesomeIcon icon={faCalendarAlt} />
-                                <label>Age</label>
-                                <h6 className="ageDtails">
-                                  {patientDocumentResult.age}
-
-                                </h6>
-                              </div>
-                              <div className="col-xl-2 col-sm-12">
-                                <FontAwesomeIcon icon={faVenusMars} />
-                                <label>Gender</label>
-                                <h6 className="ageDtails">
-                                  {patientDocumentResult.gender}
-                                </h6>
-                              </div>
-                              <div className="col-xl-2 col-sm-12">
-                                <i className={visitStyles.dob_icon}>{SVGICON.DatebirthIcon}</i> <label>DOB</label>
-                                <h6 className="ageDtails">
-                                  {patientDocumentResult.dob}
-                                </h6>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-1 col-sm-12">
-                        <div className={visitStyles.priorityStatus}>
-                          {patienIdDetails.priority == "URGENT" ?
-
-                            <div className={visitStyles.priorityStatusIcon}>
-                              <i>{SVGICON.alert}</i>{" "}
-                              <span style={{ fontSize: "13px", fontWeight: 500, color: 'red' }}>Urgent</span>{" "}
-                            </div>
-                            : patienIdDetails.priority == "HIGH" ?
-                              <div className={visitStyles.priorityStatusIcon}>
-                                <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-                                <span style={{ fontSize: "13px", fontWeight: 500, color: '#cf940a' }}>High</span>{" "}
-                              </div> : patienIdDetails.priority == "NORMAL" ?
-                                <div className={visitStyles.priorityStatusIcon}>
-                                  <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-                                  <span style={{ fontSize: "13px", fontWeight: 500, color: "#4466ff " }}>Normal</span>{" "}
-                                </div> :
-                                <div className={visitStyles.priorityStatusIcon}>
-                                  <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-                                  <span style={{ fontSize: "13px", fontWeight: 500, color: "#87909e" }}>Low</span>{" "}
-                                </div>}
-
-                          <div className={`${visitStyles.hccCountHeader} `}>
-                            <label>HCC</label>
-
-                            <h6 className="ageDtails">
-                              {newValidDiseaseList.length}
-                            </h6>
-                          </div>
-
-                        </div>
-                      </div>
-                      <div className="col-xl-1 col-sm-12 d-flex">
-                        <div className={`${visitStyles.rafscoreheader} `}>
-                          <label>Score</label>
-                          {patientDetails.rafScore != null ?
-                            <h6 className="ageDtails">
-                              {(patientDetails.rafScore?.score).toFixed(3)}
-
-                            </h6> : <h6 className="ageDtails">
-                              0.00
-
-                            </h6>}
-                        </div>
-                        <span className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}>
-                          {/* {flagFirstData.flag} */}
-                          {flagFirstData.flag == "PATIENT_NAME_MISSED" ?
-                            <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
-                              <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmallLarge}</i>
-                            </Tooltip> :
-                            flagFirstData.flag == "PATIENT_DOB_MISSED" ?
-                              <Tooltip title="PATIENT_DOB_MISSED" placement="bottom">
-                                <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmallLarge}</i>
-                              </Tooltip> :
-                              flagFirstData.flag == "MRN_ID_MISMATCH" ?
-                                <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
-                                  <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmallLarge}</i>
-                                </Tooltip> :
-                                flagFirstData.flag == "PROVIDER_SIGN_MISSED" ?
-                                  <Tooltip title="PROVIDER_SIGN_MISSED" placement="bottom">
-                                    <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmallLarge}</i>
-                                  </Tooltip> :
-                                  flagFirstData.flag == "PROVIDER_SIGNATURE_MISSED" ?
-                                    <Tooltip title="PROVIDER_SIGNATURE_MISSED" placement="bottom">
-                                      <i className={visitStyles.signature_missed}>{SVGICON.emptyFlagSmallLarge}</i>
-                                    </Tooltip> :
-                                    flagFirstData.flag == "PROVIDER_CREDENTIAL_MISSED" ?
-                                      <Tooltip title="PROVIDER_CREDENTIAL_MISSED" placement="bottom">
-                                        <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmallLarge}</i>
-                                      </Tooltip> :
-                                      flagFirstData.flag == "PROVIDER_SIGN_STATUS_PENDING" ?
-                                        <Tooltip title="PROVIDER_SIGN_STATUS_PENDING" placement="bottom">
-                                          <i className={visitStyles.sign_status}>{SVGICON.emptemptyFlagSmallLargeyFlag}</i>
-                                        </Tooltip> :
-                                        flagFirstData.flag == "NO_HCC_FOUND" ?
-                                          <Tooltip title="NO_HCC_FOUND" placement="bottom">
-                                            <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmallLarge}</i>
-                                          </Tooltip> :
-                                          flagFirstData.flag == "NO_VALID_DOCUMENT_FOUND" ?
-                                            <Tooltip title="NO_VALID_DOCUMENT_FOUND" placement="bottom">
-                                              <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmallLarge}</i>
-                                            </Tooltip> :
-                                            flagFirstData.flag == "PATIENT_DISEASED" ?
-                                              <Tooltip title="PATIENT_DISEASED" placement="bottom">
-                                                <i className={visitStyles.patient_diseased}>{SVGICON.emptyFlagSmallLarge}</i>
-                                              </Tooltip> :
-
-
-
-
-                                              null}
-
-
-                        </span>
-                      </div>
-                      <div className="col-xl-1 col-sm-12">
-                        <div className="card-body">
-                          <div className="row">
-                            <div className="col-xl-12 col-sm-12">
-                              {!isLoadingDos ? (
-                                <>
-                                  {activeTab == 3 ? (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={dosYearRadiology}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={dosYearDefalutSelectRadiology}
-                                      isSearchable={false}
-
-                                    />
-                                  ) : activeTab == 4 ? (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={labFileDosList}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={labFileDosListDefaultSelect}
-                                      isSearchable={false}
-                                    />
-                                  ) : (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={dosYear}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={dosYearDefalutSelect}
-                                      isSearchable={false}
-                                    />
-                                  )}
-                                </>
-                              ) : null}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-1 col-sm-12">
-                        <div className={`${visitStyles.actionbtnContainer}`}>
-                          {patienIdDetails.processedStatus == "COMPLETED" ?
-
-                            <Dropdown.Button
-                              type="primary"
-                              className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
-                              icon={<DownOutlined />}
-                              overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
-                            >
-                              COMPLETED
-                            </Dropdown.Button>
-                            : patienIdDetails.processedStatus == "DECLINED" ?
-                              <div className={`col-xl-12`}
+    
+        <div className={visitStyles.visitdata_tab_body}>
+                              <div
+                                className={`profile-tab ${visitStyles.visitdata_header_card2}`}
                               >
-                                <Dropdown.Button
-                                  type="primary"
-                                  className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
-                                  icon={<DownOutlined />}
-                                  overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
-                                >
-                                  DECLINED
-                                </Dropdown.Button>
+                                <div className="custom-tab-1">
+                                  <Tab.Container defaultActiveKey={activeTabHead}>
+                                    <Nav as="ul" className="nav nav-tabs">
 
-                              </div> :
-                              patienIdDetails.processedStatus == "HOLD" ?
-                                <Dropdown.Button
-                                  type="primary"
-                                  className={`holdBtnHcc ${visitStyles.holdBtnHcc}`}
-                                  icon={<DownOutlined />}
-                                  overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
-                                >
-                                  HOLD
-                                </Dropdown.Button>
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link
+                                          to="#my-posts"
+                                          eventKey="validDiseases"
+                                          className={visitStyles.navColor}
+                                          activeClassName={visitStyles.activeLink}
+                                        >
+                                          Visit Data
+                                        </Nav.Link>
+                                      </Nav.Item>
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link
+                                          to="#my-posts"
+                                          eventKey="comboDiseases"
+                                          className={visitStyles.navColor}
+                                          activeClassName={visitStyles.activeLink}
+                                        >
+                                          Combination Codes
+                                        </Nav.Link>
+                                      </Nav.Item>
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link
+                                          to="#my-posts"
+                                          eventKey="meatCriteria"
+                                          className={visitStyles.navColor}
+                                          activeClassName={visitStyles.activeLink}
+                                        >
+                                          MEAT Criteria
+                                        </Nav.Link>
+                                      </Nav.Item>
+                                      <Nav.Item as="li" className="nav-item">
+                                        <Nav.Link to="#my-posts" className={visitStyles.navColor}
+                                          activeClassName={visitStyles.activeLink} eventKey="file">
+                                          File
+                                        </Nav.Link>
+                                      </Nav.Item>
+                                    </Nav>
+                                    <Tab.Content>
+                                      <Tab.Pane
+                                        id="my-posts"
+                                        eventKey="validDiseases"
+                                      >
+                                        <div className="my-post-content pt-3">
+                                          <div className="widget-media   ps--active-y">
+                                            <div className="row">
+                                              <div className="col-xl-4">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.hcc_title_name}`}
+                                                    >
+                                                      NON-HCC
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.hcc_title_badge}`}
+                                                      >
+                                                        {
+                                                          newInValidDiseaseList.length
+                                                        }
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={visitStyles.container}>
+                                                    {newInValidDiseaseList.map(
+                                                      (data, i) => (
+                                                        <li>
+                                                          <div
+                                                            className={`${visitStyles.hcc_card}`}
+                                                          >
+                                                            <div
+                                                              className={`${visitStyles.hcc_card_nameHead}`}
+                                                            >
+                                                              <div
+                                                                className="media-body"
+                                                                onClick={() =>
+                                                                  handleOpenModalCombinationCode(
+                                                                    data.diagnosisCode,
+                                                                    data.actualDescription,
+                                                                    "valid2",
+                                                                    "nonHcc"
+                                                                  )
+                                                                }
+                                                              >
+                                                                <span className="mb-1 disease-name d-flex">
+                                                                  <span className="valid-dis-name">
+                                                                    {
+                                                                      data.diagnosisCode
+                                                                    }
+                                                                  </span>{" "}
+                                                                  -{" "}
+                                                                  {
+                                                                    data.actualDescription
+                                                                  }
+                                                                </span>
+                                                              </div>
+
+                                                              <Popconfirm
+                                                                title="You want move to valid?"
+                                                                description={
+                                                                  data.diagnosisCode
+                                                                }
+                                                                onConfirm={
+                                                                  confirmInvalid
+                                                                }
+                                                                placement="leftTop"
+                                                                okText="Yes"
+                                                                cancelText="No"
+                                                                onOpenChange={() =>
+                                                                  onchangeValid(
+                                                                    data.diagnosisCode,
+                                                                    data
+                                                                  )
+                                                                }
+                                                              >
+                                                                <div
+                                                                  className={
+                                                                    visitStyles.close_icon
+                                                                  }
+                                                                >
+                                                                  <FontAwesomeIcon
+                                                                    icon={faArrowsAlt}
+                                                                    style={{ size: 8, color: "#a80404" }}
+                                                                  />
+                                                                </div>
+                                                              </Popconfirm>
+                                                            </div>
+                                                            <div
+                                                              className={`${visitStyles.hoverActiveHcc}`}
+                                                            >
+                                                              {getEncounterDateBackground(data.encounterDateSplit)}
+                                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                {getCaptureSectionBackground(data.capturedSections)}
+                                                              </div>
+
+                                                            </div>
+
+                                                          </div>
+                                                        </li>
+                                                      )
+                                                    )}
+                                                  </div>
+                                                </ul>
+                                              </div>
+
+                                              <div className="col-xl-4">
+                                                <ul className="timeline">
+                                                  <div
+                                                    className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                                  >
+                                                    <span
+                                                      className={`${visitStyles.suggested_title_name}`}
+                                                    >
+                                                      SUGGESTED CODES
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <span
+                                                        className={`${visitStyles.suggested_title_badge}`}
+                                                      >
+                                                        {suggestedNonHccList.length}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className={visitStyles.container}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {suggestedNonHccList?.map((data) => {
+                                                        return (
+                                                          <>
+                                                            {data.isHccValid == false || data.isHccValid == null ? (
+                                                              <li>
+                                                                <div
+                                                                  className={`${visitStyles.hcc_card}`}
+                                                                >
+                                                                  <div
+                                                                    className={`${visitStyles.hcc_card_nameHead}`}
+                                                                  >
+                                                                    <div
+                                                                      className="media-body"
+                                                                      onClick={() =>
+                                                                        handleOpenModalCombinationCode(
+                                                                          data.diagnosisCode,
+                                                                          data.actualDescription,
+                                                                          "valid2"
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      <span className="mb-1 disease-name d-flex">
+                                                                        <span className="valid-dis-name">
+                                                                          {
+                                                                            data.diagnosisCode
+                                                                          }
+                                                                        </span>{" "}
+                                                                        -{" "}
+                                                                        {
+                                                                          data.actualDescription
+                                                                        }
+                                                                      </span>
+                                                                    </div>
 
 
-                                :
-                                <div className={`col-xl-12`}
-                                >
+                                                                    <Popconfirm
+                                                                      title="Choose an action"
+                                                                      icon={
+                                                                        <QuestionCircleOutlined
+                                                                          style={{
+                                                                            color:
+                                                                              "blue",
+                                                                          }}
+                                                                        />
+                                                                      }
+                                                                      okText="Move to Deleted"
+                                                                      cancelText="Move to HCC"
+                                                                      onCancel={
+                                                                        suggestedToValid
+                                                                      }
+                                                                      okButtonProps={{
+                                                                        type: buttonClicked
+                                                                          ? "primary"
+                                                                          : "default",
+                                                                      }}
+                                                                      cancelButtonProps={{
+                                                                        type: buttonClicked
+                                                                          ? "danger"
+                                                                          : "default",
+                                                                      }}
+                                                                      description={
+                                                                        data.diagnosisCode
+                                                                      }
+                                                                      onConfirm={
+                                                                        suggestedToDeleted
+                                                                      }
+                                                                      placement="leftTop"
+                                                                      onOpenChange={() =>
+                                                                        onchangeValid(
+                                                                          data.diagnosisCode,
+                                                                          data
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      <div
+                                                                        className={
+                                                                          visitStyles.close_icon
+                                                                        }
+                                                                      >
+                                                                        <FontAwesomeIcon
+                                                                          icon={faArrowsAlt}
+                                                                          style={{ size: 8, color: "#a80404" }}
+                                                                        />
+                                                                      </div>
+                                                                    </Popconfirm>
+                                                                  </div>
+                                                                  <div className="">
 
-                                  <Dropdown.Button
-                                    type="primary"
-                                    className={`pendingBtn ${visitStyles.pendingBtn}`}
-                                    icon={<DownOutlined />}
-                                    overlay={activeTab == 3 ? actionItems2 : activeTab == 4 ? actionItems3 : actionItems}
-                                  >
-                                    PENDING
-                                  </Dropdown.Button>
+
+                                                                    {getEncounterDateBackground(data.encounterDateSplit)}
+                                                                    {data.getPlace ==
+                                                                      "Lab" ? (
+                                                                      <Tooltip title="LAB">
+                                                                        <span
+                                                                          className={` mt-2 ${visitStyles.labStatus}`}
+                                                                          bg={`  mt-2 bg-bg-seven `}
+                                                                        >
+                                                                          Lab
+                                                                        </span>
+                                                                      </Tooltip>
+                                                                    ) : data.getPlace ==
+                                                                      "Radio" ? (
+                                                                      <Tooltip title="RADIOLOGY">
+                                                                        <span
+                                                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                                          bg={`  mt-2 bg-bg-eight `}
+                                                                        >
+                                                                          Radiology
+                                                                        </span>
+                                                                      </Tooltip>
+                                                                    ) : (
+                                                                      <Tooltip title="HCC">
+                                                                        <span
+                                                                          className={` mt-2 ${visitStyles.hccStatus}`}
+                                                                          bg={` mt-2 bg-bg-five `}
+                                                                        >
+                                                                          HCC
+                                                                        </span>
+                                                                      </Tooltip>
+                                                                    )}
+                                                                    <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                                                      {getCaptureSectionBackground(data.capturedSections)}
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </li>
+                                                            ) : null}
+                                                          </>
+                                                        );
+                                                      })}
+                                                    </div>
+                                                  </div>
+                                                </ul>
+                                              </div>                                          
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </Tab.Pane>
+                                      <Tab.Pane id="my-posts" eventKey="nonhcc">
+                                        <div className="my-post-content pt-3">
+                                          <div className="widget-media   ps--active-y">
+                                            <div className="row">
+                                              <div className="col-xl-6">
+                                                <ul className="timeline">
+                                                  <div className="invalid-text d-flex justify-content-sm-between">
+                                                    <span
+                                                      className={`dang d-block`}
+                                                    >
+                                                      {" "}
+                                                      NON-HCC{" "}
+                                                      <Badge
+                                                        as="a"
+                                                        href=""
+                                                        bg="badge-circle invalid-bange"
+                                                      >
+                                                        {
+                                                          newInValidDiseaseList.length
+                                                        }
+                                                      </Badge>
+                                                    </span>
+                                                    <div className="d-flex justify-content-center">
+                                                      <button
+                                                        onClick={() =>
+                                                          addValidDiseases()
+                                                        }
+                                                        className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
+                                                      >
+                                                        <FontAwesomeIcon
+                                                          icon={faAdd}
+                                                          fontSize={11}
+                                                        />
+                                                      </button>
+                                                    </div>
+                                                  </div>
+                                                  {newInValidDiseaseList.map(
+                                                    (data, i) => (
+                                                      <li>
+                                                        <div className="timeline-panel invalid-disease">
+                                                          <div className="media-body">
+                                                            <span className="mb-1 disease-name d-flex">
+                                                              <span className="valid-dis-name">
+                                                                {data.diagnosisCode}
+                                                              </span>{" "}
+                                                              -{" "}
+                                                              {
+                                                                data.actualDescription
+                                                              }
+                                                            </span>
+                                                          </div>
+                                                          <Popconfirm
+                                                            title="You want move to valid?"
+                                                            description={
+                                                              data.diagnosisCode
+                                                            }
+                                                            onConfirm={
+                                                              confirmInvalid
+                                                            }
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeValid(
+                                                                data.diagnosisCode
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faCheck}
+                                                                style={{
+                                                                  color: "orange",
+                                                                }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
+                                                        </div>
+                                                      </li>
+                                                    )
+                                                  )}
+                                                </ul>
+                                              </div>
+                                              {validDiseasesList.length == 0 ? (
+                                                <div className="card box-shadow-none">
+                                                  <div className="card combo-card">
+                                                    <div className="col-xl-12">
+                                                      <span className="no-patient-data">
+                                                        NO DATA
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              ) : null}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </Tab.Pane>
+                                      <Tab.Pane
+                                        id="my-posts"
+                                        eventKey="comboDiseases"
+                                      >
+                                        <div className={`${visitStyles.comboContainer}`}>
+                                          <div className={`row ${visitStyles.comboContainer2}`}>
+                                            <div className="col-xl-6">
+                                              <div className={`${visitStyles.comboTitle}`}>
+                                                <span>VALID CODES </span>
+                                              </div>
+                                              <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
+                                                <div
+                                                  className={
+                                                    visitStyles.combo_head_card
+                                                  }
+                                                >
+                                                  <div className="row">
+                                                    <div className="col-xl-3">
+                                                      <label>Combo Codes</label>
+                                                    </div>
+                                                    <div className="col-xl-3">
+                                                      <label>Additional Codes</label>
+                                                    </div>
+                                                    <div className="col-xl-5">
+                                                      <label>Description</label>
+                                                    </div>
+                                                    <div className="col-xl-1">
+                                                      <div className="d-flex justify-content-center">
+                                                        <button
+                                                          onClick={() =>
+                                                            addValidDiseases()
+                                                          }
+                                                          className={
+                                                            visitStyles.combo_add_btn
+                                                          }
+                                                        >
+                                                          <FontAwesomeIcon
+                                                            icon={
+                                                              faPlus
+                                                            }
+                                                            style={{
+                                                              color:
+                                                                "#fff",
+                                                              size: 12
+                                                            }}
+                                                          />
+                                                        </button>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                {comboDiseaseCodesListNonHcc.length != 0 ?
+                                                  <div className={visitStyles.container}>
+                                                    <div className={visitStyles.hccStickey_head}>
+                                                      {comboDiseaseCodesListNonHcc?.map(
+                                                        (item) => {
+                                                          return (
+                                                            <div
+                                                              className={
+                                                                visitStyles.combo_details_card
+                                                              }
+                                                            >
+                                                              <div className="row">
+                                                                <div className="col-xl-3">
+                                                                  <span className="font-bold">
+                                                                    {
+                                                                      item.diagnosisCodeCombo
+                                                                    }
+                                                                  </span>
+                                                                </div>
+                                                                <div className="col-xl-3">
+                                                                  <span className="font-bold">
+                                                                    {item.addOnCode}
+                                                                  </span>
+                                                                </div>
+                                                                <div
+                                                                  className="col-xl-5 cr-pointer"
+                                                                  onClick={() =>
+                                                                    handleOpenModalCombinationCode(
+                                                                      item.diagnosisCodeCombo,
+                                                                      item.diseaseName
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  <span>
+                                                                    {item.diseaseName}
+                                                                  </span>
+                                                                </div>
+                                                                <div className="col-xl-1 comboclose">
+                                                                  <Popconfirm
+                                                                    title="You want move to Invalid?"
+                                                                    description={
+                                                                      item.diseaseName
+                                                                    }
+                                                                    onConfirm={
+                                                                      confirmComboInvalid
+                                                                    }
+                                                                    placement="leftTop"
+                                                                    okText="Yes"
+                                                                    cancelText="No"
+                                                                    onOpenChange={() =>
+                                                                      onchangeCombo(
+                                                                        item.diseaseName,
+                                                                        item.addOnCode
+                                                                      )
+                                                                    }
+                                                                  >
+                                                                    <div
+                                                                      className={
+                                                                        visitStyles.close_icon
+                                                                      }
+                                                                    >
+                                                                      <FontAwesomeIcon
+                                                                        icon={faArrowsAlt}
+                                                                        style={{ size: 8, color: "#a80404" }}
+                                                                      />
+                                                                    </div>
+                                                                  </Popconfirm>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          );
+                                                        }
+                                                      )}
+                                                    </div>
+                                                  </div> : null}
 
 
-                                </div>}
-                        </div>
-                      </div>
-                      <div className={isSideNavShow ?
-                        `${visitStyles.visitDataMain}`
-                        : `${visitStyles.visitDataMainClose}`
-                      }>
-                        <div className={`${visitStyles.firstContainer}`}>
-                          <div className={isSideNavShow ?
-                            `${visitStyles.sideTab}`
-                            : `${visitStyles.sideTabClose}`
-                          }>
+                                                {comboDiseaseCodesListNonHcc.length == 0 ? (
+                                                  // <div className="card combo-card">
+                                                  //   <div className="col-xl-12">
+                                                  <div>
+                                                    <span className="no-patient-data">
+                                                      No Combination Codes
+                                                    </span>
+                                                  </div>
+                                                  //   </div>
+                                                  // </div>
+                                                ) : null}
+                                              </div>
+                                            </div>
+
+                                            <div className="col-xl-6">
+                                              <div className={`${visitStyles.comboTitle}`}>
+                                                <span>DELETED COMBO CODES </span>
+                                              </div>
+                                              <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
+                                                <div
+                                                  className={
+                                                    visitStyles.combo_head_card
+                                                  }
+                                                >
+                                                  <div className="row">
+                                                    <div className="col-xl-3">
+                                                      <label>Combo Codes</label>
+                                                    </div>
+                                                    <div className="col-xl-3">
+                                                      <label>Additional Codes</label>
+                                                    </div>
+                                                    <div className="col-xl-5">
+                                                      <label>Description</label>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                {invalidComboDiseaseCodesList.length !=
+                                                  0 ? (
+                                                  <>
+                                                    <div className={visitStyles.container}>
+                                                      <div className={visitStyles.hccStickey_head}>
+                                                        {invalidComboDiseaseCodesList?.map(
+                                                          (item) => {
+                                                            return (
+                                                              <div
+                                                                className={
+                                                                  visitStyles.combo_details_card
+                                                                }
+                                                              >
+                                                                <div className="row">
+                                                                  <div className="col-xl-3">
+                                                                    <span className="font-bold">
+                                                                      {
+                                                                        item.diagnosisCodeCombo
+                                                                      }
+                                                                    </span>
+                                                                  </div>
+                                                                  <div className="col-xl-3">
+                                                                    <span className="font-bold">
+                                                                      {item.addOnCode}
+                                                                    </span>
+                                                                  </div>
+                                                                  <div
+                                                                    className="col-xl-5 cr-pointer"
+                                                                    onClick={() =>
+                                                                      handleOpenModalCombinationCode(
+                                                                        item.diagnosisCodeCombo,
+                                                                        item.diseaseName
+                                                                      )
+                                                                    }
+                                                                  >
+                                                                    <span>
+                                                                      {item.diseaseName}
+                                                                    </span>
+                                                                  </div>
+                                                                  <div className="col-xl-1 comboclose">
+                                                                    <Popconfirm
+                                                                      title="You want move to Valid?"
+                                                                      description={
+                                                                        item.diseaseName
+                                                                      }
+                                                                      onConfirm={
+                                                                        confirmComboValid
+                                                                      }
+                                                                      placement="leftTop"
+                                                                      okText="Yes"
+                                                                      cancelText="No"
+                                                                      onOpenChange={() =>
+                                                                        onchangeCombo(
+                                                                          item.diseaseName,
+                                                                          item.addOnCode
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      <div
+                                                                        className={
+                                                                          visitStyles.tick_icon
+                                                                        }
+                                                                      >
+                                                                        {SVGICON.tickIcon}
+                                                                      </div>
+                                                                    </Popconfirm>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            );
+                                                          }
+                                                        )}
+                                                      </div>
+                                                    </div>
+                                                  </>
+                                                ) : null}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                      </Tab.Pane>
+                                      <Tab.Pane
+                                        id="my-posts"
+                                        eventKey="meatCriteria"
+                                      >
+                                        <div className="my-post-content pt-3">
+                                          <div
+                                            className={visitStyles.meat_head_card}
+                                          >
+                                            <div className="row">
+                                              <div className="col-xl-1">
+                                                <label>Codes</label>
+                                              </div>
+                                              <div className="col-xl-2">
+                                                <label>Description</label>
+                                              </div>
+                                              <div className="col-xl-2">
+                                                <label>Monitor</label>
+                                              </div>
+                                              <div className="col-xl-2">
+                                                <label>Evaluation</label>
+                                              </div>
+                                              <div className="col-xl-2">
+                                                <label>Assessment</label>
+                                              </div>
+                                              <div className="col-xl-2">
+                                                <label>Treatment</label>
+                                              </div>
+                                              <div className="col-xl-1">
+                                                <label></label>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          {meatCriteriaListNonHcc.length != 0 ?
+                                            <div className={visitStyles.container}>
+                                              <div className={visitStyles.hccStickey_head}>
+                                                {meatCriteriaListNonHcc?.map((item) => {
+                                                  return (
+                                                    <div
+                                                      className={
+                                                        item.isMeatCriteriaPresent ===
+                                                          true
+                                                          ? "card meat-card"
+                                                          : "card meat-card-false"
+                                                      }
+                                                    >
+                                                      <div className="row">
+                                                        <div className="col-xl-1">
+                                                          <span className="font-bold">
+                                                            {item.diagnosisCode}
+                                                          </span>
+                                                        </div>
+                                                        <div className="col-xl-2">
+                                                          <Popover
+                                                            placement="topLeft"
+                                                            title="Description"
+                                                            content={item.diseaseName}
+                                                          >
+                                                            <span className="meat-name-details">
+                                                              {item.diseaseName}
+                                                            </span>
+                                                          </Popover>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.monitor != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Monitor"
+                                                              content={item.monitor}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.monitor}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
+                                                            </span>
+                                                          )}
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.monitorCapturedFromHeader,
+                                                                item.monitor
+                                                              )
+                                                            }
+                                                          >
+                                                            {
+                                                              item.monitorCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.evaluate != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Evaluation"
+                                                              content={item.evaluate}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.evaluate}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
+                                                            </span>
+                                                          )}
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.evaluateCapturedFromHeader,
+                                                                item.evaluate
+                                                              )
+                                                            }
+                                                          >
+                                                            {
+                                                              item.evaluateCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.assessment != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Assessment"
+                                                              content={item.assessment}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.assessment}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
+                                                            </span>
+                                                          )}
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.assessmentCapturedFromHeader,
+                                                                item.assessment
+                                                              )
+                                                            }
+                                                          >
+                                                            {
+                                                              item.assessmentCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-2 d-grid">
+                                                          {item.treatment != "" ? (
+                                                            <Popover
+                                                              placement="topLeft"
+                                                              title="Treatment"
+                                                              content={item.treatment}
+                                                            >
+                                                              <span className="meat-name-details">
+                                                                {item.treatment}
+                                                              </span>
+                                                            </Popover>
+                                                          ) : (
+                                                            <span className="meat-name-details text-center font-bold">
+                                                              -
+                                                            </span>
+                                                          )}
+
+                                                          <Badge
+                                                            className="badge-meat cr-pointer badge-circle mt-2"
+                                                            bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
+                                                            onClick={() =>
+                                                              handleOpenModal(
+                                                                item.treatmentCapturedFromHeader,
+                                                                item.treatment
+                                                              )
+                                                            }
+                                                          >
+                                                            {
+                                                              item.treatmentCapturedFromHeader
+                                                            }
+                                                          </Badge>
+                                                        </div>
+                                                        <div className="col-xl-1 meatclose">
+                                                          <Popconfirm
+                                                            title="You want move to Invalid?"
+                                                            description={item.diseaseName}
+                                                            onConfirm={confirmInvalidMeat}
+                                                            placement="leftTop"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onOpenChange={() =>
+                                                              onchangeMeat(
+                                                                item.diseaseName,
+                                                                item.diagnosisCode
+                                                              )
+                                                            }
+                                                          >
+                                                            <div className="icon-box  bg-danger-light me-1">
+                                                              <FontAwesomeIcon
+                                                                icon={faClose}
+                                                                style={{ color: "red" }}
+                                                              />
+                                                            </div>
+                                                          </Popconfirm>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  );
+                                                })}
+                                              </div>
+                                            </div> : null}
+                                          {meatCriteriaListNonHcc.length == 0 ? (
+                                            <div className="col-xl-12">
+                                              <div>
+                                                <span className="no-patient-data">
+                                                  No MEAT Criteria
+                                                </span>
+                                              </div>
+                                            </div>
+                                          ) : null}
+                                        </div>
+                                      </Tab.Pane>
+                                      <Tab.Pane id="my-posts" eventKey="RafScore">
+                                        <div className="my-post-content pt-3">
+                                          <div className="row">
+                                            <div className="col-xl-3">
+                                              {/* <div className="card raf-file-head">
+
+                                        <div className="row">
+                                          <div className="col-xl-12 mb-3 text-center">
+                                            <Button
+                                              className="btn btn-primary btn-sm me-1"
+                                            >
+                                              Uplaod File
+                                            </Button>
+
+                                          </div>
+                                          <div className="col-xl-12 mb-3">
+                                            <Form.Control
+                                              required
+                                              type="file"
+                                              accept="application/pdf,text/plain"
+
+                                            />
+                                          </div>
+                                          <div className="col-xl-12 mb-3">
+                                            <Form.Control
+                                              required
+                                              type="date"
+
+                                            />
+                                          </div>
+                                        </div>
+
+                                      </div> */}
+                                            </div>
+                                            {rafScore != null ? (
+                                              <div className="col-xl-12">
+                                                {rafScore.scoreOutputDTOList !=
+                                                  null ? (
+                                                  <>
+                                                    {rafScore.scoreOutputDTOList.map(
+                                                      (rafScoreMapResult) => {
+                                                        return (
+                                                          <div className="row raf-main-card">
+                                                            {/* <div className="raf-name-head">
+                                                  <h5 className="raf-model-version">{rafScoreMapResult.hcc_model.model} - {rafScoreMapResult.hcc_model.version}</h5>
+                                                </div> */}
+
+                                                            <div className="col-xl-6">
+                                                              <div className="card">
+                                                                <div className="raf-card">
+                                                                  <div className="row raf-head text-center">
+                                                                    <div className="col-xl-12">
+                                                                      <label >
+                                                                        Summary
+                                                                      </label>
+                                                                    </div>
+                                                                  </div>
+                                                                  <div className="row raf-details">
+                                                                    <div className="col-xl-6">
+                                                                      <span>
+                                                                        {
+                                                                          rafScoreMapResult
+                                                                            .hcc_model
+                                                                            .model
+                                                                        }
+                                                                      </span>
+                                                                    </div>
+                                                                    <div className="col-xl-6">
+                                                                      <span>
+                                                                        {
+                                                                          rafScoreMapResult
+                                                                            .hcc_model
+                                                                            .version
+                                                                        }
+                                                                      </span>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <div className="col-xl-6">
+                                                              <div className="card">
+                                                                <div className="raf-card">
+                                                                  <div className="row raf-head">
+                                                                    <div className="col-xl-6">
+                                                                      <label >
+                                                                        DX Code
+                                                                      </label>
+                                                                    </div>
+                                                                    <div className="col-xl-6">
+                                                                      <label >
+                                                                        DX
+                                                                        Description
+                                                                      </label>
+                                                                    </div>
+                                                                  </div>
+
+                                                                  {rafScoreMapResult.dx_hccs.map(
+                                                                    (item) => {
+                                                                      return (
+                                                                        <div className="row raf-details">
+                                                                          <div className="col-xl-6">
+                                                                            <span>
+                                                                              {
+                                                                                item.dx_name
+                                                                              }
+                                                                            </span>
+                                                                          </div>
+                                                                          <div className="col-xl-6">
+                                                                            <span>
+                                                                              {
+                                                                                item.dx_desc
+                                                                              }
+                                                                            </span>
+                                                                          </div>
+                                                                        </div>
+                                                                      );
+                                                                    }
+                                                                  )}
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <div className="col-xl-6">
+                                                              <div className="card">
+                                                                <div className="raf-card">
+                                                                  <div className="row raf-head">
+                                                                    <div className="col-xl-6">
+                                                                      <label >
+                                                                        HCC
+                                                                      </label>
+                                                                    </div>
+                                                                    <div className="col-xl-6">
+                                                                      <label >
+                                                                        HCC
+                                                                        Description
+                                                                      </label>
+                                                                    </div>
+                                                                  </div>
+                                                                  {rafScoreMapResult.dx_hccs.map(
+                                                                    (res) => {
+                                                                      return res.hcc_list.map(
+                                                                        (res1) => {
+                                                                          return (
+                                                                            <div className="row raf-details">
+                                                                              <div className="col-xl-6">
+                                                                                <span>
+                                                                                  {
+                                                                                    res1.hcc_name
+                                                                                  }
+                                                                                </span>
+                                                                              </div>
+                                                                              <div className="col-xl-6">
+                                                                                <span>
+                                                                                  {
+                                                                                    res1.hcc_desc
+                                                                                  }
+                                                                                </span>
+                                                                              </div>
+                                                                            </div>
+                                                                          );
+                                                                        }
+                                                                      );
+                                                                    }
+                                                                  )}
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                            <div className="col-xl-6">
+                                                              <div className="card">
+                                                                <div className="raf-card">
+                                                                  <div className="row raf-head">
+                                                                    <div className="col-xl-4">
+                                                                      <label >
+                                                                        Trumped By
+                                                                      </label>
+                                                                    </div>
+                                                                    <div className="col-xl-4">
+                                                                      <label >
+                                                                        RAF
+                                                                      </label>
+                                                                    </div>
+                                                                    <div className="col-xl-4">
+                                                                      <label >
+                                                                        Monthly
+                                                                        Premium
+                                                                      </label>
+                                                                    </div>
+                                                                  </div>
+                                                                  {rafScoreMapResult.dx_hccs.map(
+                                                                    (res) => {
+                                                                      return res.hcc_list.map(
+                                                                        (res1) => {
+                                                                          return (
+                                                                            <div className="row  raf-details">
+                                                                              <div className="col-xl-4">
+                                                                                <span>
+                                                                                  -
+                                                                                </span>
+                                                                              </div>
+                                                                              <div className="col-xl-4">
+                                                                                <span>
+                                                                                  {
+                                                                                    res1.hcc_raf
+                                                                                  }
+                                                                                </span>
+                                                                              </div>
+                                                                              <div className="col-xl-4">
+                                                                                <span>
+                                                                                  $
+                                                                                  {
+                                                                                    res1.premium
+                                                                                  }
+                                                                                </span>
+                                                                              </div>
+                                                                            </div>
+                                                                          );
+                                                                        }
+                                                                      );
+                                                                    }
+                                                                  )}
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        );
+                                                      }
+                                                    )}
+                                                  </>
+                                                ) : null}
+
+                                                <div className="row raf-main-card">
+                                                  <div className="raf-name-head">
+                                                    <h5 className="raf-model-version">
+                                                      SCORE DETAILS
+                                                    </h5>
+                                                  </div>
+
+                                                  <div className="col-xl-12">
+                                                    <div className="card">
+                                                      <div className="raf-card">
+                                                        <div className="row raf-head">
+                                                          <div className="col-xl-2">
+                                                            <label >
+                                                              v24Score
+                                                            </label>
+                                                          </div>
+                                                          <div className="col-xl-3">
+                                                            <label >
+                                                              v24Score70Percent
+                                                            </label>
+                                                          </div>
+                                                          <div className="col-xl-2">
+                                                            <label >
+                                                              v28Score
+                                                            </label>
+                                                          </div>
+                                                          <div className="col-xl-3">
+                                                            <label >
+                                                              v28Score30Percent
+                                                            </label>
+                                                          </div>
+                                                          <div className="col-xl-2">
+                                                            <label >
+                                                              Score
+                                                            </label>
+                                                          </div>
+                                                        </div>
+                                                        <div className="row  raf-details">
+                                                          <div className="col-xl-2">
+                                                            <span>
+                                                              {rafScore.v24Score}
+                                                            </span>
+                                                          </div>
+                                                          <div className="col-xl-3">
+                                                            <span>
+                                                              {
+                                                                rafScore.v24Score70Percent
+                                                              }
+                                                            </span>
+                                                          </div>
+                                                          <div className="col-xl-2">
+                                                            <span>
+                                                              {rafScore.v28Score}
+                                                            </span>
+                                                          </div>
+                                                          <div className="col-xl-3">
+                                                            <span>
+                                                              {
+                                                                rafScore.v28Score30Percent
+                                                              }
+                                                            </span>
+                                                          </div>
+                                                          <div className="col-xl-2">
+                                                            <span>
+                                                              {rafScore.score}
+                                                            </span>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            ) : null}
+                                            {rafScore == null ? (
+                                              <div className="card box-shadow-none">
+                                                <div className="card combo-card">
+                                                  <div className="col-xl-12">
+                                                    <span className="no-patient-data">
+                                                      NO DATA
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            ) : null}
+                                          </div>
+                                          {/* <div className="">
+
+                                    <div className="compete-card">
+                                      <Button
+                                        className="btn btn-primary btn-sm me-1"
+                                      >
+                                        Compete
+                                      </Button>
+                                    </div>
 
 
-                            <div className={`${visitStyles.sideNav}`}>
-                              <div className="sideNavscroll">
-                                <div
-                                  className="nav-control"
-                                  onClick={() => {
-                                    handleToogleCloseNav();
-                                  }}
-                                >
-                                  <div className={`${visitStyles.sideNavArrow}`}>
-                                    <span className="line">{SVGICON.navSideIcon}</span>
+                                  </div> */}
+                                        </div>
+                                      </Tab.Pane>
+                                      <Tab.Pane id="my-posts" eventKey="file">
+                                        <div className="my-post-content pt-3">
+                                          <div>
+                                            <button
+                                              onClick={() =>
+                                                openNewTabDownloadPdf()
+                                              }
+                                              className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr"
+                                            >
+                                              Open New Tab
+                                            </button>
+                                          </div>
+                                          <div className="card-body p-0">
+                                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                                              <div
+                                                style={{
+                                                  height: "80vh",
+                                                  maxWidth: "1000px",
+                                                  marginLeft: "auto",
+                                                  marginRight: "auto",
+                                                }}
+                                              >
+                                                {" "}
+                                                <Viewer
+                                                  fileUrl={selectFileURL}
+                                                  plugins={[
+                                                    defaultLayoutPluginInstance,
+                                                  ]}
+                                                  onDocumentLoad={
+                                                    handleDocumentLoad
+                                                  }
+                                                  renderLoader={(percentages) => (
+                                                    <div
+                                                      style={{ width: "240px" }}
+                                                    >
+                                                      <ProgressBar
+                                                        progress={Math.round(
+                                                          percentages
+                                                        )}
+                                                      />
+                                                    </div>
+                                                  )}
+                                                />
+                                              </div>
+                                            </Worker>
+                                          </div>
+                                        </div>
+                                      </Tab.Pane>
+                                    </Tab.Content>
+                                  </Tab.Container>
+                                </div>
+                              </div>
+                            </div>
+
+          {/* Modals */}
+          {isModalOpen && (
+                    <Modal
+                      title={selectMeatName}
+                      // title="Pdf Test"
+                      centered
+                      open={isModalOpen}
+                      // style={{ top: 5 }}
+                      onOk={handleCloseModal}
+                      onCancel={handleCloseModal}
+                      width="90%"
+                    // height={400}
+                    >
+                      <div className="section-container">
+                        <div className="row">
+                          <div className="col-xl-12">
+
+                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                              <div
+                                style={{
+                                  height: "80vh",
+                                  width: "900px",
+                                  marginLeft: "auto",
+                                  marginRight: "auto",
+                                }}
+                              >
+                                {" "}
+                                <Viewer
+                                  fileUrl={selectFileURL}
+                                  plugins={[defaultLayoutPluginInstance]}
+                                  onDocumentLoad={handleDocumentLoad}
+                                />
+                              </div>
+                            </Worker>
+                          </div>
+                          {/* <div className="col-xl-4">
+                          <ul className="timeline">
+                          <div className="modal-valid-container">
+                            {newValidDiseaseList.map((data, i) => (
+                              <li>
+                              
+
+                                
+                                <div onClick={() => activeValidDisCode(data.diagnosisCode, data.actualDescription)} className={selectActiveCode == data.diagnosisCode ? "new_valid-dis cr-pointer modal-valid-active" : "new_valid-dis cr-pointer modal-valid" }>
+                                  <div className="timeline-panel">
+                                    <div className="media-body">
+                                      <span className="mb-1 disease-name d-flex" >
+                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
-                                <ul>
-                                  {tabList.map((data, index) => (
-                                    <Tooltip title={data.title} placement="right">
-                                      <li className={`${visitStyles.sideNavLabel}`} onClick={() =>
-                                        navigetPageDetails(data.type)
-                                      }>
-                                        <a className={` ${sideNavLabelActiveKey === data.title ? visitStyles.sideNavLabelActive : ""}`}>
-                                          <div className="menu-icon">
-                                            <Image src={data.iconStyle} />
-                                          </div>{" "}
-                                          <span className={`${visitStyles.sideNavText}`} >
-                                            {data.title}
-                                          </span>
-                                        </a>
-                                      </li>
-                                    </Tooltip>
-                                  ))}
-                                </ul>
+
+
+                              </li>
+                            ))}
+                                                            </div>
+                          </ul>
+                        </div> */}
+                        </div>
+                        {/* <button onClick={changeSearch}>Check
+        
+        </button> */}
+                        {/* {isLoadingSection ?
+                      <Spin className='ml-2 ms-1 section-spin' size="medium" />
+                      : <>
+                        {sectionList?.map((item) => {
+                          return (
+
+                            <div className="card meat-card">
+                              <span className="combodiseaseText">{item}</span>
+                            </div>
+
+
+                          );
+                        })}
+                      </>} */}
+                        {/* <div
+        className="rpv-core__viewer"
+        style={{
+            border: '1px solid rgba(0, 0, 0, 0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            marginBottom:"50px"
+        }}
+    >
+        <div
+            style={{
+                alignItems: 'center',
+                backgroundColor: '#eeeeee',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                padding: '4px',
+            }}
+        >
+            <ShowSearchPopoverButton />
+        </div>
+        </div> */}
+                      </div>
+                    </Modal>
+                  )}
+                  {isModalOpenValidCodes && (
+                    <Modal
+                      title={fileModalHeader}
+                      // title="Pdf Test"
+                      centered
+                      open={isModalOpenValidCodes}
+                      // style={{ top: 5 }}
+                      onOk={handleCloseModal}
+                      onCancel={handleCloseModal}
+                      width="90%"
+                    // height={400}
+                    >
+                      <div className="section-container">
+                        <div class="d-flex justify-content-end m-4">
+                          {/* <button
+                            class="btn btn-primary"
+                            onClick={handleAddButtonClick}
+                          >
+                            Add
+                          </button> */}
+                          <Button onClick={handleAddButtonClick} className={`btn btn-primary btn-sm me-1 ${visitStyles.hccCodeAddBtn}`}  >
+                            Add
+                          </Button>
+
+                        </div>
+
+                        <div className={`row ${visitStyles.hccCodeAddContainer}`}>
+                          <div className="col-xl-8">
+                            <div
+                            // className="rpv-core__viewer"
+                            // style={{
+                            //   border: "1px solid rgba(0, 0, 0, 0.3)",
+                            //   display: "flex",
+                            //   flexDirection: "column",
+                            //   margin: "0 82px 10px 73px",
+                            // }}
+                            >
+                              <div
+                              // style={{
+                              //   alignItems: "center",
+                              //   backgroundColor: "#eeeeee",
+                              //   borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+                              //   display: "flex",
+                              //   padding: "4px",
+                              // }}
+                              >
+                                {/* <Search>
+                                {(renderSearchProps) => {
+                                  const [readyToSearch, setReadyToSearch] =
+                                    useState(false);
+                                  return (
+                                    <>
+                                      <div
+                                        style={{
+                                          border:
+                                            "1px solid rgba(0, 0, 0, 0.3)",
+                                          display: "flex",
+                                          padding: "0 2px",
+                                        }}
+                                      >
+                                        <input
+                                          style={{
+                                            border: "none",
+                                            padding: "8px",
+                                            width: "200px",
+                                          }}
+                                          placeholder="Enter to search"
+                                          type="text"
+                                          value={renderSearchProps.keyword}
+                                          onChange={(e) => {
+                                            setReadyToSearch(false);
+                                            renderSearchProps.setKeyword(
+                                              e.target.value
+                                            );
+                                          }}
+                                          onKeyDown={(e) => {
+                                            if (
+                                              e.keyCode === 13 &&
+                                              renderSearchProps.keyword
+                                            ) {
+                                              setReadyToSearch(true);
+                                              renderSearchProps.search();
+                                            }
+                                          }}
+                                        />
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <button
+                                              style={{
+                                                background: "#fff",
+                                                border: "none",
+                                                borderBottom: `2px solid ${renderSearchProps.matchCase
+                                                  ? "blue"
+                                                  : "transparent"
+                                                  }`,
+                                                height: "100%",
+                                                padding: "0 2px",
+                                              }}
+                                              onClick={() =>
+                                                renderSearchProps.changeMatchCase(
+                                                  !renderSearchProps.matchCase
+                                                )
+                                              }
+                                            >
+                                              <Icon>
+                                                <path d="M15.979,21.725,9.453,2.612a.5.5,0,0,0-.946,0L2,21.725" />
+                                                <path d="M4.383 14.725L13.59 14.725" />
+                                                <path d="M0.5 21.725L3.52 21.725" />
+                                                <path d="M14.479 21.725L17.5 21.725" />
+                                                <path d="M22.5,21.725,18.377,9.647a.5.5,0,0,0-.946,0l-1.888,5.543" />
+                                                <path d="M16.92 16.725L20.794 16.725" />
+                                                <path d="M21.516 21.725L23.5 21.725" />
+                                              </Icon>
+                                            </button>
+                                          }
+                                          content={() => "Match case"}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <button
+                                              style={{
+                                                background: "#fff",
+                                                border: "none",
+                                                borderBottom: `2px solid ${renderSearchProps.wholeWords
+                                                  ? "blue"
+                                                  : "transparent"
+                                                  }`,
+                                                height: "100%",
+                                                padding: "0 2px",
+                                              }}
+                                              onClick={() =>
+                                                renderSearchProps.changeWholeWords(
+                                                  !renderSearchProps.wholeWords
+                                                )
+                                              }
+                                            >
+                                              <Icon>
+                                                <path d="M0.500 7.498 L23.500 7.498 L23.500 16.498 L0.500 16.498 Z" />
+                                                <path d="M3.5 9.498L3.5 14.498" />
+                                              </Icon>
+                                            </button>
+                                          }
+                                          content={() => "Match whole word"}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                      {readyToSearch &&
+                                        renderSearchProps.keyword &&
+                                        renderSearchProps.numberOfMatches ===
+                                        0 && (
+                                          <div style={{ padding: "0 8px" }}>
+                                            Not found
+                                          </div>
+                                        )}
+                                      {readyToSearch &&
+                                        renderSearchProps.keyword &&
+                                        renderSearchProps.numberOfMatches >
+                                        0 && (
+                                          <div style={{ padding: "0 8px" }}>
+                                            {renderSearchProps.currentMatch} of{" "}
+                                            {renderSearchProps.numberOfMatches}
+                                          </div>
+                                        )}
+                                      <div style={{ padding: "0 2px" }}>
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <MinimalButton
+                                              onClick={
+                                                renderSearchProps.jumpToPreviousMatch
+                                              }
+                                            >
+                                              <PreviousIcon />
+                                            </MinimalButton>
+                                          }
+                                          content={() => "Previous match"}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                      <div style={{ padding: "0 2px" }}>
+                                        <Tooltip
+                                          position={Position.BottomCenter}
+                                          target={
+                                            <MinimalButton
+                                              onClick={
+                                                renderSearchProps.jumpToNextMatch
+                                              }
+                                            >
+                                              <NextIcon />
+                                            </MinimalButton>
+                                          }
+                                          content={() => "Next match"}
+                                          offset={{ left: 0, top: 8 }}
+                                        />
+                                      </div>
+                                    </>
+                                  );
+                                }}
+                              </Search> */}
                               </div>
                             </div>
+                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                              <div
+                                style={{
+                                  height: "80vh",
+                                  // width: "1000px",
+                                  marginLeft: "auto",
+                                  marginRight: "auto",
+                                }}
+                              >
+                                {" "}
+                                <Viewer
+                                  fileUrl={selectFileURL}
+                                  plugins={[searchPluginInstance]}
+                                  onDocumentLoad={handleDocumentLoad}
+                                />
+                              </div>
+                            </Worker>
                           </div>
-                        </div>
+                          {isAddButtonClicked && (
+                            <div className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}>
+                              {/* Input fields */}
+                              <form onSubmit={handleFormSubmit}>
+                                <div className="form-group">
+                                  <Form.Label>
+                                    Diagnosis code
+                                    <span className="text-danger">*</span>{" "}
+                                  </Form.Label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="diagnosisCode"
+                                    name="diagnosisCode"
+                                    placeholder="Enter Code"
+                                    required
+                                    onChange={handleChange}
+                                  />
 
-                        <div className={`${visitStyles.secondContainer}`}>
-                          {activeTab == 1 ? 
-                           <Hcc/>
-                           : activeTab == 2 ? (
-                            <NonHcc/>
-                          ) : activeTab == 3 ? (
-                           <Radiology/>
-                          ) : (
-                            <Lab/>
-                          )}                         
-                        </div>
 
-                        <div className={`${visitStyles.thirdContainer}`}>
-                          <div className={`${visitStyles.flag_container}`}>
-                            <ul className="">
-                              {flagList?.map((data) => {
-                                return (
-                                  <>
-                                    <Tooltip title={data.name} placement="left">
+                                </div>
+                                <div className="form-group">
+                                  <Form.Label>Provider name</Form.Label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="providerName"
+                                    name="providerName"
+                                    placeholder="Enter provider name (Optional)"
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                                <div className="form-group">
+                                  <Form.Label>
+                                    Section<span className="text-danger">*</span>{" "}
+                                  </Form.Label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="capturedSections"
+                                    name="capturedSections"
+                                    placeholder="Enter section"
+                                    required
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                                <div className="form-group">
+                                  <Form.Label>
+                                    Encoded date
+                                    <span className="text-danger">*</span>{" "}
+                                  </Form.Label>
 
-                                      <li
-                                        className={
-                                          flagContainerActive == data.name
-                                            ? `${visitStyles.commentsTagActive}`
-                                            : `${visitStyles.commentsTag}`
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    id="encodedDate"
+                                    name="encodedDate"
+                                    placeholder="Select encoded date"
+                                    required
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                                <div className="form-group">
+                                  <Form.Label>
+                                    Description
+                                    <span className="text-danger">*</span>{" "}
+                                  </Form.Label>
+
+                                  <textarea
+                                    className="form-control"
+                                    id="actualDescription"
+                                    name="actualDescription"
+                                    value={inputValue.actualDescription}
+                                    onChange={handleChangeSuggested}
+                                    rows="5"
+                                  ></textarea>
+                                </div>
+                                {/* <div className="d-flex justify-content-between">
+                                  <button
+                                    type="submit"
+                                    className="btn btn-success"
+                                  >
+                                    Submit
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={handleCloseForm}
+                                  >
+                                    Cancel
+                                  </button>
+                                </div> */}
+
+                                <div className={visitStyles.addValidCodeFormFooter}>
+                                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                                    {isLoadingBtn ? "Loading..." : "Submit"}
+                                  </Button>
+                                  <Button
+                                    onClick={handleCloseForm}
+                                    className="btn btn-danger btn-sm light ms-1"
+                                  >
+                                    Cancel
+                                  </Button>
+                                </div>
+                              </form>
+                            </div>
+                          )}
+                          {nonHccActiveCodes == false &&
+                            isAddButtonClicked == false ? (
+                            <div className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}>
+                              {/* <ul className="timeline">
+                                <div className="modal-valid-container">
+                                  {newValidDiseaseList.map((data, i) => (
+                                    <li>
+                                      <div
+                                        onClick={() =>
+                                          activeValidDisCode(
+                                            data.diagnosisCode,
+                                            data.actualDescription
+                                          )
                                         }
-                                        onClick={() => addComments(data.name)}
+                                        className={
+                                          selectActiveCode == data.diagnosisCode
+                                            ? "new_valid-dis cr-pointer modal-valid-active"
+                                            : "new_valid-dis cr-pointer modal-valid"
+                                        }
                                       >
-                                        <i>{data.icon}</i>
+                                        <div className="timeline-panel">
+                                          <div className="media-body">
+                                            <span className="mb-1 disease-name d-flex">
+                                              <span className="valid-dis-name">
+                                                {data.diagnosisCode}
+                                              </span>{" "}
+                                              - {data.actualDescription}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  ))}
+                                </div>
+                              </ul> */}
+                              <div className={visitStyles.container}>
+                                <div className={visitStyles.hccStickey_head}>
+
+                                  {newValidDiseaseList.map(
+                                    (data, i) => (
+                                      <li>
+                                        <div
+                                          className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                        >
+                                          <div
+                                            className={`${visitStyles.hcc_card_nameHead}`}
+                                          >
+                                            <div
+                                              className="media-body"
+                                              onClick={() =>
+                                                handleOpenModalCombinationCode(
+                                                  data.diagnosisCode,
+                                                  data.actualDescription,
+                                                  "valid2"
+                                                )
+                                              }
+                                            >
+                                              <span className="mb-1 disease-name d-flex">
+
+                                                <span className="valid-dis-name">
+
+
+                                                  {
+                                                    data.diagnosisCode
+                                                  }
+                                                </span>{" "}
+                                                -{" "}
+                                                {
+                                                  data.actualDescription
+                                                }
+
+                                              </span>
+                                            </div>
+
+                                            {data.defaultPosition == "VALID" ?
+                                              <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
+                                              </span> : data.defaultPosition == "SUGGESTED" ?
+
+                                                <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
+                                                </span>
+                                                : data.defaultPosition == "DELETED" ?
+
+                                                  <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
+                                                  </span> : null}
+
+                                          </div>
+                                          <div className={`${visitStyles.hoverActiveHcc}`}>
+                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
+
+
+                                              {getEncounterDateBackground(data.encounterDateSplit)}
+                                              {data.isManuallyAdded == true ?
+
+                                                <Badge
+                                                  className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                                >
+                                                  Manually Added
+
+                                                </Badge> :
+                                                null}
+                                            </div>
+                                            <div className={`${visitStyles.encounterAndSectionHeader}`} >
+                                              {getCaptureSectionBackgroundFile(data.capturedSections)}
+                                            </div>
+                                          </div>
+                                        </div>
                                       </li>
-                                    </Tooltip>                                    
-                                  </>
-                                );
-                              })}
-                            </ul>
-                          </div>
+
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            null
+                            // <div className="col-xl-4">
+                            //   <ul className="timeline">
+                            //     <div className="modal-valid-container">
+                            //       {newInValidDiseaseList.map((data, i) => (
+                            //         <li>
+                            //           <div
+                            //             onClick={() =>
+                            //               activeValidDisCode(
+                            //                 data.diagnosisCode,
+                            //                 data.actualDescription
+                            //               )
+                            //             }
+                            //             className={
+                            //               selectActiveCode == data.diagnosisCode
+                            //                 ? "new_valid-dis cr-pointer modal-valid-active"
+                            //                 : "new_valid-dis cr-pointer modal-valid"
+                            //             }
+                            //           >
+                            //             <div className="timeline-panel">
+                            //               <div className="media-body">
+                            //                 <span className="mb-1 disease-name d-flex">
+                            //                   <span className="valid-dis-name">
+                            //                     {data.diagnosisCode}
+                            //                   </span>{" "}
+                            //                   - {data.actualDescription}
+                            //                 </span>
+                            //               </div>
+                            //             </div>
+                            //           </div>
+                            //         </li>
+                            //       ))}
+                            //     </div>
+                            //   </ul>
+                            // </div>
+                          )}
                         </div>
-
                       </div>
+                    </Modal>
+                  )}
+                  {isModalOpenCaptureSection && (
+                    <Modal
+                      title={fileModalHeader}
+                      // title="Pdf Test"
+                      centered
+                      open={isModalOpenCaptureSection}
+                      style={{ top: 1 }}
+                      onOk={handleCloseModal}
+                      onCancel={handleCloseModal}
+                      width="95%"
+                    // height={500}
+                    >
+                      <div className="section-container">
+                        <div className="row">
+                          <div className="col-xl-12">
 
-                    </div>
-                  </div>
+                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                              <div
+                                style={{
+                                  height: "80vh",
+                                  width: "900px",
+                                  marginLeft: "auto",
+                                  marginRight: "auto",
+                                }}
+                              >
+                                {" "}
+                                <Viewer
+                                  fileUrl={selectFileURL}
+                                  plugins={[defaultLayoutPluginInstance]}
+                                  onDocumentLoad={handleDocumentLoad}
+                                />
+                              </div>
+                            </Worker>
+                          </div>
+                          {/* <div className="col-xl-4">
+                          <ul className="timeline">
+                          <div className="modal-valid-container">
+                            {newValidDiseaseList.map((data, i) => (
+                              <li>
+                              
 
-                  {/* Modals */}
+                                
+                                <div >
+                                  <div className="timeline-panel">
+                                    <div className="media-body">
+                                      <span className="mb-1 disease-name d-flex" >
+                                        <span className="valid-dis-name">{data.diagnosisCode}</span> -  {data.actualDescription}
+                                      </span>
+                                      {data.capturedSections.map((data2, i) => (
+                                      <span className="mb-1 disease-name"  onClick={() => activeValidDisCode(data.diagnosisCode, data2)} >
+                                        <span className={selectActiveCode == data2 ? " valid-dis-name d-flex new_valid-dis cr-pointer modal-valid-active" : "valid-dis-name d-flex new_valid-dis cr-pointer modal-valid" }>{data2}</span>
+                                      </span>
+                                         ))}
+                                    </div>
+                                  </div>
+                                </div>
 
+
+                              </li>
+                            ))}
+                                                            </div>
+                          </ul>
+                        </div> */}
+                        </div>
+                      </div>
+                    </Modal>
+                  )}
+                  {isModalOpenRadiology && (
+                    <Modal
+                      title={selectMeatName}
+                      // title="Pdf Test"
+                      centered
+                      open={isModalOpenRadiology}
+                      // style={{ top: 5 }}
+                      onOk={handleCloseModal}
+                      onCancel={handleCloseModal}
+                      width="70%"
+                    // height={400}
+                    >
+                      <div className="section-container">
+                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                          <div
+                            style={{
+                              height: "80vh",
+                              // width: "900px",
+                              marginLeft: "auto",
+                              marginRight: "auto",
+                            }}
+                          >
+                            {" "}
+                            <Viewer
+                              fileUrl={selectFileURLRadiology}
+                              plugins={[defaultLayoutPluginInstance]}
+                              onDocumentLoad={handleDocumentLoad}
+                            />
+                          </div>
+                        </Worker>
+                      </div>
+                    </Modal>
+                  )}
+                  {isModalOpenLab && (
+                    <Modal
+                      title={selectMeatName}
+                      // title="Pdf Test"
+                      centered
+                      open={isModalOpenLab}
+                      // style={{ top: 5 }}
+                      onOk={handleCloseModal}
+                      onCancel={handleCloseModal}
+                      width="70%"
+                    // height={400}
+                    >
+                      <div className="section-container">
+                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                          <div
+                            style={{
+                              height: "80vh",
+                              // width: "900px",
+                              marginLeft: "auto",
+                              marginRight: "auto",
+                            }}
+                          >
+                            {" "}
+                            <Viewer
+                              fileUrl={labReportFile}
+                              plugins={[defaultLayoutPluginInstance]}
+                              onDocumentLoad={handleDocumentLoad}
+                            />
+                          </div>
+                        </Worker>
+                      </div>
+                    </Modal>
+                  )}
                   {confirmNotesModalDecline && (
                     <Modal
                       title={selectDiseasesName}
@@ -5649,6 +7275,121 @@ const Details = ({ }) => {
                       </div>
                     </Modal>
                   )}
+                  <Offcanvas
+                    onHide={handleCloseModal}
+                    show={isModalOpenValid}
+                    className="offcanvas-end"
+                    placement="end"
+                  >
+                    <div className="offcanvas-header">
+                      <h5 className="modal-title" id="#gridSystemModal">
+                        Add Valid Code
+                      </h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        onClick={() => handleCloseModal()}
+                      >
+                        <i className="fa-solid fa-xmark"></i>
+                      </button>
+                    </div>
+                    <div className="offcanvas-body">
+                      <div className="container-fluid">
+                        <Form
+                          noValidate
+                          validated={validated}
+                          onSubmit={handleFormSubmit}
+                        >
+                          <div className="row">
+                            <div className="col-xl-12 mb-3">
+                              <Form.Label>
+                                Code <span className="text-danger">*</span>{" "}
+                              </Form.Label>
+                              <Form.Control
+                                required
+                                type="text"
+                                id="diagnosisCode"
+                                name="diagnosisCode"
+                                onChange={handleChange}
+                              />
+                              {addValidCodeCheck == false ?
+                                <span className={visitStyles.invalidHccCodeError}>
+                                  Invalid Hcc Code
+                                </span> : addValidCodeCheck == true ? <span className={visitStyles.validHccCodeError}>
+                                  Valid Hcc Code
+                                </span> : null}
+
+                            </div>
+                            <div className="col-xl-12 mb-3">
+                              <Form.Label>
+                                Provider name
+                              </Form.Label>
+                              <Form.Control
+                                type="text"
+                                id="providerName"
+                                name="providerName"
+                                onChange={handleChange}
+                              />
+                            </div>
+                            <div className="col-xl-12 mb-3">
+                              <Form.Label>
+                                Section <span className="text-danger">*</span>{" "}
+                              </Form.Label>
+                              <Form.Control
+                                required
+                                type="text"
+                                id="capturedSections"
+                                name="capturedSections"
+                                onChange={handleChange}
+                              />
+                            </div>
+                            <div className="col-xl-12 mb-3">
+                              <Form.Label>
+                                Encoded date <span className="text-danger">*</span>{" "}
+                              </Form.Label>
+                              <Form.Control
+                                required
+                                type="date"
+                                id="encodedDate"
+                                name="encodedDate"
+                                onChange={handleChange}
+                              />
+                            </div>
+
+                            <div className="col-xl-12 mb-3">
+                              <Form.Label>
+                                Description <span className="text-danger">*</span>{" "}
+                              </Form.Label>
+                              <textarea
+                                className="form-control"
+                                id="actualDescription"
+                                name="actualDescription"
+                                onChange={handleChangeSuggested}
+                                value={inputValue.actualDescription}
+                                rows="5"
+                                required
+                              ></textarea>
+                            </div>
+                          </div>
+
+                          <div>
+                            <Button
+                              type="submit"
+                              className="btn btn-primary btn-sm me-1"
+                            >
+                              Submit
+                            </Button>
+                            <Button
+                              onClick={() => handleCloseModal()}
+                              className="btn btn-danger btn-sm light ms-1"
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </Form>
+                      </div>
+                    </div>
+                  </Offcanvas>
 
                   <Offcanvas
                     onHide={setAddPatient}
@@ -6496,15 +8237,7 @@ const Details = ({ }) => {
 
                       </Modal>
                     </div> : null}
-                </div>
-              </div>
-            )}
-            {/* <Footer/> */}
-          </div>
 
-        </div>
-
-      </div>
 
     </>
   );
@@ -6522,4 +8255,4 @@ const Details = ({ }) => {
 //   }
 // );
 
-export default Details;
+export default NonHcc;
