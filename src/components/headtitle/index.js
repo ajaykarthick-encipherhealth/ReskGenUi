@@ -18,7 +18,7 @@ const HeadTitle = ({
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
-
+  const [dateValues, setDates] = useState();
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
   useEffect(() => {
@@ -28,13 +28,13 @@ const HeadTitle = ({
     ]);
   }, []);
 
-  const handleDatePickerChange = (date, dateString) => {
-    if (dateString) {
+  const handleDatePickerChange = (date) => {
+    if (date) {
       const convertedDates =
-        dateString &&
-        dateString?.map((date) => {
+        date &&
+        date?.map((date) => {
           const formattedDate =
-            dateString &&
+            date &&
             dayjs(date)
               .startOf("day")
               .add(6, "hour")
@@ -49,7 +49,8 @@ const HeadTitle = ({
         startDate: convertedDates[0],
         endDate: convertedDates[1],
       };
-      dispatch(getDateRange(dates));
+      setDates(dates);
+      // dispatch(getDateRange(dates));
     }
   };
 
@@ -95,6 +96,7 @@ const HeadTitle = ({
         closable={false}
         style={{ left: "-20%", top: "18%" }}
         onOk={() => {
+          dispatch(getDateRange(dateValues));
           setOpenPicker(false);
         }}
         onCancel={() => {
