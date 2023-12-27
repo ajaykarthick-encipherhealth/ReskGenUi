@@ -52,8 +52,7 @@ const Accuracy = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const dispatch = useDispatch();
   const accuracyDatas = useSelector((state) => state?.workFlow?.accuracy);
-
-  const numberOfWeeks = accuracyDatas && Object.keys(accuracyDatas)?.length;
+  const numberOfWeeks = accuracyDatas?.response && Object.keys(accuracyDatas?.response)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -101,8 +100,8 @@ const Accuracy = () => {
   }
 
   let data = [];
-  if (currentBtn && accuracyDatas) {
-    data = Object.values(accuracyDatas);
+  if (currentBtn && accuracyDatas?.response) {
+    data = Object.values(accuracyDatas?.response);
   }
   const option = {
     xAxis: {
@@ -211,8 +210,8 @@ const Accuracy = () => {
                   : `Week ${getDateWeek(currentDate)}`}
               </div>
               <div className={styles.percentage}>
-                <span className={styles.insideTitle}>{accuracyDatas 
-                  ? `${accuracyDatas[highlightIndex + 1]}%`
+                <span className={styles.insideTitle}>{accuracyDatas?.response 
+                  ? `${accuracyDatas?.response[highlightIndex + 1]}%`
                   : "0%"}</span>
               </div>
             </div>

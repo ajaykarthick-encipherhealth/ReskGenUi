@@ -121,7 +121,7 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
     );
-    setUserIdDetails(response.data);
+    setUserIdDetails(response.data?.response);
   };
 
   const onChange = (value) => {

@@ -86,7 +86,7 @@ const DailyTask = () => {
   const currentWeek = getCurrentWeekDates();
 
   const card2Data = currentWeek?.map((dayInfo, index) => {
-    const matchingStatusData = dailyStatusData?.find((data) => {
+    const matchingStatusData = dailyStatusData?.response?.find((data) => {
       return dayjs(data?.response?.date).format("MM-DD-YYYY") === dayInfo?.date;
     });
     return {
