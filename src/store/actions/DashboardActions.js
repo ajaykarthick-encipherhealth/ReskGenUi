@@ -26,7 +26,6 @@ export const getDateRange = (val) => ({
 });
 
 export const getWorkFlow = (startDate, endDate, router) => {
-  console.log(startDate, endDate)
   return (dispatch) => {
     try {
       workStatusApi(startDate, endDate, router).then((response) => {

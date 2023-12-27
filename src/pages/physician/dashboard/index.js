@@ -22,7 +22,6 @@ const index = () => {
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const dispatch = useDispatch();
 
-  console.log(DateRanges)
   const startDate = DateRanges
     ? DateRanges?.startDate
     : last30thDate.toISOString();
