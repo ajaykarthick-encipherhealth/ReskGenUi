@@ -1,38 +1,16 @@
 import styles from "./report.module.css";
-import React, { useState, useEffect, use } from "react";
-import { Button } from "react-bootstrap";
-import { Badge, Modal, DatePicker, Checkbox, Input, Form } from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, DatePicker } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
-import Image from "next/image";
-import calender from "../../../images/dashboard/calender.png";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
-import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
-import {
-  faClose,
-  faUpload,
-  faCheck,
-  faBan,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
-import { Spin } from "antd";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
-import { notification } from "antd";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
-import { Paginator } from "primereact/paginator";
-import {
-  CircularProgressbar,
-  CircularProgressbarWithChildren,
-  buildStyles,
-} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
@@ -47,15 +25,9 @@ import {
 
 const index = () => {
   const dispatch = useDispatch();
-
-  const controller = new AbortController();
-
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("CoderReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [buttonClicked, setButtonClicked] = useState(false);
-  const [dates, setDates] = useState(null);
-  const [compledtedDate, setCompletedDate] = useState(null);
   const [filteredCOder, setFilteredCoder] = useState([]);
 
   const [tenantId, setTenantId] = useState("");
@@ -70,13 +42,11 @@ const index = () => {
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
 
-  const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const { RangePicker } = DatePicker;
 
   const [modalVisible, setModalVisible] = useState(false);
-  const currentDate = dayjs();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [receivedStartDate, setReceivedStartDate] = useState();
@@ -84,10 +54,6 @@ const index = () => {
   const [coderStartDate, setCoderStartDate] = useState();
   const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
-
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -153,17 +119,13 @@ const index = () => {
     }
   }, [pageNo, sentPageNo, receivedPageNo, activeTab, ExportResponse]);
 
-  const handleButtonClick = () => {
-    setButtonClicked(true);
-  };
-
   const ReportPatientDetails = useSelector((state) => state.report?.details);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
   useEffect(() => {
-    setFilteredCoder(ReportPatientDetails);
+    setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
 
   const statusOptions = [
@@ -174,13 +136,13 @@ const index = () => {
     { label: "All", value: "all" },
   ];
   const ReceivedOptions = [];
-  ReceivedReportDetails?.content?.map((item) => {
-    return ReceivedOptions.push({ label: item.sender, value: item.sender });
+  ReceivedReportDetails?.response?.content?.map((item) => {
+    return ReceivedOptions?.push({ label: item.sender, value: item.sender });
   });
   const SentOptions = [];
   const uniqueRoles = new Set();
 
-  SentReportDetails?.data?.forEach((data) => {
+  SentReportDetails?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
       const role = item.role;
       if (!uniqueRoles.has(role)) {
@@ -213,23 +175,6 @@ const index = () => {
     setSentPageNo(e.page);
   };
 
-  function calculateColor(percentage) {
-    // Define your color ranges based on the percentage
-    if (percentage <= 10) {
-      return "#E03838";
-    } else if (percentage <= 30) {
-      return "#E07E38";
-    } else if (percentage <= 50) {
-      return "#E0A738";
-    } else if (percentage <= 80) {
-      return "#387BE0";
-    } else if (percentage <= 100) {
-      return "#289A00";
-    } else {
-      return "#E0A738"; // Default color for percentages greater than 50
-    }
-  }
-
   const handleExport = () => {
     setIsModalVisible(true);
   };
@@ -237,44 +182,9 @@ const index = () => {
   const closeModal = () => {
     setIsModalVisible(false);
   };
-  const getAllList = async (uId, pageNo, pageSize) => {
-    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-    const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      var resultMap = [];
-      var result = response.data.content;
-      setTotalElements(response.data.totalElements);
 
-      result.map((res) => {
-        resultMap.push({
-          patientId: res.patientId,
-          patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          processedStatus: res.processedStatus,
-          createdAt: res.createdAt,
-        });
-      });
-      var newArray = [];
-      newArray = [...patinetListAll, ...resultMap];
-      setPatinetListAll(resultMap);
-
-      // console.log(newArray)
-      setIsLoading(false);
-      setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
-    }
-  };
-  const handleOk = () => {
-    setModalVisible(false);
-  };
   const handleDatePickerChange = (date, dateString) => {
-    const formattedDates = dateString.map((date, index) => {
+    const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
         index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
       return formattedDate;
@@ -292,7 +202,7 @@ const index = () => {
   };
 
   const handleReceivedDatePicker = (date, dateString) => {
-    const formattedDates = dateString.map((date, index) => {
+    const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
         index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
       return formattedDate;
@@ -309,7 +219,7 @@ const index = () => {
     );
   };
   const handleCoderPicker = (date, dateString) => {
-    const formattedDates = dateString.map((date, index) => {
+    const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
         index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
       return formattedDate;
@@ -333,7 +243,7 @@ const index = () => {
       <Header />
       <div className={styles.maincontainer}>
         <div class="content-body">
-          {!ReportPatientDetails ? (
+          {!ReportPatientDetails?.response ? (
             <Spinner />
           ) : (
             <div className="container-fluid">
@@ -528,7 +438,7 @@ const index = () => {
                                       reportListAll={filteredCOder}
                                       paginationFirst={paginationFirst}
                                       ReportPatientDetails={
-                                        ReportPatientDetails
+                                        ReportPatientDetails?.response
                                       }
                                       onPageChange={onPageChange}
                                     />
@@ -543,7 +453,7 @@ const index = () => {
                                   >
                                     <SentReportTable
                                       paginationFirst={paginationSentFirst}
-                                      details={SentReportDetails}
+                                      details={SentReportDetails?.response}
                                       onSentPageChange={onSentPageChange}
                                     />
                                   </Tab.Pane>
@@ -551,12 +461,15 @@ const index = () => {
                                     id="my-posts"
                                     eventKey="meatCriteria"
                                   >
-                                    {ReceivedReportDetails?.content && (
+                                    {ReceivedReportDetails?.response
+                                      ?.content && (
                                       <ReceivedReport
                                         paginationFirst={
                                           paginationReceivedFirst
                                         }
-                                        details={ReceivedReportDetails}
+                                        details={
+                                          ReceivedReportDetails?.response
+                                        }
                                         onPageChange={onReceivedPageChange}
                                         receivedPageNo={receivedPageNo}
                                         receivedStartDate={receivedStartDate}

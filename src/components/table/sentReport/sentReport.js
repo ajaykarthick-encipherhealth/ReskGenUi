@@ -70,7 +70,7 @@ function SentReportTable({ details, onSentPageChange, paginationFirst }) {
               <th>REPORT ID</th>
               <th>REPORT NAME</th>
               {/* <th>SENDER</th> */}
-              <th> RECEIVED USERS LIST</th>
+              <th>USER LIST</th>
               <th>DATE</th>
             </tr>
           </thead>

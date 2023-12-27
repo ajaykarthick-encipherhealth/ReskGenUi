@@ -31,7 +31,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
   }, [search]);
   const dispatch = useDispatch();
   const usersList = useSelector((state) => state.report.usersList);
-  const options = usersList?.map((data) => ({
+  const options = usersList?.response?.map((data) => ({
     label: data.userName,
     value: data.userName,
   }));

@@ -10,15 +10,16 @@ import { selectedReport } from "../../../store/actions/ReportActions";
 
 function ReceivedReport({
   details,
-  onReceivedPageChange,
+  onPageChange,
   receivedPageNo,
   receivedStartDate,
   receivedEndDate,
+  paginationFirst
 }) {
   const [sortOrder, setSortOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(details?.content);
-  
-const dispatch=useDispatch()
+
+  const dispatch = useDispatch();
   useEffect(() => {
     setDetailsContent(details?.content);
   }, [details]);
@@ -35,24 +36,31 @@ const dispatch=useDispatch()
     setDetailsContent(sortedContent);
   };
 
-  const router=useRouter()
+  const router = useRouter();
   const handleReceiverReport = (row) => {
-    const info=({
-      reportUser:row,
-      receivedPageNo:receivedPageNo,
-      receivedStartDate:receivedStartDate,
-      receivedEndDate:receivedEndDate
-  })
-    dispatch(selectedReport(info))
-    router.push("/physician/individualreport")
+    const info = {
+      reportUser: row,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    router.push("/physician/individualreport");
   };
 
   return (
     <div className={TableStyle.classContaineer}>
       {detailsContent?.length === 0 ? (
         // <Spinner />
-        <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>loading....</div>
-
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          loading....
+        </div>
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
@@ -142,12 +150,14 @@ const dispatch=useDispatch()
       )}
       <div className="pagination-container">
         <Paginator
-          // first={paginationFirst}
+          first={paginationFirst}
           rows={15}
           totalRecords={details?.totalElements}
-          onPageChange={onReceivedPageChange}
+          onPageChange={onPageChange}
         />
-        <div className="total-pages">Total count: {details?.totalElements}</div>
+        <div className="total-pages">
+        Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
+        </div>
       </div>
       {/* <Modal
         open={openModal}

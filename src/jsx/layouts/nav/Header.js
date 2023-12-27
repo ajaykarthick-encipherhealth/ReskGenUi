@@ -20,7 +20,7 @@ import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import { getChatReply } from "../../../store/actions/DashboardActions";
 
-  const Header = ({ onNote }) => {
+const Header = ({ onNote }) => {
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
   const router = useRouter();
@@ -29,12 +29,7 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
   const [menuList, setMenuList] = useState([]);
   const [userIdDetails, setUserIdDetails] = useState("");
 
-
-
-
-
   useEffect(() => {
-
     var loginCheck = localStorage.getItem("loginCheck");
     var userName = localStorage.getItem("userName");
     const userRoleLocal = localStorage.getItem("userRole");
@@ -115,7 +110,6 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
       label: "Tom",
     },
   ];
-
 
   const getUserIdDetails = async (userId) => {
     const response = await axios.get(
@@ -260,11 +254,6 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-
-                     
-
-                       
-
                         <TerminalComponent
                           handleNewUserMessage={handleNewUserMessage}
                           handleQuickButtonClicked={handleQuickButtonClicked}
@@ -276,14 +265,12 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
                         <Tooltip title={` Quality : ${percentage}%`}>
                           <div className="notificationIcon">
                             <div style={{ width: 40, height: 40 }}>
-
                               <CircularProgressbar
                                 value={percentage}
                                 text={`${percentage}%`}
                               />
 
                               {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
-
                             </div>
                           </div>
                         </Tooltip>
