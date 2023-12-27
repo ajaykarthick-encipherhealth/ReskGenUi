@@ -61,7 +61,7 @@ const Notifications = () => {
   const handleOk = () => {
     setOpenNotification(false);
   };
-  const notificationData = notificationdata.map((info) => (
+  const notificationData = notificationdata?.map((info) => (
     <div className={styles.msgDiv}>
       <div style={{ marginTop: "10px" }}> {SVGICON.dashboardNotification}</div>
       <div className={styles.msgCOntainer}>
