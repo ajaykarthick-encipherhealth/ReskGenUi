@@ -803,6 +803,34 @@ const Lab = ({ }) => {
     setSelectCode(code);
   };
 
+   const handleOpenModalLab = (value, disDescription, radiologyCheck) => {
+    if (radiologyCheck == true) {
+      var splitPoint = disDescription.substring(" ", 40);
+      setTimeout(() => {
+        highlight({
+          keyword: splitPoint,
+          // matchCase: true,
+          // wholeWords:true
+        });
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset);
+      }, 2000);
+      setDocumentLoaded(true);
+      var dataset = value + " - (" + disDescription + ")";
+      // setSelectMeatName(dataset);
+      setSelectMeatName(dataset + " -  " + "Loading...");
+      setIsLoadingSection(true);
+      setIsModalOpenLab(true);
+    } else {
+      handleOpenModal(
+        value,
+        disDescription
+      )
+    }
+    // setIsModalOpenValid(true)
+    // getSectionResult(value.toLowerCase());
+  };
+
 
 
   return (
@@ -1116,7 +1144,7 @@ const Lab = ({ }) => {
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
                                       onClick={() =>
-                                        handleOpenModalRadiology(
+                                        handleOpenModalLab(
                                           item.monitorCapturedFromHeader,
                                           item.monitor,
                                           item.radiology,
@@ -1149,7 +1177,7 @@ const Lab = ({ }) => {
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
                                       onClick={() =>
-                                        handleOpenModalRadiology(
+                                        handleOpenModalLab(
                                           item.evaluateCapturedFromHeader,
                                           item.evaluate,
                                           item.radiology,
@@ -1182,7 +1210,7 @@ const Lab = ({ }) => {
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
                                       onClick={() =>
-                                        handleOpenModalRadiology(
+                                        handleOpenModalLab(
                                           item.assessmentCapturedFromHeader,
                                           item.assessment,
                                           item.radiology,
@@ -1215,7 +1243,7 @@ const Lab = ({ }) => {
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
                                       onClick={() =>
-                                        handleOpenModalRadiology(
+                                        handleOpenModalLab(
                                           item.treatmentCapturedFromHeader,
                                           item.treatment,
                                           item.radiology,

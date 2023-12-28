@@ -180,4 +180,3 @@ function ReceivedReport({
 }
 
 export default ReceivedReport;
-getWorkFlow
