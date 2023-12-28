@@ -191,8 +191,8 @@ export default function Patient() {
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
-      var result = response.data.content;
-      setTotalElements(response.data.totalElements);
+      var result =  response.data.response.content;
+      setTotalElements(response.data.response.totalElements);
 
       result.map((res) => {
         resultMap.push({
@@ -279,8 +279,8 @@ export default function Patient() {
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
-      var result = response.data.content;
-      setTotalElements(response.data.totalElements);
+      var result =  response.data.response.content;
+      setTotalElements(response.data.response.totalElements);
 
       result.map((res) => {
         resultMap.push({
@@ -322,8 +322,8 @@ if(searchtext ){
      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
      if (response.data) {
        var resultMap = [];
-       var result = response.data.content;
-       setTotalElements(response.data.totalElements);
+       var result =  response.data.response.content;
+       setTotalElements(response.data.response.totalElements);
  
        result.map((res) => {
          resultMap.push({

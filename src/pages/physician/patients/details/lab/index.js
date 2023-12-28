@@ -564,7 +564,7 @@ const Lab = ({ }) => {
     );
     setPatienIdDetails(response.data);
     console.log(response.data)
-    var result = response.data;
+    var result = response.data.response;
 
 
     const menu = (
@@ -713,7 +713,7 @@ const Lab = ({ }) => {
       `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -1299,7 +1299,7 @@ const Lab = ({ }) => {
     );
     console.log(response.data)
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -1831,7 +1831,7 @@ const Lab = ({ }) => {
     );
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setPatientDetailsRadiology(result);
       setRadiologyResult(result);
       if (result.radiologyFileDetail != null) {
@@ -2091,7 +2091,7 @@ const Lab = ({ }) => {
       `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
-    var resultTest = response.data;
+    var resultTest = response.data.response;
 
     var dosYearArrFile = [];
     if (resultTest.labFileDetail != null) {
@@ -2376,7 +2376,7 @@ const Lab = ({ }) => {
       `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
-    var resultTest = response.data;
+    var resultTest = response.data.response;
 
     var dosYearArrFile = [];
     var fileDatesArr = [];
@@ -2652,7 +2652,7 @@ const Lab = ({ }) => {
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setSelectFileURL(response.data);
       setSelectFileURLValid(response.data);
       setIsLoading(false);
@@ -2682,7 +2682,7 @@ const Lab = ({ }) => {
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setSelectFileURLRadiology(response.data);
       // fetch(response.data)
       //   .then((resp) => resp.arrayBuffer())
@@ -2703,7 +2703,7 @@ const Lab = ({ }) => {
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setLabReportFile(response.data);
     }
   };
@@ -3206,7 +3206,7 @@ const Lab = ({ }) => {
   const getSectionResult = async (value) => {
     var apiUrl = `dbservice/patient/compute/getsection?fileid=cbd48813-3f9c-4cc9-9882-1db87fdd1ffb&section=${value}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
-    var result = response.data;
+    var result = response.data.response;
     if (response.data) {
       setSectionList(response.data);
       setIsLoadingSection(false);
@@ -3938,7 +3938,7 @@ const Lab = ({ }) => {
       ENDPOINTS.apiEndoint + `dbservice/hccdisease?diagnosisCode=${code}`
     );
     if (response.data) {
-      result = response.data;
+      result = response.data.response;
       data = (
         <div className="validhcc-details">
           {/* <Spin className='ml-2 ms-1' size="small" /> */}
@@ -4915,7 +4915,7 @@ const Lab = ({ }) => {
       );
 
       if (response.data) {
-        result = response.data;
+        result = response.data.response;
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>

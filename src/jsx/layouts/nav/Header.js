@@ -13,14 +13,33 @@ import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { Modal, Popover, Select, Tooltip } from "antd";
-import { useDispatch } from "react-redux";
+import { Badge, Select, Tooltip } from "antd";
 import "react-chat-widget/lib/styles.css";
 import dynamic from "next/dynamic";
-import { useSelector } from "react-redux";
 import { getChatReply } from "../../../store/actions/DashboardActions";
+import { Drawer } from 'antd';
+import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLocationArrow
+} from "@fortawesome/free-solid-svg-icons";
 
-  const Header = ({ onNote }) => {
+import { getNotificationAlert ,getNotificationList} from "../../../store/actions/NotificationAction";
+
+
+
+const Header = ({ onNote }) => {
+
+  // const allDeliveredNotifs = useSelector(
+  //   (state) => state.deliveredNotifs.value.notifs
+  // );
+
+  // const notifToastList = useSelector(
+  //   (state) => state.deliveredNotifs.value.notifToastList
+  // );
+  const dispatchValue = useDispatch();
+
+
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
   const router = useRouter();
@@ -28,6 +47,15 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
   const [userRole, setUserRole] = useState("");
   const [menuList, setMenuList] = useState([]);
   const [userIdDetails, setUserIdDetails] = useState("");
+  const [open, setOpen] = useState(false);
+  const [toggleChatBox, setToggleChatBox] = useState(true);
+  const [openMsg, setOpenMsg] = useState(false);
+  const notificationAlertData = useSelector((state) => state?.notificationDatas?.notificationAlert);
+  const notificationResponse = useSelector((state) => state?.notificationDatas?.notificationList);
+  
+
+
+
 
 
 
@@ -35,11 +63,16 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
 
   useEffect(() => {
 
+    
+
     var loginCheck = localStorage.getItem("loginCheck");
     var userName = localStorage.getItem("userName");
     const userRoleLocal = localStorage.getItem("userRole");
     const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     getUserIdDetails(userId);
+
+    // dispatchValue(getNotificationAlert("c58c4c29-df4a-4c9e-9277-d58ad9b9d9d8", token));
 
     setUserRole(userRoleLocal);
     setUserName(userName);
@@ -62,26 +95,35 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
         }
       });
     }
-    console.log(loginCheck);
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
 
-    // let url = ENDPOINTS.apiEndoint + "communication/push-notifications/" + "watson@encipherhealth.onmicrosoft.com" + "?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSIsImtpZCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSJ9.eyJhdWQiOiJhcGk6Ly9mOTJkZGIwNS1iNzVjLTQ0NTktOTEwZi03M2M1OGQ3NWY1ZjUiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9iNGQzNGU0Mi03OWE2LTQ3OGUtYjNhZi0xMmNlNzMxMWZhMDkvIiwiaWF0IjoxNzAxMDg2MTIxLCJuYmYiOjE3MDEwODYxMjEsImV4cCI6MTcwMTA5MTQ0NywiYWNyIjoiMSIsImFpbyI6IkFUUUF5LzhWQUFBQU01cjQwRjlaUVRvLzE3NG5pbENBOUNvQlg4OW5GQzllNTNtUWgvVERYR0ZpSWYxU1ZpWkVTTTBITE5hd0FFMlIiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiZjkyZGRiMDUtYjc1Yy00NDU5LTkxMGYtNzNjNThkNzVmNWY1IiwiYXBwaWRhY3IiOiIxIiwiaXBhZGRyIjoiMjAuNzIuMTMyLjE5NCIsIm5hbWUiOiJhaml0aCIsIm9pZCI6Ijg2M2M2NmJlLTk3OTItNDY5Ny1hZDA2LTdlZWExMGFjZDAzYyIsInJoIjoiMC5BYmNBUWs3VHRLWjVqa2V6cnhMT2N4SDZDUVhiTGZsY3QxbEVrUTl6eFkxMTlmWEpBT0kuIiwicm9sZXMiOlsiQURNSU4iXSwic2NwIjoiZW5jaXBoZXJoZWFsdGgtbXVsdGl0ZW5hbnQuc2NvcGUiLCJzdWIiOiJCM1dkVmtJX191RkM2UlpsNWhVSy1uaUFtWmVRTjlpTzQxS1c5b0s1WmlnIiwidGlkIjoiYjRkMzRlNDItNzlhNi00NzhlLWIzYWYtMTJjZTczMTFmYTA5IiwidW5pcXVlX25hbWUiOiJhaml0aDAxQGVuY2lwaGVyaGVhbHRoLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6ImFqaXRoMDFAZW5jaXBoZXJoZWFsdGgub25taWNyb3NvZnQuY29tIiwidXRpIjoiZlBpcmtmTDcxa3VlQ3FhMzZ3cEpBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il19.dzoJvDUUDYyhUQGSJb8n6KSjbbg3Oe2VEam5CqEr47VyQpeR8BAhKQFn6m9WYJiy6vNTcDZ17Hu0BqkKInY9GbIQGj4kUP7rybDF-GN8lNRetRj_lJLkpVTdZ7BYcXbprt_2CRWtxJamROyh4aALFZOynnLfK9iPny3fX6AAmyqO-dF7-A2fEG4_CVIODgrRa2AuWXMkrzZBgSBJSTHXgsFxC6zNaBkfdaqkNVz-fOTOqtmFTRA68lsiNY68cUljGrKJlxo5fyEJjlaGMd5WLl_W6quhj5EtlnTtqN_5uJtS7Dj1lXinSy-LtgyslFbUt0BmmMqBsqjLCtzNoNI-Ew";
-    // const sse = new EventSource(url, { headers: { 'X-Tenant': 'default' } });
+    const sse = new EventSource(
+      `${ENDPOINTS?.apiEndoint}communication/push-notifications/c58c4c29-df4a-4c9e-9277-d58ad9b9d9d8?token=${token}`
+    );
+    sse.addEventListener("user-list-event", (event) => {
+      const data = JSON.parse(event.data);
+      if (data.length != 0) {
+        dispatchValue(getNotificationAlert(data));
+      }
+    });
+    sse.onerror = () => {
+      sse.close();
+    };
+    return () => {
+      sse.close();
+    };
 
-    // sse.addEventListener("user-list-event", (event) => {
-    //   const data = JSON.parse(event.data);
-    //   console.log(data)
-    // });
 
-    // sse.onerror = () => {
-    //   sse.close();
-    // };
-    // return () => {
-    //   sse.close();
-    // };
   }, []);
+
+
+  const onClose = () => {
+    setOpen(false);
+    setOpenMsg(false);
+  };
+
 
   const logoutFunction = () => {
     Swal.fire({
@@ -121,7 +163,10 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
     );
-    setUserIdDetails(response.data);
+    setUserIdDetails(response.data.response);
+
+
+    // setUserIdDetails(response.data.response);
   };
 
   const onChange = (value) => {
@@ -188,7 +233,7 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
           onSearch={onSearch}
           filterOption={filterOption}
           options={options}
-          // style={{ width: "180px", height: "30px" }}
+        // style={{ width: "180px", height: "30px" }}
         />
       </div>
     </>
@@ -219,6 +264,18 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
     console.log(data);
   };
 
+  const notificationDrawer = async () => {
+    setOpen(true)
+    dispatchValue(getNotificationList("id"));
+
+    // setNotificationResponse(notificationResponse.data)
+  }
+
+  const emailSplitFunction = (email) => {
+    let emailSplit = email.split("@");
+    return emailSplit[0];
+  }
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -233,12 +290,11 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
                   {menuList.map((data, index) => {
                     return (
                       <li
-                        className={` ${
-                          stateActive === data.to ||
-                          stateActive === data.childRoute
+                        className={` ${stateActive === data.to ||
+                            stateActive === data.childRoute
                             ? "header-active"
                             : ""
-                        }`}
+                          }`}
                         key={index}
                       >
                         <Link href={data.to} className="d-flex">
@@ -261,9 +317,9 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
 
-                     
 
-                       
+
+
 
                         <TerminalComponent
                           handleNewUserMessage={handleNewUserMessage}
@@ -288,8 +344,10 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
                           </div>
                         </Tooltip>
 
-                        <div className="notificationIcon">
-                          {SVGICON.notificationIcon}
+                        <div className="notificationIcon" onClick={() => notificationDrawer()}>
+                          <Badge count={notificationAlertData.length} color='#faad14'>
+                            {SVGICON.notificationIcon}
+                          </Badge>
                         </div>
                         <div className="header-media d-flex">
                           {/* <Image src={IMAGES.profileImage}/> */}
@@ -343,6 +401,251 @@ import { getChatReply } from "../../../store/actions/DashboardActions";
           </div>
         </nav>
       </div>
+      <Drawer
+        title="Notification"
+        placement="right"
+        closable={true}
+        onClose={onClose}
+        open={open}
+      >
+
+
+        <div
+          className={`card chatbox chat dlab-chat-history-box chat-history-card ${openMsg ? "" : "d-none"}`}
+        >
+          <div className="card-header chat-list-header text-center">
+            <div className="cr-pointer" onClick={() => setOpenMsg(false)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                width="18px"
+                height="18px"
+                viewBox="0 0 24 24"
+                version="1.1"
+              >
+                <g
+                  stroke="none"
+                  strokeWidth="1"
+                  fill="none"
+                  fillRule="evenodd"
+                >
+                  <polygon points="0 0 24 0 24 24 0 24" />
+                  <rect
+                    fill="#000000"
+                    opacity="0.3"
+                    transform="translate(15.000000, 12.000000) scale(-1, 1) rotate(-90.000000) translate(-15.000000, -12.000000) "
+                    x="14"
+                    y="7"
+                    width="2"
+                    height="10"
+                    rx="1"
+                  />
+                  <path
+                    d="M3.7071045,15.7071045 C3.3165802,16.0976288 2.68341522,16.0976288 2.29289093,15.7071045 C1.90236664,15.3165802 1.90236664,14.6834152 2.29289093,14.2928909 L8.29289093,8.29289093 C8.67146987,7.914312 9.28105631,7.90106637 9.67572234,8.26284357 L15.6757223,13.7628436 C16.0828413,14.136036 16.1103443,14.7686034 15.7371519,15.1757223 C15.3639594,15.5828413 14.7313921,15.6103443 14.3242731,15.2371519 L9.03007346,10.3841355 L3.7071045,15.7071045 Z"
+                    fill="#000000"
+                    fillRule="nonzero"
+                    transform="translate(9.000001, 11.999997) scale(-1, -1) rotate(90.000000) translate(-9.000001, -11.999997) "
+                  />
+                </g>
+              </svg>
+            </div>
+
+            <div>
+              <h6 className="mb-1">Chat with Ajith</h6>
+              <p className="mb-0 text-success">Online</p>
+            </div>
+            <div className="dropdown">
+
+            </div>
+          </div>
+          <div
+            className={`card-body msg_card_body  dz-scroll ${openMsg ? "ps ps--active-y" : ""
+              } `}
+            id="DZ_W_Contacts_Body3"
+          >
+            <div className="d-flex justify-content-start mb-4">
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+              <div className="msg_cotainer">
+                Hi, how are you samim?
+                <span className="msg_time">8:40 AM, Today</span>
+              </div>
+            </div>
+            <div className="d-flex justify-content-end mb-4">
+              <div className="msg_cotainer_send">
+                Hi Khalid i am good tnx how about you?
+                <span className="msg_time_send">8:55 AM, Today</span>
+              </div>
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+            </div>
+            <div className="d-flex justify-content-start mb-4">
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+              <div className="msg_cotainer">
+                I am good too, thank you for your chat template
+                <span className="msg_time">9:00 AM, Today</span>
+              </div>
+            </div>
+            <div className="d-flex justify-content-end mb-4">
+              <div className="msg_cotainer_send">
+                You are welcome
+                <span className="msg_time_send">9:05 AM, Today</span>
+              </div>
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+            </div>
+            <div className="d-flex justify-content-start mb-4">
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+              <div className="msg_cotainer">
+                I am looking for your next templates
+                <span className="msg_time">9:07 AM, Today</span>
+              </div>
+            </div>
+            <div className="d-flex justify-content-end mb-4">
+              <div className="msg_cotainer_send">
+                Ok, thank you have a good day
+                <span className="msg_time_send">9:10 AM, Today</span>
+              </div>
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+            </div>
+            <div className="d-flex justify-content-start mb-4">
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+              <div className="msg_cotainer">
+                Bye, see you
+                <span className="msg_time">9:12 AM, Today</span>
+              </div>
+            </div>
+            <div className="d-flex justify-content-start mb-4">
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+              <div className="msg_cotainer">
+                Hi, how are you samim?
+                <span className="msg_time">8:40 AM, Today</span>
+              </div>
+            </div>
+            <div className="d-flex justify-content-end mb-4">
+              <div className="msg_cotainer_send">
+                Hi Khalid i am good tnx how about you?
+                <span className="msg_time_send">8:55 AM, Today</span>
+              </div>
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+            </div>
+            <div className="d-flex justify-content-start mb-4">
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+              <div className="msg_cotainer">
+                I am good too, thank you for your chat template
+                <span className="msg_time">9:00 AM, Today</span>
+              </div>
+            </div>
+            <div className="d-flex justify-content-end mb-4">
+              <div className="msg_cotainer_send">
+                You are welcome
+                <span className="msg_time_send">9:05 AM, Today</span>
+              </div>
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+            </div>
+            <div className="d-flex justify-content-start mb-4">
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+              <div className="msg_cotainer">
+                I am looking for your next templates
+                <span className="msg_time">9:07 AM, Today</span>
+              </div>
+            </div>
+            <div className="d-flex justify-content-end mb-4">
+              <div className="msg_cotainer_send">
+                Ok, thank you have a good day
+                <span className="msg_time_send">9:10 AM, Today</span>
+              </div>
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+            </div>
+            <div className="d-flex justify-content-start mb-4">
+              <div className="img_cont_msg">
+                <Image src={IMAGES.profileImage} />
+              </div>
+              <div className="msg_cotainer">
+                Bye, see you
+                <span className="msg_time">9:12 AM, Today</span>
+              </div>
+            </div>
+          </div>
+          <div className="card-footer type_msg">
+            <div className="input-group">
+              <textarea
+                className="form-control"
+                placeholder="Type your message..."
+              ></textarea>
+              <div className="input-group-append">
+                <button type="button" className="btn btn-primary">
+                  <FontAwesomeIcon
+                    icon={
+                      faLocationArrow
+                    }
+                    style={{
+                      color:
+                        "#fff",
+                    }}
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {!openMsg ?
+          <div
+            className={`card-body chatbox contacts_body p-0  ${toggleChatBox ? ' ps--active-y' : ''
+              }`}
+            id='DZ_W_Contacts_Body'
+          >
+            <ul className='contacts'>
+              {notificationResponse.map(
+                (data, i) => (
+                  <li
+                    className='active dlab-chat-user'
+                    onClick={() => setOpenMsg(true)}
+                  >
+                    <div className='d-flex bd-highlight'>
+                      <div className='img_cont'>
+                        <Image src={IMAGES.profileImage} alt="" />
+                        <span className='online_icon'></span>
+                      </div>
+                      <div className='user_info'>
+                        <span>{emailSplitFunction(data.userFrom.userName)} </span>
+                        <p>{data.content}</p>
+                      </div>
+                    </div>
+                  </li>
+                )
+              )}
+
+
+
+
+            </ul>
+          </div> : null}
+      </Drawer>
     </div>
   );
 };

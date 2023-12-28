@@ -97,64 +97,23 @@ import Lab from "./lab/index";
 const Details = ({ }) => {
   const navigate = useRouter();
   let searchKeywords = [];
-  // const searchPluginInstance = searchPlugin({
-  //   // keyword: [
-  //   //   'document',
-  //   //   {
-  //         keyword: 'Assessment',
-  //         matchCase: true,
-  //     // },
-  // // ],
-  // })
-
-
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
   const { highlight } = searchPluginInstance;
 
-
-
-  // const searchPluginInstance = searchPlugin({
-  //   // keyword: 'Plan / Discussion',
-  //   matchCase: true,
-  //   wholeWords: true,
-  // });
   const { RangePicker } = DatePicker;
-  // const { highlight, Search } = searchPluginInstance;
-  // const { ShowSearchPopoverButton } = searchPluginInstance;
-  // const [searchPluginInstanceLocal, setSearchPluginInstanceLocal] =
-  //   useState(searchPluginInstance);
 
   const sideMenu = useSelector((state) => state.sideMenu);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFileFormShow, setIsFileFormShow] = useState(false);
-  const [isModalOpenValid, setIsModalOpenValid] = useState(false);
-  const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
-  const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
-    useState(false);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
   const [confirmNotesModalHold, setConfirmNotesModalHold] = useState(false);
-
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [confirmNotesModalInValid, setConfirmNotesModalInValid] =
     useState(false);
 
-  // const storePatientDetails = useSelector(
-  //   (state) => state.patientDetails.patientDetails
-  // );
-  const storeDetails = useSelector((state) => state);
-
-  // const defaultLayoutPluginInstance = searchPluginInstance();
-
-
-
-
-
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingSection, setIsLoadingSection] = useState(true);
   const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
   const [invalidMoveDiseasesList, setInvalidMoveDiseasesList] = useState([]);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
@@ -328,6 +287,8 @@ const Details = ({ }) => {
   const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] = useState(false);
   const [dragFileDate, setdragFileDate] = useState(false);
   const [inputValueFileDate, setInputValueFileDate] = useState('');
+  const [patientResultReload, setPatientResultReload] = useState(false);
+
 
 
 
@@ -420,11 +381,11 @@ const Details = ({ }) => {
     var value = e.target.value;
     if (value) {
       const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/search?searchtext=${value}&pageno=${0}&pagesize=${100}`);
-      var result = response.data.content;
+      var result = response.data.response.content;;
       setPatientList(result)
     } else {
       const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${100}`);
-      var result = response.data.content;
+      var result = response.data.response.content;;
       setPatientList(result)
     }
   };
@@ -577,7 +538,7 @@ const Details = ({ }) => {
     );
     setPatienIdDetails(response.data);
     console.log(response.data)
-    var result = response.data;
+    var result = response.data.response;
 
 
     const menu = (
@@ -701,586 +662,34 @@ const Details = ({ }) => {
   };
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
   const getPatientDetails = async (patientId, orgId, tenId, fileloadCondition) => {
-
-    setNewValidDiseaseList([]);
-    setInNewValidDiseaseList([]);
-    setNewUnMatchHccList([]);
-    setValidDiseasesList([]);
-    setInvalidDiseasesList([]);
-    setComboDiseaseCodesList([]);
-    setDosYear([]);
-    setRAFScore([]);
-    setSuggestedNonHccList([]);
-    setSuggestedHccList([]);
-    setDeletedHccList([]);
-    setMeatCriteriaList([]);
-    setMeatCriteriaListNonHcc([]);
-
-
-    // setIsLoading(true);
-    setIsModalComments(false);
-    // var patientId = localStorage.getItem("patientId");
-    // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
+    setDosYear([]);  
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
       `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
-        var validDis = "";
-        var invalidDis = "";
-        var comboDis = "";
-        var meatCri = "";
         var dosYearArr = [];
-        var rafScore = null;
-        var validDiseaseNewRes = [];
-        var invalidDiseaseNewRes = [];
-        var unMatchRes = [];
-        var unMatchResHcc = [];
-        var unMatchResNonHcc = [];
-        var meatCriColorTagList = [];
-
-        var suggestRadiologyList = [];
-        var suggestLabList = [];
-
-        var suggestListAll = [];
-        var suggestListAllNonHcc = [];
-        var deleteHccList = [];
-
-        if (fileloadCondition != "fileNotLoad") {
-
-          getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
-          setSelectMeatFileId(response.data.fileId);
-        }
-        // setPatientDocumentResult(result);
-
         result.encounterYears.map((res) => {
           dosYearArr.push({ value: res, label: res });
         });
-
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        // setSelectedDosValue(dosYearArr[0].value);
-        // console.log(highestDOS)
-
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
         );
         setDosYearDefalutSelect(highestDosValue[0]);
         setSelectedDosValue(highestDosValue[0].value);
-
-
-        if (result.rafScore != null) {
-          rafScore = result.rafScore;
-        }
-
-        var unMacthResList = [];
-
-        validDis = result.validDisease;
-        validDiseaseNewRes = result.validDisease;
-        // invalidDiseaseNewRes =validDisArray;
-        var validDisArray = [];
-        var validEncounterDateArray = [];
-        validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition
-          });
-
-        });
-
-        result.invalidDisease.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
-          invalidDiseaseNewRes.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition
-          });
-
-        });
-
-
-        if (result.deletedDiseases != null) {
-          result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
-            deleteHccList.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              isManuallyAdded: res.isManuallyAdded,
-              isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition
-            });
-
-          });
-        }
-        if (result.suggestRadiology != null) {
-          // var checkDosRadio = [];
-          // for (var key in result.suggestRadiology) {
-          //   checkDosRadio.push({ value: key, label: key });
-          // }
-          // getPatientDetailsRadiologyYear(orgId,tenId)
-          suggestRadiologyList = result.suggestRadiology;
-          suggestRadiologyList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
-            suggestListAll.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              getPlace: "Radio",
-              isHccValid: true,
-              defaultPosition: res.defaultPosition
-            });
-          });
-
-          if (result.suggestRadiologyCombo != null) {
-            result.suggestRadiologyCombo.map((res, index) => {
-              const encounterDatearray = res.encounterDate.split(',');
-              suggestListAll.push({
-                actualDescription: res.diseaseName,
-                capturedSections: [],
-                diagnosisCode: res.diagnosisCodeCombo,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Radio-combo",
-                isHccValid: true,
-                // defaultPosition:res.defaultPosition
-              });
-            });
-
-          }
-        }
-
-        if (result.suggestLab != null) {
-          // getLabReportDetails(orgId,tenId)
-          suggestLabList = result.suggestLab;
-          suggestLabList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
-            suggestListAll.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              getPlace: "Lab",
-              isHccValid: true,
-              defaultPosition: res.defaultPosition
-            });
-          });
-        }
-
-        if (result.unMatchedDisease != null) {
-          unMatchRes = result.unMatchedDisease;
-          unMatchRes.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
-            if (res.isHccValid == true) {
-              suggestListAll.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-                defaultPosition: res.defaultPosition
-              });
-            } else {
-              // suggestListAll.push({
-              //   actualDescription: res.actualDescription,
-              //   diagnosisCodeFinding: res.diagnosisCodeFinding,
-              //   isHccValid: res.isHccValid,
-              //   capturedSections: res.capturedSections,
-              //   diagnosisCode: res.diagnosisCodeFinding,
-              //   encounterDate: res.encounterDate,
-              //   getPlace: "Hcc",
-              // });
-              suggestListAllNonHcc.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-              });
-            }
-          });
-        }
-
-        invalidDis = result.invalidDisease;
-        comboDis = result.comboDisease;
-        meatCri = result.meatCriteria;
-
-        // validDiseaseNewRes = validDiseaseNew[2019]
-
-        var invalidDiseasesArray = [];
-        var validDiseasesArray = [];
-
-        for (var key in invalidDis) {
-          invalidDiseasesArray.push({ name: invalidDis[key] });
-        }
-        for (var key in validDis) {
-          validDiseasesArray.push({ name: validDis[key] });
-        }
-
-        // for (var key in result.validDisease) {
-        //   validDis = result.validDisease[key];
-        //   if (result.rafScore != null) {
-        //     rafScore = result.rafScore[key]
-        //   }
-        // }
-        // for (var key in result.invalidDisease) {
-        //   invalidDis = result.invalidDisease[key];
-        // }
-        // for (var key in result.comboDisease) {
-        //   comboDis = result.comboDisease[key];
-        // }
-        // for (var key in result.meatCriteria) {
-        //   meatCri = result.meatCriteria[key];
-        // }
-
-        // var invalidDiseasesArray = [];
-        // var validDiseasesArray = [];
-
-        // for (var key in invalidDis) {
-        //   invalidDiseasesArray.push({ name: invalidDis[key] });
-        // }
-        // for (var key in validDis) {
-        //   validDiseasesArray.push({ name: validDis[key] });
-        // }
-
-
-
-        console.log(suggestListAll)
-
-        setNewValidDiseaseList(validDisArray);
-        setInNewValidDiseaseList(invalidDiseaseNewRes);
-        setNewUnMatchHccList(suggestListAll);
-        setValidDiseasesList(validDiseasesArray);
-        setInvalidDiseasesList(invalidDiseasesArray);
-        setComboDiseaseCodesList(comboDis);
-        setDosYear(dosYearArr);
-        setRAFScore(rafScore);
-        setSuggestedNonHccList(suggestListAllNonHcc);
-        setSuggestedHccList(suggestListAll);
-        setDeletedHccList(deleteHccList);
-
-
-        console.log(validDisArray);
-
-
-        var capturedSectionsColorsMatching = [];
-        var capturedSectionsArr = [];
-
-
-
-        const COLORS = [
-          "bg-bg-seven",
-          "bg-third",
-          "bg-bg-four",
-          "bg-bg-five",
-          "bg-bg-six",
-          "bg-bg-eight",
-          "bg-bg-nine",
-          "bg-bg-ten",
-          "bg-bg-leven",
-        ];
-
-        const COLORS2 = [
-          "sectionTag1",
-          "sectionTag2",
-          "sectionTag3",
-          "sectionTag4",
-          "sectionTag5",
-          "sectionTag6",
-          "sectionTag7",
-          "sectionTag8"
-        ];
-
-
-        const COLORS3 = [
-          "encounterDateTag1",
-          "encounterDateTag2",
-          "encounterDateTag3",
-          "encounterDateTag4",
-          "encounterDateTag5",
-          "encounterDateTag6",
-          "encounterDateTag7",
-          "encounterDateTag8"
-        ];
-
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
-              name: res2,
-              "diagnosisCode": res.diagnosisCode,
-            });
-
-          })
-        })
-        invalidDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
-              name: res2,
-              "diagnosisCode": res.diagnosisCode,
-            });
-
-          })
-        })
-
-        suggestListAll.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
-              name: res2,
-              "diagnosisCode": res.diagnosisCode,
-            });
-
-          })
-        })
-
-        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
-
-        dublicateSectionArr.map((res, index) => {
-          capturedSectionsColorsMatching.push({
-            "name": res.name,
-            "diagnosisCode": res.diagnosisCode,
-            "colors": COLORS2[index]
-          });
-        })
-        setCaptureSectionMatching(capturedSectionsColorsMatching);
-
-
-
-        var encounterDateColorsMatching = [];
-        var encounterDateArr = [];
-
-        validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(',');
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          })
-        })
-
-        result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(',');
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          })
-        })
-
-        result.unMatchedDisease.map((res) => {
-          const array = res.encounterDate.split(',');
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          })
-        })
-        result.suggestRadiology?.map((res) => {
-          const array = res.encounterDate.split(',');
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          })
-        })
-
-        result.suggestLab?.map((res) => {
-          const array = res.encounterDate.split(',');
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          })
-        })
-
-
-        console.log(encounterDateArr)
-
-
-        var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
-
-        encounterDateArrDublicatesRemove.map((res, index) => {
-          encounterDateColorsMatching.push({
-            "name": res.name,
-            "colors": COLORS3[index]
-          });
-        })
-
-        setEncounterDateMatching(encounterDateColorsMatching);
-
-
-        console.log(capturedSectionsColorsMatching)
-        console.log(encounterDateColorsMatching)
-
-
-
-
-        var meatListArr = [];
-        var meatMoniterHead = [];
-        var meatEvaluteHead = [];
-        var meatAssesmentHead = [];
-        var meatTreatMentHead = [];
-        var allMeatHead = [];
-        var allMeatHeadColorArr = [];
-        var allMeatHeadColor = [];
-        var dublicateRemoveSecondArr = [];
-        var nonHccMeatListArr = [];
-
-        meatCri.map((res, index) => {
-          if (res.monitorCapturedFromHeader != "") {
-            meatMoniterHead.push({
-              header: res.monitorCapturedFromHeader,
-            });
-          }
-          if (res.evaluateCapturedFromHeader != "") {
-            meatEvaluteHead.push({
-              header: res.evaluateCapturedFromHeader,
-            });
-          }
-          if (res.assessmentCapturedFromHeader != "") {
-            meatAssesmentHead.push({
-              header: res.assessmentCapturedFromHeader,
-            });
-          }
-          if (res.treatmentCapturedFromHeader != "") {
-            meatTreatMentHead.push({
-              header: res.treatmentCapturedFromHeader,
-            });
-          }
-          var newArray = [];
-          newArray = [
-            ...allMeatHead,
-            ...meatMoniterHead,
-            ...meatEvaluteHead,
-            ...meatAssesmentHead,
-            ...meatTreatMentHead,
-          ];
-          var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-          dublicateRemoveArr.map((res3, index) => {
-            allMeatHeadColor.push({
-              header: res3.header,
-              color: COLORS3[index],
-            });
-          });
-          allMeatHeadColorArr = allMeatHeadColor;
-
-          dublicateRemoveSecondArr = getUniqueListBy(
-            allMeatHeadColor,
-            "header"
-          );
-          setMeatColorCodeList(dublicateRemoveSecondArr);
-        });
-
-        meatCri.map((res, index) => {
-          if (res.category == "Invalid") {
-            nonHccMeatListArr.push({
-              diagnosisCode: res.diagnosisCode,
-              diseaseName: res.diseaseName,
-              monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-              assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-              evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-              treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-              monitorCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.monitorCapturedFromHeader
-              ),
-              assessmentCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.assessmentCapturedFromHeader
-              ),
-              evaluateCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.evaluateCapturedFromHeader
-              ),
-              treatmentCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.treatmentCapturedFromHeader
-              ),
-              monitorColor: COLORS[index],
-              meatColor: COLORS[index],
-              assessment: res.assessment,
-              monitor: res.monitor,
-              evaluate: res.evaluate,
-              treatment: res.treatment,
-              isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-              category: res.category,
-            });
-          } else {
-            meatListArr.push({
-              diagnosisCode: res.diagnosisCode,
-              diseaseName: res.diseaseName,
-              monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-              assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-              evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-              treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-              monitorCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.monitorCapturedFromHeader
-              ),
-              assessmentCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.assessmentCapturedFromHeader
-              ),
-              evaluateCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.evaluateCapturedFromHeader
-              ),
-              treatmentCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.treatmentCapturedFromHeader
-              ),
-              monitorColor: COLORS[index],
-              meatColor: COLORS[index],
-              assessment: res.assessment,
-              monitor: res.monitor,
-              evaluate: res.evaluate,
-              treatment: res.treatment,
-              isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-              category: res.category,
-            });
-          }
-        });
-        setMeatCriteriaList(meatListArr);
-        setMeatCriteriaListNonHcc(nonHccMeatListArr);
+        setDosYear(dosYearArr);       
         setIsLoadingDos(false);
-        getFlagListLastDetails(patientId, highestDosValue[0].value);
-
-        if (result.suggestRadiology != null) {
-          getPatientDetailsRadiologyYear(orgId, tenId)
-        }
-
-        if (result.suggestLab != null) {
-          getLabReportDetailsInititalLoad(orgId, tenId, capturedSectionsColorsMatching, encounterDateColorsMatching)
-        }
-
-
+        getFlagListLastDetails(patientId, highestDosValue[0].value);   
+        setIsLoading(false);   
+        setPatientResultReload(true);
       } else {
+        setPatientResultReload(true);
         setIsLoading(false);
       }
     }
@@ -1312,7 +721,7 @@ const Details = ({ }) => {
     );
     console.log(response.data)
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -1824,6 +1233,7 @@ const Details = ({ }) => {
         setMeatCriteriaList(meatListArr);
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
         setIsLoadingDos(false);
+        setPatientResultReload(true);
 
         // setMeatCriteriaListRadiology(result.meatCriteria)
       }
@@ -1844,7 +1254,7 @@ const Details = ({ }) => {
     );
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setPatientDetailsRadiology(result);
       setRadiologyResult(result);
       if (result.radiologyFileDetail != null) {
@@ -2104,7 +1514,7 @@ const Details = ({ }) => {
       `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
-    var resultTest = response.data;
+    var resultTest = response.data.response;
 
     var dosYearArrFile = [];
     if (resultTest.labFileDetail != null) {
@@ -2389,7 +1799,7 @@ const Details = ({ }) => {
       `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
-    var resultTest = response.data;
+    var resultTest = response.data.response;
 
     var dosYearArrFile = [];
     var fileDatesArr = [];
@@ -2665,7 +2075,7 @@ const Details = ({ }) => {
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setSelectFileURL(response.data);
       setSelectFileURLValid(response.data);
       setIsLoading(false);
@@ -2695,7 +2105,7 @@ const Details = ({ }) => {
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setSelectFileURLRadiology(response.data);
       // fetch(response.data)
       //   .then((resp) => resp.arrayBuffer())
@@ -2716,7 +2126,7 @@ const Details = ({ }) => {
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setLabReportFile(response.data);
     }
   };
@@ -3037,14 +2447,10 @@ const Details = ({ }) => {
   const handleCloseModal = () => {
     setAddValidCodeCheck(null)
     setValidated(false);
-    setIsModalOpen(false);
-    setIsModalOpenValid(false);
     setConfirmNotesModalValid(false);
     setConfirmNotesModalInValid(false);
     setIsModalOpenRadiology(false);
     setSuggestedModal(false);
-    setIsModalOpenValidCodes(false);
-    setIsModalOpenCaptureSection(false);
     setConfirmNotesModalDecline(false);
     setConfirmNotesModalHold(false);
     setIsAddButtonClicked(false);
@@ -3054,7 +2460,6 @@ const Details = ({ }) => {
     setFlagContainerActive("");
     setConfirmCompleteModal(false);
     setIsModalOpenLab(false);
-    setIsFileFormShow(false);
   };
 
 
@@ -3219,7 +2624,7 @@ const Details = ({ }) => {
   const getSectionResult = async (value) => {
     var apiUrl = `dbservice/patient/compute/getsection?fileid=cbd48813-3f9c-4cc9-9882-1db87fdd1ffb&section=${value}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
-    var result = response.data;
+    var result = response.data.response;
     if (response.data) {
       setSectionList(response.data);
       setIsLoadingSection(false);
@@ -3337,6 +2742,7 @@ const Details = ({ }) => {
   };
 
   const dosOnChange = async (e) => {
+    setPatientResultReload(false);
     var dosKeyValue = e.value;
     // getYearOfServiceDetails(e.value);
     // console.log(e)
@@ -3951,7 +3357,7 @@ const Details = ({ }) => {
       ENDPOINTS.apiEndoint + `dbservice/hccdisease?diagnosisCode=${code}`
     );
     if (response.data) {
-      result = response.data;
+      result = response.data.response;
       data = (
         <div className="validhcc-details">
           {/* <Spin className='ml-2 ms-1' size="small" /> */}
@@ -4535,7 +3941,7 @@ const Details = ({ }) => {
     if (value == "Filter") {
       setFlagContainerActiveTitle("My Work Queue")
       const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${100}`);
-      var result = response.data.content;
+      var result = response.data.response.content;;
       setPatientList(result)
       setFilterDataLoading(false);
 
@@ -4544,7 +3950,7 @@ const Details = ({ }) => {
     if (value == "Timeline") {
       setFlagContainerActiveTitle("Timeline")
       const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/actioneventaudit?patientid=${localPatientId}&pageno=${0}&pagesize=${100}`);
-      var result = response.data.content;
+      var result = response.data.response.content;;
       setTimeLineData(result);
       setFilterDataLoading(false);
     }
@@ -4629,15 +4035,18 @@ const Details = ({ }) => {
 
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
+    setPatientResultReload(false)
     getPatientDetails(userId, orgId, tenantId);
     getPatientIdDetails(userId);
+    setLocalPatientId(userId);
+
 
   }
 
   const getFiltePatientListStatus = async (value) => {
 
     const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`);
-    var result = response.data.content;
+    var result = response.data.response.content;;
     setPatientList(result)
 
   }
@@ -4645,7 +4054,7 @@ const Details = ({ }) => {
   // const getFiltePatientListDate = async (date1,date2) => {
 
   //   const response = await axios.get(ENDPOINTS.apiEndoint +`dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`);
-  //   var result = response.data.content;
+  //   var result = response.data.response.content;;
   //   setPatientList(result)
 
   // }
@@ -4849,8 +4258,8 @@ const Details = ({ }) => {
       ENDPOINTS.apiEndoint +
       `dbservice/flagdetails?patientId=${patientId}&year=${dos}`
     );
-    if (response.data.length != 0) {
-      setFlagFirstData(response.data[0])
+    if (response.data.response.length != 0) {
+      setFlagFirstData(response.data.response[0])
 
 
     }
@@ -4862,9 +4271,9 @@ const Details = ({ }) => {
       ENDPOINTS.apiEndoint +
       `dbservice/flagdetails?patientId=${localPatientId}&year=${selectedDosValue}`
     );
-    setFlagResultList(response.data);
-    if (response.data.length != 0) {
-      setFlagFirstData(response.data[0])
+    setFlagResultList(response.data.response);
+    if (response.data.response.length != 0) {
+      setFlagFirstData(response.data.response[0])
 
     }
     setFilterDataLoading(false);
@@ -4928,7 +4337,7 @@ const Details = ({ }) => {
       );
 
       if (response.data) {
-        result = response.data;
+        result = response.data.response;
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>
@@ -5355,15 +4764,18 @@ const Details = ({ }) => {
                         </div>
 
                         <div className={`${visitStyles.secondContainer}`}>
+                          {patientResultReload ?
+                          <>
                           {activeTab == 1 ? 
-                           <Hcc/>
+                           <Hcc patientHccResult={patientDocumentResult} />
                            : activeTab == 2 ? (
-                            <NonHcc/>
+                            <NonHcc patientNonHccResult={patientDocumentResult}/>
                           ) : activeTab == 3 ? (
                            <Radiology/>
                           ) : (
                             <Lab/>
-                          )}                         
+                          )} 
+                          </> :null}                       
                         </div>
 
                         <div className={`${visitStyles.thirdContainer}`}>

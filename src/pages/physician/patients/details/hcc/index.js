@@ -76,7 +76,7 @@ import { Avatar, Tooltip } from 'antd';
 
 
 
-const Hcc = ({ }) => {
+const Hcc = ({patientHccResult }) => {
   const navigate = useRouter();
   let searchKeywords = [];
   // const searchPluginInstance = searchPlugin({
@@ -499,7 +499,7 @@ const Hcc = ({ }) => {
     var patientId = localStorage.getItem("patientId");
     setLocalOrgId(orgId);
     getPatientDetails(patientId, orgId, tenId);
-    getPatientIdDetails(patientId);
+    // getPatientIdDetails(patientId);
     // getPatientDetailsRadiology(orgId, tenId);
     setLocalTenantId(tenId);
 
@@ -559,7 +559,7 @@ const Hcc = ({ }) => {
     );
     setPatienIdDetails(response.data);
     console.log(response.data)
-    var result = response.data;
+    var result = response.data.response;
 
 
     const menu = (
@@ -703,12 +703,12 @@ const Hcc = ({ }) => {
     setIsModalComments(false);
     // var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
-    );
-    if (response.data) {
-      var result = response.data;
+    // const response = await axios.get(
+    //   ENDPOINTS.apiEndoint +
+    //   `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+    // );
+    if (patientHccResult) {
+      var result = patientHccResult;
       console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -736,7 +736,7 @@ const Hcc = ({ }) => {
         if (fileloadCondition != "fileNotLoad") {
 
           getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
-          setSelectMeatFileId(response.data.fileId);
+          setSelectMeatFileId(patientHccResult.fileId);
         }
         // setPatientDocumentResult(result);
 
@@ -1254,11 +1254,15 @@ const Hcc = ({ }) => {
         getFlagListLastDetails(patientId, highestDosValue[0].value);
 
         if (result.suggestRadiology != null) {
+          if(result.suggestRadiology.length !=0){
           getPatientDetailsRadiologyYear(orgId, tenId)
+          }
         }
 
         if (result.suggestLab != null) {
+          if(result.suggestLab.length !=0){
           getLabReportDetailsInititalLoad(orgId, tenId, capturedSectionsColorsMatching, encounterDateColorsMatching)
+          }
         }
 
 
@@ -1294,7 +1298,7 @@ const Hcc = ({ }) => {
     );
     console.log(response.data)
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -1826,7 +1830,7 @@ const Hcc = ({ }) => {
     );
     // const response = await axios.get(ENDPOINTS.apiEndoint + `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`);
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setPatientDetailsRadiology(result);
       setRadiologyResult(result);
       if (result.radiologyFileDetail != null) {
@@ -2086,7 +2090,7 @@ const Hcc = ({ }) => {
       `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
-    var resultTest = response.data;
+    var resultTest = response.data.response;
 
     var dosYearArrFile = [];
     if (resultTest.labFileDetail != null) {
@@ -2371,7 +2375,7 @@ const Hcc = ({ }) => {
       `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
-    var resultTest = response.data;
+    var resultTest = response.data.response;
 
     var dosYearArrFile = [];
     var fileDatesArr = [];
@@ -2647,7 +2651,7 @@ const Hcc = ({ }) => {
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setSelectFileURL(response.data);
       setSelectFileURLValid(response.data);
       setIsLoading(false);
@@ -2672,12 +2676,13 @@ const Hcc = ({ }) => {
   };
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
+    console.log("dasdjmasjdnmasvdas")
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setSelectFileURLRadiology(response.data);
       // fetch(response.data)
       //   .then((resp) => resp.arrayBuffer())
@@ -2698,7 +2703,7 @@ const Hcc = ({ }) => {
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data;
+      var result = response.data.response;
       setLabReportFile(response.data);
     }
   };
@@ -3201,7 +3206,7 @@ const Hcc = ({ }) => {
   const getSectionResult = async (value) => {
     var apiUrl = `dbservice/patient/compute/getsection?fileid=cbd48813-3f9c-4cc9-9882-1db87fdd1ffb&section=${value}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
-    var result = response.data;
+    var result = response.data.response;
     if (response.data) {
       setSectionList(response.data);
       setIsLoadingSection(false);
@@ -3933,7 +3938,7 @@ const Hcc = ({ }) => {
       ENDPOINTS.apiEndoint + `dbservice/hccdisease?diagnosisCode=${code}`
     );
     if (response.data) {
-      result = response.data;
+      result = response.data.response;
       data = (
         <div className="validhcc-details">
           {/* <Spin className='ml-2 ms-1' size="small" /> */}
@@ -4910,7 +4915,7 @@ const Hcc = ({ }) => {
       );
 
       if (response.data) {
-        result = response.data;
+        result = response.data.response;
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>

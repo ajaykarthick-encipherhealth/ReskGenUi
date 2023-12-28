@@ -6,6 +6,8 @@ import todoReducers from "./reducers/Reducers";
 import { DashboardReducer } from "./reducers/DashboradReducer";
 import { PatientsReducer } from "./reducers/PatientsReducer";
 import { ReportReducer } from "./reducers/ReportReducer";
+import { NotificationReducer } from "./reducers/NotificationReducer";
+
 //import { reducer as reduxFormReducer } from 'redux-form';
 import { createWrapper } from "next-redux-wrapper";
 
@@ -21,7 +23,8 @@ const reducers = combineReducers({
   todoReducers,
   workFlow: DashboardReducer,
   report:ReportReducer,
-  patients:PatientsReducer
+  patients:PatientsReducer,
+  notificationDatas:NotificationReducer
   //form: reduxFormReducer,
 });
 
