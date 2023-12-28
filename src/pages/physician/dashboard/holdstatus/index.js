@@ -25,7 +25,7 @@ const HoldStatus = () => {
     setOpenHoldStatus(false);
   };
 
-  const processedData = holdStatusData?.map((item) => {
+  const processedData = holdStatusData?.response?.map((item) => {
     let testValue = "no data";
 
     if (item.holdNotes && item.holdNotes.length > 0) {

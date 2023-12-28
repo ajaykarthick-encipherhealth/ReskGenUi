@@ -86,7 +86,7 @@ const DailyTask = () => {
   const currentWeek = getCurrentWeekDates();
 
   const card2Data = currentWeek?.map((dayInfo, index) => {
-    const matchingStatusData = dailyStatusData?.find((data) => {
+    const matchingStatusData = dailyStatusData?.response?.find((data) => {
       return dayjs(data?.response?.date).format("MM-DD-YYYY") === dayInfo?.date;
     });
     return {
@@ -126,39 +126,32 @@ const DailyTask = () => {
       (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
     ),
   ];
+  const router = useRouter();
+  const uniqueCardData = rearrangedCard2Data?.filter(
+    (value, index, self) =>
+      self.findIndex((v) => v?.dateString === value?.dateString) === index
+  );
+  const sortedData = uniqueCardData?.sort((a, b) => {
+    const dateA = new Date(a.dateString);
+    const dateB = new Date(b.dateString);
+    return dateA - dateB;
+  });
+  const uniqueDates = [...new Set(sortedData?.map((date) => date.dateString))];
   const showPrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
+      const nextDay = uniqueDates[currentIndex - 1];
+      dispatch(getDailyTaskDatas(nextDay));
     }
   };
 
-  const WeekDays = rearrangedCard2Data?.map((date) => {
-    const formattedDate = date?.dateString;
-    return formattedDate;
-  });
-
-  const router = useRouter();
-  const uniqueDates = [
-    ...new Set(rearrangedCard2Data.map((date) => date.dateString)),
-  ];
-
   const showNext = () => {
-    if (currentIndex < card2Data.length - 3) {
+    if (currentIndex < card2Data?.length - 3) {
       setCurrentIndex(currentIndex + 1);
       const nextDay = uniqueDates[currentIndex + 3];
       dispatch(getDailyTaskDatas(nextDay));
     }
   };
-
-  const uniqueCardData = rearrangedCard2Data?.filter(
-    (value, index, self) =>
-      self.findIndex((v) => v?.dateString === value?.dateString) === index
-  );
-  const sortedData = uniqueCardData.sort((a, b) => {
-    const dateA = new Date(a.dateString);
-    const dateB = new Date(b.dateString);
-    return dateA - dateB;
-  });
 
   const currentDateIndex = sortedData?.find(
     (info) => info?.date === dayjs(currentDate).format("MM-DD-YYYY")

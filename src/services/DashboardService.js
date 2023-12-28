@@ -2,8 +2,8 @@ import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
 
 export async function workStatusApi(startDate,endDate,router) {
+  const token = localStorage.getItem("token");
   try {
-    const token = localStorage.getItem("token");
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}management/dashboard/tile/statistics?start=${startDate}&end=${endDate}`,
       {

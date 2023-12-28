@@ -39,7 +39,7 @@ const Header = ({ onNote }) => {
   // );
   const dispatchValue = useDispatch();
 
-
+const Header = ({ onNote }) => {
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
   const router = useRouter();
@@ -57,14 +57,7 @@ const Header = ({ onNote }) => {
 
 
 
-
-
-
-
   useEffect(() => {
-
-    
-
     var loginCheck = localStorage.getItem("loginCheck");
     var userName = localStorage.getItem("userName");
     const userRoleLocal = localStorage.getItem("userRole");
@@ -158,15 +151,12 @@ const Header = ({ onNote }) => {
     },
   ];
 
-
   const getUserIdDetails = async (userId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
     );
-    setUserIdDetails(response.data.response);
 
-
-    // setUserIdDetails(response.data.response);
+    setUserIdDetails(response.data?.response);
   };
 
   const onChange = (value) => {
@@ -316,11 +306,6 @@ const Header = ({ onNote }) => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-
-
-
-
-
                         <TerminalComponent
                           handleNewUserMessage={handleNewUserMessage}
                           handleQuickButtonClicked={handleQuickButtonClicked}
@@ -332,14 +317,12 @@ const Header = ({ onNote }) => {
                         <Tooltip title={` Quality : ${percentage}%`}>
                           <div className="notificationIcon">
                             <div style={{ width: 40, height: 40 }}>
-
                               <CircularProgressbar
                                 value={percentage}
                                 text={`${percentage}%`}
                               />
 
                               {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
-
                             </div>
                           </div>
                         </Tooltip>
