@@ -591,7 +591,13 @@ const Details = ({ }) => {
       formData,
       headers
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1
+      });
       setAddPatient(false);
       setIsLoadingBtn(false);
       getPatientDetailsRadiology(localOrgId, localTenantId);
@@ -621,7 +627,13 @@ const Details = ({ }) => {
       formData,
       headers
     );
-    if (response?.status == 202) {
+    var result = response.data;
+      if (result.status == "SUCCESS") {
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1
+        });
       setAddPatient(false);
       setIsLoadingBtn(false);
       getPatientDetailsRadiology(localOrgId, localTenantId);
@@ -669,16 +681,15 @@ const Details = ({ }) => {
       dos: selectedDosValue
     };
 
-    console.log(postData)
-
-    try {
+   try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
         postData
       );
-      if (response?.status == 202) {
+      var result = response.data;
+      if (result.status == "SUCCESS") {
         notification.success({
-          message: "Completed Successfully!",
+          message: result.message,
           placement: "top",
           duration: 1
         });
@@ -706,9 +717,10 @@ const Details = ({ }) => {
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/decline`,
         postData
       );
-      if (response?.status == 202) {
+      var result = response.data;
+      if (result.status == "SUCCESS") {
         notification.success({
-          message: "Decline Successfully!",
+          message: result.message,
           placement: "top",
           duration: 1
         });
@@ -736,9 +748,10 @@ const Details = ({ }) => {
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/pending`,
         postData
       );
-      if (response?.status == 202) {
+      var result = response.data;
+      if (result.status == "SUCCESS") {
         notification.success({
-          message: "Pending Successfully!",
+          message: result.message,
           placement: "top",
           duration: 1
         });
@@ -766,9 +779,10 @@ const Details = ({ }) => {
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/hold`,
         postData
       );
-      if (response?.status == 202) {
+      var result = response.data;
+      if (result.status == "SUCCESS") {
         notification.success({
-          message: "Hold Successfully!",
+          message: result.message,
           placement: "top",
           duration: 1
         });

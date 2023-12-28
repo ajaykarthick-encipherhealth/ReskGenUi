@@ -1528,9 +1528,10 @@ const Hcc = ({ patientHccResult }) => {
       `dbservice/update/move/validtosuggested`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       notification.success({
-        message: "Moved to suggested Successfully!",
+        message: result.message,
         placement: "top",
         duration: 1
       });
@@ -1556,9 +1557,10 @@ const Hcc = ({ patientHccResult }) => {
       `dbservice/update/move/validtodeleted`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       notification.success({
-        message: "Moved to deleted Successfully!",
+        message: result.message,
         placement: "top",
         duration: 1
       });
@@ -1584,9 +1586,10 @@ const Hcc = ({ patientHccResult }) => {
       `dbservice/update/move/suggestedtodeleted`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       notification.success({
-        message: "Moved to deleted Successfully!",
+        message: result.message,
         placement: "top",
         duration: 1
       });
@@ -1612,9 +1615,10 @@ const Hcc = ({ patientHccResult }) => {
       `dbservice/update/move/suggestedtovalid`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       notification.success({
-        message: "Moved to valid Successfully!",
+        message: result.message,
         placement: "top",
         duration: 1
       });
@@ -1640,9 +1644,10 @@ const Hcc = ({ patientHccResult }) => {
       `dbservice/update/move/deletedtovalid`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       notification.success({
-        message: "Moved to valid Successfully!",
+        message: result.message,
         placement: "top",
         duration: 1
       });
@@ -1667,9 +1672,10 @@ const Hcc = ({ patientHccResult }) => {
       `dbservice/update/move/deletedtoSuggested`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       notification.success({
-        message: "Moved to Suggested Successfully!",
+        message: result.message,
         placement: "top",
         duration: 1
       });
@@ -1695,12 +1701,13 @@ const Hcc = ({ patientHccResult }) => {
       `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
-      notification.success({
-        message: "Moved valid diseases Successfully!",
-        placement: "top",
-        duration: 1
-      });
+    var result = response.data;
+      if (result.status == "SUCCESS") {
+         notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1
+        });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
     }
