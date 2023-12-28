@@ -123,6 +123,8 @@ const Details = ({ }) => {
   const [filterDataLoading, setFilterDataLoading] = useState(true);
 
   const [patientResultReload, setPatientResultReload] = useState(false);
+  const [selectModalName, setSelectModalName] = useState(false);
+
 
 
   const flagPostList = [
@@ -1567,7 +1569,7 @@ const Details = ({ }) => {
 
                   {confirmNotesModalDecline && (
                     <Modal
-                      title={selectDiseasesName}
+                      title={selectModalName}
                       centered
                       open={confirmNotesModalDecline}
                       onOk={handleCloseModal}
@@ -1617,7 +1619,7 @@ const Details = ({ }) => {
                   )}
                   {confirmNotesModalHold && (
                     <Modal
-                      title={selectDiseasesName}
+                      title={selectModalName}
                       centered
                       open={confirmNotesModalHold}
                       onOk={handleCloseModal}
@@ -1667,7 +1669,7 @@ const Details = ({ }) => {
                   )}
                   {confirmNotesModalValid && (
                     <Modal
-                      title={selectDiseasesName}
+                      title={selectModalName}
                       centered
                       open={confirmNotesModalValid}
                       onOk={handleCloseModal}
@@ -1717,7 +1719,7 @@ const Details = ({ }) => {
                   )}
                   {confirmNotesModalInValid && (
                     <Modal
-                      title={selectDiseasesName}
+                      title={selectModalName}
                       centered
                       open={confirmNotesModalInValid}
                       onOk={handleCloseModal}
@@ -1767,7 +1769,7 @@ const Details = ({ }) => {
                   )}
                   {suggestedModal && (
                     <Modal
-                      title={selectDiseasesName}
+                      title={selectModalName}
                       centered
                       open={suggestedModal}
                       onOk={handleCloseModal}
