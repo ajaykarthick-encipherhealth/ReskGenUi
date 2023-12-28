@@ -885,9 +885,11 @@ const Details = ({ }) => {
         `dbservice/flagdetails`,
         [dataFormatSuggested]
       );
-      if (response?.status == 202) {
+      var result = response.data;
+      if (result.status == "SUCCESS") {
+        inputValue.comments = '';
         notification.success({
-          message: "Flag added Successfully!",
+          message: result.message,
           placement: "top",
           duration: 1
         });
@@ -918,10 +920,11 @@ const Details = ({ }) => {
         `dbservice/notes`,
         [dataFormatSuggested]
       );
-      if (response?.status == 202) {
-        inputValue.comments = ''
+      var result = response.data;
+      if (result.status == "SUCCESS") {
+        inputValue.comments = '';
         notification.success({
-          message: "Notes added Successfully!",
+          message: result.message,
           placement: "top",
           duration: 1
         });
@@ -940,7 +943,7 @@ const Details = ({ }) => {
     event.preventDefault();
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-
+      
       var dataFormatSuggested = {
         patientId: localPatientId,
         orgId: localOrgId,
@@ -952,10 +955,11 @@ const Details = ({ }) => {
         `dbservice/comment`,
         [dataFormatSuggested]
       );
-      if (response?.status == 202) {
+      var result = response.data;
+      if (result.status == "SUCCESS") {
         inputValue.comments = '';
         notification.success({
-          message: "Comment added Successfully!",
+          message: result.message,
           placement: "top",
           duration: 1
         });
@@ -983,8 +987,14 @@ const Details = ({ }) => {
         `dbservice/comment`,
         [dataFormatSuggested]
       );
-      if (response?.status == 202) {
+      var result = response.data;
+      if (result.status == "SUCCESS") {
         inputValue.comments = '';
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1
+        });
         notification.success({
           message: "Comment added Successfully!",
           placement: "top",
@@ -1010,10 +1020,11 @@ const Details = ({ }) => {
         `dbservice/notes`,
         [dataFormatSuggested]
       );
-      if (response?.status == 202) {
-        inputValue.comments = ''
+      var result = response.data;
+      if (result.status == "SUCCESS") {
+        inputValue.comments = '';
         notification.success({
-          message: "Notes added Successfully!",
+          message: result.message,
           placement: "top",
           duration: 1
         });
