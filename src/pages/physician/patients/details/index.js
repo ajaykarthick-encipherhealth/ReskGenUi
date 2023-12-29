@@ -208,9 +208,10 @@ const Details = ({ }) => {
       ENDPOINTS.apiEndoint +
       `dbservice/patient/get?patientId=${patientId}`
     );
-    setPatienIdDetails(response.data);
+    setPatienIdDetails(response.data.response);
     console.log(response.data)
     var result = response.data.response;
+    console.log(result)
 
 
     const menu = (
@@ -221,7 +222,7 @@ const Details = ({ }) => {
               <span className={`badge hold-text`} >HOLD</span>
             </div>
           </Menu.Item> : null}
-        {result.processedStatus != "PENDING" ?
+        {(result.processedStatus != "PENDING" && result.processedStatus != "COMPUTED") ?
           <Menu.Item key='2' onClick={() => handleActionClick("PENDING")}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
@@ -646,7 +647,6 @@ const Details = ({ }) => {
   };
 
   const handleSubmitHccComplete = async () => {
-    setCompleteBtnTitle("Loading...");
     var dos = selectedDosValue;
     var validObject = {};
     var inValidObject = {};
@@ -654,12 +654,14 @@ const Details = ({ }) => {
     var comoboObject = {};
     var meatObject = {};
     var deletedObject = {};
-    validObject = newValidDiseaseList;
-    inValidObject = newInValidDiseaseList;
-    unmatachObject = suggestedHccList;
-    comoboObject = comboDiseaseCodesList;
-    meatObject = meatCriteriaList;
-    deletedObject = deletedHccList;
+
+    // console.log(patientDocumentResult)
+    // validObject = newValidDiseaseList;
+    // inValidObject = newInValidDiseaseList;
+    // unmatachObject = suggestedHccList;
+    // comoboObject = comboDiseaseCodesList;
+    // meatObject = meatCriteriaList;
+    // deletedObject = deletedHccList;
 
     var postData = {
       userId: localUserId,
@@ -671,17 +673,19 @@ const Details = ({ }) => {
       dob: patientDocumentResult.dob,
       gender: patientDocumentResult.gender,
       age: patientDocumentResult.age,
-      validDisease: validObject,
-      invalidDisease: inValidObject,
-      unmatchedDisease: unmatachObject,
-      comboDisease: comoboObject,
-      meatCriteria: meatObject,
+      validDisease: patientDocumentResult.validDisease,
+      invalidDisease: patientDocumentResult.invalidDisease,
+      unmatchedDisease:patientDocumentResult.unmatchedDisease,
+      comboDisease: patientDocumentResult.comboDisease,
+      meatCriteria: patientDocumentResult.meatCriteria,
       rafScore: patientDocumentResult.rafScore,
       dosFiltered: patientDocumentResult.dosFiltered,
       fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: deletedObject,
+      deletedDiseases: patientDocumentResult.deletedDiseases,
       dos: selectedDosValue
     };
+
+    console.log(postData)
 
    try {
       const response = await axios.post(
@@ -696,18 +700,15 @@ const Details = ({ }) => {
           duration: 1
         });
         setConfirmCompleteModal(false);
-        setCompleteBtnTitle("Complete");
         getPatientDetails(localPatientId, localOrgId, localTenantId);
         getPatientIdDetails(localPatientId);
       } else {
       }
     } catch (e) {
-      setCompleteBtnTitle("Complete");
     }
   };
 
   const handleSubmitHccDeclineApi = async () => {
-    setDeclineBtnTitle("Loading...");
     var postData = {
       orgId: localOrgId,
       patientId: localPatientId,
@@ -727,18 +728,15 @@ const Details = ({ }) => {
           duration: 1
         });
         setConfirmNotesModalHold(false);
-        setDeclineBtnTitle("Decline");
         getPatientIdDetails(localPatientId);
 
       } else {
       }
     } catch (e) {
-      setDeclineBtnTitle("Decline");
     }
   };
 
   const handleSubmitHccPending = async () => {
-    setDeclineBtnTitle("Loading...");
     var postData = {
       orgId: localOrgId,
       patientId: localPatientId,
@@ -759,17 +757,14 @@ const Details = ({ }) => {
         });
         setConfirmNotesModalHold(false);
         setConfirmNotesModalDecline(false);
-        setDeclineBtnTitle("Decline");
         getPatientIdDetails(localPatientId);
       } else {
       }
     } catch (e) {
-      setDeclineBtnTitle("Decline");
     }
   };
 
   const handleSubmitHccHold = async () => {
-    setDeclineBtnTitle("Loading...");
     var postData = {
       orgId: localOrgId,
       patientId: localPatientId,
@@ -790,12 +785,10 @@ const Details = ({ }) => {
         });
         setConfirmNotesModalHold(false);
         setConfirmNotesModalDecline(false);
-        setDeclineBtnTitle("Decline");
         getPatientIdDetails(localPatientId);
       } else {
       }
     } catch (e) {
-      setDeclineBtnTitle("Decline");
     }
   };
 

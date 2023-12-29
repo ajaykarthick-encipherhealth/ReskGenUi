@@ -232,7 +232,8 @@ export default function Patient() {
     if (statusValue != null) {
       if(statusValue == "ALL"){
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`
-      }else{
+      }
+      else{
         resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`
       }
     }
@@ -242,6 +243,10 @@ export default function Patient() {
 
     if (pStart != null && statusValue != null && statusValue != "ALL") {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
+    }
+
+    if (dStart != null && statusValue != null && statusValue != "ALL") {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
     }
 
     if (
@@ -941,7 +946,7 @@ if(searchtext ){
 
                               <div className="col-xl-2" >
                               <label></label>
-                                <div className={visitStyles.flags} style={{marginTop:"15px", marginLeft:"150px"}}>
+                                <div className={visitStyles.flags_patientsList} style={{marginTop:"15px"}}>
                                   <div className={visitStyles.flags}  >
                                     <span
                                       className={visitStyles.completed}
@@ -971,7 +976,7 @@ if(searchtext ){
                                   </div>
                                 </div>
                               </div>
-                              <div className="col-xl-2"  style={{width:"15% !important"}}>
+                              <div className="col-xl-2"  style={{width:"223px !important",height:"42px"}}>
                                 <Button
                                   onClick={addPatientFormId}
                                   className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}

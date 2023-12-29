@@ -656,6 +656,16 @@ line-height: normal;
   background: transparent;
   border-bottom: 0.0125rem solid purple !important;
 }
+.flags_patientsList {
+  display: flex;
+  flex-direction: row;                                                                                                                                                                
+  align-items: center;
+  margin-top: 5px ;
+ 
+                                                                                                                                                                                                                                                                                                                                                                        ;
+
+
+}
 .flags {
     display: flex;
     flex-direction: row;                                                                                                                                                                
@@ -1359,10 +1369,10 @@ margin-left: 20px;
   margin-right: 5px;
   font-size: 10px;
 }
-/* .addPatientIdBtn{
+.addPatientIdBtn{
   height: 42px !important;
-  margin-top: 29px;
-} */
+  margin-top: 33px;
+}
 
 .fileFormContianer{
   overflow-x: hidden;
