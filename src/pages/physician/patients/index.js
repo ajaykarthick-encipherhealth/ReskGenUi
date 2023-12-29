@@ -191,10 +191,10 @@ export default function Patient() {
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
-      var result =  response.data.response.content;
-      setTotalElements(response.data.response.totalElements);
+      var result =  response.data?.response?.content;
+      setTotalElements(response.data?.response?.totalElements);
 
-      result.map((res) => {
+      result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
           patientName: res.patientName,
@@ -404,38 +404,7 @@ if(searchtext ){
       }
       if (selectFileRadiology != null) {
         submitRadiology();
-      }
-      // const formData = new FormData();
-      // formData.append("file", selectFile);
-      // formData.append("dos", inputValue.year);
-      // formData.append("orgid", localOrgId);
-      // formData.append("tenantid", tenantId);
-      // formData.append("userid", localUserId);
-      // formData.append("patientid", inputValue.patientId);
-      // formData.append("patientname", inputValue.name);
-      // const headers = {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // };
-      // setSelectFile(formData);
-      // const response = await axios.post(
-      //   ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
-      //   `,
-      //   formData,
-      //   headers
-      // );
-      // if (response?.status == 200) {
-      //   notification.success({
-      //     message: "Patient File Upload Successfully!",
-      //   });
-      //   setAddPatient(false);
-      //   setIsLoadingBtn(false);
-      // } else {
-      //   setIsLoadingBtn(false);
-      // }
-      // setAddPatient(false);
-      // getAllList(localUserId);
+      }      
     }
 
     setValidated(true);
@@ -935,13 +904,7 @@ if(searchtext ){
                               </div>
                               <div className="col-xl-2" >
                               <label>Select Status</label>
-                                <div class="form-group has-search">
-                                  {/* <InputText
-                                    type="text"
-                                    onChange={(e) => filterChangePatientName(e)}
-                                    className="form-control new-form-control"
-                                    placeholder="Status"
-                                  /> */}
+                                <div class="form-group has-search">                                 
                                   <Select
                                     onChange={(selectedOption) =>
                                       dosOnChange(selectedOption)
@@ -951,106 +914,7 @@ if(searchtext ){
                                     isSearchable={false}
                                   />
                                 </div>
-                              </div>
-
-                              {/* <div className="col-xl-2">
-                                <div class="form-group has-search">
-
-                                  <Calendar
-                                    className="form-control new-form-control calender-pri-input"
-                                    value={dates}
-                                    onChange={(e) => setDates(e.value)}
-                                    selectionMode="range"
-                                    readOnlyInput
-                                    placeholder="Due Date"
-
-                                  />
-
-
-                                </div>
-                              </div> */}
-                              {/* <div className="col-xl-3">
-                                <div
-                                  onClick={handleOpenModal}
-                                  className={styles.dateDisplay}
-                                >
-                                  {dueDateStart != null ?
-                                  <div>
-                                  {moment(dueDateStart).format("MM-DD-YYYY")}&nbsp;- &nbsp;{moment(dueDateEnd).format("MM-DD-YYYY")}
-                                  </div> :<div></div>}
-                                  <Image src={calender} />
-                                </div>
-                                <Modal
-                                  title=""
-                                  visible={modalVisible}
-                                  onOk={handleOk}
-                                  mask={false}
-                                  // onCancel={false}
-                                  closable={false}
-                                  width="45%"
-                                  height="800px"
-                                  style={{ marginTop: "30px" }}
-                                >
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      height: "400px",
-                                    }}
-                                  >
-                                    <div style={{ display: "block" }}>
-                                      <div style={{ margin: "20px 0" }}>
-                                        <Button onClick={() => setIsDueDateCalender(true)} type="ghost">Due Date</Button>
-
-                                      </div>
-                                      <div>
-                                        <Button onClick={() => setIsDueDateCalender(false)}>Completed Date</Button>
-                                      </div>
-                                    </div>
-                                    {isDueDateCalender ?
-                                    <div>
-                                      <RangePicker
-
-                                        getPopupContainer={() =>
-                                          document.getElementById("date-popup")
-                                        }
-                                        popupStyle={{
-                                          marginTop: "-259px",
-                                          marginLeft: "-78px"
-                                        }}
-                                        onChange={(dates, dateStrings) => {
-                                          handleDatePickerChange(dateStrings);
-                                        }}
-                                        open={true}
-                                        showNow={false}
-                                        style={{ visibility: "hidden", boxShadow: "none" }}
-                                      />
-                                    </div> :
-                                    <div>
-                                      <RangePicker
-
-                                        getPopupContainer={() =>
-                                          document.getElementById("date-popup")
-                                        }
-                                        popupStyle={{
-                                          marginTop: "-259px",
-                                          marginLeft: "-78px"
-                                        }}
-                                        onChange={(dates, dateStrings) => {
-                                          handleDatePickerChangeProcesseDate(dateStrings);
-                                        }}
-                                        open={true}
-                                        showNow={false}
-                                        style={{ visibility: "hidden", boxShadow: "none" }}
-                                      />
-                                    </div>}
-                                  </div>
-                                  <div
-                                    id="date-popup"
-                                    style={{ position: "relative" }}
-                                  />
-                                </Modal>
-                              </div> */}
+                              </div>                              
                               <div className="col-xl-2">
                               <label>Due Date</label>
                                 <div>
@@ -1107,27 +971,6 @@ if(searchtext ){
                                   </div>
                                 </div>
                               </div>
-
-
-                              {/* <div className="col-xl-2">
-                                <div class="form-group has-search"> */}
-                              {/* <Calendar
-                                    className="form-control new-form-control calender-pri-input"
-                                    value={compledtedDate}
-                                    onChange={(e) => setCompletedDate(e.value)}
-                                    selectionMode="range"
-                                    readOnlyInput
-                                    placeholder="Completed Date"
-                                  /> */}
-                              {/* <Button type="primary" onClick={showModal}>
-          Open Modal
-        </Button> */}
-                              {/* <div>
-                                    <RangePicker />
-                                  </div> */}
-                              {/* </div>
-                              </div> */}
-
                               <div className="col-xl-2"  style={{width:"15% !important"}}>
                                 <Button
                                   onClick={addPatientFormId}
@@ -1142,83 +985,7 @@ if(searchtext ){
                         <div
                           id="task-tbl_wrapper"
                           className="dataTables_wrapper no-footer"
-                        >
-                          {/* <DataTable
-                            value={patinetListAll}
-                            paginator={false}
-                            rows={10}
-                            rowsPerPageOptions={[10, 25, 50, 100]}
-                            dataKey="id"
-                            filters={filters}
-                            filterDisplay="menu"
-                            className="custom-table"
-                            rowClassName="custom-row"
-                          >
-                           
-
-                            <Column
-                              field="patientId"
-                              header="Patient Id"
-                              bodyStyle={{
-                                borderLeft: " 0.2px solid #e1e1e1",
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                            <Column
-                              field="patientName"
-                              header="Patient Name"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                           
-                            <Column
-                              field="status"
-                              body={statusBodyTemplate}
-                              header="Status"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                           
-                            <Column
-                              field="dueDate"
-                              body={(data) =>
-                                moment(data.dueDate).format("MM-DD-YYYY")
-                              }
-                              sortable
-                              header="Due Date"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                            <Column
-                              field="lastModifiedDate"
-                              body={(data) =>
-                                moment(data.dueDate).format("MM-DD-YYYY")
-                              }
-                              sortable
-                              header="Completed Date"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                            <Column
-                              field="action"
-                              body={actionBodyTemplate}
-                              header="Action"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                                borderRight: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                          </DataTable> */}
+                        >                         
                            {isLoading ? (
             <LoadingSpinner />
           ) : (
