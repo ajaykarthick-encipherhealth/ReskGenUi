@@ -41,8 +41,8 @@ export default function UserLogin() {
                     password: password,
                 };
                 const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/auth/login`, postData);
-                var result = response.data;
-                if (result.access_token != null) {
+                var result = response.data.response;
+                if (response.data.status == "SUCCESS") {
                     if(emailSplit[0] === "ajgith01"){
                         localStorage.setItem("userRole", 'Coder-L2')
 
@@ -59,17 +59,21 @@ export default function UserLogin() {
 
                     router.push("/physician/dashboard");
                     notification.success({
-                        message: "Login Success",
+                        message: response.data.message,
                         duration: 1
                     });
                 } else {
                     setIsLoading(false);
                     notification.error({
-                        message: "Login Failed",
+                        message:response.data.message,
                         duration: 1
                     });
                 }
             } catch (e) {
+                notification.error({
+                    message:response.data.message,
+                    duration: 1
+                });
                 setIsLoading(false);
                 // notification.error({
                 //     message: "Login Failed"
