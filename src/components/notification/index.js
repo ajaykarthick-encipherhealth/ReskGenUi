@@ -20,7 +20,7 @@ const Notification = ({ notificationResponse }) => {
           (data, i) => (
             <li
               className='active dlab-chat-user'
-              onClick={() => setOpenMsg(true)}
+             
             >
               <div className='d-flex bd-highlight'>
                 <div className='img_cont'>
