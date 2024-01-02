@@ -96,7 +96,6 @@ const UserList = () => {
 	const getAllList = async (tenId, orgId, page, limit, status) => {
 		var apiUrl = `management/admin/getusers?orgId=${orgId}&tenantId=${tenId}&status=${status}&page=${page}&limit=${limit}`;
 		const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
-		console.log(response.data);
 		var result = response.data;
 		if (response.data) {
 			setUserList(result.record != null ? result.record : []);
@@ -119,7 +118,6 @@ const UserList = () => {
 	const deletUser = async (userId) => {
 		var apiUrl = `management/admin/user?userId=${userId}&orgId=${localOrgId}&tenantId=${localTenantId}`;
 		const response = await axios.delete(ENDPOINTS.apiEndoint + apiUrl);
-		console.log(response.data);
 		var result = response.data;
 		if (response.data) {
 			setUserList(result.record != null ? result.record : []);

@@ -10,6 +10,8 @@ import { NotificationReducer } from "./reducers/NotificationReducer";
 
 //import { reducer as reduxFormReducer } from 'redux-form';
 import { createWrapper } from "next-redux-wrapper";
+import { AdminPatientsReducer } from "./reducers/adminRecucers/fileProcessingReducer";
+import { AdminPatientsListReducer } from "./reducers/adminRecucers/patientsReducers"
 
 const middleware = applyMiddleware(thunk);
 
@@ -24,7 +26,9 @@ const reducers = combineReducers({
   workFlow: DashboardReducer,
   report:ReportReducer,
   patients:PatientsReducer,
-  notificationDatas:NotificationReducer
+  notificationDatas:NotificationReducer,
+  adminPatient:AdminPatientsReducer,
+  adminList:AdminPatientsListReducer
   //form: reduxFormReducer,
 });
 
