@@ -275,14 +275,17 @@ function FileProcessingTable({ patinetListAll }) {
             : stageChartMap2[data?.processStageChart] === "STORED_FAILED" &&
               "error",
         info: "FINISHED",
+        style: {
+          backgroundColor: data?.processStageChart=== "FINISHED" ? "green" : "inherit",
+        },
       },
     ].map((step, index) => ({
       ...step,
       status: step.status,
 
-      // style: {
-      //   backgroundColor: step.status === "finish" ? "green" : "inherit",
-      // },
+      style: {
+        color: step.status === "finish" ? "green" : "inherit",
+      },
     }));
     const stepsItem =
       data?.processStageRadiology !== null
@@ -300,6 +303,7 @@ function FileProcessingTable({ patinetListAll }) {
                   ? "error"
                   : undefined,
               info: "QUERY_CONDITIONS_FOUND",
+              
             },
           ]
         : stepsItemBase;
@@ -307,9 +311,9 @@ function FileProcessingTable({ patinetListAll }) {
     const mappedSteps = stepsItem.map((step, index) => ({
       ...step,
       status: step.status,
-      // style: {
-      //   backgroundColor: step.info === "FINISHED" ? "green" : "inherit",
-      // },
+      style: {
+        color: step.info === "FINISHED" ? "green" : "inherit",
+      },
     }));
 
     return (
@@ -375,6 +379,7 @@ function FileProcessingTable({ patinetListAll }) {
                   labelPlacement="vertical"
                   items={mappedSteps}
                   percent={uploadStatus}
+                  finishIconBorderColor="#000"
                 />
               </div>
             </>
