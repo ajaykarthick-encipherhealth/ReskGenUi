@@ -69,6 +69,16 @@ export const AdminMenuList = [
     iconStyle: SVGICON.Usermanagement,
     to: "/admin/file-processing",
   },
+  {
+    title: "Patient Allocate",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/admin/allocatedUser",
+  },
+  // {
+  //   title: "Traking",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/admin/allocatedUser",
+  // },
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,
