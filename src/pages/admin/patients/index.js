@@ -336,8 +336,19 @@ export default function Patient() {
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
+          // style={{
+          //   width: "182px",
+          //   height: "32px",
+          //   borderRadius: "10px",
+          //   border: "0.5px dashed #C4C4C4",
+          //   backgroundColor:"transparent"
+          // }}
         >
           <FontAwesomeIcon icon={faUpload} fontSize={11} />
+
+     
+   
+          {/* <span style={{ fontSize: "15px", color: "#A8A8AA" }}>Upload</span> */}
         </button>
       </div>
     );
