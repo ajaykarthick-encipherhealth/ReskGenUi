@@ -12,6 +12,7 @@ import {
 import moment from "moment";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../../jsx/layouts/Footer";
+
 export default function AdminList({ userList, getAllList }) {
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
@@ -48,7 +49,7 @@ export default function AdminList({ userList, getAllList }) {
           </tr>
         </thead>
         <tbody>
-          {userList.map((item, index) => (
+          {userList?.map((item, index) => (
             <tr key={index} style={{ height: "35px" }}>
               <td
                 className={TableStyle.childBorder}

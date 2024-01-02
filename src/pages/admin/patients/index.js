@@ -69,18 +69,20 @@ export default function Patient() {
     // setIsLoading(false);
     dispatch(getPatients(pageNo, pageSize));
   }, [pageNo, pageSize]);
+
+  console.log(response)
   useEffect(() => {
     if (response) {
-      getAllList();
+      getAllList(response?.response);
     }
-  }, [response]);
+  }, [response,pageNo]);
 
-  const getAllList = () => {
-    if (response?.response) {
+  const getAllList = (response) => {
+    if (response) {
       var resultMap = [];
-      var result = response?.response?.content;
-      setTotalElements(response?.response?.totalElements);
-      result.map((res) => {
+      var result = response?.content;
+      setTotalElements(response?.totalElements);
+      result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
           patientName: res.patientName,
@@ -236,7 +238,7 @@ export default function Patient() {
         setIsLoadingBtn(false);
       }
       // setAddPatientId(false);
-      getAllList(response);
+      getAllList(response?.response);
     }
 
     setValidated(true);
@@ -367,8 +369,7 @@ export default function Patient() {
       formData,
       headers
     );
-
-    if (response?.status == 202) {
+    if (response?.status === 200) {
       getAllList(response);
 
       notification.success({
@@ -440,7 +441,7 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                             <label>Search by Name or ID</label>
                             <div class="form-group has-search">
                               <FontAwesomeIcon
@@ -449,14 +450,14 @@ export default function Patient() {
                               />
                               <InputText
                                 type="text"
-                                // onChange={(e) => getNameSearch(e.target.value)}
+                                onChange={(e) => getNameSearch(e.target.value)}
                                 className="form-control new-form-control"
                                 placeholder="Search"
                               />
                             </div>
-                          </div>
+                          </div> */}
 
-                          <div className="col-xl-10">
+                          <div className="col-xl-12">
                             <Button
                               onClick={addPatientFormId}
                               className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}

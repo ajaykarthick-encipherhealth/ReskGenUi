@@ -40,11 +40,12 @@ export default function UserLogin() {
         postData
       );
       var result = response.data.response;
+      console.log(result)
       if (response.data.status == "SUCCESS") {
         if (emailSplit[0] === "ajgith01") {
           localStorage.setItem("userRole", "Coder-L2");
         } else {
-          localStorage.setItem("userRole", "physician");
+          localStorage.setItem("userRole",result?.roles[0]?.toLowerCase() );
         }
         localStorage.setItem("token", result.access_token);
         localStorage.setItem("tenantId", result.tenantId);
@@ -60,19 +61,19 @@ export default function UserLogin() {
           router.push("/admin/user");
         }
         notification.success({
-          message: response.data.message,
+          message: result?.message? result?.message:"Login Successfully",
           duration: 1,
         });
       } else {
         setIsLoading(false);
         notification.error({
-          message: response.data.message,
+          message: result?.message,
           duration: 1,
         });
       }
     } catch (e) {
       notification.error({
-        message: response.data.message,
+        message: "Login Failed",
         duration: 1,
       });
       setIsLoading(false);
