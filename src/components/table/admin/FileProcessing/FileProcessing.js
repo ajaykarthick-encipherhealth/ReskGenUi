@@ -343,7 +343,17 @@ function FileProcessingTable({ patinetListAll }) {
   };
 
   const renderRows = () => {
-    return parsedData?.map((data, index) => (
+    return parsedData.length>0 ? parsedData?.map((data, index) => (
+      <tr key={index}>
+        <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
+        <td className={TableStyle.childBorder}>
+          {data?.patientName ? data?.patientName : "---"}
+        </td>
+        <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
+          {renderUploadStatus(data, index)}
+        </td>
+      </tr>
+    )):selectedRowTime?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
         <td className={TableStyle.childBorder}>
