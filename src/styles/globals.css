@@ -12230,7 +12230,7 @@ tbody > tr {
   margin-right: 20px;
 }
 
-:where(.css-dev-only-do-not-override-zcfrx9).ant-ribbon-wrapper {
+.ant-ribbon-wrapper {
   position: relative;
   bottom: 26px;
   right: 8px;
@@ -12596,20 +12596,17 @@ tbody > tr {
   display: block; 
 
 } */
-:where(.css-dev-only-do-not-override-2q8sxy).ant-picker-dropdown
-  .ant-picker-panel-container {
-  box-shadow: none;
+.ant-picker-dropdown .ant-picker-panel-container {
+  box-shadow: none !important;
 }
-:where(
-    .css-dev-only-do-not-override-2q8sxy
-  ).ant-ribbon.ant-ribbon-placement-start {
+.ant-ribbon.ant-ribbon-placement-start {
   width: 57px;
   font-size: 12px;
 }
-:where(.css-dev-only-do-not-override-2q8sxy).ant-ribbon-wrapper {
+.ant-ribbon-wrapper {
   position: relative;
   bottom: 23px;
-  right: 6px;
+  /* right: 6px; */
 }
 .metismenu a {
   align-items: center !important;

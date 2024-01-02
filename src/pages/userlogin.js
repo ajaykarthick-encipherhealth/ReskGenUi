@@ -44,7 +44,7 @@ export default function UserLogin() {
         if (emailSplit[0] === "ajgith01") {
           localStorage.setItem("userRole", "Coder-L2");
         } else {
-          localStorage.setItem("userRole", "admin");
+          localStorage.setItem("userRole", "physician");
         }
         localStorage.setItem("token", result.access_token);
         localStorage.setItem("tenantId", result.tenantId);
