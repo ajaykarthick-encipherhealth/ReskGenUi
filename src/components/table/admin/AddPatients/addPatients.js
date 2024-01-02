@@ -79,14 +79,14 @@ function AddPatientListTable({
     return patinetListAll?.map((data, index) => (
       <tr
         key={index}
-        // onClick={() => {
-        //   dispatch(
-        //     selectedRoWDetails({
-        //       patientId: data?.patientId,
-        //       processStageId: data?.processStageId,
-        //     })
-        //   );
-        // }}
+        onClick={() => {
+          dispatch(
+            selectedRoWDetails({
+              patientId: data?.patientId,
+              processStageId: data?.processStageId,
+            })
+          );
+        }}
       >
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           {data.patientId}

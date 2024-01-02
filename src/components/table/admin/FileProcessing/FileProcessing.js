@@ -16,7 +16,7 @@ function FileProcessingTable({ patinetListAll }) {
     Array(patinetListAll?.length).fill(false)
   );
   const [parsedData, setParsedData] = useState([]);
-
+  const [activeId,setActiveId]=useState()
   const dispatch = useDispatch();
 
   const selectedRowDetails = useSelector(
@@ -24,18 +24,14 @@ function FileProcessingTable({ patinetListAll }) {
   );
   const response = useSelector((state) => state.adminList.patients);
 
+  console.log(response,selectedRowDetails)
   const filterDetails = response?.response?.content?.filter(
     (item) => item?.patientId === selectedRowDetails?.patientId
   );
   const selectedRowTime = useSelector(
     (state) => state.adminPatient.patientsList
   );
-
-  const details = filterDetails?.map((item) => ({
-    patientId: item?.patientId,
-    processStageId: item?.processStageId,
-  }));
-
+  
   useEffect(() => {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
@@ -55,14 +51,20 @@ function FileProcessingTable({ patinetListAll }) {
   }, []);
 
   useEffect(() => {
-    parsedData?.map((data, index) => {
-      // if (data?.processStageChart === "FINISHED") {
-      //   dispatch(completedReport(data));
-      dispatch(getPatientsList(data?.patientId, data?.processStageId));
-    });
+    if(activeId){
+      parsedData?.map((info, index) => {
+        if (info?.patientId===activeId) {
+          dispatch(getPatientsList(info?.patientId, info?.processStageId));
+        }
+      });
+    }
+    
   }, [parsedData]);
 
+  // console.log(parsedData)
   const handleToggleStepper = (index, data) => {
+    setActiveId(data.patientId)
+    
     const updatedVisibility = stepperVisible?.map((value, i) =>
       i === index ? !value : false
     );
@@ -278,9 +280,9 @@ function FileProcessingTable({ patinetListAll }) {
       ...step,
       status: step.status,
 
-      style: {
-        backgroundColor: step.status === "finish" ? "green" : "inherit",
-      },
+      // style: {
+      //   backgroundColor: step.status === "finish" ? "green" : "inherit",
+      // },
     }));
     const stepsItem =
       data?.processStageRadiology !== null
@@ -305,9 +307,9 @@ function FileProcessingTable({ patinetListAll }) {
     const mappedSteps = stepsItem.map((step, index) => ({
       ...step,
       status: step.status,
-      style: {
-        background: step.status === "finish" ? "green" : "inherit",
-      },
+      // style: {
+      //   backgroundColor: step.info === "FINISHED" ? "green" : "inherit",
+      // },
     }));
 
     return (
@@ -336,23 +338,27 @@ function FileProcessingTable({ patinetListAll }) {
                 style={{
                   display: "flex",
                   width: "100%",
-                  marginTop:"20px",
+                  margin: "20px 0px 0px 10px",
                   gap: "10px",
                   flexWrap: "wrap",
                   justifyContent: "space-around",
                 }}
               >
-                {stepsItemBase.map((step, index) => (
+                {mappedSteps?.map((step, index) => (
                   <div key={index} style={{ width: "10%" }}>
-                    {selectedRowTime.find(
-                      (item) => item.processStageChart === step.info
-                    )
-                      ? dayjs(
+                    {selectedRowTime?.find(
+                      (item) => item?.processStageChart === step.info
+                    ) ? (
+                      <span>
+                        {new Date(
                           selectedRowTime.find(
-                            (item) => item.processStageChart === step.info
+                            (item) => item?.processStageChart === step.info
                           ).createdDate
-                        ).format("hh:mm:ss")
-                      : "---"}
+                        ).toISOString().substr(11, 8)}
+                      </span>
+                    ) : (
+                      "---"
+                    )}
                   </div>
                 ))}
               </div>
@@ -368,6 +374,7 @@ function FileProcessingTable({ patinetListAll }) {
                   current={currentIndex}
                   labelPlacement="vertical"
                   items={mappedSteps}
+                  percent={uploadStatus}
                 />
               </div>
             </>

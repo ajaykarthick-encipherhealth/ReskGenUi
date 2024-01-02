@@ -13312,10 +13312,17 @@ tbody > tr {
   /* background-color: yellow !important; */
   border: 1px solid #1677ff !important;
   font-weight: 700;
-  color:black;
+  color:black !important;
   /* color: #1677ff !important; */
 }
+.ant-steps .ant-steps-item-process .ant-steps-item-icon >.ant-steps-icon {
+  color:rgba(0, 0, 0, 0.65) !important;
 
+}
+.ant-steps.ant-steps-with-progress .ant-steps-item-process .ant-steps-item-container .ant-steps-item-icon .ant-steps-icon {
+  color:rgba(0, 0, 0, 0.65) !important;
+
+}
 /* Wait Step */
 .ant-steps-item-wait .ant-steps-item-icon {
   background-color: white !important;
