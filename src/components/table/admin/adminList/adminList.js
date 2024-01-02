@@ -42,7 +42,7 @@ export default function AdminList({ userList, getAllList }) {
             <th>User Name</th>
             <th>Email</th>
             <th>Role</th>
-            <th>Status</th>
+            {/* <th>Status</th> */}
             <th>Date Created</th>
             {/* <th>Action</th> */}
           </tr>
@@ -80,7 +80,7 @@ export default function AdminList({ userList, getAllList }) {
               >
                 <span>{item.role[0] ? item.role[0] : "---"}</span>
               </td>
-              <td
+              {/* <td
                 className={TableStyle.childBorder}
                 style={{ height: "40px !important" }}
               >
@@ -88,15 +88,15 @@ export default function AdminList({ userList, getAllList }) {
                   {" "}
                   <Switch
                     id={index}
-                    //   onChange={(event) =>
-                    //     switchHandler(event, index)
-                    //   }
-                    //   checked={isStatus[index]}
+                      onChange={(event) =>
+                        switchHandler(event, index)
+                      }
+                      checked={isStatus[index]}
                     checkedChildren="Enabled"
                     unCheckedChildren="Disabled"
                   />
                 </span>
-              </td>
+              </td> */}
               <td
                 className={TableStyle.lastBorder}
                 style={{ height: "40px !important" }}

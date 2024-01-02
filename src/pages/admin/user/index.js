@@ -1,407 +1,456 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
-import { Button } from 'react-bootstrap';
-import axios from '../../../utility/axiosConfig';
-import ENDPOINTS from '../../../utility/enpoints';
-import { Offcanvas } from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
-import Select from 'react-select';
-import NavBar from "../../../jsx/layouts/nav";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { Button } from "react-bootstrap";
+import axios from "../../../utility/axiosConfig";
+import ENDPOINTS from "../../../utility/enpoints";
+import { Offcanvas } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import Select from "react-select";
 import { useSelector } from "react-redux";
 import { ThemeContext } from "../../../context/ThemeContext";
-import { Switch } from 'antd';
+import { Switch } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import moment from 'moment';
-import Swal from 'sweetalert2';
-import { DataTable } from 'primereact/datatable';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
-import { Column } from 'primereact/column';
-import { InputText } from 'primereact/inputtext';
-
-
-
-
+import { notification } from "antd";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faTrash,
+  faPencilAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
+import Swal from "sweetalert2";
+import { DataTable } from "primereact/datatable";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { Column } from "primereact/column";
+import { InputText } from "primereact/inputtext";
+import AdminList from "../../../components/table/admin/adminList/adminList";
+import Header from "../../../jsx/layouts/nav/Header";
 
 const UserList = () => {
+  // const { sidebariconHover} = useContext(ThemeContext);
 
-	// const { sidebariconHover} = useContext(ThemeContext);
+  const sideMenu = useSelector((state) => state.sideMenu);
 
-	const sideMenu = useSelector(state => state.sideMenu);
+  const [localUserId, setLocalUserId] = useState("");
+  const [localOrgId, setLocalOrgId] = useState("");
+  const [localTenantId, setLocalTenantId] = useState("");
+  const [pageDataCount, setPageDataCount] = useState(0);
+  const [pageLimitCount, setPageLimitCount] = useState(1000);
 
-	const [localUserId, setLocalUserId] = useState('');
-	const [localOrgId, setLocalOrgId] = useState('');
-	const [localTenantId, setLocalTenantId] = useState('');
-	const [pageDataCount, setPageDataCount] = useState(0);
-	const [pageLimitCount, setPageLimitCount] = useState(1000);
+  const [validated, setValidated] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [userListAll, setUserListAll] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [addUser, setAddUser] = useState(false);
 
+  const recordsPage = 10;
+  const lastIndex = currentPage * recordsPage;
+  const firstIndex = lastIndex - recordsPage;
 
-	const [validated, setValidated] = useState(false);
-	const [userList, setUserList] = useState([]);
-	const [userListAll, setUserListAll] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
-	const [isDataLoading, setIsDataLoading] = useState(true);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [addUser, setAddUser] = useState(false);
-
-	const recordsPage = 10;
-	const lastIndex = currentPage * recordsPage;
-	const firstIndex = lastIndex - recordsPage;
-
-	const [npage, setNPage] = useState('');
-	const [number, setNumber] = useState([]);
-	const [records, setRecords] = useState([]);
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
-	const [email, setEmail] = useState('');
-	const [isStatus, setStatus] = useState(false);
-	const [roleValue, setRoleValue] = useState(false);
-
-	const [formData, setFormData] = useState({
-		name: '',
-		emailId: '',
-		password: '',
-		// role: '',
-		userName: '',
-		mobileNumber: ''
-	});
+  const [npage, setNPage] = useState("");
+  const [number, setNumber] = useState([]);
+  const [records, setRecords] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [isStatus, setStatus] = useState(false);
+  const [roleValue, setRoleValue] = useState(false);
+  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
 
 
-	const [pageCount, setPageCount] = useState(0);
-	const [pageIndex, setPageIndex] = useState(0);
-	const [pageOptions, setPageOptions] = useState(0);
-	const [canPreviousPage, setCanPreviousPage] = useState(false);
-	const [canNextPage, setCanNextPage] = useState(true);
-	const [canMaxPage, setCanMaxPage] = useState(10);
+  const [formData, setFormData] = useState({
+    name: "",
+    emailId: "",
+    password: "",
+    // role: '',
+    userName: "",
+    mobileNumber: "",
+  });
 
-	const [filters, setFilters] = useState({
-		global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-		patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
-		patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-	});
+  const [pageCount, setPageCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageOptions, setPageOptions] = useState(0);
+  const [canPreviousPage, setCanPreviousPage] = useState(false);
+  const [canNextPage, setCanNextPage] = useState(true);
+  const [canMaxPage, setCanMaxPage] = useState(10);  
+  const [addPatientId, setAddPatientId] = useState(false);
 
 
 
-	useEffect(() => {
-		var tenId = localStorage.getItem("tenantId");
-		var uId = localStorage.getItem("userId");
-		var orgId = localStorage.getItem("orgId");
-		setLocalTenantId(tenId);
-		setLocalUserId(uId);
-		setLocalOrgId(orgId);
-		getAllList(tenId, orgId, pageDataCount, pageLimitCount, '');
-	}, []);
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+  const [inputValue, setInputValue] = useState({
+    year: "",
+    name: "",
+    patientId: "",
+  });
+  const [inputValuePatientId, setInputValuePatientId] = useState({
+    patientId: "",
+    patientName: "",
+  });
+  useEffect(() => {
+    var tenId = localStorage.getItem("tenantId");
+    var uId = localStorage.getItem("userId");
+    var orgId = localStorage.getItem("orgId");
+    setLocalTenantId(tenId);
+    setLocalUserId(uId);
+    setLocalOrgId(orgId);
+    getAllList(tenId, orgId, pageDataCount, pageLimitCount, "");
+  }, []);
+
+  const getAllList = async (tenId, orgId, page, limit, status) => {
+    var apiUrl = `management/admin/getusers?orgId=${orgId}&tenantId=${tenId}&status=${status}&page=${page}&limit=${15}`;
+    const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
+    console.log(response.data.response.record),"test";
+    var result = response.data.response;
+    if (response.data.response) {
+      setUserList(result.record != null ? result.record : []);
+      setIsDataLoading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const createUser = async (data) => {
+    setIsLoading(true);
+    const response = await axios.post(
+      ENDPOINTS.apiEndoint + `securityservice/admin/getusers/createuser`,
+      data
+    );
+    console.log(response);
+    var result = response.data.response.record;
+    if (response?.status == 201) {
+      setAddUser(false);
+      getAllList(localTenantId, localOrgId, pageDataCount, pageLimitCount, "");
+    } else {
+    }
+  };
+  const deletUser = async (userId) => {
+    var apiUrl = `management/admin/user?userId=${userId}&orgId=${localOrgId}&tenantId=${localTenantId}`;
+    const response = await axios.delete(ENDPOINTS.apiEndoint + apiUrl);
+    console.log(response.data.response.record);
+    var result = response.data.response;
+    if (response.data.response.record) {
+      setUserList(result.record != null ? result.record : []);
+      setIsDataLoading(false);
+      setIsLoading(false);
+      getAllList(tenId, orgId, pageDataCount, pageLimitCount, "");
+    }
+  };
+
+  const addUserForm = () => {
+    setValidated(false);
+    setAddUser(true);
+  };
+
+  const handleChange = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setFormData({ ...formData, [key]: value });
+    if (key == "role") {
+      setRoleValue([value]);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+      formData.tenantId = localTenantId;
+      formData.orgId = localOrgId;
+      formData.role = roleValue;
+      console.log(formData);
+      createUser(formData);
+    }
+    setValidated(true);
+  };
+
+  const roleUpdate = async (data) => {
+    setIsLoading(true);
+    const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data);
+    if (response?.status == 200) {
+      setAddUser(false);
+      getAllList(tenId, orgId, pageDataCount, pageLimitCount, "");
+    } else {
+    }
+  };
+
+  const options3 = [
+    { value: "1", label: "ALL" },
+    { value: "2", label: "Enabled" },
+    { value: "3", label: "Disabled" },
+  ];
+  const RoleList = [
+    { value: "Coder(Level 1)", label: "Coder(Level 1)" },
+    { value: "Coder(Level 2)", label: "Coder(Level 2)" },
+    { value: "Auditor", label: "Auditor" },
+    { value: "Team Lead", label: "Team Lead" },
+  ];
+
+  function gotoPage(number) {
+    if (canMaxPage > number) {
+      setCanNextPage(true);
+      setPageIndex(number);
+      if (number > 0) {
+        setCanPreviousPage(true);
+      } else {
+        setCanPreviousPage(false);
+      }
+      setPageCount(number);
+    } else {
+      setCanNextPage(false);
+    }
+    var start = number * 10;
+    var end = start + 10;
+    const records = userListAll.slice(start, end);
+    setUserList(records);
+
+    getAllList(localTenantId, localTenantId, number, pageLimitCount, "");
+  }
+  function nextPage(number) {
+    if (canMaxPage > number) {
+      setPageCount(number);
+      setPageIndex(number);
+      setCanPreviousPage(true);
+    } else {
+      setCanNextPage(false);
+    }
+    getAllList(localTenantId, localTenantId, number, pageLimitCount, "");
+  }
+
+  function previousPage(number) {
+    setCanNextPage(true);
+    setPageIndex(number);
+    if (number > 0) {
+      setCanPreviousPage(true);
+    } else {
+      setCanPreviousPage(false);
+    }
+    setPageCount(number);
+    getAllList(localTenantId, localTenantId, number, pageLimitCount, "");
+  }
+
+  const roleChange = async (e) => {
+    console.log(e.value);
+    var data = {};
+    data.role = e.value;
+    console.log(data);
+    // roleUpdate(data);
+  };
+
+  const switchHandler = (event, id) => {
+    const isChecked = event;
+    setStatus(({ isStatus }) => ({
+      isStatus: {
+        ...isStatus,
+        [id]: isChecked,
+      },
+    }));
+
+    console.log(isStatus);
+  };
+
+  const userEdit = (data) => {
+    setAddUser(true);
+  };
+  const userDelete = (data) => {
+    Swal.fire({
+      title: "Do you want delete!",
+      text: data.name,
+      icon: "warning",
+      confirmButtonText: "Logout",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      confirmButtonColor: "#DD6B55",
+      closeOnConfirm: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deletUser(data.userId);
+      }
+    });
+  };
+
+  function validate_password(password) {
+    let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+    if (password.match(check)) {
+      console.log("Your password is strong.");
+    } else {
+      console.log("Meh, not so much.");
+    }
+  }
+
+  const statusBodyTemplate = (rowData) => {
+    switch (rowData.accountStatus) {
+      case true:
+        return (
+          <span key={rowData.userId}>
+            {" "}
+            <Switch
+              id={rowData.userId}
+              onChange={(event) => switchHandler(event, rowData.userId)}
+              checked
+              checkedChildren="Enabled"
+              unCheckedChildren="Disabled"
+            />
+          </span>
+        );
+
+      case false:
+        return (
+          <span key={rowData.userId}>
+            {" "}
+            <Switch
+              id={rowData.userId}
+              onChange={(event) => switchHandler(event, rowData.userId)}
+              checked={false}
+              checkedChildren="Enabled"
+              unCheckedChildren="Disabled"
+            />
+          </span>
+        );
+    }
+  };
+  const handleSubmitPatientId = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    inputValuePatientId.patientAllocated = localUserId;
+    inputValuePatientId.computing = 0;
+    inputValuePatientId.allocatedUserId = localUserId;
+
+    if (form.checkValidity() === true) {
+      setIsLoadingBtn(true);
+      const response = await axios.post(
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
+        inputValuePatientId
+      );
+      if (response?.status == 200) {
+        console.log(response.data)
+        if(response.data.message == "patient Already Present"){
+          setIsLoadingBtn(false);
+          notification.warning({
+            message: "Patient Id Already Present",
+            duration:1
+          });
+        }else{
+          notification.success({
+            message: "Patient Id Created Successfully!",
+            duration:1
+          });
+          setAddPatientId(false);
+          setIsLoadingBtn(false);
+
+        }
+      
+      } else {
+        setIsLoadingBtn(false);
+      }
+      // setAddPatientId(false);
+      getAllList(localUserId, pageNo, pageSize);
+    }
+
+    setValidated(true);
+  };
 
 
 
-	const getAllList = async (tenId, orgId, page, limit, status) => {
-		var apiUrl = `management/admin/getusers?orgId=${orgId}&tenantId=${tenId}&status=${status}&page=${page}&limit=${limit}`;
-		const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
-		var result = response.data;
-		if (response.data) {
-			setUserList(result.record != null ? result.record : []);
-			setIsDataLoading(false);
-			setIsLoading(false);
-		}
-	}
-	const createUser = async (data) => {
-		setIsLoading(true);
-		const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/admin/getusers/createuser`, data);
-		console.log(response)
-		var result = response.data;
-		if (response?.status == 201) {
-			setAddUser(false);
-			getAllList(localTenantId, localOrgId, pageDataCount, pageLimitCount, '');
-		} else {
+  const actionBodyTemplate = (rowData) => {
+    return (
+      <div className="d-flex">
+        <button
+          onClick={() => userEdit(rowData)}
+          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
+        >
+          <FontAwesomeIcon icon={faPencilAlt} fontSize={11} />
+        </button>
+        <button
+          onClick={() => userDelete(rowData)}
+          className="btn hegiht10 btn-danger shadow  sharp me-1 action-btn"
+        >
+          <FontAwesomeIcon icon={faTrash} fontSize={11} />
+        </button>
+      </div>
+    );
+  };
+  const addPatientFormId = () => {
+    setValidated(false);
+    setAddPatientId(true);
+  };
+  const handleChangePatientId = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setInputValuePatientId({ ...inputValuePatientId, [key]: value });
+  };
+ 
 
-		}
-	}
-	const deletUser = async (userId) => {
-		var apiUrl = `management/admin/user?userId=${userId}&orgId=${localOrgId}&tenantId=${localTenantId}`;
-		const response = await axios.delete(ENDPOINTS.apiEndoint + apiUrl);
-		var result = response.data;
-		if (response.data) {
-			setUserList(result.record != null ? result.record : []);
-			setIsDataLoading(false);
-			setIsLoading(false);
-			getAllList(tenId, orgId, pageDataCount, pageLimitCount, '');
-		}
-	}
-
-	const addUserForm = () => {
-		setValidated(false);
-		setAddUser(true);
-	}
-
-	const handleChange = async (e) => {
-		const key = e.target.name;
-		const value = e.target.value;
-		setFormData({ ...formData, [key]: value })
-		if (key == 'role') {
-			setRoleValue([value]);
-		}
-	}
-
-	const handleSubmit = (event) => {
-		const form = event.currentTarget;
-		event.preventDefault();
-		if (form.checkValidity() === true) {
-			formData.tenantId = localTenantId;
-			formData.orgId = localOrgId;
-			formData.role = roleValue;
-			console.log(formData)
-			createUser(formData);
-		}
-		setValidated(true);
-
-	};
-
-	const roleUpdate = async (data) => {
-		setIsLoading(true);
-		const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data)
-		if (response?.status == 200) {
-			setAddUser(false);
-			getAllList(tenId, orgId, pageDataCount, pageLimitCount, '');
-		} else {
-
-		}
-	}
-
-	const options3 = [
-		{ value: '1', label: 'ALL' },
-		{ value: '2', label: 'Enabled' },
-		{ value: '3', label: 'Disabled' },
-	]
-	const RoleList = [
-		{ value: 'Coder(Level 1)', label: 'Coder(Level 1)' },
-		{ value: 'Coder(Level 2)', label: 'Coder(Level 2)' },
-		{ value: 'Auditor', label: 'Auditor' },
-		{ value: 'Team Lead', label: 'Team Lead' },
-	];
-
-
-	function gotoPage(number) {
-		if (canMaxPage > number) {
-			setCanNextPage(true);
-			setPageIndex(number);
-			if (number > 0) {
-				setCanPreviousPage(true);
-			} else {
-				setCanPreviousPage(false);
-			}
-			setPageCount(number);
-		} else {
-			setCanNextPage(false);
-		}
-		var start = number * 10;
-		var end = start + 10;
-		const records = userListAll.slice(start, end);
-		setUserList(records);
-
-		getAllList(localTenantId, localTenantId, number, pageLimitCount, '');
-
-
-	}
-	function nextPage(number) {
-		if (canMaxPage > number) {
-			setPageCount(number);
-			setPageIndex(number);
-			setCanPreviousPage(true);
-		} else {
-			setCanNextPage(false);
-		}
-		getAllList(localTenantId, localTenantId, number, pageLimitCount, '');
-
-	}
-
-	function previousPage(number) {
-		setCanNextPage(true);
-		setPageIndex(number);
-		if (number > 0) {
-			setCanPreviousPage(true);
-		} else {
-			setCanPreviousPage(false);
-		}
-		setPageCount(number);
-		getAllList(localTenantId, localTenantId, number, pageLimitCount, '');
-	}
-
-	const roleChange = async (e) => {
-		console.log(e.value);
-		var data = {};
-		data.role = e.value;
-		console.log(data);
-		// roleUpdate(data);
-	}
-
-	const switchHandler = (event, id) => {
-
-		const isChecked = event;
-		setStatus(
-			({ isStatus }) => ({
-				isStatus: {
-					...isStatus,
-					[id]: isChecked,
-				}
-			})
-		);
-
-		console.log(isStatus)
-	}
-
-	const userEdit = (data) => {
-		setAddUser(true)
-
-	}
-	const userDelete = (data) => {
-		Swal.fire({
-			title: 'Do you want delete!',
-			text: data.name,
-			icon: 'warning',
-			confirmButtonText: 'Logout',
-			showCancelButton: true,
-			confirmButtonText: 'Yes',
-			confirmButtonColor: "#DD6B55",
-			closeOnConfirm: false
-		}).then((result) => {
-			if (result.isConfirmed) {
-				deletUser(data.userId)
-			}
-		})
-
-	}
-
-	function validate_password(password) {
-		let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-		if (password.match(check)) {
-			console.log("Your password is strong.");
-		} else {
-			console.log("Meh, not so much.");
-		}
-	}
-
-	const statusBodyTemplate = (rowData) => {
-	
-		switch (rowData.accountStatus) {
-		  case true:
-			return <span key={rowData.userId}> <Switch id={rowData.userId} onChange={event => switchHandler(event, rowData.userId)} checked checkedChildren="Enabled" unCheckedChildren="Disabled" /></span>
-			  ;
-	
-		  case false:
-			return<span key={rowData.userId}> <Switch id={rowData.userId} onChange={event => switchHandler(event, rowData.userId)} checked={false} checkedChildren="Enabled" unCheckedChildren="Disabled" /></span>;
-	
-		}
-	  };
-
-	const actionBodyTemplate = (rowData) => {
-		return <div className="d-flex">
-			<button onClick={() => userEdit(rowData)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-				<FontAwesomeIcon icon={faPencilAlt} fontSize={11} />
-			</button>
-			<button onClick={() => userDelete(rowData)} className="btn hegiht10 btn-danger shadow  sharp me-1 action-btn">
-				<FontAwesomeIcon icon={faTrash} fontSize={11} />
-			</button>
-
-		</div>
-	};
-
-
-
-
-
-	return (
-		<>
-			<div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
-				<NavBar />
-				<div className="content-body show menu-toggle">
-					<div className="container-fluid">
-						<div className="row">
-							<div className='col-xl-12'>
-								<div className="card">
-									<div className="card-body p-0">
-										<div className="table-responsive active-projects task-table">
-											<div className="tbl-caption  align-items-center">
-												<div className="row">
-													<div className='col-xl-2'>
-														<input type="text" className="form-control" placeholder="Name" />
-													</div>
-													<div className='col-xl-2'>
-														<input type="date" className="form-control" placeholder="Date" />
-													</div>
-													<div className='col-xl-2'>
-														<Select options={RoleList} className="custom-react-select"
-															defaultValue={RoleList[0]}
-															isSearchable={false}
-														/>
-													</div>
-													<div className='col-xl-2'>
-														<Select options={options3} className="custom-react-select"
-															defaultValue={options3[0]}
-															isSearchable={false}
-														/>
-													</div>
-													<div className='col-xl-4'>
+  return (
+    <>
+  <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+        <Header />
+        <div class="content-body">
+         
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-xl-12">
+             
+                  <div className="card-body p-0">
+                    <div className="table-responsive active-projects task-table">
+                      <div className="tbl-caption  align-items-center">
+                        <div className="row">
+                          <div className="col-xl-2">
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Name"
+                            />
+                          </div>
+                          <div className="col-xl-2">
+                            <input
+                              type="date"
+                              className="form-control"
+                              placeholder="Date"
+                            />
+                          </div>
+                          <div className="col-xl-2">
+                            <Select
+                              options={RoleList}
+                              className="custom-react-select"
+                              defaultValue={RoleList[0]}
+                              isSearchable={false}
+                            />
+                          </div>
+                          <div className="col-xl-2">
+                            <Select
+                              options={options3}
+                              className="custom-react-select"
+                              defaultValue={options3[0]}
+                              isSearchable={false}
+                            />
+                          </div>
+						  <div className='col-xl-4'>
 														<Button onClick={addUserForm} className="btn btn-primary btn-sm ms-2 flr">+ Add User</Button>
 													</div>
-												</div>
+						  {/* <div className="col-xl-2"  style={{width:"14% !important"}}>
+                             
+							 <Button
+							   onClick={addPatientFormId}
+							   className="btn btn-primary btn-sm ms-2 flr"
+							 >
+							   + Add Patient Id
+							 </Button>
+						   </div> */}
+                        </div>
+                      </div>
+                      <div
+                        id="task-tbl_wrapper"
+                        className="dataTables_wrapper no-footer"
+                      >
+                        
+						<AdminList userList={userList} switchHandler={switchHandler} getAllList={getAllList}/>
 
-											</div>
-											<div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
-												<DataTable value={userList} paginator rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
-													<Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => options.rowIndex + 1}></Column>
-													<Column field="name" header="Name" />
-													<Column field="userName" header="User Name" />
-													<Column field="email" header="Email" />
-													<Column field="role" header="Role" />
-													<Column field="status" body={statusBodyTemplate} header="Status" />
-													<Column field="createdDate" header="Created Date" />
-													<Column field="action" body={actionBodyTemplate} header="Action" />
-												</DataTable>
-												{/* <table id="empoloyeestbl2" className="table ItemsCheckboxSec dataTable no-footer mb-2 mb-sm-0">
-													<thead>
-														<tr>
-															<th>SI.NO</th>
-															<th>First Name</th>
-															<th>Last Name</th>
-															<th>User Name</th>
-															<th>Email</th>
-															<th>Role</th>
-															<th>Status</th>
-															<th>Date Created</th>
-															<th>Action</th>
-														</tr>
-													</thead>
-													<tbody>
-														{userList.map((item, index) => (
-															<tr key={index}>
-																<td><span>{index + 1}</span></td>
-																<td><span>{item.firstName}</span></td>
-																<td><span>{item.lastName}</span></td>
-																<td><span>{item.userName}</span></td>
-																<td><span>{item.email}</span></td>
-																<td><span>
-																	{item.role[0]}
-																	
-																</span></td>
-																<td>
-																<span key={index}> <Switch id={index} onChange={event => switchHandler(event, index)} checked={isStatus[index]} checkedChildren="Enabled" unCheckedChildren="Disabled" /></span
-																></td>
-																<td><span>{moment(item.createdDate).format('DD/MM/YYYY hh:mm A')}</span></td>
-																<td>
-																	<div className="d-flex">
-																		<button onClick={() => userEdit(item)} className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn">
-																			<FontAwesomeIcon icon={faPencilAlt} fontSize={11} />
-																		</button>
-																		<button onClick={() => userDelete(item)} className="btn hegiht10 btn-danger shadow  sharp me-1 action-btn">
-																			<FontAwesomeIcon icon={faTrash} fontSize={11} />
-																		</button>
-																	</div>
-																</td>
-
-															</tr>
-														))}
-													</tbody>
-												</table>
-												<div className="d-flex justify-content-between mrt-15">
+                        {/* <div className="d-flex justify-content-between mrt-15">
 													<span>
 														Page{' '}
 														<strong>
@@ -434,16 +483,81 @@ const UserList = () => {
 														</button>
 													</div>
 												</div> */}
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<Offcanvas show={addUser} onHide={setAddUser} className="offcanvas-end  offcanvas-md-size" placement='end'>
+                      </div>
+                    </div>
+                  </div>
+          
+              </div>
+            </div>
+          </div>
+        </div>
+ 
+		<Offcanvas
+          onHide={setAddPatientId}
+          show={addPatientId}
+          className="offcanvas-end"
+          placement="end"
+        >
+          <div className="offcanvas-header">
+            <h5 className="modal-title" id="#gridSystemModal">
+              Add Patient Details
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setAddPatientId(false)}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div className="offcanvas-body">
+            <div className="container-fluid">
+              <Form
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmitPatientId}
+              >
+                <div className="row">
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Id <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientId"
+                      required
+                      type="text"
+                      onChange={handleChangePatientId}
+                    />
+                  </div>
+                  <div className="col-xl-12 mb-3">
+                    <Form.Label>
+                      Patient Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="patientName"
+                      required
+                      type="text"
+                      onChange={handleChangePatientId}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    {isLoadingBtn ? "Loading..." : "Submit"}
+                  </Button>
+                  <Button
+                    onClick={() => setAddPatientId(false)}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </div>
+        </Offcanvas>
+		<Offcanvas show={addUser} onHide={setAddUser} className="offcanvas-end  offcanvas-md-size" placement='end'>
 				<div className="offcanvas-header">
 					<h5 className="modal-title" id="#gridSystemModal">Add User</h5>
 					<button type="button" className="btn-close"
@@ -508,8 +622,9 @@ const UserList = () => {
 					</div>
 				</div>
 			</Offcanvas>
-		</>
-	);
+	  </div>
+    </>
+  );
 };
 
 export default UserList;
