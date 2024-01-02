@@ -12,7 +12,6 @@ import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 function FileProcessingTable({ patinetListAll }) {
-  const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
   );
@@ -25,7 +24,7 @@ function FileProcessingTable({ patinetListAll }) {
   );
   const response = useSelector((state) => state.adminList.patients);
 
-  const filterDetails = response?.content?.filter(
+  const filterDetails = response?.response?.content?.filter(
     (item) => item?.patientId === selectedRowDetails?.patientId
   );
   const selectedRowTime = useSelector(
@@ -36,7 +35,6 @@ function FileProcessingTable({ patinetListAll }) {
     patientId: item?.patientId,
     processStageId: item?.processStageId,
   }));
-  // console.log(details);
 
   useEffect(() => {
     const id = localStorage.getItem("userId");
@@ -54,10 +52,10 @@ function FileProcessingTable({ patinetListAll }) {
     return () => {
       sse.close();
     };
-  }, [ENDPOINTS]);
+  }, []);
 
   useEffect(() => {
-    parsedData?.filter((data, index) => {
+    parsedData?.map((data, index) => {
       // if (data?.processStageChart === "FINISHED") {
       //   dispatch(completedReport(data));
       dispatch(getPatientsList(data?.patientId, data?.processStageId));
@@ -88,6 +86,13 @@ function FileProcessingTable({ patinetListAll }) {
     FINISHED: "Finished",
     DISEASE_FOUND_FAILED: "DISEASE_FOUND_FAILED",
     OCR_FAILED: "OCR_FAILED",
+    SECTIONS_FILTER_FAILED: "SECTIONS_FILTER_FAILED",
+    VALID_DISEASE_SEPARATION_FAILED: "VALID_DISEASE_SEPARATION_FAILED",
+    COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
+    MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
+    RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
+    STORED_FAILED: "STORED_FAILED",
+    QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
   };
 
   const renderUploadStatus = (data, index) => {
@@ -166,6 +171,145 @@ function FileProcessingTable({ patinetListAll }) {
     };
 
     const currentIndex = stageChartMap[data?.processStageChart];
+
+    const stepsItemBase = [
+      {
+        title: "",
+        description: "File Upload",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : undefined,
+        info: "FILE_UPLOAD",
+      },
+      {
+        title: "",
+        description: "OCR",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] === "OCR_FAILED"
+            ? "error"
+            : undefined,
+        info: "OCR",
+      },
+      {
+        title: "",
+        description: "Sections Filter",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] ===
+              "SECTIONS_FILTER_FAILED"
+            ? "error"
+            : undefined,
+        info: "SECTIONS_FILTER",
+      },
+      {
+        title: "",
+        description: "Disease",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] === "DISEASE_FOUND_FAILED"
+            ? "error"
+            : undefined,
+        info: "DISEASE_FOUND",
+      },
+      {
+        title: "",
+        description: "Valid disease",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] ===
+              "VALID_DISEASE_SEPARATION_FAILED"
+            ? "error"
+            : undefined,
+        info: "VALID_DISEASE_SEPARATION",
+      },
+      {
+        title: "",
+        description: "Combination codes",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] ===
+              "COMBINATION_CODES_FOUND_FAILED"
+            ? "error"
+            : undefined,
+        info: "COMBINATION_CODES_FOUND",
+      },
+      {
+        title: "",
+        description: "Meat",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] === "MEAT_FOUND_FAILED"
+            ? "error"
+            : undefined,
+        info: "MEAT_FOUND",
+      },
+      {
+        title: "",
+        description: "RAF Score",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] ===
+              "RAF_SCORE_FOUND_FAILED"
+            ? "error"
+            : undefined,
+        info: "RAF_SCORE_FOUND",
+      },
+
+      {
+        title: "",
+        description: "Finished",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] === "STORED_FAILED" &&
+              "error",
+        info: "FINISHED",
+      },
+    ].map((step, index) => ({
+      ...step,
+      status: step.status,
+
+      style: {
+        backgroundColor: step.status === "finish" ? "green" : "inherit",
+      },
+    }));
+    const stepsItem =
+      data?.processStageRadiology !== null
+        ? [
+            ...stepsItemBase,
+            {
+              title: "",
+              description: "Query Conditions",
+              status:
+                stageChartMap[data?.processStageChart] <=
+                stageChartMap[currentIndex]
+                  ? "finish"
+                  : stageChartMap2[data?.processStageChart] ===
+                    "QUERY_CONDITIONS_FOUND_FAILED"
+                  ? "error"
+                  : undefined,
+              info: "QUERY_CONDITIONS_FOUND",
+            },
+          ]
+        : stepsItemBase;
+
+    const mappedSteps = stepsItem.map((step, index) => ({
+      ...step,
+      status: step.status,
+      style: {
+        background: step.status === "finish" ? "green" : "inherit",
+      },
+    }));
+
     return (
       <div style={{ display: "flex" }}>
         <div style={{ width: "98%" }}>
@@ -188,13 +332,31 @@ function FileProcessingTable({ patinetListAll }) {
           >{`${uploadStatus}% Complete`}</div>
           {stepperVisible[index] && (
             <>
-              <div style={{ display: "flex", width: "100%" }}>
-                {selectedRowTime?.map((item) => (
-                  <div style={{ display: "flex", width: "10%" }}>
-                    {dayjs(item?.lastModifiedDate).format("hh:mm:ss")}
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  marginTop:"20px",
+                  gap: "10px",
+                  flexWrap: "wrap",
+                  justifyContent: "space-around",
+                }}
+              >
+                {stepsItemBase.map((step, index) => (
+                  <div key={index} style={{ width: "10%" }}>
+                    {selectedRowTime.find(
+                      (item) => item.processStageChart === step.info
+                    )
+                      ? dayjs(
+                          selectedRowTime.find(
+                            (item) => item.processStageChart === step.info
+                          ).createdDate
+                        ).format("hh:mm:ss")
+                      : "---"}
                   </div>
                 ))}
               </div>
+
               <div
                 style={{
                   position: "relative",
@@ -205,125 +367,7 @@ function FileProcessingTable({ patinetListAll }) {
                 <Steps
                   current={currentIndex}
                   labelPlacement="vertical"
-                  items={[
-                    {
-                      title: "",
-                      description: "File Upload",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "OCR",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "OCR_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "Sections Filter",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "SECTIONS_FILTER_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "Disease",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "DISEASE_FOUND_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "Valid disease",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "VALID_DISEASE_SEPARATION_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "Combination codes",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "COMBINATION_CODES_FOUND_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "Meat",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "MEAT_FOUND_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "RAF Score",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "RAF_SCORE_FOUND_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "Query Conditions",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "QUERY_CONDITIONS_FOUND_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                    {
-                      title: "",
-                      description: "Finished",
-                      status:
-                        stageChartMap[data?.processStageChart] <=
-                        stageChartMap[currentIndex]
-                          ? "finish"
-                          : stageChartMap2[data?.processStageChart] ===
-                            "STORED_FAILED"
-                          ? "error"
-                          : undefined,
-                    },
-                  ]}
+                  items={mappedSteps}
                 />
               </div>
             </>
@@ -343,27 +387,31 @@ function FileProcessingTable({ patinetListAll }) {
   };
 
   const renderRows = () => {
-    return parsedData.length>0 ? parsedData?.map((data, index) => (
-      <tr key={index}>
-        <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
-        <td className={TableStyle.childBorder}>
-          {data?.patientName ? data?.patientName : "---"}
-        </td>
-        <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
-          {renderUploadStatus(data, index)}
-        </td>
-      </tr>
-    )):selectedRowTime?.map((data, index) => (
-      <tr key={index}>
-        <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
-        <td className={TableStyle.childBorder}>
-          {data?.patientName ? data?.patientName : "---"}
-        </td>
-        <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
-          {renderUploadStatus(data, index)}
-        </td>
-      </tr>
-    ));
+    return (
+      parsedData.length > 0 &&
+      parsedData?.map((data, index) => (
+        <tr key={index}>
+          <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
+          <td className={TableStyle.childBorder}>
+            {data?.patientName ? data?.patientName : "---"}
+          </td>
+          <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
+            {renderUploadStatus(data, index)}
+          </td>
+        </tr>
+      ))
+    );
+    // :selectedRowTime?.map((data, index) => (
+    //   <tr key={index}>
+    //     <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
+    //     <td className={TableStyle.childBorder}>
+    //       {data?.patientName ? data?.patientName : "---"}
+    //     </td>
+    //     <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
+    //       {renderUploadStatus(data, index)}
+    //     </td>
+    //   </tr>
+    // ));
   };
 
   return (
@@ -378,7 +426,7 @@ function FileProcessingTable({ patinetListAll }) {
         </thead>
 
         <tbody>
-          {detailsContent?.length <= 0 ? (
+          {patinetListAll?.length <= 0 ? (
             <tr>
               <td colSpan="3">
                 <Empty />

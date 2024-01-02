@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import {
-  notification,
-  Select as AntSelect,
-  Empty,
-} from "antd";
+import { notification, Select as AntSelect, Empty } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
@@ -19,11 +15,7 @@ function AddPatientListTable({
   patientDetails,
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("asc");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-
-  const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
 
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -32,42 +24,13 @@ function AddPatientListTable({
     key: null,
     direction: null,
   });
-  const [hoveredAvatar, setHoveredAvatar] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState({
-    id: "meat-01",
-    value: "HIGH",
-  });
-
-  const handlePriorityChange = (patientId, selectedValue) => {
-    setSelectedPriority((prev) => ({
-      ...prev,
-      id: patientId,
-      value: selectedValue,
-    }));
-  };
-
-  const handleAvatarHover = (data) => {
-    setHoveredAvatar(data);
-  };
-
-  const handleAvatarClick = (data) => {
-    gotoPatientDetails(data);
-  };
 
   const requestSort = (key) => {
-    console.log(key);
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
     setSortConfig({ key, direction });
-  };
-
-  const getClassNamesFor = (name) => {
-    if (!sortConfig) {
-      return;
-    }
-    return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
   const gotoPatientDetails = (data) => {
@@ -94,39 +57,26 @@ function AddPatientListTable({
     }
   };
 
-  const TickMark = () => (
-    <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
-  );
-
-  const sortTableByDate = (value) => {
+  const sortTableByDate = () => {
     const sortedContent = [...detailsContent];
-    if (value === "dueDate") {
-      if (sortDueOrder === "asc") {
-        sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
-        setSortDueOrder("desc");
-      } else {
-        sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
-        setSortDueOrder("asc");
-      }
+
+    if (sortDueOrder === "asc") {
+      sortedContent.sort((a, b) =>
+        dayjs(a.processedDate).diff(dayjs(b.processedDate))
+      );
+      setSortDueOrder("desc");
+    } else {
+      sortedContent.sort((a, b) =>
+        dayjs(b.processedDate).diff(dayjs(a.processedDate))
+      );
+      setSortDueOrder("asc");
     }
-    if (value === "completeDate") {
-      if (sortCompleteOrder === "asc") {
-        sortedContent.sort((a, b) =>
-          dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate))
-        );
-        setSortCompleteOrder("desc");
-      } else {
-        sortedContent.sort((a, b) =>
-          dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate))
-        );
-        setSortCompleteOrder("asc");
-      }
-    }
+
     setDetailsContent(sortedContent);
   };
 
   const renderRows = () => {
-    return detailsContent?.map((data, index) => (
+    return patinetListAll?.map((data, index) => (
       <tr
         key={index}
         // onClick={() => {
@@ -170,12 +120,12 @@ function AddPatientListTable({
             <th
               onClick={() => {
                 requestSort("lastModifiedDate");
-                sortTableByDate("completeDate");
+                sortTableByDate();
               }}
             >
               COMPLETED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "asc" ? (
+                {sortDueOrder === "asc" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />

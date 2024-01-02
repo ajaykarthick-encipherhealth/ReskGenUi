@@ -13309,10 +13309,11 @@ tbody > tr {
 
 /* Process Step */
 .ant-steps-item-process .ant-steps-item-icon {
-  background-color: yellow !important;
-  border: none !important;
+  /* background-color: yellow !important; */
+  border: 1px solid #1677ff !important;
   font-weight: 700;
-  color: #fff !important;
+  color:black;
+  /* color: #1677ff !important; */
 }
 
 /* Wait Step */

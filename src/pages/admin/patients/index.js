@@ -70,18 +70,17 @@ export default function Patient() {
     dispatch(getPatients(pageNo, pageSize));
   }, [pageNo, pageSize]);
 
-  console.log(response)
   useEffect(() => {
-    if (response) {
+    if (response?.response) {
       getAllList(response?.response);
     }
-  }, [response,pageNo]);
+  }, [response,pageNo,pageSize]);
 
-  const getAllList = (response) => {
-    if (response) {
+  const getAllList = (info) => {
+    if (info) {
       var resultMap = [];
-      var result = response?.content;
-      setTotalElements(response?.totalElements);
+      var result = info?.content;
+      setTotalElements(info?.totalElements);
       result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
@@ -112,51 +111,6 @@ export default function Patient() {
       // }, 3000);
     }
   };
-
-  // const getNameSearch = async (searchtext) => {
-  //   setIsLoading(true);
-
-  //   // dispatch(getSearchPatients(0,searchtext));
-  //   if (searchtext) {
-  //     var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-  //     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-  //     if (response.response?.data) {
-  //       var resultMap = [];
-  //       var result = response.data.response?.content;
-  //       setTotalElements(response.data.response?.totalElements);
-  //       result.map((res) => {
-  //         resultMap.push({
-  //           patientId: res.patientId,
-  //           patientName: res.patientName,
-  //           fileName: res.fileName,
-  //           computing: res.computing,
-  //           createdAt: res.createdAt,
-  //           lastModifiedDate: res.lastModifiedDate,
-  //           dueDate: res.dueDate,
-  //           allocatedBy: res.allocatedBy,
-  //           allocatedOn: res.allocatedOn,
-  //           priority: res.priority,
-  //           processedStatus: res.processedStatus,
-  //           createdAt: res.createdAt,
-  //           processedDate: res.processedDate,
-  //           processStageId: res.processStageId,
-  //         });
-  //       });
-  //       var newArray = [];
-  //       newArray = [...patinetListAll, ...resultMap];
-  //       setPatinetListAll(resultMap);
-
-  //       // console.log(newArray)
-  //       setIsLoading(false);
-  //       setTableLoading(false);
-  //       //     setTimeout(() => {
-  //       //     subscribe(resultMap);
-  //       // }, 3000);
-  //     }
-  //   } else {
-  //     getAllList(response);
-  //   }
-  // };
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -425,7 +379,7 @@ export default function Patient() {
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getAllList(response);
+    getAllList(response?.response);
   };
 
   return (
