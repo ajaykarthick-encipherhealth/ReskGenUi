@@ -60,8 +60,7 @@ function FileProcessingTable({ patinetListAll }) {
     parsedData?.filter((data, index) => {
       // if (data?.processStageChart === "FINISHED") {
       //   dispatch(completedReport(data));
-        dispatch(getPatientsList(data?.patientId, data?.processStageId));
-      
+      dispatch(getPatientsList(data?.patientId, data?.processStageId));
     });
   }, [parsedData]);
 
@@ -172,7 +171,10 @@ function FileProcessingTable({ patinetListAll }) {
         <div style={{ width: "98%" }}>
           <div style={{ display: "flex" }}>
             <Tooltip
-              title={data?.processStageChart.toLowerCase()?.split("_").join(" ")}
+              title={data?.processStageChart
+                .toLowerCase()
+                ?.split("_")
+                .join(" ")}
             >
               <Progress
                 percent={uploadStatus}
@@ -200,7 +202,6 @@ function FileProcessingTable({ patinetListAll }) {
                   marginLeft: "-40px",
                 }}
               >
-                {/* {stepperVisible[index] && ( */}
                 <Steps
                   current={currentIndex}
                   labelPlacement="vertical"
@@ -218,11 +219,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "OCR",
                       status:
-                        // stageChartMap2[data?.processStageChart] === "OCR_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] === "OCR"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -235,13 +231,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "Sections Filter",
                       status:
-                        // stageChartMap2[data?.processStageChart] ===
-                        // "SECTIONS_FILTER_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] ===
-                        //     "SECTIONS_FILTER"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -254,13 +243,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "Disease",
                       status:
-                        // stageChartMap2[data?.processStageChart] ===
-                        // "DISEASE_FOUND_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] ===
-                        //     "DISEASE_FOUND"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -273,13 +255,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "Valid disease",
                       status:
-                        // stageChartMap2[data?.processStageChart] ===
-                        // "VALID_DISEASE_SEPARATION_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] ===
-                        //     "VALID_DISEASE_SEPARATION"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -292,13 +267,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "Combination codes",
                       status:
-                        // stageChartMap2[data?.processStageChart] ===
-                        // "COMBINATION_CODES_FOUND_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] ===
-                        //     "COMBINATION_CODES_FOUND"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -311,13 +279,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "Meat",
                       status:
-                        // stageChartMap2[data?.processStageChart] ===
-                        // "MEAT_FOUND_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] ===
-                        //     "MEAT_FOUND"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -330,13 +291,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "RAF Score",
                       status:
-                        // stageChartMap2[data?.processStageChart] ===
-                        // "RAF_SCORE_FOUND_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] ===
-                        //     "RAF_SCORE_FOUND"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -349,13 +303,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "Query Conditions",
                       status:
-                        // stageChartMap2[data?.processStageChart] ===
-                        // "QUERY_CONDITIONS_FOUND_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] ===
-                        //     "QUERY_CONDITIONS_FOUND"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -368,14 +315,6 @@ function FileProcessingTable({ patinetListAll }) {
                       title: "",
                       description: "Finished",
                       status:
-                        // stageChartMap2[data?.processStageChart] ===
-                        // "STORED_FAILED"
-                        //   ? "error"
-                        //   : stageChartMap2[data?.processStageChart] === "STORED"
-                        //   ? "finish"
-                        //   : stageChartMap[data?.processStageChart] === "FINISHED"
-                        //   ? "finish"
-                        //   : undefined,
                         stageChartMap[data?.processStageChart] <=
                         stageChartMap[currentIndex]
                           ? "finish"
@@ -386,8 +325,6 @@ function FileProcessingTable({ patinetListAll }) {
                     },
                   ]}
                 />
-
-                {/* )} */}
               </div>
             </>
           )}
@@ -408,9 +345,9 @@ function FileProcessingTable({ patinetListAll }) {
   const renderRows = () => {
     return parsedData?.map((data, index) => (
       <tr key={index}>
-        <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
+        <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
         <td className={TableStyle.childBorder}>
-          {data.patientName ? data.patientName : "---"}
+          {data?.patientName ? data?.patientName : "---"}
         </td>
         <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
           {renderUploadStatus(data, index)}
