@@ -20,6 +20,7 @@ import { getMessagesList } from "../../../store/actions/adminAction/fileProcessi
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../file-processing/FileUploading";
 import Addpatients from "../file-processing/Addpatiens";
+import SpinnerDots from "../../../components/spinner";
 
 export default function Patient() {
   const navigate = useRouter();
@@ -74,7 +75,7 @@ export default function Patient() {
     if (response?.response) {
       getAllList(response?.response);
     }
-  }, [response,pageNo,pageSize]);
+  }, [response, pageNo, pageSize]);
 
   const getAllList = (info) => {
     if (info) {
@@ -103,7 +104,6 @@ export default function Patient() {
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
 
-      // console.log(newArray)
       setIsLoading(false);
       setTableLoading(false);
       //     setTimeout(() => {
@@ -146,7 +146,6 @@ export default function Patient() {
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    // console.log(form.checkValidity());
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       event.preventDefault();
@@ -163,9 +162,9 @@ export default function Patient() {
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    inputValuePatientId.patientAllocated = localUserId;
+    inputValuePatientId.allocatedBy = localUserId;
     inputValuePatientId.computing = 0;
-    inputValuePatientId.allocatedUserId = localUserId;
+    // inputValuePatientId.allocatedUserId = localUserId;
 
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
@@ -214,7 +213,6 @@ export default function Patient() {
   };
 
   const processstatusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
     //   return <span className={`badge badge-success`}>
     //   Processed
     //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
@@ -302,12 +300,53 @@ export default function Patient() {
         >
           <FontAwesomeIcon icon={faUpload} fontSize={11} />
 
-     
-   
           {/* <span style={{ fontSize: "15px", color: "#A8A8AA" }}>Upload</span> */}
         </button>
       </div>
     );
+  };
+  const getNameSearch = async (searchtext) => {
+    setIsLoading(true);
+
+    // dispatch(getSearchPatients(0,searchtext));
+    if (searchtext?.length > 0) {
+      var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
+      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+      if (response.data) {
+        var resultMap = [];
+        var result = response.data.response.content;
+        setTotalElements(response.data.response.totalElements);
+
+        result.map((res) => {
+          resultMap.push({
+            patientId: res.patientId,
+            patientName: res.patientName,
+            fileName: res.fileName,
+            computing: res.computing,
+            createdAt: res.createdAt,
+            lastModifiedDate: res.lastModifiedDate,
+            dueDate: res.dueDate,
+            allocatedBy: res.allocatedBy,
+            allocatedOn: res.allocatedOn,
+            priority: res.priority,
+            processedStatus: res.processedStatus,
+            createdAt: res.createdAt,
+            processedDate: res.processedDate,
+          });
+        });
+        var newArray = [];
+        newArray = [...patinetListAll, ...resultMap];
+        setPatinetListAll(resultMap);
+
+        setIsLoading(false);
+        setTableLoading(false);
+        //     setTimeout(() => {
+        //     subscribe(resultMap);
+        // }, 3000);
+      }
+    } else {
+      getAllList(response?.response);
+    }
   };
 
   const submitPatientFile = async () => {
@@ -406,7 +445,7 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          {/* <div className="col-xl-2">
+                          <div className="col-xl-2">
                             <label>Search by Name or ID</label>
                             <div class="form-group has-search">
                               <FontAwesomeIcon
@@ -420,9 +459,9 @@ export default function Patient() {
                                 placeholder="Search"
                               />
                             </div>
-                          </div> */}
+                          </div>
 
-                          <div className="col-xl-12">
+                          <div className="col-xl-10">
                             <Button
                               onClick={addPatientFormId}
                               className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}
@@ -438,7 +477,7 @@ export default function Patient() {
                         className="dataTables_wrapper no-footer"
                       >
                         {isLoading ? (
-                          <Spinner />
+                          <SpinnerDots />
                         ) : (
                           <>
                             <AddPatientListTable
