@@ -52,7 +52,39 @@ export const PhysicanMenuList = [
     to: "/physician/workingstatus",
   },
 ];
+export const AdminMenuList = [
+  {
+    title: "Users",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/admin/user",
+  },
 
+  {
+    title: "Patients",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/admin/patients",
+  },
+   {
+    title: "File Processing",
+    iconStyle: SVGICON.Usermanagement,
+    to: "/admin/file-processing",
+  },
+  {
+    title: "Patient Allocate",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/admin/allocatedUser",
+  },
+  // {
+  //   title: "Traking",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/admin/allocatedUser",
+  // },
+  // {
+  //   title: "Auditing Window",
+  //   iconStyle: SVGICON.Usermanagement,
+  //   to: "/coder/auditing",
+  // },
+]
 export const L2AuditMenuList = [
   {
     title: "Dashboard",

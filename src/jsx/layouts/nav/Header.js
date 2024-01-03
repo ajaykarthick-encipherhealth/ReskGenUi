@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Logout } from "../../../store/actions/AuthActions";
 import Swal from "sweetalert2";
-import { MenuList, PhysicanMenuList, L2AuditMenuList } from "./Menu";
+import { AdminMenuList,MenuList, PhysicanMenuList, L2AuditMenuList } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -17,17 +17,15 @@ import { Badge, Select, Tooltip } from "antd";
 import "react-chat-widget/lib/styles.css";
 import dynamic from "next/dynamic";
 import { getChatReply } from "../../../store/actions/DashboardActions";
-import { Drawer } from 'antd';
+import { Drawer } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faLocationArrow
-} from "@fortawesome/free-solid-svg-icons";
+import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+
 
 import { getNotificationAlert ,getNotificationList,getNotificationAlertClear} from "../../../store/actions/NotificationAction";
+
 import Notification from "../../../components/notification/index";
-
-
 
 const Header = ({ onNote }) => {
   const dispatchValue = useDispatch();
@@ -41,21 +39,14 @@ const Header = ({ onNote }) => {
   const [open, setOpen] = useState(false);
   const [toggleChatBox, setToggleChatBox] = useState(true);
   const [openMsg, setOpenMsg] = useState(false);
-  const notificationAlertData = useSelector((state) => state?.notificationDatas?.notificationAlert);
-  const notificationResponse = useSelector((state) => state?.notificationDatas?.notificationList);
-  
-
-
-
-
-
-
-
+  const notificationAlertData = useSelector(
+    (state) => state?.notificationDatas?.notificationAlert
+  );
+  const notificationResponse = useSelector(
+    (state) => state?.notificationDatas?.notificationList
+  );
 
   useEffect(() => {
-
-    
-
     var loginCheck = localStorage.getItem("loginCheck");
     var userName = localStorage.getItem("userName");
     const userRoleLocal = localStorage.getItem("userRole");
@@ -69,7 +60,9 @@ const Header = ({ onNote }) => {
     setUserName(userName);
     if (userRoleLocal == "Coder-L2") {
       setMenuList(L2AuditMenuList);
-    } else {
+    } else if(userRoleLocal == "admin") {
+      setMenuList(AdminMenuList);
+    }else {
       setMenuList(PhysicanMenuList);
     }
     if (loginCheck != "true") {
@@ -90,31 +83,13 @@ const Header = ({ onNote }) => {
       setheaderFix(window.scrollY > 50);
     });
 
-    // const sse = new EventSource(
-    //   `${ENDPOINTS?.apiEndoint}communication/push-notifications/c58c4c29-df4a-4c9e-9277-d58ad9b9d9d8?token=${token}`
-    // );
-    // sse.addEventListener("user-list-event", (event) => {
-    //   const data = JSON.parse(event.data);
-    //   if (data.length != 0) {
-    //     dispatchValue(getNotificationAlert(data));
-    //   }
-    // });
-    // sse.onerror = () => {
-    //   sse.close();
-    // };
-    // return () => {
-    //   sse.close();
-    // };
-
 
   }, []);
-
 
   const onClose = () => {
     setOpen(false);
     setOpenMsg(false);
   };
-
 
   const logoutFunction = () => {
     Swal.fire({
@@ -149,7 +124,6 @@ const Header = ({ onNote }) => {
     },
   ];
 
-
   const getUserIdDetails = async (userId) => {
     const token = localStorage.getItem("token");
     const response = await axios.get(
@@ -172,7 +146,6 @@ const Header = ({ onNote }) => {
     return () => {
       sse.close();
     };
-
 
 
     // setUserIdDetails(response.data.response);
@@ -242,7 +215,7 @@ const Header = ({ onNote }) => {
           onSearch={onSearch}
           filterOption={filterOption}
           options={options}
-        // style={{ width: "180px", height: "30px" }}
+          // style={{ width: "180px", height: "30px" }}
         />
       </div>
     </>
@@ -274,17 +247,19 @@ const Header = ({ onNote }) => {
   };
 
   const notificationDrawer = async () => {
+
     setOpen(true)
     dispatchValue(getNotificationList(userIdDetails.id));
     dispatchValue(getNotificationAlertClear([]));
 
+
     // setNotificationResponse(notificationResponse.data)
-  }
+  };
 
   const emailSplitFunction = (email) => {
     let emailSplit = email.split("@");
     return emailSplit[0];
-  }
+  };
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -300,11 +275,12 @@ const Header = ({ onNote }) => {
                   {menuList.map((data, index) => {
                     return (
                       <li
-                        className={` ${stateActive === data.to ||
-                            stateActive === data.childRoute
+                        className={` ${
+                          stateActive === data.to ||
+                          stateActive === data.childRoute
                             ? "header-active"
                             : ""
-                          }`}
+                        }`}
                         key={index}
                       >
                         <Link href={data.to} className="d-flex">
@@ -326,11 +302,6 @@ const Header = ({ onNote }) => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-
-
-
-
-
                         <TerminalComponent
                           handleNewUserMessage={handleNewUserMessage}
                           handleQuickButtonClicked={handleQuickButtonClicked}
@@ -342,20 +313,24 @@ const Header = ({ onNote }) => {
                         <Tooltip title={` Quality : ${percentage}%`}>
                           <div className="notificationIcon">
                             <div style={{ width: 40, height: 40 }}>
-
                               <CircularProgressbar
                                 value={percentage}
                                 text={`${percentage}%`}
                               />
 
                               {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
-
                             </div>
                           </div>
                         </Tooltip>
 
-                        <div className="notificationIcon" onClick={() => notificationDrawer()}>
-                          <Badge count={notificationAlertData.length} color='#faad14'>
+                        <div
+                          className="notificationIcon"
+                          onClick={() => notificationDrawer()}
+                        >
+                          <Badge
+                            count={notificationAlertData.length}
+                            color="#faad14"
+                          >
                             {SVGICON.notificationIcon}
                           </Badge>
                         </div>
@@ -418,9 +393,9 @@ const Header = ({ onNote }) => {
         onClose={onClose}
         open={open}
       >
-        {!openMsg ?
-        <Notification notificationResponse={notificationResponse}/>
-          : null}
+        {!openMsg ? (
+          <Notification notificationResponse={notificationResponse} />
+        ) : null}
       </Drawer>
     </div>
   );
