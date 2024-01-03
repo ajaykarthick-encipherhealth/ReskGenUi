@@ -2,7 +2,7 @@
 import React from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 
-function Spinner() {
+function SpinnerDots() {
   return (
     <div class="content-body">
   
@@ -25,4 +25,4 @@ function Spinner() {
   );
 }
 
-export default Spinner;
+export default SpinnerDots;
