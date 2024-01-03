@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import {
-  faSort,
-  faSortUp,
-  faSortDown,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   Avatar,
   Tooltip,
@@ -16,23 +11,15 @@ import {
 } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { SVGICON } from "../../../../jsx/constant/theme";
 
-import { getPriorityChange } from "../../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { Paginator } from "primereact/paginator";
-
-const { Option } = AntSelect;
 
 function TrackingTable({
   patinetListAll,
-  actionBodyTemplate,
+
   statusBodyTemplate,
   patientDetails,
-  paginationFirst,
-  totalElements,
-  onPageChange,
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
@@ -41,87 +28,17 @@ function TrackingTable({
   const dispatch = useDispatch();
   const navigate = useRouter();
 
-  const priorityOptions = [
-    {
-      value: "URGENT",
-      label: (
-        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "HIGH",
-      label: (
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "NORMAL",
-      label: (
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#4466ff " }}>
-            Normal
-          </span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "LOW",
-      label: (
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-        </>
-      ),
-    },
-  ];
-
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: null,
   });
-  const [hoveredAvatar, setHoveredAvatar] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState({
-    id: "meat-01",
-    value: "HIGH",
-  });
-
-  const handlePriorityChange = (patientId, selectedValue) => {
-    setSelectedPriority((prev) => ({
-      ...prev,
-      id: patientId,
-      value: selectedValue,
-    }));
-  };
-
-  const handleAvatarHover = (data) => {
-    setHoveredAvatar(data);
-  };
-
-  const handleAvatarClick = (data) => {
-    gotoPatientDetails(data);
-  };
 
   const requestSort = (key) => {
-    console.log(key);
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
     setSortConfig({ key, direction });
-  };
-
-  const getClassNamesFor = (name) => {
-    if (!sortConfig) {
-      return;
-    }
-    return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
   const gotoPatientDetails = (data) => {
@@ -147,10 +64,6 @@ function TrackingTable({
       gotoPatientDetails(clickedData);
     }
   };
-
-  const TickMark = () => (
-    <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
-  );
 
   const sortTableByDate = (value) => {
     const sortedContent = [...detailsContent];
@@ -178,10 +91,7 @@ function TrackingTable({
     }
     setDetailsContent(sortedContent);
   };
-  const dummyProfileImageUrl =
-    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
-  const nullImg =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
+
   const renderRows = () => {
     return detailsContent?.map((data, index) => (
       <tr key={index}>
@@ -221,8 +131,7 @@ function TrackingTable({
                 style={{ borderRadius: "50%", marginRight:"10px"}}
               />
             )} */}
-         
-                     </Tooltip>
+          </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
           <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
@@ -231,7 +140,7 @@ function TrackingTable({
                 backgroundColor: "#04306f ",
                 color: "white",
                 cursor: "pointer",
-                marginRight:"10px"
+                marginRight: "10px",
               }}
             >
               {data.allocatedBy
@@ -255,14 +164,14 @@ function TrackingTable({
                 style={{ borderRadius: "50%", marginRight:"10px"}}
               />
             )} */}
-            {data.allocatedBy ?
-            <>
-                      {  data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +  data.allocatedBy.split("@")[0].slice(1)}
-
-            </>:
-            <>
-            Praveen
-            </>}
+            {data.allocatedBy ? (
+              <>
+                {data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +
+                  data.allocatedBy.split("@")[0].slice(1)}
+              </>
+            ) : (
+              <>Praveen</>
+            )}
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
@@ -271,8 +180,7 @@ function TrackingTable({
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
         </td>
-      
-      
+
         <td className={TableStyle.lastBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
@@ -299,16 +207,14 @@ function TrackingTable({
               DUE DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
                 {sortDueOrder === "asc" ? (
-                  <ArrowUpOutlined /> 
+                  <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
               </span>
             </th>
-           
 
             <th>STATUS</th>
-      
           </tr>
         </thead>
 
