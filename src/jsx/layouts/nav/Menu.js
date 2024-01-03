@@ -74,11 +74,11 @@ export const AdminMenuList = [
     iconStyle: SVGICON.ReportIcon,
     to: "/admin/allocatedUser",
   },
-  // {
-  //   title: "Traking",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/admin/allocatedUser",
-  // },
+  {
+    title: "Traking",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/admin/tracking",
+  },
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,
