@@ -31,12 +31,11 @@ import { notification } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
-import Spinner from "../../../../components/spinner/spinner";
-
 import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
+import SpinnerDots from "../../../../components/spinner";
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -1271,7 +1270,7 @@ const Details = ({}) => {
         <div className={visitStyles.headerFixed}>
           <div class="content-body">
             {isLoading ? (
-              <Spinner />
+              <SpinnerDots />
             ) : (
               <div
                 className={`container-fluid ${visitStyles.container_fluid_patient}`}
@@ -1340,7 +1339,7 @@ const Details = ({}) => {
                       </div>
                       <div className="col-xl-1 col-sm-12">
                         <div className={visitStyles.priorityStatus}>
-                          {patienIdDetails.priority == "URGENT" ? (
+                          {patienIdDetails?.priority == "URGENT" ? (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i>{SVGICON.alert}</i>{" "}
                               <span
