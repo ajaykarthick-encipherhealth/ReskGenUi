@@ -3,35 +3,22 @@ import TableStyle from "../../table.module.css";
 import { Empty, Progress, Steps, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import {
-  completedReport,
-  getPatientsList,
-} from "../../../../store/actions/adminAction/fileProcessingActions";
+import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
 import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
 
 function FileProcessingTable({ patinetListAll }) {
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
   );
   const [parsedData, setParsedData] = useState([]);
-  const [activeId,setActiveId]=useState()
+  const [activeId, setActiveId] = useState();
   const dispatch = useDispatch();
 
-  const selectedRowDetails = useSelector(
-    (state) => state.adminPatient.selectedFile
-  );
-  const response = useSelector((state) => state.adminList.patients);
-
-  console.log(response,selectedRowDetails)
-  const filterDetails = response?.response?.content?.filter(
-    (item) => item?.patientId === selectedRowDetails?.patientId
-  );
   const selectedRowTime = useSelector(
     (state) => state.adminPatient.patientsList
   );
-  
+
   useEffect(() => {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
@@ -51,27 +38,22 @@ function FileProcessingTable({ patinetListAll }) {
   }, []);
 
   useEffect(() => {
-    if(activeId){
+    if (activeId) {
       parsedData?.map((info, index) => {
-        if (info?.patientId===activeId) {
+        if (info?.patientId === activeId) {
           dispatch(getPatientsList(info?.patientId, info?.processStageId));
         }
       });
     }
-    
-  }, [parsedData]);
+  }, [activeId,parsedData]);
 
-  // console.log(parsedData)
   const handleToggleStepper = (index, data) => {
-    setActiveId(data.patientId)
-    
+    setActiveId(data.patientId);
+
     const updatedVisibility = stepperVisible?.map((value, i) =>
       i === index ? !value : false
     );
     setStepperVisible(updatedVisibility);
-    // if (data?.processStageChart) {
-    //   dispatch(getPatientsList(data?.patientId, data?.processStageId));
-    // }
   };
 
   const stageChartMap2 = {
@@ -276,7 +258,8 @@ function FileProcessingTable({ patinetListAll }) {
               "error",
         info: "FINISHED",
         style: {
-          backgroundColor: data?.processStageChart=== "FINISHED" ? "green" : "inherit",
+          backgroundColor:
+            data?.processStageChart === "FINISHED" ? "green" : "inherit",
         },
       },
     ].map((step, index) => ({
@@ -303,7 +286,6 @@ function FileProcessingTable({ patinetListAll }) {
                   ? "error"
                   : undefined,
               info: "QUERY_CONDITIONS_FOUND",
-              
             },
           ]
         : stepsItemBase;
@@ -358,7 +340,9 @@ function FileProcessingTable({ patinetListAll }) {
                           selectedRowTime.find(
                             (item) => item?.processStageChart === step.info
                           ).createdDate
-                        ).toISOString().substr(11, 8)}
+                        )
+                          .toISOString()
+                          .substr(11, 8)}
                       </span>
                     ) : (
                       "---"
@@ -399,9 +383,8 @@ function FileProcessingTable({ patinetListAll }) {
   };
 
   const renderRows = () => {
-    return (
-      parsedData.length > 0 &&
-      parsedData?.map((data, index) => (
+    if (parsedData.length > 0) {
+      return parsedData.map((data, index) => (
         <tr key={index}>
           <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
           <td className={TableStyle.childBorder}>
@@ -411,21 +394,23 @@ function FileProcessingTable({ patinetListAll }) {
             {renderUploadStatus(data, index)}
           </td>
         </tr>
-      ))
-    );
-    // :selectedRowTime?.map((data, index) => (
-    //   <tr key={index}>
-    //     <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
-    //     <td className={TableStyle.childBorder}>
-    //       {data?.patientName ? data?.patientName : "---"}
-    //     </td>
-    //     <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
-    //       {renderUploadStatus(data, index)}
-    //     </td>
-    //   </tr>
-    // ));
+      ));
+    } else if (selectedRowTime?.length > 0) {
+      const lastData = [selectedRowTime[selectedRowTime.length - 1]];
+      return lastData?.map((data, index) => (
+        <tr key={index}>
+          <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
+          <td className={TableStyle.childBorder}>
+            {data?.patientName ? data?.patientName : "---"}
+          </td>
+          <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
+            {renderUploadStatus(data, index)}
+          </td>
+        </tr>
+      ));
+    }
+  
   };
-
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
