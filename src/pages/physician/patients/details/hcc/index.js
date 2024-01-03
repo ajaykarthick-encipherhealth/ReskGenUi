@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Tab, Nav, Badge } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
@@ -9,10 +8,7 @@ import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import moment, { months } from "moment";
 import "react-vertical-timeline-component/style.min.css";
-import {
-  highlightPlugin,
-} from '@react-pdf-viewer/highlight';
-
+import { highlightPlugin } from "@react-pdf-viewer/highlight";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -32,11 +28,9 @@ import {
   faCog,
   faClock,
   faArrowsAlt,
-  faCalendar
+  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  CalendarOutlined
-} from '@ant-design/icons';
+import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
@@ -46,18 +40,19 @@ import Form from "react-bootstrap/Form";
 import { Offcanvas } from "react-bootstrap";
 import { notification } from "antd";
 import { useRouter } from "next/navigation";
-import { Avatar, Tooltip } from 'antd';
-
+import { Avatar, Tooltip } from "antd";
 
 const Hcc = ({ patientHccResult }) => {
   const navigate = useRouter();
   let searchKeywords = [];
 
-
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
   const { highlight } = searchPluginInstance;
+  const { setTargetPages } = searchPluginInstance;
+
+  // setTargetPages((targetPage) => targetPage.pageIndex === 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
@@ -66,7 +61,8 @@ const Hcc = ({ patientHccResult }) => {
   const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
     useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
-  const [confirmNotesModalInValid, setConfirmNotesModalInValid] =useState(false);
+  const [confirmNotesModalInValid, setConfirmNotesModalInValid] =
+    useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSection, setIsLoadingSection] = useState(true);
   const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
@@ -145,7 +141,7 @@ const Hcc = ({ patientHccResult }) => {
     capturedSections: "",
     encodedDate: "",
     flag: "",
-    comments: ""
+    comments: "",
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -209,12 +205,12 @@ const Hcc = ({ patientHccResult }) => {
   const [filter, setFilter] = useState("");
   const [showCard, setShowCard] = useState(false);
   const [patientList, setPatientList] = useState([]);
-  const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC")
+  const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
   const [isSideNavShow, setIsSideNavShow] = useState(false);
-  const [timelineData, setTimeLineData] = useState([])
-  const [flagTagActive, setFlagTagActive] = useState(true)
+  const [timelineData, setTimeLineData] = useState([]);
+  const [flagTagActive, setFlagTagActive] = useState(true);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
-  const [patienIdDetails, setPatienIdDetails] = useState('');
+  const [patienIdDetails, setPatienIdDetails] = useState("");
   const [commentList, setCommentList] = useState([]);
   const [notesList, setNotesList] = useState([]);
   const [flagResultList, setFlagResultList] = useState([]);
@@ -239,11 +235,13 @@ const Hcc = ({ patientHccResult }) => {
   const [totalElements, setTotalElements] = useState(10);
 
   const [labFileFilterList, setLabFileFilterList] = useState(10);
-  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] = useState(false);
+  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
+    useState(false);
   const [dragFileDate, setdragFileDate] = useState(false);
-  const [inputValueFileDate, setInputValueFileDate] = useState('');
-
-
+  const [inputValueFileDate, setInputValueFileDate] = useState("");
+  const [patientFileDTO, setPatientFileDTO] = useState("");
+  const [fileInitialPage, setFileInitialPage] = useState(0);
+  const [sectionAllColor, setSectionAllColor] = useState([]);
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -255,21 +253,18 @@ const Hcc = ({ patientHccResult }) => {
       getFindValidDiagnosisCode(e.target.value);
     }
     if (key == "encodedDate") {
-      setInputValueFileDate(e.target.value)
-
+      setInputValueFileDate(e.target.value);
     }
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
   };
 
   const handleDatePickerChangeFile = (dates, dateString) => {
-    let convertDate = moment(dateString).format('MM-DD-YYYY');
+    let convertDate = moment(dateString).format("MM-DD-YYYY");
     setdragFileDate(false);
-    setInputValueFileDate(convertDate)
+    setInputValueFileDate(convertDate);
     setInputValue({ ...inputValue, ["encodedDate"]: convertDate });
-
   };
-
 
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const handleDocumentLoad = () => {
@@ -277,9 +272,7 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const pageClickPdfFile = (e) => {
-    console.log(e)
   };
-
 
   useEffect(() => {
     // loadFilterPatientList();
@@ -288,6 +281,7 @@ const Hcc = ({ patientHccResult }) => {
     var patientId = localStorage.getItem("patientId");
     var uId = localStorage.getItem("userId");
     setLocalUserId(uId);
+    getSectionTagColorAll();
     setLocalPatientId(patientId);
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
@@ -304,28 +298,27 @@ const Hcc = ({ patientHccResult }) => {
     );
 
     var currentTime = moment().format("hh:mm");
-    setCurrentTime(currentTime)
+    setCurrentTime(currentTime);
 
     setUserDetails(userSpinner);
 
-    setvalidHccDetails(userSpinner)
-
-
+    setvalidHccDetails(userSpinner);
   }, []);
-
 
   const getPatientIdDetails = async (patientId) => {
     const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-      `dbservice/patient/get?patientId=${patientId}`
+      ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
     );
     setPatienIdDetails(response.data);
-    console.log(response.data)
     var result = response.data.response;
-  }
+  };
 
-  const getPatientDetails = async (patientId, orgId, tenId, fileloadCondition) => {
-
+  const getPatientDetails = async (
+    patientId,
+    orgId,
+    tenId,
+    fileloadCondition
+  ) => {
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
     setNewUnMatchHccList([]);
@@ -340,7 +333,6 @@ const Hcc = ({ patientHccResult }) => {
     setMeatCriteriaList([]);
     setMeatCriteriaListNonHcc([]);
 
-
     // setIsLoading(true);
     setIsModalComments(false);
     // var patientId = localStorage.getItem("patientId");
@@ -351,7 +343,6 @@ const Hcc = ({ patientHccResult }) => {
     // );
     if (patientHccResult) {
       var result = patientHccResult;
-      console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -376,9 +367,9 @@ const Hcc = ({ patientHccResult }) => {
         var deleteHccList = [];
 
         if (fileloadCondition != "fileNotLoad") {
-
           getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
           setSelectMeatFileId(patientHccResult.fileId);
+          setPatientFileDTO(result.fileDetailDTO);
         }
         // setPatientDocumentResult(result);
 
@@ -387,15 +378,12 @@ const Hcc = ({ patientHccResult }) => {
         });
 
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        // setSelectedDosValue(dosYearArr[0].value);
-        // console.log(highestDOS)
 
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
         );
         setDosYearDefalutSelect(highestDosValue[0]);
         setSelectedDosValue(highestDosValue[0].value);
-
 
         if (result.rafScore != null) {
           rafScore = result.rafScore;
@@ -409,7 +397,7 @@ const Hcc = ({ patientHccResult }) => {
         var validDisArray = [];
         var validEncounterDateArray = [];
         validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
+          const encounterDatearray = res.encounterDate.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -418,13 +406,12 @@ const Hcc = ({ patientHccResult }) => {
             encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition
+            defaultPosition: res.defaultPosition,
           });
-
         });
 
         result.invalidDisease.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
+          const encounterDatearray = res.encounterDate.split(",");
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -433,15 +420,13 @@ const Hcc = ({ patientHccResult }) => {
             encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition
+            defaultPosition: res.defaultPosition,
           });
-
         });
-
 
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
+            const encounterDatearray = res.encounterDate.split(",");
             deleteHccList.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -450,9 +435,8 @@ const Hcc = ({ patientHccResult }) => {
               encounterDateSplit: encounterDatearray,
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition
+              defaultPosition: res.defaultPosition,
             });
-
           });
         }
         if (result.suggestRadiology != null) {
@@ -463,7 +447,7 @@ const Hcc = ({ patientHccResult }) => {
           // getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
+            const encounterDatearray = res.encounterDate.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -472,13 +456,13 @@ const Hcc = ({ patientHccResult }) => {
               encounterDateSplit: encounterDatearray,
               getPlace: "Radio",
               isHccValid: true,
-              defaultPosition: res.defaultPosition
+              defaultPosition: res.defaultPosition,
             });
           });
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
-              const encounterDatearray = res.encounterDate.split(',');
+              const encounterDatearray = res.encounterDate.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
                 capturedSections: [],
@@ -490,7 +474,6 @@ const Hcc = ({ patientHccResult }) => {
                 // defaultPosition:res.defaultPosition
               });
             });
-
           }
         }
 
@@ -498,7 +481,7 @@ const Hcc = ({ patientHccResult }) => {
           // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
+            const encounterDatearray = res.encounterDate.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -507,7 +490,7 @@ const Hcc = ({ patientHccResult }) => {
               encounterDateSplit: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
-              defaultPosition: res.defaultPosition
+              defaultPosition: res.defaultPosition,
             });
           });
         }
@@ -515,7 +498,7 @@ const Hcc = ({ patientHccResult }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
+            const encounterDatearray = res.encounterDate.split(",");
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -526,7 +509,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
-                defaultPosition: res.defaultPosition
+                defaultPosition: res.defaultPosition,
               });
             } else {
               // suggestListAll.push({
@@ -594,10 +577,6 @@ const Hcc = ({ patientHccResult }) => {
         //   validDiseasesArray.push({ name: validDis[key] });
         // }
 
-
-
-        console.log(suggestListAll)
-
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
@@ -610,14 +589,8 @@ const Hcc = ({ patientHccResult }) => {
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
 
-
-        console.log(validDisArray);
-
-
         var capturedSectionsColorsMatching = [];
         var capturedSectionsArr = [];
-
-
 
         const COLORS = [
           "bg-bg-seven",
@@ -639,9 +612,8 @@ const Hcc = ({ patientHccResult }) => {
           "sectionTag5",
           "sectionTag6",
           "sectionTag7",
-          "sectionTag8"
+          "sectionTag8",
         ];
-
 
         const COLORS3 = [
           "encounterDateTag1",
@@ -651,120 +623,106 @@ const Hcc = ({ patientHccResult }) => {
           "encounterDateTag5",
           "encounterDateTag6",
           "encounterDateTag7",
-          "encounterDateTag8"
+          "encounterDateTag8",
         ];
 
         validDiseaseNewRes.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
               name: res2,
-              "diagnosisCode": res.diagnosisCode,
+              diagnosisCode: res.diagnosisCode,
             });
-
-          })
-        })
+          });
+        });
         invalidDiseaseNewRes.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
               name: res2,
-              "diagnosisCode": res.diagnosisCode,
+              diagnosisCode: res.diagnosisCode,
             });
-
-          })
-        })
+          });
+        });
 
         suggestListAll.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
               name: res2,
-              "diagnosisCode": res.diagnosisCode,
+              diagnosisCode: res.diagnosisCode,
             });
-
-          })
-        })
+          });
+        });
 
         var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
         dublicateSectionArr.map((res, index) => {
           capturedSectionsColorsMatching.push({
-            "name": res.name,
-            "diagnosisCode": res.diagnosisCode,
-            "colors": COLORS2[index]
+            name: res.name,
+            diagnosisCode: res.diagnosisCode,
+            colors: COLORS2[index],
           });
-        })
+        });
         setCaptureSectionMatching(capturedSectionsColorsMatching);
-
-
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
 
         validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
 
         result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
 
         result.unMatchedDisease.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
         result.suggestRadiology?.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
 
         result.suggestLab?.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
 
-
-        console.log(encounterDateArr)
-
-
-        var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
+        var encounterDateArrDublicatesRemove = getUniqueListBy(
+          encounterDateArr,
+          "name"
+        );
 
         encounterDateArrDublicatesRemove.map((res, index) => {
           encounterDateColorsMatching.push({
-            "name": res.name,
-            "colors": COLORS3[index]
+            name: res.name,
+            colors: COLORS3[index],
           });
-        })
+        });
 
         setEncounterDateMatching(encounterDateColorsMatching);
-
-
-        console.log(capturedSectionsColorsMatching)
-        console.log(encounterDateColorsMatching)
-
-
-
-
         var meatListArr = [];
         var meatMoniterHead = [];
         var meatEvaluteHead = [];
@@ -854,6 +812,7 @@ const Hcc = ({ patientHccResult }) => {
               treatment: res.treatment,
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
+              encounterDate: res.encounterDate,
             });
           } else {
             meatListArr.push({
@@ -887,6 +846,7 @@ const Hcc = ({ patientHccResult }) => {
               treatment: res.treatment,
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
+              encounterDate: res.encounterDate,
             });
           }
         });
@@ -896,17 +856,20 @@ const Hcc = ({ patientHccResult }) => {
 
         if (result.suggestRadiology != null) {
           if (result.suggestRadiology.length != 0) {
-            getPatientDetailsRadiologyYear(orgId, tenId)
+            getPatientDetailsRadiologyYear(orgId, tenId);
           }
         }
 
         if (result.suggestLab != null) {
           if (result.suggestLab.length != 0) {
-            getLabReportDetailsInititalLoad(orgId, tenId, capturedSectionsColorsMatching, encounterDateColorsMatching)
+            getLabReportDetailsInititalLoad(
+              orgId,
+              tenId,
+              capturedSectionsColorsMatching,
+              encounterDateColorsMatching
+            );
           }
         }
-
-
       } else {
         setIsLoading(false);
       }
@@ -916,7 +879,7 @@ const Hcc = ({ patientHccResult }) => {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       var result = response.data.response;
@@ -925,47 +888,38 @@ const Hcc = ({ patientHccResult }) => {
       if (result.radiologyFileDetail != null) {
         if (result.radiologyFileDetail.length != 0) {
           var dosYearArrFile = [];
-
-          // for (var key in result.radiologyFileDetail[0].documentDos) {
-          //   dosYearArrFile.push({ value: key, label: key });
-          // }
-
           result.radiologyFileDetail.map((res, index) => {
-            // console.log(res)
-
             for (var key in res.documentDos) {
-              console.log(res.documentDos[key])
-              dosYearArrFile.push({ value: key, label: key + " - " + res.documentDos[key].testName });
+              dosYearArrFile.push({
+                value: key,
+                label: key + " - " + res.documentDos[key].testName,
+              });
             }
-
-
-          })
-
-          console.log(dosYearArrFile)
-          // for (var key in resultTest.radiologyFileDetail[0].documentDos) {
-          //   dosYearArrFile.push({ value: key, label: key });
-          // }
+          });
           setFileRadiologyDateofServiceList(dosYearArrFile);
           setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
-          getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
-          console.log(dosYearArrFile[0])
+          getPatientPdfFileRadiology(
+            result.radiologyFileDetail[0].azureBlobPath,
+            tenId
+          );
           setRadiologyFileDetailCheck(true);
-
-
         }
-      }
-
-      else {
+      } else {
         setIsLoading(false);
       }
     }
   };
-  const getLabReportDetailsInititalLoad = async (orgId, tenId, matchCode, encounterData) => {
+  const getLabReportDetailsInititalLoad = async (
+    orgId,
+    tenId,
+    matchCode,
+    encounterData
+  ) => {
     var patientId = localStorage.getItem("patientId");
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
     var resultTest = response.data.response;
@@ -1001,7 +955,7 @@ const Hcc = ({ patientHccResult }) => {
   const getPatientPdfFile = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data.response;
@@ -1013,10 +967,9 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    console.log("dasdjmasjdnmasvdas")
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data.response;
@@ -1027,7 +980,7 @@ const Hcc = ({ patientHccResult }) => {
   const getLabReportFiles = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data.response;
@@ -1035,74 +988,61 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
 
-
   const confirmvalid = () =>
     new Promise((resolve) => {
-      setTimeout(
-        () =>
-          resolve(
-            setConfirmNotesModalValid(true),
-            setIsValidAction("validToDeleted")
-          ),
-
+      setTimeout(() =>
+        resolve(
+          setConfirmNotesModalValid(true),
+          setIsValidAction("validToDeleted")
+        )
       );
     });
 
   const validToSuggested = () =>
     new Promise((resolve) => {
-      setTimeout(
-        () =>
-          resolve(
-            setConfirmNotesModalValid(true),
-            setIsValidAction("validToSuggested")
-          ),
-
+      setTimeout(() =>
+        resolve(
+          setConfirmNotesModalValid(true),
+          setIsValidAction("validToSuggested")
+        )
       );
     });
 
   const suggestedToValid = () =>
     new Promise((resolve) => {
-      setTimeout(
-        () =>
-          resolve(
-            setConfirmNotesModalValid(true),
-            setIsValidAction("suggestedToValid")
-          ),
-
+      setTimeout(() =>
+        resolve(
+          setConfirmNotesModalValid(true),
+          setIsValidAction("suggestedToValid")
+        )
       );
     });
   const suggestedToDeleted = () =>
     new Promise((resolve) => {
-      setTimeout(
-        () =>
-          resolve(
-            setConfirmNotesModalValid(true),
-            setIsValidAction("suggestedToDeleted")
-          ),
-
+      setTimeout(() =>
+        resolve(
+          setConfirmNotesModalValid(true),
+          setIsValidAction("suggestedToDeleted")
+        )
       );
     });
 
   const deletedToSuggested = () =>
     new Promise((resolve) => {
-      setTimeout(
-        () =>
-          resolve(
-            setConfirmNotesModalValid(true),
-            setIsValidAction("deletedToSuggested")
-          ),
-
+      setTimeout(() =>
+        resolve(
+          setConfirmNotesModalValid(true),
+          setIsValidAction("deletedToSuggested")
+        )
       );
     });
   const deletedToValid = () =>
     new Promise((resolve) => {
-      setTimeout(
-        () =>
-          resolve(
-            setConfirmNotesModalValid(true),
-            setIsValidAction("deletedToValid")
-          ),
-
+      setTimeout(() =>
+        resolve(
+          setConfirmNotesModalValid(true),
+          setIsValidAction("deletedToValid")
+        )
       );
     });
 
@@ -1111,7 +1051,6 @@ const Hcc = ({ patientHccResult }) => {
       // invalidMoveConfirm();
       setTimeout(() => resolve(setConfirmNotesModalInValid(true)), 1000);
     });
-
 
   const confirmComboInvalid = () =>
     new Promise((resolve) => {
@@ -1206,14 +1145,13 @@ const Hcc = ({ patientHccResult }) => {
     setMeatCriteriaList(newArray);
   };
 
-
   const handleCloseForm = () => {
     setIsAddButtonClicked(false);
     // Add any additional logic for closing the form if needed
   };
 
   const handleCloseModal = () => {
-    setAddValidCodeCheck(null)
+    setAddValidCodeCheck(null);
     setValidated(false);
     setIsModalOpen(false);
     setIsModalOpenValid(false);
@@ -1232,10 +1170,11 @@ const Hcc = ({ patientHccResult }) => {
     setIsFileFormShow(false);
   };
 
-
-  const handleOpenModal = (value, disDescription) => {
+  const handleOpenModal = (value, disDescription, encounterDate) => {
+    getSectionPageNumber(value, encounterDate);
     var splitPoint = disDescription.substring(" ", 40);
     setTimeout(() => {
+      setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
       highlight({
         keyword: splitPoint,
         matchCase: true,
@@ -1253,26 +1192,55 @@ const Hcc = ({ patientHccResult }) => {
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
-  const findValueDocument = (value, disDescription,) => {
-    var splitPoint = disDescription.substring(" ", 40);
 
+  const getSectionPageNumber = async (header, encounterDate) => {
+    var fileId = patientFileDTO.fileId;
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/pageNumber?header=${header}&fileId=${fileId}&dos=${encounterDate}`
+    );
+
+    var result = response.data;
+    if (result?.length) {
+      var pageNumber = result[0] - 1;
+      setFileInitialPage(pageNumber);
+    }
+  };
+
+  const findValueDocument = (
+    value,
+    disDescription,
+    headerNames,
+    encounterDate,
+    actualDescription
+  ) => {
+    getSectionPageNumber(headerNames, encounterDate);
+
+    var splitPoint = disDescription.substring(" ", 40);
+    setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
     highlight({
-      keyword: splitPoint,
+      keyword: actualDescription,
       // matchCase: true,
       // wholeWords:true
     });
-
   };
-  const handleOpenModalCombinationCode = (
+  const handleOpenModalCombinationCode = async (
     value,
     disDescription,
     check,
     whereCome,
-    documentPlace
+    documentPlace,
+    encounterDate,
+    headerNames,
+    actualDescription,
+    testModal
   ) => {
-    console.log(whereCome)
-    if (documentPlace == "Radio" || whereCome == "Radio" || whereCome == "Radio-combo") {
-      handleOpenModalRadiology(value, disDescription, true,)
+    if (
+      documentPlace == "Radio" ||
+      whereCome == "Radio" ||
+      whereCome == "Radio-combo"
+    ) {
+      handleOpenModalRadiology(value, disDescription, true);
     } else if (documentPlace == "Lab" || whereCome == "Lab") {
       var splitPoint = disDescription.substring(" ", 40);
       setTimeout(() => {
@@ -1290,7 +1258,6 @@ const Hcc = ({ patientHccResult }) => {
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
       setIsModalOpenLab(true);
-
     } else {
       if (whereCome == "nonHcc") {
         setNonHccActiveCodes(true);
@@ -1298,25 +1265,56 @@ const Hcc = ({ patientHccResult }) => {
         setNonHccActiveCodes(false);
       }
       if (check === "valid") {
+        var fileId = patientFileDTO.fileId;
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint +
+            `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDate}`
+        );
+        var result = response.data;
+        if (result?.length) {
+          var pageNumber = result[0] - 1;
+          setFileInitialPage(pageNumber);
+        }
+
         setSelectActiveCode(value);
         var splitPoint = "";
         splitPoint = disDescription;
         setTimeout(() => {
+          setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+
           highlight({
-            keyword: splitPoint,
+            keyword: actualDescription,
           });
+
           var dataset = value + " - (" + splitPoint + ")";
           setSelectMeatName(dataset);
-          var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset;
-          setFileModalHeader(headerName)
+          var headerName =
+            patientDocumentResult.patientId +
+            " / " +
+            patientDocumentResult.patientName +
+            " / " +
+            dataset;
+          setFileModalHeader(headerName);
         }, 2000);
         setDocumentLoaded(true);
         var dataset = value + " - (" + splitPoint + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
         setIsLoadingSection(true);
-        var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset + " -  " + "Loading...";
-        setFileModalHeader(headerName)
-        setIsModalOpenCaptureSection(true);
+        var headerName =
+          patientDocumentResult.patientId +
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          dataset +
+          " -  " +
+          "Loading...";
+        setFileModalHeader(headerName);
+        if (testModal == "Suggested") {
+          setIsModalOpenCaptureSection(true);
+        } else {
+          setIsModalOpenValidCodes(true);
+        }
+        // setIsModalOpenCaptureSection(true);
       } else if (check == "valid2") {
         setSelectActiveCode(value);
         var splitPoint = "";
@@ -1328,14 +1326,26 @@ const Hcc = ({ patientHccResult }) => {
           });
           var dataset = value + " - (" + disDescription + ")";
           setSelectMeatName(dataset);
-          var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset;
-          setFileModalHeader(headerName)
+          var headerName =
+            patientDocumentResult.patientId +
+            " / " +
+            patientDocumentResult.patientName +
+            " / " +
+            dataset;
+          setFileModalHeader(headerName);
         }, 2000);
         setDocumentLoaded(true);
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
-        var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset + " -  " + "Loading...";
-        setFileModalHeader(headerName)
+        var headerName =
+          patientDocumentResult.patientId +
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          dataset +
+          " -  " +
+          "Loading...";
+        setFileModalHeader(headerName);
 
         setIsLoadingSection(true);
         setIsModalOpenValidCodes(true);
@@ -1382,10 +1392,7 @@ const Hcc = ({ patientHccResult }) => {
       setIsLoadingSection(true);
       setIsModalOpenRadiology(true);
     } else {
-      handleOpenModal(
-        value,
-        disDescription
-      )
+      handleOpenModal(value, disDescription);
     }
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
@@ -1395,7 +1402,6 @@ const Hcc = ({ patientHccResult }) => {
     setIsModalOpenValid(true);
     // setValidated(true);
   };
-
 
   const handleSubmitValidNotes = async (event) => {
     const form = event.currentTarget;
@@ -1434,8 +1440,6 @@ const Hcc = ({ patientHccResult }) => {
     }
     setValidated(true);
   };
-
-
 
   const handleChangeSuggested = async (e) => {
     const key = e.target.name;
@@ -1506,8 +1510,6 @@ const Hcc = ({ patientHccResult }) => {
       );
     }
 
-
-
     setvalidHccDetails(data);
   };
 
@@ -1521,11 +1523,11 @@ const Hcc = ({ patientHccResult }) => {
       notes: inputValue.notes,
       dos: selectedDosValue,
       encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections
+      capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `dbservice/update/move/validtosuggested`,
+        `dbservice/update/move/validtosuggested`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -1533,7 +1535,7 @@ const Hcc = ({ patientHccResult }) => {
       notification.success({
         message: result.message,
         placement: "top",
-        duration: 1
+        duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
@@ -1550,11 +1552,11 @@ const Hcc = ({ patientHccResult }) => {
       notes: inputValue.notes,
       dos: selectedDosValue,
       encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections
+      capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `dbservice/update/move/validtodeleted`,
+        `dbservice/update/move/validtodeleted`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -1562,7 +1564,7 @@ const Hcc = ({ patientHccResult }) => {
       notification.success({
         message: result.message,
         placement: "top",
-        duration: 1
+        duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
@@ -1579,11 +1581,11 @@ const Hcc = ({ patientHccResult }) => {
       notes: inputValue.notes,
       dos: selectedDosValue,
       encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections
+      capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `dbservice/update/move/suggestedtodeleted`,
+        `dbservice/update/move/suggestedtodeleted`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -1591,7 +1593,7 @@ const Hcc = ({ patientHccResult }) => {
       notification.success({
         message: result.message,
         placement: "top",
-        duration: 1
+        duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
@@ -1608,11 +1610,11 @@ const Hcc = ({ patientHccResult }) => {
       notes: inputValue.notes,
       dos: selectedDosValue,
       encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections
+      capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `dbservice/update/move/suggestedtovalid`,
+        `dbservice/update/move/suggestedtovalid`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -1620,7 +1622,7 @@ const Hcc = ({ patientHccResult }) => {
       notification.success({
         message: result.message,
         placement: "top",
-        duration: 1
+        duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
@@ -1637,11 +1639,11 @@ const Hcc = ({ patientHccResult }) => {
       notes: inputValue.notes,
       dos: selectedDosValue,
       encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections
+      capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `dbservice/update/move/deletedtovalid`,
+        `dbservice/update/move/deletedtovalid`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -1649,7 +1651,7 @@ const Hcc = ({ patientHccResult }) => {
       notification.success({
         message: result.message,
         placement: "top",
-        duration: 1
+        duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
@@ -1665,11 +1667,11 @@ const Hcc = ({ patientHccResult }) => {
       notes: inputValue.notes,
       dos: selectedDosValue,
       encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections
+      capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `dbservice/update/move/deletedtoSuggested`,
+        `dbservice/update/move/deletedtoSuggested`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -1677,7 +1679,7 @@ const Hcc = ({ patientHccResult }) => {
       notification.success({
         message: result.message,
         placement: "top",
-        duration: 1
+        duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
@@ -1694,20 +1696,20 @@ const Hcc = ({ patientHccResult }) => {
       notes: inputValue.notes,
       dos: selectedDosValue,
       encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections
+      capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
       ENDPOINTS.apiEndointFileUploadHcc +
-      `dbservice/update/move/invalidtovalid`,
+        `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
     var result = response.data;
-      if (result.status == "SUCCESS") {
-         notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1
-        });
+    if (result.status == "SUCCESS") {
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
     }
@@ -1771,7 +1773,7 @@ const Hcc = ({ patientHccResult }) => {
         notification.success({
           message: "Saved Successfully!",
           placement: "top",
-          duration: 1
+          duration: 1,
         });
         setSaveBtnTitle("Save");
         getPatientDetails(localPatientId, localOrgId, localTenantId);
@@ -1782,187 +1784,21 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
 
-  const handleSubmitHccAction = () => {
-    handleSubmitHccComplete()
-  }
-
-  const handleSubmitHccComplete = async () => {
-    setCompleteBtnTitle("Loading...");
-    var dos = selectedDosValue;
-    var validObject = {};
-    var inValidObject = {};
-    var unmatachObject = {};
-    var comoboObject = {};
-    var meatObject = {};
-    var deletedObject = {};
-    validObject = newValidDiseaseList;
-    inValidObject = newInValidDiseaseList;
-    unmatachObject = suggestedHccList;
-    comoboObject = comboDiseaseCodesList;
-    meatObject = meatCriteriaList;
-    deletedObject = deletedHccList;
-    // validObject[dos] = newValidDiseaseList;
-    // inValidObject[dos] = newInValidDiseaseList;
-    // unmatachObject[dos] = suggestedHccList;
-    // comoboObject[dos] = comboDiseaseCodesList;
-    // meatObject[dos] = meatCriteriaList;
-    // deletedObject[dos] = deletedHccList;
-
-    var postData = {
-      userId: localUserId,
-      patientId: localPatientId,
-      patientName: patientDocumentResult.patientName,
-      fileId: patientDocumentResult.patientName,
-      orgId: patientDocumentResult.orgId,
-      tenantId: patientDocumentResult.tenantId,
-      dob: patientDocumentResult.dob,
-      gender: patientDocumentResult.gender,
-      age: patientDocumentResult.age,
-      validDisease: validObject,
-      invalidDisease: inValidObject,
-      unmatchedDisease: unmatachObject,
-      comboDisease: comoboObject,
-      meatCriteria: meatObject,
-      rafScore: patientDocumentResult.rafScore,
-      dosFiltered: patientDocumentResult.dosFiltered,
-      fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: deletedObject,
-      dos: selectedDosValue
-    };
-
-    console.log(postData)
-
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Completed Successfully!",
-          placement: "top",
-          duration: 1
-        });
-        setConfirmCompleteModal(false);
-        setCompleteBtnTitle("Complete");
-        getPatientDetails(localPatientId, localOrgId, localTenantId);
-        getPatientIdDetails(localPatientId);
-      } else {
-      }
-    } catch (e) {
-      setCompleteBtnTitle("Complete");
-    }
-  };
-
-  const handleSubmitHccDeclineApi = async () => {
-    setDeclineBtnTitle("Loading...");
-    var postData = {
-      orgId: localOrgId,
-      patientId: localPatientId,
-      notes: inputValue.notes,
-      dos: selectedDosValue
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/decline`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Decline Successfully!",
-          placement: "top",
-          duration: 1
-        });
-        setConfirmNotesModalHold(false);
-        setDeclineBtnTitle("Decline");
-        getPatientIdDetails(localPatientId);
-
-      } else {
-      }
-    } catch (e) {
-      setDeclineBtnTitle("Decline");
-    }
-  };
-
-  const handleSubmitHccPending = async () => {
-    setDeclineBtnTitle("Loading...");
-    var postData = {
-      orgId: localOrgId,
-      patientId: localPatientId,
-      notes: inputValue.notes,
-      dos: selectedDosValue
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/pending`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Pending Successfully!",
-          placement: "top",
-          duration: 1
-        });
-        setDeclineBtnTitle("Decline");
-        getPatientIdDetails(localPatientId);
-      } else {
-      }
-    } catch (e) {
-      setDeclineBtnTitle("Decline");
-    }
-  };
-
-  const handleSubmitHccHold = async () => {
-    setDeclineBtnTitle("Loading...");
-    var postData = {
-      orgId: localOrgId,
-      patientId: localPatientId,
-      notes: inputValue.notes,
-      dos: selectedDosValue
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/hold`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Hold Successfully!",
-          placement: "top",
-          duration: 1
-        });
-        setConfirmNotesModalHold(false);
-        setConfirmNotesModalDecline(false);
-        setDeclineBtnTitle("Decline");
-        getPatientIdDetails(localPatientId);
-      } else {
-      }
-    } catch (e) {
-      setDeclineBtnTitle("Decline");
-    }
-  };
-
-  const handleSubmitHccDecline = async () => {
-    setIsValidAction("declineFunction");
-    setConfirmNotesModalHold(true);
-  };
-
   const getFindValidDiagnosisCode = async (value) => {
-
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
+        `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
     );
     if (response.data) {
       if (response.data == "ICD disease not found") {
-        setAddValidCodeCheck(false)
+        setAddValidCodeCheck(false);
       } else {
-        setAddValidCodeCheck(true)
-        inputValue.actualDescription = "adakd dvasdv"
+        setAddValidCodeCheck(true);
+        inputValue.actualDescription = "adakd dvasdv";
       }
     }
 
-    inputValue.actualDescription = "adakd dvasdv"
+    inputValue.actualDescription = "adakd dvasdv";
   };
 
   // updated changes
@@ -1971,9 +1807,9 @@ const Hcc = ({ patientHccResult }) => {
     const form = event.currentTarget;
     event.preventDefault();
     if (addValidCodeCheck == true) {
-      setAddValidCodeCheck(null)
+      setAddValidCodeCheck(null);
       if (form.checkValidity() === true) {
-        let convertDate = moment(inputValue.encodedDate).format('MM-DD-YYYY');
+        let convertDate = moment(inputValue.encodedDate).format("MM-DD-YYYY");
 
         var dataFormatSuggested = {
           patientComputeDetailId: localPatientId,
@@ -1991,34 +1827,43 @@ const Hcc = ({ patientHccResult }) => {
         try {
           const response = await axios.post(
             ENDPOINTS.apiEndointFileUploadHcc +
-            `dbservice/patient/compute/addvaliddisease`,
+              `dbservice/patient/compute/addvaliddisease`,
             dataFormatSuggested
           );
           if (response?.status == 200) {
             notification.success({
               message: "Saved Successfully!",
               placement: "top",
-              duration: 1
+              duration: 1,
             });
             form.reset();
             setIsModalOpenValidCodes(false);
-            setIsFileFormShow(false)
-            setInputValueFileDate('')
+            setIsFileFormShow(false);
+            setInputValueFileDate("");
 
-            getPatientDetailsReload(localPatientId, localOrgId, localTenantId, "fileNotLoad");
+            getPatientDetailsReload(
+              localPatientId,
+              localOrgId,
+              localTenantId,
+              "fileNotLoad"
+            );
             handleCloseForm();
-            setIsModalOpenValid(false)
+            setIsModalOpenValid(false);
           } else {
           }
-        } catch (e) { }
-
+        } catch (e) {}
       }
     }
 
     setValidated(true);
   };
 
-  const getPatientDetailsReload = async (patientId, orgId, tenId, fileloadCondition) => {
+  const getPatientDetailsReload = async (
+    patientId,
+    orgId,
+    tenId,
+    fileloadCondition
+  ) => {
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
     setNewUnMatchHccList([]);
@@ -2038,11 +1883,10 @@ const Hcc = ({ patientHccResult }) => {
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       var result = response.data.response;
-      console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -2067,7 +1911,6 @@ const Hcc = ({ patientHccResult }) => {
         var deleteHccList = [];
 
         if (fileloadCondition != "fileNotLoad") {
-
           getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
           setSelectMeatFileId(patientHccResult.fileId);
         }
@@ -2078,15 +1921,12 @@ const Hcc = ({ patientHccResult }) => {
         });
 
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        // setSelectedDosValue(dosYearArr[0].value);
-        // console.log(highestDOS)
 
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
         );
         setDosYearDefalutSelect(highestDosValue[0]);
         setSelectedDosValue(highestDosValue[0].value);
-
 
         if (result.rafScore != null) {
           rafScore = result.rafScore;
@@ -2100,7 +1940,7 @@ const Hcc = ({ patientHccResult }) => {
         var validDisArray = [];
         var validEncounterDateArray = [];
         validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
+          const encounterDatearray = res.encounterDate.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -2109,13 +1949,12 @@ const Hcc = ({ patientHccResult }) => {
             encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition
+            defaultPosition: res.defaultPosition,
           });
-
         });
 
         result.invalidDisease.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
+          const encounterDatearray = res.encounterDate.split(",");
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -2124,15 +1963,13 @@ const Hcc = ({ patientHccResult }) => {
             encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition
+            defaultPosition: res.defaultPosition,
           });
-
         });
-
 
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
+            const encounterDatearray = res.encounterDate.split(",");
             deleteHccList.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -2141,9 +1978,8 @@ const Hcc = ({ patientHccResult }) => {
               encounterDateSplit: encounterDatearray,
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition
+              defaultPosition: res.defaultPosition,
             });
-
           });
         }
         if (result.suggestRadiology != null) {
@@ -2154,7 +1990,7 @@ const Hcc = ({ patientHccResult }) => {
           // getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
+            const encounterDatearray = res.encounterDate.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -2163,13 +1999,13 @@ const Hcc = ({ patientHccResult }) => {
               encounterDateSplit: encounterDatearray,
               getPlace: "Radio",
               isHccValid: true,
-              defaultPosition: res.defaultPosition
+              defaultPosition: res.defaultPosition,
             });
           });
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
-              const encounterDatearray = res.encounterDate.split(',');
+              const encounterDatearray = res.encounterDate.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
                 capturedSections: [],
@@ -2181,7 +2017,6 @@ const Hcc = ({ patientHccResult }) => {
                 // defaultPosition:res.defaultPosition
               });
             });
-
           }
         }
 
@@ -2189,7 +2024,7 @@ const Hcc = ({ patientHccResult }) => {
           // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
+            const encounterDatearray = res.encounterDate.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -2198,7 +2033,7 @@ const Hcc = ({ patientHccResult }) => {
               encounterDateSplit: encounterDatearray,
               getPlace: "Lab",
               isHccValid: true,
-              defaultPosition: res.defaultPosition
+              defaultPosition: res.defaultPosition,
             });
           });
         }
@@ -2206,7 +2041,7 @@ const Hcc = ({ patientHccResult }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(',');
+            const encounterDatearray = res.encounterDate.split(",");
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -2217,7 +2052,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
-                defaultPosition: res.defaultPosition
+                defaultPosition: res.defaultPosition,
               });
             } else {
               suggestListAllNonHcc.push({
@@ -2238,7 +2073,6 @@ const Hcc = ({ patientHccResult }) => {
         comboDis = result.comboDisease;
         meatCri = result.meatCriteria;
 
-
         var invalidDiseasesArray = [];
         var validDiseasesArray = [];
 
@@ -2248,8 +2082,6 @@ const Hcc = ({ patientHccResult }) => {
         for (var key in validDis) {
           validDiseasesArray.push({ name: validDis[key] });
         }
-
-
 
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -2263,13 +2095,8 @@ const Hcc = ({ patientHccResult }) => {
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
 
-
-
-
         var capturedSectionsColorsMatching = [];
         var capturedSectionsArr = [];
-
-
 
         const COLORS = [
           "bg-bg-seven",
@@ -2291,9 +2118,8 @@ const Hcc = ({ patientHccResult }) => {
           "sectionTag5",
           "sectionTag6",
           "sectionTag7",
-          "sectionTag8"
+          "sectionTag8",
         ];
-
 
         const COLORS3 = [
           "encounterDateTag1",
@@ -2303,116 +2129,106 @@ const Hcc = ({ patientHccResult }) => {
           "encounterDateTag5",
           "encounterDateTag6",
           "encounterDateTag7",
-          "encounterDateTag8"
+          "encounterDateTag8",
         ];
 
         validDiseaseNewRes.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
               name: res2,
-              "diagnosisCode": res.diagnosisCode,
+              diagnosisCode: res.diagnosisCode,
             });
-
-          })
-        })
+          });
+        });
         invalidDiseaseNewRes.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
               name: res2,
-              "diagnosisCode": res.diagnosisCode,
+              diagnosisCode: res.diagnosisCode,
             });
-
-          })
-        })
+          });
+        });
 
         suggestListAll.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
               name: res2,
-              "diagnosisCode": res.diagnosisCode,
+              diagnosisCode: res.diagnosisCode,
             });
-
-          })
-        })
+          });
+        });
 
         var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
         dublicateSectionArr.map((res, index) => {
           capturedSectionsColorsMatching.push({
-            "name": res.name,
-            "diagnosisCode": res.diagnosisCode,
-            "colors": COLORS2[index]
+            name: res.name,
+            diagnosisCode: res.diagnosisCode,
+            colors: COLORS2[index],
           });
-        })
+        });
         setCaptureSectionMatching(capturedSectionsColorsMatching);
-
-
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
 
         validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
 
         result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
 
         result.unMatchedDisease.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
         result.suggestRadiology?.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
 
         result.suggestLab?.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
-        })
+          });
+        });
 
-
-
-
-        var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
+        var encounterDateArrDublicatesRemove = getUniqueListBy(
+          encounterDateArr,
+          "name"
+        );
 
         encounterDateArrDublicatesRemove.map((res, index) => {
           encounterDateColorsMatching.push({
-            "name": res.name,
-            "colors": COLORS3[index]
+            name: res.name,
+            colors: COLORS3[index],
           });
-        })
+        });
 
         setEncounterDateMatching(encounterDateColorsMatching);
-
-
-
-
-
 
         var meatListArr = [];
         var meatMoniterHead = [];
@@ -2503,6 +2319,7 @@ const Hcc = ({ patientHccResult }) => {
               treatment: res.treatment,
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
+              encounterDate: res.encounterDate,
             });
           } else {
             meatListArr.push({
@@ -2536,6 +2353,7 @@ const Hcc = ({ patientHccResult }) => {
               treatment: res.treatment,
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
+              encounterDate: res.encounterDate,
             });
           }
         });
@@ -2545,17 +2363,20 @@ const Hcc = ({ patientHccResult }) => {
 
         if (result.suggestRadiology != null) {
           if (result.suggestRadiology.length != 0) {
-            getPatientDetailsRadiologyYear(orgId, tenId)
+            getPatientDetailsRadiologyYear(orgId, tenId);
           }
         }
 
         if (result.suggestLab != null) {
           if (result.suggestLab.length != 0) {
-            getLabReportDetailsInititalLoad(orgId, tenId, capturedSectionsColorsMatching, encounterDateColorsMatching)
+            getLabReportDetailsInititalLoad(
+              orgId,
+              tenId,
+              capturedSectionsColorsMatching,
+              encounterDateColorsMatching
+            );
           }
         }
-
-
       } else {
         setIsLoading(false);
       }
@@ -2565,83 +2386,121 @@ const Hcc = ({ patientHccResult }) => {
   const addValidCodeFile = async (event) => {
     setIsFileFormShow(true);
     setValidated(false);
-  }
-  
-  
-  function removeDuplicates(array) {
-    let output = []
-    for (let item of array) {
+  };
 
-      if (!output.includes(item))
-        output.push(item)
+  function removeDuplicates(array) {
+    let output = [];
+    for (let item of array) {
+      if (!output.includes(item)) output.push(item);
     }
 
-    return output
-
+    return output;
   }
 
-  const getCaptureSectionBackgroundFile = (value) => {
+  const getSectionTagColor = async (value) => {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/section/color/getsections?sectionnames=${value}`
+    );
+
+    var resultTest = response.data.response;
+    return resultTest;
+  };
+
+  const getSectionTagColorAll = async (value) => {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
+    );
+
+    var result = response.data.response;
+    setSectionAllColor(result);
+  };
+
+  const getCaptureSectionBackgroundFile = (
+    value,
+    encounterDate,
+    actualDescription
+  ) => {
+    // getSectionTagColor(value);
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.name == res
-      );
-      var backColor = result[0]?.colors;
+      const result = sectionAllColor.filter((res2) => res2.sectionName == res);
+      var headerNames = result[0]?.sectionName;
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
       var disCode = result[0]?.diagnosisCode;
 
-      var sectionMapArr =
-        (<Badge onClick={() =>
-          findValueDocument(
-            disCode,
-            res,
-          )
-        }
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
-          {res}</Badge>)
-      return sectionMapArr
+      var sectionMapArr = (
+        <span
+          onClick={() =>
+            findValueDocument(
+              disCode,
+              res,
+              headerNames,
+              encounterDate,
+              actualDescription
+            )
+          }
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+        >
+          {res}
+        </span>
+      );
+      return sectionMapArr;
     });
-  }
+  };
 
-
-  const getCaptureSectionBackground = (value, documentPlace) => {
-    // console.log(value)
+  const getCaptureSectionBackground = (
+    value,
+    documentPlace,
+    encounterDate,
+    actualDescription,
+    testModal
+  ) => {
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.name == res
+      const result = sectionAllColor.filter((res2) => res2.sectionName == res);
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var disCode = result[0]?.sectionName;
+      var headerNames = result[0]?.sectionName;
+
+      var sectionMapArr = (
+        <span
+          onClick={() =>
+            handleOpenModalCombinationCode(
+              disCode,
+              res,
+              "valid",
+              "null",
+              documentPlace,
+              encounterDate,
+              headerNames,
+              actualDescription,
+              testModal
+            )
+          }
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+        >
+          {res}
+        </span>
       );
-      var backColor = result[0]?.colors;
-      var disCode = result[0]?.diagnosisCode;
-
-      var sectionMapArr =
-        (<Badge onClick={() =>
-          handleOpenModalCombinationCode(
-            disCode,
-            res,
-            "valid",
-            "null",
-            documentPlace
-          )
-        }
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
-          {res}</Badge>)
-      return sectionMapArr
+      return sectionMapArr;
     });
-  }
-
+  };
 
   const getEncounterDateBackground = (value) => {
     return value.map((res) => {
-      const result = encounterDateMatching.filter(
-        (res2) => res2.name == res
-      );
+      const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
-      var sectionMapArr =
+      var sectionMapArr = (
         // (<Badge
         // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
         // {res}</Badge>)
 
-        (<Badge
+        <Badge
           className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
@@ -2649,26 +2508,15 @@ const Hcc = ({ patientHccResult }) => {
           </i>
           {moment(res).format("MM/DD")}
         </Badge>
-        )
-      return sectionMapArr
+      );
+      return sectionMapArr;
     });
-  }
-
-
-
-
-
-
-
+  };
 
   return (
     <>
-
-
       <div className={visitStyles.visitdata_tab_body}>
-        <div
-          className={`profile-tab ${visitStyles.visitdata_header_card2}`}
-        >
+        <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1 ">
             <Tab.Container defaultActiveKey={activeTabHead}>
               <div className="row">
@@ -2680,9 +2528,7 @@ const Hcc = ({ patientHccResult }) => {
                         eventKey="validDiseases"
                         className={visitStyles.navColor}
                         activeClassName={visitStyles.activeLink}
-                        onClick={() =>
-                          setFlagTagActive(true)
-                        }
+                        onClick={() => setFlagTagActive(true)}
                       >
                         Visit Data
                       </Nav.Link>
@@ -2692,9 +2538,7 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="comboDiseases"
                         className={visitStyles.navColor}
-                        onClick={() =>
-                          setFlagTagActive(false)
-                        }
+                        onClick={() => setFlagTagActive(false)}
                       >
                         Combination Codes
                       </Nav.Link>
@@ -2704,9 +2548,7 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="meatCriteria"
                         className={visitStyles.navColor}
-                        onClick={() =>
-                          setFlagTagActive(false)
-                        }
+                        onClick={() => setFlagTagActive(false)}
                       >
                         MEAT Criteria
                       </Nav.Link>
@@ -2716,9 +2558,7 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="RafScore"
                         className={visitStyles.navColor}
-                        onClick={() =>
-                          setFlagTagActive(false)
-                        }
+                        onClick={() => setFlagTagActive(false)}
                       >
                         RAF Score
                       </Nav.Link>
@@ -2728,53 +2568,35 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="file"
                         className={visitStyles.navColor}
-                        onClick={() =>
-                          setFlagTagActive(false)
-                        }
+                        onClick={() => setFlagTagActive(false)}
                       >
                         File
                       </Nav.Link>
-
                     </Nav.Item>
-
                   </Nav>
                 </div>
-                {flagTagActive == true ?
+                {flagTagActive == true ? (
                   <div className="col-xl-4">
-                    <div className={visitStyles.flags} >
-                      <div className={visitStyles.flags} >
-                        <span className={visitStyles.hccFlag}>
-                        </span>
-                        <span className={visitStyles.flagCodes}>
-                          HCC
-                        </span>
+                    <div className={visitStyles.flags}>
+                      <div className={visitStyles.flags}>
+                        <span className={visitStyles.hccFlag}></span>
+                        <span className={visitStyles.flagCodes}>HCC</span>
                       </div>
-                      <div className={visitStyles.flags}   >
-                        <span className={visitStyles.suggestedFlag}>
-                        </span>
-                        <span className={visitStyles.flagCodes}>
-                          SUGGESTED
-                        </span>
+                      <div className={visitStyles.flags}>
+                        <span className={visitStyles.suggestedFlag}></span>
+                        <span className={visitStyles.flagCodes}>SUGGESTED</span>
                       </div>
-                      <div className={visitStyles.flags} >
-                        <span className={visitStyles.deleteFlag}>
-                        </span>
-                        <span className={visitStyles.flagCodes}>
-                          DELETED
-                        </span>
+                      <div className={visitStyles.flags}>
+                        <span className={visitStyles.deleteFlag}></span>
+                        <span className={visitStyles.flagCodes}>DELETED</span>
                       </div>
                     </div>
-                  </div> : null}
-
-
+                  </div>
+                ) : null}
               </div>
 
-
               <Tab.Content>
-                <Tab.Pane
-                  id="my-posts"
-                  eventKey="validDiseases"
-                >
+                <Tab.Pane id="my-posts" eventKey="validDiseases">
                   <div className="my-post-content pt-3">
                     <div className="widget-media   ps--active-y">
                       <div className="row">
@@ -2783,14 +2605,10 @@ const Hcc = ({ patientHccResult }) => {
                             <div
                               className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                             >
-                              <span
-                                className={`${visitStyles.hcc_title_name}`}
-                              >
-
+                              <span className={`${visitStyles.hcc_title_name}`}>
                                 HCC
-                                <FontAwesomeIcon onClick={() =>
-                                  addValidDiseases()
-                                }
+                                <FontAwesomeIcon
+                                  onClick={() => addValidDiseases()}
                                   icon={faPlus}
                                 />
                               </span>
@@ -2804,149 +2622,138 @@ const Hcc = ({ patientHccResult }) => {
                             </div>
                             <div className={visitStyles.container}>
                               <div className={visitStyles.hccStickey_head}>
-
-                                {newValidDiseaseList.map(
-                                  (data, i) => (
-                                    <li>
+                                {newValidDiseaseList.map((data, i) => (
+                                  <li>
+                                    <div
+                                      className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                    >
                                       <div
-                                        className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                        className={`${visitStyles.hcc_card_nameHead}`}
                                       >
-                                        <div
-                                          className={`${visitStyles.hcc_card_nameHead}`}
+                                        <div className="media-body">
+                                          <span className="mb-1 disease-name d-flex">
+                                            <span className="valid-dis-name">
+                                              {data.diagnosisCode}
+                                            </span>{" "}
+                                            - {data.actualDescription}
+                                          </span>
+                                        </div>
+
+                                        {data.defaultPosition == "VALID" ? (
+                                          <span
+                                            className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "SUGGESTED" ? (
+                                          <span
+                                            className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "DELETED" ? (
+                                          <span
+                                            className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : null}
+                                        <Popover
+                                          onClick={() =>
+                                            getValidHccDetails(
+                                              data.actualDescription,
+                                              data.diagnosisCode
+                                            )
+                                          }
+                                          content={validHccDetails}
+                                          title={data.diagnosisCode}
+                                          placement="bottom"
+                                          trigger="click"
+                                        >
+                                          <Tooltip
+                                            title="HCC Veriosn Details"
+                                            placement="bottom"
+                                          >
+                                            <i className="cr-pointer">
+                                              {SVGICON.infoIcon}
+                                            </i>
+                                          </Tooltip>
+                                        </Popover>
+
+                                        <Popconfirm
+                                          title="Choose an action"
+                                          icon={
+                                            <QuestionCircleOutlined
+                                              style={{
+                                                color: "blue",
+                                              }}
+                                            />
+                                          }
+                                          okText="Move to Deleted"
+                                          cancelText="Move to Suggested"
+                                          onCancel={validToSuggested}
+                                          okButtonProps={{
+                                            type: buttonClicked
+                                              ? "primary"
+                                              : "default",
+                                          }}
+                                          cancelButtonProps={{
+                                            type: buttonClicked
+                                              ? "danger"
+                                              : "default",
+                                          }}
+                                          description={data.diagnosisCode}
+                                          onConfirm={confirmvalid}
+                                          placement="leftTop"
+                                          onOpenChange={() =>
+                                            onchangeValid(
+                                              data.diagnosisCode,
+                                              data
+                                            )
+                                          }
                                         >
                                           <div
-                                            className="media-body"
-                                            onClick={() =>
-                                              handleOpenModalCombinationCode(
-                                                data.diagnosisCode,
-                                                data.actualDescription,
-                                                "valid2"
-                                              )
-                                            }
+                                            className={visitStyles.close_icon}
                                           >
-                                            <span className="mb-1 disease-name d-flex">
-
-                                              <span className="valid-dis-name">
-
-
-                                                {
-                                                  data.diagnosisCode
-                                                }
-                                              </span>{" "}
-                                              -{" "}
-                                              {
-                                                data.actualDescription
-                                              }
-
-                                            </span>
-                                          </div>
-
-                                          {data.defaultPosition == "VALID" ?
-                                            <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                            </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                              <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                              </span>
-                                              : data.defaultPosition == "DELETED" ?
-
-                                                <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                </span> : null}
-                                          <Popover
-                                            onClick={() =>
-                                              getValidHccDetails(
-                                                data.actualDescription,
-                                                data.diagnosisCode
-                                              )
-                                            }
-                                            content={
-                                              validHccDetails
-                                            }
-                                            title={
-                                              data.diagnosisCode
-                                            }
-                                            placement="bottom"
-                                            trigger="click"
-                                          >
-                                            <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                              <i className="cr-pointer">
-                                                {SVGICON.infoIcon}
-                                              </i>
-                                            </Tooltip>
-                                          </Popover>
-
-
-                                          <Popconfirm
-                                            title="Choose an action"
-                                            icon={
-                                              <QuestionCircleOutlined
+                                            {
+                                              <FontAwesomeIcon
+                                                icon={faArrowsAlt}
                                                 style={{
-                                                  color: "blue",
+                                                  size: 8,
+                                                  color: "#a80404",
                                                 }}
                                               />
                                             }
-                                            okText="Move to Deleted"
-                                            cancelText="Move to Suggested"
-                                            onCancel={
-                                              validToSuggested
-                                            }
-                                            okButtonProps={{
-                                              type: buttonClicked
-                                                ? "primary"
-                                                : "default",
-                                            }}
-                                            cancelButtonProps={{
-                                              type: buttonClicked
-                                                ? "danger"
-                                                : "default",
-                                            }}
-                                            description={
-                                              data.diagnosisCode
-                                            }
-                                            onConfirm={
-                                              confirmvalid
-                                            }
-                                            placement="leftTop"
-                                            onOpenChange={() =>
-                                              onchangeValid(
-                                                data.diagnosisCode,
-                                                data
-                                              )
-                                            }
-                                          >
-                                            <div
-                                              className={
-                                                visitStyles.close_icon
-                                              }
+                                          </div>
+                                        </Popconfirm>
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.hoverActiveHcc}`}
+                                      >
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}
+                                          {data.isManuallyAdded == true ? (
+                                            <Badge
+                                              className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                             >
-                                              {<FontAwesomeIcon
-                                                icon={faArrowsAlt}
-                                                style={{ size: 8, color: "#a80404" }}
-                                              />}
-                                            </div>
-                                          </Popconfirm>
+                                              Manually Added
+                                            </Badge>
+                                          ) : null}
                                         </div>
-                                        <div className={`${visitStyles.hoverActiveHcc}`}>
-                                          <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                            {getEncounterDateBackground(data.encounterDateSplit)}
-                                            {data.isManuallyAdded == true ?
-
-                                              <Badge
-                                                className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                              >
-                                                Manually Added
-
-                                              </Badge> :
-                                              null}
-                                          </div>
-                                          <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                            {getCaptureSectionBackground(data.capturedSections)}
-                                          </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getCaptureSectionBackground(
+                                            data.capturedSections,
+                                            null,
+                                            data.encounterDate,
+                                            data.actualDescription
+                                          )}
                                         </div>
                                       </div>
-                                    </li>
-
-                                  )
-                                )}
+                                    </div>
+                                  </li>
+                                ))}
                               </div>
                             </div>
                           </ul>
@@ -2982,39 +2789,30 @@ const Hcc = ({ patientHccResult }) => {
                                             <div
                                               className={`${visitStyles.hcc_card_nameHead}`}
                                             >
-                                              <div
-                                                className="media-body"
-                                                onClick={() =>
-                                                  handleOpenModalCombinationCode(
-                                                    data.diagnosisCode,
-                                                    data.actualDescription,
-                                                    "valid2",
-                                                    data.getPlace
-                                                  )
-                                                }
-                                              >
+                                              <div className="media-body">
                                                 <span className="mb-1 disease-name d-flex">
                                                   <span className="valid-dis-name">
-                                                    {
-                                                      data.diagnosisCode
-                                                    }
+                                                    {data.diagnosisCode}
                                                   </span>{" "}
-                                                  -{" "}
-                                                  {
-                                                    data.actualDescription
-                                                  }
+                                                  - {data.actualDescription}
                                                 </span>
                                               </div>
-                                              {data.defaultPosition == "VALID" ?
-                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                  </span>
-                                                  : data.defaultPosition == "DELETED" ?
-
-                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                    </span> : null}
+                                              {data.defaultPosition ==
+                                              "VALID" ? (
+                                                <span
+                                                  className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                                ></span>
+                                              ) : data.defaultPosition ==
+                                                "SUGGESTED" ? (
+                                                <span
+                                                  className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                                ></span>
+                                              ) : data.defaultPosition ==
+                                                "DELETED" ? (
+                                                <span
+                                                  className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                                ></span>
+                                              ) : null}
                                               <Popover
                                                 onClick={() =>
                                                   getValidHccDetails(
@@ -3022,48 +2820,34 @@ const Hcc = ({ patientHccResult }) => {
                                                     data.diagnosisCode
                                                   )
                                                 }
-                                                content={
-                                                  validHccDetails
-                                                }
-                                                title={
-                                                  data.diagnosisCode
-                                                }
+                                                content={validHccDetails}
+                                                title={data.diagnosisCode}
                                                 placement="bottom"
                                                 trigger="click"
                                               >
-                                                <i>
-                                                  {
-                                                    SVGICON.infoIcon
-                                                  }
-                                                </i>
+                                                <i>{SVGICON.infoIcon}</i>
                                               </Popover>
-                                              {data.getPlace ==
-                                                "Radio" || data.getPlace ==
-                                                "Lab" ?
+                                              {data.getPlace == "Radio" ||
+                                              data.getPlace == "Lab" ? (
                                                 <Popconfirm
                                                   title="Choose an action"
                                                   icon={
                                                     <QuestionCircleOutlined
                                                       style={{
-                                                        color:
-                                                          "blue",
+                                                        color: "blue",
                                                       }}
                                                     />
                                                   }
                                                   okText="Move to Deleted"
-
                                                   okButtonProps={{
                                                     type: buttonClicked
                                                       ? "primary"
                                                       : "default",
                                                   }}
-
                                                   description={
                                                     data.diagnosisCode
                                                   }
-                                                  onConfirm={
-                                                    suggestedToDeleted
-                                                  }
+                                                  onConfirm={suggestedToDeleted}
                                                   placement="leftTop"
                                                   onOpenChange={() =>
                                                     onchangeValid(
@@ -3079,26 +2863,26 @@ const Hcc = ({ patientHccResult }) => {
                                                   >
                                                     <FontAwesomeIcon
                                                       icon={faArrowsAlt}
-                                                      style={{ size: 8, color: "#a80404" }}
+                                                      style={{
+                                                        size: 8,
+                                                        color: "#a80404",
+                                                      }}
                                                     />
                                                   </div>
                                                 </Popconfirm>
-
-                                                : <Popconfirm
+                                              ) : (
+                                                <Popconfirm
                                                   title="Choose an action"
                                                   icon={
                                                     <QuestionCircleOutlined
                                                       style={{
-                                                        color:
-                                                          "blue",
+                                                        color: "blue",
                                                       }}
                                                     />
                                                   }
                                                   okText="Move to Deleted"
                                                   cancelText="Move to HCC"
-                                                  onCancel={
-                                                    suggestedToValid
-                                                  }
+                                                  onCancel={suggestedToValid}
                                                   okButtonProps={{
                                                     type: buttonClicked
                                                       ? "primary"
@@ -3112,9 +2896,7 @@ const Hcc = ({ patientHccResult }) => {
                                                   description={
                                                     data.diagnosisCode
                                                   }
-                                                  onConfirm={
-                                                    suggestedToDeleted
-                                                  }
+                                                  onConfirm={suggestedToDeleted}
                                                   placement="leftTop"
                                                   onOpenChange={() =>
                                                     onchangeValid(
@@ -3130,17 +2912,23 @@ const Hcc = ({ patientHccResult }) => {
                                                   >
                                                     <FontAwesomeIcon
                                                       icon={faArrowsAlt}
-                                                      style={{ size: 8, color: "#a80404" }}
+                                                      style={{
+                                                        size: 8,
+                                                        color: "#a80404",
+                                                      }}
                                                     />
                                                   </div>
-                                                </Popconfirm>}
+                                                </Popconfirm>
+                                              )}
                                             </div>
-                                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                                            <div
+                                              className={`${visitStyles.hoverActiveHcc}`}
+                                            >
                                               <div className="">
-
-                                                {getEncounterDateBackground(data.encounterDateSplit)}
-                                                {data.getPlace ==
-                                                  "Lab" ? (
+                                                {getEncounterDateBackground(
+                                                  data.encounterDateSplit
+                                                )}
+                                                {data.getPlace == "Lab" ? (
                                                   <Tooltip title="LAB">
                                                     <span
                                                       className={` mt-2 ${visitStyles.labStatus}`}
@@ -3149,8 +2937,7 @@ const Hcc = ({ patientHccResult }) => {
                                                       Lab
                                                     </span>
                                                   </Tooltip>
-                                                ) : data.getPlace ==
-                                                  "Radio" ? (
+                                                ) : data.getPlace == "Radio" ? (
                                                   <Tooltip title="RADIOLOGY">
                                                     <span
                                                       className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -3169,12 +2956,18 @@ const Hcc = ({ patientHccResult }) => {
                                                       Radiology - Combo Codes
                                                     </span>
                                                   </Tooltip>
-                                                ) : null
-                                                }
-
+                                                ) : null}
                                               </div>
-                                              <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                {getCaptureSectionBackground(data.capturedSections, data.getPlace)}
+                                              <div
+                                                className={`${visitStyles.encounterAndSectionHeader}`}
+                                              >
+                                                {getCaptureSectionBackground(
+                                                  data.capturedSections,
+                                                  data.getPlace,
+                                                  data.encounterDate,
+                                                  data.actualDescription,
+                                                  "Suggested"
+                                                )}
                                               </div>
                                             </div>
                                           </div>
@@ -3221,36 +3014,35 @@ const Hcc = ({ patientHccResult }) => {
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
-                                            -{" "}
-                                            {
-                                              data.actualDescription
-                                            }
+                                            - {data.actualDescription}
                                           </span>
                                         </div>
-                                        {data.defaultPosition == "VALID" ?
-                                          <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                          </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                            <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                            </span>
-                                            : data.defaultPosition == "DELETED" ?
-
-                                              <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                              </span> : null}
+                                        {data.defaultPosition == "VALID" ? (
+                                          <span
+                                            className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "SUGGESTED" ? (
+                                          <span
+                                            className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "DELETED" ? (
+                                          <span
+                                            className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : null}
                                         <Popover
-                                          content={
-                                            data.dbDescription
-                                          }
-                                          title={
-                                            data.diagnosisCode
-                                          }
+                                          content={data.dbDescription}
+                                          title={data.diagnosisCode}
                                           placement="bottom"
                                           trigger="click"
                                         >
-                                          <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                            <i>
-                                              {SVGICON.infoIcon}
-                                            </i>
+                                          <Tooltip
+                                            title="HCC Veriosn Details"
+                                            placement="bottom"
+                                          >
+                                            <i>{SVGICON.infoIcon}</i>
                                           </Tooltip>
                                         </Popover>
                                         <Popconfirm
@@ -3264,9 +3056,7 @@ const Hcc = ({ patientHccResult }) => {
                                           }
                                           okText="Move to Suggested"
                                           cancelText="Move to HCC"
-                                          onCancel={
-                                            deletedToValid
-                                          }
+                                          onCancel={deletedToValid}
                                           okButtonProps={{
                                             type: buttonClicked
                                               ? "primary"
@@ -3277,12 +3067,8 @@ const Hcc = ({ patientHccResult }) => {
                                               ? "danger"
                                               : "default",
                                           }}
-                                          description={
-                                            data.diagnosisCode
-                                          }
-                                          onConfirm={
-                                            deletedToSuggested
-                                          }
+                                          description={data.diagnosisCode}
+                                          onConfirm={deletedToSuggested}
                                           placement="leftTop"
                                           onOpenChange={() =>
                                             onchangeValid(
@@ -3292,34 +3078,36 @@ const Hcc = ({ patientHccResult }) => {
                                           }
                                         >
                                           <div
-                                            className={
-                                              visitStyles.close_icon
-                                            }
+                                            className={visitStyles.close_icon}
                                           >
                                             <FontAwesomeIcon
                                               icon={faArrowsAlt}
-                                              style={{ size: 8, color: "#a80404" }}
+                                              style={{
+                                                size: 8,
+                                                color: "#a80404",
+                                              }}
                                             />
                                           </div>
                                         </Popconfirm>
                                       </div>
-                                      <div className={`${visitStyles.hoverActiveHcc}`}>
+                                      <div
+                                        className={`${visitStyles.hoverActiveHcc}`}
+                                      >
                                         <div className="">
-
-                                          {getEncounterDateBackground(data.encounterDateSplit)}
-
-                                          {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
-                                                      <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
-                                                      <FontAwesomeIcon
-                                                          icon={faSearch}
-                                                          style={{ color: "#fff" }}
-                                                        />
-                                                        HPI Test Urlplan
-                                                      </Badge>
-                                                      </Popover> */}
+                                          {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}
                                         </div>
-                                        <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                          {getCaptureSectionBackground(data.capturedSections)}
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getCaptureSectionBackground(
+                                            data.capturedSections,
+                                            null,
+                                            data.encounterDate,
+                                            data.actualDescription,
+                                            "Suggested"
+                                          )}
                                         </div>
                                       </div>
                                     </div>
@@ -3333,119 +3121,18 @@ const Hcc = ({ patientHccResult }) => {
                     </div>
                   </div>
                 </Tab.Pane>
-                <Tab.Pane id="my-posts" eventKey="nonhcc">
-                  <div className="my-post-content pt-3">
-                    <div className="widget-media   ps--active-y">
-                      <div className="row">
-                        <div className="col-xl-6">
-                          <ul className="timeline">
-                            <div className="invalid-text d-flex justify-content-sm-between">
-                              <span
-                                className={`dang d-block`}
-                              >
-                                {" "}
-                                NON-HCC{" "}
-                                <Badge
-                                  as="a"
-                                  href=""
-                                  bg="badge-circle invalid-bange"
-                                >
-                                  {
-                                    newInValidDiseaseList.length
-                                  }
-                                </Badge>
-                              </span>
-                              <div className="d-flex justify-content-center">
-                                <button
-                                  onClick={() =>
-                                    addValidDiseases()
-                                  }
-                                  className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faAdd}
-                                    fontSize={11}
-                                  />
-                                </button>
-                              </div>
-                            </div>
-                            {newInValidDiseaseList.map(
-                              (data, i) => (
-                                <li>
-                                  <div className="timeline-panel invalid-disease">
-                                    <div className="media-body">
-                                      <span className="mb-1 disease-name d-flex">
-                                        <span className="valid-dis-name">
-                                          {data.diagnosisCode}
-                                        </span>{" "}
-                                        -{" "}
-                                        {
-                                          data.actualDescription
-                                        }
-                                      </span>
-                                    </div>
-                                    <Popconfirm
-                                      title="You want move to valid?"
-                                      description={
-                                        data.diagnosisCode
-                                      }
-                                      onConfirm={
-                                        confirmInvalid
-                                      }
-                                      placement="leftTop"
-                                      okText="Yes"
-                                      cancelText="No"
-                                      onOpenChange={() =>
-                                        onchangeValid(
-                                          data.diagnosisCode
-                                        )
-                                      }
-                                    >
-                                      <div className="icon-box  bg-danger-light me-1">
-                                        <FontAwesomeIcon
-                                          icon={faCheck}
-                                          style={{
-                                            color: "orange",
-                                          }}
-                                        />
-                                      </div>
-                                    </Popconfirm>
-                                  </div>
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </div>
-                        {/* {validDiseasesList.length == 0 ?
-                                              <div className="card box-shadow-none">
-                                                <div className="card combo-card">
-                                                  <div className="col-xl-12">
 
-                                                    <span className="no-patient-data">NO DATA</span>
-                                                  </div>
-                                                </div></div>
-                                              : null} */}
-                      </div>
-                    </div>
-                  </div>
-                </Tab.Pane>
-
-                <Tab.Pane
-                  id="my-posts"
-                  eventKey="comboDiseases"
-                >
+                <Tab.Pane id="my-posts" eventKey="comboDiseases">
                   <div className={`${visitStyles.comboContainer}`}>
                     <div className={`row ${visitStyles.comboContainer2}`}>
                       <div className="col-xl-6">
                         <div className={`${visitStyles.comboTitle}`}>
                           <span>VALID CODES </span>
                         </div>
-                        <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-                          <div
-                            className={
-                              visitStyles.combo_head_card
-                            }
-                          >
+                        <div
+                          className={`my-post-content  ${visitStyles.comboContainer3}`}
+                        >
+                          <div className={visitStyles.combo_head_card}>
                             <div className="row">
                               <div className="col-xl-3">
                                 <label>Combo Codes</label>
@@ -3459,21 +3146,14 @@ const Hcc = ({ patientHccResult }) => {
                               <div className="col-xl-1">
                                 <div className="d-flex justify-content-center">
                                   <button
-                                    onClick={() =>
-                                      addValidDiseases()
-                                    }
-                                    className={
-                                      visitStyles.combo_add_btn
-                                    }
+                                    onClick={() => addValidDiseases()}
+                                    className={visitStyles.combo_add_btn}
                                   >
                                     <FontAwesomeIcon
-                                      icon={
-                                        faPlus
-                                      }
+                                      icon={faPlus}
                                       style={{
-                                        color:
-                                          "#fff",
-                                        size: 12
+                                        color: "#fff",
+                                        size: 12,
                                       }}
                                     />
                                   </button>
@@ -3481,11 +3161,107 @@ const Hcc = ({ patientHccResult }) => {
                               </div>
                             </div>
                           </div>
-                          {comboDiseaseCodesList.length != 0 ?
+                          {comboDiseaseCodesList.length != 0 ? (
                             <div className={visitStyles.container}>
                               <div className={visitStyles.hccStickey_head}>
-                                {comboDiseaseCodesList?.map(
-                                  (item) => {
+                                {comboDiseaseCodesList?.map((item) => {
+                                  return (
+                                    <div
+                                      className={visitStyles.combo_details_card}
+                                    >
+                                      <div className="row">
+                                        <div className="col-xl-3">
+                                          <span className="font-bold">
+                                            {item.diagnosisCodeCombo}
+                                          </span>
+                                        </div>
+                                        <div className="col-xl-3">
+                                          <span className="font-bold">
+                                            {item.addOnCode}
+                                          </span>
+                                        </div>
+                                        <div
+                                          className="col-xl-5 cr-pointer"
+                                          onClick={() =>
+                                            handleOpenModalCombinationCode(
+                                              item.diagnosisCodeCombo,
+                                              item.diseaseName
+                                            )
+                                          }
+                                        >
+                                          <span>{item.diseaseName}</span>
+                                        </div>
+                                        <div className="col-xl-1 comboclose">
+                                          <Popconfirm
+                                            title="You want move to Invalid?"
+                                            description={item.diseaseName}
+                                            onConfirm={confirmComboInvalid}
+                                            placement="leftTop"
+                                            okText="Yes"
+                                            cancelText="No"
+                                            onOpenChange={() =>
+                                              onchangeCombo(
+                                                item.diseaseName,
+                                                item.addOnCode
+                                              )
+                                            }
+                                          >
+                                            <div
+                                              className={visitStyles.close_icon}
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faArrowsAlt}
+                                                style={{
+                                                  size: 8,
+                                                  color: "#a80404",
+                                                }}
+                                              />
+                                            </div>
+                                          </Popconfirm>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          ) : null}
+
+                          {comboDiseaseCodesList.length == 0 ? (
+                            <div>
+                              <span className="no-patient-data">
+                                No Combination Codes
+                              </span>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div className="col-xl-6">
+                        <div className={`${visitStyles.comboTitle}`}>
+                          <span>DELETED COMBO CODES </span>
+                        </div>
+                        <div
+                          className={`my-post-content  ${visitStyles.comboContainer3}`}
+                        >
+                          <div className={visitStyles.combo_head_card}>
+                            <div className="row">
+                              <div className="col-xl-3">
+                                <label>Combo Codes</label>
+                              </div>
+                              <div className="col-xl-3">
+                                <label>Additional Codes</label>
+                              </div>
+                              <div className="col-xl-5">
+                                <label>Description</label>
+                              </div>
+                            </div>
+                          </div>
+                          {invalidComboDiseaseCodesList.length != 0 ? (
+                            <>
+                              <div className={visitStyles.container}>
+                                <div className={visitStyles.hccStickey_head}>
+                                  {invalidComboDiseaseCodesList?.map((item) => {
                                     return (
                                       <div
                                         className={
@@ -3495,9 +3271,7 @@ const Hcc = ({ patientHccResult }) => {
                                         <div className="row">
                                           <div className="col-xl-3">
                                             <span className="font-bold">
-                                              {
-                                                item.diagnosisCodeCombo
-                                              }
+                                              {item.diagnosisCodeCombo}
                                             </span>
                                           </div>
                                           <div className="col-xl-3">
@@ -3514,19 +3288,13 @@ const Hcc = ({ patientHccResult }) => {
                                               )
                                             }
                                           >
-                                            <span>
-                                              {item.diseaseName}
-                                            </span>
+                                            <span>{item.diseaseName}</span>
                                           </div>
                                           <div className="col-xl-1 comboclose">
                                             <Popconfirm
-                                              title="You want move to Invalid?"
-                                              description={
-                                                item.diseaseName
-                                              }
-                                              onConfirm={
-                                                confirmComboInvalid
-                                              }
+                                              title="You want move to Valid?"
+                                              description={item.diseaseName}
+                                              onConfirm={confirmComboValid}
                                               placement="leftTop"
                                               okText="Yes"
                                               cancelText="No"
@@ -3539,148 +3307,29 @@ const Hcc = ({ patientHccResult }) => {
                                             >
                                               <div
                                                 className={
-                                                  visitStyles.close_icon
+                                                  visitStyles.tick_icon
                                                 }
                                               >
-                                                <FontAwesomeIcon
-                                                  icon={faArrowsAlt}
-                                                  style={{ size: 8, color: "#a80404" }}
-                                                />
+                                                {SVGICON.tickIcon}
                                               </div>
                                             </Popconfirm>
                                           </div>
                                         </div>
                                       </div>
                                     );
-                                  }
-                                )}
+                                  })}
+                                </div>{" "}
                               </div>
-                            </div> : null}
-
-                          {comboDiseaseCodesList.length == 0 ? (
-
-                            <div>
-                              <span className="no-patient-data">
-                                No Combination Codes
-                              </span>
-                            </div>
-
-                          ) : null}
-                        </div>
-                      </div>
-
-                      <div className="col-xl-6">
-                        <div className={`${visitStyles.comboTitle}`}>
-                          <span>DELETED COMBO CODES </span>
-                        </div>
-                        <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-                          <div
-                            className={
-                              visitStyles.combo_head_card
-                            }
-                          >
-                            <div className="row">
-                              <div className="col-xl-3">
-                                <label>Combo Codes</label>
-                              </div>
-                              <div className="col-xl-3">
-                                <label>Additional Codes</label>
-                              </div>
-                              <div className="col-xl-5">
-                                <label>Description</label>
-                              </div>
-                            </div>
-                          </div>
-                          {invalidComboDiseaseCodesList.length !=
-                            0 ? (
-                            <>
-                              <div className={visitStyles.container}>
-                                <div className={visitStyles.hccStickey_head}>
-                                  {invalidComboDiseaseCodesList?.map(
-                                    (item) => {
-                                      return (
-                                        <div
-                                          className={
-                                            visitStyles.combo_details_card
-                                          }
-                                        >
-                                          <div className="row">
-                                            <div className="col-xl-3">
-                                              <span className="font-bold">
-                                                {
-                                                  item.diagnosisCodeCombo
-                                                }
-                                              </span>
-                                            </div>
-                                            <div className="col-xl-3">
-                                              <span className="font-bold">
-                                                {item.addOnCode}
-                                              </span>
-                                            </div>
-                                            <div
-                                              className="col-xl-5 cr-pointer"
-                                              onClick={() =>
-                                                handleOpenModalCombinationCode(
-                                                  item.diagnosisCodeCombo,
-                                                  item.diseaseName
-                                                )
-                                              }
-                                            >
-                                              <span>
-                                                {item.diseaseName}
-                                              </span>
-                                            </div>
-                                            <div className="col-xl-1 comboclose">
-                                              <Popconfirm
-                                                title="You want move to Valid?"
-                                                description={
-                                                  item.diseaseName
-                                                }
-                                                onConfirm={
-                                                  confirmComboValid
-                                                }
-                                                placement="leftTop"
-                                                okText="Yes"
-                                                cancelText="No"
-                                                onOpenChange={() =>
-                                                  onchangeCombo(
-                                                    item.diseaseName,
-                                                    item.addOnCode
-                                                  )
-                                                }
-                                              >
-                                                <div
-                                                  className={
-                                                    visitStyles.tick_icon
-                                                  }
-                                                >
-                                                  {SVGICON.tickIcon}
-                                                </div>
-                                              </Popconfirm>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      );
-                                    }
-                                  )}
-                                </div> </div>
-
                             </>
                           ) : null}
                         </div>
                       </div>
                     </div>
                   </div>
-
                 </Tab.Pane>
-                <Tab.Pane
-                  id="my-posts"
-                  eventKey="meatCriteria"
-                >
+                <Tab.Pane id="my-posts" eventKey="meatCriteria">
                   <div className="my-post-content pt-3">
-                    <div
-                      className={visitStyles.meat_head_card}
-                    >
+                    <div className={visitStyles.meat_head_card}>
                       <div className="row">
                         <div className="col-xl-1">
                           <label>Codes</label>
@@ -3705,17 +3354,14 @@ const Hcc = ({ patientHccResult }) => {
                         </div>
                       </div>
                     </div>
-                    {meatCriteriaList.length != 0 ?
+                    {meatCriteriaList.length != 0 ? (
                       <div className={visitStyles.container}>
-                        <div
-                          className={visitStyles.hccStickey_head}
-                        >
+                        <div className={visitStyles.hccStickey_head}>
                           {meatCriteriaList?.map((item) => {
                             return (
                               <div
                                 className={
-                                  item.isMeatCriteriaPresent ===
-                                    true
+                                  item.isMeatCriteriaPresent === true
                                     ? `${visitStyles.meat_details_card}`
                                     : `${visitStyles.meat_details_card_false}`
                                 }
@@ -3777,13 +3423,12 @@ const Hcc = ({ patientHccResult }) => {
                                       onClick={() =>
                                         handleOpenModal(
                                           item.monitorCapturedFromHeader,
-                                          item.monitor
+                                          item.monitor,
+                                          item.encounterDate
                                         )
                                       }
                                     >
-                                      {
-                                        item.monitorCapturedFromHeader
-                                      }
+                                      {item.monitorCapturedFromHeader}
                                     </Badge>
                                   </div>
                                   <div className="col-xl-2 d-grid">
@@ -3808,13 +3453,12 @@ const Hcc = ({ patientHccResult }) => {
                                       onClick={() =>
                                         handleOpenModal(
                                           item.evaluateCapturedFromHeader,
-                                          item.evaluate
+                                          item.evaluate,
+                                          item.encounterDate
                                         )
                                       }
                                     >
-                                      {
-                                        item.evaluateCapturedFromHeader
-                                      }
+                                      {item.evaluateCapturedFromHeader}
                                     </Badge>
                                   </div>
                                   <div className="col-xl-2 d-grid">
@@ -3839,13 +3483,12 @@ const Hcc = ({ patientHccResult }) => {
                                       onClick={() =>
                                         handleOpenModal(
                                           item.assessmentCapturedFromHeader,
-                                          item.assessment
+                                          item.assessment,
+                                          item.encounterDate
                                         )
                                       }
                                     >
-                                      {
-                                        item.assessmentCapturedFromHeader
-                                      }
+                                      {item.assessmentCapturedFromHeader}
                                     </Badge>
                                   </div>
                                   <div className="col-xl-2 d-grid">
@@ -3871,13 +3514,12 @@ const Hcc = ({ patientHccResult }) => {
                                       onClick={() =>
                                         handleOpenModal(
                                           item.treatmentCapturedFromHeader,
-                                          item.treatment
+                                          item.treatment,
+                                          item.encounterDate
                                         )
                                       }
                                     >
-                                      {
-                                        item.treatmentCapturedFromHeader
-                                      }
+                                      {item.treatmentCapturedFromHeader}
                                     </Badge>
                                   </div>
                                   <div className="col-xl-1 meatclose">
@@ -3900,11 +3542,7 @@ const Hcc = ({ patientHccResult }) => {
                                         )
                                       }
                                     >
-                                      <div
-                                        className={
-                                          visitStyles.close_icon
-                                        }
-                                      >
+                                      <div className={visitStyles.close_icon}>
                                         <FontAwesomeIcon
                                           icon={faArrowsAlt}
                                           style={{ size: 8, color: "#a80404" }}
@@ -3934,338 +3572,319 @@ const Hcc = ({ patientHccResult }) => {
                                 <span>Invalid MeatCriteria</span>
                               </div>
 
-                              {invalidMeatCriteriaList?.map(
-                                (item) => {
-                                  return (
-                                    <div
-                                      className={
-                                        visitStyles.meat_details_card
-                                      }
-                                    >
-                                      <div className="row">
-                                        <div className="col-xl-1">
-                                          <span className="font-bold">
-                                            {item.diagnosisCode}
+                              {invalidMeatCriteriaList?.map((item) => {
+                                return (
+                                  <div
+                                    className={visitStyles.meat_details_card}
+                                  >
+                                    <div className="row">
+                                      <div className="col-xl-1">
+                                        <span className="font-bold">
+                                          {item.diagnosisCode}
+                                        </span>
+                                      </div>
+                                      <div className="col-xl-2">
+                                        <Popover
+                                          placement="topLeft"
+                                          title="Description"
+                                          content={item.diseaseName}
+                                        >
+                                          <span className="meat-name-details">
+                                            {item.diseaseName}
                                           </span>
-                                        </div>
-                                        <div className="col-xl-2">
-                                          <Popover
-                                            placement="topLeft"
-                                            title="Description"
-                                            content={
-                                              item.diseaseName
-                                            }
-                                          >
-                                            <span className="meat-name-details">
-                                              {item.diseaseName}
-                                            </span>
-                                          </Popover>
-                                        </div>
-                                        <div className="col-xl-2 d-grid">
-                                          <Popover
-                                            placement="topLeft"
-                                            title="Monitor"
-                                            content={item.monitor}
-                                          >
-                                            <span className="meat-name-details">
-                                              {item.monitor}
-                                            </span>
-                                          </Popover>
-                                          <Badge
-                                            className="badge-meat cr-pointer"
-                                            bg={
-                                              item.monitorCapturedFromHeader ===
-                                                "HPI" ||
-                                                item.monitorCapturedFromHeader ===
-                                                "Plan: Hypertensive heart disease without heart failure" ||
-                                                item.monitorCapturedFromHeader ===
-                                                "Vital Signs"
-                                                ? "third badge-circle mt-2"
-                                                : item.monitorCapturedFromHeader ===
+                                        </Popover>
+                                      </div>
+                                      <div className="col-xl-2 d-grid">
+                                        <Popover
+                                          placement="topLeft"
+                                          title="Monitor"
+                                          content={item.monitor}
+                                        >
+                                          <span className="meat-name-details">
+                                            {item.monitor}
+                                          </span>
+                                        </Popover>
+                                        <Badge
+                                          className="badge-meat cr-pointer"
+                                          bg={
+                                            item.monitorCapturedFromHeader ===
+                                              "HPI" ||
+                                            item.monitorCapturedFromHeader ===
+                                              "Plan: Hypertensive heart disease without heart failure" ||
+                                            item.monitorCapturedFromHeader ===
+                                              "Vital Signs"
+                                              ? "third badge-circle mt-2"
+                                              : item.monitorCapturedFromHeader ===
                                                   "Impression" ||
-                                                  item.monitorCapturedFromHeader ===
+                                                item.monitorCapturedFromHeader ===
                                                   "Plan: COPD" ||
-                                                  item.monitorCapturedFromHeader ===
+                                                item.monitorCapturedFromHeader ===
                                                   "Assessments" ||
-                                                  item.monitorCapturedFromHeader ===
+                                                item.monitorCapturedFromHeader ===
                                                   "Assessment"
-                                                  ? "bg-eight badge-circle mt-2"
-                                                  : item.monitorCapturedFromHeader ===
-                                                    "Recommendations" ||
-                                                    item.monitorCapturedFromHeader ===
-                                                    "Plan: GERD without esophagitis" ||
-                                                    item.monitorCapturedFromHeader ===
-                                                    "Treatment"
-                                                    ? "bgshodowcolor badge-circle mt-2"
-                                                    : item.monitorCapturedFromHeader ===
-                                                      "Plan / Discussion" ||
-                                                      item.monitorCapturedFromHeader ===
-                                                      "Plan: Arteriosclerotic cardiovascular disease"
-                                                      ? "bg-four badge-circle mt-2"
-                                                      : item.monitorCapturedFromHeader ===
-                                                        "Patient Instructions" ||
-                                                        item.monitorCapturedFromHeader ===
-                                                        "Plan: Hyperlipidemia, acquired"
-                                                        ? "bg-five badge-circle mt-2"
-                                                        : item.monitorCapturedFromHeader ===
-                                                          "N/A"
-                                                          ? "bg-six badge-circle mt-2"
-                                                          : item.monitorCapturedFromHeader ===
-                                                            "Plan"
-                                                            ? "bg-seven badge-circle mt-2"
-                                                            : "primary badge-circle mt-2"
-                                            }
-                                            onClick={() =>
-                                              handleOpenModal(
-                                                item.monitorCapturedFromHeader,
-                                                item.monitor
-                                              )
-                                            }
-                                          >
-                                            {
-                                              item.monitorCapturedFromHeader
-                                            }
-                                          </Badge>
-                                        </div>
-                                        <div className="col-xl-2 d-grid">
-                                          <Popover
-                                            placement="topLeft"
-                                            title="Evaluation"
-                                            content={item.evaluate}
-                                          >
-                                            <span className="meat-name-details">
-                                              {item.evaluate}
-                                            </span>
-                                          </Popover>
-                                          <Badge
-                                            className="badge-meat cr-pointer"
-                                            bg={
-                                              item.evaluateCapturedFromHeader ===
-                                                "HPI" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                "Plan: Hypertensive heart disease without heart failure" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                "Vital Signs"
-                                                ? "third badge-circle mt-2"
-                                                : item.evaluateCapturedFromHeader ===
+                                              ? "bg-eight badge-circle mt-2"
+                                              : item.monitorCapturedFromHeader ===
+                                                  "Recommendations" ||
+                                                item.monitorCapturedFromHeader ===
+                                                  "Plan: GERD without esophagitis" ||
+                                                item.monitorCapturedFromHeader ===
+                                                  "Treatment"
+                                              ? "bgshodowcolor badge-circle mt-2"
+                                              : item.monitorCapturedFromHeader ===
+                                                  "Plan / Discussion" ||
+                                                item.monitorCapturedFromHeader ===
+                                                  "Plan: Arteriosclerotic cardiovascular disease"
+                                              ? "bg-four badge-circle mt-2"
+                                              : item.monitorCapturedFromHeader ===
+                                                  "Patient Instructions" ||
+                                                item.monitorCapturedFromHeader ===
+                                                  "Plan: Hyperlipidemia, acquired"
+                                              ? "bg-five badge-circle mt-2"
+                                              : item.monitorCapturedFromHeader ===
+                                                "N/A"
+                                              ? "bg-six badge-circle mt-2"
+                                              : item.monitorCapturedFromHeader ===
+                                                "Plan"
+                                              ? "bg-seven badge-circle mt-2"
+                                              : "primary badge-circle mt-2"
+                                          }
+                                          onClick={() =>
+                                            handleOpenModal(
+                                              item.monitorCapturedFromHeader,
+                                              item.monitor
+                                            )
+                                          }
+                                        >
+                                          {item.monitorCapturedFromHeader}
+                                        </Badge>
+                                      </div>
+                                      <div className="col-xl-2 d-grid">
+                                        <Popover
+                                          placement="topLeft"
+                                          title="Evaluation"
+                                          content={item.evaluate}
+                                        >
+                                          <span className="meat-name-details">
+                                            {item.evaluate}
+                                          </span>
+                                        </Popover>
+                                        <Badge
+                                          className="badge-meat cr-pointer"
+                                          bg={
+                                            item.evaluateCapturedFromHeader ===
+                                              "HPI" ||
+                                            item.evaluateCapturedFromHeader ===
+                                              "Plan: Hypertensive heart disease without heart failure" ||
+                                            item.evaluateCapturedFromHeader ===
+                                              "Vital Signs"
+                                              ? "third badge-circle mt-2"
+                                              : item.evaluateCapturedFromHeader ===
                                                   "Impression" ||
-                                                  item.evaluateCapturedFromHeader ===
+                                                item.evaluateCapturedFromHeader ===
                                                   "Plan: COPD" ||
-                                                  item.evaluateCapturedFromHeader ===
+                                                item.evaluateCapturedFromHeader ===
                                                   "Assessments" ||
-                                                  item.evaluateCapturedFromHeader ===
+                                                item.evaluateCapturedFromHeader ===
                                                   "Assessment"
-                                                  ? "bg-eight badge-circle mt-2"
-                                                  : item.evaluateCapturedFromHeader ===
-                                                    "Recommendations" ||
-                                                    item.evaluateCapturedFromHeader ===
-                                                    "Plan: GERD without esophagitis" ||
-                                                    item.evaluateCapturedFromHeader ===
-                                                    "Treatment"
-                                                    ? "bgshodowcolor badge-circle mt-2"
-                                                    : item.evaluateCapturedFromHeader ===
-                                                      "Plan / Discussion" ||
-                                                      item.evaluateCapturedFromHeader ===
-                                                      "Plan: Arteriosclerotic cardiovascular disease"
-                                                      ? "bg-four badge-circle mt-2"
-                                                      : item.evaluateCapturedFromHeader ===
-                                                        "Patient Instructions" ||
-                                                        item.evaluateCapturedFromHeader ===
-                                                        "Plan: Hyperlipidemia, acquired"
-                                                        ? "bg-five badge-circle mt-2"
-                                                        : item.evaluateCapturedFromHeader ===
-                                                          "N/A"
-                                                          ? "bg-six badge-circle mt-2"
-                                                          : item.evaluateCapturedFromHeader ===
-                                                            "Plan"
-                                                            ? "bg-seven badge-circle mt-2"
-                                                            : "primary badge-circle mt-2"
-                                            }
-                                            onClick={() =>
-                                              handleOpenModal(
-                                                item.evaluateCapturedFromHeader,
-                                                item.evaluate
-                                              )
-                                            }
-                                          >
-                                            {
-                                              item.evaluateCapturedFromHeader
-                                            }
-                                          </Badge>
-                                        </div>
-                                        <div className="col-xl-2 d-grid">
-                                          <Popover
-                                            placement="topLeft"
-                                            title="Assessment"
-                                            content={
+                                              ? "bg-eight badge-circle mt-2"
+                                              : item.evaluateCapturedFromHeader ===
+                                                  "Recommendations" ||
+                                                item.evaluateCapturedFromHeader ===
+                                                  "Plan: GERD without esophagitis" ||
+                                                item.evaluateCapturedFromHeader ===
+                                                  "Treatment"
+                                              ? "bgshodowcolor badge-circle mt-2"
+                                              : item.evaluateCapturedFromHeader ===
+                                                  "Plan / Discussion" ||
+                                                item.evaluateCapturedFromHeader ===
+                                                  "Plan: Arteriosclerotic cardiovascular disease"
+                                              ? "bg-four badge-circle mt-2"
+                                              : item.evaluateCapturedFromHeader ===
+                                                  "Patient Instructions" ||
+                                                item.evaluateCapturedFromHeader ===
+                                                  "Plan: Hyperlipidemia, acquired"
+                                              ? "bg-five badge-circle mt-2"
+                                              : item.evaluateCapturedFromHeader ===
+                                                "N/A"
+                                              ? "bg-six badge-circle mt-2"
+                                              : item.evaluateCapturedFromHeader ===
+                                                "Plan"
+                                              ? "bg-seven badge-circle mt-2"
+                                              : "primary badge-circle mt-2"
+                                          }
+                                          onClick={() =>
+                                            handleOpenModal(
+                                              item.evaluateCapturedFromHeader,
+                                              item.evaluate
+                                            )
+                                          }
+                                        >
+                                          {item.evaluateCapturedFromHeader}
+                                        </Badge>
+                                      </div>
+                                      <div className="col-xl-2 d-grid">
+                                        <Popover
+                                          placement="topLeft"
+                                          title="Assessment"
+                                          content={item.assessment}
+                                        >
+                                          <span className="meat-name-details">
+                                            {item.assessment}
+                                          </span>
+                                        </Popover>
+                                        <Badge
+                                          className="badge-meat cr-pointer"
+                                          bg={
+                                            item.assessmentCapturedFromHeader ===
+                                              "HPI" ||
+                                            item.assessmentCapturedFromHeader ===
+                                              "Plan: Hypertensive heart disease without heart failure" ||
+                                            item.assessmentCapturedFromHeader ===
+                                              "Vital Signs"
+                                              ? "third badge-circle mt-2"
+                                              : item.assessmentCapturedFromHeader ===
+                                                  "Impression" ||
+                                                item.assessmentCapturedFromHeader ===
+                                                  "Plan: COPD" ||
+                                                item.assessmentCapturedFromHeader ===
+                                                  "Assessments" ||
+                                                item.assessmentCapturedFromHeader ===
+                                                  "Assessment"
+                                              ? "bg-eight badge-circle mt-2"
+                                              : item.assessmentCapturedFromHeader ===
+                                                  "Recommendations" ||
+                                                item.assessmentCapturedFromHeader ===
+                                                  "Plan: GERD without esophagitis" ||
+                                                item.assessmentCapturedFromHeader ===
+                                                  "Treatment"
+                                              ? "bgshodowcolor badge-circle mt-2"
+                                              : item.assessmentCapturedFromHeader ===
+                                                  "Plan / Discussion" ||
+                                                item.assessmentCapturedFromHeader ===
+                                                  "Plan: Arteriosclerotic cardiovascular disease"
+                                              ? "bg-four badge-circle mt-2"
+                                              : item.assessmentCapturedFromHeader ===
+                                                  "Patient Instructions" ||
+                                                item.assessmentCapturedFromHeader ===
+                                                  "Plan: Hyperlipidemia, acquired"
+                                              ? "bg-five badge-circle mt-2"
+                                              : item.assessmentCapturedFromHeader ===
+                                                "N/A"
+                                              ? "bg-six badge-circle mt-2"
+                                              : item.assessmentCapturedFromHeader ===
+                                                "Plan"
+                                              ? "bg-seven badge-circle mt-2"
+                                              : "primary badge-circle mt-2"
+                                          }
+                                          onClick={() =>
+                                            handleOpenModal(
+                                              item.assessmentCapturedFromHeader,
                                               item.assessment
-                                            }
-                                          >
-                                            <span className="meat-name-details">
-                                              {item.assessment}
-                                            </span>
-                                          </Popover>
-                                          <Badge
-                                            className="badge-meat cr-pointer"
-                                            bg={
-                                              item.assessmentCapturedFromHeader ===
-                                                "HPI" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                "Plan: Hypertensive heart disease without heart failure" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                "Vital Signs"
-                                                ? "third badge-circle mt-2"
-                                                : item.assessmentCapturedFromHeader ===
-                                                  "Impression" ||
-                                                  item.assessmentCapturedFromHeader ===
-                                                  "Plan: COPD" ||
-                                                  item.assessmentCapturedFromHeader ===
-                                                  "Assessments" ||
-                                                  item.assessmentCapturedFromHeader ===
-                                                  "Assessment"
-                                                  ? "bg-eight badge-circle mt-2"
-                                                  : item.assessmentCapturedFromHeader ===
-                                                    "Recommendations" ||
-                                                    item.assessmentCapturedFromHeader ===
-                                                    "Plan: GERD without esophagitis" ||
-                                                    item.assessmentCapturedFromHeader ===
-                                                    "Treatment"
-                                                    ? "bgshodowcolor badge-circle mt-2"
-                                                    : item.assessmentCapturedFromHeader ===
-                                                      "Plan / Discussion" ||
-                                                      item.assessmentCapturedFromHeader ===
-                                                      "Plan: Arteriosclerotic cardiovascular disease"
-                                                      ? "bg-four badge-circle mt-2"
-                                                      : item.assessmentCapturedFromHeader ===
-                                                        "Patient Instructions" ||
-                                                        item.assessmentCapturedFromHeader ===
-                                                        "Plan: Hyperlipidemia, acquired"
-                                                        ? "bg-five badge-circle mt-2"
-                                                        : item.assessmentCapturedFromHeader ===
-                                                          "N/A"
-                                                          ? "bg-six badge-circle mt-2"
-                                                          : item.assessmentCapturedFromHeader ===
-                                                            "Plan"
-                                                            ? "bg-seven badge-circle mt-2"
-                                                            : "primary badge-circle mt-2"
-                                            }
-                                            onClick={() =>
-                                              handleOpenModal(
-                                                item.assessmentCapturedFromHeader,
-                                                item.assessment
-                                              )
-                                            }
-                                          >
-                                            {
-                                              item.assessmentCapturedFromHeader
-                                            }
-                                          </Badge>
-                                        </div>
-                                        <div className="col-xl-2 d-grid">
-                                          <Popover
-                                            placement="topLeft"
-                                            title="Treatment"
-                                            content={item.treatment}
-                                          >
-                                            <span className="meat-name-details">
-                                              {item.treatment}
-                                            </span>
-                                          </Popover>
+                                            )
+                                          }
+                                        >
+                                          {item.assessmentCapturedFromHeader}
+                                        </Badge>
+                                      </div>
+                                      <div className="col-xl-2 d-grid">
+                                        <Popover
+                                          placement="topLeft"
+                                          title="Treatment"
+                                          content={item.treatment}
+                                        >
+                                          <span className="meat-name-details">
+                                            {item.treatment}
+                                          </span>
+                                        </Popover>
 
-                                          <Badge
-                                            className="badge-meat cr-pointer"
-                                            bg={
-                                              item.treatmentCapturedFromHeader ===
-                                                "HPI" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                "Plan: Hypertensive heart disease without heart failure" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                "Vital Signs"
-                                                ? "third badge-circle mt-2"
-                                                : item.treatmentCapturedFromHeader ===
+                                        <Badge
+                                          className="badge-meat cr-pointer"
+                                          bg={
+                                            item.treatmentCapturedFromHeader ===
+                                              "HPI" ||
+                                            item.treatmentCapturedFromHeader ===
+                                              "Plan: Hypertensive heart disease without heart failure" ||
+                                            item.treatmentCapturedFromHeader ===
+                                              "Vital Signs"
+                                              ? "third badge-circle mt-2"
+                                              : item.treatmentCapturedFromHeader ===
                                                   "Impression" ||
-                                                  item.treatmentCapturedFromHeader ===
+                                                item.treatmentCapturedFromHeader ===
                                                   "Plan: COPD" ||
-                                                  item.treatmentCapturedFromHeader ===
+                                                item.treatmentCapturedFromHeader ===
                                                   "Assessments" ||
-                                                  item.treatmentCapturedFromHeader ===
+                                                item.treatmentCapturedFromHeader ===
                                                   "Assessment"
-                                                  ? "bg-eight badge-circle mt-2"
-                                                  : item.treatmentCapturedFromHeader ===
-                                                    "Recommendations" ||
-                                                    item.treatmentCapturedFromHeader ===
-                                                    "Plan: GERD without esophagitis" ||
-                                                    item.treatmentCapturedFromHeader ===
-                                                    "Treatment"
-                                                    ? "bgshodowcolor badge-circle mt-2"
-                                                    : item.treatmentCapturedFromHeader ===
-                                                      "Plan / Discussion" ||
-                                                      item.treatmentCapturedFromHeader ===
-                                                      "Plan: Arteriosclerotic cardiovascular disease"
-                                                      ? "bg-four badge-circle mt-2"
-                                                      : item.treatmentCapturedFromHeader ===
-                                                        "Patient Instructions" ||
-                                                        item.treatmentCapturedFromHeader ===
-                                                        "Plan: Hyperlipidemia, acquired"
-                                                        ? "bg-five badge-circle mt-2"
-                                                        : item.treatmentCapturedFromHeader ===
-                                                          "N/A"
-                                                          ? "bg-six badge-circle mt-2"
-                                                          : item.treatmentCapturedFromHeader ===
-                                                            "Plan"
-                                                            ? "bg-seven badge-circle mt-2"
-                                                            : "primary badge-circle mt-2"
-                                            }
-                                            onClick={() =>
-                                              handleOpenModal(
-                                                item.treatmentCapturedFromHeader,
-                                                item.treatment
-                                              )
-                                            }
-                                          >
-                                            {
-                                              item.treatmentCapturedFromHeader
-                                            }
-                                          </Badge>
-                                        </div>
-                                        <div className="col-xl-1 meatclose">
-                                          <Popconfirm
-                                            title="You want move to Valid?"
-                                            description={
-                                              item.diseaseName
-                                            }
-                                            onConfirm={
-                                              confirmValidMeat
-                                            }
-                                            placement="leftTop"
-                                            okText="Yes"
-                                            cancelText="No"
-                                            onOpenChange={() =>
-                                              onchangeMeat(
-                                                item.diseaseName,
-                                                item.diagnosisCode
-                                              )
-                                            }
-                                          >
-                                            <div className="icon-box  bg-danger-light me-1">
-                                              <FontAwesomeIcon
-                                                icon={faCheck}
-                                                style={{
-                                                  color: "orange",
-                                                }}
-                                              />
-                                            </div>
-                                          </Popconfirm>
-                                        </div>
+                                              ? "bg-eight badge-circle mt-2"
+                                              : item.treatmentCapturedFromHeader ===
+                                                  "Recommendations" ||
+                                                item.treatmentCapturedFromHeader ===
+                                                  "Plan: GERD without esophagitis" ||
+                                                item.treatmentCapturedFromHeader ===
+                                                  "Treatment"
+                                              ? "bgshodowcolor badge-circle mt-2"
+                                              : item.treatmentCapturedFromHeader ===
+                                                  "Plan / Discussion" ||
+                                                item.treatmentCapturedFromHeader ===
+                                                  "Plan: Arteriosclerotic cardiovascular disease"
+                                              ? "bg-four badge-circle mt-2"
+                                              : item.treatmentCapturedFromHeader ===
+                                                  "Patient Instructions" ||
+                                                item.treatmentCapturedFromHeader ===
+                                                  "Plan: Hyperlipidemia, acquired"
+                                              ? "bg-five badge-circle mt-2"
+                                              : item.treatmentCapturedFromHeader ===
+                                                "N/A"
+                                              ? "bg-six badge-circle mt-2"
+                                              : item.treatmentCapturedFromHeader ===
+                                                "Plan"
+                                              ? "bg-seven badge-circle mt-2"
+                                              : "primary badge-circle mt-2"
+                                          }
+                                          onClick={() =>
+                                            handleOpenModal(
+                                              item.treatmentCapturedFromHeader,
+                                              item.treatment
+                                            )
+                                          }
+                                        >
+                                          {item.treatmentCapturedFromHeader}
+                                        </Badge>
+                                      </div>
+                                      <div className="col-xl-1 meatclose">
+                                        <Popconfirm
+                                          title="You want move to Valid?"
+                                          description={item.diseaseName}
+                                          onConfirm={confirmValidMeat}
+                                          placement="leftTop"
+                                          okText="Yes"
+                                          cancelText="No"
+                                          onOpenChange={() =>
+                                            onchangeMeat(
+                                              item.diseaseName,
+                                              item.diagnosisCode
+                                            )
+                                          }
+                                        >
+                                          <div className="icon-box  bg-danger-light me-1">
+                                            <FontAwesomeIcon
+                                              icon={faCheck}
+                                              style={{
+                                                color: "orange",
+                                              }}
+                                            />
+                                          </div>
+                                        </Popconfirm>
                                       </div>
                                     </div>
-                                  );
-                                }
-                              )}
+                                  </div>
+                                );
+                              })}
                             </>
                           ) : null}
                         </div>
-                      </div> : null}
+                      </div>
+                    ) : null}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="RafScore">
@@ -4276,30 +3895,48 @@ const Hcc = ({ patientHccResult }) => {
                           {rafScore != null ? (
                             <>
                               <div className="col-xl-9">
-                                {rafScore.scoreOutputDTOList !=
-                                  null ? (
+                                {rafScore.scoreOutputDTOList != null ? (
                                   <>
                                     {rafScore.scoreOutputDTOList.map(
                                       (rafScoreMapResult, index) => {
                                         return (
                                           <>
-                                            {index == 0 ?
-                                              <label className={`${visitStyles.labelStyle} ${visitStyles.raflablehead2}`}>{rafScoreMapResult.hcc_model.version}</label> :
-                                              <label className={`${visitStyles.labelStyle} ${visitStyles.raflablehead1}`}>{rafScoreMapResult.hcc_model.version}</label>}
+                                            {index == 0 ? (
+                                              <label
+                                                className={`${visitStyles.labelStyle} ${visitStyles.raflablehead2}`}
+                                              >
+                                                {
+                                                  rafScoreMapResult.hcc_model
+                                                    .version
+                                                }
+                                              </label>
+                                            ) : (
+                                              <label
+                                                className={`${visitStyles.labelStyle} ${visitStyles.raflablehead1}`}
+                                              >
+                                                {
+                                                  rafScoreMapResult.hcc_model
+                                                    .version
+                                                }
+                                              </label>
+                                            )}
 
                                             <div className="row raf-main-card">
                                               <div className="col-xl-4">
                                                 <div className="raf-card">
                                                   <div className="row raf-head">
                                                     <div className="col-xl-6">
-                                                      <label className={`${visitStyles.labelStyle}`}>
+                                                      <label
+                                                        className={`${visitStyles.labelStyle}`}
+                                                      >
                                                         DX Code
                                                       </label>
                                                     </div>
                                                     <div className="col-xl-6">
-                                                      <label className={`${visitStyles.labelStyle}`}>
-                                                        DX
-                                                        Description
+                                                      <label
+                                                        className={`${visitStyles.labelStyle}`}
+                                                      >
+                                                        DX Description
                                                       </label>
                                                     </div>
                                                   </div>
@@ -4310,16 +3947,12 @@ const Hcc = ({ patientHccResult }) => {
                                                         <div className="row raf-details">
                                                           <div className="col-xl-6">
                                                             <span>
-                                                              {
-                                                                item.dx_name
-                                                              }
+                                                              {item.dx_name}
                                                             </span>
                                                           </div>
                                                           <div className="col-xl-6">
                                                             <span>
-                                                              {
-                                                                item.dx_desc
-                                                              }
+                                                              {item.dx_desc}
                                                             </span>
                                                           </div>
                                                         </div>
@@ -4332,23 +3965,24 @@ const Hcc = ({ patientHccResult }) => {
                                                 <div className="raf-card">
                                                   <div className="row raf-head">
                                                     <div className="col-xl-6">
-                                                      <label className={`${visitStyles.labelStyle}`}>
+                                                      <label
+                                                        className={`${visitStyles.labelStyle}`}
+                                                      >
                                                         HCC
                                                       </label>
                                                     </div>
                                                     <div className="col-xl-6">
-                                                      <label className={`${visitStyles.labelStyle}`}>
-                                                        HCC
-                                                        Description
+                                                      <label
+                                                        className={`${visitStyles.labelStyle}`}
+                                                      >
+                                                        HCC Description
                                                       </label>
                                                     </div>
                                                   </div>
                                                   {rafScoreMapResult.dx_hccs.map(
                                                     (res) => {
                                                       return res.hcc_list.map(
-                                                        (
-                                                          res1
-                                                        ) => {
+                                                        (res1) => {
                                                           return (
                                                             <div className="row raf-details">
                                                               <div className="col-xl-6">
@@ -4382,23 +4016,24 @@ const Hcc = ({ patientHccResult }) => {
                                                                             </label>
                                                                           </div> */}
                                                     <div className="col-xl-6">
-                                                      <label className={`${visitStyles.labelStyle}`}>
+                                                      <label
+                                                        className={`${visitStyles.labelStyle}`}
+                                                      >
                                                         RAF
                                                       </label>
                                                     </div>
                                                     <div className="col-xl-6">
-                                                      <label className={`${visitStyles.labelStyle}`}>
-                                                        Monthly
-                                                        Premium
+                                                      <label
+                                                        className={`${visitStyles.labelStyle}`}
+                                                      >
+                                                        Monthly Premium
                                                       </label>
                                                     </div>
                                                   </div>
                                                   {rafScoreMapResult.dx_hccs.map(
                                                     (res) => {
                                                       return res.hcc_list.map(
-                                                        (
-                                                          res1
-                                                        ) => {
+                                                        (res1) => {
                                                           return (
                                                             <div className="row  raf-details">
                                                               {/* <div className="col-xl-4">
@@ -4408,17 +4043,13 @@ const Hcc = ({ patientHccResult }) => {
                                                                                     </div> */}
                                                               <div className="col-xl-6">
                                                                 <span>
-                                                                  {
-                                                                    res1.hcc_raf
-                                                                  }
+                                                                  {res1.hcc_raf}
                                                                 </span>
                                                               </div>
                                                               <div className="col-xl-6">
                                                                 <span>
                                                                   $
-                                                                  {
-                                                                    res1.premium
-                                                                  }
+                                                                  {res1.premium}
                                                                 </span>
                                                               </div>
                                                             </div>
@@ -4438,17 +4069,27 @@ const Hcc = ({ patientHccResult }) => {
                                 ) : null}
                               </div>
                               <div className="col-xl-3">
-                                <label className={`${visitStyles.labelStyle} ${visitStyles.raflableheadOverall}`}>Overall score</label>
-                                <div className={`row raf-main-card ${visitStyles.overallScoreContainer}`}>
+                                <label
+                                  className={`${visitStyles.labelStyle} ${visitStyles.raflableheadOverall}`}
+                                >
+                                  Overall score
+                                </label>
+                                <div
+                                  className={`row raf-main-card ${visitStyles.overallScoreContainer}`}
+                                >
                                   <div className="raf-card ">
                                     <div className="row raf-head">
                                       <div className="col-xl-4">
-                                        <label className={`${visitStyles.labelStyle}`}>
+                                        <label
+                                          className={`${visitStyles.labelStyle}`}
+                                        >
                                           V24 score
                                         </label>
                                       </div>
                                       <div className="col-xl-4">
-                                        <label className={`${visitStyles.labelStyle}`}>
+                                        <label
+                                          className={`${visitStyles.labelStyle}`}
+                                        >
                                           v24Score(70%)
                                         </label>
                                       </div>
@@ -4456,27 +4097,32 @@ const Hcc = ({ patientHccResult }) => {
 
                                     <div className="row  raf-details">
                                       <div className="col-xl-4">
-                                        <span>
-                                          {rafScore.v24Score}
-                                        </span>
+                                        <span>{rafScore.v24Score}</span>
                                       </div>
                                       <div className="col-xl-4">
-                                        {rafScore.v24Score70Percent != null ?
+                                        {rafScore.v24Score70Percent != null ? (
                                           <span>
-                                            {rafScore.v24Score70Percent.toFixed(3)}
-                                          </span> : null}
+                                            {rafScore.v24Score70Percent.toFixed(
+                                              3
+                                            )}
+                                          </span>
+                                        ) : null}
                                       </div>
                                     </div>
                                   </div>
                                   <div className="raf-card">
                                     <div className="row raf-head">
                                       <div className="col-xl-4">
-                                        <label className={`${visitStyles.labelStyle}`}>
+                                        <label
+                                          className={`${visitStyles.labelStyle}`}
+                                        >
                                           V28 score
                                         </label>
                                       </div>
                                       <div className="col-xl-4">
-                                        <label className={`${visitStyles.labelStyle}`}>
+                                        <label
+                                          className={`${visitStyles.labelStyle}`}
+                                        >
                                           v28Score(30%)
                                         </label>
                                       </div>
@@ -4484,32 +4130,34 @@ const Hcc = ({ patientHccResult }) => {
 
                                     <div className="row  raf-details">
                                       <div className="col-xl-4 ">
-                                        <span>
-                                          {rafScore.v28Score}
-                                        </span>
+                                        <span>{rafScore.v28Score}</span>
                                       </div>
                                       <div className="col-xl-4">
-                                        {rafScore.v28Score30Percent != null ?
+                                        {rafScore.v28Score30Percent != null ? (
                                           <span>
-                                            {rafScore.v28Score30Percent.toFixed(3)}
-                                          </span> : null}
+                                            {rafScore.v28Score30Percent.toFixed(
+                                              3
+                                            )}
+                                          </span>
+                                        ) : null}
                                       </div>
                                     </div>
                                   </div>
                                   <div className="raf-card">
                                     <div className=" col raf-head">
                                       <div className="col-xl-12">
-                                        <label className={`${visitStyles.labelStyle}`}>
+                                        <label
+                                          className={`${visitStyles.labelStyle}`}
+                                        >
                                           Overall score
                                         </label>
                                       </div>
                                     </div>
 
                                     <div className="row  raf-details">
-                                      {rafScore.score != null ?
-                                        <span>
-                                          {rafScore.score.toFixed(3)}
-                                        </span> : null}
+                                      {rafScore.score != null ? (
+                                        <span>{rafScore.score.toFixed(3)}</span>
+                                      ) : null}
                                     </div>
                                   </div>
                                 </div>
@@ -4524,9 +4172,9 @@ const Hcc = ({ patientHccResult }) => {
                                 No RAF Score
                               </span>
                             </div>
-                            //   </div>
-                            // </div>
-                          ) : null}
+                          ) : //   </div>
+                          // </div>
+                          null}
                         </div>
                       </div>
                     </div>
@@ -4534,20 +4182,16 @@ const Hcc = ({ patientHccResult }) => {
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
                   <div className="my-post-content pt-3 row">
-                    {!isFileFormShow ?
+                    {!isFileFormShow ? (
                       <div className="col-xl-2">
                         <ul className="timeline">
                           <div
                             className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                           >
-                            <span
-                              className={`${visitStyles.hcc_title_name}`}
-                            >
-
+                            <span className={`${visitStyles.hcc_title_name}`}>
                               HCC
-                              <FontAwesomeIcon onClick={() =>
-                                addValidCodeFile()
-                              }
+                              <FontAwesomeIcon
+                                onClick={() => addValidCodeFile()}
                                 icon={faPlus}
                               />
                             </span>
@@ -4561,155 +4205,140 @@ const Hcc = ({ patientHccResult }) => {
                           </div>
                           <div className={visitStyles.container}>
                             <div className={visitStyles.hccStickey_head}>
-
-                              {newValidDiseaseList.map(
-                                (data, i) => (
-                                  <li>
+                              {newValidDiseaseList.map((data, i) => (
+                                <li>
+                                  <div
+                                    className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                  >
                                     <div
-                                      className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                      className={`${visitStyles.hcc_card_nameHead}`}
                                     >
-                                      <div
-                                        className={`${visitStyles.hcc_card_nameHead}`}
-                                      >
-                                        <div
-                                          className="media-body"
-                                          onClick={() =>
-                                            findValueDocument(
-                                              data.diagnosisCode,
-                                              data.actualDescription,
-                                              "valid2"
-                                            )
-                                          }
-                                        >
-                                          <span className="mb-1 disease-name d-flex">
+                                      <div>
+                                        <span className="mb-1 disease-name d-flex">
+                                          <span className="valid-dis-name">
+                                            {data.diagnosisCode}
+                                          </span>{" "}
+                                          - {data.actualDescription}
+                                        </span>
+                                      </div>
 
-                                            <span className="valid-dis-name">
-
-
-                                              {
-                                                data.diagnosisCode
-                                              }
-                                            </span>{" "}
-                                            -{" "}
-                                            {
-                                              data.actualDescription
-                                            }
-
-                                          </span>
-                                        </div>
-
-                                        {data.defaultPosition == "VALID" ?
-                                          <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                          </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                            <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                            </span>
-                                            : data.defaultPosition == "DELETED" ?
-
-                                              <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                              </span> : null}
-                                        <Popover
-                                          onClick={() =>
-                                            getValidHccDetails(
-                                              data.actualDescription,
-                                              data.diagnosisCode
-                                            )
-                                          }
-                                          content={
-                                            validHccDetails
-                                          }
-                                          title={
+                                      {data.defaultPosition == "VALID" ? (
+                                        <span
+                                          className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                        ></span>
+                                      ) : data.defaultPosition ==
+                                        "SUGGESTED" ? (
+                                        <span
+                                          className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                        ></span>
+                                      ) : data.defaultPosition == "DELETED" ? (
+                                        <span
+                                          className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                        ></span>
+                                      ) : null}
+                                      <Popover
+                                        onClick={() =>
+                                          getValidHccDetails(
+                                            data.actualDescription,
                                             data.diagnosisCode
-                                          }
+                                          )
+                                        }
+                                        content={validHccDetails}
+                                        title={data.diagnosisCode}
+                                        placement="bottom"
+                                        trigger="click"
+                                      >
+                                        <Tooltip
+                                          title="HCC Veriosn Details"
                                           placement="bottom"
-                                          trigger="click"
                                         >
-                                          <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                            <i className="cr-pointer">
-                                              {SVGICON.infoIcon}
-                                            </i>
-                                          </Tooltip>
-                                        </Popover>
+                                          <i className="cr-pointer">
+                                            {SVGICON.infoIcon}
+                                          </i>
+                                        </Tooltip>
+                                      </Popover>
 
-
-                                        <Popconfirm
-                                          title="Choose an action"
-                                          icon={
-                                            <QuestionCircleOutlined
+                                      <Popconfirm
+                                        title="Choose an action"
+                                        icon={
+                                          <QuestionCircleOutlined
+                                            style={{
+                                              color: "blue",
+                                            }}
+                                          />
+                                        }
+                                        okText="Move to Deleted"
+                                        cancelText="Move to Suggested"
+                                        onCancel={validToSuggested}
+                                        okButtonProps={{
+                                          type: buttonClicked
+                                            ? "primary"
+                                            : "default",
+                                        }}
+                                        cancelButtonProps={{
+                                          type: buttonClicked
+                                            ? "danger"
+                                            : "default",
+                                        }}
+                                        description={data.diagnosisCode}
+                                        onConfirm={confirmvalid}
+                                        placement="leftTop"
+                                        onOpenChange={() =>
+                                          onchangeValid(
+                                            data.diagnosisCode,
+                                            data
+                                          )
+                                        }
+                                      >
+                                        <div className={visitStyles.close_icon}>
+                                          {
+                                            <FontAwesomeIcon
+                                              icon={faArrowsAlt}
                                               style={{
-                                                color: "blue",
+                                                size: 8,
+                                                color: "#a80404",
                                               }}
                                             />
                                           }
-                                          okText="Move to Deleted"
-                                          cancelText="Move to Suggested"
-                                          onCancel={
-                                            validToSuggested
-                                          }
-                                          okButtonProps={{
-                                            type: buttonClicked
-                                              ? "primary"
-                                              : "default",
-                                          }}
-                                          cancelButtonProps={{
-                                            type: buttonClicked
-                                              ? "danger"
-                                              : "default",
-                                          }}
-                                          description={
-                                            data.diagnosisCode
-                                          }
-                                          onConfirm={
-                                            confirmvalid
-                                          }
-                                          placement="leftTop"
-                                          onOpenChange={() =>
-                                            onchangeValid(
-                                              data.diagnosisCode,
-                                              data
-                                            )
-                                          }
-                                        >
-                                          <div
-                                            className={
-                                              visitStyles.close_icon
-                                            }
+                                        </div>
+                                      </Popconfirm>
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.hoverActiveHcc}`}
+                                    >
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {getEncounterDateBackground(
+                                          data.encounterDateSplit
+                                        )}
+                                        {data.isManuallyAdded == true ? (
+                                          <Badge
+                                            className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                           >
-                                            {<FontAwesomeIcon
-                                              icon={faArrowsAlt}
-                                              style={{ size: 8, color: "#a80404" }}
-                                            />}
-                                          </div>
-                                        </Popconfirm>
+                                            Manually Added
+                                          </Badge>
+                                        ) : null}
                                       </div>
-                                      <div className={`${visitStyles.hoverActiveHcc}`}>
-                                        <div className={`${visitStyles.encounterAndSectionHeader}`} >
-
-                                          {getEncounterDateBackground(data.encounterDateSplit)}
-                                          {data.isManuallyAdded == true ?
-
-                                            <Badge
-                                              className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                            >
-                                              Manually Added
-
-                                            </Badge>
-                                            : null}
-                                        </div>
-                                        <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                          {getCaptureSectionBackgroundFile(data.capturedSections)}
-                                        </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {getCaptureSectionBackgroundFile(
+                                          data.capturedSections,
+                                          data.encounterDate,
+                                          data.actualDescription
+                                        )}
                                       </div>
                                     </div>
-                                  </li>
-
-                                )
-                              )}
+                                  </div>
+                                </li>
+                              ))}
                             </div>
                           </div>
                         </ul>
-                      </div> : null}
-                    <div className="col-xl-8">                     
+                      </div>
+                    ) : null}
+                    <div className="col-xl-8">
                       <div className="card-body p-0">
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                           <div
@@ -4724,20 +4353,12 @@ const Hcc = ({ patientHccResult }) => {
                             <Viewer
                               fileUrl={selectFileURL}
                               onChange={pageClickPdfFile}
-                              plugins={[
-                                defaultLayoutPluginInstance,
-                              ]}
-                              onDocumentLoad={
-                                handleDocumentLoad
-                              }
+                              plugins={[defaultLayoutPluginInstance]}
+                              onDocumentLoad={handleDocumentLoad}
                               renderLoader={(percentages) => (
-                                <div
-                                  style={{ width: "240px" }}
-                                >
+                                <div style={{ width: "240px" }}>
                                   <ProgressBar
-                                    progress={Math.round(
-                                      percentages
-                                    )}
+                                    progress={Math.round(percentages)}
                                   />
                                 </div>
                               )}
@@ -4746,9 +4367,8 @@ const Hcc = ({ patientHccResult }) => {
                         </Worker>
                       </div>
                     </div>
-                    {isFileFormShow ?
+                    {isFileFormShow ? (
                       <div className="col-xl-4">
-
                         <div className="offcanvas-body">
                           <div className={visitStyles.fileFormContianer}>
                             <Form
@@ -4768,18 +4388,24 @@ const Hcc = ({ patientHccResult }) => {
                                     name="diagnosisCode"
                                     onChange={handleChange}
                                   />
-                                  {addValidCodeCheck == false ?
-                                    <span className={visitStyles.invalidHccCodeError}>
+                                  {addValidCodeCheck == false ? (
+                                    <span
+                                      className={
+                                        visitStyles.invalidHccCodeError
+                                      }
+                                    >
                                       Invalid Hcc Code
-                                    </span> : addValidCodeCheck == true ? <span className={visitStyles.validHccCodeError}>
+                                    </span>
+                                  ) : addValidCodeCheck == true ? (
+                                    <span
+                                      className={visitStyles.validHccCodeError}
+                                    >
                                       Valid Hcc Code
-                                    </span> : null}
-
+                                    </span>
+                                  ) : null}
                                 </div>
                                 <div className="col-xl-12">
-                                  <Form.Label>
-                                    Provider name
-                                  </Form.Label>
+                                  <Form.Label>Provider name</Form.Label>
                                   <Form.Control
                                     type="text"
                                     id="providerName"
@@ -4789,7 +4415,8 @@ const Hcc = ({ patientHccResult }) => {
                                 </div>
                                 <div className="col-xl-12">
                                   <Form.Label>
-                                    Section <span className="text-danger">*</span>{" "}
+                                    Section{" "}
+                                    <span className="text-danger">*</span>{" "}
                                   </Form.Label>
                                   <Form.Control
                                     required
@@ -4799,11 +4426,11 @@ const Hcc = ({ patientHccResult }) => {
                                     onChange={handleChange}
                                   />
                                 </div>
-                                <div className={`col-xl-12`} >
+                                <div className={`col-xl-12`}>
                                   <Form.Label>
-                                    Encoded date <span className="text-danger">*</span>{" "}
+                                    Encoded date{" "}
+                                    <span className="text-danger">*</span>{" "}
                                   </Form.Label>
-
 
                                   {/* <Form.Control
                                                         required
@@ -4821,47 +4448,57 @@ const Hcc = ({ patientHccResult }) => {
                                       onChange={handleChange}
                                       value={inputValueFileDate}
                                     />
-                                    {!dragFileDate ?
-                                      <span onClick={() =>
-                                        setdragFileDate(true)
-                                      }> <FontAwesomeIcon
-                                          icon={
-                                            faCalendar
-                                          }
+                                    {!dragFileDate ? (
+                                      <span
+                                        onClick={() => setdragFileDate(true)}
+                                      >
+                                        {" "}
+                                        <FontAwesomeIcon
+                                          icon={faCalendar}
                                           style={{
-                                            color:
-                                              "#918585",
+                                            color: "#918585",
                                           }}
-                                        /></span> :
-                                      <span onClick={() =>
-                                        setdragFileDate(false)
-                                      }> <FontAwesomeIcon
-                                          icon={
-                                            faClose
-                                          }
+                                        />
+                                      </span>
+                                    ) : (
+                                      <span
+                                        onClick={() => setdragFileDate(false)}
+                                      >
+                                        {" "}
+                                        <FontAwesomeIcon
+                                          icon={faClose}
                                           style={{
-                                            color:
-                                              "#918585",
+                                            color: "#918585",
                                           }}
-                                        /></span>}
-
+                                        />
+                                      </span>
+                                    )}
                                   </div>
-
                                 </div>
-                                <DatePicker format="MM-DD-YYYY"
+                                <DatePicker
+                                  format="MM-DD-YYYY"
                                   onChange={(dates, dateStrings) => {
-                                    handleDatePickerChangeFile(dates, dateStrings);
+                                    handleDatePickerChangeFile(
+                                      dates,
+                                      dateStrings
+                                    );
                                   }}
-
                                   open={dragFileDate}
                                   showNow={false}
-                                  style={{ visibility: "hidden", boxShadow: "none", marginBottom: "-45px" }}
-                                  placeholder="MM-DD-YYYY" className="form-control" />
+                                  style={{
+                                    visibility: "hidden",
+                                    boxShadow: "none",
+                                    marginBottom: "-45px",
+                                  }}
+                                  placeholder="MM-DD-YYYY"
+                                  className="form-control"
+                                />
                                 {/* <DatePicker/> */}
 
                                 <div className="col-xl-12 mb-3">
                                   <Form.Label>
-                                    Description <span className="text-danger">*</span>{" "}
+                                    Description{" "}
+                                    <span className="text-danger">*</span>{" "}
                                   </Form.Label>
                                   <textarea
                                     className="form-control"
@@ -4893,11 +4530,10 @@ const Hcc = ({ patientHccResult }) => {
                             </Form>
                           </div>
                         </div>
-                      </div> : null}
-                    {!isFileFormShow ?
+                      </div>
+                    ) : null}
+                    {!isFileFormShow ? (
                       <div className="col-xl-2">
-
-
                         <div className="">
                           <ul className="timeline">
                             <div
@@ -4929,38 +4565,30 @@ const Hcc = ({ patientHccResult }) => {
                                             <div
                                               className={`${visitStyles.hcc_card_nameHead}`}
                                             >
-                                              <div
-                                                className="media-body"
-                                                onClick={() =>
-                                                  findValueDocument(
-                                                    data.diagnosisCode,
-                                                    data.actualDescription,
-                                                    "valid2"
-                                                  )
-                                                }
-                                              >
+                                              <div className="media-body">
                                                 <span className="mb-1 disease-name d-flex">
                                                   <span className="valid-dis-name">
-                                                    {
-                                                      data.diagnosisCode
-                                                    }
+                                                    {data.diagnosisCode}
                                                   </span>{" "}
-                                                  -{" "}
-                                                  {
-                                                    data.actualDescription
-                                                  }
+                                                  - {data.actualDescription}
                                                 </span>
                                               </div>
-                                              {data.defaultPosition == "VALID" ?
-                                                <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                                </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                                  <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                                  </span>
-                                                  : data.defaultPosition == "DELETED" ?
-
-                                                    <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                                    </span> : null}
+                                              {data.defaultPosition ==
+                                              "VALID" ? (
+                                                <span
+                                                  className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                                ></span>
+                                              ) : data.defaultPosition ==
+                                                "SUGGESTED" ? (
+                                                <span
+                                                  className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                                ></span>
+                                              ) : data.defaultPosition ==
+                                                "DELETED" ? (
+                                                <span
+                                                  className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                                ></span>
+                                              ) : null}
                                               <Popover
                                                 onClick={() =>
                                                   getValidHccDetails(
@@ -4968,48 +4596,34 @@ const Hcc = ({ patientHccResult }) => {
                                                     data.diagnosisCode
                                                   )
                                                 }
-                                                content={
-                                                  validHccDetails
-                                                }
-                                                title={
-                                                  data.diagnosisCode
-                                                }
+                                                content={validHccDetails}
+                                                title={data.diagnosisCode}
                                                 placement="bottom"
                                                 trigger="click"
                                               >
-                                                <i>
-                                                  {
-                                                    SVGICON.infoIcon
-                                                  }
-                                                </i>
+                                                <i>{SVGICON.infoIcon}</i>
                                               </Popover>
-                                              {data.getPlace ==
-                                                "Radio" || data.getPlace ==
-                                                "Lab" ?
+                                              {data.getPlace == "Radio" ||
+                                              data.getPlace == "Lab" ? (
                                                 <Popconfirm
                                                   title="Choose an action"
                                                   icon={
                                                     <QuestionCircleOutlined
                                                       style={{
-                                                        color:
-                                                          "blue",
+                                                        color: "blue",
                                                       }}
                                                     />
                                                   }
                                                   okText="Move to Deleted"
-
                                                   okButtonProps={{
                                                     type: buttonClicked
                                                       ? "primary"
                                                       : "default",
                                                   }}
-
                                                   description={
                                                     data.diagnosisCode
                                                   }
-                                                  onConfirm={
-                                                    suggestedToDeleted
-                                                  }
+                                                  onConfirm={suggestedToDeleted}
                                                   placement="leftTop"
                                                   onOpenChange={() =>
                                                     onchangeValid(
@@ -5025,26 +4639,26 @@ const Hcc = ({ patientHccResult }) => {
                                                   >
                                                     <FontAwesomeIcon
                                                       icon={faArrowsAlt}
-                                                      style={{ size: 8, color: "#a80404" }}
+                                                      style={{
+                                                        size: 8,
+                                                        color: "#a80404",
+                                                      }}
                                                     />
                                                   </div>
                                                 </Popconfirm>
-
-                                                : <Popconfirm
+                                              ) : (
+                                                <Popconfirm
                                                   title="Choose an action"
                                                   icon={
                                                     <QuestionCircleOutlined
                                                       style={{
-                                                        color:
-                                                          "blue",
+                                                        color: "blue",
                                                       }}
                                                     />
                                                   }
                                                   okText="Move to Deleted"
                                                   cancelText="Move to HCC"
-                                                  onCancel={
-                                                    suggestedToValid
-                                                  }
+                                                  onCancel={suggestedToValid}
                                                   okButtonProps={{
                                                     type: buttonClicked
                                                       ? "primary"
@@ -5058,9 +4672,7 @@ const Hcc = ({ patientHccResult }) => {
                                                   description={
                                                     data.diagnosisCode
                                                   }
-                                                  onConfirm={
-                                                    suggestedToDeleted
-                                                  }
+                                                  onConfirm={suggestedToDeleted}
                                                   placement="leftTop"
                                                   onOpenChange={() =>
                                                     onchangeValid(
@@ -5076,17 +4688,23 @@ const Hcc = ({ patientHccResult }) => {
                                                   >
                                                     <FontAwesomeIcon
                                                       icon={faArrowsAlt}
-                                                      style={{ size: 8, color: "#a80404" }}
+                                                      style={{
+                                                        size: 8,
+                                                        color: "#a80404",
+                                                      }}
                                                     />
                                                   </div>
-                                                </Popconfirm>}
+                                                </Popconfirm>
+                                              )}
                                             </div>
-                                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                                            <div
+                                              className={`${visitStyles.hoverActiveHcc}`}
+                                            >
                                               <div className="">
-
-                                                {getEncounterDateBackground(data.encounterDateSplit)}
-                                                {data.getPlace ==
-                                                  "Lab" ? (
+                                                {getEncounterDateBackground(
+                                                  data.encounterDateSplit
+                                                )}
+                                                {data.getPlace == "Lab" ? (
                                                   <Tooltip title="LAB">
                                                     <span
                                                       className={` mt-2 ${visitStyles.labStatus}`}
@@ -5095,8 +4713,7 @@ const Hcc = ({ patientHccResult }) => {
                                                       Lab
                                                     </span>
                                                   </Tooltip>
-                                                ) : data.getPlace ==
-                                                  "Radio" ? (
+                                                ) : data.getPlace == "Radio" ? (
                                                   <Tooltip title="RADIOLOGY">
                                                     <span
                                                       className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -5105,26 +4722,42 @@ const Hcc = ({ patientHccResult }) => {
                                                       Radiology
                                                     </span>
                                                   </Tooltip>
-                                                ) : null
-                                                }
-
+                                                ) : null}
                                               </div>
 
-                                              {data.getPlace ==
-                                                "Lab" ?
-                                                <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                  {getCaptureSectionBackground(data.capturedSections, "Lab")}
+                                              {data.getPlace == "Lab" ? (
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {getCaptureSectionBackground(
+                                                    data.capturedSections,
+                                                    "Lab",
+                                                    data.encounterDate,
+                                                    data.actualDescription
+                                                  )}
                                                 </div>
-                                                : data.getPlace ==
-                                                  "Radio" ?
-                                                  <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                    {getCaptureSectionBackground(data.capturedSections, "Radio")}
-                                                  </div>
-                                                  : <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                    {getCaptureSectionBackgroundFile(data.capturedSections)}
-                                                  </div>
-                                              }
-
+                                              ) : data.getPlace == "Radio" ? (
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {getCaptureSectionBackground(
+                                                    data.capturedSections,
+                                                    "Radio",
+                                                    data.encounterDate,
+                                                    data.actualDescription
+                                                  )}
+                                                </div>
+                                              ) : (
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {getCaptureSectionBackgroundFile(
+                                                    data.capturedSections,
+                                                    data.encounterDate,
+                                                    data.actualDescription
+                                                  )}
+                                                </div>
+                                              )}
                                             </div>
                                           </div>
                                         </li>
@@ -5170,36 +4803,35 @@ const Hcc = ({ patientHccResult }) => {
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
-                                            -{" "}
-                                            {
-                                              data.actualDescription
-                                            }
+                                            - {data.actualDescription}
                                           </span>
                                         </div>
-                                        {data.defaultPosition == "VALID" ?
-                                          <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                          </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                            <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                            </span>
-                                            : data.defaultPosition == "DELETED" ?
-
-                                              <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                              </span> : null}
+                                        {data.defaultPosition == "VALID" ? (
+                                          <span
+                                            className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "SUGGESTED" ? (
+                                          <span
+                                            className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "DELETED" ? (
+                                          <span
+                                            className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : null}
                                         <Popover
-                                          content={
-                                            data.dbDescription
-                                          }
-                                          title={
-                                            data.diagnosisCode
-                                          }
+                                          content={data.dbDescription}
+                                          title={data.diagnosisCode}
                                           placement="bottom"
                                           trigger="click"
                                         >
-                                          <Tooltip title="HCC Veriosn Details" placement="bottom">
-                                            <i>
-                                              {SVGICON.infoIcon}
-                                            </i>
+                                          <Tooltip
+                                            title="HCC Veriosn Details"
+                                            placement="bottom"
+                                          >
+                                            <i>{SVGICON.infoIcon}</i>
                                           </Tooltip>
                                         </Popover>
                                         <Popconfirm
@@ -5213,9 +4845,7 @@ const Hcc = ({ patientHccResult }) => {
                                           }
                                           okText="Move to Suggested"
                                           cancelText="Move to HCC"
-                                          onCancel={
-                                            deletedToValid
-                                          }
+                                          onCancel={deletedToValid}
                                           okButtonProps={{
                                             type: buttonClicked
                                               ? "primary"
@@ -5226,12 +4856,8 @@ const Hcc = ({ patientHccResult }) => {
                                               ? "danger"
                                               : "default",
                                           }}
-                                          description={
-                                            data.diagnosisCode
-                                          }
-                                          onConfirm={
-                                            deletedToSuggested
-                                          }
+                                          description={data.diagnosisCode}
+                                          onConfirm={deletedToSuggested}
                                           placement="leftTop"
                                           onOpenChange={() =>
                                             onchangeValid(
@@ -5241,26 +4867,34 @@ const Hcc = ({ patientHccResult }) => {
                                           }
                                         >
                                           <div
-                                            className={
-                                              visitStyles.close_icon
-                                            }
+                                            className={visitStyles.close_icon}
                                           >
                                             <FontAwesomeIcon
                                               icon={faArrowsAlt}
-                                              style={{ size: 8, color: "#a80404" }}
+                                              style={{
+                                                size: 8,
+                                                color: "#a80404",
+                                              }}
                                             />
                                           </div>
                                         </Popconfirm>
                                       </div>
-                                      <div className={`${visitStyles.hoverActiveHcc}`}>
+                                      <div
+                                        className={`${visitStyles.hoverActiveHcc}`}
+                                      >
                                         <div className="">
-
-                                          {getEncounterDateBackground(data.encounterDateSplit)}
-
-                                         
+                                          {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}
                                         </div>
-                                        <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                          {getCaptureSectionBackground(data.capturedSections)}
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getCaptureSectionBackgroundFile(
+                                            data.capturedSections,
+                                            data.encounterDate,
+                                            data.actualDescription
+                                          )}
                                         </div>
                                       </div>
                                     </div>
@@ -5270,8 +4904,8 @@ const Hcc = ({ patientHccResult }) => {
                             </div>
                           </ul>
                         </div>
-                      </div> : null}
-
+                      </div>
+                    ) : null}
                   </div>
                 </Tab.Pane>
               </Tab.Content>
@@ -5279,7 +4913,6 @@ const Hcc = ({ patientHccResult }) => {
           </div>
         </div>
       </div>
-
 
       {/* Modals */}
       {isModalOpen && (
@@ -5292,12 +4925,11 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="90%"
-        // height={400}
+          // height={400}
         >
           <div className="section-container">
             <div className="row">
               <div className="col-xl-12">
-
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                   <div
                     style={{
@@ -5315,8 +4947,8 @@ const Hcc = ({ patientHccResult }) => {
                     />
                   </div>
                 </Worker>
-              </div>            
-            </div>            
+              </div>
+            </div>
           </div>
         </Modal>
       )}
@@ -5330,14 +4962,16 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="90%"
-        // height={400}
+          // height={400}
         >
           <div className="section-container">
             <div class="d-flex justify-content-end m-4">
-              <Button onClick={handleAddButtonClick} className={`btn btn-primary btn-sm me-1 ${visitStyles.hccCodeAddBtn}`}  >
+              <Button
+                onClick={handleAddButtonClick}
+                className={`btn btn-primary btn-sm me-1 ${visitStyles.hccCodeAddBtn}`}
+              >
                 Add
               </Button>
-
             </div>
 
             <div className={`row ${visitStyles.hccCodeAddContainer}`}>
@@ -5353,15 +4987,23 @@ const Hcc = ({ patientHccResult }) => {
                   >
                     {" "}
                     <Viewer
+                      initialPage={fileInitialPage}
                       fileUrl={selectFileURL}
                       plugins={[searchPluginInstance]}
                       onDocumentLoad={handleDocumentLoad}
+                      renderLoader={(percentages) => (
+                        <div style={{ width: "240px" }}>
+                          <ProgressBar progress={Math.round(percentages)} />
+                        </div>
+                      )}
                     />
                   </div>
                 </Worker>
               </div>
               {isAddButtonClicked && (
-                <div className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}>
+                <div
+                  className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}
+                >
                   {/* Input fields */}
                   <form onSubmit={handleFormSubmit}>
                     <div className="form-group">
@@ -5378,8 +5020,6 @@ const Hcc = ({ patientHccResult }) => {
                         required
                         onChange={handleChange}
                       />
-
-
                     </div>
                     <div className="form-group">
                       <Form.Label>Provider name</Form.Label>
@@ -5438,9 +5078,11 @@ const Hcc = ({ patientHccResult }) => {
                       ></textarea>
                     </div>
 
-
                     <div className={visitStyles.addValidCodeFormFooter}>
-                      <Button type="submit" className="btn btn-primary btn-sm me-1">
+                      <Button
+                        type="submit"
+                        className="btn btn-primary btn-sm me-1"
+                      >
                         {isLoadingBtn ? "Loading..." : "Submit"}
                       </Button>
                       <Button
@@ -5453,91 +5095,73 @@ const Hcc = ({ patientHccResult }) => {
                   </form>
                 </div>
               )}
-              {nonHccActiveCodes == false &&
-                isAddButtonClicked == false ? (
-                <div className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}>
-
+              {nonHccActiveCodes == false && isAddButtonClicked == false ? (
+                <div
+                  className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}
+                >
                   <div className={visitStyles.container}>
                     <div className={visitStyles.hccStickey_head}>
-
-                      {newValidDiseaseList.map(
-                        (data, i) => (
-                          <li>
-                            <div
-                              className={`hccActiveCard ${visitStyles.hcc_card}`}
-                            >
-                              <div
-                                className={`${visitStyles.hcc_card_nameHead}`}
-                              >
-                                <div
-                                  className="media-body"
-                                  onClick={() =>
-                                    handleOpenModalCombinationCode(
-                                      data.diagnosisCode,
-                                      data.actualDescription,
-                                      "valid2"
-                                    )
-                                  }
-                                >
-                                  <span className="mb-1 disease-name d-flex">
-
-                                    <span className="valid-dis-name">
-
-
-                                      {
-                                        data.diagnosisCode
-                                      }
-                                    </span>{" "}
-                                    -{" "}
-                                    {
-                                      data.actualDescription
-                                    }
-
-                                  </span>
-                                </div>
-
-                                {data.defaultPosition == "VALID" ?
-                                  <span className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}>
-                                  </span> : data.defaultPosition == "SUGGESTED" ?
-
-                                    <span className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}>
-                                    </span>
-                                    : data.defaultPosition == "DELETED" ?
-
-                                      <span className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}>
-                                      </span> : null}
-
+                      {newValidDiseaseList.map((data, i) => (
+                        <li>
+                          <div
+                            className={`hccActiveCard ${visitStyles.hcc_card} ${visitStyles.hcc_card_addCode}`}
+                          >
+                            <div className={`${visitStyles.hcc_card_nameHead}`}>
+                              <div className="media-body">
+                                <span className="mb-1 disease-name d-flex">
+                                  <span className="valid-dis-name">
+                                    {data.diagnosisCode}
+                                  </span>{" "}
+                                  - {data.actualDescription}
+                                </span>
                               </div>
-                              <div className={`${visitStyles.hoverActiveHcc}`}>
-                                <div className={`${visitStyles.encounterAndSectionHeader}`} >
 
-
-                                  {getEncounterDateBackground(data.encounterDateSplit)}
-                                  {data.isManuallyAdded == true ?
-
-                                    <Badge
-                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                    >
-                                      Manually Added
-
-                                    </Badge> :
-                                    null}
-                                </div>
-                                <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                  {getCaptureSectionBackgroundFile(data.capturedSections)}
-                                </div>
+                              {data.defaultPosition == "VALID" ? (
+                                <span
+                                  className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                ></span>
+                              ) : data.defaultPosition == "SUGGESTED" ? (
+                                <span
+                                  className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                ></span>
+                              ) : data.defaultPosition == "DELETED" ? (
+                                <span
+                                  className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                ></span>
+                              ) : null}
+                            </div>
+                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getEncounterDateBackground(
+                                  data.encounterDateSplit
+                                )}
+                                {data.isManuallyAdded == true ? (
+                                  <Badge
+                                    className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                  >
+                                    Manually Added
+                                  </Badge>
+                                ) : null}
+                              </div>
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getCaptureSectionBackgroundFile(
+                                  data.capturedSections,
+                                  data.encounterDate,
+                                  data.actualDescription
+                                )}
                               </div>
                             </div>
-                          </li>
-
-                        )
-                      )}
+                          </div>
+                        </li>
+                      ))}
                     </div>
                   </div>
                 </div>
-              ) : (
-                null
-              )}
+              ) : null}
             </div>
           </div>
         </Modal>
@@ -5552,12 +5176,11 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="95%"
-        // height={500}
+          // height={500}
         >
           <div className="section-container">
             <div className="row">
               <div className="col-xl-12">
-
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                   <div
                     style={{
@@ -5571,11 +5194,12 @@ const Hcc = ({ patientHccResult }) => {
                     <Viewer
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
+                      initialPage={fileInitialPage}
                       onDocumentLoad={handleDocumentLoad}
                     />
                   </div>
                 </Worker>
-              </div>             
+              </div>
             </div>
           </div>
         </Modal>
@@ -5590,7 +5214,7 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="70%"
-        // height={400}
+          // height={400}
         >
           <div className="section-container">
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -5623,7 +5247,7 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="70%"
-        // height={400}
+          // height={400}
         >
           <div className="section-container">
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -5678,10 +5302,7 @@ const Hcc = ({ patientHccResult }) => {
                 </div>
 
                 <div>
-                  <Button
-                    type="submit"
-                    className="btn btn-primary btn-sm me-1"
-                  >
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
                     {isLoading ? "Loding..." : "Submit"}
                   </Button>
                   <Button
@@ -5728,10 +5349,7 @@ const Hcc = ({ patientHccResult }) => {
                 </div>
 
                 <div>
-                  <Button
-                    type="submit"
-                    className="btn btn-primary btn-sm me-1"
-                  >
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
                     {isLoading ? "Loding..." : "Submit"}
                   </Button>
                   <Button
@@ -5746,7 +5364,7 @@ const Hcc = ({ patientHccResult }) => {
           </div>
         </Modal>
       )}
-   
+
       <Offcanvas
         onHide={handleCloseModal}
         show={isModalOpenValid}
@@ -5767,11 +5385,7 @@ const Hcc = ({ patientHccResult }) => {
         </div>
         <div className="offcanvas-body">
           <div className="container-fluid">
-            <Form
-              noValidate
-              validated={validated}
-              onSubmit={handleFormSubmit}
-            >
+            <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
               <div className="row">
                 <div className="col-xl-12 mb-3">
                   <Form.Label>
@@ -5784,18 +5398,18 @@ const Hcc = ({ patientHccResult }) => {
                     name="diagnosisCode"
                     onChange={handleChange}
                   />
-                  {addValidCodeCheck == false ?
+                  {addValidCodeCheck == false ? (
                     <span className={visitStyles.invalidHccCodeError}>
                       Invalid Hcc Code
-                    </span> : addValidCodeCheck == true ? <span className={visitStyles.validHccCodeError}>
+                    </span>
+                  ) : addValidCodeCheck == true ? (
+                    <span className={visitStyles.validHccCodeError}>
                       Valid Hcc Code
-                    </span> : null}
-
+                    </span>
+                  ) : null}
                 </div>
                 <div className="col-xl-12 mb-3">
-                  <Form.Label>
-                    Provider name
-                  </Form.Label>
+                  <Form.Label>Provider name</Form.Label>
                   <Form.Control
                     type="text"
                     id="providerName"
@@ -5845,10 +5459,7 @@ const Hcc = ({ patientHccResult }) => {
               </div>
 
               <div>
-                <Button
-                  type="submit"
-                  className="btn btn-primary btn-sm me-1"
-                >
+                <Button type="submit" className="btn btn-primary btn-sm me-1">
                   Submit
                 </Button>
                 <Button
@@ -5862,12 +5473,8 @@ const Hcc = ({ patientHccResult }) => {
           </div>
         </div>
       </Offcanvas>
-
-
     </>
   );
-}
-
-
+};
 
 export default Hcc;

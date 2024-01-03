@@ -16,9 +16,8 @@ import {
   MessageIcon,
   RenderHighlightContentProps,
   RenderHighlightTargetProps,
-} from '@react-pdf-viewer/highlight';
+} from "@react-pdf-viewer/highlight";
 import { useRouter } from "next/navigation";
-
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -38,11 +37,9 @@ import {
   faCog,
   faClock,
   faArrowsAlt,
-  faCalendar
+  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  CalendarOutlined
-} from '@ant-design/icons';
+import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
@@ -51,10 +48,7 @@ import { Modal } from "antd";
 
 import Link from "next/link";
 
-
-
-
-const Lab = ({ }) => {
+const Lab = ({}) => {
   const navigate = useRouter();
   let searchKeywords = [];
 
@@ -157,7 +151,7 @@ const Lab = ({ }) => {
     capturedSections: "",
     encodedDate: "",
     flag: "",
-    comments: ""
+    comments: "",
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -221,12 +215,12 @@ const Lab = ({ }) => {
   const [filter, setFilter] = useState("");
   const [showCard, setShowCard] = useState(false);
   const [patientList, setPatientList] = useState([]);
-  const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC")
+  const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
   const [isSideNavShow, setIsSideNavShow] = useState(false);
-  const [timelineData, setTimeLineData] = useState([])
-  const [flagTagActive, setFlagTagActive] = useState(true)
+  const [timelineData, setTimeLineData] = useState([]);
+  const [flagTagActive, setFlagTagActive] = useState(true);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
-  const [patienIdDetails, setPatienIdDetails] = useState('');
+  const [patienIdDetails, setPatienIdDetails] = useState("");
   const [commentList, setCommentList] = useState([]);
   const [notesList, setNotesList] = useState([]);
   const [flagResultList, setFlagResultList] = useState([]);
@@ -251,15 +245,15 @@ const Lab = ({ }) => {
   const [totalElements, setTotalElements] = useState(10);
 
   const [labFileFilterList, setLabFileFilterList] = useState(10);
-  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] = useState(false);
+  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
+    useState(false);
   const [dragFileDate, setdragFileDate] = useState(false);
-  const [inputValueFileDate, setInputValueFileDate] = useState('');
+  const [inputValueFileDate, setInputValueFileDate] = useState("");
 
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const handleDocumentLoad = () => {
     setDocumentLoaded(true);
   };
-
 
   useEffect(() => {
     // loadFilterPatientList();
@@ -273,10 +267,6 @@ const Lab = ({ }) => {
     setLocalPatientId(patientId);
     getLabReportDetails(orgId, tenId);
 
-
-
-
-
     var userSpinner = (
       <div className={visitStyles.userDetailsCard}>
         <div className="bouncing-loader">
@@ -288,20 +278,17 @@ const Lab = ({ }) => {
     );
 
     var currentTime = moment().format("hh:mm");
-    setCurrentTime(currentTime)
+    setCurrentTime(currentTime);
     setUserDetails(userSpinner);
-    setvalidHccDetails(userSpinner)
-
-
+    setvalidHccDetails(userSpinner);
   }, []);
-
 
   const getLabReportDetails = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+        `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
     );
 
     var resultTest = response.data.response;
@@ -311,14 +298,10 @@ const Lab = ({ }) => {
     if (resultTest.labFileDetail != null) {
       if (resultTest.labFileDetail.length != 0) {
         resultTest.labFileDetail.map((res, index) => {
-          console.log(res)
-
           for (var key in res.documentDos) {
             fileDatesArr.push({ value: key, label: key });
           }
-
-
-        })
+        });
         for (var key in resultTest.labFileDetail[0].documentDos) {
           dosYearArrFile.push({ value: key, label: key });
         }
@@ -329,8 +312,7 @@ const Lab = ({ }) => {
       }
     }
 
-    setLabFileFilterList(fileDatesArr)
-
+    setLabFileFilterList(fileDatesArr);
 
     if (resultTest.labFileDetail != null) {
       var result = resultTest;
@@ -346,22 +328,21 @@ const Lab = ({ }) => {
 
       setLabFileDosList(dosYearArr);
 
-      console.log(dosYearArr)
-
       var validDisArray = [];
-
 
       if (dosYearArr.length != 0) {
         var dateofService = dosYearArr[0].value;
 
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
 
-        const highestDosValue = dosYearArr.filter((i) => i.value === highestDOS);
+        const highestDosValue = dosYearArr.filter(
+          (i) => i.value === highestDOS
+        );
 
         validDiseaseNewRes = result.validDisease[dateofService];
 
         validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
+          const encounterDatearray = res.encounterDate.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -370,13 +351,11 @@ const Lab = ({ }) => {
             encounterDateSplit: encounterDatearray,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition
+            defaultPosition: res.defaultPosition,
           });
-
         });
         var capturedSectionsColorsMatching = [];
         var capturedSectionsArr = [];
-
 
         const COLORS2 = [
           "sectionTag5",
@@ -397,62 +376,55 @@ const Lab = ({ }) => {
           "encounterDateTag5",
           "encounterDateTag6",
           "encounterDateTag7",
-          "encounterDateTag8"
+          "encounterDateTag8",
         ];
 
         validDiseaseNewRes.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
               name: res2,
-              "diagnosisCode": res.diagnosisCode,
+              diagnosisCode: res.diagnosisCode,
             });
-
-          })
-        })
-
-
-
+          });
+        });
 
         var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
         dublicateSectionArr.map((res, index) => {
           capturedSectionsColorsMatching.push({
-            "name": res.name,
-            "diagnosisCode": res.diagnosisCode,
-            "colors": COLORS2[index]
+            name: res.name,
+            diagnosisCode: res.diagnosisCode,
+            colors: COLORS2[index],
           });
         });
-
-
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
 
         validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(',');
+          const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
-          })
+          });
         });
 
-        var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
+        var encounterDateArrDublicatesRemove = getUniqueListBy(
+          encounterDateArr,
+          "name"
+        );
         encounterDateArrDublicatesRemove.map((res, index) => {
           encounterDateColorsMatching.push({
-            "name": res.name,
-            "colors": COLORS3[index]
+            name: res.name,
+            colors: COLORS3[index],
           });
-        })
+        });
 
         setEncounterDateMatching(encounterDateColorsMatching);
 
         setCaptureSectionMatching(capturedSectionsColorsMatching);
         // setCaptureSectionMatching(newArray);
-
-
-
-
 
         meatRes = result.meatCriteria[dateofService];
         if (result.labFileDetail != null || result.labFileDetail.length != 0) {
@@ -474,7 +446,7 @@ const Lab = ({ }) => {
         "encounterDateTag5",
         "encounterDateTag6",
         "encounterDateTag7",
-        "encounterDateTag8"
+        "encounterDateTag8",
       ];
 
       var meatListArr = [];
@@ -525,10 +497,7 @@ const Lab = ({ }) => {
         });
         allMeatHeadColorArr = allMeatHeadColor;
 
-        dublicateRemoveSecondArr = getUniqueListBy(
-          allMeatHeadColor,
-          "header"
-        );
+        dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
         setMeatColorCodeList(dublicateRemoveSecondArr);
       });
 
@@ -567,7 +536,6 @@ const Lab = ({ }) => {
         });
       });
 
-
       setLabReportValidList(validDisArray);
       setLabReportMeatList(meatListArr);
       setLabFileDosListDefaultSelect(dosYearArr[0]);
@@ -592,7 +560,7 @@ const Lab = ({ }) => {
   const getLabReportFiles = async (fileId, tenId) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-      `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
       var result = response.data.response;
@@ -601,7 +569,7 @@ const Lab = ({ }) => {
   };
 
   const handleCloseModal = () => {
-    setAddValidCodeCheck(null)
+    setAddValidCodeCheck(null);
     setValidated(false);
     setIsModalOpen(false);
     setIsModalOpenValid(false);
@@ -623,9 +591,7 @@ const Lab = ({ }) => {
     setIsFileFormShow(false);
   };
 
-
   const handleOpenModal = (value, disDescription) => {
-    console.log(disDescription)
     var splitPoint = disDescription.substring(" ", 40);
     setTimeout(() => {
       highlight({
@@ -641,16 +607,13 @@ const Lab = ({ }) => {
     setSelectMeatName(dataset + " -  " + "Loading...");
     setIsLoadingSection(true);
     setIsModalOpenLab(true);
-
   };
-  const findValueDocument = (value, disDescription,) => {
+  const findValueDocument = (value, disDescription) => {
     var splitPoint = disDescription.substring(" ", 40);
 
     highlight({
       keyword: splitPoint,
-
     });
-
   };
   const handleOpenModalCombinationCode = (
     value,
@@ -659,7 +622,6 @@ const Lab = ({ }) => {
     whereCome,
     documentPlace
   ) => {
-    console.log(whereCome)
     var splitPoint = disDescription.substring(" ", 40);
     setTimeout(() => {
       highlight({
@@ -676,9 +638,7 @@ const Lab = ({ }) => {
     setSelectMeatName(dataset + " -  " + "Loading...");
     setIsLoadingSection(true);
     setIsModalOpenLab(true);
-
   };
-
 
   const dosOnChangeLabFile = async (e) => {
     var dosKeyValue = e.value;
@@ -686,86 +646,76 @@ const Lab = ({ }) => {
       for (var key in res.documentDos) {
         if (key == dosKeyValue) {
           getLabReportFiles(res.azureBlobPath, localTenantId);
-
         }
       }
-    })
+    });
   };
 
   function removeDuplicates(array) {
-    let output = []
+    let output = [];
     for (let item of array) {
-
-      if (!output.includes(item))
-        output.push(item)
+      if (!output.includes(item)) output.push(item);
     }
 
-    return output
-
+    return output;
   }
 
   const getCaptureSectionBackgroundFile = (value) => {
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.name == res
-      );
+      const result = captureSectionMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var disCode = result[0]?.diagnosisCode;
 
-      var sectionMapArr =
-        (<Badge onClick={() =>
-          findValueDocument(
-            disCode,
-            res,
-          )
-        }
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
-          {res}</Badge>)
-      return sectionMapArr
+      var sectionMapArr = (
+        <Badge
+          onClick={() => findValueDocument(disCode, res)}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+        >
+          {res}
+        </Badge>
+      );
+      return sectionMapArr;
     });
-  }
-
+  };
 
   const getCaptureSectionBackground = (value, documentPlace) => {
-    // console.log(value)
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.name == res
-      );
+      const result = captureSectionMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var disCode = result[0]?.diagnosisCode;
 
-      var sectionMapArr =
-        (<Badge onClick={() =>
-          handleOpenModalCombinationCode(
-            disCode,
-            res,
-            "valid",
-            "null",
-            documentPlace
-          )
-        }
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
-          {res}</Badge>)
-      return sectionMapArr
+      var sectionMapArr = (
+        <Badge
+          onClick={() =>
+            handleOpenModalCombinationCode(
+              disCode,
+              res,
+              "valid",
+              "null",
+              documentPlace
+            )
+          }
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+        >
+          {res}
+        </Badge>
+      );
+      return sectionMapArr;
     });
-  }
-
+  };
 
   const getEncounterDateBackground = (value) => {
     return value.map((res) => {
-      const result = encounterDateMatching.filter(
-        (res2) => res2.name == res
-      );
+      const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
-      var sectionMapArr =
+      var sectionMapArr = (
         // (<Badge
         // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
         // {res}</Badge>)
 
-        (<Badge
+        <Badge
           className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
@@ -773,11 +723,10 @@ const Lab = ({ }) => {
           </i>
           {moment(res).format("MM/DD")}
         </Badge>
-        )
-      return sectionMapArr
+      );
+      return sectionMapArr;
     });
-  }
-
+  };
 
   const confirmInvalidMeat = () =>
     new Promise((resolve) => {
@@ -803,7 +752,7 @@ const Lab = ({ }) => {
     setSelectCode(code);
   };
 
-   const handleOpenModalLab = (value, disDescription, radiologyCheck) => {
+  const handleOpenModalLab = (value, disDescription, radiologyCheck) => {
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
       setTimeout(() => {
@@ -822,23 +771,16 @@ const Lab = ({ }) => {
       setIsLoadingSection(true);
       setIsModalOpenLab(true);
     } else {
-      handleOpenModal(
-        value,
-        disDescription
-      )
+      handleOpenModal(value, disDescription);
     }
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
 
-
-
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>
-        <div
-          className={`profile-tab ${visitStyles.visitdata_header_card2}`}
-        >
+        <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1">
             <Tab.Container defaultActiveKey={activeTabHead}>
               <div className="row">
@@ -865,8 +807,12 @@ const Lab = ({ }) => {
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
-                      <Nav.Link to="#my-posts" eventKey="file" className={visitStyles.navColor}
-                        activeClassName={visitStyles.activeLink}>
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="file"
+                        className={visitStyles.navColor}
+                        activeClassName={visitStyles.activeLink}
+                      >
                         File
                       </Nav.Link>
                     </Nav.Item>
@@ -877,14 +823,10 @@ const Lab = ({ }) => {
                     <span>LAB</span>
                   </div>
                 </div>
-
               </div>
 
               <Tab.Content>
-                <Tab.Pane
-                  id="my-posts"
-                  eventKey="validDiseases"
-                >
+                <Tab.Pane id="my-posts" eventKey="validDiseases">
                   <div className="my-post-content pt-3">
                     <div className="widget-media   ps--active-y">
                       <div className="row">
@@ -893,9 +835,7 @@ const Lab = ({ }) => {
                             <div
                               className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                             >
-                              <span
-                                className={`${visitStyles.hcc_title_name}`}
-                              >
+                              <span className={`${visitStyles.hcc_title_name}`}>
                                 HCC
                               </span>
                               <div className="d-flex justify-content-center">
@@ -907,46 +847,39 @@ const Lab = ({ }) => {
                               </div>
                             </div>
                             <div className={visitStyles.container}>
-
-                              {labReportValidList.map(
-                                (data, i) => (
-                                  <li>
+                              {labReportValidList.map((data, i) => (
+                                <li>
+                                  <div className={`${visitStyles.hcc_card}`}>
                                     <div
-                                      className={`${visitStyles.hcc_card}`}
+                                      className={`${visitStyles.hcc_card_nameHead}`}
                                     >
-                                      <div
-                                        className={`${visitStyles.hcc_card_nameHead}`}
-                                      >
-                                        <div
-                                          className="media-body"
-
-                                        >
-                                          <span className="mb-1 disease-name d-flex">
-                                            <span className="valid-dis-name">
-                                              {
-                                                data.diagnosisCode
-                                              }
-                                            </span>{" "}
-                                            -{" "}
-                                            {
-                                              data.actualDescription
-                                            }
-                                          </span>
-                                        </div>
+                                      <div className="media-body">
+                                        <span className="mb-1 disease-name d-flex">
+                                          <span className="valid-dis-name">
+                                            {data.diagnosisCode}
+                                          </span>{" "}
+                                          - {data.actualDescription}
+                                        </span>
                                       </div>
-                                      <div className={`${visitStyles.hoverActiveHcc}`}>
-
-                                        {getEncounterDateBackground(data.encounterDateSplit)}
-                                        <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                          {getCaptureSectionBackground(data.capturedSections, "Lab")}
-                                        </div>
-
-                                      </div>
-
                                     </div>
-                                  </li>
-                                )
-                              )}
+                                    <div
+                                      className={`${visitStyles.hoverActiveHcc}`}
+                                    >
+                                      {getEncounterDateBackground(
+                                        data.encounterDateSplit
+                                      )}
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {getCaptureSectionBackground(
+                                          data.capturedSections,
+                                          "Lab"
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
                             </div>
                           </ul>
                         </div>
@@ -964,77 +897,60 @@ const Lab = ({ }) => {
                                 <span
                                   className={`${visitStyles.deleted_title_badge}`}
                                 >
-                                  {
-                                    invalidMoveDiseasesList.length
-                                  }
+                                  {invalidMoveDiseasesList.length}
                                 </span>
                               </div>
                             </div>
                             <div className={visitStyles.container}>
-                              {invalidMoveDiseasesList.map(
-                                (data, i) => (
-                                  <li>
-                                    <div className="timeline-panel invalid-disease">
-                                      <div className="media-body">
-                                        <span className="mb-1 disease-name d-flex">
-                                          <span className="valid-dis-name">
-                                            {data.diagnosisCode}
-                                          </span>{" "}
-                                          -{" "}
-                                          {
-                                            data.actualDescription
-                                          }
-                                        </span>
-                                      </div>
-                                      <Popover
-                                        content={
-                                          data.dbDescription
-                                        }
-                                        title={
-                                          data.diagnosisCode
-                                        }
-                                        placement="bottom"
-                                        trigger="click"
-                                      >
-                                        <div className="icon-box  bg-danger-light me-1">
-                                          <FontAwesomeIcon
-                                            icon={faInfo}
-                                            style={{
-                                              color: "blue",
-                                            }}
-                                          />
-                                        </div>
-                                      </Popover>
-                                      <Popconfirm
-                                        title="You want move to valid?"
-                                        description={
-                                          data.diagnosisCode
-                                        }
-                                        onConfirm={
-                                          confirmInvalidMoveDis
-                                        }
-                                        placement="leftTop"
-                                        okText="Yes"
-                                        cancelText="No"
-                                        onOpenChange={() =>
-                                          onchangeValid(
-                                            data.diagnosisCode
-                                          )
-                                        }
-                                      >
-                                        <div className="icon-box  bg-danger-light me-1">
-                                          <FontAwesomeIcon
-                                            icon={faCheck}
-                                            style={{
-                                              color: "orange",
-                                            }}
-                                          />
-                                        </div>
-                                      </Popconfirm>
+                              {invalidMoveDiseasesList.map((data, i) => (
+                                <li>
+                                  <div className="timeline-panel invalid-disease">
+                                    <div className="media-body">
+                                      <span className="mb-1 disease-name d-flex">
+                                        <span className="valid-dis-name">
+                                          {data.diagnosisCode}
+                                        </span>{" "}
+                                        - {data.actualDescription}
+                                      </span>
                                     </div>
-                                  </li>
-                                )
-                              )}
+                                    <Popover
+                                      content={data.dbDescription}
+                                      title={data.diagnosisCode}
+                                      placement="bottom"
+                                      trigger="click"
+                                    >
+                                      <div className="icon-box  bg-danger-light me-1">
+                                        <FontAwesomeIcon
+                                          icon={faInfo}
+                                          style={{
+                                            color: "blue",
+                                          }}
+                                        />
+                                      </div>
+                                    </Popover>
+                                    <Popconfirm
+                                      title="You want move to valid?"
+                                      description={data.diagnosisCode}
+                                      onConfirm={confirmInvalidMoveDis}
+                                      placement="leftTop"
+                                      okText="Yes"
+                                      cancelText="No"
+                                      onOpenChange={() =>
+                                        onchangeValid(data.diagnosisCode)
+                                      }
+                                    >
+                                      <div className="icon-box  bg-danger-light me-1">
+                                        <FontAwesomeIcon
+                                          icon={faCheck}
+                                          style={{
+                                            color: "orange",
+                                          }}
+                                        />
+                                      </div>
+                                    </Popconfirm>
+                                  </div>
+                                </li>
+                              ))}
                             </div>
                           </ul>
                         </div>
@@ -1042,14 +958,9 @@ const Lab = ({ }) => {
                     </div>
                   </div>
                 </Tab.Pane>
-                <Tab.Pane
-                  id="my-posts"
-                  eventKey="meatCriteria"
-                >
+                <Tab.Pane id="my-posts" eventKey="meatCriteria">
                   <div className="my-post-content pt-3">
-                    <div
-                      className={visitStyles.meat_head_card}
-                    >
+                    <div className={visitStyles.meat_head_card}>
                       <div className="row">
                         <div className="col-xl-1">
                           <label>Codes</label>
@@ -1074,16 +985,13 @@ const Lab = ({ }) => {
                         </div>
                       </div>
                     </div>
-                    {labReportMeatList.length != 0 ?
-                      <div
-                        className={visitStyles.hccStickey_head}
-                      >
+                    {labReportMeatList.length != 0 ? (
+                      <div className={visitStyles.hccStickey_head}>
                         {labReportMeatList?.map((item) => {
                           return (
                             <div
                               className={
-                                item.isMeatCriteriaPresent ===
-                                  true
+                                item.isMeatCriteriaPresent === true
                                   ? `${visitStyles.meat_details_card}`
                                   : `${visitStyles.meat_details_card_false}`
                               }
@@ -1124,7 +1032,8 @@ const Lab = ({ }) => {
                                   </Popover>
                                 </div>
                                 <div className="col-xl-2 d-grid">
-                                  {item.monitor != "" && item.monitor != null ? (
+                                  {item.monitor != "" &&
+                                  item.monitor != null ? (
                                     <Popover
                                       placement="topLeft"
                                       title="Monitor"
@@ -1139,7 +1048,8 @@ const Lab = ({ }) => {
                                       -
                                     </span>
                                   )}
-                                  {item.monitor != "" && item.monitor != null ?
+                                  {item.monitor != "" &&
+                                  item.monitor != null ? (
                                     <Badge
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
@@ -1147,17 +1057,17 @@ const Lab = ({ }) => {
                                         handleOpenModalLab(
                                           item.monitorCapturedFromHeader,
                                           item.monitor,
-                                          item.radiology,
+                                          item.radiology
                                         )
                                       }
                                     >
-                                      {
-                                        item.monitorCapturedFromHeader
-                                      }
-                                    </Badge> : null}
+                                      {item.monitorCapturedFromHeader}
+                                    </Badge>
+                                  ) : null}
                                 </div>
                                 <div className="col-xl-2 d-grid">
-                                  {item.evaluate != "" && item.evaluate != null ? (
+                                  {item.evaluate != "" &&
+                                  item.evaluate != null ? (
                                     <Popover
                                       placement="topLeft"
                                       title="Evaluation"
@@ -1172,7 +1082,8 @@ const Lab = ({ }) => {
                                       -
                                     </span>
                                   )}
-                                  {item.evaluate != "" && item.evaluate != null ?
+                                  {item.evaluate != "" &&
+                                  item.evaluate != null ? (
                                     <Badge
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
@@ -1180,14 +1091,13 @@ const Lab = ({ }) => {
                                         handleOpenModalLab(
                                           item.evaluateCapturedFromHeader,
                                           item.evaluate,
-                                          item.radiology,
+                                          item.radiology
                                         )
                                       }
                                     >
-                                      {
-                                        item.evaluateCapturedFromHeader
-                                      }
-                                    </Badge> : null}
+                                      {item.evaluateCapturedFromHeader}
+                                    </Badge>
+                                  ) : null}
                                 </div>
                                 <div className="col-xl-2 d-grid">
                                   {item.assessment != "" ? (
@@ -1205,7 +1115,8 @@ const Lab = ({ }) => {
                                       -
                                     </span>
                                   )}
-                                  {item.assessment != "" && item.assessment != null ?
+                                  {item.assessment != "" &&
+                                  item.assessment != null ? (
                                     <Badge
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
@@ -1213,17 +1124,17 @@ const Lab = ({ }) => {
                                         handleOpenModalLab(
                                           item.assessmentCapturedFromHeader,
                                           item.assessment,
-                                          item.radiology,
+                                          item.radiology
                                         )
                                       }
                                     >
-                                      {
-                                        item.assessmentCapturedFromHeader
-                                      }
-                                    </Badge> : null}
+                                      {item.assessmentCapturedFromHeader}
+                                    </Badge>
+                                  ) : null}
                                 </div>
                                 <div className="col-xl-2 d-grid">
-                                  {item.treatment != "" && item.treatment != null ? (
+                                  {item.treatment != "" &&
+                                  item.treatment != null ? (
                                     <Popover
                                       placement="topLeft"
                                       title="Treatment"
@@ -1238,7 +1149,8 @@ const Lab = ({ }) => {
                                       -
                                     </span>
                                   )}
-                                  {item.treatment != "" && item.treatment != null ?
+                                  {item.treatment != "" &&
+                                  item.treatment != null ? (
                                     <Badge
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
@@ -1246,14 +1158,13 @@ const Lab = ({ }) => {
                                         handleOpenModalLab(
                                           item.treatmentCapturedFromHeader,
                                           item.treatment,
-                                          item.radiology,
+                                          item.radiology
                                         )
                                       }
                                     >
-                                      {
-                                        item.treatmentCapturedFromHeader
-                                      }
-                                    </Badge> : null}
+                                      {item.treatmentCapturedFromHeader}
+                                    </Badge>
+                                  ) : null}
                                 </div>
                                 <div className="col-xl-1 meatclose">
                                   <Popconfirm
@@ -1270,11 +1181,7 @@ const Lab = ({ }) => {
                                       )
                                     }
                                   >
-                                    <div
-                                      className={
-                                        visitStyles.close_icon
-                                      }
-                                    >
+                                    <div className={visitStyles.close_icon}>
                                       <FontAwesomeIcon
                                         icon={faArrowsAlt}
                                         style={{ size: 8, color: "#a80404" }}
@@ -1291,15 +1198,13 @@ const Lab = ({ }) => {
                           <div className="card combo-card">
                             <div className="col-xl-12">
                               <div>
-                                <span className="no-patient-data">
-                                  NO DATA
-                                </span>
+                                <span className="no-patient-data">NO DATA</span>
                               </div>
                             </div>
                           </div>
                         ) : null}
-
-                      </div> : null}
+                      </div>
+                    ) : null}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
@@ -1307,21 +1212,14 @@ const Lab = ({ }) => {
                     <div className="radiology-select-dos">
                       {labResultStatus ? (
                         <Select
-                          onChange={(e) =>
-                            dosOnChangeLabFile(e)
-                          }
+                          onChange={(e) => dosOnChangeLabFile(e)}
                           options={labFileFilterList}
                           className="custom-react-select"
-                          defaultValue={
-                            labFileDateDefaulteSelect
-                          }
+                          defaultValue={labFileDateDefaulteSelect}
                           isSearchable={false}
                         />
                       ) : null}
-                      <button
-
-                        className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr"
-                      >
+                      <button className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr">
                         Open New Tab
                       </button>
                     </div>
@@ -1331,9 +1229,7 @@ const Lab = ({ }) => {
                           <div
                             className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                           >
-                            <span
-                              className={`${visitStyles.hcc_title_name}`}
-                            >
+                            <span className={`${visitStyles.hcc_title_name}`}>
                               HCC
                             </span>
                             <div className="d-flex justify-content-center">
@@ -1345,52 +1241,47 @@ const Lab = ({ }) => {
                             </div>
                           </div>
 
-                          {labReportValidList.map(
-                            (data, i) => (
-                              <li>
+                          {labReportValidList.map((data, i) => (
+                            <li>
+                              <div className={`${visitStyles.hcc_card}`}>
                                 <div
-                                  className={`${visitStyles.hcc_card}`}
+                                  className={`${visitStyles.hcc_card_nameHead}`}
                                 >
                                   <div
-                                    className={`${visitStyles.hcc_card_nameHead}`}
+                                    className="media-body"
+                                    onClick={() =>
+                                      findValueDocument(
+                                        data.diagnosisCode,
+                                        data.actualDescription
+                                      )
+                                    }
                                   >
-                                    <div
-                                      className="media-body"
-
-                                      onClick={() =>
-                                        findValueDocument(
-                                          data.diagnosisCode,
-                                          data.actualDescription,
-                                        )
-                                      }
-
-                                    >
-                                      <span className="mb-1 disease-name d-flex">
-                                        <span className="valid-dis-name">
-                                          {
-                                            data.diagnosisCode
-                                          }
-                                        </span>{" "}
-                                        -{" "}
-                                        {
-                                          data.actualDescription
-                                        }
-                                      </span>
-                                    </div>
+                                    <span className="mb-1 disease-name d-flex">
+                                      <span className="valid-dis-name">
+                                        {data.diagnosisCode}
+                                      </span>{" "}
+                                      - {data.actualDescription}
+                                    </span>
                                   </div>
-                                  <div className={`${visitStyles.hoverActiveHcc}`}>
-
-                                    {getEncounterDateBackground(data.encounterDateSplit)}
-                                    <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                      {getCaptureSectionBackgroundFile(data.capturedSections, "Lab")}
-                                    </div>
-
-                                  </div>
-
                                 </div>
-                              </li>
-                            )
-                          )}
+                                <div
+                                  className={`${visitStyles.hoverActiveHcc}`}
+                                >
+                                  {getEncounterDateBackground(
+                                    data.encounterDateSplit
+                                  )}
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {getCaptureSectionBackgroundFile(
+                                      data.capturedSections,
+                                      "Lab"
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
                         </ul>
                       </div>
                       <div className="col-xl-8">
@@ -1407,20 +1298,12 @@ const Lab = ({ }) => {
                               {" "}
                               <Viewer
                                 fileUrl={labReportFile}
-                                plugins={[
-                                  defaultLayoutPluginInstance,
-                                ]}
-                                onDocumentLoad={
-                                  handleDocumentLoad
-                                }
+                                plugins={[defaultLayoutPluginInstance]}
+                                onDocumentLoad={handleDocumentLoad}
                                 renderLoader={(percentages) => (
-                                  <div
-                                    style={{ width: "240px" }}
-                                  >
+                                  <div style={{ width: "240px" }}>
                                     <ProgressBar
-                                      progress={Math.round(
-                                        percentages
-                                      )}
+                                      progress={Math.round(percentages)}
                                     />
                                   </div>
                                 )}
@@ -1444,96 +1327,72 @@ const Lab = ({ }) => {
                                 <span
                                   className={`${visitStyles.deleted_title_badge}`}
                                 >
-                                  {
-                                    invalidMoveDiseasesList.length
-                                  }
+                                  {invalidMoveDiseasesList.length}
                                 </span>
                               </div>
                             </div>
-                            {invalidMoveDiseasesList.map(
-                              (data, i) => (
-                                <li>
-                                  <div className="timeline-panel invalid-disease">
-                                    <div className="media-body">
-                                      <span className="mb-1 disease-name d-flex">
-                                        <span className="valid-dis-name">
-                                          {data.diagnosisCode}
-                                        </span>{" "}
-                                        -{" "}
-                                        {
-                                          data.actualDescription
-                                        }
-                                      </span>
-                                    </div>
-                                    <Popover
-                                      content={
-                                        data.dbDescription
-                                      }
-                                      title={
-                                        data.diagnosisCode
-                                      }
-                                      placement="bottom"
-                                      trigger="click"
-                                    >
-                                      <div className="icon-box  bg-danger-light me-1">
-                                        <FontAwesomeIcon
-                                          icon={faInfo}
-                                          style={{
-                                            color: "blue",
-                                          }}
-                                        />
-                                      </div>
-                                    </Popover>
-                                    <Popconfirm
-                                      title="You want move to valid?"
-                                      description={
-                                        data.diagnosisCode
-                                      }
-                                      onConfirm={
-                                        confirmInvalidMoveDis
-                                      }
-                                      placement="leftTop"
-                                      okText="Yes"
-                                      cancelText="No"
-                                      onOpenChange={() =>
-                                        onchangeValid(
-                                          data.diagnosisCode
-                                        )
-                                      }
-                                    >
-                                      <div className="icon-box  bg-danger-light me-1">
-                                        <FontAwesomeIcon
-                                          icon={faCheck}
-                                          style={{
-                                            color: "orange",
-                                          }}
-                                        />
-                                      </div>
-                                    </Popconfirm>
+                            {invalidMoveDiseasesList.map((data, i) => (
+                              <li>
+                                <div className="timeline-panel invalid-disease">
+                                  <div className="media-body">
+                                    <span className="mb-1 disease-name d-flex">
+                                      <span className="valid-dis-name">
+                                        {data.diagnosisCode}
+                                      </span>{" "}
+                                      - {data.actualDescription}
+                                    </span>
                                   </div>
-                                </li>
-                              )
-                            )}
+                                  <Popover
+                                    content={data.dbDescription}
+                                    title={data.diagnosisCode}
+                                    placement="bottom"
+                                    trigger="click"
+                                  >
+                                    <div className="icon-box  bg-danger-light me-1">
+                                      <FontAwesomeIcon
+                                        icon={faInfo}
+                                        style={{
+                                          color: "blue",
+                                        }}
+                                      />
+                                    </div>
+                                  </Popover>
+                                  <Popconfirm
+                                    title="You want move to valid?"
+                                    description={data.diagnosisCode}
+                                    onConfirm={confirmInvalidMoveDis}
+                                    placement="leftTop"
+                                    okText="Yes"
+                                    cancelText="No"
+                                    onOpenChange={() =>
+                                      onchangeValid(data.diagnosisCode)
+                                    }
+                                  >
+                                    <div className="icon-box  bg-danger-light me-1">
+                                      <FontAwesomeIcon
+                                        icon={faCheck}
+                                        style={{
+                                          color: "orange",
+                                        }}
+                                      />
+                                    </div>
+                                  </Popconfirm>
+                                </div>
+                              </li>
+                            ))}
                           </ul>
                         </div>
                       </div>
-
                     </div>
-
                   </div>
                 </Tab.Pane>
               </Tab.Content>
-
             </Tab.Container>
-
-
           </div>
         </div>
       </div>
 
-
       {/* Modals */}
-
 
       {isModalOpenLab && (
         <Modal
@@ -1545,7 +1404,7 @@ const Lab = ({ }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="70%"
-        // height={400}
+          // height={400}
         >
           <div className="section-container">
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
@@ -1568,14 +1427,8 @@ const Lab = ({ }) => {
           </div>
         </Modal>
       )}
-
-
-
-
     </>
   );
-}
-
-
+};
 
 export default Lab;

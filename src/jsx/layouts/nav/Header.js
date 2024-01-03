@@ -22,10 +22,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  getNotificationAlert,
-  getNotificationList,
-} from "../../../store/actions/NotificationAction";
+
+import { getNotificationAlert ,getNotificationList,getNotificationAlertClear} from "../../../store/actions/NotificationAction";
+
 import Notification from "../../../components/notification/index";
 
 const Header = ({ onNote }) => {
@@ -84,21 +83,7 @@ const Header = ({ onNote }) => {
       setheaderFix(window.scrollY > 50);
     });
 
-    const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/push-notifications/c58c4c29-df4a-4c9e-9277-d58ad9b9d9d8?token=${token}`
-    );
-    sse.addEventListener("user-list-event", (event) => {
-      const data = JSON.parse(event.data);
-      if (data.length != 0) {
-        dispatchValue(getNotificationAlert(data));
-      }
-    });
-    sse.onerror = () => {
-      sse.close();
-    };
-    return () => {
-      sse.close();
-    };
+
   }, []);
 
   const onClose = () => {
@@ -140,10 +125,28 @@ const Header = ({ onNote }) => {
   ];
 
   const getUserIdDetails = async (userId) => {
+    const token = localStorage.getItem("token");
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
     );
     setUserIdDetails(response.data.response);
+    var userId = response.data.response?.id;
+    const sse = new EventSource(
+      `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userId}?token=${token}`
+    );
+    sse.addEventListener("user-list-event", (event) => {
+      const data = JSON.parse(event.data);
+      if (data.length != 0) {
+        dispatchValue(getNotificationAlert(data));
+      }
+    });
+    sse.onerror = () => {
+      sse.close();
+    };
+    return () => {
+      sse.close();
+    };
+
 
     // setUserIdDetails(response.data.response);
   };
@@ -244,8 +247,11 @@ const Header = ({ onNote }) => {
   };
 
   const notificationDrawer = async () => {
-    setOpen(true);
-    dispatchValue(getNotificationList("id"));
+
+    setOpen(true)
+    dispatchValue(getNotificationList(userIdDetails.id));
+    dispatchValue(getNotificationAlertClear([]));
+
 
     // setNotificationResponse(notificationResponse.data)
   };
@@ -328,7 +334,7 @@ const Header = ({ onNote }) => {
                             {SVGICON.notificationIcon}
                           </Badge>
                         </div>
-                        <div className="header-media d-flex">
+                        <div className="header-media d-flex"   onClick={logoutFunction}>
                           {/* <Image src={IMAGES.profileImage}/> */}
 
                           <div>
@@ -346,7 +352,7 @@ const Header = ({ onNote }) => {
                               <Dropdown.Menu align="end">
                                 <div className=" border-0 mb-0">
                                   <span
-                                    onClick={logoutFunction}
+                                  
                                     className="dropdown-item ai-icon "
                                   >
                                     {SVGICON.Logout}{" "}
