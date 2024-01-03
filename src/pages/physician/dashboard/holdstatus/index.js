@@ -6,6 +6,7 @@ import { Modal } from "antd";
 import { getHoldStatusData } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { getPatientID } from "../../../../store/actions/PatientsActions";
 
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);

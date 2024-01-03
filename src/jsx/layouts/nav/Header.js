@@ -27,6 +27,7 @@ import {
   getNotificationList,
 } from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
+import { getFilteredList } from "../../../store/actions/PatientsActions";
 
 const Header = ({ onNote }) => {
   const dispatchValue = useDispatch();
@@ -276,6 +277,9 @@ const Header = ({ onNote }) => {
                             : ""
                         }`}
                         key={index}
+                        onClick={()=>{
+                          dispatch(getFilteredList(null))
+                        }}
                       >
                         <Link href={data.to} className="d-flex">
                           <div className="menu-icon">{data.iconStyle}</div>{" "}

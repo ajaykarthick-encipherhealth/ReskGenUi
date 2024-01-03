@@ -12,7 +12,7 @@ import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
-import { getpatientsList } from "../../../../store/actions/PatientsActions";
+import { getFilteredList, getpatientsList } from "../../../../store/actions/PatientsActions";
 
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

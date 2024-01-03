@@ -939,6 +939,7 @@ export default function Patient() {
       );
     }
   };
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -988,6 +989,38 @@ export default function Patient() {
                                 onChange={(dates, dateStrings) => {
                                   handleDatePickerChange(dateStrings);
                                 }}
+                                placeholder={
+                                  filteratedDashboardData
+                                    ? 
+                                  //   [       dayjs(
+                                  //     filteratedDashboardData?.dayDate
+                                  //   ).format("MM-DD-YYYY"),
+                                  //   dayjs(
+                                  //     filteratedDashboardData?.dayDate
+                                  //   ).format("MM-DD-YYYY"),
+                                  // ]
+                                    filteratedDashboardData?.dayDate
+                                      ? [
+                                          dayjs(
+                                            filteratedDashboardData?.dayDate
+                                          ).format("MM-DD-YYYY"),
+                                          dayjs(
+                                            filteratedDashboardData?.dayDate
+                                          ).format("MM-DD-YYYY"),
+                                        ]
+                                      : filteratedDashboardData &&
+                                        filteratedDashboardData?.date
+                                      ? [
+                                          dayjs(
+                                            filteratedDashboardData?.date
+                                          ).format("MM-DD-YYYY"),
+                                          dayjs(
+                                            filteratedDashboardData?.date
+                                          ).format("MM-DD-YYYY"),
+                                        ]
+                                      : []
+                                    : ["Start date","End date"]
+                                }
                               />
                             </div>
                           </div>
