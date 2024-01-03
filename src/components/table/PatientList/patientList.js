@@ -184,7 +184,7 @@ function PatientTable({
   const nullImg =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
-    return detailsContent?.map((data, index) => (
+    return patinetListAll?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           {data.patientId}
@@ -322,7 +322,7 @@ function PatientTable({
         </thead>
 
         <tbody>
-          {detailsContent.length <= 0 ? (
+          {patinetListAll?.length <= 0 ? (
             <tr>
               <td colSpan="9">
                 <Empty />

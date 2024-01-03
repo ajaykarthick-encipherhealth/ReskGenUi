@@ -1,79 +1,38 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Spinner } from "react-bootstrap";
-import { Badge } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Select from "react-select";
-import { SVGICON } from "../../../jsx/constant/theme";
-// import LoadingSpinner from "../../../jsx/components/spinner/spinner";
-import NavBar from "../../../jsx/layouts/nav";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
-import styles from "../report/report.module.css";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLoading from "react-facebook-loading";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import {
-  faAngleLeft,
-  faAngleRight,
-  faClose,
-  faUpload,
-  faCheck,
-  faBan,
-  faAdd,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
-import { Space, Spin, DatePicker, Popover, Input, Modal } from "antd";
-import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
-import { connect, useDispatch } from "react-redux";
+import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker } from "antd";
+import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
 import { notification } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { DataTable } from "primereact/datatable";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
-import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import { Tag } from "primereact/tag";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from "primereact/paginator";
-import { Calendar } from "primereact/calendar";
 import PatientTable from "../../../components/table/PatientList/patientList";
 import dayjs from "dayjs";
 import Image from "next/image";
 import calender from "../../../images/dashboard/calender.png";
 import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
-import { getSearchPatients } from "../../../store/actions/PatientsActions";
 import visitStyles from "../../../styles/visitdata.module.css";
-import { Label } from "recharts";
 
 export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  const patientStoreDetails = useSelector((state) => state);
-  const controller = new AbortController();
-  const signal = controller.signal;
-
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
-  const [dataValidationList, setDataValidationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [addUser, setAddUser] = useState(false);
-
-  const recordsPage = 10;
-  const lastIndex = currentPage * recordsPage;
-  const firstIndex = lastIndex - recordsPage;
-
-  const [npage, setNPage] = useState("");
-  const [number, setNumber] = useState([]);
-  const [records, setRecords] = useState([]);
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
@@ -90,19 +49,6 @@ export default function Patient() {
     patientId: "",
     patientName: "",
   });
-
-  const [pageCount, setPageCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageOptions, setPageOptions] = useState(0);
-  const [canPreviousPage, setCanPreviousPage] = useState(false);
-  const [canNextPage, setCanNextPage] = useState(true);
-  const [canMaxPage, setCanMaxPage] = useState(10);
-
-  const [process, setProcess] = useState({});
-  const [message, setMessage] = useState({});
-  const [listening, setListening] = useState(false);
-
-  const [patinetList, setPatinetList] = useState([]);
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -115,62 +61,29 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const currentDate = dayjs();
   const [dueDateStart, setDueDateStart] = useState(null);
   const [dueDateEnd, setDueDateEnd] = useState(null);
   const [processedStart, setProcessedStart] = useState(null);
   const [processedEnd, setProcessedEnd] = useState(null);
-  const [isDueDateCalender, setIsDueDateCalender] = useState(true);
   const [statusSelectedValue, setStausSelectedValue] = useState(null);
 
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  const statusMessage = {
-    subscribed: "Subscribed",
-    unsubscribed: "Unsubscribed",
-  };
-  const content = (
-    <div style={{ display: "flex" }}>
-      <div style={{ marginBottom: "8px" }}>
-        <Button>Button 1</Button>
-        <Button>Button 2</Button>
-      </div>
-      <hr></hr>
-      <div>
-        <RangePicker />
-      </div>
-    </div>
+  const filteratedDashboardData = useSelector(
+    (state) => state.patients.filteredList
   );
-  const filterChangePatientId = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientId"].value = value;
-    setFilters(_filters);
-  };
-  const filterChangePatientName = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientName"].value = value;
-    setFilters(_filters);
-  };
+  const dayDateFormated = filteratedDashboardData?.date
+    ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
+    : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
+  const [defaultStartDate, setDefaultStartDate] = useState(
+    dayjs(dayDateFormated).format("MM-DD-YYYY")
+  );
+  const [defaultEndDate, setDefaultEndDate] = useState(
+    dayjs(dayDateFormated).format("MM-DD-YYYY")
+  );
+
+  useEffect(() => {
+    setDefaultStartDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
+    setDefaultEndDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
+  }, [dayDateFormated]);
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -181,7 +94,24 @@ export default function Patient() {
     setLocalUserId(uId);
     // setIsLoading(false);
     getAllList(uId, pageNo, pageSize);
-    // fetchData();
+    if (filteratedDashboardData?.dayDate) {
+      getFilteApi(
+        pageNo,
+        pageSize,
+        "ALL",
+        filteratedDashboardData?.dayDate,
+        filteratedDashboardData?.dayDate
+      );
+    }
+    if (filteratedDashboardData?.status) {
+      getFilteApi(
+        pageNo,
+        pageSize,
+        filteratedDashboardData?.status.toUpperCase(),
+        filteratedDashboardData?.date,
+        filteratedDashboardData?.date
+      );
+    }
   }, []);
 
   const getAllList = async (uId, pageNo, pageSize) => {
@@ -227,56 +157,58 @@ export default function Patient() {
     dEnd
   ) => {
     setIsLoading(true);
-    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-    if (statusValue != null) {
-      if (statusValue == "ALL") {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+    if (filteratedDashboardData) {
+      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+      if (filteratedDashboardData?.status && statusValue && pStart && pEnd) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+      } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
       } else {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       }
-    }
-    if (pStart != null && statusValue == null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
+    } else {
+      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
 
-    if (pStart != null && statusValue != null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
+      if (statusValue != null) {
+        if (statusValue == "ALL") {
+          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+        } else {
+          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
+        }
+      }
+      if (pStart != null && statusValue == null) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
+      }
 
-    if (pStart != null && statusValue != null && statusValue == "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
+      if (pStart != null && statusValue != null && statusValue != "ALL") {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
+      }
 
-    if (dStart != null && statusValue != null && statusValue == "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
-    }
+      if (dStart != null && statusValue != null && statusValue != "ALL") {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
+      }
 
-    if (dStart != null && statusValue != null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
-    }
+      if (
+        dStart != null &&
+        statusValue == null &&
+        pStart == null &&
+        statusValue != "ALL"
+      ) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
+      }
 
-    if (
-      dStart != null &&
-      statusValue == null &&
-      pStart == null &&
-      statusValue != "ALL"
-    ) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
-    }
+      if (dStart != null && pStart != null) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
+      }
 
-    if (dStart != null && pStart != null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
-
-    if (
-      dStart != null &&
-      statusValue != null &&
-      pStart != null &&
-      statusValue != "ALL"
-    ) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
-
+      if (
+        dStart != null &&
+        statusValue != null &&
+        pStart != null &&
+        statusValue != "ALL"
+      ) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
+      }
     // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
 
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
@@ -284,7 +216,6 @@ export default function Patient() {
       var resultMap = [];
       var result = response.data.response.content;
       setTotalElements(response.data.response.totalElements);
-
       result.map((res) => {
         resultMap.push({
           patientId: res.patientId,
@@ -371,9 +302,6 @@ export default function Patient() {
   const onChangeFile = (e) => {
     setSelectFile(e[0]);
   };
-  const onChangeFileRadiology = (e) => {
-    setSelectFileRadiology(e[0]);
-  };
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -456,6 +384,7 @@ export default function Patient() {
       });
     }
   };
+
 
   function gotoPage(number) {
     if (canMaxPage > number) {
@@ -605,7 +534,6 @@ export default function Patient() {
     }
   };
   const dateFormateChange = (rowData) => {};
-
   const processstatusBodyTemplate = (rowData) => {
     switch (rowData.processedStatus) {
       case "COMPLETED":
@@ -661,21 +589,7 @@ export default function Patient() {
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex justify-content-center">
-        {/* {rowData.computing == 2 ? (
-<button
-onClick={() => gotoPatientDetails(rowData)}
-className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
->
-<EyeOutlined className="text-white" />
-</button>
-) : (
-<button
-disabled
-className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
->
-<EyeInvisibleOutlined className="text-white" />
-</button>
-)} */}
+
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
@@ -860,6 +774,7 @@ className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
 
     }
   };
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -898,6 +813,7 @@ className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
                                 options={statusOptions}
                                 className="custom-react-select"
                                 isSearchable={false}
+                                placeholder={ filteratedDashboardData ?filteratedDashboardData?.status.toUpperCase():"Select Status"}
                               />
                             </div>
                           </div>
@@ -909,6 +825,14 @@ className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
                                 onChange={(dates, dateStrings) => {
                                   handleDatePickerChange(dateStrings);
                                 }}
+                                defaultValue={
+                                  filteratedDashboardData
+                                    ? [
+                                        dayjs(defaultStartDate, "MM-DD-YYYY"),
+                                        dayjs(defaultEndDate, "MM-DD-YYYY"),
+                                      ]
+                                    : []
+                                }
                               />
                             </div>
                           </div>
