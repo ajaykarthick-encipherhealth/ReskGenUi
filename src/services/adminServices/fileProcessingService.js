@@ -117,5 +117,4 @@ export const patientDetails = async (patientId,chartId) => {
 
 
 
-
   
