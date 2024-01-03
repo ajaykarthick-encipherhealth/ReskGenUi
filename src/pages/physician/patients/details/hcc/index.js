@@ -281,7 +281,6 @@ const Hcc = ({ patientHccResult }) => {
     var patientId = localStorage.getItem("patientId");
     var uId = localStorage.getItem("userId");
     setLocalUserId(uId);
-    getSectionTagColorAll();
     setLocalPatientId(patientId);
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
@@ -304,14 +303,6 @@ const Hcc = ({ patientHccResult }) => {
 
     setvalidHccDetails(userSpinner);
   }, []);
-
-  const getPatientIdDetails = async (patientId) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
-    );
-    setPatienIdDetails(response.data);
-    var result = response.data.response;
-  };
 
   const getPatientDetails = async (
     patientId,
@@ -661,7 +652,38 @@ const Hcc = ({ patientHccResult }) => {
             colors: COLORS2[index],
           });
         });
-        setCaptureSectionMatching(capturedSectionsColorsMatching);
+
+
+
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
+        );
+    
+        var sectionColorResult = response.data.response;
+
+        let sectionColorResultMatch = sectionColorResult.filter(o1 => dublicateSectionArr.some(o2 => o1.sectionName === o2.name));
+        let sectionColorResultNotMatch = dublicateSectionArr.filter(o1 => !sectionColorResult.some(o2 => o1.name === o2.sectionName));
+
+        var notMatchColorArray = [];
+        sectionColorResultNotMatch?.map((res, index) => {
+          var radomColorcode = stringToColour(res.name);
+          var randomColorChangeShadow = radomColorcode +33;
+           notMatchColorArray.push({
+           sectionName:res.name,
+           backgroundColor:randomColorChangeShadow,
+           sectionColor:radomColorcode,
+           });
+          submitSectionColors(res.name,radomColorcode,randomColorChangeShadow);
+        });
+
+
+          var newArrayColorMatchs = [];
+          newArrayColorMatchs = [
+            ...sectionColorResultMatch,
+            ...notMatchColorArray,
+          ];
+
+         setCaptureSectionMatching(newArrayColorMatchs);
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
@@ -1266,9 +1288,11 @@ const Hcc = ({ patientHccResult }) => {
       }
       if (check === "valid") {
         var fileId = patientFileDTO.fileId;
+        const encounterDatesValue = encounterDate.split(",");
+        const encounterDatesHeader = encounterDatesValue[0]
         const response = await axios.get(
           ENDPOINTS.apiEndoint +
-            `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDate}`
+            `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
         );
         var result = response.data;
         if (result?.length) {
@@ -1715,75 +1739,6 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
 
-  const replaceString = (value) => {
-    var removeComma = null;
-    // if (value != null) {
-    //   removeComma = value.replace(/,/g, "");
-    // }
-    return removeComma;
-  };
-
-  const replaceCaptureSection = (value) => {
-    return value;
-  };
-
-  const handleSubmitHccSave = async () => {
-    setSaveBtnTitle("Loading...");
-    var dos = dosYearDefalutSelect[0].label;
-    var validObject = {};
-    var inValidObject = {};
-    var unmatachObject = {};
-    var comoboObject = {};
-    var meatObject = {};
-    var deletedObject = {};
-    validObject[dos] = newValidDiseaseList;
-    inValidObject[dos] = newInValidDiseaseList;
-    unmatachObject[dos] = suggestedHccList;
-    comoboObject[dos] = comboDiseaseCodesList;
-    meatObject[dos] = meatCriteriaList;
-    deletedObject[dos] = deletedHccList;
-
-    var postData = {
-      userId: localUserId,
-      patientId: localPatientId,
-      patientName: patientDocumentResult.patientName,
-      fileId: patientDocumentResult.patientName,
-      orgId: patientDocumentResult.orgId,
-      tenantId: patientDocumentResult.tenantId,
-      dob: patientDocumentResult.dob,
-      gender: patientDocumentResult.gender,
-      age: patientDocumentResult.age,
-      validDisease: validObject,
-      invalidDisease: inValidObject,
-      unmatchedDisease: unmatachObject,
-      comboDisease: comoboObject,
-      meatCriteria: meatObject,
-      rafScore: patientDocumentResult.rafScore,
-      dosFiltered: patientDocumentResult.dosFiltered,
-      fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: deletedObject,
-    };
-
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/save`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Saved Successfully!",
-          placement: "top",
-          duration: 1,
-        });
-        setSaveBtnTitle("Save");
-        getPatientDetails(localPatientId, localOrgId, localTenantId);
-      } else {
-      }
-    } catch (e) {
-      setSaveBtnTitle("Save");
-    }
-  };
-
   const getFindValidDiagnosisCode = async (value) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
@@ -2167,7 +2122,7 @@ const Hcc = ({ patientHccResult }) => {
             colors: COLORS2[index],
           });
         });
-        setCaptureSectionMatching(capturedSectionsColorsMatching);
+        // setCaptureSectionMatching(capturedSectionsColorsMatching);
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
@@ -2397,23 +2352,40 @@ const Hcc = ({ patientHccResult }) => {
     return output;
   }
 
-  const getSectionTagColor = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/section/color/getsections?sectionnames=${value}`
-    );
 
-    var resultTest = response.data.response;
-    return resultTest;
-  };
+const stringToColour = (str) => {
+  let hash = 0;
+  str.split('').forEach(char => {
+    hash = char.charCodeAt(0) + ((hash << 5) - hash)
+  })
+  let colour = '#'
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff
+    colour += value.toString(16).padStart(2, '0')
+  }
+  return colour
+}
 
-  const getSectionTagColorAll = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
-    );
 
-    var result = response.data.response;
-    setSectionAllColor(result);
+
+  const submitSectionColors = async (sectionName,sectionColor,backgroundColor) => {
+      var postData = {
+        "backgroundColor":backgroundColor,
+        "sectionColor":sectionColor,
+        "sectionName":sectionName  
+       };
+
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/section/color/save`,
+        postData
+      );
+      var result = response.data;
+      if (result.status == "SUCCESS") {
+      } else {
+      }
+    } catch (e) {
+    }
   };
 
   const getCaptureSectionBackgroundFile = (
@@ -2424,12 +2396,13 @@ const Hcc = ({ patientHccResult }) => {
     // getSectionTagColor(value);
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = sectionAllColor.filter((res2) => res2.sectionName == res);
-      var headerNames = result[0]?.sectionName;
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
       var disCode = result[0]?.diagnosisCode;
-
+      var headerNames = result[0]?.sectionName;
       var sectionMapArr = (
         <span
           onClick={() =>
@@ -2458,37 +2431,38 @@ const Hcc = ({ patientHccResult }) => {
     actualDescription,
     testModal
   ) => {
-    var dublicateCaptureDelete = removeDuplicates(value);
+     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = sectionAllColor.filter((res2) => res2.sectionName == res);
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.sectionName;
+      var disCode = result[0]?.diagnosisCode;
       var headerNames = result[0]?.sectionName;
+      
 
-      var sectionMapArr = (
-        <span
-          onClick={() =>
-            handleOpenModalCombinationCode(
-              disCode,
-              res,
-              "valid",
-              "null",
-              documentPlace,
-              encounterDate,
-              headerNames,
-              actualDescription,
-              testModal
-            )
-          }
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
+       var sectionMapArr =
+        (<span onClick={() =>
+          handleOpenModalCombinationCode(
+            disCode,
+            res,
+            "valid",
+            "null",
+            documentPlace,
+            encounterDate,
+            headerNames,
+            actualDescription,
+            testModal
+          )
+        }
+           style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}>
+          {res}</span>)
+      return sectionMapArr
     });
+
+
   };
 
   const getEncounterDateBackground = (value) => {
@@ -2500,14 +2474,14 @@ const Hcc = ({ patientHccResult }) => {
         // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
         // {res}</Badge>)
 
-        <Badge
+        <span
           className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
           {moment(res).format("MM/DD")}
-        </Badge>
+        </span>
       );
       return sectionMapArr;
     });
