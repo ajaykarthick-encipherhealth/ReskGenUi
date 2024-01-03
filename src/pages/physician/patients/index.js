@@ -168,9 +168,8 @@ export default function Patient() {
       }
     } else {
       var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-
       if (statusValue != null) {
-        if (statusValue == "ALL") {
+        if (statusValue === "ALL") {
           resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
         } else {
           resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
@@ -209,6 +208,7 @@ export default function Patient() {
       ) {
         resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
+    }
     // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
 
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
@@ -216,7 +216,7 @@ export default function Patient() {
       var resultMap = [];
       var result = response.data.response.content;
       setTotalElements(response.data.response.totalElements);
-      result.map((res) => {
+      result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
           patientName: res.patientName,
@@ -385,7 +385,6 @@ export default function Patient() {
     }
   };
 
-
   function gotoPage(number) {
     if (canMaxPage > number) {
       setCanNextPage(true);
@@ -497,11 +496,6 @@ export default function Patient() {
     fetchData();
   };
 
-  function abortFetching() {
-    // Abort.
-    controller.abort();
-  }
-
   const statusBodyTemplate = (rowData) => {
     switch (rowData.computing) {
       case 2:
@@ -533,7 +527,7 @@ export default function Patient() {
         );
     }
   };
-  const dateFormateChange = (rowData) => {};
+
   const processstatusBodyTemplate = (rowData) => {
     switch (rowData.processedStatus) {
       case "COMPLETED":
@@ -589,7 +583,6 @@ export default function Patient() {
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex justify-content-center">
-
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
@@ -706,9 +699,6 @@ export default function Patient() {
       dueDateEnd
     );
   };
-  const handleOk = () => {
-    setModalVisible(false);
-  };
   const handleDatePickerChange = (dateString) => {
     if (dateString[0] != "") {
       let convertStartDate =
@@ -738,7 +728,6 @@ export default function Patient() {
         null,
         null
       );
-
     }
   };
 
@@ -771,7 +760,6 @@ export default function Patient() {
         dueDateStart,
         dueDateEnd
       );
-
     }
   };
 
@@ -813,7 +801,11 @@ export default function Patient() {
                                 options={statusOptions}
                                 className="custom-react-select"
                                 isSearchable={false}
-                                placeholder={ filteratedDashboardData ?filteratedDashboardData?.status.toUpperCase():"Select Status"}
+                                placeholder={
+                                  filteratedDashboardData
+                                    ? filteratedDashboardData?.status?.toUpperCase()
+                                    : "Select Status"
+                                }
                               />
                             </div>
                           </div>

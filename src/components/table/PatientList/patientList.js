@@ -23,6 +23,7 @@ import { getPriorityChange } from "../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { Paginator } from "primereact/paginator";
+import SpinnerDots from "../../spinner";
 
 const { Option } = AntSelect;
 
@@ -184,30 +185,36 @@ function PatientTable({
   const nullImg =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
-    return patinetListAll?.map((data, index) => (
-      <tr key={index}>
-        <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
-          {data.patientId}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.patientName}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.allocatedOn
-            ? moment(data.allocatedOn).format("MM-DD-YYYY")
-            : "---"}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.processedDate ?
-            moment(data.processedDate).format("MM-DD-YYYY")
-            : "---"}
-        </td>
-        <td className={TableStyle.childBorder}>
-          <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
-            {/* <Avatar
+    return patinetListAll?.length === 0 ? (
+      <SpinnerDots />
+    ) : (
+      patinetListAll?.map((data, index) => (
+        <tr key={index}>
+          <td
+            className={TableStyle.firstTdBorder}
+            onClick={handleTableRowClick}
+          >
+            {data.patientId}
+          </td>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.patientName}
+          </td>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.allocatedOn
+              ? moment(data.allocatedOn).format("MM-DD-YYYY")
+              : "---"}
+          </td>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
+          </td>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.processedDate
+              ? moment(data.processedDate).format("MM-DD-YYYY")
+              : "---"}
+          </td>
+          <td className={TableStyle.childBorder}>
+            <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
+              {/* <Avatar
               style={{
                 backgroundColor: "#fde3cf",
                 color: "#f56a00",
@@ -218,61 +225,62 @@ function PatientTable({
                 ? data.allocatedBy.slice(0, 2).toUpperCase()
                 : "N"}
             </Avatar> */}
-            {data.allocatedBy ? (
-              <img
-                src={dummyProfileImageUrl}
-                alt="User Avatar"
-                width={30}
-                height={30}
-                style={{ borderRadius: "50%" , marginRight:"5px"}}
-              />
-            ) : (
-              <img
-                src={nullImg}
-                alt="User Avatar"
-                width={30}
-                height={30}
-                style={{ borderRadius: "50%", marginRight:"10px"}}
-              />
-            )}
-            {data.allocatedBy ?
-            <>
-                      {  data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +  data.allocatedBy.split("@")[0].slice(1)}
+              {data.allocatedBy ? (
+                <img
+                  src={dummyProfileImageUrl}
+                  alt="User Avatar"
+                  width={30}
+                  height={30}
+                  style={{ borderRadius: "50%", marginRight: "5px" }}
+                />
+              ) : (
+                <img
+                  src={nullImg}
+                  alt="User Avatar"
+                  width={30}
+                  height={30}
+                  style={{ borderRadius: "50%", marginRight: "10px" }}
+                />
+              )}
+              {data.allocatedBy ? (
+                <>
+                  {data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +
+                    data.allocatedBy.split("@")[0].slice(1)}
+                </>
+              ) : (
+                <>Praveen</>
+              )}
+            </Tooltip>
+          </td>
+          <td className={TableStyle.childBorder}>
+            <AntSelect
+              options={priorityOptions}
+              placeholder="Set priority"
+              className={`custom-ant-select ${TableStyle.customAntSelect}`}
+              showSearch={false}
+              defaultValue={data?.priority ? data.priority : "Set Priority"}
+              disabled={!data?.priority ? true : false}
+              onChange={(value) => {
+                handlePriorityChange(data?.patientId, value);
+                dispatch(
+                  getPriorityChange(
+                    data?.patientId,
+                    dayjs(data?.lastModifiedDate)?.format("YYYY"),
+                    value
+                  )
+                );
+              }}
+              style={{ width: "80%" }}
+            />
+          </td>
 
-            </>:
-            <>
-            Praveen
-            </>}
-          </Tooltip>
-        </td>
-        <td className={TableStyle.childBorder}>
-          <AntSelect
-            options={priorityOptions}
-            placeholder="Set priority"
-            className={`custom-ant-select ${TableStyle.customAntSelect}`}
-            showSearch={false}
-            defaultValue={data?.priority ? data.priority : "Set Priority"}
-            disabled={!data?.priority ? true : false}
-            onChange={(value) => {
-              handlePriorityChange(data?.patientId, value);
-              dispatch(
-                getPriorityChange(
-                  data?.patientId,
-                  dayjs(data?.lastModifiedDate)?.format("YYYY"),
-                  value
-                )
-              );
-            }}
-            style={{ width: "80%" }}
-          />
-        </td>
-
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {statusBodyTemplate(data)}
-        </td>
-        <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
-      </tr>
-    ));
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {statusBodyTemplate(data)}
+          </td>
+          <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
+        </tr>
+      ))
+    );
   };
 
   return (
@@ -292,7 +300,7 @@ function PatientTable({
               DUE DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
                 {sortDueOrder === "asc" ? (
-                  <ArrowUpOutlined /> 
+                  <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
