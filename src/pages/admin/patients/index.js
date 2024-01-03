@@ -163,6 +163,7 @@ export default function Patient() {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
+
     getAllList(uId, pageNo, pageSize);
     // fetchData();
   }, []);
@@ -269,6 +270,23 @@ export default function Patient() {
       setTotalElements(response.data.response.totalElements);
 
       result.map((res) => {
+
+    dispatch(getPatients(pageNo, pageSize));
+  }, [pageNo, pageSize]);
+
+  useEffect(() => {
+    if (response?.response) {
+      getAllList(response?.response);
+    }
+  }, [response,pageNo,pageSize]);
+
+  const getAllList = (info) => {
+    if (info) {
+      var resultMap = [];
+      var result = info?.content;
+      setTotalElements(info?.totalElements);
+      result?.map((res) => {
+
         resultMap.push({
           patientId: res.patientId,
           patientName: res.patientName,
@@ -297,6 +315,7 @@ export default function Patient() {
       // }, 3000);
     }
   };
+
 
   const getNameSearch = async (searchtext) => {
     console.log(searchtext);
@@ -427,7 +446,9 @@ export default function Patient() {
         setIsLoadingBtn(false);
       }
       // setAddPatientId(false);
+
       getAllList(localUserId, pageNo, pageSize);
+
     }
 
     setValidated(true);
@@ -736,8 +757,10 @@ export default function Patient() {
       formData,
       headers
     );
+
     if (response?.status == 202) {
       getAllList(localUserId, pageNo, pageSize);
+
 
       notification.success({
         message: "Patient File Upload Successfully!",
@@ -797,6 +820,7 @@ export default function Patient() {
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
+
     // getAllList(localUserId, e.page, e.rows);
     getFilteApi(
       e.page,
@@ -862,6 +886,9 @@ export default function Patient() {
         null
       );
     }
+
+    getAllList(response?.response);
+
   };
 
   const handleDatePickerChangeProcesseDate = (dateString) => {
@@ -906,7 +933,7 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                             <label>Search by Name or ID</label>
                             <div class="form-group has-search">
                               <FontAwesomeIcon
@@ -920,7 +947,7 @@ export default function Patient() {
                                 placeholder="Search"
                               />
                             </div>
-                          </div>
+                          </div> */}
 
                           <div
                             className="col-xl-10"
@@ -929,6 +956,9 @@ export default function Patient() {
                               height: "42px",
                             }}
                           >
+
+                          <div className="col-xl-12">
+
                             <Button
                               onClick={addPatientFormId}
                               className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}

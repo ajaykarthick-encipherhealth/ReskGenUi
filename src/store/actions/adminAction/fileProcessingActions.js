@@ -11,10 +11,19 @@ export const selectedRoWDetails = (val) => ({
   payload: val,
 });
 
-export const completedReport = (val) => ({
-  type: COMPLETED_REPORT,
-  payload: val,
-});
+export const completedReport = (data) => {
+  return (dispatch) => {
+    try {
+    
+        dispatch({
+          type: COMPLETED_REPORT,
+          payload: data,
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 export const getPatientsList = (patientId, chartId) => {
   return (dispatch) => {
     try {
