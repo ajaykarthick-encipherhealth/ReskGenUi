@@ -1,79 +1,36 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Spinner } from "react-bootstrap";
-import { Badge } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Select from "react-select";
-import { SVGICON } from "../../../jsx/constant/theme";
-// import LoadingSpinner from "../../../jsx/components/spinner/spinner";
-import NavBar from "../../../jsx/layouts/nav";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
-import styles from "../report/report.module.css";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLoading from "react-facebook-loading";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import {
-  faAngleLeft,
-  faAngleRight,
-  faClose,
-  faUpload,
-  faCheck,
-  faBan,
-  faAdd,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
-import { Space, Spin, DatePicker, Popover, Input, Modal } from "antd";
-import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
-import { connect, useDispatch } from "react-redux";
+import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker } from "antd";
+import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
 import { notification } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { DataTable } from "primereact/datatable";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
-import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import { Tag } from "primereact/tag";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from "primereact/paginator";
-import { Calendar } from "primereact/calendar";
 import PatientTable from "../../../components/table/PatientList/patientList";
 import dayjs from "dayjs";
-import Image from "next/image";
-import calender from "../../../images/dashboard/calender.png";
 import LoadingSpinner from "../../../components/spinner/spinner";
 import Footer from "../../../jsx/layouts/Footer";
-import { getSearchPatients } from "../../../store/actions/PatientsActions";
 import visitStyles from "../../../styles/visitdata.module.css";
-import { Label } from "recharts";
 
 export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  const patientStoreDetails = useSelector((state) => state);
-  const controller = new AbortController();
-  const signal = controller.signal;
-
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
-  const [dataValidationList, setDataValidationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [addUser, setAddUser] = useState(false);
-
-  const recordsPage = 10;
-  const lastIndex = currentPage * recordsPage;
-  const firstIndex = lastIndex - recordsPage;
-
-  const [npage, setNPage] = useState("");
-  const [number, setNumber] = useState([]);
-  const [records, setRecords] = useState([]);
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
@@ -90,19 +47,6 @@ export default function Patient() {
     patientId: "",
     patientName: "",
   });
-
-  const [pageCount, setPageCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageOptions, setPageOptions] = useState(0);
-  const [canPreviousPage, setCanPreviousPage] = useState(false);
-  const [canNextPage, setCanNextPage] = useState(true);
-  const [canMaxPage, setCanMaxPage] = useState(10);
-
-  const [process, setProcess] = useState({});
-  const [message, setMessage] = useState({});
-  const [listening, setListening] = useState(false);
-
-  const [patinetList, setPatinetList] = useState([]);
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -115,32 +59,29 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const currentDate = dayjs();
   const [dueDateStart, setDueDateStart] = useState(null);
   const [dueDateEnd, setDueDateEnd] = useState(null);
   const [processedStart, setProcessedStart] = useState(null);
   const [processedEnd, setProcessedEnd] = useState(null);
-  const [isDueDateCalender, setIsDueDateCalender] = useState(true);
   const [statusSelectedValue, setStausSelectedValue] = useState(null);
 
   const filteratedDashboardData = useSelector(
     (state) => state.patients.filteredList
   );
-  const dayDateFormated=filteratedDashboardData?.date? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY"):dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY")
-  const [defaultStartDate, setDefaultStartDate] = useState(dayjs(dayDateFormated).format('MM-DD-YYYY'));
-  const [defaultEndDate, setDefaultEndDate] = useState(dayjs(dayDateFormated).format('MM-DD-YYYY'));
-  
-  useEffect(() => {
-    setDefaultStartDate(dayjs(dayDateFormated).format('MM-DD-YYYY'));
-    setDefaultEndDate(dayjs(dayDateFormated).format('MM-DD-YYYY'));
-  }, [dayDateFormated]);
+  const dayDateFormated = filteratedDashboardData?.date
+    ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
+    : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
+  const [defaultStartDate, setDefaultStartDate] = useState(
+    dayjs(dayDateFormated).format("MM-DD-YYYY")
+  );
+  const [defaultEndDate, setDefaultEndDate] = useState(
+    dayjs(dayDateFormated).format("MM-DD-YYYY")
+  );
 
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  });
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+    setDefaultStartDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
+    setDefaultEndDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
+  }, [dayDateFormated]);
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -229,7 +170,6 @@ export default function Patient() {
         resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       }
     } else {
-      console.log("pailslist");
       var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
 
       if (statusValue != null) {
@@ -374,9 +314,6 @@ export default function Patient() {
   const onChangeFile = (e) => {
     setSelectFile(e[0]);
   };
-  const onChangeFileRadiology = (e) => {
-    setSelectFileRadiology(e[0]);
-  };
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -421,7 +358,6 @@ export default function Patient() {
         inputValuePatientId
       );
       if (response?.status == 200) {
-        console.log(response.data);
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
@@ -447,8 +383,6 @@ export default function Patient() {
   };
 
   const gotoPatientDetails = (data) => {
-    console.log("Clicked on patient details:", data);
-
     dispatch(patientDetails(data));
     if (data.computing == 2) {
       const controller = new AbortController();
@@ -463,190 +397,7 @@ export default function Patient() {
     }
   };
 
-  function gotoPage(number) {
-    if (canMaxPage > number) {
-      setCanNextPage(true);
-      setPageIndex(number);
-      if (number > 0) {
-        setCanPreviousPage(true);
-      } else {
-        setCanPreviousPage(false);
-      }
-      setPageCount(number);
-    } else {
-      setCanNextPage(false);
-    }
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-  function nextPage(number) {
-    if (canMaxPage > number) {
-      setPageCount(number);
-      setPageIndex(number);
-      setCanPreviousPage(true);
-    } else {
-      setCanNextPage(false);
-    }
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-
-  function previousPage(number) {
-    setCanNextPage(true);
-    setPageIndex(number);
-    if (number > 0) {
-      setCanPreviousPage(true);
-    } else {
-      setCanPreviousPage(false);
-    }
-    setPageCount(number);
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-
-  const subscribe = async (patientResult) => {
-    const accessToken = localStorage.getItem("token");
-    var uId = localStorage.getItem("userId");
-    var tenId = localStorage.getItem("tenantId");
-    var processedList = [];
-
-    var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`;
-    const fetchData = async () => {
-      let eventSource = await fetchEventSource(resoureUrl, {
-        method: "get",
-        mode: "cors",
-        signal: signal,
-        headers: {
-          // Accept: "text/event-stream",
-          Authorization: `Bearer ` + accessToken,
-          // 'Cache-Control': 'no-cache',
-          // 'Connection': 'keep-alive',
-          // 'Accept': "text/event-stream",
-          "Access-Control-Allow-Origin": "*",
-        },
-        withCredentials: true,
-        onopen(res) {
-          console.log("Client side error ", res);
-        },
-        onmessage(event) {
-          console.log("Client Events Trigger ");
-          const parsedData = JSON.parse(event.data);
-          processedList = parsedData;
-          var checkProcessedValue = [];
-          processedList.map((res) => {
-            checkProcessedValue.push({
-              patientId: res,
-            });
-          });
-
-          const array1 = patientResult;
-          const array2 = checkProcessedValue;
-          console.log(array2);
-          console.log(patientResult);
-
-          const hashMap2 = array2.reduce((carry, item) => {
-            const { patientId } = item;
-            if (!carry[patientId]) {
-              carry[patientId] = item;
-            }
-            return carry;
-          }, {});
-
-          const output = array1.map((item) => {
-            const newName = hashMap2[item.patientId];
-            if (newName) {
-              item.computing = 2;
-            }
-            return item;
-          });
-
-          setPatinetListAll(output);
-        },
-        onclose() {
-          controller.abort();
-          console.log("Connection closed by the server");
-        },
-        onerror(err) {
-          controller.abort();
-          console.log("There was an error from server", err);
-        },
-      });
-    };
-
-    fetchData();
-  };
-
-  function abortFetching() {
-    console.log("Now aborting");
-    // Abort.
-    controller.abort();
-  }
-
-  // const fetchData = async () => {
-  //   const data = await (await fetchDataApi()).data;
-  //   console.log(data);
-  //   // setNotifications(data);
-  // };
-
-  // const fetchDataApi = async () => {
-  //   return await axios.get(ENDPOINTS.apiEndoint + "aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09");
-
-  // };
-
-  const statusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
-
-    switch (rowData.computing) {
-      case 2:
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Processed</span>
-          </div>
-        );
-
-      case 1:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Processing</span>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`}>Failed</span>
-          </div>
-        );
-
-      case 0:
-        return (
-          <div className="patient-status">
-            <span className={`badge not-started-text`}>Not Started</span>
-          </div>
-        );
-    }
-  };
-  const dateFormateChange = (rowData) => {
-    console.log(rowData);
-  };
-
   const processstatusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
-
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
@@ -701,21 +452,6 @@ export default function Patient() {
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex justify-content-center">
-        {/* {rowData.computing == 2 ? (
-          <button
-            onClick={() => gotoPatientDetails(rowData)}
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeOutlined className="text-white" />
-          </button>
-        ) : (
-          <button
-            disabled
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeInvisibleOutlined className="text-white" />
-          </button>
-        )} */}
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
@@ -907,7 +643,6 @@ export default function Patient() {
     }
   };
 
- 
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -946,6 +681,7 @@ export default function Patient() {
                                 options={statusOptions}
                                 className="custom-react-select"
                                 isSearchable={false}
+                                placeholder={ filteratedDashboardData ?filteratedDashboardData?.status.toUpperCase():"Select Status"}
                               />
                             </div>
                           </div>
@@ -958,22 +694,14 @@ export default function Patient() {
                                   handleDatePickerChange(dateStrings);
                                 }}
                                 defaultValue={
-                                  filteratedDashboardData 
+                                  filteratedDashboardData
                                     ? [
-                                        dayjs(defaultStartDate, 'MM-DD-YYYY'),
-                                        dayjs(defaultEndDate, 'MM-DD-YYYY'),
+                                        dayjs(defaultStartDate, "MM-DD-YYYY"),
+                                        dayjs(defaultEndDate, "MM-DD-YYYY"),
                                       ]
                                     : []
                                 }
-                               
-                                />
-                                {console.log(filteratedDashboardData 
-                                  ? [
-                                      dayjs(dayDateFormated).format('MM-DD-YYYY'),
-                                      dayjs(dayDateFormated).format('MM-DD-YYYY'),
-                                      
-                                    ]
-                                  : ["Start date", "End date"])}
+                              />
                             </div>
                           </div>
 
