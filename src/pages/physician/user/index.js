@@ -10,6 +10,7 @@ import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 import NavBar from "../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
+import AdminList from "../../../components/table/admin/adminList";
 
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
@@ -34,6 +35,7 @@ import {
 } from '@ant-design/icons';
 import moment from 'moment';
 import { fetchEventSource } from "@microsoft/fetch-event-source";
+import { AdminMenuList } from '../../../jsx/layouts/nav/Menu';
 
 
 
@@ -215,7 +217,7 @@ export default function Patient() {
 
                           </div>
                         </div>
-
+<AdminList/>
 
 
                         <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">

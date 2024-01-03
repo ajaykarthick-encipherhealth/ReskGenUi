@@ -40,7 +40,6 @@ export default function Login() {
                 };
                 const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/auth/admin/login`, postData);
                 var result = response.data;
-                console.log(result)
                 if (result.status === "SUCCESS") {
                     localStorage.setItem("userRole", 'admin')
                     localStorage.setItem("token", result.response.access_token);
