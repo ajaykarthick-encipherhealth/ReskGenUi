@@ -123,6 +123,9 @@ export default function Patient() {
   const [isDueDateCalender, setIsDueDateCalender] = useState(true);
   const [statusSelectedValue, setStausSelectedValue] = useState(null);
 
+  const filteratedDashboardData = useSelector(
+    (state) => state.patients.filteredList
+  );
   const handleOpenModal = () => {
     setModalVisible(true);
   };
@@ -181,7 +184,24 @@ export default function Patient() {
     setLocalUserId(uId);
     // setIsLoading(false);
     getAllList(uId, pageNo, pageSize);
-    // fetchData();
+    if (filteratedDashboardData?.dayDate) {
+      getFilteApi(
+        pageNo,
+        pageSize,
+        "ALL",
+        filteratedDashboardData?.dayDate,
+        filteratedDashboardData?.dayDate
+      );
+    }
+    if (filteratedDashboardData?.status) {
+      getFilteApi(
+        pageNo,
+        pageSize,
+        filteratedDashboardData?.status.toUpperCase(),
+        filteratedDashboardData?.date,
+        filteratedDashboardData?.date
+      );
+    }
   }, []);
 
   const getAllList = async (uId, pageNo, pageSize) => {
@@ -232,50 +252,60 @@ export default function Patient() {
     dEnd
   ) => {
     setIsLoading(true);
-    console.log(pStart, pEnd, dStart, dEnd);
-    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-    if (statusValue != null) {
-      if (statusValue == "ALL") {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+    if (filteratedDashboardData) {
+      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+      if (filteratedDashboardData?.status && statusValue && pStart && pEnd) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+      } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
       } else {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+      }
+    } else {
+      console.log("pailslist");
+      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+
+      if (statusValue != null) {
+        if (statusValue == "ALL") {
+          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+        } else {
+          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
+        }
+      }
+      if (pStart != null && statusValue == null) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
+      }
+
+      if (pStart != null && statusValue != null && statusValue != "ALL") {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
+      }
+
+      if (dStart != null && statusValue != null && statusValue != "ALL") {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
+      }
+
+      if (
+        dStart != null &&
+        statusValue == null &&
+        pStart == null &&
+        statusValue != "ALL"
+      ) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
+      }
+
+      if (dStart != null && pStart != null) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
+      }
+
+      if (
+        dStart != null &&
+        statusValue != null &&
+        pStart != null &&
+        statusValue != "ALL"
+      ) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
     }
-    if (pStart != null && statusValue == null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
-
-    if (pStart != null && statusValue != null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
-
-    if (dStart != null && statusValue != null && statusValue != "ALL") {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
-    }
-
-    if (
-      dStart != null &&
-      statusValue == null &&
-      pStart == null &&
-      statusValue != "ALL"
-    ) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
-    }
-
-    if (dStart != null && pStart != null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
-
-    if (
-      dStart != null &&
-      statusValue != null &&
-      pStart != null &&
-      statusValue != "ALL"
-    ) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
-    }
-
-    console.log(resoureUrl);
 
     // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
 
@@ -284,7 +314,6 @@ export default function Patient() {
       var resultMap = [];
       var result = response.data.response.content;
       setTotalElements(response.data.response.totalElements);
-
       result.map((res) => {
         resultMap.push({
           patientId: res.patientId,

@@ -423,7 +423,7 @@ const Hcc = ({ patientHccResult }) => {
 
         });
 
-        result.invalidDisease.map((res, index) => {
+        result?.invalidDisease?.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(',');
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
