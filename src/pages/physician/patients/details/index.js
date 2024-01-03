@@ -119,7 +119,6 @@ const Details = ({}) => {
 
   const [patientResultReload, setPatientResultReload] = useState(false);
   const [selectModalName, setSelectModalName] = useState(false);
-
   const selectPatientId = useSelector((state) => state.patients?.patiendId);
 
   const flagPostList = [
@@ -264,6 +263,7 @@ const Details = ({}) => {
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
+
     setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
 
     getPatientDetails(
@@ -295,10 +295,7 @@ const Details = ({}) => {
       ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
     );
     setPatienIdDetails(response.data.response);
-    // console.log(response.data)
     var result = response.data.response;
-    // console.log(result)
-
     const menu = (
       <Menu>
         {result.processedStatus != "HOLD" ? (
@@ -438,7 +435,6 @@ const Details = ({}) => {
     );
     if (response.data) {
       var result = response.data.response;
-      // console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -487,7 +483,7 @@ const Details = ({}) => {
       ENDPOINTS.apiEndoint +
         `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}&year=${year}`
     );
-    console.log(response.data);
+
     if (response.data) {
       var result = response.data.response;
 
@@ -762,15 +758,6 @@ const Details = ({}) => {
     var comoboObject = {};
     var meatObject = {};
     var deletedObject = {};
-
-    // console.log(patientDocumentResult)
-    // validObject = newValidDiseaseList;
-    // inValidObject = newInValidDiseaseList;
-    // unmatachObject = suggestedHccList;
-    // comoboObject = comboDiseaseCodesList;
-    // meatObject = meatCriteriaList;
-    // deletedObject = deletedHccList;
-
     var postData = {
       userId: localUserId,
       patientId: localPatientId,
@@ -793,9 +780,8 @@ const Details = ({}) => {
       dos: selectedDosValue,
     };
 
-    console.log(postData);
 
-    try {
+   try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
         postData
@@ -1193,9 +1179,9 @@ const Details = ({}) => {
   };
 
   const handleDatePickerChange = (dateString) => {
-    console.log(dateString);
 
     // getFiltePatientListDate(dateString[0],dateString[1])
+
   };
 
   const handleActionClick = (value) => {
@@ -1381,6 +1367,7 @@ const Details = ({}) => {
                               >
                                 High
                               </span>{" "}
+
                             </div>
                           ) : patienIdDetails.priority == "NORMAL" ? (
                             <div className={visitStyles.priorityStatusIcon}>
@@ -1397,6 +1384,7 @@ const Details = ({}) => {
                                 Normal
                               </span>{" "}
                             </div>
+
                           ) : (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i className={TableStyle.lowFlag}>

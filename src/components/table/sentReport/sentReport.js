@@ -4,7 +4,7 @@ import { Paginator } from "primereact/paginator";
 import { Modal, Popover } from "antd";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import Spinner from "../../spinner/spinner";
+import SpinnerDots from "../../spinner";
 
 function SentReportTable({ details, onSentPageChange, paginationFirst }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -53,16 +53,8 @@ function SentReportTable({ details, onSentPageChange, paginationFirst }) {
   return (
     <div className={TableStyle.classContaineer}>
       {details?.data?.length === 0 ? (
-        // <Spinner />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          loading....
-        </div>
+        <SpinnerDots />
+       
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>

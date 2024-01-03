@@ -7,6 +7,7 @@ import Footer from "../../../jsx/layouts/Footer";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../store/actions/ReportActions";
+import SpinnerDots from "../../spinner";
 
 function ReceivedReport({
   details,
@@ -51,16 +52,8 @@ function ReceivedReport({
   return (
     <div className={TableStyle.classContaineer}>
       {detailsContent?.length === 0 ? (
-        // <Spinner />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          loading....
-        </div>
+        <SpinnerDots />
+      
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>

@@ -142,13 +142,8 @@ export default function Patient() {
       var newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
-
-      // console.log(newArray)
       setIsLoading(false);
       setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
     }
   };
 
@@ -214,8 +209,6 @@ export default function Patient() {
       ) {
         resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
-    }
-
     // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
 
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
@@ -244,7 +237,6 @@ export default function Patient() {
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
 
-      // console.log(newArray)
       setIsLoading(false);
       setTableLoading(false);
       //     setTimeout(() => {
@@ -254,7 +246,6 @@ export default function Patient() {
   };
 
   const getNameSearch = async (searchtext) => {
-    // console.log(searchtext);
     setIsLoading(true);
 
     // dispatch(getSearchPatients(0,searchtext));
@@ -285,15 +276,10 @@ export default function Patient() {
         });
         var newArray = [];
         newArray = [...patinetListAll, ...resultMap];
-        console.log(resultMap);
         setPatinetListAll(resultMap);
 
-        // console.log(newArray)
         setIsLoading(false);
         setTableLoading(false);
-        //     setTimeout(() => {
-        //     subscribe(resultMap);
-        // }, 3000);
       }
     } else {
       getAllList(localUserId, pageNo, pageSize);
@@ -399,6 +385,155 @@ export default function Patient() {
     }
   };
 
+
+  function gotoPage(number) {
+    if (canMaxPage > number) {
+      setCanNextPage(true);
+      setPageIndex(number);
+      if (number > 0) {
+        setCanPreviousPage(true);
+      } else {
+        setCanPreviousPage(false);
+      }
+      setPageCount(number);
+    } else {
+      setCanNextPage(false);
+    }
+    var start = number * 10;
+    var end = start + 10;
+    const records = patinetListAll.slice(start, end);
+    setPatinetList(records);
+  }
+  function nextPage(number) {
+    if (canMaxPage > number) {
+      setPageCount(number);
+      setPageIndex(number);
+      setCanPreviousPage(true);
+    } else {
+      setCanNextPage(false);
+    }
+    var start = number * 10;
+    var end = start + 10;
+    const records = patinetListAll.slice(start, end);
+    setPatinetList(records);
+  }
+
+  function previousPage(number) {
+    setCanNextPage(true);
+    setPageIndex(number);
+    if (number > 0) {
+      setCanPreviousPage(true);
+    } else {
+      setCanPreviousPage(false);
+    }
+    setPageCount(number);
+    var start = number * 10;
+    var end = start + 10;
+    const records = patinetListAll.slice(start, end);
+    setPatinetList(records);
+  }
+
+  const subscribe = async (patientResult) => {
+    const accessToken = localStorage.getItem("token");
+    var uId = localStorage.getItem("userId");
+    var tenId = localStorage.getItem("tenantId");
+    var processedList = [];
+
+    var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`;
+    const fetchData = async () => {
+      let eventSource = await fetchEventSource(resoureUrl, {
+        method: "get",
+        mode: "cors",
+        signal: signal,
+        headers: {
+          // Accept: "text/event-stream",
+          Authorization: `Bearer ` + accessToken,
+          // 'Cache-Control': 'no-cache',
+          // 'Connection': 'keep-alive',
+          // 'Accept': "text/event-stream",
+          "Access-Control-Allow-Origin": "*",
+        },
+        withCredentials: true,
+        onopen(res) {},
+        onmessage(event) {
+          const parsedData = JSON.parse(event.data);
+          processedList = parsedData;
+          var checkProcessedValue = [];
+          processedList.map((res) => {
+            checkProcessedValue.push({
+              patientId: res,
+            });
+          });
+
+          const array1 = patientResult;
+          const array2 = checkProcessedValue;
+          const hashMap2 = array2.reduce((carry, item) => {
+            const { patientId } = item;
+            if (!carry[patientId]) {
+              carry[patientId] = item;
+            }
+            return carry;
+          }, {});
+
+          const output = array1.map((item) => {
+            const newName = hashMap2[item.patientId];
+            if (newName) {
+              item.computing = 2;
+            }
+            return item;
+          });
+
+          setPatinetListAll(output);
+        },
+        onclose() {
+          controller.abort();
+        },
+        onerror(err) {
+          controller.abort();
+        },
+      });
+    };
+
+    fetchData();
+  };
+
+  function abortFetching() {
+    // Abort.
+    controller.abort();
+  }
+
+  const statusBodyTemplate = (rowData) => {
+    switch (rowData.computing) {
+      case 2:
+        return (
+          <div className="patient-status">
+            <span className={`badge processed-text`}>Processed</span>
+          </div>
+        );
+
+      case 1:
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Processing</span>
+          </div>
+        );
+
+      case 3:
+        return (
+          <div className="patient-status">
+            <span className={`badge failed-text`}>Failed</span>
+          </div>
+        );
+
+      case 0:
+        return (
+          <div className="patient-status">
+            <span className={`badge not-started-text`}>Not Started</span>
+          </div>
+        );
+    }
+  };
+  const dateFormateChange = (rowData) => {};
   const processstatusBodyTemplate = (rowData) => {
     switch (rowData.processedStatus) {
       case "COMPLETED":
@@ -454,6 +589,7 @@ export default function Patient() {
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex justify-content-center">
+
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
@@ -483,7 +619,7 @@ export default function Patient() {
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
         `aiservice/ai/upload
-      `,
+`,
       formData,
       headers
     );
@@ -500,10 +636,6 @@ export default function Patient() {
     }
     setAddPatient(false);
     setIsLoadingBtn(false);
-
-    // getAllList(localUserId);
-
-    // console.log("1");
   };
   const submitRadiology = async () => {
     const formData = new FormData();
@@ -522,7 +654,7 @@ export default function Patient() {
     const response = await axios.post(
       ENDPOINTS.apiEndointFileUploadHcc +
         `aiservice/ai/upload/radiology
-    `,
+`,
       formData,
       headers
     );
@@ -540,15 +672,10 @@ export default function Patient() {
 
   const onPageChange = (e) => {
     setIsLoading(true);
-
-    console.log(dates);
-    console.log(compledtedDate);
-    console.log(e);
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    // getAllList(localUserId, e.page, e.rows);
     getFilteApi(
       e.page,
       e.rows,
@@ -558,8 +685,6 @@ export default function Patient() {
       dueDateStart,
       dueDateEnd
     );
-
-    console.log("test");
   };
   const statusOptions = [
     { label: "ALL", value: "ALL" },
@@ -585,7 +710,6 @@ export default function Patient() {
     setModalVisible(false);
   };
   const handleDatePickerChange = (dateString) => {
-    console.log(dateString);
     if (dateString[0] != "") {
       let convertStartDate =
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
@@ -603,6 +727,8 @@ export default function Patient() {
         convertEndDate
       );
     } else {
+      setDueDateStart(null);
+      setDueDateEnd(null);
       getFilteApi(
         0,
         15,
@@ -612,6 +738,7 @@ export default function Patient() {
         null,
         null
       );
+
     }
   };
 
@@ -633,6 +760,8 @@ export default function Patient() {
         dueDateEnd
       );
     } else {
+      setProcessedStart(null);
+      setProcessedEnd(null);
       getFilteApi(
         0,
         15,
@@ -642,6 +771,7 @@ export default function Patient() {
         dueDateStart,
         dueDateEnd
       );
+
     }
   };
 
@@ -874,16 +1004,16 @@ export default function Patient() {
                     />
                   </div>
                   {/* <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Radiology
-                    </Form.Label>
-                    <Form.Control
-                      type="file"
-                      accept="application/pdf,text/plain"
-                      onChange={(e) => onChangeFileRadiology(e.target.files)}
-                      disabled={isLoadingBtn ? true : false}
-                    />
-                  </div> */}
+<Form.Label>
+Radiology
+</Form.Label>
+<Form.Control
+type="file"
+accept="application/pdf,text/plain"
+onChange={(e) => onChangeFileRadiology(e.target.files)}
+disabled={isLoadingBtn ? true : false}
+/>
+</div> */}
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
                       Year of Service <span className="text-danger">*</span>{" "}
