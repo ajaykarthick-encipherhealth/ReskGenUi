@@ -69,18 +69,19 @@ export default function Patient() {
     // setIsLoading(false);
     dispatch(getPatients(pageNo, pageSize));
   }, [pageNo, pageSize]);
-  useEffect(() => {
-    if (response) {
-      getAllList();
-    }
-  }, [response]);
 
-  const getAllList = () => {
+  useEffect(() => {
     if (response?.response) {
+      getAllList(response?.response);
+    }
+  }, [response,pageNo,pageSize]);
+
+  const getAllList = (info) => {
+    if (info) {
       var resultMap = [];
-      var result = response?.response?.content;
-      setTotalElements(response?.response?.totalElements);
-      result.map((res) => {
+      var result = info?.content;
+      setTotalElements(info?.totalElements);
+      result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
           patientName: res.patientName,
@@ -110,51 +111,6 @@ export default function Patient() {
       // }, 3000);
     }
   };
-
-  // const getNameSearch = async (searchtext) => {
-  //   setIsLoading(true);
-
-  //   // dispatch(getSearchPatients(0,searchtext));
-  //   if (searchtext) {
-  //     var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-  //     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-  //     if (response.response?.data) {
-  //       var resultMap = [];
-  //       var result = response.data.response?.content;
-  //       setTotalElements(response.data.response?.totalElements);
-  //       result.map((res) => {
-  //         resultMap.push({
-  //           patientId: res.patientId,
-  //           patientName: res.patientName,
-  //           fileName: res.fileName,
-  //           computing: res.computing,
-  //           createdAt: res.createdAt,
-  //           lastModifiedDate: res.lastModifiedDate,
-  //           dueDate: res.dueDate,
-  //           allocatedBy: res.allocatedBy,
-  //           allocatedOn: res.allocatedOn,
-  //           priority: res.priority,
-  //           processedStatus: res.processedStatus,
-  //           createdAt: res.createdAt,
-  //           processedDate: res.processedDate,
-  //           processStageId: res.processStageId,
-  //         });
-  //       });
-  //       var newArray = [];
-  //       newArray = [...patinetListAll, ...resultMap];
-  //       setPatinetListAll(resultMap);
-
-  //       // console.log(newArray)
-  //       setIsLoading(false);
-  //       setTableLoading(false);
-  //       //     setTimeout(() => {
-  //       //     subscribe(resultMap);
-  //       // }, 3000);
-  //     }
-  //   } else {
-  //     getAllList(response);
-  //   }
-  // };
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -236,7 +192,7 @@ export default function Patient() {
         setIsLoadingBtn(false);
       }
       // setAddPatientId(false);
-      getAllList(response);
+      getAllList(response?.response);
     }
 
     setValidated(true);
@@ -378,8 +334,7 @@ export default function Patient() {
       formData,
       headers
     );
-
-    if (response?.status == 202) {
+    if (response?.status === 200) {
       getAllList(response);
 
       notification.success({
@@ -435,7 +390,7 @@ export default function Patient() {
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getAllList(response);
+    getAllList(response?.response);
   };
 
   return (
@@ -451,7 +406,7 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                             <label>Search by Name or ID</label>
                             <div class="form-group has-search">
                               <FontAwesomeIcon
@@ -460,14 +415,14 @@ export default function Patient() {
                               />
                               <InputText
                                 type="text"
-                                // onChange={(e) => getNameSearch(e.target.value)}
+                                onChange={(e) => getNameSearch(e.target.value)}
                                 className="form-control new-form-control"
                                 placeholder="Search"
                               />
                             </div>
-                          </div>
+                          </div> */}
 
-                          <div className="col-xl-10">
+                          <div className="col-xl-12">
                             <Button
                               onClick={addPatientFormId}
                               className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}

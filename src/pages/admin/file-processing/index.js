@@ -391,7 +391,7 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                             <label>Search by Name or ID</label>
                             <div class="form-group has-search">
                               <FontAwesomeIcon
@@ -405,16 +405,16 @@ export default function Patient() {
                                 placeholder="Search"
                               />
                             </div>
-                          </div>
+                          </div> */}
 
-                          <div className="col-xl-10">
+                          {/* <div className="col-xl-10">
                             <Button
                               onClick={addPatientFormId}
                               className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}
                             >
                               + Add Patient Id
                             </Button>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 

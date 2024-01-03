@@ -44,7 +44,7 @@ export default function UserLogin() {
         if (emailSplit[0] === "ajgith01") {
           localStorage.setItem("userRole", "Coder-L2");
         } else {
-          localStorage.setItem("userRole", "admin");
+          localStorage.setItem("userRole", result?.roles[0]?.toLowerCase());
         }
         localStorage.setItem("token", result.access_token);
         localStorage.setItem("tenantId", result.tenantId);
@@ -54,25 +54,25 @@ export default function UserLogin() {
         localStorage.setItem("loginCheck", true);
 
         const userRoleLocal = localStorage.getItem("userRole");
-        if (userRoleLocal === "physician") {
-          router.push("/physician/dashboard");
-        } else {
+        if (userRoleLocal === "admin") {
           router.push("/admin/user");
+        } else {
+          router.push("/physician/dashboard");
         }
         notification.success({
-          message: response.data.message,
+          message: result?.message ? result?.message : "Login Successfully",
           duration: 1,
         });
       } else {
         setIsLoading(false);
         notification.error({
-          message: response.data.message,
+          message: result?.message,
           duration: 1,
         });
       }
     } catch (e) {
       notification.error({
-        message: response.data.message,
+        message: "Login Failed",
         duration: 1,
       });
       setIsLoading(false);

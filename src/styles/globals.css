@@ -12230,7 +12230,7 @@ tbody > tr {
   margin-right: 20px;
 }
 
-:where(.css-dev-only-do-not-override-zcfrx9).ant-ribbon-wrapper {
+.ant-ribbon-wrapper {
   position: relative;
   bottom: 26px;
   right: 8px;
@@ -12596,20 +12596,17 @@ tbody > tr {
   display: block; 
 
 } */
-:where(.css-dev-only-do-not-override-2q8sxy).ant-picker-dropdown
-  .ant-picker-panel-container {
-  box-shadow: none;
+.ant-picker-dropdown .ant-picker-panel-container {
+  box-shadow: none !important;
 }
-:where(
-    .css-dev-only-do-not-override-2q8sxy
-  ).ant-ribbon.ant-ribbon-placement-start {
+.ant-ribbon.ant-ribbon-placement-start {
   width: 57px;
   font-size: 12px;
 }
-:where(.css-dev-only-do-not-override-2q8sxy).ant-ribbon-wrapper {
+.ant-ribbon-wrapper {
   position: relative;
   bottom: 23px;
-  right: 6px;
+  /* right: 6px; */
 }
 .metismenu a {
   align-items: center !important;
@@ -13287,7 +13284,7 @@ tbody > tr {
 }
 .ant-steps .ant-steps-item-tail {
   position: absolute;
-  top: 16px;
+  top: 20px !important;
   width: 100%;
   left: 16px;
   padding: 0px !important;
@@ -13312,12 +13309,20 @@ tbody > tr {
 
 /* Process Step */
 .ant-steps-item-process .ant-steps-item-icon {
-  background-color: yellow !important;
-  border: none !important;
+  /* background-color: yellow !important; */
+  border: 1px solid #1677ff !important;
   font-weight: 700;
-  color: #fff !important;
+  color:black !important;
+  /* color: #1677ff !important; */
 }
+.ant-steps .ant-steps-item-process .ant-steps-item-icon >.ant-steps-icon {
+  color:rgba(0, 0, 0, 0.65) !important;
 
+}
+.ant-steps.ant-steps-with-progress .ant-steps-item-process .ant-steps-item-container .ant-steps-item-icon .ant-steps-icon {
+  color:rgba(0, 0, 0, 0.65) !important;
+
+}
 /* Wait Step */
 .ant-steps-item-wait .ant-steps-item-icon {
   background-color: white !important;
@@ -13325,4 +13330,12 @@ tbody > tr {
 }
 .ant-steps .ant-steps-item-error .ant-steps-item-icon {
   background: red !important;
+}
+
+.ant-steps .ant-steps-item-finish:last-child .ant-steps-item-icon {
+  background-color: green !important;
+  /* width:33% !important;
+  height:80% !important; */
+  border: 1px solid green !important;
+
 }
