@@ -22,7 +22,7 @@ import { getMessagesList } from "../../../store/actions/adminAction/fileProcessi
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../file-processing/FileUploading";
 import Addpatients from "../file-processing/Addpatiens";
-import TrackingTable from "../../../components/table/admin/trackingList/trackingList";
+import TrackingTable from "../../../components/table/admin/trackingList";
 
 
 export default function Patient() {

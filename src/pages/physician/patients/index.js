@@ -46,7 +46,7 @@ import PatientTable from "../../../components/table/PatientList/patientList";
 import dayjs from "dayjs";
 import Image from "next/image";
 import calender from "../../../images/dashboard/calender.png";
-import LoadingSpinner from "../../../components/spinner/spinner";
+import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { getSearchPatients } from "../../../store/actions/PatientsActions";
 import visitStyles from "../../../styles/visitdata.module.css";

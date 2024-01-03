@@ -20,7 +20,7 @@ import { getMessagesList } from "../../../store/actions/adminAction/fileProcessi
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../file-processing/FileUploading";
 import Addpatients from "../file-processing/Addpatiens";
-import SpinnerDots from "../../../components/spinner/spinner";
+import SpinnerDots from "../../../components/spinner";
 
 export default function Patient() {
   const navigate = useRouter();

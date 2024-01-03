@@ -18,7 +18,7 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import FileProcessingTable from "../../../components/table/admin/FileProcessing/FileProcessing";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
-import SpinnerDots from "../../../components/spinner/spinner";
+import SpinnerDots from "../../../components/spinner";
 
 export default function Patient() {
   const [validated, setValidated] = useState(false);
