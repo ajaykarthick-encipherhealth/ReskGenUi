@@ -7,7 +7,7 @@ import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../jsx/layouts/Footer";
-import Spinner from "../../spinner/spinner";
+import SpinnerDots from "../../spinner";
 
 function CoderReport({
   setModal,
@@ -109,16 +109,8 @@ function CoderReport({
   return (
     <div className={TableStyle.classContaineer}>
       {reportListAll?.data?.length === 0 ? (
-        // <Spinner />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          loading....
-        </div>
+         <SpinnerDots />
+         
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
