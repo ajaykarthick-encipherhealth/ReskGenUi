@@ -19,9 +19,7 @@ const Notification = ({ notificationResponse }) => {
         {notificationResponse?.map(
           (data, i) => (
             <li
-              className='active dlab-chat-user'
-              onClick={() => setOpenMsg(true)}
-             
+              className='active dlab-chat-user'            
             >
               <div className='d-flex bd-highlight'>
                 <div className='img_cont'>
@@ -31,7 +29,6 @@ const Notification = ({ notificationResponse }) => {
                 <div className='user_info'>
                   <div className='d-flex'>
                   <span>{emailSplitFunction(data.userFrom.userName)} </span>
-                  <span>1 min ago</span>
                   </div>
                 
                   <p>{data.content}</p>
