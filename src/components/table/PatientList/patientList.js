@@ -186,7 +186,7 @@ function PatientTable({
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
-      <SpinnerDots />
+     <Empty/>
     ) : (
       patinetListAll?.map((data, index) => (
         <tr key={index}>
