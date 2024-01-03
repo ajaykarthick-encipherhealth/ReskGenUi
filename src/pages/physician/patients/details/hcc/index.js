@@ -58,6 +58,9 @@ const Hcc = ({ patientHccResult }) => {
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
   const { highlight } = searchPluginInstance;
+  const { setTargetPages } = searchPluginInstance;
+  
+  // setTargetPages((targetPage) => targetPage.pageIndex === 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
@@ -242,6 +245,10 @@ const Hcc = ({ patientHccResult }) => {
   const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] = useState(false);
   const [dragFileDate, setdragFileDate] = useState(false);
   const [inputValueFileDate, setInputValueFileDate] = useState('');
+  const [patientFileDTO, setPatientFileDTO] = useState('');
+  const [fileInitialPage, setFileInitialPage] = useState(0);
+
+
 
 
 
@@ -379,6 +386,7 @@ const Hcc = ({ patientHccResult }) => {
 
           getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
           setSelectMeatFileId(patientHccResult.fileId);
+          setPatientFileDTO(result.fileDetailDTO)
         }
         // setPatientDocumentResult(result);
 
@@ -854,6 +862,7 @@ const Hcc = ({ patientHccResult }) => {
               treatment: res.treatment,
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
+              encounterDate:res.encounterDate
             });
           } else {
             meatListArr.push({
@@ -887,6 +896,7 @@ const Hcc = ({ patientHccResult }) => {
               treatment: res.treatment,
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
+              encounterDate:res.encounterDate
             });
           }
         });
@@ -1233,9 +1243,11 @@ const Hcc = ({ patientHccResult }) => {
   };
 
 
-  const handleOpenModal = (value, disDescription) => {
+  const handleOpenModal = (value, disDescription,encounterDate) => {
+    getSectionPageNumber(value,encounterDate);
     var splitPoint = disDescription.substring(" ", 40);
     setTimeout(() => {
+      setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
       highlight({
         keyword: splitPoint,
         matchCase: true,
@@ -1253,24 +1265,57 @@ const Hcc = ({ patientHccResult }) => {
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
-  const findValueDocument = (value, disDescription,) => {
-    var splitPoint = disDescription.substring(" ", 40);
 
+
+  const getSectionPageNumber = async (header,encounterDate) => {  
+    console.log(patientFileDTO)  
+    var fileId = patientFileDTO.fileId;
+    // const response = await axios.get(
+    //   ENDPOINTS.apiEndoint +
+    //   `dbservice/pageNumber?header=hpi&fileId=7b319ab4-db10-4f3b-94ad-4ff27757f830&dos=06/13/2023`
+    // );
+
+
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/pageNumber?header=${header}&fileId=${fileId}&dos=${encounterDate}`
+    );
+
+    var result = response.data;
+    if(result?.length){
+      var pageNumber =  result[0] - 1;
+      console.log(pageNumber)
+    setFileInitialPage(pageNumber)
+    // setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
+    }
+  };
+
+
+
+  const findValueDocument = (value, disDescription,headerNames,encounterDate,actualDescription) => {
+    getSectionPageNumber(headerNames,encounterDate);
+
+
+    var splitPoint = disDescription.substring(" ", 40);
+     setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
     highlight({
-      keyword: splitPoint,
+      keyword: actualDescription,
       // matchCase: true,
       // wholeWords:true
     });
 
   };
-  const handleOpenModalCombinationCode = (
+  const handleOpenModalCombinationCode = async (
     value,
     disDescription,
     check,
     whereCome,
-    documentPlace
+    documentPlace,
+    encounterDate,
+    headerNames,
+    actualDescription,
+    testModal
   ) => {
-    console.log(whereCome)
     if (documentPlace == "Radio" || whereCome == "Radio" || whereCome == "Radio-combo") {
       handleOpenModalRadiology(value, disDescription, true,)
     } else if (documentPlace == "Lab" || whereCome == "Lab") {
@@ -1291,24 +1336,42 @@ const Hcc = ({ patientHccResult }) => {
       setIsLoadingSection(true);
       setIsModalOpenLab(true);
 
-    } else {
+    } 
+    else {
       if (whereCome == "nonHcc") {
         setNonHccActiveCodes(true);
       } else {
         setNonHccActiveCodes(false);
       }
       if (check === "valid") {
+        var fileId = patientFileDTO.fileId;
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint +
+          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDate}`
+        );    
+        var result = response.data;
+        if(result?.length){
+          var pageNumber =  result[0] - 1;
+          console.log(pageNumber)
+        setFileInitialPage(pageNumber)
+        }
+
         setSelectActiveCode(value);
         var splitPoint = "";
         splitPoint = disDescription;
         setTimeout(() => {
+          setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+
           highlight({
-            keyword: splitPoint,
+            keyword: actualDescription,
           });
+
           var dataset = value + " - (" + splitPoint + ")";
           setSelectMeatName(dataset);
           var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset;
           setFileModalHeader(headerName)
+         
+
         }, 2000);
         setDocumentLoaded(true);
         var dataset = value + " - (" + splitPoint + ")";
@@ -1316,7 +1379,12 @@ const Hcc = ({ patientHccResult }) => {
         setIsLoadingSection(true);
         var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset + " -  " + "Loading...";
         setFileModalHeader(headerName)
-        setIsModalOpenCaptureSection(true);
+        if(testModal == "Suggested"){
+          setIsModalOpenCaptureSection(true);
+        }else{
+          setIsModalOpenValidCodes(true);
+        }
+        // setIsModalOpenCaptureSection(true);
       } else if (check == "valid2") {
         setSelectActiveCode(value);
         var splitPoint = "";
@@ -1780,171 +1848,6 @@ const Hcc = ({ patientHccResult }) => {
     } catch (e) {
       setSaveBtnTitle("Save");
     }
-  };
-
-  const handleSubmitHccAction = () => {
-    handleSubmitHccComplete()
-  }
-
-  const handleSubmitHccComplete = async () => {
-    setCompleteBtnTitle("Loading...");
-    var dos = selectedDosValue;
-    var validObject = {};
-    var inValidObject = {};
-    var unmatachObject = {};
-    var comoboObject = {};
-    var meatObject = {};
-    var deletedObject = {};
-    validObject = newValidDiseaseList;
-    inValidObject = newInValidDiseaseList;
-    unmatachObject = suggestedHccList;
-    comoboObject = comboDiseaseCodesList;
-    meatObject = meatCriteriaList;
-    deletedObject = deletedHccList;
-    // validObject[dos] = newValidDiseaseList;
-    // inValidObject[dos] = newInValidDiseaseList;
-    // unmatachObject[dos] = suggestedHccList;
-    // comoboObject[dos] = comboDiseaseCodesList;
-    // meatObject[dos] = meatCriteriaList;
-    // deletedObject[dos] = deletedHccList;
-
-    var postData = {
-      userId: localUserId,
-      patientId: localPatientId,
-      patientName: patientDocumentResult.patientName,
-      fileId: patientDocumentResult.patientName,
-      orgId: patientDocumentResult.orgId,
-      tenantId: patientDocumentResult.tenantId,
-      dob: patientDocumentResult.dob,
-      gender: patientDocumentResult.gender,
-      age: patientDocumentResult.age,
-      validDisease: validObject,
-      invalidDisease: inValidObject,
-      unmatchedDisease: unmatachObject,
-      comboDisease: comoboObject,
-      meatCriteria: meatObject,
-      rafScore: patientDocumentResult.rafScore,
-      dosFiltered: patientDocumentResult.dosFiltered,
-      fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: deletedObject,
-      dos: selectedDosValue
-    };
-
-    console.log(postData)
-
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Completed Successfully!",
-          placement: "top",
-          duration: 1
-        });
-        setConfirmCompleteModal(false);
-        setCompleteBtnTitle("Complete");
-        getPatientDetails(localPatientId, localOrgId, localTenantId);
-        getPatientIdDetails(localPatientId);
-      } else {
-      }
-    } catch (e) {
-      setCompleteBtnTitle("Complete");
-    }
-  };
-
-  const handleSubmitHccDeclineApi = async () => {
-    setDeclineBtnTitle("Loading...");
-    var postData = {
-      orgId: localOrgId,
-      patientId: localPatientId,
-      notes: inputValue.notes,
-      dos: selectedDosValue
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/decline`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Decline Successfully!",
-          placement: "top",
-          duration: 1
-        });
-        setConfirmNotesModalHold(false);
-        setDeclineBtnTitle("Decline");
-        getPatientIdDetails(localPatientId);
-
-      } else {
-      }
-    } catch (e) {
-      setDeclineBtnTitle("Decline");
-    }
-  };
-
-  const handleSubmitHccPending = async () => {
-    setDeclineBtnTitle("Loading...");
-    var postData = {
-      orgId: localOrgId,
-      patientId: localPatientId,
-      notes: inputValue.notes,
-      dos: selectedDosValue
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/pending`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Pending Successfully!",
-          placement: "top",
-          duration: 1
-        });
-        setDeclineBtnTitle("Decline");
-        getPatientIdDetails(localPatientId);
-      } else {
-      }
-    } catch (e) {
-      setDeclineBtnTitle("Decline");
-    }
-  };
-
-  const handleSubmitHccHold = async () => {
-    setDeclineBtnTitle("Loading...");
-    var postData = {
-      orgId: localOrgId,
-      patientId: localPatientId,
-      notes: inputValue.notes,
-      dos: selectedDosValue
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/hold`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Hold Successfully!",
-          placement: "top",
-          duration: 1
-        });
-        setConfirmNotesModalHold(false);
-        setConfirmNotesModalDecline(false);
-        setDeclineBtnTitle("Decline");
-        getPatientIdDetails(localPatientId);
-      } else {
-      }
-    } catch (e) {
-      setDeclineBtnTitle("Decline");
-    }
-  };
-
-  const handleSubmitHccDecline = async () => {
-    setIsValidAction("declineFunction");
-    setConfirmNotesModalHold(true);
   };
 
   const getFindValidDiagnosisCode = async (value) => {
@@ -2503,6 +2406,7 @@ const Hcc = ({ patientHccResult }) => {
               treatment: res.treatment,
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
+              encounterDate:res.encounterDate
             });
           } else {
             meatListArr.push({
@@ -2536,6 +2440,7 @@ const Hcc = ({ patientHccResult }) => {
               treatment: res.treatment,
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
+              encounterDate:res.encounterDate
             });
           }
         });
@@ -2580,22 +2485,40 @@ const Hcc = ({ patientHccResult }) => {
 
   }
 
-  const getCaptureSectionBackgroundFile = (value) => {
+  const getSectionTagColor = async (value) => {    
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/section/color/getsections?sectionnames=${value}`
+    );
+
+    var resultTest = response.data.response;
+    return resultTest;
+  };
+
+  const getCaptureSectionBackgroundFile = (value,encounterDate,actualDescription) => {
+    // getSectionTagColor(value);
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
+      // getSectionTagColor(res);
       const result = captureSectionMatching.filter(
         (res2) => res2.name == res
+
       );
       var backColor = result[0]?.colors;
       var disCode = result[0]?.diagnosisCode;
+      var headerNames = result[0]?.name;
+
 
       var sectionMapArr =
         (<Badge onClick={() =>
           findValueDocument(
             disCode,
             res,
+            headerNames,
+            encounterDate,actualDescription
           )
         }
+        // style={{ backgroundColor: backColor }}
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
           {res}</Badge>)
       return sectionMapArr
@@ -2603,7 +2526,7 @@ const Hcc = ({ patientHccResult }) => {
   }
 
 
-  const getCaptureSectionBackground = (value, documentPlace) => {
+  const getCaptureSectionBackground = (value, documentPlace,encounterDate,actualDescription,testModal) => {
     // console.log(value)
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
@@ -2612,15 +2535,21 @@ const Hcc = ({ patientHccResult }) => {
       );
       var backColor = result[0]?.colors;
       var disCode = result[0]?.diagnosisCode;
+      var headerNames = result[0]?.name;
+      
 
-      var sectionMapArr =
+       var sectionMapArr =
         (<Badge onClick={() =>
           handleOpenModalCombinationCode(
             disCode,
             res,
             "valid",
             "null",
-            documentPlace
+            documentPlace,
+            encounterDate,
+            headerNames,
+            actualDescription,
+            testModal
           )
         }
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
@@ -2815,14 +2744,7 @@ const Hcc = ({ patientHccResult }) => {
                                           className={`${visitStyles.hcc_card_nameHead}`}
                                         >
                                           <div
-                                            className="media-body"
-                                            onClick={() =>
-                                              handleOpenModalCombinationCode(
-                                                data.diagnosisCode,
-                                                data.actualDescription,
-                                                "valid2"
-                                              )
-                                            }
+                                            className="media-body"                                           
                                           >
                                             <span className="mb-1 disease-name d-flex">
 
@@ -2939,7 +2861,7 @@ const Hcc = ({ patientHccResult }) => {
                                               null}
                                           </div>
                                           <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                            {getCaptureSectionBackground(data.capturedSections)}
+                                            {getCaptureSectionBackground(data.capturedSections,null,data.encounterDate,data.actualDescription)}
                                           </div>
                                         </div>
                                       </div>
@@ -2983,15 +2905,7 @@ const Hcc = ({ patientHccResult }) => {
                                               className={`${visitStyles.hcc_card_nameHead}`}
                                             >
                                               <div
-                                                className="media-body"
-                                                onClick={() =>
-                                                  handleOpenModalCombinationCode(
-                                                    data.diagnosisCode,
-                                                    data.actualDescription,
-                                                    "valid2",
-                                                    data.getPlace
-                                                  )
-                                                }
+                                                className="media-body"                                                
                                               >
                                                 <span className="mb-1 disease-name d-flex">
                                                   <span className="valid-dis-name">
@@ -3174,7 +3088,7 @@ const Hcc = ({ patientHccResult }) => {
 
                                               </div>
                                               <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                {getCaptureSectionBackground(data.capturedSections, data.getPlace)}
+                                                {getCaptureSectionBackground(data.capturedSections, data.getPlace,data.encounterDate,data.actualDescription,"Suggested")}
                                               </div>
                                             </div>
                                           </div>
@@ -3307,19 +3221,9 @@ const Hcc = ({ patientHccResult }) => {
                                         <div className="">
 
                                           {getEncounterDateBackground(data.encounterDateSplit)}
-
-                                          {/* <Popover placement="topLeft" content={ patientDocumentResult.patientName}>
-                                                      <Badge className="badge-meat text-white cr-pointer badge-circle mt-2" bg={` badge-circle mt-2 bg-bg-five`} onClick={() => handleOpenModalCombinationCode(data.diagnosisCode, data.actualDescription)}>
-                                                      <FontAwesomeIcon
-                                                          icon={faSearch}
-                                                          style={{ color: "#fff" }}
-                                                        />
-                                                        HPI Test Urlplan
-                                                      </Badge>
-                                                      </Popover> */}
                                         </div>
                                         <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                          {getCaptureSectionBackground(data.capturedSections)}
+                                          {getCaptureSectionBackground(data.capturedSections,null,data.encounterDate,data.actualDescription,"Suggested")}
                                         </div>
                                       </div>
                                     </div>
@@ -3332,103 +3236,7 @@ const Hcc = ({ patientHccResult }) => {
                       </div>
                     </div>
                   </div>
-                </Tab.Pane>
-                <Tab.Pane id="my-posts" eventKey="nonhcc">
-                  <div className="my-post-content pt-3">
-                    <div className="widget-media   ps--active-y">
-                      <div className="row">
-                        <div className="col-xl-6">
-                          <ul className="timeline">
-                            <div className="invalid-text d-flex justify-content-sm-between">
-                              <span
-                                className={`dang d-block`}
-                              >
-                                {" "}
-                                NON-HCC{" "}
-                                <Badge
-                                  as="a"
-                                  href=""
-                                  bg="badge-circle invalid-bange"
-                                >
-                                  {
-                                    newInValidDiseaseList.length
-                                  }
-                                </Badge>
-                              </span>
-                              <div className="d-flex justify-content-center">
-                                <button
-                                  onClick={() =>
-                                    addValidDiseases()
-                                  }
-                                  className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faAdd}
-                                    fontSize={11}
-                                  />
-                                </button>
-                              </div>
-                            </div>
-                            {newInValidDiseaseList.map(
-                              (data, i) => (
-                                <li>
-                                  <div className="timeline-panel invalid-disease">
-                                    <div className="media-body">
-                                      <span className="mb-1 disease-name d-flex">
-                                        <span className="valid-dis-name">
-                                          {data.diagnosisCode}
-                                        </span>{" "}
-                                        -{" "}
-                                        {
-                                          data.actualDescription
-                                        }
-                                      </span>
-                                    </div>
-                                    <Popconfirm
-                                      title="You want move to valid?"
-                                      description={
-                                        data.diagnosisCode
-                                      }
-                                      onConfirm={
-                                        confirmInvalid
-                                      }
-                                      placement="leftTop"
-                                      okText="Yes"
-                                      cancelText="No"
-                                      onOpenChange={() =>
-                                        onchangeValid(
-                                          data.diagnosisCode
-                                        )
-                                      }
-                                    >
-                                      <div className="icon-box  bg-danger-light me-1">
-                                        <FontAwesomeIcon
-                                          icon={faCheck}
-                                          style={{
-                                            color: "orange",
-                                          }}
-                                        />
-                                      </div>
-                                    </Popconfirm>
-                                  </div>
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </div>
-                        {/* {validDiseasesList.length == 0 ?
-                                              <div className="card box-shadow-none">
-                                                <div className="card combo-card">
-                                                  <div className="col-xl-12">
-
-                                                    <span className="no-patient-data">NO DATA</span>
-                                                  </div>
-                                                </div></div>
-                                              : null} */}
-                      </div>
-                    </div>
-                  </div>
-                </Tab.Pane>
+                </Tab.Pane>           
 
                 <Tab.Pane
                   id="my-posts"
@@ -3777,7 +3585,8 @@ const Hcc = ({ patientHccResult }) => {
                                       onClick={() =>
                                         handleOpenModal(
                                           item.monitorCapturedFromHeader,
-                                          item.monitor
+                                          item.monitor,
+                                          item.encounterDate
                                         )
                                       }
                                     >
@@ -3808,7 +3617,8 @@ const Hcc = ({ patientHccResult }) => {
                                       onClick={() =>
                                         handleOpenModal(
                                           item.evaluateCapturedFromHeader,
-                                          item.evaluate
+                                          item.evaluate,
+                                          item.encounterDate
                                         )
                                       }
                                     >
@@ -3839,7 +3649,8 @@ const Hcc = ({ patientHccResult }) => {
                                       onClick={() =>
                                         handleOpenModal(
                                           item.assessmentCapturedFromHeader,
-                                          item.assessment
+                                          item.assessment,
+                                          item.encounterDate
                                         )
                                       }
                                     >
@@ -3871,7 +3682,8 @@ const Hcc = ({ patientHccResult }) => {
                                       onClick={() =>
                                         handleOpenModal(
                                           item.treatmentCapturedFromHeader,
-                                          item.treatment
+                                          item.treatment,
+                                          item.encounterDate
                                         )
                                       }
                                     >
@@ -4571,15 +4383,7 @@ const Hcc = ({ patientHccResult }) => {
                                       <div
                                         className={`${visitStyles.hcc_card_nameHead}`}
                                       >
-                                        <div
-                                          className="media-body"
-                                          onClick={() =>
-                                            findValueDocument(
-                                              data.diagnosisCode,
-                                              data.actualDescription,
-                                              "valid2"
-                                            )
-                                          }
+                                        <div               
                                         >
                                           <span className="mb-1 disease-name d-flex">
 
@@ -4697,7 +4501,7 @@ const Hcc = ({ patientHccResult }) => {
                                             : null}
                                         </div>
                                         <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                          {getCaptureSectionBackgroundFile(data.capturedSections)}
+                                          {getCaptureSectionBackgroundFile(data.capturedSections,data.encounterDate,data.actualDescription)}
                                         </div>
                                       </div>
                                     </div>
@@ -4931,13 +4735,6 @@ const Hcc = ({ patientHccResult }) => {
                                             >
                                               <div
                                                 className="media-body"
-                                                onClick={() =>
-                                                  findValueDocument(
-                                                    data.diagnosisCode,
-                                                    data.actualDescription,
-                                                    "valid2"
-                                                  )
-                                                }
                                               >
                                                 <span className="mb-1 disease-name d-flex">
                                                   <span className="valid-dis-name">
@@ -5113,15 +4910,15 @@ const Hcc = ({ patientHccResult }) => {
                                               {data.getPlace ==
                                                 "Lab" ?
                                                 <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                  {getCaptureSectionBackground(data.capturedSections, "Lab")}
+                                                  {getCaptureSectionBackground(data.capturedSections, "Lab",data.encounterDate,data.actualDescription)}
                                                 </div>
                                                 : data.getPlace ==
                                                   "Radio" ?
                                                   <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                    {getCaptureSectionBackground(data.capturedSections, "Radio")}
+                                                    {getCaptureSectionBackground(data.capturedSections, "Radio",data.encounterDate,data.actualDescription)}
                                                   </div>
                                                   : <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                    {getCaptureSectionBackgroundFile(data.capturedSections)}
+                                                    {getCaptureSectionBackgroundFile(data.capturedSections,data.encounterDate,data.actualDescription)}
                                                   </div>
                                               }
 
@@ -5260,7 +5057,7 @@ const Hcc = ({ patientHccResult }) => {
                                          
                                         </div>
                                         <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                          {getCaptureSectionBackground(data.capturedSections)}
+                                        {getCaptureSectionBackgroundFile(data.capturedSections,data.encounterDate,data.actualDescription)}
                                         </div>
                                       </div>
                                     </div>
@@ -5353,9 +5150,21 @@ const Hcc = ({ patientHccResult }) => {
                   >
                     {" "}
                     <Viewer
+                    initialPage={fileInitialPage}
                       fileUrl={selectFileURL}
                       plugins={[searchPluginInstance]}
                       onDocumentLoad={handleDocumentLoad}
+                      renderLoader={(percentages) => (
+                        <div
+                          style={{ width: "240px" }}
+                        >
+                          <ProgressBar
+                            progress={Math.round(
+                              percentages
+                            )}
+                          />
+                        </div>
+                      )}
                     />
                   </div>
                 </Worker>
@@ -5464,20 +5273,13 @@ const Hcc = ({ patientHccResult }) => {
                         (data, i) => (
                           <li>
                             <div
-                              className={`hccActiveCard ${visitStyles.hcc_card}`}
+                              className={`hccActiveCard ${visitStyles.hcc_card} ${visitStyles.hcc_card_addCode}`}
                             >
                               <div
                                 className={`${visitStyles.hcc_card_nameHead}`}
                               >
                                 <div
-                                  className="media-body"
-                                  onClick={() =>
-                                    handleOpenModalCombinationCode(
-                                      data.diagnosisCode,
-                                      data.actualDescription,
-                                      "valid2"
-                                    )
-                                  }
+                                  className="media-body"                                
                                 >
                                   <span className="mb-1 disease-name d-flex">
 
@@ -5524,7 +5326,7 @@ const Hcc = ({ patientHccResult }) => {
                                     null}
                                 </div>
                                 <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                  {getCaptureSectionBackgroundFile(data.capturedSections)}
+                                  {getCaptureSectionBackgroundFile(data.capturedSections,data.encounterDate,data.actualDescription)}
                                 </div>
                               </div>
                             </div>
@@ -5571,6 +5373,7 @@ const Hcc = ({ patientHccResult }) => {
                     <Viewer
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
+                      initialPage={fileInitialPage}
                       onDocumentLoad={handleDocumentLoad}
                     />
                   </div>

@@ -245,6 +245,14 @@ export default function Patient() {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
     }
 
+    if (pStart != null && statusValue != null && statusValue == "ALL") {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
+    }
+
+    if (dStart != null && statusValue != null && statusValue == "ALL") {
+      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
+    }
+
     if (dStart != null && statusValue != null && statusValue != "ALL") {
       resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
     }
@@ -858,6 +866,8 @@ if(searchtext ){
       setDueDateEnd(convertEndDate )
       getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
     }else{
+      setDueDateStart(null)
+      setDueDateEnd(null)
       getFilteApi(0, 15,statusSelectedValue,processedStart,processedEnd,null,null)
     }
   
@@ -872,6 +882,8 @@ if(searchtext ){
       setProcessedEnd(convertEndDate )
       getFilteApi(0, 15,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
     }else{
+      setProcessedStart(null )
+      setProcessedEnd(null )
       getFilteApi(0, 15,statusSelectedValue,null,null,dueDateStart,dueDateEnd)
 
     }

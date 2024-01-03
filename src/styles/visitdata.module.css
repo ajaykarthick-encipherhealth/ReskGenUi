@@ -1390,3 +1390,6 @@ margin-left: 20px;
   margin-top: 10px;
   cursor: pointer;
 }
+.hcc_card_addCode{
+  margin-bottom: 10px !important;
+}

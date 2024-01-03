@@ -59,6 +59,8 @@ const NonHcc = ({ patientNonHccResult }) => {
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
   const { highlight } = searchPluginInstance;
+  const { setTargetPages } = searchPluginInstance;
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
@@ -249,6 +251,8 @@ const NonHcc = ({ patientNonHccResult }) => {
   const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] = useState(false);
   const [dragFileDate, setdragFileDate] = useState(false);
   const [inputValueFileDate, setInputValueFileDate] = useState('');
+  const [patientFileDTO, setPatientFileDTO] = useState('');
+  const [fileInitialPage, setFileInitialPage] = useState(0);
 
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const handleDocumentLoad = () => {
@@ -347,6 +351,7 @@ const NonHcc = ({ patientNonHccResult }) => {
 
           getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
           setSelectMeatFileId(patientNonHccResult.fileId);
+          setPatientFileDTO(result.fileDetailDTO)
         }
         // setPatientDocumentResult(result);
 
@@ -1152,27 +1157,41 @@ const NonHcc = ({ patientNonHccResult }) => {
     });
 
   };
-  const handleOpenModalCombinationCode = (
+  const handleOpenModalCombinationCode = async (
     value,
     disDescription,
     check,
     whereCome,
-    documentPlace
+    documentPlace,
+    encounterDate,
+    headerNames,
+    actualDescription
   ) => {
-    console.log(whereCome)
- 
-      if (whereCome == "nonHcc") {
-        setNonHccActiveCodes(true);
-      } else {
-        setNonHccActiveCodes(false);
-      }
+  
       if (check === "valid") {
+        var fileId = patientFileDTO.fileId;
+
+        const encounterDatearray = encounterDate.split(',');
+        const encounterDateValue  = encounterDatearray[0];
+
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint +
+          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDateValue}`
+        );    
+        var result = response.data;
+        if(result?.length){
+          var pageNumber =  result[0] - 1;
+          console.log(pageNumber)
+        setFileInitialPage(pageNumber)
+        }
+
         setSelectActiveCode(value);
         var splitPoint = "";
         splitPoint = disDescription;
         setTimeout(() => {
+          setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
           highlight({
-            keyword: splitPoint,
+            keyword: actualDescription,
           });
           var dataset = value + " - (" + splitPoint + ")";
           setSelectMeatName(dataset);
@@ -1186,51 +1205,7 @@ const NonHcc = ({ patientNonHccResult }) => {
         var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset + " -  " + "Loading...";
         setFileModalHeader(headerName)
         setIsModalOpenCaptureSection(true);
-      } else if (check == "valid2") {
-        setSelectActiveCode(value);
-        var splitPoint = "";
-        splitPoint = disDescription;
-        setTimeout(() => {
-          highlight({
-            keyword: splitPoint,
-            matchCase: true,
-          });
-          var dataset = value + " - (" + disDescription + ")";
-          setSelectMeatName(dataset);
-          var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset;
-          setFileModalHeader(headerName)
-        }, 2000);
-        setDocumentLoaded(true);
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
-        var headerName = patientDocumentResult.patientId + " / " + patientDocumentResult.patientName + " / " + dataset + " -  " + "Loading...";
-        setFileModalHeader(headerName)
-
-        setIsLoadingSection(true);
-        setIsModalOpenValidCodes(true);
-      } else {
-        setSelectActiveCode(value);
-        var splitPoint = "";
-        splitPoint = disDescription.substring(" ", 20);
-        setTimeout(() => {
-          highlight({
-            keyword: splitPoint,
-            matchCase: true,
-            // wholeWords:true
-          });
-          var dataset = value + " - (" + disDescription + ")";
-          setSelectMeatName(dataset);
-        }, 2000);
-        setDocumentLoaded(true);
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
-        setIsLoadingSection(true);
-        setIsModalOpen(true);
-      }
-    
-
-    // setIsModalOpenValid(true)
-    // getSectionResult(value.toLowerCase());
+      } 
   };
 
 
@@ -1511,7 +1486,7 @@ const NonHcc = ({ patientNonHccResult }) => {
   }
 
 
-  const getCaptureSectionBackground = (value, documentPlace) => {
+  const getCaptureSectionBackground = (value, documentPlace,encounterDate,actualDescription) => {
     // console.log(value)
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
@@ -1520,7 +1495,7 @@ const NonHcc = ({ patientNonHccResult }) => {
       );
       var backColor = result[0]?.colors;
       var disCode = result[0]?.diagnosisCode;
-
+      var headerNames = result[0]?.name;
       var sectionMapArr =
         (<Badge onClick={() =>
           handleOpenModalCombinationCode(
@@ -1528,7 +1503,10 @@ const NonHcc = ({ patientNonHccResult }) => {
             res,
             "valid",
             "null",
-            documentPlace
+            documentPlace,
+            encounterDate,
+            headerNames,
+            actualDescription
           )
         }
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
@@ -1658,15 +1636,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                                                               className={`${visitStyles.hcc_card_nameHead}`}
                                                             >
                                                               <div
-                                                                className="media-body"
-                                                                onClick={() =>
-                                                                  handleOpenModalCombinationCode(
-                                                                    data.diagnosisCode,
-                                                                    data.actualDescription,
-                                                                    "valid2",
-                                                                    "nonHcc"
-                                                                  )
-                                                                }
+                                                                className="media-body"                                                               
                                                               >
                                                                 <span className="mb-1 disease-name d-flex">
                                                                   <span className="valid-dis-name">
@@ -1716,7 +1686,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                                                             >
                                                               {getEncounterDateBackground(data.encounterDateSplit)}
                                                               <div className={`${visitStyles.encounterAndSectionHeader}`} >
-                                                                {getCaptureSectionBackground(data.capturedSections)}
+                                                                {getCaptureSectionBackground(data.capturedSections,null,data.encounterDate,data.actualDescription)}
                                                               </div>
 
                                                             </div>

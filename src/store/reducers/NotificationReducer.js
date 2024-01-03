@@ -1,4 +1,4 @@
-import {NOTIFICATION_ALERT, NOTIFICATION_LIST} from "../actions/NotificationAction";
+import {NOTIFICATION_ALERT, NOTIFICATION_LIST,NOTIFICATION_ALERT_CLEAR} from "../actions/NotificationAction";
   
   const initialState = {
    notificationAlert: [], 
@@ -17,6 +17,13 @@ import {NOTIFICATION_ALERT, NOTIFICATION_LIST} from "../actions/NotificationActi
         notificationAlert:newArray,
       };
     }
+
+    if (action.type === NOTIFICATION_ALERT_CLEAR) {
+    return {
+      ...state,
+      notificationAlert:action.payload,
+    };
+  }
 
     if (action.type === NOTIFICATION_LIST) {
         return {

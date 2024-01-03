@@ -16,10 +16,11 @@ const Notification = ({ notificationResponse }) => {
     <div className={`card-body chatbox contacts_body p-0`} id='DZ_W_Contacts_Body' >
       {!openMsg ?
       <ul className='contacts'>
-        {notificationResponse.map(
+        {notificationResponse?.map(
           (data, i) => (
             <li
               className='active dlab-chat-user'
+              onClick={() => setOpenMsg(true)}
              
             >
               <div className='d-flex bd-highlight'>
@@ -28,8 +29,13 @@ const Notification = ({ notificationResponse }) => {
                   <span className='online_icon'></span>
                 </div>
                 <div className='user_info'>
+                  <div className='d-flex'>
                   <span>{emailSplitFunction(data.userFrom.userName)} </span>
+                  <span>1 min ago</span>
+                  </div>
+                
                   <p>{data.content}</p>
+                
                 </div>
               </div>
             </li>
