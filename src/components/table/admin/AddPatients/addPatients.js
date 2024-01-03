@@ -151,9 +151,9 @@ function AddPatientListTable({
             : "---"}
         </td>
 
-        {/* <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
-        </td> */}
+        </td>
         <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
       </tr>
     ));
@@ -183,7 +183,7 @@ function AddPatientListTable({
               </span>
             </th>
 
-            {/* <th>STATUS</th> */}
+            <th>STATUS</th>
             <th>Upload</th>
           </tr>
         </thead>
