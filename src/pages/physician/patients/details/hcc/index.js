@@ -327,7 +327,6 @@ const Hcc = ({ patientHccResult }) => {
       `dbservice/patient/get?patientId=${patientId}`
     );
     setPatienIdDetails(response.data);
-    console.log(response.data)
     var result = response.data.response;
   }
 
@@ -358,7 +357,6 @@ const Hcc = ({ patientHccResult }) => {
     // );
     if (patientHccResult) {
       var result = patientHccResult;
-      console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -395,8 +393,6 @@ const Hcc = ({ patientHccResult }) => {
         });
 
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        // setSelectedDosValue(dosYearArr[0].value);
-        // console.log(highestDOS)
 
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
@@ -604,7 +600,6 @@ const Hcc = ({ patientHccResult }) => {
 
 
 
-        console.log(suggestListAll)
 
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -619,7 +614,6 @@ const Hcc = ({ patientHccResult }) => {
         setDeletedHccList(deleteHccList);
 
 
-        console.log(validDisArray);
 
 
         var capturedSectionsColorsMatching = [];
@@ -752,7 +746,6 @@ const Hcc = ({ patientHccResult }) => {
         })
 
 
-        console.log(encounterDateArr)
 
 
         var encounterDateArrDublicatesRemove = getUniqueListBy(encounterDateArr, "name");
@@ -765,14 +758,6 @@ const Hcc = ({ patientHccResult }) => {
         })
 
         setEncounterDateMatching(encounterDateColorsMatching);
-
-
-        console.log(capturedSectionsColorsMatching)
-        console.log(encounterDateColorsMatching)
-
-
-
-
         var meatListArr = [];
         var meatMoniterHead = [];
         var meatEvaluteHead = [];
@@ -935,30 +920,14 @@ const Hcc = ({ patientHccResult }) => {
       if (result.radiologyFileDetail != null) {
         if (result.radiologyFileDetail.length != 0) {
           var dosYearArrFile = [];
-
-          // for (var key in result.radiologyFileDetail[0].documentDos) {
-          //   dosYearArrFile.push({ value: key, label: key });
-          // }
-
           result.radiologyFileDetail.map((res, index) => {
-            // console.log(res)
-
             for (var key in res.documentDos) {
-              console.log(res.documentDos[key])
               dosYearArrFile.push({ value: key, label: key + " - " + res.documentDos[key].testName });
             }
-
-
-          })
-
-          console.log(dosYearArrFile)
-          // for (var key in resultTest.radiologyFileDetail[0].documentDos) {
-          //   dosYearArrFile.push({ value: key, label: key });
-          // }
+          });
           setFileRadiologyDateofServiceList(dosYearArrFile);
           setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
           getPatientPdfFileRadiology(result.radiologyFileDetail[0].azureBlobPath, tenId);
-          console.log(dosYearArrFile[0])
           setRadiologyFileDetailCheck(true);
 
 
@@ -1023,7 +992,6 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    console.log("dasdjmasjdnmasvdas")
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
@@ -1268,14 +1236,7 @@ const Hcc = ({ patientHccResult }) => {
 
 
   const getSectionPageNumber = async (header,encounterDate) => {  
-    console.log(patientFileDTO)  
     var fileId = patientFileDTO.fileId;
-    // const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //   `dbservice/pageNumber?header=hpi&fileId=7b319ab4-db10-4f3b-94ad-4ff27757f830&dos=06/13/2023`
-    // );
-
-
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
       `dbservice/pageNumber?header=${header}&fileId=${fileId}&dos=${encounterDate}`
@@ -1284,9 +1245,7 @@ const Hcc = ({ patientHccResult }) => {
     var result = response.data;
     if(result?.length){
       var pageNumber =  result[0] - 1;
-      console.log(pageNumber)
     setFileInitialPage(pageNumber)
-    // setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
     }
   };
 
@@ -1352,7 +1311,6 @@ const Hcc = ({ patientHccResult }) => {
         var result = response.data;
         if(result?.length){
           var pageNumber =  result[0] - 1;
-          console.log(pageNumber)
         setFileInitialPage(pageNumber)
         }
 
@@ -1945,7 +1903,6 @@ const Hcc = ({ patientHccResult }) => {
     );
     if (response.data) {
       var result = response.data.response;
-      console.log(result)
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -1981,8 +1938,6 @@ const Hcc = ({ patientHccResult }) => {
         });
 
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        // setSelectedDosValue(dosYearArr[0].value);
-        // console.log(highestDOS)
 
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
@@ -2527,7 +2482,6 @@ const Hcc = ({ patientHccResult }) => {
 
 
   const getCaptureSectionBackground = (value, documentPlace,encounterDate,actualDescription,testModal) => {
-    // console.log(value)
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
