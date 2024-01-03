@@ -3,7 +3,10 @@ import TableStyle from "../../table.module.css";
 import { Empty, Progress, Steps, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
+import {
+  completedReport,
+  getPatientsList,
+} from "../../../../store/actions/adminAction/fileProcessingActions";
 import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 
@@ -38,14 +41,14 @@ function FileProcessingTable({ patinetListAll }) {
   }, []);
 
   useEffect(() => {
-    if (activeId) {
-      parsedData?.map((info, index) => {
+    if (activeId && parsedData) {
+      parsedData?.map((info) => {
         if (info?.patientId === activeId) {
           dispatch(getPatientsList(info?.patientId, info?.processStageId));
         }
       });
     }
-  }, [activeId,parsedData]);
+  }, [parsedData, activeId]);
 
   const handleToggleStepper = (index, data) => {
     setActiveId(data.patientId);
@@ -383,33 +386,17 @@ function FileProcessingTable({ patinetListAll }) {
   };
 
   const renderRows = () => {
-    if (parsedData.length > 0) {
-      return parsedData.map((data, index) => (
-        <tr key={index}>
-          <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
-          <td className={TableStyle.childBorder}>
-            {data?.patientName ? data?.patientName : "---"}
-          </td>
-          <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
-            {renderUploadStatus(data, index)}
-          </td>
-        </tr>
-      ));
-    } else if (selectedRowTime?.length > 0) {
-      const lastData = [selectedRowTime[selectedRowTime.length - 1]];
-      return lastData?.map((data, index) => (
-        <tr key={index}>
-          <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
-          <td className={TableStyle.childBorder}>
-            {data?.patientName ? data?.patientName : "---"}
-          </td>
-          <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
-            {renderUploadStatus(data, index)}
-          </td>
-        </tr>
-      ));
-    }
-  
+    return parsedData?.map((data, index) => (
+      <tr key={index}>
+        <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
+        <td className={TableStyle.childBorder}>
+          {data?.patientName ? data?.patientName : "---"}
+        </td>
+        <td className={TableStyle.lastBorder} style={{ width: "75%" }}>
+          {renderUploadStatus(data, index)}
+        </td>
+      </tr>
+    ));
   };
   return (
     <div className={TableStyle.classContaineer}>
