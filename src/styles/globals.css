@@ -4356,7 +4356,7 @@ a.active {
 }
 
 .bg-primary {
-  background-color: var(--primary) !important;
+  /* background-color: var(--primary) !important; */
 }
 
 .bg-secondary {
