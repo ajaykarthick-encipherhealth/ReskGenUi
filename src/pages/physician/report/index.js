@@ -15,13 +15,13 @@ import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
-import Spinner from "../../../components/spinner/spinner";
 import Export, { debounce } from "./Export";
 import {
   getReceivedDetails,
   getReportDetails,
   getSentDetails,
 } from "../../../store/actions/ReportActions";
+import SpinnerDots from "../../../components/spinner";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -244,7 +244,7 @@ const index = () => {
       <div className={styles.maincontainer}>
         <div class="content-body">
           {!ReportPatientDetails?.response ? (
-            <Spinner />
+            <SpinnerDots />
           ) : (
             <div className="container-fluid">
               <div className="row">
