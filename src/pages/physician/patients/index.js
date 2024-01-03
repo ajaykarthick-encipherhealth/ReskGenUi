@@ -126,54 +126,21 @@ export default function Patient() {
   const filteratedDashboardData = useSelector(
     (state) => state.patients.filteredList
   );
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
+  const dayDateFormated=filteratedDashboardData?.date? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY"):dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY")
+  const [defaultStartDate, setDefaultStartDate] = useState(dayjs(dayDateFormated).format('MM-DD-YYYY'));
+  const [defaultEndDate, setDefaultEndDate] = useState(dayjs(dayDateFormated).format('MM-DD-YYYY'));
+  
+  useEffect(() => {
+    setDefaultStartDate(dayjs(dayDateFormated).format('MM-DD-YYYY'));
+    setDefaultEndDate(dayjs(dayDateFormated).format('MM-DD-YYYY'));
+  }, [dayDateFormated]);
 
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  const statusMessage = {
-    subscribed: "Subscribed",
-    unsubscribed: "Unsubscribed",
-  };
-  const content = (
-    <div style={{ display: "flex" }}>
-      <div style={{ marginBottom: "8px" }}>
-        <Button>Button 1</Button>
-        <Button>Button 2</Button>
-      </div>
-      <hr></hr>
-      <div>
-        <RangePicker />
-      </div>
-    </div>
-  );
-  const filterChangePatientId = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientId"].value = value;
-    setFilters(_filters);
-  };
-  const filterChangePatientName = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientName"].value = value;
-    setFilters(_filters);
-  };
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -345,7 +312,7 @@ export default function Patient() {
   };
 
   const getNameSearch = async (searchtext) => {
-    console.log(searchtext);
+    // console.log(searchtext);
     setIsLoading(true);
 
     // dispatch(getSearchPatients(0,searchtext));
@@ -940,9 +907,7 @@ export default function Patient() {
     }
   };
 
-  const dayDateFormated=filteratedDashboardData?.date? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY"):dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY")
-  // const statusDateFormated=dayjs(filteratedDashboardData?.date).format("YYYY:MM:DD")
-
+ 
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -994,12 +959,11 @@ export default function Patient() {
                                 }}
                                 defaultValue={
                                   filteratedDashboardData 
-                                  ? [
-                                      dayjs(dayDateFormated).format('MM-DD-YYYY'),
-                                      dayjs(dayDateFormated).format('MM-DD-YYYY'),
-                                      
-                                    ]
-                                  : ["Start date", "End date"]
+                                    ? [
+                                        dayjs(defaultStartDate, 'MM-DD-YYYY'),
+                                        dayjs(defaultEndDate, 'MM-DD-YYYY'),
+                                      ]
+                                    : []
                                 }
                                
                                 />
