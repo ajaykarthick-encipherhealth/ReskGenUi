@@ -61,10 +61,10 @@ const Header = ({ onNote }) => {
     setUserName(userName);
     if (userRoleLocal == "Coder-L2") {
       setMenuList(L2AuditMenuList);
-    } else if(userRoleLocal == "physician") {
-      setMenuList(PhysicanMenuList);
-    }else {
+    } else if(userRoleLocal == "admin") {
       setMenuList(AdminMenuList);
+    }else {
+      setMenuList(PhysicanMenuList);
     }
     if (loginCheck != "true") {
       Swal.fire({

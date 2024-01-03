@@ -40,7 +40,6 @@ export default function UserLogin() {
         postData
       );
       var result = response.data.response;
-      console.log(result);
       if (response.data.status == "SUCCESS") {
         if (emailSplit[0] === "ajgith01") {
           localStorage.setItem("userRole", "Coder-L2");
