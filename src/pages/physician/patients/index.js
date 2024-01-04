@@ -766,7 +766,6 @@ export default function Patient() {
     }
   };
 
-  console.log(filteratedDashboardData)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
