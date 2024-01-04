@@ -87,7 +87,7 @@ const Notifications = () => {
       <div className={styles.msgCOntainer}>
         <span className={styles.description}>{info.content}</span>
         <div className={styles.time}>
-          {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp; {moment(info.createdAt).format("hh:mm:A")} &nbsp; {emailSplitFunction(info.userFrom.userName)} ({info.userFrom?.role[0]})
+          {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp; {moment(info.createdAt).format("hh:mm:A")} &nbsp; {emailSplitFunction(info.userFrom.userName)} ({info.userFrom?.role})
         </div>
       </div>
     </div>
