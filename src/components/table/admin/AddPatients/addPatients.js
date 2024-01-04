@@ -74,7 +74,6 @@ function AddPatientListTable({
 
     setDetailsContent(sortedContent);
   };
-console.log(patinetListAll,"datatest");
 
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
