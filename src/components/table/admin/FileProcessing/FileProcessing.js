@@ -10,6 +10,23 @@ import {
 import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 
+export const eventStreming=(ENDPOINTS,setParsedData)=>{
+  const id = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  const sse = new EventSource(
+    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
+  );
+  sse.addEventListener("file-status-event", (event) => {
+    const data = JSON.parse(event.data);
+    setParsedData(data);
+  });
+  sse.onerror = () => {
+    sse.close();
+  };
+  return () => {
+    sse.close();
+  };
+}
 function FileProcessingTable({ patinetListAll }) {
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)

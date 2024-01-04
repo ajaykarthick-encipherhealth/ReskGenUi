@@ -10,7 +10,7 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { notification } from "antd";
+import { Spin, notification } from "antd";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
@@ -21,6 +21,8 @@ import { getPatients } from "../../../store/actions/adminAction/patientsActions"
 import FileUploading from "../file-processing/FileUploading";
 import Addpatients from "../file-processing/Addpatiens";
 import SpinnerDots from "../../../components/spinner";
+import { LoadingOutlined } from "@ant-design/icons";
+import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
 
 export default function Patient() {
   const navigate = useRouter();
@@ -54,10 +56,10 @@ export default function Patient() {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-
+  const [parsedData, setParsedData] = useState([]);
+ 
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-
   const response = useSelector((state) => state.adminList.patients);
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -70,12 +72,22 @@ export default function Patient() {
     // setIsLoading(false);
     dispatch(getPatients(pageNo, pageSize));
   }, [pageNo, pageSize]);
+  useEffect(()=>{
+    eventStreming(ENDPOINTS, setParsedData);
+  },[])
 
   useEffect(() => {
+    // parsedData?.length > 0 &&
+    //   parsedData?.some((data) => {
+    //     return (
+    //       data?.proceddstageChart === "FINISHED"  && setFinished(true)
+    //       // dispatch(getPatients(pageNo, pageSize))
+    //     );
+    //   });
     if (response?.response) {
       getAllList(response?.response);
     }
-  }, [response, pageNo, pageSize]);
+  }, [parsedData, response, pageNo, pageSize]);
 
   const getAllList = (info) => {
     if (info) {
@@ -221,94 +233,69 @@ export default function Patient() {
   };
 
   const processstatusBodyTemplate = (rowData) => {
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
+    const isFinished =
+      parsedData?.length > 0 &&
+      parsedData?.some(
+        (data) =>
+          data?.patientId === rowData?.patientId &&
+          data?. processStageChart === "FINISHED"
+      );
 
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
-        );
-
-      case "PENDING":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
-
-      case "DECLINED":
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge notComputed-text`}>Not Computed</span>
-          </div>
-        );
-      case "COMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge computed-text`}>Computed</span>
-          </div>
-        );
-      case "HOLD":
-        return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
-        );
-      case null:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
-    }
+    const rowStatus =
+      rowData?.computing === 0 && parsedData?.length === 0
+        ? "Not Computed"
+        : rowData?.computing === 1
+        ? "Processing"
+        : isFinished || rowData?.computing === 2 
+        ? "Computed"
+        : "Not Computed";
+        console.log(isFinished)
+    return (
+      <div className="patient-status">
+        <div
+          className={visitStyles.roleStyle}
+          style={{
+            backgroundColor:
+              rowStatus === "Computed"
+                ? "#cceeff "
+                : rowStatus === "Processing"
+                ? "#dfd8f3"
+                : "#F1DEDA",
+            color:
+              rowStatus === "Computed"
+                ? " #285563"
+                : rowStatus === "Processing"
+                ? "#452b90"
+                : "#BA704F",
+          }}
+        >
+          {rowStatus === "Processing" && (
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 16,
+                  }}
+                  spin
+                />
+              }
+              style={{ color: "#452b90", margin: "0 10px 0 0" }}
+            />
+          )}
+          {rowStatus}
+        </div>
+      </div>
+    );
   };
 
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex ">
-        {/* {rowData.computing == 2 ? (
-          <button
-            onClick={() => gotoPatientDetails(rowData)}
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeOutlined className="text-white" />
-          </button>
-        ) : (
-          <button
-            disabled
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeInvisibleOutlined className="text-white" />
-          </button>
-        )} */}
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-          // style={{
-          //   width: "182px",
-          //   height: "32px",
-          //   borderRadius: "10px",
-          //   border: "0.5px dashed #C4C4C4",
-          //   backgroundColor:"transparent"
-          // }}
         >
           <FontAwesomeIcon icon={faUpload} fontSize={11} />
-
-          {/* <span style={{ fontSize: "15px", color: "#A8A8AA" }}>Upload</span> */}
         </button>
       </div>
     );
@@ -359,7 +346,7 @@ export default function Patient() {
 
   const submitPatientFile = async () => {
     // setIsLoadingBtn(false);
-    setAddPatient(false);
+    // setAddPatient(false);
     const formData = new FormData();
     formData.append("file", selectFile);
     formData.append("dos", inputValue.year);
@@ -387,7 +374,10 @@ export default function Patient() {
       notification.success({
         message: "Patient File Upload Successfully!",
       });
-      navigate.push("/admin/file-processing");
+      // navigate.push("/admin/file-processing");
+      dispatch(getPatients(pageNo, pageSize));
+      // eventStreming(ENDPOINTS, setParsedData);
+      setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
       // dispatch(getMessagesList())

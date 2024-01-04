@@ -74,44 +74,66 @@ function AddPatientListTable({
 
     setDetailsContent(sortedContent);
   };
-console.log(patinetListAll,"datatest");
 
   const renderRows = () => {
-    return patinetListAll?.map((data, index) => (
-      <tr
-        key={index}
-        onClick={() => {
-          dispatch(
-            selectedRoWDetails({
-              patientId: data?.patientId,
-              processStageId: data?.processStageId,
-            })
-          );
-        }}
-      >
-        <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
-          {data.patientId}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.patientName}
-        </td>
+    return patinetListAll?.length === 0 ? (
+      <Empty />
+    ) : (
+      <>
+        {patinetListAll?.map((data, index) => (
+          <tr
+            key={index}
+            onClick={() => {
+              dispatch(
+                selectedRoWDetails({
+                  patientId: data?.patientId,
+                  processStageId: data?.processStageId,
+                })
+              );
+            }}
+          >
+            <td
+              className={TableStyle.firstTdBorder}
+              onClick={handleTableRowClick}
+            >
+              {data.patientId}
+            </td>
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+            >
+              {data.patientName}
+            </td>
 
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.computedDate
-            ? moment(data.computedDate).format("MM-DD-YYYY")
-            : "---"}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.createdDate
-            ? moment(data.createdDate).format("MM-DD-YYYY")
-            : "---"}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {statusBodyTemplate(data)}
-        </td>
-        <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
-      </tr>
-    ));
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+            >
+              {data.computedDate
+                ? moment(data.computedDate).format("MM-DD-YYYY")
+                : "---"}
+            </td>
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+            >
+              {data.createdDate
+                ? moment(data.createdDate).format("MM-DD-YYYY")
+                : "---"}
+            </td>
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+            >
+              {statusBodyTemplate(data)}
+            </td>
+            <td className={TableStyle.lastBorder}>
+              {actionBodyTemplate(data)}
+            </td>
+          </tr>
+        ))}
+      </>
+    );
   };
 
   return (
