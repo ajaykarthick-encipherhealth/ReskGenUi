@@ -68,9 +68,7 @@ const Header = ({ onNote }) => {
 
     setUserRole(userRoleLocal);
     setUserName(userName);
-    if (userRoleLocal == "Coder-L2") {
-      setMenuList(L2AuditMenuList);
-    } else if (userRoleLocal == "admin") {
+     if (currentUserRole?.toLowerCase() === "admin") {
       setMenuList(AdminMenuList);
     } else {
       setMenuList(PhysicanMenuList);
@@ -92,7 +90,7 @@ const Header = ({ onNote }) => {
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
-  }, []);
+  }, [currentUserRole]);
 
   const onClose = () => {
     setOpen(false);

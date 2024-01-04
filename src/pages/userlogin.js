@@ -98,7 +98,7 @@ export default function UserLogin() {
   const items = [];
   const data = role?.map((info) => {
     if(info.toLowerCase() ==="admin"){
-      items?.push({ value: info, label: info },{ value: "L1Coder", label: 'L1Coder' });
+      items?.push({ value: "Admin", label:"Admin"},{ value: "L1Coder", label: 'L1Coder' });
     }
     else{
       items?.push({ value: info, label: info })
