@@ -12,7 +12,7 @@ import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
-import { getpatientsList } from "../../../../store/actions/PatientsActions";
+import { getFilteredList, getpatientsList } from "../../../../store/actions/PatientsActions";
 
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -253,13 +253,6 @@ const DailyTask = () => {
       ],
     };
   };
-  const handleDays = (status) => {
-    if (status) {
-      const url = `processedStatus=${status?.toUpperCase()}&processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`;
-      dispatch(getpatientsList(0, url));
-    }
-  };
-
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -289,8 +282,12 @@ const DailyTask = () => {
                           className={styles.headerTitle}
                           style={{ fontSize: "16px" }}
                           onClick={() => {
-                            const url = `processedStart=${selectedDate}T00%3A00%3A00.000Z&processedEnd=${selectedDate}T23%3A07%3A59.016Z`;
-                            dispatch(getpatientsList(0, url));
+                            dispatch(
+                              getFilteredList({
+                                dayDate: data?.dateString,
+                              })
+                            );
+                            router.push("/physician/patients");
                           }}
                         >
                           <div className={styles.headerDisplay}>
@@ -320,13 +317,19 @@ const DailyTask = () => {
                             <div style={{ paddingLeft: "10px" }}>
                               {bullets?.map((item) => {
                                 return (
-                                  <div
-                                    className={styles.container}
-                                    onClick={() => {
-                                      handleDays(item?.name);
-                                    }}
-                                  >
-                                    <div style={{ display: "flex" }}>
+                                  <div className={styles.container}>
+                                    <div
+                                      style={{ display: "flex" }}
+                                      onClick={() => {
+                                        dispatch(
+                                          getFilteredList({
+                                            date: data?.dateString,
+                                            status: item?.name,
+                                          })
+                                        );
+                                        router.push("/physician/patients");
+                                      }}
+                                    >
                                       <div
                                         className={styles.bgColor}
                                         style={{

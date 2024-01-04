@@ -31,12 +31,11 @@ import { notification } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
-import Spinner from "../../../../components/spinner/spinner";
-
 import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
+import SpinnerDots from "../../../../components/spinner";
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -119,6 +118,7 @@ const Details = ({}) => {
 
   const [patientResultReload, setPatientResultReload] = useState(false);
   const [selectModalName, setSelectModalName] = useState(false);
+  const selectPatientId = useSelector((state) => state.patients?.patiendId);
 
   const flagPostList = [
     {
@@ -262,10 +262,17 @@ const Details = ({}) => {
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
-    setLocalPatientId(patientId);
 
-    getPatientDetails(patientId, orgId, tenId);
-    getPatientIdDetails(patientId);
+    setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
+
+    getPatientDetails(
+      selectPatientId ? selectPatientId?.patirntId : patientId,
+      orgId,
+      tenId
+    );
+    getPatientIdDetails(
+      selectPatientId ? selectPatientId?.patirntId : patientId
+    );
 
     var userSpinner = (
       <div className={visitStyles.userDetailsCard}>
@@ -288,7 +295,6 @@ const Details = ({}) => {
     );
     setPatienIdDetails(response.data.response);
     var result = response.data.response;
-
     const menu = (
       <Menu>
         {result.processedStatus != "HOLD" ? (
@@ -476,6 +482,7 @@ const Details = ({}) => {
       ENDPOINTS.apiEndoint +
         `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}&year=${year}`
     );
+
     if (response.data) {
       var result = response.data.response;
 
@@ -771,6 +778,7 @@ const Details = ({}) => {
       deletedDiseases: patientDocumentResult.deletedDiseases,
       dos: selectedDosValue,
     };
+
 
    try {
       const response = await axios.post(
@@ -1170,6 +1178,9 @@ const Details = ({}) => {
   };
 
   const handleDatePickerChange = (dateString) => {
+
+    // getFiltePatientListDate(dateString[0],dateString[1])
+
   };
 
   const handleActionClick = (value) => {
@@ -1259,7 +1270,7 @@ const Details = ({}) => {
         <div className={visitStyles.headerFixed}>
           <div class="content-body">
             {isLoading ? (
-              <Spinner />
+              <SpinnerDots />
             ) : (
               <div
                 className={`container-fluid ${visitStyles.container_fluid_patient}`}
@@ -1328,7 +1339,7 @@ const Details = ({}) => {
                       </div>
                       <div className="col-xl-1 col-sm-12">
                         <div className={visitStyles.priorityStatus}>
-                          {patienIdDetails.priority == "URGENT" ? (
+                          {patienIdDetails?.priority == "URGENT" ? (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i>{SVGICON.alert}</i>{" "}
                               <span
@@ -1355,6 +1366,7 @@ const Details = ({}) => {
                               >
                                 High
                               </span>{" "}
+
                             </div>
                           ) : patienIdDetails.priority == "NORMAL" ? (
                             <div className={visitStyles.priorityStatusIcon}>
@@ -1371,6 +1383,7 @@ const Details = ({}) => {
                                 Normal
                               </span>{" "}
                             </div>
+
                           ) : (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i className={TableStyle.lowFlag}>

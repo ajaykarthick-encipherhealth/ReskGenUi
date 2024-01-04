@@ -1,12 +1,14 @@
 import {
   PatientsList,
   SearchPatientsList,
-  ChangePriority
+  ChangePriority,
 } from "../../services/PatientsListSevice";
 
 export const PATIENTS_LIST = "PAIENTS_LIST";
 export const SEARCH_PATIENT = "SEARCH_PATIENT";
-export const CHANGE_PRIORITY='CHANGE_PRIORITY'
+export const CHANGE_PRIORITY = "CHANGE_PRIORITY";
+export const FILTERATION='FILTERATION';
+export const PATIENT_ID='PATIENT_ID'
 
 export const getpatientsList = (page, url) => {
   return (dispatch) => {
@@ -23,6 +25,16 @@ export const getpatientsList = (page, url) => {
   };
 };
 
+export const getFilteredList = (data) => ({
+  type: FILTERATION,
+  payload: data,
+});
+
+export const getPatientID = (data) => ({
+  type: PATIENT_ID,
+  payload: data,
+});
+
 export const getSearchPatients = (pagenum, search) => {
   return (dispatch) => {
     try {
@@ -38,16 +50,11 @@ export const getSearchPatients = (pagenum, search) => {
   };
 };
 
-export const getPriorityChange = (patientId,year,priority) => {
-  console.log(patientId,year,priority)
+export const getPriorityChange = (patientId, year, priority) => {
   return (dispatch) => {
     try {
-      ChangePriority(patientId,year,priority).then((response) => {
-        // dispatch({
-        //   type: SEARCH_PATIENT,
-        //   payload: response,
-        // });
-        console.log(response)
+      ChangePriority(patientId, year, priority).then((response) => {
+        console.log(response);
       });
     } catch (err) {
       console.log(err);

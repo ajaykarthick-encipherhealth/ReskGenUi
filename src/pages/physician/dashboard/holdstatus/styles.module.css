@@ -46,4 +46,5 @@
 .tabelCell {
   height:40px;
   background: #F0F6FE !important;
+  cursor:pointer;
 }

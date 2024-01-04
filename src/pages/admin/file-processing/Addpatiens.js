@@ -2,7 +2,7 @@ import React from "react";
 import { Offcanvas,Button } from "react-bootstrap";
 import visitStyles from "../../../styles/visitdata.module.css";
 import Form from "react-bootstrap/Form";
-import Spinner from "../../../components/spinner/spinner";
+import Spinner from "../../../components/spinner";
 
 const Addpatients = ({
   addPatientId,

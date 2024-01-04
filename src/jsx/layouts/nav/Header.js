@@ -8,7 +8,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Logout } from "../../../store/actions/AuthActions";
 import Swal from "sweetalert2";
-import { AdminMenuList,MenuList, PhysicanMenuList, L2AuditMenuList } from "./Menu";
+import {
+  AdminMenuList,
+  MenuList,
+  PhysicanMenuList,
+  L2AuditMenuList,
+} from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -22,10 +27,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 
-
-import { getNotificationAlert ,getNotificationList,getNotificationAlertClear} from "../../../store/actions/NotificationAction";
+import {
+  getNotificationAlert,
+  getNotificationList,
+  getNotificationAlertClear,
+} from "../../../store/actions/NotificationAction";
 
 import Notification from "../../../components/notification/index";
+import { getFilteredList } from "../../../store/actions/PatientsActions";
 
 const Header = ({ onNote }) => {
   const dispatchValue = useDispatch();
@@ -45,6 +54,7 @@ const Header = ({ onNote }) => {
   const notificationResponse = useSelector(
     (state) => state?.notificationDatas?.notificationList
   );
+  const currentUserRole = useSelector((state) => state.auth.selectedRole);
 
   useEffect(() => {
     var loginCheck = localStorage.getItem("loginCheck");
@@ -60,9 +70,9 @@ const Header = ({ onNote }) => {
     setUserName(userName);
     if (userRoleLocal == "Coder-L2") {
       setMenuList(L2AuditMenuList);
-    } else if(userRoleLocal == "admin") {
+    } else if (userRoleLocal == "admin") {
       setMenuList(AdminMenuList);
-    }else {
+    } else {
       setMenuList(PhysicanMenuList);
     }
     if (loginCheck != "true") {
@@ -82,8 +92,6 @@ const Header = ({ onNote }) => {
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
-
-
   }, []);
 
   const onClose = () => {
@@ -148,7 +156,6 @@ const Header = ({ onNote }) => {
     return () => {
       sse.close();
     };
-
 
     // setUserIdDetails(response.data.response);
   };
@@ -249,13 +256,8 @@ const Header = ({ onNote }) => {
   };
 
   const notificationDrawer = async () => {
-
     setOpen(true)
-    // dispatchValue(getNotificationList(userIdDetails.id));
     dispatchValue(getNotificationAlertClear([]));
-
-
-    // setNotificationResponse(notificationResponse.data)
   };
 
   const emailSplitFunction = (email) => {
@@ -284,6 +286,9 @@ const Header = ({ onNote }) => {
                             : ""
                         }`}
                         key={index}
+                        onClick={() => {
+                          dispatch(getFilteredList(null));
+                        }}
                       >
                         <Link href={data.to} className="d-flex">
                           <div className="menu-icon">{data.iconStyle}</div>{" "}
@@ -336,7 +341,10 @@ const Header = ({ onNote }) => {
                             {SVGICON.dashboardNotification}
                           </Badge>
                         </div>
-                        <div className="header-media d-flex"   onClick={logoutFunction}>
+                        <div
+                          className="header-media d-flex"
+                          onClick={logoutFunction}
+                        >
                           {/* <Image src={IMAGES.profileImage}/> */}
 
                           <div>
@@ -353,10 +361,7 @@ const Header = ({ onNote }) => {
                               </Dropdown.Toggle>
                               <Dropdown.Menu align="end">
                                 <div className=" border-0 mb-0">
-                                  <span
-                                  
-                                    className="dropdown-item ai-icon "
-                                  >
+                                  <span className="dropdown-item ai-icon ">
                                     {SVGICON.Logout}{" "}
                                     <span className="ms-2">Logout </span>
                                   </span>
@@ -373,7 +378,8 @@ const Header = ({ onNote }) => {
                               <span className="ms-2 d-flex mt-1">
                                 {/* {SVGICON.Logout}{" "} */}
                                 <h6 className="logout-name">
-                                  {userIdDetails?.role[0]}{" "}
+                                  {/* {userIdDetails?.role[0]}{" "} */}
+                                  {currentUserRole}
                                 </h6>
                               </span>
                             ) : null}

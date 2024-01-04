@@ -1,13 +1,12 @@
-import React, { use, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
-import calender from "../../../../images/dashboard/calender.png";
 import HeadTitle from "../../../../components/headtitle";
 import { Modal } from "antd";
 import { getHoldStatusData } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
-import TableStyle from "../../../../components/table/table.module.css";
 import { useRouter } from "next/router";
+import { getPatientID } from "../../../../store/actions/PatientsActions";
 
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
@@ -35,7 +34,6 @@ const HoldStatus = () => {
         }
       });
     }
-
     return {
       patientId: item.patientId,
       testValue: testValue,
@@ -52,7 +50,14 @@ const HoldStatus = () => {
       <tbody className={styles.body}>
         {processedData?.length > 0 ? (
           processedData?.map((item, index) => (
-            <tr key={index} className={styles.tabelCell}>
+            <tr
+              key={index}
+              className={styles.tabelCell}
+              onClick={() => {
+                dispatch(getPatientID({ patirntId: item.patientId }));
+                router.push("/physician/patients/details");
+              }}
+            >
               <td className={styles.description}>{item.patientId}</td>
               <td className={styles.description}>{item.testValue}</td>
             </tr>

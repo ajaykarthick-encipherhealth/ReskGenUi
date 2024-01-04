@@ -4,19 +4,26 @@ import ENDPOINTS from "../utility/enpoints";
 import axios from "../utility/axiosConfig";
 import { useRouter } from "next/router";
 import LoginBack from "../images/logo/login-back.jpg";
-import { notification } from "antd";
+import { Dropdown, Select, Space, notification } from "antd";
 import Image from "next/image";
 import { IMAGES } from "../jsx/constant/theme";
+import { useDispatch } from "react-redux";
+import { selectedUserRole } from "../store/actions/AuthActions";
 
 export default function UserLogin() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState(null);
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
   // const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [displayRoles, setDisplayRoles] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [roleError, setRoleError] = useState(false);
 
+  const dispatch=useDispatch()
   const onLogin = async (e) => {
     setIsLoading(true);
     e.preventDefault();
@@ -34,6 +41,7 @@ export default function UserLogin() {
       const postData = {
         username: email,
         password: password,
+        role: role,
       };
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `securityservice/auth/login`,
@@ -41,11 +49,14 @@ export default function UserLogin() {
       );
       var result = response.data.response;
       if (response.data.status == "SUCCESS") {
-        if (emailSplit[0] === "ajgith01") {
-          localStorage.setItem("userRole", "Coder-L2");
-        } else {
-          localStorage.setItem("userRole", result?.roles[0]?.toLowerCase());
-        }
+        // if (emailSplit[0] === "ajgith01") {
+        //   localStorage.setItem("userRole", "Coder-L2");
+        // } else {
+        // localStorage.setItem("userRolesList", result?.roles);
+        setRole(result?.roles);
+        // localStorage.setItem("userRole", "physician");
+
+        // }
         localStorage.setItem("token", result.access_token);
         localStorage.setItem("tenantId", result.tenantId);
         localStorage.setItem("userId", result.userEmail);
@@ -53,20 +64,23 @@ export default function UserLogin() {
         localStorage.setItem("userName", emailSplit[0]);
         localStorage.setItem("loginCheck", true);
 
-        const userRoleLocal = localStorage.getItem("userRole");
-        if (userRoleLocal === "admin") {
-          router.push("/admin/user");
-        } else {
-          router.push("/physician/dashboard");
-        }
-        notification.success({
-          message: result?.message ? result?.message : "Login Successfully",
-          duration: 1,
-        });
+        // const userRoleLocal = localStorage.getItem("userRole");
+        // if (userRoleLocal === "admin") {
+        //   router.push("/admin/user");
+        // } else {
+        //   router.push("/physician/dashboard");
+        // }
+        // notification.success({
+        //   message: response?.data?.message
+        //     ? response?.data?.message
+        //     : "Login Successfully",
+        //   duration: 1,
+        // });
+        setDisplayRoles(true);
       } else {
         setIsLoading(false);
         notification.error({
-          message: result?.message,
+          message: response?.data?.message,
           duration: 1,
         });
       }
@@ -79,6 +93,34 @@ export default function UserLogin() {
       // notification.error({
       //     message: "Login Failed"
       // });
+    }
+  };
+  const items = [];
+  const data = role?.map((info) => {
+    if(info.toLowerCase() ==="admin"){
+      items?.push({ value: info, label: info },{ value: "L1Coder", label: 'L1Coder' });
+    }
+    else{
+      items?.push({ value: info, label: info })
+    }
+  });
+  const onSubmitRole = (e) => {
+    e.preventDefault();
+    notification.success({
+      message: "Login Successfully",
+      duration: 1,
+    });
+    if (!selectedRole) {
+      setRoleError(true);
+    } else {
+      setRoleError(false);
+      if (selectedRole === "admin" && !roleError) {
+        dispatch(selectedUserRole(selectedRole.toUpperCase()))
+        router.push("/admin/user");
+      } else if(selectedRole === "l1coder" && !roleError) {
+        dispatch(selectedUserRole(selectedRole.toUpperCase()))
+        router.push("/physician/dashboard");
+      }
     }
   };
 
@@ -116,41 +158,93 @@ export default function UserLogin() {
                             <div className='bg-green-300 text-green-900 border border-green-900 p-1 my-2'>
                                 {props.successMessage}
                             </div>
-                        )}					 */}
-              <form onSubmit={onLogin}>
-                <div className="mb-4">
-                  <label className="mb-1 text-dark">Email</label>
-                  <input
-                    type="email"
-                    className="form-control form-control-lg"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  {errors.email && (
-                    <div className="text-danger fs-12">{errors.email}</div>
-                  )}
-                </div>
-                <div className="mb-4">
-                  <label className="mb-1 text-dark">Password</label>
-                  <input
-                    type="password"
-                    className="form-control form-control-lg"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  {errors.password && (
-                    <div className="text-danger fs-12">{errors.password}</div>
-                  )}
-                </div>
-                <div className="text-center mb-4">
-                  <button type="submit" className="btn btn-primary btn-block">
-                    {isLoading ? "Loading..." : "LOGIN"}
-                  </button>
-                </div>
-                {/* <p className="text-center">Not registered ?  
+                        )}	
+                        				 */}
+              {displayRoles ? (
+                <form onSubmit={onSubmitRole}>
+                  <div className="mb-4">
+                    <label className="mb-1 text-dark">Select Role</label>
+                    <div
+                      style={{
+                        height: "100px",
+                        marginTop: "5px",
+                      }}
+                    >
+                      <Select
+                        style={{ width: "100%", height: "2.75rem" }}
+                        placeholder="Select Role"
+                        onChange={(value) => {
+                          setSelectedRole(value?.toLowerCase());
+                          setRoleError(false);
+                        }}
+                        options={items}
+                      />
+                    </div>
+                    {roleError && (
+                      <span className="text-danger fs-12">
+                        Please Select Role
+                      </span>
+                    )}
+                  </div>
+                  <div className="d-flex">
+                    <div className="col-lg-6 mx-2">
+                      <button
+                        className="btn btn-primary btn-block"
+                        onClick={() => {
+                          setDisplayRoles(false);
+                          setIsLoading(false);
+                        }}
+                      >
+                        {"BACK"}
+                      </button>
+                    </div>
+                    <div className="col-lg-6">
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-block"
+                      >
+                        {"NEXT"}
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              ) : (
+                <form onSubmit={onLogin}>
+                  <div className="mb-4">
+                    <label className="mb-1 text-dark">Email</label>
+                    <input
+                      type="email"
+                      className="form-control form-control-lg"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    {errors.email && (
+                      <div className="text-danger fs-12">{errors.email}</div>
+                    )}
+                  </div>
+                  <div className="mb-4">
+                    <label className="mb-1 text-dark">Password</label>
+                    <input
+                      type="password"
+                      className="form-control form-control-lg"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {errors.password && (
+                      <div className="text-danger fs-12">{errors.password}</div>
+                    )}
+                  </div>
+                  <div className="text-center mb-4">
+                    <button type="submit" className="btn btn-primary btn-block">
+                      {isLoading ? "Loading..." : "LOGIN"}
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* <p className="text-center">Not registered ?  
                                 <Link to={"/signup"} className="btn-link text-primary"> Signup</Link>
                             </p>								 */}
-              </form>
             </div>
           </div>
         </div>

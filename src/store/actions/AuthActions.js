@@ -19,9 +19,14 @@ export const LOADING_TOGGLE_ACTION = '[Loading action] toggle loading';
 export const LOGOUT_ACTION = '[Logout action] logout action';
 export const NAVTOGGLE = 'NAVTOGGLE';
 export const PATIENT_DETAILS = '';
+export const SELECTEDROLE='SELECTEDROLE'
 
 
+export const selectedUserRole=(data)=>({
+    type:SELECTEDROLE,
+    payload:data
 
+})
 export function signupAction(email, password, navigate) {
 	
     return (dispatch) => {
