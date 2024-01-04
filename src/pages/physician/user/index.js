@@ -10,7 +10,7 @@ import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 import NavBar from "../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
-import AdminList from "../../../components/table/admin/adminList";
+import AdminList from "../../../components/table/admin/adminList/adminList";
 
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";

@@ -13,7 +13,7 @@ export const NotificationList = async (Id) => {
           },
         }
       );
-      return response.data;
+      return response.data.response;
     } catch (err) {
       console.log(err);
     }
