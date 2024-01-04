@@ -159,10 +159,13 @@ export default function Patient() {
     setIsLoading(true);
     if (filteratedDashboardData) {
       var resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
-      if (filteratedDashboardData?.status && statusValue && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+      if (filteratedDashboardData?.status &&pStart && pEnd) {
+        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
       } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
         resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+      } 
+      else if(filteratedDashboardData?.status && statusValue !=="ALL"){
+        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
       } else {
         resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
       }
@@ -763,6 +766,7 @@ export default function Patient() {
     }
   };
 
+  console.log(filteratedDashboardData)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
