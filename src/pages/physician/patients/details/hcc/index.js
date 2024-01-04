@@ -271,8 +271,7 @@ const Hcc = ({ patientHccResult }) => {
     setDocumentLoaded(true);
   };
 
-  const pageClickPdfFile = (e) => {
-  };
+  const pageClickPdfFile = (e) => {};
 
   useEffect(() => {
     // loadFilterPatientList();
@@ -653,29 +652,34 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-
-
         const response = await axios.get(
           ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
         );
-    
+
         var sectionColorResult = response.data.response;
 
-        let sectionColorResultMatch = sectionColorResult.filter(o1 => dublicateSectionArr.some(o2 => o1.sectionName === o2.name));
-        let sectionColorResultNotMatch = dublicateSectionArr.filter(o1 => !sectionColorResult.some(o2 => o1.name === o2.sectionName));
+        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+        );
+        let sectionColorResultNotMatch = dublicateSectionArr.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+        );
 
         var notMatchColorArray = [];
         sectionColorResultNotMatch?.map((res, index) => {
           var radomColorcode = stringToColour(res.name);
-          var randomColorChangeShadow = radomColorcode +33;
-           notMatchColorArray.push({
-           sectionName:res.name,
-           backgroundColor:randomColorChangeShadow,
-           sectionColor:radomColorcode,
-           });
-          submitSectionColors(res.name,radomColorcode,randomColorChangeShadow);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArray.push({
+            sectionName: res.name,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          submitSectionColors(
+            res.name,
+            radomColorcode,
+            randomColorChangeShadow
+          );
         });
-
 
         //   var newArrayColorMatchs = [];
         //   newArrayColorMatchs = [
@@ -755,7 +759,6 @@ const Hcc = ({ patientHccResult }) => {
         var allMeatHeadColor = [];
         var dublicateRemoveSecondArr = [];
         var nonHccMeatListArr = [];
-
 
         var meatHeaderList = [];
 
@@ -876,33 +879,38 @@ const Hcc = ({ patientHccResult }) => {
           }
         });
 
-        let sectionColorResultMatchMeat = sectionColorResult.filter(o1 => meatHeaderList.some(o2 => o1.sectionName === o2.header));
-        let sectionColorResultNotMatchMeat = meatHeaderList.filter(o1 => !sectionColorResult.some(o2 => o1.header === o2.sectionName));
+        let sectionColorResultMatchMeat = sectionColorResult.filter((o1) =>
+          meatHeaderList.some((o2) => o1.sectionName === o2.header)
+        );
+        let sectionColorResultNotMatchMeat = meatHeaderList.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.header === o2.sectionName)
+        );
 
-       var notMatchColorArrayMeat = [];
-       sectionColorResultNotMatchMeat?.map((res, index) => {
-         var radomColorcode = stringToColour(res.header);
-         var randomColorChangeShadow = radomColorcode +33;
-         notMatchColorArrayMeat.push({
-          sectionName:res.header,
-          backgroundColor:randomColorChangeShadow,
-          sectionColor:radomColorcode,
+        var notMatchColorArrayMeat = [];
+        sectionColorResultNotMatchMeat?.map((res, index) => {
+          var radomColorcode = stringToColour(res.header);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArrayMeat.push({
+            sectionName: res.header,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
           });
-         submitSectionColors(res.header,radomColorcode,randomColorChangeShadow);
-       });
+          submitSectionColors(
+            res.header,
+            radomColorcode,
+            randomColorChangeShadow
+          );
+        });
 
-
-         var newArrayColorMatchs = [];
-         newArrayColorMatchs = [
-           ...sectionColorResultMatch,
-           ...notMatchColorArray,
-           ...sectionColorResultMatchMeat,
-           ...notMatchColorArrayMeat
-         ];
+        var newArrayColorMatchs = [];
+        newArrayColorMatchs = [
+          ...sectionColorResultMatch,
+          ...notMatchColorArray,
+          ...sectionColorResultMatchMeat,
+          ...notMatchColorArrayMeat,
+        ];
 
         setCaptureSectionMatching(newArrayColorMatchs);
-
-
 
         setMeatCriteriaList(meatListArr);
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
@@ -1289,8 +1297,6 @@ const Hcc = ({ patientHccResult }) => {
     actualDescription,
     testModal
   ) => {
-
-    console.log(value)
     if (
       documentPlace == "Radio" ||
       whereCome == "Radio" ||
@@ -1323,7 +1329,7 @@ const Hcc = ({ patientHccResult }) => {
       if (check === "valid") {
         var fileId = patientFileDTO.fileId;
         const encounterDatesValue = encounterDate.split(",");
-        const encounterDatesHeader = encounterDatesValue[0]
+        const encounterDatesHeader = encounterDatesValue[0];
         const response = await axios.get(
           ENDPOINTS.apiEndoint +
             `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
@@ -2386,28 +2392,29 @@ const Hcc = ({ patientHccResult }) => {
     return output;
   }
 
+  const stringToColour = (str) => {
+    let hash = 0;
+    str.split("").forEach((char) => {
+      hash = char.charCodeAt(0) + ((hash << 5) - hash);
+    });
+    let colour = "#";
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      colour += value.toString(16).padStart(2, "0");
+    }
+    return colour;
+  };
 
-const stringToColour = (str) => {
-  let hash = 0;
-  str.split('').forEach(char => {
-    hash = char.charCodeAt(0) + ((hash << 5) - hash)
-  })
-  let colour = '#'
-  for (let i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff
-    colour += value.toString(16).padStart(2, '0')
-  }
-  return colour
-}
-
-
-
-  const submitSectionColors = async (sectionName,sectionColor,backgroundColor) => {
-      var postData = {
-        "backgroundColor":backgroundColor,
-        "sectionColor":sectionColor,
-        "sectionName":sectionName  
-       };
+  const submitSectionColors = async (
+    sectionName,
+    sectionColor,
+    backgroundColor
+  ) => {
+    var postData = {
+      backgroundColor: backgroundColor,
+      sectionColor: sectionColor,
+      sectionName: sectionName,
+    };
 
     try {
       const response = await axios.post(
@@ -2418,8 +2425,7 @@ const stringToColour = (str) => {
       if (result.status == "SUCCESS") {
       } else {
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   };
 
   const getCaptureSectionBackgroundFile = (
@@ -2466,7 +2472,7 @@ const stringToColour = (str) => {
     testModal,
     diagnosisCode
   ) => {
-     var dublicateCaptureDelete = removeDuplicates(value);
+    var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
@@ -2475,29 +2481,30 @@ const stringToColour = (str) => {
       var textColor = result[0]?.sectionColor;
       var disCode = diagnosisCode;
       var headerNames = result[0]?.sectionName;
-      
 
-       var sectionMapArr =
-        (<span onClick={() =>
-          handleOpenModalCombinationCode(
-            disCode,
-            res,
-            "valid",
-            "null",
-            documentPlace,
-            encounterDate,
-            headerNames,
-            actualDescription,
-            testModal
-          )
-        }
-           style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}>
-          {res}</span>)
-      return sectionMapArr
+      var sectionMapArr = (
+        <span
+          onClick={() =>
+            handleOpenModalCombinationCode(
+              disCode,
+              res,
+              "valid",
+              "null",
+              documentPlace,
+              encounterDate,
+              headerNames,
+              actualDescription,
+              testModal
+            )
+          }
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+        >
+          {res}
+        </span>
+      );
+      return sectionMapArr;
     });
-
-
   };
 
   const getEncounterDateBackground = (value) => {
@@ -2522,36 +2529,29 @@ const stringToColour = (str) => {
     });
   };
 
-  const getCaptureSectionBackgroundMeat = (
-    value,dis,encounterDate
-  ) => {
-    if(value){
+  const getCaptureSectionBackgroundMeat = (value, dis, encounterDate) => {
+    if (value) {
       var igonreCase = value.toLowerCase();
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == igonreCase
       );
 
-
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
       var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;      
+      var headerNames = result[0]?.sectionName;
 
-       var sectionMapArr =
-        (<span  onClick={() =>
-          handleOpenModal(
-            value,
-            dis,
-            encounterDate
-          )
-        }
-           style={{ backgroundColor: backColor, color: textColor}}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeat}`}>
-          {value}</span>)
-      return sectionMapArr
-        }
-
-
+      var sectionMapArr = (
+        <span
+          onClick={() => handleOpenModal(value, dis, encounterDate)}
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeat}`}
+        >
+          {value}
+        </span>
+      );
+      return sectionMapArr;
+    }
   };
 
   return (
@@ -3463,7 +3463,7 @@ const stringToColour = (str) => {
                                       </span>
                                     )}
                                     <div>
-                                    {/* <Badge
+                                      {/* <Badge
                                       className="badge-meat cr-pointer badge-circle mt-2"
                                       bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
                                       onClick={() =>
@@ -3477,13 +3477,12 @@ const stringToColour = (str) => {
                                       {item.monitorCapturedFromHeader}
                                     </Badge> */}
 
-                                        {getCaptureSectionBackgroundMeat(
-                                            item.monitorCapturedFromHeader,
-                                            item.monitor,
-                                            item.encounterDate                                            
-                                          )}
-                                      </div>
-                                    
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.monitorCapturedFromHeader,
+                                        item.monitor,
+                                        item.encounterDate
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.evaluate != "" ? (
@@ -3514,13 +3513,13 @@ const stringToColour = (str) => {
                                     >
                                       {item.evaluateCapturedFromHeader}
                                     </Badge> */}
-                                     <div>
-                                     {getCaptureSectionBackgroundMeat(
-                                            item.evaluateCapturedFromHeader,    
-                                            item.evaluate,
-                                          item.encounterDate                                        
-                                          )}
-                                          </div>
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.evaluateCapturedFromHeader,
+                                        item.evaluate,
+                                        item.encounterDate
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.assessment != "" ? (
@@ -3551,13 +3550,13 @@ const stringToColour = (str) => {
                                     >
                                       {item.assessmentCapturedFromHeader}
                                     </Badge> */}
-                                     <div>
-                                    {getCaptureSectionBackgroundMeat(
-                                            item.assessmentCapturedFromHeader,   
-                                            item.assessment,
-                                            item.encounterDate                                         
-                                          )}
-                                          </div>
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.assessmentCapturedFromHeader,
+                                        item.assessment,
+                                        item.encounterDate
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.treatment != "" ? (
@@ -3590,12 +3589,12 @@ const stringToColour = (str) => {
                                       {item.treatmentCapturedFromHeader}
                                     </Badge> */}
                                     <div>
-                                    {getCaptureSectionBackgroundMeat(
-                                            item.treatmentCapturedFromHeader, 
-                                            item.treatment,
-                                            item.encounterDate                                           
-                                          )}
-                                          </div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.treatmentCapturedFromHeader,
+                                        item.treatment,
+                                        item.encounterDate
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-1 meatclose">
                                     {/* {item.isMeatCriteriaPresent === true ?
@@ -3679,13 +3678,13 @@ const stringToColour = (str) => {
                                             {item.monitor}
                                           </span>
                                         </Popover>
-                                         <div>
-                                         {getCaptureSectionBackgroundMeat(
+                                        <div>
+                                          {getCaptureSectionBackgroundMeat(
                                             item.monitorCapturedFromHeader,
                                             item.monitor,
-                                            item.encounterDate                                            
+                                            item.encounterDate
                                           )}
-                                      </div>
+                                        </div>
                                       </div>
                                       <div className="col-xl-2 d-grid">
                                         <Popover
@@ -3698,12 +3697,12 @@ const stringToColour = (str) => {
                                           </span>
                                         </Popover>
                                         <div>
-                                     {getCaptureSectionBackgroundMeat(
-                                            item.evaluateCapturedFromHeader,    
+                                          {getCaptureSectionBackgroundMeat(
+                                            item.evaluateCapturedFromHeader,
                                             item.evaluate,
-                                          item.encounterDate                                        
+                                            item.encounterDate
                                           )}
-                                          </div>
+                                        </div>
                                       </div>
                                       <div className="col-xl-2 d-grid">
                                         <Popover
@@ -3716,12 +3715,12 @@ const stringToColour = (str) => {
                                           </span>
                                         </Popover>
                                         <div>
-                                    {getCaptureSectionBackgroundMeat(
-                                            item.assessmentCapturedFromHeader,   
+                                          {getCaptureSectionBackgroundMeat(
+                                            item.assessmentCapturedFromHeader,
                                             item.assessment,
-                                            item.encounterDate                                         
+                                            item.encounterDate
                                           )}
-                                          </div>
+                                        </div>
                                       </div>
                                       <div className="col-xl-2 d-grid">
                                         <Popover
@@ -3735,12 +3734,12 @@ const stringToColour = (str) => {
                                         </Popover>
 
                                         <div>
-                                    {getCaptureSectionBackgroundMeat(
-                                            item.treatmentCapturedFromHeader, 
+                                          {getCaptureSectionBackgroundMeat(
+                                            item.treatmentCapturedFromHeader,
                                             item.treatment,
-                                            item.encounterDate                                           
+                                            item.encounterDate
                                           )}
-                                          </div>
+                                        </div>
                                       </div>
                                       <div className="col-xl-1 meatclose">
                                         <Popconfirm
@@ -3757,12 +3756,17 @@ const stringToColour = (str) => {
                                             )
                                           }
                                         >
-                                          <div className={visitStyles.close_icon}>
-                                        <FontAwesomeIcon
-                                          icon={faArrowsAlt}
-                                          style={{ size: 8, color: "#a80404" }}
-                                        />
-                                      </div>
+                                          <div
+                                            className={visitStyles.close_icon}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faArrowsAlt}
+                                              style={{
+                                                size: 8,
+                                                color: "#a80404",
+                                              }}
+                                            />
+                                          </div>
                                         </Popconfirm>
                                       </div>
                                     </div>
