@@ -131,6 +131,7 @@ const Header = ({ onNote }) => {
     );
     setUserIdDetails(response.data.response);
     var userId = response.data.response?.id;
+    dispatchValue(getNotificationList(userId));
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userId}?token=${token}`
     );
@@ -138,6 +139,7 @@ const Header = ({ onNote }) => {
       const data = JSON.parse(event.data);
       if (data.length != 0) {
         dispatchValue(getNotificationAlert(data));
+        dispatchValue(getNotificationList(userId));
       }
     });
     sse.onerror = () => {
@@ -249,7 +251,7 @@ const Header = ({ onNote }) => {
   const notificationDrawer = async () => {
 
     setOpen(true)
-    dispatchValue(getNotificationList(userIdDetails.id));
+    // dispatchValue(getNotificationList(userIdDetails.id));
     dispatchValue(getNotificationAlertClear([]));
 
 
@@ -329,9 +331,9 @@ const Header = ({ onNote }) => {
                         >
                           <Badge
                             count={notificationAlertData.length}
-                            color="#faad14"
+                            color="#3479fe"
                           >
-                            {SVGICON.notificationIcon}
+                            {SVGICON.dashboardNotification}
                           </Badge>
                         </div>
                         <div className="header-media d-flex"   onClick={logoutFunction}>

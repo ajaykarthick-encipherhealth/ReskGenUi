@@ -4,9 +4,15 @@ import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import { Modal } from "antd";
 import { SVGICON } from "../../../../jsx/constant/theme";
+import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
+
 
 const Notifications = () => {
   const [openNotifications, setOpenNotification] = useState(false);
+  const notificationResponse = useSelector(
+    (state) => state?.notificationDatas?.notificationList
+  );
   const notificationdata = [
     {
       key: "1",
@@ -61,13 +67,23 @@ const Notifications = () => {
   const handleOk = () => {
     setOpenNotification(false);
   };
-  const notificationData = notificationdata?.map((info) => (
+  
+  const emailSplitFunction = (email) => {
+    let emailSplit = email.split("@");
+    return capitalizeFirstLetter(emailSplit[0]);
+  }
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+
+  const notificationData = notificationResponse?.map((info) => (
     <div className={styles.msgDiv}>
       <div style={{ marginTop: "10px" }}> {SVGICON.dashboardNotification}</div>
       <div className={styles.msgCOntainer}>
-        <span className={styles.description}>{info.message}</span>
+        <span className={styles.description}>{info.content}</span>
         <div className={styles.time}>
-          {info.date}&nbsp; {info.time} &nbsp; {info.person}
+          {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp; {moment(info.createdAt).format("hh:mm:A")} &nbsp; {emailSplitFunction(info.userFrom.userName)} ({info.userFrom?.role[0]})
         </div>
       </div>
     </div>
