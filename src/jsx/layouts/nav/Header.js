@@ -262,6 +262,7 @@ const Header = ({ onNote }) => {
     return emailSplit[0];
   };
 
+  const currentUserRole=useSelector(state=>state.auth.selectedRole)
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -375,7 +376,8 @@ const Header = ({ onNote }) => {
                               <span className="ms-2 d-flex mt-1">
                                 {/* {SVGICON.Logout}{" "} */}
                                 <h6 className="logout-name">
-                                  {userIdDetails?.role[0]}{" "}
+                                  {/* {userIdDetails?.role[0]}{" "} */}
+                                  {currentUserRole}
                                 </h6>
                               </span>
                             ) : null}

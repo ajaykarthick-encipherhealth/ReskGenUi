@@ -7,6 +7,8 @@ import LoginBack from "../images/logo/login-back.jpg";
 import { Dropdown, Select, Space, notification } from "antd";
 import Image from "next/image";
 import { IMAGES } from "../jsx/constant/theme";
+import { useDispatch } from "react-redux";
+import { selectedUserRole } from "../store/actions/AuthActions";
 
 export default function UserLogin() {
   const router = useRouter();
@@ -21,6 +23,7 @@ export default function UserLogin() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
 
+  const dispatch=useDispatch()
   const onLogin = async (e) => {
     setIsLoading(true);
     e.preventDefault();
@@ -67,12 +70,12 @@ export default function UserLogin() {
         // } else {
         //   router.push("/physician/dashboard");
         // }
-        notification.success({
-          message: response?.data?.message
-            ? response?.data?.message
-            : "Login Successfully",
-          duration: 1,
-        });
+        // notification.success({
+        //   message: response?.data?.message
+        //     ? response?.data?.message
+        //     : "Login Successfully",
+        //   duration: 1,
+        // });
         setDisplayRoles(true);
       } else {
         setIsLoading(false);
@@ -94,17 +97,28 @@ export default function UserLogin() {
   };
   const items = [];
   const data = role?.map((info) => {
-    items?.push({ value: info, label: info });
+    if(info.toLowerCase() ==="admin"){
+      items?.push({ value: info, label: info },{ value: "L1Coder", label: 'L1Coder' });
+    }
+    else{
+      items?.push({ value: info, label: info })
+    }
   });
   const onSubmitRole = (e) => {
     e.preventDefault();
+    notification.success({
+      message: "Login Successfully",
+      duration: 1,
+    });
     if (!selectedRole) {
       setRoleError(true);
     } else {
       setRoleError(false);
       if (selectedRole === "admin" && !roleError) {
+        dispatch(selectedUserRole(selectedRole.toUpperCase()))
         router.push("/admin/user");
-      } else {
+      } else if(selectedRole === "l1coder" && !roleError) {
+        dispatch(selectedUserRole(selectedRole.toUpperCase()))
         router.push("/physician/dashboard");
       }
     }

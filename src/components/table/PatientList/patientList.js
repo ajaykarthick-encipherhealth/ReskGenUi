@@ -283,6 +283,7 @@ function PatientTable({
     );
   };
 
+  console.log(patinetListAll)
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>

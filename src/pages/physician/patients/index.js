@@ -158,33 +158,33 @@ export default function Patient() {
   ) => {
     setIsLoading(true);
     if (filteratedDashboardData) {
-      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+      var resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
       if (filteratedDashboardData?.status && statusValue && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
       } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
       } else {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
       }
     } else {
-      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+      var resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
       if (statusValue != null) {
         if (statusValue === "ALL") {
-          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+          resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
         } else {
-          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
+          resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
         }
       }
       if (pStart != null && statusValue == null) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
 
       if (pStart != null && statusValue != null && statusValue != "ALL") {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
 
       if (dStart != null && statusValue != null && statusValue != "ALL") {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
+        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
       }
 
       if (
