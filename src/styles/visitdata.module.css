@@ -349,6 +349,26 @@ margin-left: 10px !important;
   border: 0.0625rem solid transparent;
 }
 
+.captureheaderMeat{
+  background: rgba(194, 54, 83, 0.2);
+  font-size: 11px !important;
+  font-weight: 500;
+  border-radius: 30px !important;
+  margin: 4px 3px 0px 5px;
+  text-align: center !important;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+  padding: 1px 10px;
+  border: 0.0625rem solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px;
+  display: block;
+}
+
 
 .manuallyAdded{
   background: #dad7f4!important;

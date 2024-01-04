@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import styles from "./styles.module.css";
 import { IMAGES } from "../../jsx/constant/theme";
 import Image from "next/image";
-import Chat from '../chat/index'
+import Chat from '../chat/index';
+import { Avatar } from "antd";
+
 
 const Notification = ({ notificationResponse }) => {
   const [openMsg, setOpenMsg] = useState(false);
@@ -11,6 +13,10 @@ const Notification = ({ notificationResponse }) => {
     let emailSplit = email.split("@");
     return emailSplit[0];
   }
+
+  const splitUserName = (name) => {
+    return name[0].toUpperCase();
+  };
 
   return (
     <div className={`card-body chatbox contacts_body p-0`} id='DZ_W_Contacts_Body' >
@@ -23,7 +29,7 @@ const Notification = ({ notificationResponse }) => {
             >
               <div className='d-flex bd-highlight'>
                 <div className='img_cont'>
-                  <Image src={IMAGES.profileImage} alt="" />
+                <span>{splitUserName(data.userFrom.userName)}</span>
                   <span className='online_icon'></span>
                 </div>
                 <div className='user_info'>
