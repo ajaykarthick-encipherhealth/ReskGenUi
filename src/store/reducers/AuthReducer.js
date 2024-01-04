@@ -5,7 +5,8 @@ import {
     LOGOUT_ACTION,
     SIGNUP_CONFIRMED_ACTION,
     SIGNUP_FAILED_ACTION,
-    PATIENT_DETAILS
+    PATIENT_DETAILS,
+    SELECTEDROLE
     
 } from '../actions/AuthActions';
 
@@ -20,6 +21,7 @@ const initialState = {
     errorMessage: '',
     successMessage: '',
     showLoading: false,
+    selectedRole:null
     // count : false, 
 };
 
@@ -78,6 +80,12 @@ export function AuthReducer(state = initialState, action) {
         return {
             ...state,
             showLoading: action.payload,
+        };
+    }
+    if (action.type === SELECTEDROLE ) {
+        return {
+            ...state,
+            selectedRole: action.payload,
         };
     }
     // if (action.type === NAVTOGGLE) {   

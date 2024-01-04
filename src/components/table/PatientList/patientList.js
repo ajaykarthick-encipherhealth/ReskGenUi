@@ -282,7 +282,6 @@ function PatientTable({
       ))
     );
   };
-
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
