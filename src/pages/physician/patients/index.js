@@ -338,9 +338,9 @@ export default function Patient() {
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    inputValuePatientId.patientAllocated = localUserId;
+    inputValuePatientId.allocatedBy = localUserId;
     inputValuePatientId.computing = 0;
-    inputValuePatientId.allocatedUserId = localUserId;
+    // inputValuePatientId.allocatedUserId = localUserId;
 
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
@@ -367,7 +367,7 @@ export default function Patient() {
         setIsLoadingBtn(false);
       }
       // setAddPatientId(false);
-      getAllList(localUserId, pageNo, pageSize);
+      getAllList(response?.response);
     }
 
     setValidated(true);

@@ -43,7 +43,7 @@ function FileProcessingTable({ patinetListAll }) {
   useEffect(() => {
     if (activeId && parsedData) {
       parsedData?.map((info) => {
-        if (info?.patientId === activeId) {
+        if (info?.patientId === activeId && info?.processStageId) {
           dispatch(getPatientsList(info?.patientId, info?.processStageId));
         }
       });
@@ -306,10 +306,7 @@ function FileProcessingTable({ patinetListAll }) {
         <div style={{ width: "98%" }}>
           <div style={{ display: "flex" }}>
             <Tooltip
-              title={data?.processStageChart
-                .toLowerCase()
-                ?.split("_")
-                .join(" ")}
+              title={data?.processStageChart?.toLowerCase()?.split("_").join(" ")}
             >
               <Progress
                 percent={uploadStatus}

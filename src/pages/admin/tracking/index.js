@@ -19,7 +19,7 @@ import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
 import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
 import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
-import { getPatients } from "../../../store/actions/adminAction/patientsActions";
+import { getPatients, getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../file-processing/FileUploading";
 import Addpatients from "../file-processing/Addpatiens";
 import TrackingTable from "../../../components/table/admin/trackingList";
@@ -72,7 +72,7 @@ export default function Patient() {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
-    dispatch(getPatients(pageNo, pageSize));
+    dispatch(getTrackingList(pageNo, pageSize));
   }, [pageNo, pageSize]);
   useEffect(() => {
     if (response) {
