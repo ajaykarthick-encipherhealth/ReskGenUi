@@ -74,6 +74,7 @@ function AddPatientListTable({
 
     setDetailsContent(sortedContent);
   };
+console.log(patinetListAll,"datatest");
 
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
@@ -96,11 +97,15 @@ function AddPatientListTable({
         </td>
 
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.processedDate
-            ? moment(data.processedDate).format("MM-DD-YYYY")
+          {data.computedDate
+            ? moment(data.computedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+          {data.createdDate
+            ? moment(data.createdDate).format("MM-DD-YYYY")
+            : "---"}
+        </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
         </td>
@@ -123,7 +128,22 @@ function AddPatientListTable({
                 sortTableByDate();
               }}
             >
-              PROCESSED DATE
+              COMPUTED DATE
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {sortDueOrder === "asc" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+            <th
+              onClick={() => {
+                requestSort("lastModifiedDate");
+                sortTableByDate();
+              }}
+            >
+              CREATED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
                 {sortDueOrder === "asc" ? (
                   <ArrowUpOutlined />
