@@ -33,15 +33,14 @@ const Notification = ({ notificationResponse }) => {
               className='active dlab-chat-user'            
             >
               <div className='d-flex bd-highlight'>
-                <div className='img_cont'>
-                <Tooltip title={emailSplitFunction(data.userFrom.userName)} placement="bottom">                             
-                <span>{splitUserName(data.userFrom.userName)}</span>
-                </Tooltip>
+              <Tooltip title={emailSplitFunction(data.userFrom.userName)} placement="bottom">       
+                <div className='img_cont'>                                    
+                <span>{splitUserName(data.userFrom.userName)}</span>               
                   <span className='online_icon'></span>
                 </div>
+                </Tooltip>
                 <div className='user_info'>
                   <div className='d-flex'>
-                  {/* <span>{emailSplitFunction(data.userFrom.userName)} </span> */}
                   <span>{data.content}</span>
                   </div>                
                   <p> {moment(data.createdAt).fromNow()}</p>                
