@@ -10,7 +10,7 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { notification } from "antd";
+import { DatePicker, notification } from "antd";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
@@ -21,7 +21,10 @@ import { getPatients } from "../../../store/actions/adminAction/patientsActions"
 import FileUploading from "../file-processing/FileUploading";
 import Addpatients from "../file-processing/Addpatiens";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
-
+import allocateStyle from "./allocate/style.module.css";
+import AllocateModal from "./allocate";
+import moment from "moment/moment";
+const { RangePicker } = DatePicker;
 export default function Patient() {
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -30,9 +33,13 @@ export default function Patient() {
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [selectedRowsId, setSelectedRowsId] = useState([]);
+  const [dateRange, setDateRange] = useState([]);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [dates, setDates] = useState(null);
   const [compledtedDate, setCompletedDate] = useState(null);
+  const [allocateModal, setAllocateModal] = useState(false);
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -59,6 +66,7 @@ export default function Patient() {
   const sideMenu = useSelector((state) => state.sideMenu);
 
   const response = useSelector((state) => state.adminList.patients);
+
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -68,94 +76,85 @@ export default function Patient() {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
-    dispatch(getPatients(pageNo, pageSize));
+    getAllList(pageNo, pageSize, "", "", true, 2);
   }, [pageNo, pageSize]);
-  useEffect(() => {
-    if (response) {
-      getAllList();
-    }
-  }, [response]);
 
-  const getAllList = () => {
-    if (response?.response) {
+  const getAllList = async (
+    pageNo,
+    pageSize,
+    startDate,
+    endDate,
+    allocate,
+    status
+  ) => {
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=uavis01@encipherhealth.onmicrosoft.com&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}`;
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response.data) {
       var resultMap = [];
-      var result = response?.response?.content;
-      setTotalElements(response?.response?.totalElements);
-      result.map((res) => {
+      var result = response?.data?.response?.content;
+      setTotalElements(response?.data?.response?.totalElements);
+      result?.map((res) => {
         resultMap.push({
+          ...res,
           patientId: res.patientId,
           patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          allocatedBy: res.allocatedBy,
-          allocatedOn: res.allocatedOn,
-          priority: res.priority,
-          processedStatus: res.processedStatus,
-          processedDate: res.processedDate,
-          createdAt: res.createdAt,
-          processStageId: res.processStageId,
+          computedDate: res.computedDate,
         });
       });
-      var newArray = [];
-      newArray = [...patinetListAll, ...resultMap];
-      setPatinetListAll(resultMap);
-
-      // console.log(newArray)
+      if (result.length > 0) {
+        setPatinetListAll(result)
+      } else {
+        setPatinetListAll([]);
+      }
+      
       setIsLoading(false);
       setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
+    }
+  };
+  const getAllCheckList = async () => {
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${totalElements}&userId=uavis01@encipherhealth.onmicrosoft.com&computationStart=&computationEnd=&isAllocation=true&status=2`;
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response.data) {
+      var result = response?.data?.response?.content;
+      const data = result.map((item) => ({
+        id: item.patientId,
+        name: item.patientName,
+      }));
+      setSelectedRowsId(data);
     }
   };
 
-  // const getNameSearch = async (searchtext) => {
-  //   setIsLoading(true);
+  useEffect(() => {
+    if (selectAllChecked) {
+      getAllCheckList();
+    } else {
+      setSelectedRowsId([]);
+    }
+  }, [selectAllChecked]);
 
-  //   // dispatch(getSearchPatients(0,searchtext));
-  //   if (searchtext) {
-  //     var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-  //     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-  //     if (response.response?.data) {
-  //       var resultMap = [];
-  //       var result = response.data.response?.content;
-  //       setTotalElements(response.data.response?.totalElements);
-  //       result.map((res) => {
-  //         resultMap.push({
-  //           patientId: res.patientId,
-  //           patientName: res.patientName,
-  //           fileName: res.fileName,
-  //           computing: res.computing,
-  //           createdAt: res.createdAt,
-  //           lastModifiedDate: res.lastModifiedDate,
-  //           dueDate: res.dueDate,
-  //           allocatedBy: res.allocatedBy,
-  //           allocatedOn: res.allocatedOn,
-  //           priority: res.priority,
-  //           processedStatus: res.processedStatus,
-  //           createdAt: res.createdAt,
-  //           processedDate: res.processedDate,
-  //           processStageId: res.processStageId,
-  //         });
-  //       });
-  //       var newArray = [];
-  //       newArray = [...patinetListAll, ...resultMap];
-  //       setPatinetListAll(resultMap);
-
-  //       // console.log(newArray)
-  //       setIsLoading(false);
-  //       setTableLoading(false);
-  //       //     setTimeout(() => {
-  //       //     subscribe(resultMap);
-  //       // }, 3000);
-  //     }
-  //   } else {
-  //     getAllList(response);
-  //   }
-  // };
+  const handleReceivedDatePicker = (date, dateString) => {
+    if (dateString[0] == '') {
+      getAllList(pageNo, pageSize, "", "", true, 2);
+    } else if (dateString.length > 1) {
+      const formattedDates = dateString?.map((date, index) => {
+        const formattedDate =
+          index === 1
+            ? `${moment(date).format("YYYY-MM-DD")}T23:59:59.999Z`
+            : `${moment(date).format("YYYY-MM-DD")}T00:00:00.000Z`;
+        return formattedDate;
+      });
+      if (dateString.length > 0) {
+        getAllList(
+          pageNo,
+          pageSize,
+          formattedDates[0],
+          formattedDates[1],
+          true,
+          2
+        );
+      }
+    }
+  };
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -191,7 +190,6 @@ export default function Patient() {
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    // console.log(form.checkValidity());
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       event.preventDefault();
@@ -258,63 +256,63 @@ export default function Patient() {
     }
   };
 
-  const processstatusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
+  // const processstatusBodyTemplate = (rowData) => {
+  //   //   console.log(rowData.computing)
+  //   //   return <span className={`badge badge-success`}>
+  //   //   Processed
+  //   //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
+  //   // </span>;
 
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
-        );
+  //   switch (rowData.processedStatus) {
+  //     case "COMPLETED":
+  //       return (
+  //         <div className="patient-status">
+  //           <span className={`badge processed-text`}>Completed</span>
+  //         </div>
+  //       );
 
-      case "PENDING":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
+  //     case "PENDING":
+  //       return (
+  //         <div className="patient-status">
+  //           <span className={`badge processing-text`}>Pending</span>
+  //         </div>
+  //       );
 
-      case "DECLINED":
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
-        );
+  //     case "DECLINED":
+  //       return (
+  //         <div className="patient-status">
+  //           <span className={`badge failed-text`} style={{ color: "red" }}>
+  //             Declined
+  //           </span>
+  //         </div>
+  //       );
 
-      case "NOTCOMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge notComputed-text`}>Not Computed</span>
-          </div>
-        );
-      case "COMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge computed-text`}>Computed</span>
-          </div>
-        );
-      case "HOLD":
-        return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
-        );
-      case null:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
-    }
-  };
+  //     case "NOTCOMPUTED":
+  //       return (
+  //         <div className="patient-status">
+  //           <span className={`badge notComputed-text`}>Not Computed</span>
+  //         </div>
+  //       );
+  //     case "COMPUTED":
+  //       return (
+  //         <div className="patient-status">
+  //           <span className={`badge computed-text`}>Computed</span>
+  //         </div>
+  //       );
+  //     case "HOLD":
+  //       return (
+  //         <div className="patient-status">
+  //           <span className={`badge hold-text`}>Hold</span>
+  //         </div>
+  //       );
+  //     case null:
+  //       return (
+  //         <div className="patient-status">
+  //           <span className={`badge processing-text`}>Pending</span>
+  //         </div>
+  //       );
+  //   }
+  // };
 
   const actionBodyTemplate = (rowData) => {
     return (
@@ -347,8 +345,6 @@ export default function Patient() {
         >
           <FontAwesomeIcon icon={faUpload} fontSize={11} />
 
-     
-   
           {/* <span style={{ fontSize: "15px", color: "#A8A8AA" }}>Upload</span> */}
         </button>
       </div>
@@ -439,6 +435,12 @@ export default function Patient() {
     getAllList(response);
   };
 
+  const handleOpneModal = () => {
+    setValidated(false);
+    setAddPatientId(false);
+    setAllocateModal(true);
+  };
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -467,14 +469,31 @@ export default function Patient() {
                               />
                             </div>
                           </div>
+                          <div className="col-xl-2">
+                            <label>Computed Date</label>
+                            <div>
+                              <RangePicker
+                                format="MM-DD-YYYY"
+                                onChange={(dates, dateStrings) => {
+                                  setDateRange(dateStrings);
+                                  handleReceivedDatePicker(dates, dateStrings);
 
-                          <div className="col-xl-10">
-                            <Button
-                              onClick={addPatientFormId}
-                              className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}
+                                  // handleDatePickerChangeProcesseDate(
+                                  //   dateStrings
+                                  // );
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-xl-8 mt-4">
+                            <button
+                              onClick={handleOpneModal}
+                              className={`btn btn-outline-primary btn-sm ms-2 flr ${allocateStyle.modalBtn}`}
+                              disabled={!selectedRowsId.length > 0}
                             >
-                              + Add Patient Id
-                            </Button>
+                              Allocate
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -489,10 +508,10 @@ export default function Patient() {
                           <>
                             <AllocatedAdminList
                               patinetListAll={patinetListAll}
-                              actionBodyTemplate={actionBodyTemplate}
-                              statusBodyTemplate={processstatusBodyTemplate}
-                              gotoPatientDetails={gotoPatientDetails}
-                              patientDetails={patientDetails}
+                              selectAllChecked={selectAllChecked}
+                              setSelectAllChecked={setSelectAllChecked}
+                              selectedRowsId={selectedRowsId}
+                              setSelectedRowsId={setSelectedRowsId}
                             />
                             <div>
                               <div className="pagination-container">
@@ -538,6 +557,12 @@ export default function Patient() {
           isLoadingBtn={isLoadingBtn}
         />
       </div>
+      <AllocateModal
+        open={allocateModal}
+        setOpen={setAllocateModal}
+        selectedRowsId={selectedRowsId}
+        setSelectedRowsId={setSelectedRowsId}
+      />
     </>
   );
 }

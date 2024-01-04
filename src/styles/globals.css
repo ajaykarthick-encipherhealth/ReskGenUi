@@ -13340,3 +13340,14 @@ tbody > tr {
   border: 1px solid green !important;
 
 }
+.ant-modal-content {
+    background: #f5f9ff !important;
+}
+.ant-modal-header {
+  background: #f5f9ff !important;
+}
+
+.ant-modal-content{
+  height: 730px;
+  overflow: scroll;
+}
