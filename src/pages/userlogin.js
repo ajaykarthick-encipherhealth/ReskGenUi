@@ -102,13 +102,12 @@ export default function UserLogin() {
       setRoleError(true);
     } else {
       setRoleError(false);
-      // if (selectedRole === "admin") {
-      //   router.push("/admin/user");
-      // } else {
-      //   router.push("/physician/dashboard");
-      // }
+      if (selectedRole === "admin" && !roleError) {
+        router.push("/admin/user");
+      } else {
+        router.push("/physician/dashboard");
+      }
     }
-    console.log(selectedRole);
   };
 
   return (
@@ -168,9 +167,9 @@ export default function UserLogin() {
                       />
                     </div>
                     {roleError && (
-                      <div className="text-danger fs-12">
+                      <span className="text-danger fs-12">
                         Please Select Role
-                      </div>
+                      </span>
                     )}
                   </div>
                   <div className="d-flex">
