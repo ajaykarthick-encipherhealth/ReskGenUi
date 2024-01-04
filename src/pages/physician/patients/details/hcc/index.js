@@ -1270,17 +1270,32 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
 
-  const findValueDocument = (
+  const findValueDocument = async (
     value,
     disDescription,
     headerNames,
     encounterDate,
     actualDescription
   ) => {
-    getSectionPageNumber(headerNames, encounterDate);
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
+    );
+    var result = response.data.response;
+    if (result?.length) {
+      var pageNumber = result[0] - 1;
+      setFileInitialPage(pageNumber);
+    }
+
+
+    // getSectionPageNumber(headerNames, encounterDate);
 
     var splitPoint = disDescription.substring(" ", 40);
-    setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
+    setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
     highlight({
       keyword: actualDescription,
       // matchCase: true,
@@ -1335,7 +1350,7 @@ const Hcc = ({ patientHccResult }) => {
           ENDPOINTS.apiEndoint +
             `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
         );
-        var result = response.data;
+        var result = response.data.response;
         if (result?.length) {
           var pageNumber = result[0] - 1;
           setFileInitialPage(pageNumber);
