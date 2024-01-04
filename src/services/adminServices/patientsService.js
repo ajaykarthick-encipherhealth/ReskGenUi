@@ -6,7 +6,7 @@ export const PatientsList = async (pageNo) => {
     const uId = localStorage.getItem("userId");
     try {
       const response = await axios.get(
-        `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/filter?&page=${pageNo}&size=10&userId=${uId}&isAllocation=false`,
+        `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/filter?&page=${pageNo}&size=15&userId=${uId}&isAllocation=false`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
