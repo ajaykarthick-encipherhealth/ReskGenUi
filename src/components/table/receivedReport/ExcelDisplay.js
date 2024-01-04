@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./receivedReport.module.css";
 import dayjs from "dayjs";
-import Spinner from "../../spinner/spinner";
 import Spreadsheet, { CellBase, Matrix } from "react-spreadsheet";
 
 const ExcelDisplay = ({ tableData }) => {

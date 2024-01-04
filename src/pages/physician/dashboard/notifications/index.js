@@ -6,6 +6,10 @@ import { Modal } from "antd";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
+import Image from "next/image";
+import NoNotification from "../../../../images/dashboard/no-notification.png";
+
+
 
 
 const Notifications = () => {
@@ -98,9 +102,14 @@ const Notifications = () => {
 
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
+          {notificationResponse.length != 0 ?
           <div className={styles.container}>
             {notificationData}
           </div>
+          :
+          <div className={styles.no_notificarion_container}>
+           <Image src={NoNotification} alt="" />
+        </div>}
         </Card>
       </div>
       <Modal

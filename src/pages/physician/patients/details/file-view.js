@@ -6,7 +6,6 @@ import ENDPOINTS from "../../../../utility/enpoints";
 import LoadingSpinner from "../../../../jsx/components/spinner/spinner";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import Spinner from "../../../../components/spinner/spinner";
 
 
 export default function PatientDetails() {
@@ -67,7 +66,6 @@ export default function PatientDetails() {
             <div>
                 <Header />
                 <div class="content-body show menu-toggle no-sidebar">
-                    {isLoading ? <Spinner />:
                         <div className="container-fluid fileview-fluid">
                             <div className="row patient-file-container">
                                 <div className="col-xl-12">
@@ -97,7 +95,6 @@ export default function PatientDetails() {
 
                             </div>
                         </div>
-                    }
                 </div>
             </div>
         </>
