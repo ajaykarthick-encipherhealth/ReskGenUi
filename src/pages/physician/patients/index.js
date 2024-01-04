@@ -846,7 +846,7 @@ export default function Patient() {
                             </div>
                           </div>
 
-                          <div className="col-xl-2">
+                          <div className="col-xl-4">
                             <label></label>
                             <div
                               className={visitStyles.flags_patientsList}
@@ -880,21 +880,7 @@ export default function Patient() {
                                 </span>
                               </div>
                             </div>
-                          </div>
-                          <div
-                            className="col-xl-2"
-                            style={{
-                              width: "223px !important",
-                              height: "42px",
-                            }}
-                          >
-                            <Button
-                              onClick={addPatientFormId}
-                              className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}
-                            >
-                              + Add Patient Id
-                            </Button>
-                          </div>
+                          </div>                          
                         </div>
                       </div>
 
