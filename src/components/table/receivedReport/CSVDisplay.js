@@ -3,7 +3,6 @@ import styles from "./receivedReport.module.css";
 
 const CSVDisplay = ({ tableData,fileUrl, extention }) => {
   const [tableHead, setTableHead] = useState([]);
-
   useEffect(() => {
     if (Array.isArray(tableData) && tableData.length > 0) {
       const filteredData = tableData.filter((data) =>

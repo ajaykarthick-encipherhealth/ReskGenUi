@@ -127,7 +127,7 @@ export const getSelectedReportDetails = (reportId) => {
         if (response) {
           dispatch({
             type: REPORT_DETAILS,
-            payload: response,
+            payload: response?.response,
           });
         }
       });
@@ -144,7 +144,7 @@ export const getFileDetails = (pathname) => {
         if (response) {
           dispatch({
             type: FILEDETAILS,
-            payload: response.data,
+            payload: response.data?.response,
           });
           // window.open(response.data)
         }

@@ -5,12 +5,13 @@ import Spreadsheet, { CellBase, Matrix } from "react-spreadsheet";
 
 const ExcelDisplay = ({ tableData }) => {
   const [data, setData] = useState();
+
   useEffect(() => {
     if (Array.isArray(tableData) && tableData.length > 0) {
       const fieldNames = tableData[0];
       const transformedData = tableData.slice(1).map((row) => {
         const rowData = {};
-        fieldNames.forEach((fieldName, index) => {
+        fieldNames?.forEach((fieldName, index) => {
           rowData[fieldName] = row[index];
         });
         return rowData;
@@ -29,7 +30,7 @@ const ExcelDisplay = ({ tableData }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {tableData?.length > 0 ? (
+      {Array.isArray(tableData) && tableData.length > 0 && data[0]?.[0]?.value!==""  ? (
         data && <Spreadsheet data={data} onChange={setData} />
       ) : (
         <div
@@ -39,7 +40,7 @@ const ExcelDisplay = ({ tableData }) => {
             alignItems: "center",
           }}
         >
-          {data?.length === 0 ? "No data Found" : "loading...."}
+          {data?.length === 0 ? "No data Found" : "No data Found"}
         </div>
       )}
     </div>
