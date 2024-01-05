@@ -394,7 +394,7 @@ const Header = ({ onNote }) => {
                                 trigger={["click"]}
                               >
                                 <span className="header-name"
-                                style={{marginLeft:"20px"}}>{userRole}
+                                style={{marginLeft:"10px"}}>{userRole}
                                 <DownOutlined  style={{margin:"0 0 0 5px"}}/></span>
 
                               </Dropdown>
