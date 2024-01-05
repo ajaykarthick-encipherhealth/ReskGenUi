@@ -54,8 +54,6 @@ export default function UserLogin() {
         // } else {
         // localStorage.setItem("userRolesList", result?.roles);
         setRole(result?.roles);
-        // localStorage.setItem("userRole", "physician");
-
         // }
         localStorage.setItem("token", result.access_token);
         localStorage.setItem("tenantId", result.tenantId);

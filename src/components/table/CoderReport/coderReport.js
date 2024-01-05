@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge } from "antd";
+import { Badge, Empty } from "antd";
 import TableStyle from "../table.module.css";
 import moment from "moment";
 import { SVGICON } from "../../../jsx/constant/theme";
@@ -109,7 +109,7 @@ function CoderReport({
   return (
     <div className={TableStyle.classContaineer}>
       {reportListAll?.data?.length === 0 ? (
-         <SpinnerDots />
+         <Empty />
          
       ) : (
         <table className={TableStyle.classTable}>

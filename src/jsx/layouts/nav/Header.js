@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Dropdown } from "react-bootstrap";
+// import { Dropdown } from "react-bootstrap";
 import Link from "next/link";
-
 import { IMAGES, SVGICON } from "../../constant/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
 import Image from "next/image";
@@ -14,11 +13,12 @@ import {
   PhysicanMenuList,
   L2AuditMenuList,
 } from "./Menu";
+import { DownOutlined } from '@ant-design/icons'
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { Badge, Select, Tooltip } from "antd";
+import { Badge, Dropdown, Select, Space, Tooltip } from "antd";
 import "react-chat-widget/lib/styles.css";
 import dynamic from "next/dynamic";
 import { getChatReply } from "../../../store/actions/DashboardActions";
@@ -26,13 +26,11 @@ import { Drawer } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
-
 import {
   getNotificationAlert,
   getNotificationList,
   getNotificationAlertClear,
 } from "../../../store/actions/NotificationAction";
-
 import Notification from "../../../components/notification/index";
 import { getFilteredList } from "../../../store/actions/PatientsActions";
 
@@ -42,9 +40,9 @@ const Header = ({ onNote }) => {
   const [userName, setUserName] = useState("");
   const router = useRouter();
   const [stateActive, setStateActive] = useState(router.pathname);
-  const [userRole, setUserRole] = useState("");
+  const [userRole, setUserRole] = useState(null);
   const [menuList, setMenuList] = useState([]);
-  const [userIdDetails, setUserIdDetails] = useState("");
+  const [userIdDetails, setUserIdDetails] = useState(null);
   const [open, setOpen] = useState(false);
   const [toggleChatBox, setToggleChatBox] = useState(true);
   const [openMsg, setOpenMsg] = useState(false);
@@ -54,7 +52,6 @@ const Header = ({ onNote }) => {
   const notificationResponse = useSelector(
     (state) => state?.notificationDatas?.notificationList
   );
-  const currentUserRole = useSelector((state) => state.auth.selectedRole);
 
   useEffect(() => {
     var loginCheck = localStorage.getItem("loginCheck");
@@ -64,14 +61,14 @@ const Header = ({ onNote }) => {
     const token = localStorage.getItem("token");
     getUserIdDetails(userId);
 
-    // dispatchValue(getNotificationAlert("c58c4c29-df4a-4c9e-9277-d58ad9b9d9d8", token));
-
     setUserRole(userRoleLocal);
     setUserName(userName);
-     if (userRoleLocal=== "admin") {
+    if (userRoleLocal === "admin") {
       setMenuList(AdminMenuList);
-    } else {
+    } else if(userRoleLocal === "l1auditor"){
       setMenuList(PhysicanMenuList);
+    }else{
+      setMenuList([])
     }
     if (loginCheck != "true") {
       Swal.fire({
@@ -254,7 +251,7 @@ const Header = ({ onNote }) => {
   };
 
   const notificationDrawer = async () => {
-    setOpen(true)
+    setOpen(true);
     dispatchValue(getNotificationAlertClear([]));
   };
 
@@ -263,6 +260,20 @@ const Header = ({ onNote }) => {
     return emailSplit[0];
   };
 
+  const data = [
+    { label: "Admin", key: "admin" },
+    { label: "L1auditor", key: "l1auditor" },
+  ];
+  const items =data?.filter(info=>(info?.key?.toLowerCase() !== userRole?.toLowerCase()))
+
+  const onClick = ({key}) => {
+    localStorage.setItem("userRole", key);
+   if(key==="admin"){
+     router.push("/admin/user")
+    }else if(key==="l1auditor"){
+     router.push("/physician/dashboard")
+   }
+  };
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -346,42 +357,50 @@ const Header = ({ onNote }) => {
                           {/* <Image src={IMAGES.profileImage}/> */}
 
                           <div>
-                            <Dropdown>
+                            {/* <Dropdown>
                               <Dropdown.Toggle
                                 className="nav-link i-false"
                                 as="div"
-                              >
+                              > */}
                                 <div className="header-info2 d-flex align-items-center">
                                   <div className="header-media">
                                     <Image src={IMAGES.profileImage} />
                                   </div>
                                 </div>
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu align="end">
+                              {/* </Dropdown.Toggle> */}
+                              {/* <Dropdown.Menu align="end">
                                 <div className=" border-0 mb-0">
                                   <span className="dropdown-item ai-icon ">
                                     {SVGICON.Logout}{" "}
                                     <span className="ms-2">Logout </span>
                                   </span>
                                 </div>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                              </Dropdown.Menu> */}
+                            {/* </Dropdown> */}
                           </div>
+                        </div>
+                        <div className="mx-15">
+                          <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
+                            {userName}
+                          </span>
 
-                          <div>
-                            <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
-                              {userName}
+                          {userIdDetails != "" ? (
+                            <span className="ms-2 d-flex mt-1">
+                              <Dropdown
+                                menu={{
+                                  items,
+                                  onClick
+                                }}
+                                trigger={["click"]}
+                              >
+                                <span className="header-name"
+                                style={{marginLeft:"10px"}}>{userRole}
+                                <DownOutlined  style={{margin:"0 0 0 5px"}}/></span>
+
+                              </Dropdown>
+                             
                             </span>
-                            {userIdDetails != "" ? (
-                              <span className="ms-2 d-flex mt-1">
-                                {/* {SVGICON.Logout}{" "} */}
-                                <h6 className="logout-name">
-                                  {/* {userIdDetails?.role[0]}{" "} */}
-                                  {userRole}
-                                </h6>
-                              </span>
-                            ) : null}
-                          </div>
+                          ) : null}
                         </div>
                       </div>
                     </div>
