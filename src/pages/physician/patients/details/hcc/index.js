@@ -683,7 +683,7 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-        result.unMatchedDisease.map((res) => {
+        result.unMatchedDisease?.map((res) => {
           const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
@@ -2169,7 +2169,7 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-        result.unMatchedDisease.map((res) => {
+        result.unMatchedDisease?.map((res) => {
           const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
