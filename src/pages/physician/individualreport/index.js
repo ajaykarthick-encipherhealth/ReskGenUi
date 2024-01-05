@@ -36,7 +36,7 @@ const IndividualReceiverReport = () => {
   const fileUrl = useSelector((state) => state.report);
   const fileExtension = fileUrl?.uploadFile?.split(".").pop();
   const extention = fileExtension?.split("?").shift();
-  const [csvTableData,setCSVTableData]=useState([])
+  const [csvTableData, setCSVTableData] = useState([]);
 
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
@@ -70,8 +70,8 @@ const IndividualReceiverReport = () => {
         const text = await response.text();
         const jsonArray = await csvToJson().fromString(text);
         setCSVTableData(jsonArray);
-      } 
-      if(extention === "xlsx") {
+      }
+      if (extention === "xlsx") {
         const arrayBuffer = await response.arrayBuffer();
         const data = new Uint8Array(arrayBuffer);
         const workbook = XLSX.read(data, { type: "array" });
@@ -93,9 +93,8 @@ const IndividualReceiverReport = () => {
     if (fileUrl) {
       fetchData(fileUrl);
     }
+  }, [ReceivedReportDetails?.content, fileUrl?.uploadFile]);
 
-  }, [ReceivedReportDetails?.content,fileUrl?.uploadFile]);
-  
   useEffect(() => {
     if (reportInfo?.reportUser?.reportId) {
       dispatch(getSelectedReportDetails(reportInfo?.reportUser?.reportId));
@@ -111,7 +110,6 @@ const IndividualReceiverReport = () => {
       )
     );
   }, [reportInfo?.reportUser, selectedRow?.reportPath]);
-
 
   const performanceSearch = (value) => {
     dispatch(
@@ -131,7 +129,10 @@ const IndividualReceiverReport = () => {
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-      <div className={styles.container} style={{ margin: "30px 0px 50px 0px",height:"auto" }}>
+      <div
+        className={styles.container}
+        style={{ margin: "30px 0px 50px 0px", height: "auto" }}
+      >
         <div className={styles.cont1}>
           <div>
             <div className={styles.container}>
@@ -162,7 +163,7 @@ const IndividualReceiverReport = () => {
                         marginBottom: "10px",
                       }}
                       onClick={() => {
-                        console.log("vg")
+                        console.log("vg");
                         dispatch(selectedReport({ reportUser: item }));
                       }}
                     >
@@ -234,9 +235,12 @@ const IndividualReceiverReport = () => {
                     window.open(fileUrl?.uploadFile);
                   }}
                   className={styles.download}
-                  disabled={csvTableData?.length===0 && tableData?.length===0?true:false}
+                  disabled={
+                    csvTableData?.length === 0 && tableData?.length === 0
+                      ? true
+                      : false
+                  }
                 >
-                  {console.log(csvTableData?.length===0 , tableData?.length===0)}
                   <Image
                     src={download}
                     alt="noimg"
@@ -261,13 +265,24 @@ const IndividualReceiverReport = () => {
                 {selectedRow?.type}
               </div>
             </div>
-            <div style={{
-              width:"100%",overflowX:"scroll"
-            }}>
+            <div
+              style={{
+                width: "100%",
+                overflowX: "scroll",
+              }}
+            >
               {extention === "csv" ? (
-                <CSVDisplay tableData={csvTableData} fileUrl={fileUrl?.uploadFile} extention={extention} />
+                <CSVDisplay
+                  tableData={csvTableData}
+                  fileUrl={fileUrl?.uploadFile}
+                  extention={extention}
+                />
               ) : (
-                <ExcelDisplay tableData={tableData} fileUrl={fileUrl?.uploadFile} extention={extention}/>
+                <ExcelDisplay
+                  tableData={tableData}
+                  fileUrl={fileUrl?.uploadFile}
+                  extention={extention}
+                />
               )}
             </div>
           </div>
