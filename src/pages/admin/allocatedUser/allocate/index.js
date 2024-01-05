@@ -67,8 +67,8 @@ const AllocateModal = ({
       dueDate: `${allocateDate + "T00:00:00.000Z"}`,
       patientIds: selectedRowsId.map((item) => item.id),
     });
-    if (response.data) {
-      if (response?.status == 200) {
+    if (response) {
+      if (response?.status == "SUCCESS") {
         notification.success({
           message: response?.data?.message,
         });
