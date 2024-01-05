@@ -98,7 +98,7 @@ export default function UserLogin() {
   const items = [];
   const data = role?.map((info) => {
     if(info.toLowerCase() ==="admin"){
-      items?.push({ value: "Admin", label:"Admin"},{ value: "L1Coder", label: 'L1Coder' });
+      items?.push({ value: "Admin", label:"Admin"},{ value: "L1auditor", label: 'L1auditor' });
     }
     else{
       items?.push({ value: info, label: info })
@@ -116,9 +116,11 @@ export default function UserLogin() {
       setRoleError(false);
       if (selectedRole === "admin" && !roleError) {
         dispatch(selectedUserRole(selectedRole.toUpperCase()))
+        localStorage.setItem("userRole", selectedRole)
         router.push("/admin/user");
-      } else if(selectedRole === "l1coder" && !roleError) {
+      } else if(selectedRole === "l1auditor" && !roleError) {
         dispatch(selectedUserRole(selectedRole.toUpperCase()))
+        localStorage.setItem("userRole", selectedRole)
         router.push("/physician/dashboard");
       }
     }
