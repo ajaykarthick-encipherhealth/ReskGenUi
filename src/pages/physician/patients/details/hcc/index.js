@@ -400,9 +400,8 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-
         result?.invalidDisease?.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
+          const encounterDatearray = res.encounterDate.split(",");
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -541,33 +540,6 @@ const Hcc = ({ patientHccResult }) => {
         for (var key in validDis) {
           validDiseasesArray.push({ name: validDis[key] });
         }
-
-        // for (var key in result.validDisease) {
-        //   validDis = result.validDisease[key];
-        //   if (result.rafScore != null) {
-        //     rafScore = result.rafScore[key]
-        //   }
-        // }
-        // for (var key in result.invalidDisease) {
-        //   invalidDis = result.invalidDisease[key];
-        // }
-        // for (var key in result.comboDisease) {
-        //   comboDis = result.comboDisease[key];
-        // }
-        // for (var key in result.meatCriteria) {
-        //   meatCri = result.meatCriteria[key];
-        // }
-
-        // var invalidDiseasesArray = [];
-        // var validDiseasesArray = [];
-
-        // for (var key in invalidDis) {
-        //   invalidDiseasesArray.push({ name: invalidDis[key] });
-        // }
-        // for (var key in validDis) {
-        //   validDiseasesArray.push({ name: validDis[key] });
-        // }
-
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
@@ -764,22 +736,34 @@ const Hcc = ({ patientHccResult }) => {
         var meatHeaderList = [];
 
         meatCri.map((res, index) => {
-          if (res.monitorCapturedFromHeader != "") {
+          if (
+            res.monitorCapturedFromHeader != "" &&
+            res.monitorCapturedFromHeader != null
+          ) {
             meatMoniterHead.push({
               header: res.monitorCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.evaluateCapturedFromHeader != "") {
+          if (
+            res.evaluateCapturedFromHeader != "" &&
+            res.evaluateCapturedFromHeader != null
+          ) {
             meatEvaluteHead.push({
               header: res.evaluateCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.assessmentCapturedFromHeader != "") {
+          if (
+            res.assessmentCapturedFromHeader != "" &&
+            res.assessmentCapturedFromHeader != null
+          ) {
             meatAssesmentHead.push({
               header: res.assessmentCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.treatmentCapturedFromHeader != "") {
+          if (
+            res.treatmentCapturedFromHeader != "" &&
+            res.treatmentCapturedFromHeader != null
+          ) {
             meatTreatMentHead.push({
               header: res.treatmentCapturedFromHeader.toLowerCase(),
             });
@@ -1291,7 +1275,6 @@ const Hcc = ({ patientHccResult }) => {
       setFileInitialPage(pageNumber);
     }
 
-
     // getSectionPageNumber(headerNames, encounterDate);
 
     var splitPoint = disDescription.substring(" ", 40);
@@ -1525,21 +1508,6 @@ const Hcc = ({ patientHccResult }) => {
     const key = e.target.name;
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
-  };
-
-  const addPatientFile = (data) => {
-    inputValue.patientId = patientDocumentResult.patientId;
-    inputValue.name = patientDocumentResult.patientName;
-    setValidated(false);
-    setAddPatient(true);
-    setIsLoadingBtn(false);
-  };
-  const addLabReport = (data) => {
-    inputValue.patientId = patientDocumentResult.patientId;
-    inputValue.name = patientDocumentResult.patientName;
-    setValidated(false);
-    setLapReportSlider(true);
-    setIsLoadingBtn(false);
   };
 
   const getValidHccDetails = async (value, code) => {
@@ -2253,24 +2221,36 @@ const Hcc = ({ patientHccResult }) => {
         var nonHccMeatListArr = [];
 
         meatCri.map((res, index) => {
-          if (res.monitorCapturedFromHeader != "") {
+          if (
+            res.monitorCapturedFromHeader != "" &&
+            res.monitorCapturedFromHeader != null
+          ) {
             meatMoniterHead.push({
-              header: res.monitorCapturedFromHeader,
+              header: res.monitorCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.evaluateCapturedFromHeader != "") {
+          if (
+            res.evaluateCapturedFromHeader != "" &&
+            res.evaluateCapturedFromHeader != null
+          ) {
             meatEvaluteHead.push({
-              header: res.evaluateCapturedFromHeader,
+              header: res.evaluateCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.assessmentCapturedFromHeader != "") {
+          if (
+            res.assessmentCapturedFromHeader != "" &&
+            res.assessmentCapturedFromHeader != null
+          ) {
             meatAssesmentHead.push({
-              header: res.assessmentCapturedFromHeader,
+              header: res.assessmentCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.treatmentCapturedFromHeader != "") {
+          if (
+            res.treatmentCapturedFromHeader != "" &&
+            res.treatmentCapturedFromHeader != null
+          ) {
             meatTreatMentHead.push({
-              header: res.treatmentCapturedFromHeader,
+              header: res.treatmentCapturedFromHeader.toLowerCase(),
             });
           }
           var newArray = [];
@@ -2696,9 +2676,8 @@ const Hcc = ({ patientHccResult }) => {
                                           </span>
                                         </div>
 
-                                        {data.defaultPosition == "VALID" ? (
-                                          null
-                                        ) : data.defaultPosition ==
+                                        {data.defaultPosition ==
+                                        "VALID" ? null : data.defaultPosition ==
                                           "SUGGESTED" ? (
                                           <span
                                             className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
@@ -3477,20 +3456,6 @@ const Hcc = ({ patientHccResult }) => {
                                       </span>
                                     )}
                                     <div>
-                                      {/* <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModal(
-                                          item.monitorCapturedFromHeader,
-                                          item.monitor,
-                                          item.encounterDate
-                                        )
-                                      }
-                                    >
-                                      {item.monitorCapturedFromHeader}
-                                    </Badge> */}
-
                                       {getCaptureSectionBackgroundMeat(
                                         item.monitorCapturedFromHeader,
                                         item.monitor,
@@ -3514,19 +3479,6 @@ const Hcc = ({ patientHccResult }) => {
                                         -
                                       </span>
                                     )}
-                                    {/* <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModal(
-                                          item.evaluateCapturedFromHeader,
-                                          item.evaluate,
-                                          item.encounterDate
-                                        )
-                                      }
-                                    >
-                                      {item.evaluateCapturedFromHeader}
-                                    </Badge> */}
                                     <div>
                                       {getCaptureSectionBackgroundMeat(
                                         item.evaluateCapturedFromHeader,
@@ -3551,19 +3503,7 @@ const Hcc = ({ patientHccResult }) => {
                                         -
                                       </span>
                                     )}
-                                    {/* <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModal(
-                                          item.assessmentCapturedFromHeader,
-                                          item.assessment,
-                                          item.encounterDate
-                                        )
-                                      }
-                                    >
-                                      {item.assessmentCapturedFromHeader}
-                                    </Badge> */}
+
                                     <div>
                                       {getCaptureSectionBackgroundMeat(
                                         item.assessmentCapturedFromHeader,
@@ -3588,20 +3528,6 @@ const Hcc = ({ patientHccResult }) => {
                                         -
                                       </span>
                                     )}
-
-                                    {/* <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModal(
-                                          item.treatmentCapturedFromHeader,
-                                          item.treatment,
-                                          item.encounterDate
-                                        )
-                                      }
-                                    >
-                                      {item.treatmentCapturedFromHeader}
-                                    </Badge> */}
                                     <div>
                                       {getCaptureSectionBackgroundMeat(
                                         item.treatmentCapturedFromHeader,
@@ -3611,11 +3537,6 @@ const Hcc = ({ patientHccResult }) => {
                                     </div>
                                   </div>
                                   <div className="col-xl-1 meatclose">
-                                    {/* {item.isMeatCriteriaPresent === true ?
-                                             <span  className="badge badge-rounded badge-warning badge-meat">
-                                             True
-                                           </span>:
-                                            <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
                                     <Popconfirm
                                       title="You want move to Invalid?"
                                       description={item.diseaseName}
