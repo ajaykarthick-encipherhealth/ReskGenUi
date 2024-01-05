@@ -68,7 +68,7 @@ const Header = ({ onNote }) => {
 
     setUserRole(userRoleLocal);
     setUserName(userName);
-     if (currentUserRole?.toLowerCase() === "admin") {
+     if (userRoleLocal=== "admin") {
       setMenuList(AdminMenuList);
     } else {
       setMenuList(PhysicanMenuList);
@@ -90,7 +90,7 @@ const Header = ({ onNote }) => {
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
-  }, [currentUserRole]);
+  }, []);
 
   const onClose = () => {
     setOpen(false);
@@ -377,7 +377,7 @@ const Header = ({ onNote }) => {
                                 {/* {SVGICON.Logout}{" "} */}
                                 <h6 className="logout-name">
                                   {/* {userIdDetails?.role[0]}{" "} */}
-                                  {currentUserRole}
+                                  {userRole}
                                 </h6>
                               </span>
                             ) : null}
