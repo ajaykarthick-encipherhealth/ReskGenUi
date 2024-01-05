@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import { notification, Select as AntSelect, Empty } from "antd";
@@ -10,13 +10,16 @@ import { selectedRoWDetails } from "../../../../store/actions/adminAction/filePr
 
 function AllocatedAdminList({
   patinetListAll,
-  actionBodyTemplate,
-  statusBodyTemplate,
-  patientDetails,
+  selectAllChecked,
+  setSelectAllChecked,
+  setSelectedRowsId,
+  selectedRowsId
 }) {
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
-  const [detailsContent, setDetailsContent] = useState(patinetListAll);
+  const [detailsContent, setDetailsContent] = useState();
 
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
@@ -34,10 +37,22 @@ function AllocatedAdminList({
     value: "HIGH",
   });
 
-  const handleHeaderCheckboxChange = () => {
-    // setSelectAll(!selectAll);
-    // const updatedRows = selectAll ? [] : reportListAll;
-    // setSelectedRows(updatedRows);
+  const handleRowCheckboxChange = (row) => {
+    const isSelected = selectedRows.some(
+      (selectedRow) => selectedRow.patientId === row.patientId
+    );
+
+    let updatedRows;
+
+    if (isSelected) {
+      updatedRows = selectedRows.filter(
+        (selectedRow) => selectedRow.patientId !== row.patientId
+      );
+    } else {
+      updatedRows = [...selectedRows, row];
+    }
+
+    setSelectedRows(updatedRows);
   };
 
   const handleAvatarHover = (data) => {
@@ -49,7 +64,6 @@ function AllocatedAdminList({
   };
 
   const requestSort = (key) => {
-    console.log(key);
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
@@ -132,18 +146,17 @@ function AllocatedAdminList({
           );
         }}
       >
-        <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
+        <td className={TableStyle.firstTdBorder}>
           {data.patientId}
         </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+        <td className={TableStyle.childBorder}>
           {data.patientName}
         </td>
-
-        {/* <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.processedDate
-            ? moment(data.processedDate).format("MM-DD-YYYY")
+        <td className={TableStyle.childBorder}>
+          {data.computedDate
+            ? moment.utc(data.computedDate).format("MM-DD-YYYY")
             : "---"}
-        </td> */}
+        </td>
 
         {/* <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {statusBodyTemplate(data)}
@@ -153,12 +166,17 @@ function AllocatedAdminList({
           <input
             type="checkbox"
             onChange={() => {
-              handleRowCheckboxChange(row);
+              handleRowCheckboxChange(data);
+              setSelectedRowsId((prev) => {
+                const currentIds = prev.map(item => item.id);
+                if (!currentIds.includes(data.patientId)) {
+                  return [...prev, { id: data.patientId, name: data.patientName }];
+                } else {
+                  return prev.filter((item) => item.id !== data.patientId);
+                }                
+              });
             }}
-            //   checked={selectedRows?.data?.some(
-            //     (selectedRow) =>
-            //       selectedRow.patientId === row.patientId
-            //   )}
+            checked={selectedRowsId.some(item => item.id === data.patientId)}
             style={{
               width: "20px",
               height: "20px",
@@ -171,7 +189,9 @@ function AllocatedAdminList({
       </tr>
     ));
   };
-
+useEffect(() => {
+  setDetailsContent(patinetListAll)
+}, [patinetListAll])
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -180,13 +200,13 @@ function AllocatedAdminList({
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
 
-            {/* <th
+            <th
               onClick={() => {
                 requestSort("lastModifiedDate");
                 sortTableByDate("completeDate");
               }}
             >
-              PROCESSED DATE
+              COMPUTED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
                 {sortCompleteOrder === "asc" ? (
                   <ArrowUpOutlined />
@@ -194,7 +214,7 @@ function AllocatedAdminList({
                   <ArrowDownOutlined />
                 )}
               </span>
-            </th> */}
+            </th>
 
             {/* <th>STATUS</th> */}
             {/* <th>Upload</th> */}
@@ -202,7 +222,7 @@ function AllocatedAdminList({
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <input
                   type="checkbox"
-                  onChange={handleHeaderCheckboxChange}
+                  onClick={() => setSelectAllChecked(!selectAllChecked)}
                   style={{
                     paddingTop: "10px",
                     width: "20px",
@@ -211,7 +231,7 @@ function AllocatedAdminList({
                     borderRadius: "4px",
                     backgroundColor: "pink",
                   }}
-                  //   checked={selectAll}
+                    checked={selectAllChecked}
                 />
               </div>
             </th>
@@ -219,7 +239,7 @@ function AllocatedAdminList({
         </thead>
 
         <tbody>
-          {detailsContent.length <= 0 ? (
+          {detailsContent?.length <= 0 ? (
             <tr>
               <td colSpan="9">
                 <Empty />

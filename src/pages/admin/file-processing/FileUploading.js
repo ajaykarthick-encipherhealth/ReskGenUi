@@ -1,6 +1,5 @@
 import React from "react";
 import { Offcanvas, Spinner, Button } from "react-bootstrap";
-import visitStyles from "../../../styles/visitdata.module.css";
 import Form from "react-bootstrap/Form";
 
 const FileUploading = ({
@@ -44,7 +43,7 @@ const FileUploading = ({
                   name="patientId"
                   required
                   type="text"
-                  value={inputValue.patientId}
+                  value={inputValue?.patientId}
                   onChange={(e) => handleChange(e)}
                 />
               </div>
@@ -57,7 +56,7 @@ const FileUploading = ({
                   name="name"
                   required
                   type="text"
-                  value={inputValue.name}
+                  value={inputValue?.name}
                   onChange={(e) => handleChange(e)}
                 />
               </div>

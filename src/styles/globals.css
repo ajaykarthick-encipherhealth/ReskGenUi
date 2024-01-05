@@ -4356,7 +4356,7 @@ a.active {
 }
 
 .bg-primary {
-  /* background-color: var(--primary) !important; */
+  background-color: var(--primary) !important;
 }
 
 .bg-secondary {
@@ -12660,6 +12660,7 @@ tbody > tr {
   z-index: 0 !important;
 }
 
+
 .completedBtnHcc
   > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
   color: #3a9b94;
@@ -12667,6 +12668,11 @@ tbody > tr {
   border: none !important;
   border-radius: 6px;
   box-shadow: none;
+}
+
+.pendingBtn
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
+  display: none;
 }
 
 .completedBtnHcc
@@ -13087,13 +13093,8 @@ tbody > tr {
   color: #000;
   display: block;
   font-weight: 500;
-  /* line-height: 1.2; */
-  margin-bottom: 0.3125rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  display: block;
-  max-width: 10.625rem;
+  margin-bottom: 10px;
+  line-height: 18px;
 }
 
 .chatbox .user_info p {
@@ -13338,4 +13339,15 @@ tbody > tr {
   height:80% !important; */
   border: 1px solid green !important;
 
+}
+.ant-modal-content {
+    background: #f5f9ff !important;
+}
+.ant-modal-header {
+  background: #f5f9ff !important;
+}
+
+.ant-modal-content{
+  height: 730px;
+  overflow: scroll;
 }

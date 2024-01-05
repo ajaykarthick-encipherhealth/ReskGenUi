@@ -277,12 +277,11 @@ function PatientTable({
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {statusBodyTemplate(data)}
           </td>
-          <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td>
+          {/* <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td> */}
         </tr>
       ))
     );
   };
-
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -325,7 +324,7 @@ function PatientTable({
             <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th>STATUS</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
           </tr>
         </thead>
 

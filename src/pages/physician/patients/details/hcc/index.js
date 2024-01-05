@@ -271,8 +271,7 @@ const Hcc = ({ patientHccResult }) => {
     setDocumentLoaded(true);
   };
 
-  const pageClickPdfFile = (e) => {
-  };
+  const pageClickPdfFile = (e) => {};
 
   useEffect(() => {
     // loadFilterPatientList();
@@ -281,7 +280,6 @@ const Hcc = ({ patientHccResult }) => {
     var patientId = localStorage.getItem("patientId");
     var uId = localStorage.getItem("userId");
     setLocalUserId(uId);
-    getSectionTagColorAll();
     setLocalPatientId(patientId);
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
@@ -304,14 +302,6 @@ const Hcc = ({ patientHccResult }) => {
 
     setvalidHccDetails(userSpinner);
   }, []);
-
-  const getPatientIdDetails = async (patientId) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
-    );
-    setPatienIdDetails(response.data);
-    var result = response.data.response;
-  };
 
   const getPatientDetails = async (
     patientId,
@@ -410,9 +400,8 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-
         result?.invalidDisease?.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(',');
+          const encounterDatearray = res.encounterDate.split(",");
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -551,33 +540,6 @@ const Hcc = ({ patientHccResult }) => {
         for (var key in validDis) {
           validDiseasesArray.push({ name: validDis[key] });
         }
-
-        // for (var key in result.validDisease) {
-        //   validDis = result.validDisease[key];
-        //   if (result.rafScore != null) {
-        //     rafScore = result.rafScore[key]
-        //   }
-        // }
-        // for (var key in result.invalidDisease) {
-        //   invalidDis = result.invalidDisease[key];
-        // }
-        // for (var key in result.comboDisease) {
-        //   comboDis = result.comboDisease[key];
-        // }
-        // for (var key in result.meatCriteria) {
-        //   meatCri = result.meatCriteria[key];
-        // }
-
-        // var invalidDiseasesArray = [];
-        // var validDiseasesArray = [];
-
-        // for (var key in invalidDis) {
-        //   invalidDiseasesArray.push({ name: invalidDis[key] });
-        // }
-        // for (var key in validDis) {
-        //   validDiseasesArray.push({ name: validDis[key] });
-        // }
-
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
@@ -662,7 +624,43 @@ const Hcc = ({ patientHccResult }) => {
             colors: COLORS2[index],
           });
         });
-        setCaptureSectionMatching(capturedSectionsColorsMatching);
+
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
+        );
+
+        var sectionColorResult = response.data.response;
+
+        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+        );
+        let sectionColorResultNotMatch = dublicateSectionArr.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+        );
+
+        var notMatchColorArray = [];
+        sectionColorResultNotMatch?.map((res, index) => {
+          var radomColorcode = stringToColour(res.name);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArray.push({
+            sectionName: res.name,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          submitSectionColors(
+            res.name,
+            radomColorcode,
+            randomColorChangeShadow
+          );
+        });
+
+        //   var newArrayColorMatchs = [];
+        //   newArrayColorMatchs = [
+        //     ...sectionColorResultMatch,
+        //     ...notMatchColorArray,
+        //   ];
+
+        //  setCaptureSectionMatching(newArrayColorMatchs);
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
@@ -685,7 +683,7 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-        result.unMatchedDisease.map((res) => {
+        result.unMatchedDisease?.map((res) => {
           const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
@@ -735,25 +733,39 @@ const Hcc = ({ patientHccResult }) => {
         var dublicateRemoveSecondArr = [];
         var nonHccMeatListArr = [];
 
+        var meatHeaderList = [];
+
         meatCri.map((res, index) => {
-          if (res.monitorCapturedFromHeader != "") {
+          if (
+            res.monitorCapturedFromHeader != "" &&
+            res.monitorCapturedFromHeader != null
+          ) {
             meatMoniterHead.push({
-              header: res.monitorCapturedFromHeader,
+              header: res.monitorCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.evaluateCapturedFromHeader != "") {
+          if (
+            res.evaluateCapturedFromHeader != "" &&
+            res.evaluateCapturedFromHeader != null
+          ) {
             meatEvaluteHead.push({
-              header: res.evaluateCapturedFromHeader,
+              header: res.evaluateCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.assessmentCapturedFromHeader != "") {
+          if (
+            res.assessmentCapturedFromHeader != "" &&
+            res.assessmentCapturedFromHeader != null
+          ) {
             meatAssesmentHead.push({
-              header: res.assessmentCapturedFromHeader,
+              header: res.assessmentCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.treatmentCapturedFromHeader != "") {
+          if (
+            res.treatmentCapturedFromHeader != "" &&
+            res.treatmentCapturedFromHeader != null
+          ) {
             meatTreatMentHead.push({
-              header: res.treatmentCapturedFromHeader,
+              header: res.treatmentCapturedFromHeader.toLowerCase(),
             });
           }
           var newArray = [];
@@ -772,7 +784,7 @@ const Hcc = ({ patientHccResult }) => {
             });
           });
           allMeatHeadColorArr = allMeatHeadColor;
-
+          meatHeaderList = dublicateRemoveArr;
           dublicateRemoveSecondArr = getUniqueListBy(
             allMeatHeadColor,
             "header"
@@ -851,6 +863,40 @@ const Hcc = ({ patientHccResult }) => {
             });
           }
         });
+
+        let sectionColorResultMatchMeat = sectionColorResult.filter((o1) =>
+          meatHeaderList.some((o2) => o1.sectionName === o2.header)
+        );
+        let sectionColorResultNotMatchMeat = meatHeaderList.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.header === o2.sectionName)
+        );
+
+        var notMatchColorArrayMeat = [];
+        sectionColorResultNotMatchMeat?.map((res, index) => {
+          var radomColorcode = stringToColour(res.header);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArrayMeat.push({
+            sectionName: res.header,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          submitSectionColors(
+            res.header,
+            radomColorcode,
+            randomColorChangeShadow
+          );
+        });
+
+        var newArrayColorMatchs = [];
+        newArrayColorMatchs = [
+          ...sectionColorResultMatch,
+          ...notMatchColorArray,
+          ...sectionColorResultMatchMeat,
+          ...notMatchColorArrayMeat,
+        ];
+
+        setCaptureSectionMatching(newArrayColorMatchs);
+
         setMeatCriteriaList(meatListArr);
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
         setIsLoadingDos(false);
@@ -1172,10 +1218,10 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const handleOpenModal = (value, disDescription, encounterDate) => {
-    getSectionPageNumber(value, encounterDate);
-    var splitPoint = disDescription.substring(" ", 40);
+    // getSectionPageNumber(value, encounterDate);
+    var splitPoint = disDescription.substring(" ", 20);
     setTimeout(() => {
-      setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
+      // setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
       highlight({
         keyword: splitPoint,
         matchCase: true,
@@ -1208,17 +1254,31 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
 
-  const findValueDocument = (
+  const findValueDocument = async (
     value,
     disDescription,
     headerNames,
     encounterDate,
     actualDescription
   ) => {
-    getSectionPageNumber(headerNames, encounterDate);
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
+    );
+    var result = response.data.response;
+    if (result?.length) {
+      var pageNumber = result[0] - 1;
+      setFileInitialPage(pageNumber);
+    }
+
+    // getSectionPageNumber(headerNames, encounterDate);
 
     var splitPoint = disDescription.substring(" ", 40);
-    setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
+    setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
     highlight({
       keyword: actualDescription,
       // matchCase: true,
@@ -1267,11 +1327,13 @@ const Hcc = ({ patientHccResult }) => {
       }
       if (check === "valid") {
         var fileId = patientFileDTO.fileId;
+        const encounterDatesValue = encounterDate.split(",");
+        const encounterDatesHeader = encounterDatesValue[0];
         const response = await axios.get(
           ENDPOINTS.apiEndoint +
-            `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDate}`
+            `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
         );
-        var result = response.data;
+        var result = response.data.response;
         if (result?.length) {
           var pageNumber = result[0] - 1;
           setFileInitialPage(pageNumber);
@@ -1446,21 +1508,6 @@ const Hcc = ({ patientHccResult }) => {
     const key = e.target.name;
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
-  };
-
-  const addPatientFile = (data) => {
-    inputValue.patientId = patientDocumentResult.patientId;
-    inputValue.name = patientDocumentResult.patientName;
-    setValidated(false);
-    setAddPatient(true);
-    setIsLoadingBtn(false);
-  };
-  const addLabReport = (data) => {
-    inputValue.patientId = patientDocumentResult.patientId;
-    inputValue.name = patientDocumentResult.patientName;
-    setValidated(false);
-    setLapReportSlider(true);
-    setIsLoadingBtn(false);
   };
 
   const getValidHccDetails = async (value, code) => {
@@ -1713,75 +1760,6 @@ const Hcc = ({ patientHccResult }) => {
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
     } else {
-    }
-  };
-
-  const replaceString = (value) => {
-    var removeComma = null;
-    // if (value != null) {
-    //   removeComma = value.replace(/,/g, "");
-    // }
-    return removeComma;
-  };
-
-  const replaceCaptureSection = (value) => {
-    return value;
-  };
-
-  const handleSubmitHccSave = async () => {
-    setSaveBtnTitle("Loading...");
-    var dos = dosYearDefalutSelect[0].label;
-    var validObject = {};
-    var inValidObject = {};
-    var unmatachObject = {};
-    var comoboObject = {};
-    var meatObject = {};
-    var deletedObject = {};
-    validObject[dos] = newValidDiseaseList;
-    inValidObject[dos] = newInValidDiseaseList;
-    unmatachObject[dos] = suggestedHccList;
-    comoboObject[dos] = comboDiseaseCodesList;
-    meatObject[dos] = meatCriteriaList;
-    deletedObject[dos] = deletedHccList;
-
-    var postData = {
-      userId: localUserId,
-      patientId: localPatientId,
-      patientName: patientDocumentResult.patientName,
-      fileId: patientDocumentResult.patientName,
-      orgId: patientDocumentResult.orgId,
-      tenantId: patientDocumentResult.tenantId,
-      dob: patientDocumentResult.dob,
-      gender: patientDocumentResult.gender,
-      age: patientDocumentResult.age,
-      validDisease: validObject,
-      invalidDisease: inValidObject,
-      unmatchedDisease: unmatachObject,
-      comboDisease: comoboObject,
-      meatCriteria: meatObject,
-      rafScore: patientDocumentResult.rafScore,
-      dosFiltered: patientDocumentResult.dosFiltered,
-      fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: deletedObject,
-    };
-
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/save`,
-        postData
-      );
-      if (response?.status == 202) {
-        notification.success({
-          message: "Saved Successfully!",
-          placement: "top",
-          duration: 1,
-        });
-        setSaveBtnTitle("Save");
-        getPatientDetails(localPatientId, localOrgId, localTenantId);
-      } else {
-      }
-    } catch (e) {
-      setSaveBtnTitle("Save");
     }
   };
 
@@ -2168,7 +2146,7 @@ const Hcc = ({ patientHccResult }) => {
             colors: COLORS2[index],
           });
         });
-        setCaptureSectionMatching(capturedSectionsColorsMatching);
+        // setCaptureSectionMatching(capturedSectionsColorsMatching);
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
@@ -2191,7 +2169,7 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-        result.unMatchedDisease.map((res) => {
+        result.unMatchedDisease?.map((res) => {
           const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
@@ -2243,24 +2221,36 @@ const Hcc = ({ patientHccResult }) => {
         var nonHccMeatListArr = [];
 
         meatCri.map((res, index) => {
-          if (res.monitorCapturedFromHeader != "") {
+          if (
+            res.monitorCapturedFromHeader != "" &&
+            res.monitorCapturedFromHeader != null
+          ) {
             meatMoniterHead.push({
-              header: res.monitorCapturedFromHeader,
+              header: res.monitorCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.evaluateCapturedFromHeader != "") {
+          if (
+            res.evaluateCapturedFromHeader != "" &&
+            res.evaluateCapturedFromHeader != null
+          ) {
             meatEvaluteHead.push({
-              header: res.evaluateCapturedFromHeader,
+              header: res.evaluateCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.assessmentCapturedFromHeader != "") {
+          if (
+            res.assessmentCapturedFromHeader != "" &&
+            res.assessmentCapturedFromHeader != null
+          ) {
             meatAssesmentHead.push({
-              header: res.assessmentCapturedFromHeader,
+              header: res.assessmentCapturedFromHeader.toLowerCase(),
             });
           }
-          if (res.treatmentCapturedFromHeader != "") {
+          if (
+            res.treatmentCapturedFromHeader != "" &&
+            res.treatmentCapturedFromHeader != null
+          ) {
             meatTreatMentHead.push({
-              header: res.treatmentCapturedFromHeader,
+              header: res.treatmentCapturedFromHeader.toLowerCase(),
             });
           }
           var newArray = [];
@@ -2398,23 +2388,40 @@ const Hcc = ({ patientHccResult }) => {
     return output;
   }
 
-  const getSectionTagColor = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/section/color/getsections?sectionnames=${value}`
-    );
-
-    var resultTest = response.data.response;
-    return resultTest;
+  const stringToColour = (str) => {
+    let hash = 0;
+    str.split("").forEach((char) => {
+      hash = char.charCodeAt(0) + ((hash << 5) - hash);
+    });
+    let colour = "#";
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      colour += value.toString(16).padStart(2, "0");
+    }
+    return colour;
   };
 
-  const getSectionTagColorAll = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
-    );
+  const submitSectionColors = async (
+    sectionName,
+    sectionColor,
+    backgroundColor
+  ) => {
+    var postData = {
+      backgroundColor: backgroundColor,
+      sectionColor: sectionColor,
+      sectionName: sectionName,
+    };
 
-    var result = response.data.response;
-    setSectionAllColor(result);
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/section/color/save`,
+        postData
+      );
+      var result = response.data;
+      if (result.status == "SUCCESS") {
+      } else {
+      }
+    } catch (e) {}
   };
 
   const getCaptureSectionBackgroundFile = (
@@ -2425,12 +2432,13 @@ const Hcc = ({ patientHccResult }) => {
     // getSectionTagColor(value);
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = sectionAllColor.filter((res2) => res2.sectionName == res);
-      var headerNames = result[0]?.sectionName;
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
       var disCode = result[0]?.diagnosisCode;
-
+      var headerNames = result[0]?.sectionName;
       var sectionMapArr = (
         <span
           onClick={() =>
@@ -2457,14 +2465,17 @@ const Hcc = ({ patientHccResult }) => {
     documentPlace,
     encounterDate,
     actualDescription,
-    testModal
+    testModal,
+    diagnosisCode
   ) => {
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = sectionAllColor.filter((res2) => res2.sectionName == res);
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.sectionName;
+      var disCode = diagnosisCode;
       var headerNames = result[0]?.sectionName;
 
       var sectionMapArr = (
@@ -2483,7 +2494,7 @@ const Hcc = ({ patientHccResult }) => {
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
         >
           {res}
         </span>
@@ -2501,17 +2512,42 @@ const Hcc = ({ patientHccResult }) => {
         // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
         // {res}</Badge>)
 
-        <Badge
+        <span
           className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
           {moment(res).format("MM/DD")}
-        </Badge>
+        </span>
       );
       return sectionMapArr;
     });
+  };
+
+  const getCaptureSectionBackgroundMeat = (value, dis, encounterDate) => {
+    if (value) {
+      var igonreCase = value.toLowerCase();
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == igonreCase
+      );
+
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var disCode = result[0]?.diagnosisCode;
+      var headerNames = result[0]?.sectionName;
+
+      var sectionMapArr = (
+        <span
+          onClick={() => handleOpenModal(value, dis, encounterDate)}
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeat}`}
+        >
+          {value}
+        </span>
+      );
+      return sectionMapArr;
+    }
   };
 
   return (
@@ -2640,11 +2676,8 @@ const Hcc = ({ patientHccResult }) => {
                                           </span>
                                         </div>
 
-                                        {data.defaultPosition == "VALID" ? (
-                                          <span
-                                            className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
-                                          ></span>
-                                        ) : data.defaultPosition ==
+                                        {data.defaultPosition ==
+                                        "VALID" ? null : data.defaultPosition ==
                                           "SUGGESTED" ? (
                                           <span
                                             className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
@@ -2748,7 +2781,9 @@ const Hcc = ({ patientHccResult }) => {
                                             data.capturedSections,
                                             null,
                                             data.encounterDate,
-                                            data.actualDescription
+                                            data.actualDescription,
+                                            null,
+                                            data.diagnosisCode
                                           )}
                                         </div>
                                       </div>
@@ -2967,7 +3002,8 @@ const Hcc = ({ patientHccResult }) => {
                                                   data.getPlace,
                                                   data.encounterDate,
                                                   data.actualDescription,
-                                                  "Suggested"
+                                                  "Suggested",
+                                                  data.diagnosisCode
                                                 )}
                                               </div>
                                             </div>
@@ -3107,7 +3143,8 @@ const Hcc = ({ patientHccResult }) => {
                                             null,
                                             data.encounterDate,
                                             data.actualDescription,
-                                            "Suggested"
+                                            "Suggested",
+                                            data.diagnosisCode
                                           )}
                                         </div>
                                       </div>
@@ -3418,19 +3455,13 @@ const Hcc = ({ patientHccResult }) => {
                                         -
                                       </span>
                                     )}
-                                    <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModal(
-                                          item.monitorCapturedFromHeader,
-                                          item.monitor,
-                                          item.encounterDate
-                                        )
-                                      }
-                                    >
-                                      {item.monitorCapturedFromHeader}
-                                    </Badge>
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.monitorCapturedFromHeader,
+                                        item.monitor,
+                                        item.encounterDate
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.evaluate != "" ? (
@@ -3448,19 +3479,13 @@ const Hcc = ({ patientHccResult }) => {
                                         -
                                       </span>
                                     )}
-                                    <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModal(
-                                          item.evaluateCapturedFromHeader,
-                                          item.evaluate,
-                                          item.encounterDate
-                                        )
-                                      }
-                                    >
-                                      {item.evaluateCapturedFromHeader}
-                                    </Badge>
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.evaluateCapturedFromHeader,
+                                        item.evaluate,
+                                        item.encounterDate
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.assessment != "" ? (
@@ -3478,19 +3503,14 @@ const Hcc = ({ patientHccResult }) => {
                                         -
                                       </span>
                                     )}
-                                    <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModal(
-                                          item.assessmentCapturedFromHeader,
-                                          item.assessment,
-                                          item.encounterDate
-                                        )
-                                      }
-                                    >
-                                      {item.assessmentCapturedFromHeader}
-                                    </Badge>
+
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.assessmentCapturedFromHeader,
+                                        item.assessment,
+                                        item.encounterDate
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.treatment != "" ? (
@@ -3508,27 +3528,15 @@ const Hcc = ({ patientHccResult }) => {
                                         -
                                       </span>
                                     )}
-
-                                    <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModal(
-                                          item.treatmentCapturedFromHeader,
-                                          item.treatment,
-                                          item.encounterDate
-                                        )
-                                      }
-                                    >
-                                      {item.treatmentCapturedFromHeader}
-                                    </Badge>
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.treatmentCapturedFromHeader,
+                                        item.treatment,
+                                        item.encounterDate
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-1 meatclose">
-                                    {/* {item.isMeatCriteriaPresent === true ?
-                                             <span  className="badge badge-rounded badge-warning badge-meat">
-                                             True
-                                           </span>:
-                                            <Badge  bg="success badge-circle mt-2">{item.isMeatCriteriaPresent}</Badge>} */}
                                     <Popconfirm
                                       title="You want move to Invalid?"
                                       description={item.diseaseName}
@@ -3605,59 +3613,13 @@ const Hcc = ({ patientHccResult }) => {
                                             {item.monitor}
                                           </span>
                                         </Popover>
-                                        <Badge
-                                          className="badge-meat cr-pointer"
-                                          bg={
-                                            item.monitorCapturedFromHeader ===
-                                              "HPI" ||
-                                            item.monitorCapturedFromHeader ===
-                                              "Plan: Hypertensive heart disease without heart failure" ||
-                                            item.monitorCapturedFromHeader ===
-                                              "Vital Signs"
-                                              ? "third badge-circle mt-2"
-                                              : item.monitorCapturedFromHeader ===
-                                                  "Impression" ||
-                                                item.monitorCapturedFromHeader ===
-                                                  "Plan: COPD" ||
-                                                item.monitorCapturedFromHeader ===
-                                                  "Assessments" ||
-                                                item.monitorCapturedFromHeader ===
-                                                  "Assessment"
-                                              ? "bg-eight badge-circle mt-2"
-                                              : item.monitorCapturedFromHeader ===
-                                                  "Recommendations" ||
-                                                item.monitorCapturedFromHeader ===
-                                                  "Plan: GERD without esophagitis" ||
-                                                item.monitorCapturedFromHeader ===
-                                                  "Treatment"
-                                              ? "bgshodowcolor badge-circle mt-2"
-                                              : item.monitorCapturedFromHeader ===
-                                                  "Plan / Discussion" ||
-                                                item.monitorCapturedFromHeader ===
-                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                              ? "bg-four badge-circle mt-2"
-                                              : item.monitorCapturedFromHeader ===
-                                                  "Patient Instructions" ||
-                                                item.monitorCapturedFromHeader ===
-                                                  "Plan: Hyperlipidemia, acquired"
-                                              ? "bg-five badge-circle mt-2"
-                                              : item.monitorCapturedFromHeader ===
-                                                "N/A"
-                                              ? "bg-six badge-circle mt-2"
-                                              : item.monitorCapturedFromHeader ===
-                                                "Plan"
-                                              ? "bg-seven badge-circle mt-2"
-                                              : "primary badge-circle mt-2"
-                                          }
-                                          onClick={() =>
-                                            handleOpenModal(
-                                              item.monitorCapturedFromHeader,
-                                              item.monitor
-                                            )
-                                          }
-                                        >
-                                          {item.monitorCapturedFromHeader}
-                                        </Badge>
+                                        <div>
+                                          {getCaptureSectionBackgroundMeat(
+                                            item.monitorCapturedFromHeader,
+                                            item.monitor,
+                                            item.encounterDate
+                                          )}
+                                        </div>
                                       </div>
                                       <div className="col-xl-2 d-grid">
                                         <Popover
@@ -3669,59 +3631,13 @@ const Hcc = ({ patientHccResult }) => {
                                             {item.evaluate}
                                           </span>
                                         </Popover>
-                                        <Badge
-                                          className="badge-meat cr-pointer"
-                                          bg={
-                                            item.evaluateCapturedFromHeader ===
-                                              "HPI" ||
-                                            item.evaluateCapturedFromHeader ===
-                                              "Plan: Hypertensive heart disease without heart failure" ||
-                                            item.evaluateCapturedFromHeader ===
-                                              "Vital Signs"
-                                              ? "third badge-circle mt-2"
-                                              : item.evaluateCapturedFromHeader ===
-                                                  "Impression" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                  "Plan: COPD" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                  "Assessments" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                  "Assessment"
-                                              ? "bg-eight badge-circle mt-2"
-                                              : item.evaluateCapturedFromHeader ===
-                                                  "Recommendations" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                  "Plan: GERD without esophagitis" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                  "Treatment"
-                                              ? "bgshodowcolor badge-circle mt-2"
-                                              : item.evaluateCapturedFromHeader ===
-                                                  "Plan / Discussion" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                              ? "bg-four badge-circle mt-2"
-                                              : item.evaluateCapturedFromHeader ===
-                                                  "Patient Instructions" ||
-                                                item.evaluateCapturedFromHeader ===
-                                                  "Plan: Hyperlipidemia, acquired"
-                                              ? "bg-five badge-circle mt-2"
-                                              : item.evaluateCapturedFromHeader ===
-                                                "N/A"
-                                              ? "bg-six badge-circle mt-2"
-                                              : item.evaluateCapturedFromHeader ===
-                                                "Plan"
-                                              ? "bg-seven badge-circle mt-2"
-                                              : "primary badge-circle mt-2"
-                                          }
-                                          onClick={() =>
-                                            handleOpenModal(
-                                              item.evaluateCapturedFromHeader,
-                                              item.evaluate
-                                            )
-                                          }
-                                        >
-                                          {item.evaluateCapturedFromHeader}
-                                        </Badge>
+                                        <div>
+                                          {getCaptureSectionBackgroundMeat(
+                                            item.evaluateCapturedFromHeader,
+                                            item.evaluate,
+                                            item.encounterDate
+                                          )}
+                                        </div>
                                       </div>
                                       <div className="col-xl-2 d-grid">
                                         <Popover
@@ -3733,59 +3649,13 @@ const Hcc = ({ patientHccResult }) => {
                                             {item.assessment}
                                           </span>
                                         </Popover>
-                                        <Badge
-                                          className="badge-meat cr-pointer"
-                                          bg={
-                                            item.assessmentCapturedFromHeader ===
-                                              "HPI" ||
-                                            item.assessmentCapturedFromHeader ===
-                                              "Plan: Hypertensive heart disease without heart failure" ||
-                                            item.assessmentCapturedFromHeader ===
-                                              "Vital Signs"
-                                              ? "third badge-circle mt-2"
-                                              : item.assessmentCapturedFromHeader ===
-                                                  "Impression" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                  "Plan: COPD" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                  "Assessments" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                  "Assessment"
-                                              ? "bg-eight badge-circle mt-2"
-                                              : item.assessmentCapturedFromHeader ===
-                                                  "Recommendations" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                  "Plan: GERD without esophagitis" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                  "Treatment"
-                                              ? "bgshodowcolor badge-circle mt-2"
-                                              : item.assessmentCapturedFromHeader ===
-                                                  "Plan / Discussion" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                              ? "bg-four badge-circle mt-2"
-                                              : item.assessmentCapturedFromHeader ===
-                                                  "Patient Instructions" ||
-                                                item.assessmentCapturedFromHeader ===
-                                                  "Plan: Hyperlipidemia, acquired"
-                                              ? "bg-five badge-circle mt-2"
-                                              : item.assessmentCapturedFromHeader ===
-                                                "N/A"
-                                              ? "bg-six badge-circle mt-2"
-                                              : item.assessmentCapturedFromHeader ===
-                                                "Plan"
-                                              ? "bg-seven badge-circle mt-2"
-                                              : "primary badge-circle mt-2"
-                                          }
-                                          onClick={() =>
-                                            handleOpenModal(
-                                              item.assessmentCapturedFromHeader,
-                                              item.assessment
-                                            )
-                                          }
-                                        >
-                                          {item.assessmentCapturedFromHeader}
-                                        </Badge>
+                                        <div>
+                                          {getCaptureSectionBackgroundMeat(
+                                            item.assessmentCapturedFromHeader,
+                                            item.assessment,
+                                            item.encounterDate
+                                          )}
+                                        </div>
                                       </div>
                                       <div className="col-xl-2 d-grid">
                                         <Popover
@@ -3798,59 +3668,13 @@ const Hcc = ({ patientHccResult }) => {
                                           </span>
                                         </Popover>
 
-                                        <Badge
-                                          className="badge-meat cr-pointer"
-                                          bg={
-                                            item.treatmentCapturedFromHeader ===
-                                              "HPI" ||
-                                            item.treatmentCapturedFromHeader ===
-                                              "Plan: Hypertensive heart disease without heart failure" ||
-                                            item.treatmentCapturedFromHeader ===
-                                              "Vital Signs"
-                                              ? "third badge-circle mt-2"
-                                              : item.treatmentCapturedFromHeader ===
-                                                  "Impression" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                  "Plan: COPD" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                  "Assessments" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                  "Assessment"
-                                              ? "bg-eight badge-circle mt-2"
-                                              : item.treatmentCapturedFromHeader ===
-                                                  "Recommendations" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                  "Plan: GERD without esophagitis" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                  "Treatment"
-                                              ? "bgshodowcolor badge-circle mt-2"
-                                              : item.treatmentCapturedFromHeader ===
-                                                  "Plan / Discussion" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                  "Plan: Arteriosclerotic cardiovascular disease"
-                                              ? "bg-four badge-circle mt-2"
-                                              : item.treatmentCapturedFromHeader ===
-                                                  "Patient Instructions" ||
-                                                item.treatmentCapturedFromHeader ===
-                                                  "Plan: Hyperlipidemia, acquired"
-                                              ? "bg-five badge-circle mt-2"
-                                              : item.treatmentCapturedFromHeader ===
-                                                "N/A"
-                                              ? "bg-six badge-circle mt-2"
-                                              : item.treatmentCapturedFromHeader ===
-                                                "Plan"
-                                              ? "bg-seven badge-circle mt-2"
-                                              : "primary badge-circle mt-2"
-                                          }
-                                          onClick={() =>
-                                            handleOpenModal(
-                                              item.treatmentCapturedFromHeader,
-                                              item.treatment
-                                            )
-                                          }
-                                        >
-                                          {item.treatmentCapturedFromHeader}
-                                        </Badge>
+                                        <div>
+                                          {getCaptureSectionBackgroundMeat(
+                                            item.treatmentCapturedFromHeader,
+                                            item.treatment,
+                                            item.encounterDate
+                                          )}
+                                        </div>
                                       </div>
                                       <div className="col-xl-1 meatclose">
                                         <Popconfirm
@@ -3867,11 +3691,14 @@ const Hcc = ({ patientHccResult }) => {
                                             )
                                           }
                                         >
-                                          <div className="icon-box  bg-danger-light me-1">
+                                          <div
+                                            className={visitStyles.close_icon}
+                                          >
                                             <FontAwesomeIcon
-                                              icon={faCheck}
+                                              icon={faArrowsAlt}
                                               style={{
-                                                color: "orange",
+                                                size: 8,
+                                                color: "#a80404",
                                               }}
                                             />
                                           </div>
@@ -4990,7 +4817,7 @@ const Hcc = ({ patientHccResult }) => {
                     <Viewer
                       initialPage={fileInitialPage}
                       fileUrl={selectFileURL}
-                      plugins={[searchPluginInstance]}
+                      plugins={[defaultLayoutPluginInstance]}
                       onDocumentLoad={handleDocumentLoad}
                       renderLoader={(percentages) => (
                         <div style={{ width: "240px" }}>

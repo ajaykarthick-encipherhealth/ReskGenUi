@@ -47,6 +47,19 @@
   overflow: hidden;
   position: relative;
 }
+.no_notificarion_container{
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.no_notificarion_container img {
+  height: 150px;
+  width: 150px;
+}
+
 
 
 .container:hover {
