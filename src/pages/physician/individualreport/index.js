@@ -234,8 +234,9 @@ const IndividualReceiverReport = () => {
                     window.open(fileUrl?.uploadFile);
                   }}
                   className={styles.download}
-                  disabled={csvTableData?.length===0 || tableData?.length===0?true:false}
+                  disabled={csvTableData?.length===0 && tableData?.length===0?true:false}
                 >
+                  {console.log(csvTableData?.length===0 , tableData?.length===0)}
                   <Image
                     src={download}
                     alt="noimg"

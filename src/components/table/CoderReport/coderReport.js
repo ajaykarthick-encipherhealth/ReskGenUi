@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Empty } from "antd";
+import { Badge, Empty, Popconfirm, Popover } from "antd";
 import TableStyle from "../table.module.css";
 import moment from "moment";
 import { SVGICON } from "../../../jsx/constant/theme";
@@ -18,6 +18,7 @@ function CoderReport({
 }) {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [comments, setComments] = useState();
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -106,11 +107,24 @@ function CoderReport({
     }
   };
 
+  const msgContent = (
+    <>
+      {comments && comments[2023] ? (
+        comments[2023].map((item, index) => (
+          <div key={index}>
+            <p>{item.comment}</p>
+          </div>
+        ))
+      ) : (
+        <p>Comments not found</p>
+      )}
+    </>
+  );
+
   return (
     <div className={TableStyle.classContaineer}>
       {reportListAll?.data?.length === 0 ? (
-         <Empty />
-         
+        <Empty />
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
@@ -192,9 +206,18 @@ function CoderReport({
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.comments
-                          ? SVGICON.comment
-                          : SVGICON.emptyComments}
+                        <Popconfirm title="" description={msgContent}>
+                          <div
+                            onClick={() => {
+                              setComments(row?.comment);
+                            }}
+                            disbaled={true}
+                          >
+                            {row?.comment
+                              ? SVGICON.comment
+                              : SVGICON.emptyComments}
+                          </div>
+                        </Popconfirm>
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.auditedBy ? row?.auditedBy : "---"}
@@ -257,9 +280,17 @@ function CoderReport({
                           : "MM-DD-YYYY"}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.comments
-                          ? SVGICON.comment
-                          : SVGICON.emptyComments}
+                        <Popconfirm title="" description={msgContent}>
+                          <div
+                            onClick={() => {
+                              setComments(row?.comment);
+                            }}
+                          >
+                            {row?.comment
+                              ? SVGICON.comment
+                              : SVGICON.emptyComments}
+                          </div>
+                        </Popconfirm>
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.auditedBy ? row?.auditedBy : "---"}

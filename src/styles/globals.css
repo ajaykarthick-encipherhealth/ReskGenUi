@@ -9059,7 +9059,10 @@ button.btn.btn-danger.btn-sm.light.ms-1.btn.btn-primary {
 } */
 
 /* header-profile */
-
+.ant-popconfirm.ant-popover {
+  font-size: 14px;
+  width: 20%;
+}
 .header-profile2 {
   margin-right: 58px !important;
   text-transform: capitalize;
