@@ -136,6 +136,7 @@ function AllocatedAdminList({
   const renderRows = () => {
     return detailsContent?.map((data, index) => (
       <tr
+      style={{height:"35px"}}
         key={index}
         onClick={() => {
           dispatch(

@@ -75,7 +75,7 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    // setIsLoading(false);
+    setIsLoading(false);
     dispatch(getTrackingList(pageNo, pageSize));
   }, [pageNo, pageSize]);
 
@@ -106,6 +106,7 @@ export default function Patient() {
           processedDate: res.processedDate,
           createdAt: res.createdAt,
           processStageId: res.processStageId,
+          patientAllocated:res.patientAllocated
         });
       });
       var newArray = [];
@@ -481,7 +482,7 @@ export default function Patient() {
                               />
                             </div>
                           </div>
-                          <div className="col-xl-2">
+                          {/* <div className="col-xl-2">
                             <label>Select Status</label>
                             <div class="form-group has-search">
                               <Select
@@ -518,7 +519,7 @@ export default function Patient() {
                                 }}
                               />
                             </div>
-                          </div>
+                          </div> */}
 
                           {/* <div className="col-xl-10">
                             <Button

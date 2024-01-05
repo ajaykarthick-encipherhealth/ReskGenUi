@@ -40,54 +40,67 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
     {
       id: 1,
       title: "patientId",
+      heading:"Patient Id"
     },
     {
       id: 2,
       title: "patientName",
+      heading:"Patient Name"
     },
     {
       id: 3,
       title: "dob",
+      heading:"Dob"
     },
     {
       id: 4,
       title: "processedDate",
+      heading:"Processed Date"
     },
     {
       id: 5,
       title: "providerName",
+      heading:"Provider Name"
     },
     {
       id: 6,
       title: "allocatedOn",
+      heading:"Allocated On"
     },
     {
       id: 7,
       title: "noOfValidCodes",
+      heading:"No Of Valid Codes"
     },
     {
       id: 8,
       title: "noOfSuggestedCodes",
+      heading:"No Of Suggested Codes"
     },
     {
       id: 9,
       title: "noOfDeletedCodes",
+      heading:"No Of Deleted Codes"
     },
     {
       id: 10,
       title: "totalCodes",
+      heading:"Total Codes"
     },
     {
       id: 11,
       title: "allocatedUserId",
+      heading:"Allocated UserId"
     },
     {
       id: 12,
       title: "comments",
+      heading:"Comments"
     },
     {
       id: 13,
       title: "validDisease",
+      heading:"Valid Disease"
     },
   ];
   const handleSelectedOption = (value) => {
@@ -209,7 +222,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
             >
               {checkBoxData?.map((data) => (
                 <Checkbox key={data.id} value={data.title}>
-                  {data.title}
+                  {data.heading}
                 </Checkbox>
               ))}
             </div>
@@ -273,6 +286,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
                     width: "100px",
                     color: "#fff",
                   }}
+                  disabled={ (selectedUser && selectedUser[0]?.user )&&  (selectedUser &&selectedUser[0]?.role) ? false:true}
                 >
                   add
                 </Button>
