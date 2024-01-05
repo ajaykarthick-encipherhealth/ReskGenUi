@@ -110,7 +110,8 @@ const AllocateModal = ({
       title="Select User"
       footer={false}
       width={700}
-      // style={{height: "800px"}}
+    // style={{height: "800px"}}
+    className="allocate_modal_container"
     >
       <div class="form-group has-search">
         <FontAwesomeIcon

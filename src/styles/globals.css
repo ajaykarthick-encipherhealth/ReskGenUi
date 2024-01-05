@@ -13340,14 +13340,22 @@ tbody > tr {
   border: 1px solid green !important;
 
 }
-.ant-modal-content {
-    background: #f5f9ff !important;
+/* .ant-modal-content {
+  background: #f5f9ff !important;
 }
 .ant-modal-header {
-  background: #f5f9ff !important;
+background: #f5f9ff !important;
 }
 
 .ant-modal-content{
+height: 730px;
+overflow: scroll;
+} */
+.allocate_modal_container > .ant-modal-content, .allocate_modal_container > .ant-modal-content > .ant-modal-header{
+  background: #f5f9ff !important;
+}
+
+.allocate_modal_container > .ant-modal-content{
   height: 730px;
   overflow: scroll;
 }
