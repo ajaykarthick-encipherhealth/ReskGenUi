@@ -90,7 +90,7 @@ export const exportData=(data)=>{
 export const usersList=(id,search)=>{
   const token = localStorage.getItem("token");
   return axios.get(
-    `${ENDPOINTS?.apiEndoint}dbservice/user/getUsersByOrgIdAndSearchString?orgid=${id}&searchString=${search}`,
+    `${ENDPOINTS?.apiEndoint}dbservice/user/getUsersByOrgIdAndTenantId?orgid=${id}&searchString=${search}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
