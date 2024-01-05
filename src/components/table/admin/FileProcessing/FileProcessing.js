@@ -9,6 +9,7 @@ import {
 } from "../../../../store/actions/adminAction/fileProcessingActions";
 import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import SpinnerDots from "../../../spinner";
 
 function FileProcessingTable({ patinetListAll }) {
   const [stepperVisible, setStepperVisible] = useState(
@@ -407,9 +408,9 @@ function FileProcessingTable({ patinetListAll }) {
         </thead>
 
         <tbody>
-          {patinetListAll?.length <= 0 ? (
+          {parsedData?.length <= 0 ? (
             <tr>
-              <td colSpan="3">
+              <td colSpan="9">
                 <Empty />
               </td>
             </tr>
@@ -417,6 +418,7 @@ function FileProcessingTable({ patinetListAll }) {
             renderRows()
           )}
         </tbody>
+         
       </table>
       <div></div>
     </div>
