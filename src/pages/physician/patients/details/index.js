@@ -119,6 +119,8 @@ const Details = ({}) => {
   const [patientResultReload, setPatientResultReload] = useState(false);
   const [selectModalName, setSelectModalName] = useState(false);
   const selectPatientId = useSelector((state) => state.patients?.patiendId);
+  const [userRole, setUserRole] = useState("");
+
 
   const flagPostList = [
     {
@@ -259,6 +261,9 @@ const Details = ({}) => {
     var tenId = localStorage.getItem("tenantId");
     var patientId = localStorage.getItem("patientId");
     var uId = localStorage.getItem("userId");
+    const userRoleLocal = localStorage.getItem("userRole");
+    setUserRole(userRoleLocal);
+
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
@@ -1138,7 +1143,8 @@ const Details = ({}) => {
   };
 
   const backToPatientData = () => {
-    navigate.push("/physician/patients");
+    navigate.back();
+    // navigate.push("/physician/patients");
   };
 
   const splitUserName = (name) => {
@@ -1263,13 +1269,12 @@ const Details = ({}) => {
     setUserDetails(data);
   };
 
-  function removeDuplicates(array) {
-    let output = [];
-    for (let item of array) {
-      if (!output.includes(item)) output.push(item);
-    }
-
-    return output;
+  const allocatePatient = () =>{
+    notification.success({
+      message: "Allocated Successfully",
+      placement: "top",
+      duration: 1,
+    });
   }
 
   return (
@@ -1565,7 +1570,14 @@ const Details = ({}) => {
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">
+                        {userRole == "admin" ?
                         <div className={`${visitStyles.actionbtnContainer}`}>
+                          <div className="patient-status"     onClick={() => {
+                                    allocatePatient();
+                                  }}>
+              <span className={`badge processed-text cr-pointer`}>ALLOCATE</span>
+            </div>
+                        </div> : <div className={`${visitStyles.actionbtnContainer}`}>
                           {patienIdDetails.processedStatus == "COMPLETED" ? (
                             <Dropdown.Button
                               type="primary"
@@ -1631,7 +1643,7 @@ const Details = ({}) => {
                               </Dropdown.Button>
                             </div>
                           )}
-                        </div>
+                        </div>}
                       </div>
                       <div
                         className={

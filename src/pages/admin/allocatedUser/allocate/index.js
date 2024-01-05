@@ -215,6 +215,7 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
       footer={false}
       width={700}
     // style={{height: "800px"}}
+    className="allocate_modal_container"
     >
       <div class="form-group has-search">
         <FontAwesomeIcon
