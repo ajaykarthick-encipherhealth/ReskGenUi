@@ -175,7 +175,7 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
     });
     if (response.data) {
       var result = response?.data?.response?.content;
-      const user = result.map((item) => {
+      const user = result?.map((item) => {
         return {
           firstName: item.firstName,
           lastName: item.lastName,
