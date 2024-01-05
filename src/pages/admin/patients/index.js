@@ -57,7 +57,7 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
- 
+
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.patients);
@@ -72,18 +72,19 @@ export default function Patient() {
     // setIsLoading(false);
     dispatch(getPatients(pageNo, pageSize));
   }, [pageNo, pageSize]);
-  useEffect(()=>{
-    eventStreming(ENDPOINTS, setParsedData);
-  },[])
 
   useEffect(() => {
-    // parsedData?.length > 0 &&
-    //   parsedData?.some((data) => {
-    //     return (
-    //       data?.proceddstageChart === "FINISHED"  && setFinished(true)
-    //       // dispatch(getPatients(pageNo, pageSize))
-    //     );
-    //   });
+    eventStreming(
+      ENDPOINTS,
+      setParsedData,
+      pageNo,
+      pageSize,
+      getPatients,
+      dispatch
+    );
+  }, []);
+
+  useEffect(() => {
     if (response?.response) {
       getAllList(response?.response);
     }
@@ -95,7 +96,7 @@ export default function Patient() {
       var result = info?.content;
       setTotalElements(info?.totalElements);
       result?.map((res) => {
-        resultMap.push({
+        resultMap?.push({
           patientId: res.patientId,
           patientAllocated: res.patientAllocated,
           computing: res.computing,
@@ -235,21 +236,21 @@ export default function Patient() {
   const processstatusBodyTemplate = (rowData) => {
     const isFinished =
       parsedData?.length > 0 &&
-      parsedData?.some(
+      parsedData?.find(
         (data) =>
           data?.patientId === rowData?.patientId &&
-          data?. processStageChart === "FINISHED"
-      );
+          data?.processStageChart === "FINISHED"
+      ) !== undefined;
 
     const rowStatus =
       rowData?.computing === 0 && parsedData?.length === 0
         ? "Not Computed"
-        : rowData?.computing === 1
+        : rowData?.computing == 1
         ? "Processing"
-        : isFinished || rowData?.computing === 2 
+        : isFinished || rowData?.computing == 2
         ? "Computed"
         : "Not Computed";
-        console.log(isFinished)
+    // console.log(isFinished)
     return (
       <div className="patient-status">
         <div
