@@ -287,7 +287,7 @@ const NonHcc = ({ patientNonHccResult }) => {
     patientId,
     orgId,
     tenId,
-    fileloadCondition
+    reload
   ) => {
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
@@ -305,14 +305,19 @@ const NonHcc = ({ patientNonHccResult }) => {
 
     // setIsLoading(true);
     setIsModalComments(false);
-    // var patientId = localStorage.getItem("patientId");
-    // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
-    // const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //   `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
-    // );
-    if (patientNonHccResult) {
-      var result = patientNonHccResult;
+
+    var result = patientNonHccResult;
+
+    if(reload == "reload"){
+    var patientId = localStorage.getItem("patientId");
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+    );
+    result = response.data.response;
+    }
+  
+    if (result) {
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -336,7 +341,7 @@ const NonHcc = ({ patientNonHccResult }) => {
         var suggestListAllNonHcc = [];
         var deleteHccList = [];
 
-        if (fileloadCondition != "fileNotLoad") {
+        if (reload != "reload") {
           getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
           setSelectMeatFileId(patientNonHccResult.fileId);
           setPatientFileDTO(result.fileDetailDTO);
@@ -606,7 +611,48 @@ const NonHcc = ({ patientNonHccResult }) => {
             colors: COLORS2[index],
           });
         });
-        setCaptureSectionMatching(capturedSectionsColorsMatching);
+
+
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
+        );
+
+        var sectionColorResult = response.data.response;
+
+        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+        );
+        let sectionColorResultNotMatch = dublicateSectionArr.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+        );
+
+        var notMatchColorArray = [];
+        sectionColorResultNotMatch?.map((res, index) => {
+          var radomColorcode = stringToColour(res.name);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArray.push({
+            sectionName: res.name,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          submitSectionColors(
+            res.name,
+            radomColorcode,
+            randomColorChangeShadow
+          );
+        });
+
+
+        var newArrayColorMatchs = [];
+        newArrayColorMatchs = [
+          ...sectionColorResultMatch,
+          ...notMatchColorArray,
+        ];
+
+        setCaptureSectionMatching(newArrayColorMatchs);
+
+
+        // setCaptureSectionMatching(capturedSectionsColorsMatching);
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
@@ -869,49 +915,10 @@ const NonHcc = ({ patientNonHccResult }) => {
       );
     });
 
-  const deletedToSuggested = () =>
+   const confirmInvalid = () =>
     new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("deletedToSuggested")
-        )
-      );
+      resolve(setConfirmNotesModalInValid(true));
     });
-  const deletedToValid = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("deletedToValid")
-        )
-      );
-    });
-
-  const confirmInvalid = () =>
-    new Promise((resolve) => {
-      // invalidMoveConfirm();
-      setTimeout(() => resolve(setConfirmNotesModalInValid(true)), 1000);
-    });
-
-  const confirmInvalidSuggested = () =>
-    new Promise((resolve) => {
-      // invalidMoveConfirm();
-      setTimeout(() => resolve(setConfirmNotesModalInValid(true)), 1000);
-    });
-
-  const confirmInvalidMoveDis = () =>
-    new Promise((resolve) => {
-      validMoveConfirmDis();
-      setTimeout(() => resolve(null), 1000);
-    });
-
-  const confirmCombo = () =>
-    new Promise((resolve) => {
-      comboMoveConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
   const confirmComboInvalid = () =>
     new Promise((resolve) => {
       comboMoveInvalidConfirm();
@@ -936,12 +943,6 @@ const NonHcc = ({ patientNonHccResult }) => {
       setTimeout(() => resolve(null), 1000);
     });
 
-  const confirmMeat = () =>
-    new Promise((resolve) => {
-      meatMoveConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
     setSelectDiseasesName(title);
@@ -955,21 +956,6 @@ const NonHcc = ({ patientNonHccResult }) => {
   const onchangeMeat = (data, code) => {
     setSelectDiseasesName(data);
     setSelectCode(code);
-  };
-
-  const validMoveConfirmDis = () => {
-    const result = invalidMoveDiseasesList.filter(
-      (res) => res.diagnosisCode != selectDiseasesName
-    );
-    setInvalidMoveDiseasesList(result);
-    const result2 = invalidMoveDiseasesList.filter(
-      (res2) => res2.diagnosisCode == selectDiseasesName
-    );
-    // var namePush = [];
-    // namePush.push({ name: selectDiseasesName });
-    var newArray = [];
-    newArray = [...newValidDiseaseList, ...result2];
-    setNewValidDiseaseList(newArray);
   };
 
   const comboMoveInvalidConfirm = () => {
@@ -1115,7 +1101,7 @@ const NonHcc = ({ patientNonHccResult }) => {
         ENDPOINTS.apiEndoint +
           `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDateValue}`
       );
-      var result = response.data;
+      var result = response.data.response;
       if (result?.length) {
         var pageNumber = result[0] - 1;
         setFileInitialPage(pageNumber);
@@ -1127,7 +1113,7 @@ const NonHcc = ({ patientNonHccResult }) => {
       setTimeout(() => {
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         highlight({
-          keyword: actualDescription,
+          keyword: headerNames,
         });
         var dataset = value + " - (" + splitPoint + ")";
         setSelectMeatName(dataset);
@@ -1161,42 +1147,13 @@ const NonHcc = ({ patientNonHccResult }) => {
     // setValidated(true);
   };
 
-  const addValidDiseasesFileForm = () => {
-    setIsFileFormShow(true);
-    // setValidated(true);
-  };
-
-  const handleSubmit = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-    }
-    setValidated(true);
-  };
-
   const handleSubmitValidNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
       setConfirmNotesModalValid(false);
-      // validMoveConfirm();
-      if (isValidAction == "validToSuggested") {
-        handleSubmitMoveValidToSuggested();
-      }
-      if (isValidAction == "validToDeleted") {
-        handleSubmitMoveValidToDeleted();
-      }
-      if (isValidAction == "suggestedToDeleted") {
-        handleSubmitMoveSuggestedToDeleted();
-      }
       if (isValidAction == "suggestedToValid") {
         handleSubmitMoveSuggestedToValid();
-      }
-      if (isValidAction == "deletedToSuggested") {
-        handleSubmitMoveDeletedToSuggested();
-      }
-      if (isValidAction == "deletedToValid") {
-        handleSubmitMoveDeletedToValid();
       }
     }
     setValidated(true);
@@ -1216,94 +1173,6 @@ const NonHcc = ({ patientNonHccResult }) => {
     window.open("details/file-view", "_blank", "width=4000, height=4000");
   };
 
-  const openNewTabDownloadPdfradiology = async () => {
-    window.open("details/radiology-file", "_blank", "width=4000, height=4000");
-  };
-
-  const handleSubmitMoveValidToSuggested = async () => {
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/validtosuggested`,
-      dataFormatSuggested
-    );
-    if (response?.status == 202) {
-      notification.success({
-        message: "Moved to suggested Successfully!",
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetails(localPatientId, localOrgId, localTenantId);
-    } else {
-    }
-  };
-
-  const handleSubmitMoveValidToDeleted = async () => {
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/validtodeleted`,
-      dataFormatSuggested
-    );
-    if (response?.status == 202) {
-      notification.success({
-        message: "Moved to deleted Successfully!",
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetails(localPatientId, localOrgId, localTenantId);
-    } else {
-    }
-  };
-
-  const handleSubmitMoveSuggestedToDeleted = async () => {
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/suggestedtodeleted`,
-      dataFormatSuggested
-    );
-    if (response?.status == 202) {
-      notification.success({
-        message: "Moved to deleted Successfully!",
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetails(localPatientId, localOrgId, localTenantId);
-    } else {
-    }
-  };
-
   const handleSubmitMoveSuggestedToValid = async () => {
     var dataFormatSuggested = {
       userId: localUserId,
@@ -1321,68 +1190,14 @@ const NonHcc = ({ patientNonHccResult }) => {
         `dbservice/update/move/suggestedtovalid`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       notification.success({
-        message: "Moved to valid Successfully!",
+        message: result.message,
         placement: "top",
         duration: 1,
       });
-      getPatientDetails(localPatientId, localOrgId, localTenantId);
-    } else {
-    }
-  };
-
-  const handleSubmitMoveDeletedToValid = async () => {
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/deletedtovalid`,
-      dataFormatSuggested
-    );
-    if (response?.status == 202) {
-      notification.success({
-        message: "Moved to valid Successfully!",
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetails(localPatientId, localOrgId, localTenantId);
-    } else {
-    }
-  };
-  const handleSubmitMoveDeletedToSuggested = async () => {
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `dbservice/update/move/deletedtoSuggested`,
-      dataFormatSuggested
-    );
-    if (response?.status == 202) {
-      notification.success({
-        message: "Moved to Suggested Successfully!",
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetails(localPatientId, localOrgId, localTenantId);
+      getPatientDetails(localPatientId, localOrgId, localTenantId,"reload");
     } else {
     }
   };
@@ -1404,13 +1219,14 @@ const NonHcc = ({ patientNonHccResult }) => {
         `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
-    if (response?.status == 202) {
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       notification.success({
-        message: "Moved valid diseases Successfully!",
+        message: result.message,
         placement: "top",
         duration: 1,
       });
-      getPatientDetails(localPatientId, localOrgId, localTenantId);
+      getPatientDetails(localPatientId, localOrgId, localTenantId,"reload");
     } else {
     }
   };
@@ -1428,16 +1244,21 @@ const NonHcc = ({ patientNonHccResult }) => {
     value,
     documentPlace,
     encounterDate,
-    actualDescription
+    actualDescription,
+    diagnosisCode
   ) => {
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.name;
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var disCode = diagnosisCode;
+      var headerNames = result[0]?.sectionName;
+
       var sectionMapArr = (
-        <Badge
+        <span
           onClick={() =>
             handleOpenModalCombinationCode(
               disCode,
@@ -1447,13 +1268,14 @@ const NonHcc = ({ patientNonHccResult }) => {
               documentPlace,
               encounterDate,
               headerNames,
-              actualDescription
+              actualDescription,
             )
           }
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
         >
           {res}
-        </Badge>
+        </span>
       );
       return sectionMapArr;
     });
@@ -1464,21 +1286,24 @@ const NonHcc = ({ patientNonHccResult }) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        // (<Badge
-        // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
-        // {res}</Badge>)
-
-        <Badge
+        <span
           className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
           {moment(res).format("MM/DD")}
-        </Badge>
+        </span>
       );
       return sectionMapArr;
     });
+  };
+
+
+  const handleChangeSuggested = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setInputValue({ ...inputValue, [key]: value });
   };
 
   return (
@@ -1567,7 +1392,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                                       </div>
 
                                       <Popconfirm
-                                        title="You want move to valid?"
+                                        title="You want move to Hcc?"
                                         description={data.diagnosisCode}
                                         onConfirm={confirmInvalid}
                                         placement="leftTop"
@@ -1604,7 +1429,8 @@ const NonHcc = ({ patientNonHccResult }) => {
                                           data.capturedSections,
                                           null,
                                           data.encounterDate,
-                                          data.actualDescription
+                                          data.actualDescription,
+                                          data.diagnosisCode
                                         )}
                                       </div>
                                     </div>
@@ -1748,7 +1574,8 @@ const NonHcc = ({ patientNonHccResult }) => {
                                                 className={`${visitStyles.encounterAndSectionHeader}`}
                                               >
                                                 {getCaptureSectionBackground(
-                                                  data.capturedSections
+                                                  data.capturedSections,
+                                                  data.diagnosisCode
                                                 )}
                                               </div>
                                             </div>
@@ -2194,35 +2021,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                   <div className="my-post-content pt-3">
                     <div className="row">
                       <div className="col-xl-3">
-                        {/* <div className="card raf-file-head">
-
-                                        <div className="row">
-                                          <div className="col-xl-12 mb-3 text-center">
-                                            <Button
-                                              className="btn btn-primary btn-sm me-1"
-                                            >
-                                              Uplaod File
-                                            </Button>
-
-                                          </div>
-                                          <div className="col-xl-12 mb-3">
-                                            <Form.Control
-                                              required
-                                              type="file"
-                                              accept="application/pdf,text/plain"
-
-                                            />
-                                          </div>
-                                          <div className="col-xl-12 mb-3">
-                                            <Form.Control
-                                              required
-                                              type="date"
-
-                                            />
-                                          </div>
-                                        </div>
-
-                                      </div> */}
+                       
                       </div>
                       {rafScore != null ? (
                         <div className="col-xl-12">
@@ -2443,18 +2242,6 @@ const NonHcc = ({ patientNonHccResult }) => {
                         </div>
                       ) : null}
                     </div>
-                    {/* <div className="">
-
-                                    <div className="compete-card">
-                                      <Button
-                                        className="btn btn-primary btn-sm me-1"
-                                      >
-                                        Compete
-                                      </Button>
-                                    </div>
-
-
-                                  </div> */}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
@@ -2602,6 +2389,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                   >
                     {" "}
                     <Viewer
+                    initialPage={fileInitialPage}
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
                       onDocumentLoad={handleDocumentLoad}

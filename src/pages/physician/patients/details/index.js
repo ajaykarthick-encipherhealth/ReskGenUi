@@ -607,12 +607,21 @@ const Details = ({}) => {
     },
   ];
 
-  const navigetPageDetails = (pageTitle) => {
+  const navigetPageDetails = async (pageTitle) => {
     setSideNavLabelActiveKey(pageTitle);
-    setIsLoading(true);
     if (pageTitle == "HCC") {
+      var patientId = localStorage.getItem("patientId");
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/patient/compute/get?patientid=${patientId}&orgid=${localOrgId}`
+      );
+      if (response.data) {
+      var result = response.data.response;
+      setPatientDocumentResult(result);  
+      }
       setActiveTab(1);
-      setIsLoadingDos(false);
+      setIsLoadingDos(false);  
+      
     }
     if (pageTitle == "NON HCC") {
       setActiveTab(2);
