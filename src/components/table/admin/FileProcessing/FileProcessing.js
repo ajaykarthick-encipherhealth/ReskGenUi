@@ -10,6 +10,76 @@ import {
 import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 
+export const eventStreming = (
+  ENDPOINTS,
+  setParsedData,
+  pageNo,
+  pageSize,
+  getPatients,
+  dispatch
+) => {
+  const id = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  const sse = new EventSource(
+    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
+  );
+
+  const fileStatusEventListener = (event) => {
+    const data = JSON.parse(event.data);
+    if (data?.length != 0) {
+      const item = data[0];
+      if (item?.processStageChart === "FINISHED") {
+        setParsedData(data);
+        dispatch(getPatients(pageNo, pageSize));
+        sse.close();
+      }
+    }
+  };
+
+  sse.addEventListener("file-status-event", fileStatusEventListener);
+
+  sse.onerror = () => {
+    sse.close();
+  };
+
+  return () => {
+    sse.removeEventListener("file-status-event", fileStatusEventListener);
+    sse.close();
+  };
+};
+
+// export const eventStreming = (
+//   ENDPOINTS,
+//   setParsedData,
+//   pageNo,
+//   pageSize,
+//   getPatients,
+//   dispatch
+// ) => {
+//   const id = localStorage.getItem("userId");
+//   const token = localStorage.getItem("token");
+//   const sse = new EventSource(
+//     `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
+//   );
+//   sse.addEventListener("file-status-event", (event) => {
+//     const data = JSON.parse(event.data);
+//     if (data?.length === 1) {
+//       data?.find((item) => {
+//         if (item?.processStageChart === "FINISHED") {
+
+//           setParsedData(data);
+//           dispatch(getPatients(pageNo, pageSize));
+//         }
+//       });
+//     }
+//   });
+//   sse.onerror = () => {
+//     sse.close();
+//   };
+//   return () => {
+//     sse.close();
+//   };
+// };
 function FileProcessingTable({ patinetListAll }) {
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -306,7 +376,10 @@ function FileProcessingTable({ patinetListAll }) {
         <div style={{ width: "98%" }}>
           <div style={{ display: "flex" }}>
             <Tooltip
-              title={data?.processStageChart?.toLowerCase()?.split("_").join(" ")}
+              title={data?.processStageChart
+                ?.toLowerCase()
+                ?.split("_")
+                .join(" ")}
             >
               <Progress
                 percent={uploadStatus}

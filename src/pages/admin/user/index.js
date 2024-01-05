@@ -105,7 +105,6 @@ const UserList = () => {
   const getAllList = async (tenId, orgId, page, limit, status) => {
     var apiUrl = `management/admin/getusers?orgId=${orgId}&tenantId=${tenId}&status=${status}&page=${page}&limit=${15}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
-    console.log(response.data.response.record),"test";
     var result = response.data.response;
     if (response.data.response) {
       setUserList(result.record != null ? result.record : []);

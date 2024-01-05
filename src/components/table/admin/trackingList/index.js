@@ -93,7 +93,7 @@ function TrackingTable({
   };
 
   const renderRows = () => {
-    return detailsContent?.map((data, index) => (
+    return patinetListAll?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           {data.patientId}
@@ -219,7 +219,7 @@ function TrackingTable({
         </thead>
 
         <tbody>
-          {detailsContent.length <= 0 ? (
+          {patinetListAll?.length <= 0 ? (
             <tr>
               <td colSpan="9">
                 <Empty />

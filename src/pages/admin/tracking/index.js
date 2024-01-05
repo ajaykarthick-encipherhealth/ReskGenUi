@@ -19,11 +19,14 @@ import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
 import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
 import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
-import { getPatients, getTrackingList } from "../../../store/actions/adminAction/patientsActions";
+import {
+  getPatients,
+  getTrackingList,
+} from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../file-processing/FileUploading";
 import Addpatients from "../file-processing/Addpatiens";
 import TrackingTable from "../../../components/table/admin/trackingList";
-
+import SpinnerDots from "../../../components/spinner";
 
 export default function Patient() {
   const navigate = useRouter();
@@ -61,7 +64,8 @@ export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
 
-  const response = useSelector((state) => state.adminList.patients);
+  const response = useSelector((state) => state.adminList.tracking);
+
   const { RangePicker } = DatePicker;
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -74,18 +78,19 @@ export default function Patient() {
     // setIsLoading(false);
     dispatch(getTrackingList(pageNo, pageSize));
   }, [pageNo, pageSize]);
+
   useEffect(() => {
     if (response) {
-      getAllList();
+      getAllList(response?.response);
     }
   }, [response]);
 
-  const getAllList = () => {
-    if (response?.response) {
+  const getAllList = (info) => {
+    if (info) {
       var resultMap = [];
-      var result = response?.response?.content;
-      setTotalElements(response?.response?.totalElements);
-      result.map((res) => {
+      var result = info?.content;
+      setTotalElements(info?.totalElements);
+      result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
           patientName: res.patientName,
@@ -358,8 +363,6 @@ export default function Patient() {
         >
           <FontAwesomeIcon icon={faUpload} fontSize={11} />
 
-     
-   
           {/* <span style={{ fontSize: "15px", color: "#A8A8AA" }}>Upload</span> */}
         </button>
       </div>
@@ -533,7 +536,7 @@ export default function Patient() {
                         className="dataTables_wrapper no-footer"
                       >
                         {isLoading ? (
-                          <Spinner />
+                          <SpinnerDots />
                         ) : (
                           <>
                             <TrackingTable
