@@ -74,17 +74,6 @@ export default function Patient() {
   }, [pageNo, pageSize]);
 
   useEffect(() => {
-    eventStreming(
-      ENDPOINTS,
-      setParsedData,
-      pageNo,
-      pageSize,
-      getPatients,
-      dispatch
-    );
-  }, []);
-
-  useEffect(() => {
     if (response?.response) {
       getAllList(response?.response);
     }
@@ -377,7 +366,12 @@ export default function Patient() {
       });
       // navigate.push("/admin/file-processing");
       dispatch(getPatients(pageNo, pageSize));
-      // eventStreming(ENDPOINTS, setParsedData);
+      eventStreming(ENDPOINTS,
+        setParsedData,
+        pageNo,
+        pageSize,
+        getPatients,
+        dispatch);
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);

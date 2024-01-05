@@ -26,7 +26,7 @@ export const eventStreming = (
 
   const fileStatusEventListener = (event) => {
     const data = JSON.parse(event.data);
-    if (data?.length === 1) {
+    if (data?.length != 0) {
       const item = data[0];
       if (item?.processStageChart === "FINISHED") {
         setParsedData(data);
