@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import SpinnerDots from "../../../spinner";
 
 function TrackingTable({
   patinetListAll,
@@ -134,7 +135,7 @@ function TrackingTable({
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder}>
-          <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
+          <Tooltip title={data.patientAllocated ? data.patientAllocated : "Praveen"}>
             <Avatar
               style={{
                 backgroundColor: "#04306f ",
@@ -143,8 +144,8 @@ function TrackingTable({
                 marginRight: "10px",
               }}
             >
-              {data.allocatedBy
-                ? data.allocatedBy.slice(0, 2).toUpperCase()
+              {data.patientAllocated
+                ? data.patientAllocated.slice(0, 2).toUpperCase()
                 : "P"}
             </Avatar>
             {/* {data.allocatedBy ? (
@@ -164,18 +165,20 @@ function TrackingTable({
                 style={{ borderRadius: "50%", marginRight:"10px"}}
               />
             )} */}
-            {data.allocatedBy ? (
+            {data.patientAllocated ? (
               <>
-                {data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +
-                  data.allocatedBy.split("@")[0].slice(1)}
+                {data.patientAllocated.split("@")[0].charAt(0).toUpperCase() +
+                  data.patientAllocated.split("@")[0].slice(1)}
               </>
             ) : (
-              <>Praveen</>
+              <>---</>
             )}
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
+          {data.allocatedOn
+            ? moment(data.allocatedOn).format("MM-DD-YYYY")
+            : "---"}
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
@@ -219,10 +222,10 @@ function TrackingTable({
         </thead>
 
         <tbody>
-          {patinetListAll?.length <= 0 ? (
+          {detailsContent?.length <= 0 ? (
             <tr>
               <td colSpan="9">
-                <Empty />
+                <SpinnerDots/>
               </td>
             </tr>
           ) : (

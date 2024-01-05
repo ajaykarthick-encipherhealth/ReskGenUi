@@ -102,7 +102,7 @@ const Notifications = () => {
 
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
-          {notificationResponse.length != 0 ?
+          {notificationResponse?.length != 0 ?
           <div className={styles.container}>
             {notificationData}
           </div>

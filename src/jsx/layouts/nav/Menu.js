@@ -75,7 +75,7 @@ export const AdminMenuList = [
     to: "/admin/allocatedUser",
   },
   {
-    title: "Traking",
+    title: "Tracking",
     iconStyle: SVGICON.ReportIcon,
     to: "/admin/tracking",
   },
