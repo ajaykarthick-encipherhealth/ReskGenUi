@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, DatePicker, Modal } from "antd";
+import { Avatar, DatePicker, Modal, notification } from "antd";
 import {
   faSearch,
   faLock,
@@ -11,12 +11,19 @@ import modalStyle from "./style.module.css";
 import { useEffect, useState } from "react";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
+import Router from "next/router";
 
-const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => {
+const AllocateModal = ({
+  open,
+  setOpen,
+  selectedRowsId,
+  setSelectedRowsId,
+  setAllocateClicked,
+}) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
-  const [allocateDate, setAllocateDate] = useState('');
+  const [allocateDate, setAllocateDate] = useState("");
   const [selectedChart, setSelectedChart] = useState([]);
   const [chart, setChart] = useState({
     date: null,
@@ -24,121 +31,8 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
     pending: null,
     declined: null,
     hold: null,
-    allocated: null
-  })
-  const data = [
-    {
-      id: 1,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "complete",
-    },
-    {
-      id: 2,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "test",
-    },
-    {
-      id: 3,
-      name: "Richard",
-      role: "L1 Coder",
-      status: "danger",
-    },
-    {
-      id: 4,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "complete",
-    },
-    {
-      id: 5,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "complete",
-    },
-    {
-      id: 6,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "complete",
-    },
-    {
-      id: 7,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "complete",
-    },
-    {
-      id: 8,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "test",
-    },
-    {
-      id: 9,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "complete",
-    },
-    {
-      id: 10,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "complete",
-    },
-    {
-      id: 11,
-      name: "Richard Jorge",
-      role: "L1 Coder",
-      status: "complete",
-    },
-  ];
-  
-
-  const handleStatus = (status) => {
-    switch (status) {
-      case "test":
-        return (
-          <Avatar
-            size={26}
-            shape="square"
-            style={{ backgroundColor: "#F7CFA1", color: "#EA8715" }}
-          >
-            NA
-          </Avatar>
-        );
-      case "complete":
-        return (
-          <Avatar
-            size={26}
-            shape="square"
-            style={{ backgroundColor: "#CCFFD1", color: "#009910" }}
-          >
-            A
-          </Avatar>
-        );
-      case "danger":
-        return (
-          <Avatar
-            size={26}
-            shape="square"
-            style={{ backgroundColor: "#F99F9F", color: "#F01010" }}
-            icon={<FontAwesomeIcon className="fa fa-search" icon={faLock} />}
-          ></Avatar>
-        );
-      default:
-        return (
-          <Avatar
-            size={26}
-            shape="square"
-            style={{ backgroundColor: "#EA8715" }}
-          >
-            {status}
-          </Avatar>
-        );
-    }
-  };
+    allocated: null,
+  });
 
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
@@ -158,7 +52,7 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
           lastName: item.lastName,
           id: item.id,
           role: item.role,
-          email: item.email
+          email: item.userName,
         };
       });
       setUserDetails(user);
@@ -169,21 +63,21 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
     var resoureUrl = `dbservice/patient/admin/assignPatients`;
     var uId = localStorage.getItem("userId");
     const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
-      userName : uId,
-      dueDate: "2023-11-16T05:07:59.016Z",
+      userName: uId,
+      dueDate: `${allocateDate + "T00:00:00.000Z"}`,
       patientIds: selectedRowsId.map((item) => item.id),
     });
-    if (response.data) {
-      var result = response?.data?.response?.content;
-      const user = result?.map((item) => {
-        return {
-          firstName: item.firstName,
-          lastName: item.lastName,
-          id: item.id,
-          role: item.role,
-        };
-      });
-      setUserDetails(user);
+    if (response) {
+      if (response?.status == "SUCCESS") {
+        notification.success({
+          message: response?.data?.message,
+        });
+        setOpen(false);
+        setAllocateClicked(true);
+        setAllocateDate("");
+        setActiveCard("");
+        setSearch("");
+      }
     }
   };
 
@@ -203,18 +97,20 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
+
   return (
     <Modal
       open={open}
       onCancel={() => {
         setOpen(false);
         setSelectedRowsId(selectedChart);
-        setActiveCard('')
+        setActiveCard("");
+        setSearch("");
       }}
       title="Select User"
       footer={false}
       width={700}
-    // style={{height: "800px"}}
+      // style={{height: "800px"}}
     >
       <div class="form-group has-search">
         <FontAwesomeIcon
@@ -223,22 +119,22 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
         />
         <InputText
           type="text"
+          value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="form-control new-form-control"
           placeholder="Search"
         />
       </div>
-      {userDetails?.map((item) => (
+      {userDetails.length > 0 ? userDetails?.map((item) => (
         <div
           className="mt-4 pe-auto"
-
-        // onClick={() => setActiveCard(item.id)}
         >
           <div
-            className={`form-control new-form-control my-2 p-0 ${item.id == activeCard
+            className={`form-control new-form-control my-2 p-0 ${
+              item.id == activeCard
                 ? modalStyle.listContentLarge
                 : modalStyle.listContent
-              }`}
+            }`}
           >
             <div
               className="d-flex justify-content-between"
@@ -248,7 +144,7 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                 } else {
                   setActiveCard(item.id);
                   // setSelectEmail(item.email)
-                  getAllCheckList(item.email)
+                  getAllCheckList(item.email);
                 }
               }}
             >
@@ -271,8 +167,8 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                   <p className={`${modalStyle.listRole}`}>
                     {item.role
                       ? item.role.map((item) => (
-                        <span className="px-1">{item}</span>
-                      ))
+                          <span className="px-1">{item}</span>
+                        ))
                       : null}
                   </p>
                 </div>
@@ -284,7 +180,10 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
               <>
                 <div className="row px-2">
                   <div className={`col-5 ${modalStyle.activeRow1}`}>
-                    <span>Charts Selected: {selectedChart.length > 0 ? selectedChart.length : 0}</span>
+                    <span>
+                      Charts Selected:{" "}
+                      {selectedChart.length > 0 ? selectedChart.length : 0}
+                    </span>
                     <div className="d-flex py-2">
                       <span className={`${modalStyle.title} py-3`}>
                         Due Date
@@ -293,11 +192,12 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                         style={{ width: "150px", marginLeft: "5px" }}
                         onChange={(date, dateS) => {
                           if (dateS) {
-                            setAllocateDate(dateS+'T00:00:00.000Z');
+                            setAllocateDate(dateS);
                           } else {
-                            setAllocateDate('')
+                            setAllocateDate("");
                           }
                         }}
+                        // value={moment(allocateDate, 'YYYY-MM-DD')}
                       />
                     </div>
                     <div className="d-flex my-3">
@@ -313,7 +213,7 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                         </svg>
                         <span className="p-2">Allocated</span>
                       </div>
-                      <span>{chart ? chart.allocated: 0}</span>
+                      <span>{chart ? chart.allocated : 0}</span>
                     </div>
                     <div className="d-flex my-3">
                       <div>
@@ -328,7 +228,7 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                         </svg>
                         <span className="p-2">Completed</span>
                       </div>
-                      <span>{chart ? chart.completed: 0}</span>
+                      <span>{chart ? chart.completed : 0}</span>
                     </div>
                     <div className="d-flex my-3">
                       <div>
@@ -343,7 +243,7 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                         </svg>
                         <span className="p-2">Pending</span>
                       </div>
-                      <span>{chart ? chart.pending: 0}</span>
+                      <span>{chart ? chart.pending : 0}</span>
                     </div>
                     <div className="d-flex my-3">
                       <div>
@@ -358,7 +258,7 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                         </svg>
                         <span className="p-2">Hold</span>
                       </div>
-                      <span>{chart ? chart.hold: 0}</span>
+                      <span>{chart ? chart.hold : 0}</span>
                     </div>
                     <div className="d-flex my-3">
                       <div>
@@ -373,12 +273,13 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                         </svg>
                         <span className="p-2">Decline</span>
                       </div>
-                      <span>{chart ? chart.declined: 0}</span>
+                      <span>{chart ? chart.declined : 0}</span>
                     </div>
                   </div>
                   <div className={`col-7 ${modalStyle.activeRow1}`}>
                     <span className={`${modalStyle.title} text-danger`}>
-                      Maximum upto 25 charts to pending
+                      {selectedChart.length + chart.hold + chart.pending > 19 &&
+                        "Maximum upto 20 charts to pending"}
                     </span>
                     <p>Selected Charts</p>
 
@@ -419,7 +320,11 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
                 <div className={`d-flex justify-content-center`}>
                   <button
                     className={`btn btn-outline-primary px-5 p-1 ${modalStyle.modalBtn}`}
-                    disabled={!selectedChart.length > 0 || allocateDate == ""}
+                    disabled={
+                      !selectedChart.length > 0 ||
+                      allocateDate == "" ||
+                      selectedChart.length + 10 + 8 > 19
+                    }
                     onClick={setAllocate}
                   >
                     Allocate
@@ -429,7 +334,17 @@ const AllocateModal = ({ open, setOpen, selectedRowsId, setSelectedRowsId }) => 
             )}
           </div>
         </div>
-      ))}
+      )) :
+       <div className="m-4">
+      <button
+        onClick={() => {
+          Router.push('/admin/user')
+        }}
+        className={`btn btn-outline-primary btn-sm ms-2 ${modalStyle.modalBtn}`}
+      >
+        Add User
+      </button>
+    </div>}
     </Modal>
   );
 };
