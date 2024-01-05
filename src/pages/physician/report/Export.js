@@ -273,6 +273,7 @@ const Export = ({ isModalVisible, closeModal, rowsLength }) => {
                     width: "100px",
                     color: "#fff",
                   }}
+                  disabled={ (selectedUser && selectedUser[0]?.user )&&  (selectedUser &&selectedUser[0]?.role) ? false:true}
                 >
                   add
                 </Button>
