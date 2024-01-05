@@ -37,7 +37,7 @@ export default function Patient() {
   const [selectedRowsId, setSelectedRowsId] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [dates, setDates] = useState(null);
+  const [allocateClicked, setAllocateClicked] = useState(false);
   const [compledtedDate, setCompletedDate] = useState(null);
   const [allocateModal, setAllocateModal] = useState(false);
   const [inputValue, setInputValue] = useState({
@@ -241,116 +241,6 @@ export default function Patient() {
     setValidated(true);
   };
 
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data.computing == 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed Please wait",
-      });
-    }
-  };
-
-  // const processstatusBodyTemplate = (rowData) => {
-  //   //   console.log(rowData.computing)
-  //   //   return <span className={`badge badge-success`}>
-  //   //   Processed
-  //   //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-  //   // </span>;
-
-  //   switch (rowData.processedStatus) {
-  //     case "COMPLETED":
-  //       return (
-  //         <div className="patient-status">
-  //           <span className={`badge processed-text`}>Completed</span>
-  //         </div>
-  //       );
-
-  //     case "PENDING":
-  //       return (
-  //         <div className="patient-status">
-  //           <span className={`badge processing-text`}>Pending</span>
-  //         </div>
-  //       );
-
-  //     case "DECLINED":
-  //       return (
-  //         <div className="patient-status">
-  //           <span className={`badge failed-text`} style={{ color: "red" }}>
-  //             Declined
-  //           </span>
-  //         </div>
-  //       );
-
-  //     case "NOTCOMPUTED":
-  //       return (
-  //         <div className="patient-status">
-  //           <span className={`badge notComputed-text`}>Not Computed</span>
-  //         </div>
-  //       );
-  //     case "COMPUTED":
-  //       return (
-  //         <div className="patient-status">
-  //           <span className={`badge computed-text`}>Computed</span>
-  //         </div>
-  //       );
-  //     case "HOLD":
-  //       return (
-  //         <div className="patient-status">
-  //           <span className={`badge hold-text`}>Hold</span>
-  //         </div>
-  //       );
-  //     case null:
-  //       return (
-  //         <div className="patient-status">
-  //           <span className={`badge processing-text`}>Pending</span>
-  //         </div>
-  //       );
-  //   }
-  // };
-
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <div className="d-flex ">
-        {/* {rowData.computing == 2 ? (
-          <button
-            onClick={() => gotoPatientDetails(rowData)}
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeOutlined className="text-white" />
-          </button>
-        ) : (
-          <button
-            disabled
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeInvisibleOutlined className="text-white" />
-          </button>
-        )} */}
-        <button
-          onClick={() => addPatientFile(rowData)}
-          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-          // style={{
-          //   width: "182px",
-          //   height: "32px",
-          //   borderRadius: "10px",
-          //   border: "0.5px dashed #C4C4C4",
-          //   backgroundColor:"transparent"
-          // }}
-        >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} />
-
-          {/* <span style={{ fontSize: "15px", color: "#A8A8AA" }}>Upload</span> */}
-        </button>
-      </div>
-    );
-  };
-
   const submitPatientFile = async () => {
     // setIsLoadingBtn(false);
     setAddPatient(false);
@@ -440,7 +330,14 @@ export default function Patient() {
     setAddPatientId(false);
     setAllocateModal(true);
   };
-
+useEffect(() => {
+  if (allocateClicked) {
+    getAllList(pageNo, pageSize, "", "", true, 2);
+    setAllocateClicked(false)
+    setSelectedRowsId([])
+    setSelectAllChecked(false)
+  }
+}, [allocateClicked])
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -477,10 +374,6 @@ export default function Patient() {
                                 onChange={(dates, dateStrings) => {
                                   setDateRange(dateStrings);
                                   handleReceivedDatePicker(dates, dateStrings);
-
-                                  // handleDatePickerChangeProcesseDate(
-                                  //   dateStrings
-                                  // );
                                 }}
                               />
                             </div>
@@ -562,6 +455,7 @@ export default function Patient() {
         setOpen={setAllocateModal}
         selectedRowsId={selectedRowsId}
         setSelectedRowsId={setSelectedRowsId}
+        setAllocateClicked={setAllocateClicked}
       />
     </>
   );
