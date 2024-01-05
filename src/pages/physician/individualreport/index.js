@@ -163,7 +163,6 @@ const IndividualReceiverReport = () => {
                         marginBottom: "10px",
                       }}
                       onClick={() => {
-                        console.log("vg");
                         dispatch(selectedReport({ reportUser: item }));
                       }}
                     >

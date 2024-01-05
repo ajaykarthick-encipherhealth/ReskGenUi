@@ -110,7 +110,7 @@ function CoderReport({
   const msgContent = (
     <>
       {comments && comments[2023] ? (
-        comments[2023].map((item, index) => (
+        comments[2023]?.map((item, index) => (
           <div key={index}>
             <p>{item.comment}</p>
           </div>
