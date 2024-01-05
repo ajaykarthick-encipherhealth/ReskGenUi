@@ -49,38 +49,6 @@ export const eventStreming = (
   };
 };
 
-// export const eventStreming = (
-//   ENDPOINTS,
-//   setParsedData,
-//   pageNo,
-//   pageSize,
-//   getPatients,
-//   dispatch
-// ) => {
-//   const id = localStorage.getItem("userId");
-//   const token = localStorage.getItem("token");
-//   const sse = new EventSource(
-//     `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
-//   );
-//   sse.addEventListener("file-status-event", (event) => {
-//     const data = JSON.parse(event.data);
-//     if (data?.length === 1) {
-//       data?.find((item) => {
-//         if (item?.processStageChart === "FINISHED") {
-
-//           setParsedData(data);
-//           dispatch(getPatients(pageNo, pageSize));
-//         }
-//       });
-//     }
-//   });
-//   sse.onerror = () => {
-//     sse.close();
-//   };
-//   return () => {
-//     sse.close();
-//   };
-// };
 function FileProcessingTable({ patinetListAll }) {
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -96,17 +64,35 @@ function FileProcessingTable({ patinetListAll }) {
   useEffect(() => {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
+    let isFinished = false; // State variable to track if FINISHED status received
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
     );
-    sse.addEventListener("file-status-event", (event) => {
+
+    const fileStatusEventListener = (event) => {
       const data = JSON.parse(event.data);
       setParsedData(data);
-    });
-    sse.onerror = () => {
-      sse.close();
+
+      if (!isFinished && data[0]?.processStageChart === "FINISHED") {
+        isFinished = true;
+        sse.close();
+      }
     };
+
+    if (!isFinished) {
+      sse.addEventListener("file-status-event", fileStatusEventListener);
+    } else {
+      sse.close();
+    }
+
+    sse.onerror = () => {
+      if (!isFinished) {
+        sse.close();
+      }
+    };
+
     return () => {
+      sse.removeEventListener("file-status-event", fileStatusEventListener);
       sse.close();
     };
   }, []);
@@ -344,33 +330,49 @@ function FileProcessingTable({ patinetListAll }) {
         color: step.status === "finish" ? "green" : "inherit",
       },
     }));
-    const stepsItem =
-      data?.processStageRadiology !== null
-        ? [
-            ...stepsItemBase,
-            {
-              title: "",
-              description: "Query Conditions",
-              status:
-                stageChartMap[data?.processStageChart] <=
-                stageChartMap[currentIndex]
-                  ? "finish"
-                  : stageChartMap2[data?.processStageChart] ===
-                    "QUERY_CONDITIONS_FOUND_FAILED"
-                  ? "error"
-                  : undefined,
-              info: "QUERY_CONDITIONS_FOUND",
-            },
-          ]
-        : stepsItemBase;
 
-    const mappedSteps = stepsItem.map((step, index) => ({
-      ...step,
-      status: step.status,
-      style: {
-        color: step.info === "FINISHED" ? "green" : "inherit",
-      },
-    }));
+    let stepsItem = stepsItemBase;
+
+    if (data?.processStageRadiology !== null) {
+      const foundIndex = stepsItemBase?.findIndex(
+        (step) => step?.info === "FINISHED"
+      );
+
+      const queryConditionsStep = {
+        title: "",
+        description: "Query Conditions",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] ===
+              "QUERY_CONDITIONS_FOUND_FAILED"
+            ? "error"
+            : undefined,
+        info: "QUERY_CONDITIONS_FOUND",
+      };
+
+      if (foundIndex !== -1) {
+        stepsItem.splice(foundIndex, 0, queryConditionsStep);
+      } else {
+        stepsItem.push(queryConditionsStep);
+      }
+    }
+
+    const mappedSteps = stepsItem
+      ? stepsItem?.map((step, index) => ({
+          ...step,
+          status: step.status,
+          style: {
+            color: step.info === "FINISHED" ? "green" : "inherit",
+          },
+        }))
+      : stepsItemBase.map((step, index) => ({
+          ...step,
+          status: step.status,
+          style: {
+            color: step.info === "FINISHED" ? "green" : "inherit",
+          },
+        }));
 
     return (
       <div style={{ display: "flex" }}>
@@ -491,7 +493,6 @@ function FileProcessingTable({ patinetListAll }) {
             renderRows()
           )}
         </tbody>
-         
       </table>
       <div></div>
     </div>
