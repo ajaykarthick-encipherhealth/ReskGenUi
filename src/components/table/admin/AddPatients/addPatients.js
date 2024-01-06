@@ -106,6 +106,7 @@ function AddPatientListTable({
             </td>
 
             <td
+             style={{textAlign:"center"}}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
@@ -114,6 +115,7 @@ function AddPatientListTable({
                 : "---"}
             </td>
             <td
+             style={{textAlign:"center"}}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
@@ -122,12 +124,13 @@ function AddPatientListTable({
                 : "---"}
             </td>
             <td
+             style={{marginLeft:"10px"}}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
               {statusBodyTemplate(data)}
             </td>
-            <td className={TableStyle.lastBorder}>
+            <td className={TableStyle.lastBorder}  style={{textAlign:"center"}}>
               {actionBodyTemplate(data)}
             </td>
           </tr>
@@ -145,6 +148,7 @@ function AddPatientListTable({
             <th>PATIENT NAME</th>
 
             <th
+             style={{textAlign:"center"}}
               onClick={() => {
                 requestSort("lastModifiedDate");
                 sortTableByDate();
@@ -160,6 +164,7 @@ function AddPatientListTable({
               </span>
             </th>
             <th
+             style={{textAlign:"center"}}
               onClick={() => {
                 requestSort("lastModifiedDate");
                 sortTableByDate();
@@ -175,7 +180,7 @@ function AddPatientListTable({
               </span>
             </th>
 
-            <th>STATUS</th>
+            <th style={{paddingLeft:"55px"}}>STATUS</th>
             <th>Upload</th>
           </tr>
         </thead>

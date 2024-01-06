@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
+import { useEffect } from "react";
 
 function TrackingTable({
   patinetListAll,
@@ -92,6 +93,9 @@ function TrackingTable({
     }
     setDetailsContent(sortedContent);
   };
+  useEffect(() => {
+    setDetailsContent(patinetListAll)
+  }, [patinetListAll])
 
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
@@ -99,10 +103,10 @@ function TrackingTable({
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           {data.patientId}
         </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}  >
           {data.patientName}
         </td>
-        <td className={TableStyle.childBorder}>
+        <td className={TableStyle.childBorder}  style={{textAlign:"center"}}>
           <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
             <Avatar
               style={{
@@ -134,7 +138,7 @@ function TrackingTable({
             )} */}
           </Tooltip>
         </td>
-        <td className={TableStyle.childBorder}>
+        <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
           <Tooltip title={data.patientAllocated ? data.patientAllocated : "Praveen"}>
             <Avatar
               style={{
@@ -175,16 +179,16 @@ function TrackingTable({
             )}
           </Tooltip>
         </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}  style={{textAlign:"center"}}>
           {data.allocatedOn
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
             : "---"}
         </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}  style={{textAlign:"center"}}>
           {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
         </td>
 
-        <td className={TableStyle.lastBorder} onClick={handleTableRowClick}>
+        <td className={TableStyle.lastBorder} onClick={handleTableRowClick} style={{textAlign:"center"}}>
           {statusBodyTemplate(data)}
         </td>
       </tr>
@@ -198,10 +202,11 @@ function TrackingTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th>ALLOCATED BY</th>
-            <th>ALLOCATED TO</th>
-            <th>ALLOCATED TIME</th>
+            <th  style={{textAlign:"center"}}>ALLOCATED BY</th>
+            <th  style={{textAlign:"center"}}>ALLOCATED TO</th>
+            <th  style={{textAlign:"center"}}>ALLOCATED TIME</th>
             <th
+             style={{textAlign:"center"}}
               onClick={() => {
                 requestSort("dueDate");
                 sortTableByDate("dueDate");
@@ -215,17 +220,19 @@ function TrackingTable({
                   <ArrowDownOutlined />
                 )}
               </span>
+             
             </th>
 
-            <th>STATUS</th>
+            <th style={{textAlign:"center"}}>STATUS</th>
           </tr>
         </thead>
 
+       
         <tbody>
-          {detailsContent?.length <= 0 ? (
+          {detailsContent.length <= 0 ? (
             <tr>
               <td colSpan="9">
-                <SpinnerDots/>
+                <SpinnerDots />
               </td>
             </tr>
           ) : (
