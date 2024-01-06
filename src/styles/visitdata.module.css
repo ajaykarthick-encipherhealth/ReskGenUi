@@ -1395,3 +1395,15 @@
   font-size: 14px;
   padding-top: 3px;
 }
+.validHcccontainer {
+  min-height: 83vh;
+  max-height: 83vh;
+  overflow: hidden;
+}
+.validHcccontainer:hover {
+  overflow-y: scroll;
+  position: inherit;
+}
+.sticked_head{
+  margin-bottom: 20px;
+}
