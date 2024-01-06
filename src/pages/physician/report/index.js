@@ -254,7 +254,7 @@ const index = () => {
                         <div className="tbl-caption  align-items-center">
                           <div className="row filter-contain">
                             <div className="col-xl-2">
-                              <label>Search by Name or ID</label>
+                              <label>Search by Name</label>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon
                                   className="fa fa-search form-control-feedback"

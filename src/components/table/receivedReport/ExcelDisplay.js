@@ -30,10 +30,9 @@ const ExcelDisplay = ({ tableData }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {Array.isArray(tableData) &&
-      tableData.length > 0 &&
-      data[1]?.[0]?.value !== "" &&
-      data?.length > 0 ? (
+      {Array.isArray(data) &&
+      data?.length > 0 &&
+      data[1]?.[0]?.value !== "" ? (
         data?.length > 0 && <Spreadsheet data={data} onChange={setData} />
       ) : (
         <div
