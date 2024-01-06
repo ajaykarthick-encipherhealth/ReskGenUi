@@ -9,7 +9,7 @@ const ExcelDisplay = ({ tableData }) => {
   useEffect(() => {
     if (Array.isArray(tableData) && tableData.length > 0) {
       const fieldNames = tableData[0];
-      const transformedData = tableData.slice(1).map((row) => {
+      const transformedData = tableData?.slice(1).map((row) => {
         const rowData = {};
         fieldNames?.forEach((fieldName, index) => {
           rowData[fieldName] = row[index];
@@ -17,7 +17,7 @@ const ExcelDisplay = ({ tableData }) => {
         return rowData;
       });
 
-      const formattedData = transformedData.map((row) => {
+      const formattedData = transformedData?.map((row) => {
         const values = Object.values(row);
         return values.map((value) => ({ value }));
       });
@@ -30,8 +30,11 @@ const ExcelDisplay = ({ tableData }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {Array.isArray(tableData) && tableData.length > 0 && data[0]?.[0]?.value!==""  ? (
-        data && <Spreadsheet data={data} onChange={setData} />
+      {Array.isArray(tableData) &&
+      tableData.length > 0 &&
+      data[1]?.[0]?.value !== "" &&
+      data?.length > 0 ? (
+        data?.length > 0 && <Spreadsheet data={data} onChange={setData} />
       ) : (
         <div
           style={{
@@ -40,7 +43,7 @@ const ExcelDisplay = ({ tableData }) => {
             alignItems: "center",
           }}
         >
-          {data?.length === 0 ? "No data Found" : "No data Found"}
+          {data?.length === 0 && "No data Found"}
         </div>
       )}
     </div>
