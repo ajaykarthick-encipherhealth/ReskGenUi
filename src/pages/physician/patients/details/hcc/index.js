@@ -1358,7 +1358,7 @@ const Hcc = ({ patientHccResult }) => {
             " / " +
             dataset;
           setFileModalHeader(headerName);
-        }, 2000);
+        }, 3000);
         setDocumentLoaded(true);
         var dataset = value + " - (" + splitPoint + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");

@@ -56,3 +56,21 @@ export const ChangePriority = async (patientId, year, priority) => {
   }
 };
 
+
+export const PatientsListFilter = async (url) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}${url}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+

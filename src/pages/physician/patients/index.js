@@ -25,6 +25,7 @@ import calender from "../../../images/dashboard/calender.png";
 import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
+import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
 
 export default function Patient() {
   const dispatch = useDispatch();
@@ -66,6 +67,10 @@ export default function Patient() {
   const [processedStart, setProcessedStart] = useState(null);
   const [processedEnd, setProcessedEnd] = useState(null);
   const [statusSelectedValue, setStausSelectedValue] = useState(null);
+
+  const patientsListFilter = useSelector(
+    (state) => state.patients.patientsListFilter
+  );
 
   const filteratedDashboardData = useSelector(
     (state) => state.patients.filteredList
@@ -158,36 +163,35 @@ export default function Patient() {
   ) => {
     setIsLoading(true);
     if (filteratedDashboardData) {
-      var resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
-      if (filteratedDashboardData?.status &&pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+      if (filteratedDashboardData?.status && pStart && pEnd) {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
       } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
-      } 
-      else if(filteratedDashboardData?.status && statusValue !=="ALL"){
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+      } else if (filteratedDashboardData?.status && statusValue !== "ALL") {
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
       } else {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       }
     } else {
-      var resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
+      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       if (statusValue != null) {
         if (statusValue === "ALL") {
-          resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
+          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
         } else {
-          resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
+          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
         }
       }
       if (pStart != null && statusValue == null) {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
 
       if (pStart != null && statusValue != null && statusValue != "ALL") {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
 
       if (dStart != null && statusValue != null && statusValue != "ALL") {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
       }
 
       if (
@@ -212,8 +216,7 @@ export default function Patient() {
         resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
     }
-    // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
-
+    // dispatch(getpatientsListFilter(resoureUrl));
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -250,7 +253,6 @@ export default function Patient() {
 
   const getNameSearch = async (searchtext) => {
     setIsLoading(true);
-
     // dispatch(getSearchPatients(0,searchtext));
     if (searchtext) {
       var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
@@ -289,88 +291,12 @@ export default function Patient() {
     }
   };
 
-  const addPatientFormId = () => {
-    setValidated(false);
-    setAddPatientId(true);
-  };
-
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
     setValidated(false);
     setAddPatient(true);
     setIsLoadingBtn(false);
-  };
-
-  const onChangeFile = (e) => {
-    setSelectFile(e[0]);
-  };
-
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
-  };
-
-  const handleChangePatientId = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValuePatientId({ ...inputValuePatientId, [key]: value });
-  };
-
-  const handleSubmit = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      event.preventDefault();
-      event.stopPropagation();
-      if (selectFile != null) {
-        submitPatientFile();
-      }
-      if (selectFileRadiology != null) {
-        submitRadiology();
-      }
-    }
-
-    setValidated(true);
-  };
-  const handleSubmitPatientId = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    inputValuePatientId.allocatedBy = localUserId;
-    inputValuePatientId.computing = 0;
-    // inputValuePatientId.allocatedUserId = localUserId;
-
-    if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
-        inputValuePatientId
-      );
-      if (response?.status == 200) {
-        if (response.data.message == "patient Already Present") {
-          setIsLoadingBtn(false);
-          notification.warning({
-            message: "Patient Id Already Present",
-            duration: 1,
-          });
-        } else {
-          notification.success({
-            message: "Patient Id Created Successfully!",
-            duration: 1,
-          });
-          setAddPatientId(false);
-          setIsLoadingBtn(false);
-        }
-      } else {
-        setIsLoadingBtn(false);
-      }
-      // setAddPatientId(false);
-      getAllList(response?.response);
-    }
-
-    setValidated(true);
   };
 
   const gotoPatientDetails = (data) => {
@@ -385,149 +311,6 @@ export default function Patient() {
       notification.warning({
         message: data.patientId + " file not processed Please wait",
       });
-    }
-  };
-
-  function gotoPage(number) {
-    if (canMaxPage > number) {
-      setCanNextPage(true);
-      setPageIndex(number);
-      if (number > 0) {
-        setCanPreviousPage(true);
-      } else {
-        setCanPreviousPage(false);
-      }
-      setPageCount(number);
-    } else {
-      setCanNextPage(false);
-    }
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-  function nextPage(number) {
-    if (canMaxPage > number) {
-      setPageCount(number);
-      setPageIndex(number);
-      setCanPreviousPage(true);
-    } else {
-      setCanNextPage(false);
-    }
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-
-  function previousPage(number) {
-    setCanNextPage(true);
-    setPageIndex(number);
-    if (number > 0) {
-      setCanPreviousPage(true);
-    } else {
-      setCanPreviousPage(false);
-    }
-    setPageCount(number);
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-
-  const subscribe = async (patientResult) => {
-    const accessToken = localStorage.getItem("token");
-    var uId = localStorage.getItem("userId");
-    var tenId = localStorage.getItem("tenantId");
-    var processedList = [];
-
-    var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`;
-    const fetchData = async () => {
-      let eventSource = await fetchEventSource(resoureUrl, {
-        method: "get",
-        mode: "cors",
-        signal: signal,
-        headers: {
-          // Accept: "text/event-stream",
-          Authorization: `Bearer ` + accessToken,
-          // 'Cache-Control': 'no-cache',
-          // 'Connection': 'keep-alive',
-          // 'Accept': "text/event-stream",
-          "Access-Control-Allow-Origin": "*",
-        },
-        withCredentials: true,
-        onopen(res) {},
-        onmessage(event) {
-          const parsedData = JSON.parse(event.data);
-          processedList = parsedData;
-          var checkProcessedValue = [];
-          processedList.map((res) => {
-            checkProcessedValue.push({
-              patientId: res,
-            });
-          });
-
-          const array1 = patientResult;
-          const array2 = checkProcessedValue;
-          const hashMap2 = array2.reduce((carry, item) => {
-            const { patientId } = item;
-            if (!carry[patientId]) {
-              carry[patientId] = item;
-            }
-            return carry;
-          }, {});
-
-          const output = array1.map((item) => {
-            const newName = hashMap2[item.patientId];
-            if (newName) {
-              item.computing = 2;
-            }
-            return item;
-          });
-
-          setPatinetListAll(output);
-        },
-        onclose() {
-          controller.abort();
-        },
-        onerror(err) {
-          controller.abort();
-        },
-      });
-    };
-
-    fetchData();
-  };
-
-  const statusBodyTemplate = (rowData) => {
-    switch (rowData.computing) {
-      case 2:
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Processed</span>
-          </div>
-        );
-
-      case 1:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Processing</span>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`}>Failed</span>
-          </div>
-        );
-
-      case 0:
-        return (
-          <div className="patient-status">
-            <span className={`badge not-started-text`}>Not Started</span>
-          </div>
-        );
     }
   };
 
@@ -686,6 +469,7 @@ export default function Patient() {
     { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "PENDING", value: "PENDING" },
+    { label: "COMPUTED", value: "COMPUTED" },
     { label: "DECLINED", value: "DECLINED" },
     { label: "HOLD", value: "HOLD" },
   ];
@@ -880,7 +664,7 @@ export default function Patient() {
                                 </span>
                               </div>
                             </div>
-                          </div>                          
+                          </div>
                         </div>
                       </div>
 
@@ -924,180 +708,6 @@ export default function Patient() {
             </div>
           </div>
         </div>
-        <Offcanvas
-          onHide={setAddPatient}
-          show={addPatient}
-          className="offcanvas-end"
-          placement="end"
-        >
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Details
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setAddPatient(false)}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                      value={inputValue.patientId}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="name"
-                      required
-                      type="text"
-                      value={inputValue.name}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      File <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      required
-                      type="file"
-                      accept="application/pdf,text/plain"
-                      onChange={(e) => onChangeFile(e.target.files)}
-                      disabled={isLoadingBtn ? true : false}
-                    />
-                  </div>
-                  {/* <div className="col-xl-12 mb-3">
-<Form.Label>
-Radiology
-</Form.Label>
-<Form.Control
-type="file"
-accept="application/pdf,text/plain"
-onChange={(e) => onChangeFileRadiology(e.target.files)}
-disabled={isLoadingBtn ? true : false}
-/>
-</div> */}
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Year of Service <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="year"
-                      required
-                      type="number"
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? (
-                      <Spinner
-                        as="span"
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                        className={visitStyles.btnSpinner}
-                      />
-                    ) : null}
-                    {isLoadingBtn ? "Loading..." : "Submit"}
-                  </Button>
-                  <Button
-                    onClick={() => setAddPatient(false)}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
-        <Offcanvas
-          onHide={setAddPatientId}
-          show={addPatientId}
-          className="offcanvas-end"
-          placement="end"
-        >
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Details
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setAddPatientId(false)}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmitPatientId}
-              >
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientName"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loading..." : "Submit"}
-                  </Button>
-                  <Button
-                    onClick={() => setAddPatientId(false)}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
       </div>
     </>
   );

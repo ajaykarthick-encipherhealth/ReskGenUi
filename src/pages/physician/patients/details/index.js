@@ -36,6 +36,8 @@ import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
+import AllocateModal from "../../../admin/allocatedUser/allocate";
+
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -120,6 +122,10 @@ const Details = ({}) => {
   const [selectModalName, setSelectModalName] = useState(false);
   const selectPatientId = useSelector((state) => state.patients?.patiendId);
   const [userRole, setUserRole] = useState("");
+  const [allocateModal, setAllocateModal] = useState(false);
+  const [selectedRowsId, setSelectedRowsId] = useState([]);
+
+
 
 
   const flagPostList = [
@@ -263,13 +269,10 @@ const Details = ({}) => {
     var uId = localStorage.getItem("userId");
     const userRoleLocal = localStorage.getItem("userRole");
     setUserRole(userRoleLocal);
-
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
-
     setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
-
     getPatientDetails(
       selectPatientId ? selectPatientId?.patirntId : patientId,
       orgId,
@@ -278,7 +281,6 @@ const Details = ({}) => {
     getPatientIdDetails(
       selectPatientId ? selectPatientId?.patirntId : patientId
     );
-
     var userSpinner = (
       <div className={visitStyles.userDetailsCard}>
         <div className="bouncing-loader">
@@ -288,7 +290,6 @@ const Details = ({}) => {
         </div>
       </div>
     );
-
     var currentTime = moment().format("hh:mm");
     setCurrentTime(currentTime);
     setUserDetails(userSpinner);
@@ -300,6 +301,11 @@ const Details = ({}) => {
     );
     setPatienIdDetails(response.data.response);
     var result = response.data.response;
+    var data = [{
+      id: result.patientId,
+      name: result.patientName,
+    }]
+    setSelectedRowsId(data);
     const menu = (
       <Menu>
         {result.processedStatus != "HOLD" ? (
@@ -490,7 +496,6 @@ const Details = ({}) => {
 
     if (response.data) {
       var result = response.data.response;
-
       var validDisArray = [];
       result.validDisease.map((res, index) => {
         const encounterDatearray = res.encounterDate.split(",");
@@ -505,7 +510,6 @@ const Details = ({}) => {
           defaultPosition: res.defaultPosition,
         });
       });
-
       setNewValidDiseaseList(validDisArray);
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -560,7 +564,6 @@ const Details = ({}) => {
     if (form.checkValidity() === true) {
       setSuggestedModal(false);
       submitSuggestedHcc();
-      // setSuggestedBtnTitle("Loading...")
     }
     setValidated(true);
   };
@@ -648,10 +651,8 @@ const Details = ({}) => {
       setIsLoadingBtn(true);
       event.preventDefault();
       event.stopPropagation();
-
       submitRadiology();
     }
-
     setValidated(true);
   };
 
@@ -664,7 +665,6 @@ const Details = ({}) => {
       event.stopPropagation();
       submitLabReport();
     }
-
     setValidated(true);
   };
 
@@ -1003,13 +1003,10 @@ const Details = ({}) => {
         });
         getFlagList();
         setCommentsTrigger(false);
-
-        // getPatientDetails(localPatientId,localOrgId, localTenantId);
       } else {
       }
     }
     setValidated(true);
-    // setIsModalComments(false)
   };
 
   const handleSubmitNotes = async (event) => {
@@ -1041,7 +1038,6 @@ const Details = ({}) => {
       }
     }
     setValidated(true);
-    // setIsModalComments(false)
   };
 
   const handleSubmitCommnets = async (event) => {
@@ -1074,7 +1070,6 @@ const Details = ({}) => {
       }
     }
     setValidated(true);
-    // setIsModalComments(false)
   };
 
   const handleEnterTextComments = async (event) => {
@@ -1193,9 +1188,7 @@ const Details = ({}) => {
   };
 
   const handleDatePickerChange = (dateString) => {
-
     // getFiltePatientListDate(dateString[0],dateString[1])
-
   };
 
   const handleActionClick = (value) => {
@@ -1221,8 +1214,6 @@ const Details = ({}) => {
     if (value == "ADD LAB") {
       addLabReport();
     }
-
-    // getFiltePatientListDate(dateString[0],dateString[1])
   };
 
   const renderUserDetails = async (userId) => {
@@ -1270,11 +1261,7 @@ const Details = ({}) => {
   };
 
   const allocatePatient = () =>{
-    notification.success({
-      message: "Allocated Successfully",
-      placement: "top",
-      duration: 1,
-    });
+    setAllocateModal(true);
   }
 
   return (
@@ -3074,6 +3061,13 @@ const Details = ({}) => {
           </div>
         </div>
       </div>
+
+      <AllocateModal
+        open={allocateModal}
+        setOpen={setAllocateModal}
+        selectedRowsId={selectedRowsId}
+        setSelectedRowsId={setSelectedRowsId}
+      />
     </>
   );
 };

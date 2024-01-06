@@ -1,10 +1,11 @@
-import { PATIENTS_LIST ,SEARCH_PATIENT,FILTERATION,PATIENT_ID} from "../actions/PatientsActions";
+import { PATIENTS_LIST ,SEARCH_PATIENT,FILTERATION,PATIENT_ID,PATIENTS_LIST_FILTER} from "../actions/PatientsActions";
 
 const initialState = {
   patientsList: null,
   searchPatient:null,
   filteredList:null,
-  patiendId:null
+  patiendId:null,
+  patientsListFilter:null,
 };
 
 export const PatientsReducer = (state = initialState, action) => {
@@ -12,6 +13,12 @@ export const PatientsReducer = (state = initialState, action) => {
     return {
       ...state,
       patientsList: action.payload,
+    };
+  }
+  if (action.type === PATIENTS_LIST_FILTER) {
+    return {
+      ...state,
+      patientsListFilter: action.payload,
     };
   }
   if (action.type === SEARCH_PATIENT) {
