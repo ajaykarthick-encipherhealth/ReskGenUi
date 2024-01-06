@@ -2518,7 +2518,7 @@ const Hcc = ({ patientHccResult }) => {
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-          {moment(res).format("MM/DD")}
+          {moment(res).format("MM/DD/YYYY")}
         </span>
       );
       return sectionMapArr;

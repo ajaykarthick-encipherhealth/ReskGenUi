@@ -62,16 +62,17 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [dueDateStart, setDueDateStart] = useState(null);
-  const [dueDateEnd, setDueDateEnd] = useState(null);
-  const [processedStart, setProcessedStart] = useState(null);
-  const [processedEnd, setProcessedEnd] = useState(null);
-  const [statusSelectedValue, setStausSelectedValue] = useState(null);
+  const [dueDateStart, setDueDateStart] = useState('');
+  const [dueDateEnd, setDueDateEnd] = useState('');
+  const [processedStart, setProcessedStart] = useState('');
+  const [processedEnd, setProcessedEnd] = useState('');
+  const [statusSelectedValue, setStausSelectedValue] = useState('');
+  const [searchTextValue, setSearchTextValue] = useState('');
+
 
   const patientsListFilter = useSelector(
     (state) => state.patients.patientsListFilter
   );
-
   const filteratedDashboardData = useSelector(
     (state) => state.patients.filteredList
   );
@@ -97,13 +98,13 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    // setIsLoading(false);
-    getAllList(uId, pageNo, pageSize);
+
+    getFilteApi(pageNo,pageSize,statusSelectedValue,dueDateStart,dueDateEnd,processedStart,processedEnd);    
     if (filteratedDashboardData?.dayDate) {
       getFilteApi(
         pageNo,
         pageSize,
-        "ALL",
+        '',
         filteratedDashboardData?.dayDate,
         filteratedDashboardData?.dayDate
       );
@@ -119,14 +120,13 @@ export default function Patient() {
     }
   }, []);
 
-  const getAllList = async (uId, pageNo, pageSize) => {
-    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      var resultMap = [];
-      var result = response.data?.response?.content;
-      setTotalElements(response.data?.response?.totalElements);
 
+
+  useEffect(() => {
+    if (patientsListFilter) {
+      var resultMap = [];
+      var result = patientsListFilter?.response?.content;
+      setTotalElements(patientsListFilter?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
@@ -148,12 +148,12 @@ export default function Patient() {
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
       setIsLoading(false);
-      setTableLoading(false);
-    }
-  };
+      setTableLoading(false);    }
+  }, [patientsListFilter]);
+
 
   const getFilteApi = async (
-    pageNo,
+     pageNo,
     pageSize,
     statusValue,
     pStart,
@@ -162,6 +162,7 @@ export default function Patient() {
     dEnd
   ) => {
     setIsLoading(true);
+    var uId = localStorage.getItem("userId");
     if (filteratedDashboardData) {
       var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       if (filteratedDashboardData?.status && pStart && pEnd) {
@@ -173,122 +174,17 @@ export default function Patient() {
       } else {
         resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       }
-    } else {
-      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-      if (statusValue != null) {
-        if (statusValue === "ALL") {
-          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-        } else {
-          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
-        }
-      }
-      if (pStart != null && statusValue == null) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
-      }
-
-      if (pStart != null && statusValue != null && statusValue != "ALL") {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
-      }
-
-      if (dStart != null && statusValue != null && statusValue != "ALL") {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
-      }
-
-      if (
-        dStart != null &&
-        statusValue == null &&
-        pStart == null &&
-        statusValue != "ALL"
-      ) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
-      }
-
-      if (dStart != null && pStart != null) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
-      }
-
-      if (
-        dStart != null &&
-        statusValue != null &&
-        pStart != null &&
-        statusValue != "ALL"
-      ) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
-      }
-    }
-    // dispatch(getpatientsListFilter(resoureUrl));
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      var resultMap = [];
-      var result = response.data.response.content;
-      setTotalElements(response.data.response.totalElements);
-      result?.map((res) => {
-        resultMap.push({
-          patientId: res.patientId,
-          patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          allocatedBy: res.allocatedBy,
-          allocatedOn: res.allocatedOn,
-          priority: res.priority,
-          processedStatus: res.processedStatus,
-          createdAt: res.createdAt,
-          processedDate: res.processedDate,
-        });
-      });
-      var newArray = [];
-      newArray = [...patinetListAll, ...resultMap];
-      setPatinetListAll(resultMap);
-
-      setIsLoading(false);
-      setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
+    } else {    
+      var  resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}`;
+      dispatch(getpatientsListFilter(resoureUrl));
     }
   };
 
   const getNameSearch = async (searchtext) => {
-    setIsLoading(true);
-    // dispatch(getSearchPatients(0,searchtext));
-    if (searchtext) {
-      var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-      if (response.data) {
-        var resultMap = [];
-        var result = response.data.response.content;
-        setTotalElements(response.data.response.totalElements);
-
-        result.map((res) => {
-          resultMap.push({
-            patientId: res.patientId,
-            patientName: res.patientName,
-            fileName: res.fileName,
-            computing: res.computing,
-            createdAt: res.createdAt,
-            lastModifiedDate: res.lastModifiedDate,
-            dueDate: res.dueDate,
-            allocatedBy: res.allocatedBy,
-            allocatedOn: res.allocatedOn,
-            priority: res.priority,
-            processedStatus: res.processedStatus,
-            createdAt: res.createdAt,
-            processedDate: res.processedDate,
-          });
-        });
-        var newArray = [];
-        newArray = [...patinetListAll, ...resultMap];
-        setPatinetListAll(resultMap);
-
-        setIsLoading(false);
-        setTableLoading(false);
-      }
-    } else {
-      getAllList(localUserId, pageNo, pageSize);
-    }
+      setIsLoading(true);
+      setSearchTextValue(searchtext)
+      var resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
+      dispatch(getpatientsListFilter(resoureUrl));
   };
 
   const addPatientFile = (data) => {
@@ -379,76 +275,6 @@ export default function Patient() {
     );
   };
 
-  const submitPatientFile = async () => {
-    // setIsLoadingBtn(false);
-    const formData = new FormData();
-    formData.append("file", selectFile);
-    formData.append("dos", inputValue.year);
-    formData.append("orgid", localOrgId);
-    formData.append("tenantid", tenantId);
-    formData.append("userid", localUserId);
-    formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload
-`,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
-
-      notification.success({
-        message: "Patient File Upload Successfully!",
-      });
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-    } else {
-      setIsLoadingBtn(false);
-    }
-    setAddPatient(false);
-    setIsLoadingBtn(false);
-  };
-  const submitRadiology = async () => {
-    const formData = new FormData();
-    formData.append("file", selectFileRadiology);
-    formData.append("orgid", localOrgId);
-    formData.append("tenantid", tenantId);
-    formData.append("userid", localUserId);
-    formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload/radiology
-`,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-    } else {
-      setIsLoadingBtn(false);
-    }
-    setAddPatient(false);
-    // setIsLoadingBtn(false);
-    setSelectFileRadiology(null);
-  };
-
   const onPageChange = (e) => {
     setIsLoading(true);
     setPaginationFirst(e.first);
@@ -473,12 +299,15 @@ export default function Patient() {
     { label: "DECLINED", value: "DECLINED" },
     { label: "HOLD", value: "HOLD" },
   ];
-  const dosOnChange = (selectedOption) => {
-    const value = selectedOption.value;
+  const onChangeStatus = (selectedOption) => {
+    var value = selectedOption.value;
+    if(value == "ALL"){
+      value = ''
+    }
     setStausSelectedValue(value);
     getFilteApi(
-      0,
-      15,
+      pageNo,
+      pageSize,
       value,
       processedStart,
       processedEnd,
@@ -495,8 +324,8 @@ export default function Patient() {
       setDueDateStart(convertStartDate);
       setDueDateEnd(convertEndDate);
       getFilteApi(
-        0,
-        15,
+        pageNo,
+        pageSize,
         statusSelectedValue,
         processedStart,
         processedEnd,
@@ -504,16 +333,16 @@ export default function Patient() {
         convertEndDate
       );
     } else {
-      setDueDateStart(null);
-      setDueDateEnd(null);
+      setDueDateStart('');
+      setDueDateEnd('');
       getFilteApi(
-        0,
-        15,
+        pageNo,
+        pageSize,
         statusSelectedValue,
         processedStart,
         processedEnd,
-        null,
-        null
+        '',
+        ''
       );
     }
   };
@@ -527,8 +356,8 @@ export default function Patient() {
       setProcessedStart(convertStartDate);
       setProcessedEnd(convertEndDate);
       getFilteApi(
-        0,
-        15,
+        pageNo,
+        pageSize,
         statusSelectedValue,
         convertStartDate,
         convertEndDate,
@@ -536,14 +365,14 @@ export default function Patient() {
         dueDateEnd
       );
     } else {
-      setProcessedStart(null);
-      setProcessedEnd(null);
+      setProcessedStart('');
+      setProcessedEnd('');
       getFilteApi(
-        0,
-        15,
+        pageNo,
+        pageSize,
         statusSelectedValue,
-        null,
-        null,
+        '',
+        '',
         dueDateStart,
         dueDateEnd
       );
@@ -583,7 +412,7 @@ export default function Patient() {
                             <div class="form-group has-search">
                               <Select
                                 onChange={(selectedOption) =>
-                                  dosOnChange(selectedOption)
+                                  onChangeStatus(selectedOption)
                                 }
                                 options={statusOptions}
                                 className="custom-react-select"
