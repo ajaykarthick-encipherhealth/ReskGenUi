@@ -382,7 +382,7 @@ useEffect(() => {
                           <div className="col-xl-8 mt-4">
                             <button
                               onClick={handleOpneModal}
-                              className={`btn btn-outline-primary btn-sm ms-2 flr ${allocateStyle.modalBtn}`}
+                              className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
                               disabled={!selectedRowsId.length > 0}
                             >
                               Allocate

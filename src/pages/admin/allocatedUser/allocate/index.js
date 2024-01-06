@@ -25,6 +25,7 @@ const AllocateModal = ({
   const [userDetails, setUserDetails] = useState([]);
   const [allocateDate, setAllocateDate] = useState("");
   const [selectedChart, setSelectedChart] = useState([]);
+  const [activeEmail, setActiveEmail] = useState('')
   const [chart, setChart] = useState({
     date: null,
     completed: null,
@@ -61,14 +62,13 @@ const AllocateModal = ({
 
   const setAllocate = async () => {
     var resoureUrl = `dbservice/patient/admin/assignPatients`;
-    var uId = localStorage.getItem("userId");
     const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
-      userName: uId,
+      userId: activeEmail,
       dueDate: `${allocateDate + "T00:00:00.000Z"}`,
       patientIds: selectedRowsId.map((item) => item.id),
     });
     if (response) {
-      if (response?.status == "SUCCESS") {
+      if (response?.data?.status == "SUCCESS") {
         notification.success({
           message: response?.data?.message,
         });
@@ -76,6 +76,7 @@ const AllocateModal = ({
         setAllocateClicked(true);
         setAllocateDate("");
         setActiveCard("");
+        setActiveEmail('');
         setSearch("");
       }
     }
@@ -105,6 +106,7 @@ const AllocateModal = ({
         setOpen(false);
         setSelectedRowsId(selectedChart);
         setActiveCard("");
+        setActiveEmail('')
         setSearch("");
       }}
       title="Select User"
@@ -142,9 +144,10 @@ const AllocateModal = ({
               onClick={() => {
                 if (activeCard == item.id) {
                   setActiveCard("");
+                  setActiveEmail(item.email)
                 } else {
                   setActiveCard(item.id);
-                  // setSelectEmail(item.email)
+                  setActiveEmail(item.email)
                   getAllCheckList(item.email);
                 }
               }}
@@ -179,7 +182,7 @@ const AllocateModal = ({
             </div>
             {activeCard == item.id && (
               <>
-                <div className="row px-2">
+                <div className="row px-3">
                   <div className={`col-5 ${modalStyle.activeRow1}`}>
                     <span>
                       Charts Selected:{" "}
@@ -214,7 +217,7 @@ const AllocateModal = ({
                         </svg>
                         <span className="p-2">Allocated</span>
                       </div>
-                      <span>{chart ? chart.allocated : 0}</span>
+                      <span>{chart.allocated ? chart.allocated : 0}</span>
                     </div>
                     <div className="d-flex my-3">
                       <div>
@@ -229,7 +232,7 @@ const AllocateModal = ({
                         </svg>
                         <span className="p-2">Completed</span>
                       </div>
-                      <span>{chart ? chart.completed : 0}</span>
+                      <span>{chart.completed ? chart.completed : 0}</span>
                     </div>
                     <div className="d-flex my-3">
                       <div>
@@ -244,7 +247,7 @@ const AllocateModal = ({
                         </svg>
                         <span className="p-2">Pending</span>
                       </div>
-                      <span>{chart ? chart.pending : 0}</span>
+                      <span>{chart.pending ? chart.pending : 0}</span>
                     </div>
                     <div className="d-flex my-3">
                       <div>
@@ -259,7 +262,7 @@ const AllocateModal = ({
                         </svg>
                         <span className="p-2">Hold</span>
                       </div>
-                      <span>{chart ? chart.hold : 0}</span>
+                      <span>{chart.hold ? chart.hold : 0}</span>
                     </div>
                     <div className="d-flex my-3">
                       <div>
@@ -274,7 +277,7 @@ const AllocateModal = ({
                         </svg>
                         <span className="p-2">Decline</span>
                       </div>
-                      <span>{chart ? chart.declined : 0}</span>
+                      <span>{chart.declined ? chart.declined : 0}</span>
                     </div>
                   </div>
                   <div className={`col-7 ${modalStyle.activeRow1}`}>
@@ -299,7 +302,7 @@ const AllocateModal = ({
                           <span>{item.name}</span>
                           <button className="btn p-1">
                             <Avatar
-                              size={20}
+                              size={21}
                               shape="square"
                               style={{
                                 backgroundColor: "#F99F9F",
@@ -320,7 +323,7 @@ const AllocateModal = ({
                 </div>
                 <div className={`d-flex justify-content-center`}>
                   <button
-                    className={`btn btn-outline-primary px-5 p-1 ${modalStyle.modalBtn}`}
+                    className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
                     disabled={
                       !selectedChart.length > 0 ||
                       allocateDate == "" ||
