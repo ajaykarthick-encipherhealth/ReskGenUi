@@ -25,6 +25,8 @@ import calender from "../../../images/dashboard/calender.png";
 import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
+import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
+
 
 export default function Patient() {
   const dispatch = useDispatch();
@@ -66,6 +68,10 @@ export default function Patient() {
   const [processedStart, setProcessedStart] = useState(null);
   const [processedEnd, setProcessedEnd] = useState(null);
   const [statusSelectedValue, setStausSelectedValue] = useState(null);
+
+  const patientsListFilter = useSelector(
+    (state) => state.patients.patientsListFilter
+  );
 
   const filteratedDashboardData = useSelector(
     (state) => state.patients.filteredList
@@ -158,36 +164,36 @@ export default function Patient() {
   ) => {
     setIsLoading(true);
     if (filteratedDashboardData) {
-      var resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
+      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       if (filteratedDashboardData?.status &&pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
       } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
       } 
       else if(filteratedDashboardData?.status && statusValue !=="ALL"){
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
       } else {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       }
     } else {
-      var resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
+      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
       if (statusValue != null) {
         if (statusValue === "ALL") {
-          resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}`;
+          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
         } else {
-          resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
+          resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`;
         }
       }
       if (pStart != null && statusValue == null) {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
 
       if (pStart != null && statusValue != null && statusValue != "ALL") {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
 
       if (dStart != null && statusValue != null && statusValue != "ALL") {
-        resoureUrl = `dbservice/patient/filter?page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
+        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`;
       }
 
       if (
@@ -212,7 +218,12 @@ export default function Patient() {
         resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`;
       }
     }
-    // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
+
+
+
+        // dispatch(getpatientsListFilter(resoureUrl));
+
+
 
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
@@ -686,6 +697,7 @@ export default function Patient() {
     { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "PENDING", value: "PENDING" },
+    { label: "COMPUTED", value: "COMPUTED" },
     { label: "DECLINED", value: "DECLINED" },
     { label: "HOLD", value: "HOLD" },
   ];

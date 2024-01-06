@@ -36,6 +36,8 @@ import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
+import AllocateModal from "../../../admin/allocatedUser/allocate";
+
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -120,6 +122,10 @@ const Details = ({}) => {
   const [selectModalName, setSelectModalName] = useState(false);
   const selectPatientId = useSelector((state) => state.patients?.patiendId);
   const [userRole, setUserRole] = useState("");
+  const [allocateModal, setAllocateModal] = useState(false);
+  const [selectedRowsId, setSelectedRowsId] = useState([]);
+
+
 
 
   const flagPostList = [
@@ -263,7 +269,6 @@ const Details = ({}) => {
     var uId = localStorage.getItem("userId");
     const userRoleLocal = localStorage.getItem("userRole");
     setUserRole(userRoleLocal);
-
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
@@ -300,6 +305,15 @@ const Details = ({}) => {
     );
     setPatienIdDetails(response.data.response);
     var result = response.data.response;
+
+    var data = [{
+      id: result.patientId,
+      name: result.patientName,
+    }]
+    setSelectedRowsId(data);
+
+    console.log(data)
+
     const menu = (
       <Menu>
         {result.processedStatus != "HOLD" ? (
@@ -1270,11 +1284,12 @@ const Details = ({}) => {
   };
 
   const allocatePatient = () =>{
-    notification.success({
-      message: "Allocated Successfully",
-      placement: "top",
-      duration: 1,
-    });
+    setAllocateModal(true);
+    // notification.success({
+    //   message: "Allocated Successfully",
+    //   placement: "top",
+    //   duration: 1,
+    // });
   }
 
   return (
@@ -3074,6 +3089,13 @@ const Details = ({}) => {
           </div>
         </div>
       </div>
+
+      <AllocateModal
+        open={allocateModal}
+        setOpen={setAllocateModal}
+        selectedRowsId={selectedRowsId}
+        setSelectedRowsId={setSelectedRowsId}
+      />
     </>
   );
 };
