@@ -57,7 +57,7 @@ export const ReceivedReport = async (pagenum,startDate,endDate,search) => {
     console.log(err);
   }
 };
-export const GetSelectedReport = async (reportId) => {
+export const GetSelectedReport = async (reportId,reportInfo) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(

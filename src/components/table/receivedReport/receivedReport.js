@@ -45,6 +45,7 @@ function ReceivedReport({
       receivedStartDate: receivedStartDate,
       receivedEndDate: receivedEndDate,
     };
+    localStorage.setItem("reportInfo",JSON.stringify(info?.reportUser))
     dispatch(selectedReport(info));
     router.push("/physician/individualreport");
   };

@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
@@ -93,7 +93,10 @@ const HoldStatus = () => {
         closable={true}
         onCancel={handleOk}
       >
-        {TableData}
+        <div className={styles.container} style={{ height: "500px" }}>
+          {" "}
+          {TableData}
+        </div>
       </Modal>
     </>
   );

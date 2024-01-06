@@ -82,12 +82,14 @@ export default function UserLogin() {
           duration: 1,
         });
       }
-    } catch (e) {
+    } catch (err) {
+     if(err){
       notification.error({
         message: "Login Failed",
         duration: 1,
       });
       setIsLoading(false);
+     }
       // notification.error({
       //     message: "Login Failed"
       // });
@@ -113,11 +115,11 @@ export default function UserLogin() {
     } else {
       setRoleError(false);
       if (selectedRole === "admin" && !roleError) {
-        dispatch(selectedUserRole(selectedRole.toUpperCase()))
+        dispatch(selectedUserRole(selectedRole?.toUpperCase()))
         localStorage.setItem("userRole", selectedRole)
         router.push("/admin/user");
       } else if(selectedRole === "l1auditor" && !roleError) {
-        dispatch(selectedUserRole(selectedRole.toUpperCase()))
+        dispatch(selectedUserRole(selectedRole?.toUpperCase()))
         localStorage.setItem("userRole", selectedRole)
         router.push("/physician/dashboard");
       }
@@ -193,6 +195,7 @@ export default function UserLogin() {
                         onClick={() => {
                           setDisplayRoles(false);
                           setIsLoading(false);
+                          setSelectedRole("")
                         }}
                       >
                         {"BACK"}

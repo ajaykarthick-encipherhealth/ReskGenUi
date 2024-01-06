@@ -29,6 +29,7 @@ const index = () => {
   const [activeTab, setActiveTab] = useState("CoderReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
+  const [comments, setComments] = useState();
 
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -54,7 +55,6 @@ const index = () => {
   const [coderStartDate, setCoderStartDate] = useState();
   const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
-
   const handleCloseModal = () => {
     setModalVisible(false);
   };
@@ -237,7 +237,6 @@ const index = () => {
   };
 
   const rowsLength = useSelector((state) => state.report.row);
-
   return (
     <>
       <Header />
@@ -435,12 +434,15 @@ const index = () => {
                                   >
                                     <CoderReport
                                       setModal={setModal}
+                                      modal={modal}
                                       reportListAll={filteredCOder}
                                       paginationFirst={paginationFirst}
                                       ReportPatientDetails={
                                         ReportPatientDetails?.response
                                       }
                                       onPageChange={onPageChange}
+                                      comments={comments}
+                                      setComments={setComments}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -495,11 +497,18 @@ const index = () => {
                               title="Comments"
                               centered
                               open={modal}
-                              onOk={handleCloseModal}
-                              onCancel={handleCloseModal}
+                              onOk={() => {
+                                setModal(false);
+                              }}
+                              onCancel={() => {
+                                setModal(false);
+                              }}
                               footer={null}
                             >
-                              <div className="offcanvas-body">
+                              <div
+                                className="offcanvas-body"
+                                style={{ height: "400px", overflowY: "scroll" }}
+                              >
                                 <div className="container-fluid">
                                   <div className={styles.heads}>
                                     <span className={styles.headText}>
@@ -507,7 +516,30 @@ const index = () => {
                                     </span>
                                   </div>
                                   <div className={styles.data}>
-                                    <div className={styles.datas}>
+                                    {comments && comments ? (
+                                      Object.entries(comments).map(
+                                        ([year, commentsArray]) => (
+                                          <div key={year}>
+                                            <div className={styles.datas}>
+                                              {year}
+                                            </div>
+                                            {commentsArray.map(
+                                              (comment, index) => (
+                                                <div
+                                                  key={index}
+                                                  className={styles.comment}
+                                                >
+                                                  <p>{comment.comment}</p>
+                                                </div>
+                                              )
+                                            )}
+                                          </div>
+                                        )
+                                      )
+                                    ) : (
+                                      <p>Comments not found</p>
+                                    )}
+                                    {/* <div className={styles.datas}>
                                       Visit Data
                                     </div>
                                     <div className={styles.description}>
@@ -554,7 +586,7 @@ const index = () => {
                                     <div className={styles.description}>
                                       Lorem Ipsum is simply dummy text of the
                                       printing and typesetting industry.
-                                    </div>
+                                    </div> */}
                                   </div>
                                 </div>
                               </div>
