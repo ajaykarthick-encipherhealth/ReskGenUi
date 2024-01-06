@@ -12,11 +12,17 @@ import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
-import { getFilteredList, getpatientsList } from "../../../../store/actions/PatientsActions";
+import {
+  getFilteredList,
+  getpatientsList,
+} from "../../../../store/actions/PatientsActions";
+import { weekdays } from "moment";
+import { useFetcher } from "react-router-dom";
 
 const DailyTask = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState();
+  const [currentDays, setCurrentDays] = useState([]);
 
   const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
   const currentDate = dayjs();
@@ -43,16 +49,111 @@ const DailyTask = () => {
     },
   ];
 
-  const currentWeekDates = [];
-  let dateIterator = startWeekDate;
+  // const currentWeekDates = [];
+  // let dateIterator = startWeekDate;
 
-  while (
-    dateIterator?.isBefore(endWeekDate) ||
-    dateIterator?.isSame(endWeekDate, "day")
-  ) {
-    currentWeekDates?.push(dateIterator.format("MM-DD-YYYY"));
-    dateIterator = dateIterator?.add(1, "day");
-  }
+  // while (
+  //   dateIterator?.isBefore(endWeekDate) ||
+  //   dateIterator?.isSame(endWeekDate, "day")
+  // ) {
+  //   currentWeekDates?.push(dateIterator.format("MM-DD-YYYY"));
+  //   dateIterator = dateIterator?.add(1, "day");
+  // }
+
+  // const getCurrentWeekDates = () => {
+  //   const today = new Date();
+  //   const currentDay = today.getDay();
+  //   const weekStart = new Date(today);
+  //   weekStart.setDate(today.getDate() - currentDay);
+
+  //   const weekDates = [];
+  //   for (let i = 0; i < 7; i++) {
+  //     const nextDay = new Date(weekStart);
+  //     nextDay.setDate(weekStart.getDate() + i);
+  //     weekDates.push({
+  //       day: daysOfWeek[nextDay.getDay()],
+  //       date: dayjs(nextDay).format("MM-DD-YYYY"),
+  //       //nextDay.toISOString().split("T")[0],
+  //       dateString: nextDay.toISOString(),
+  //     });
+  //   }
+  //   return weekDates;
+  // };
+
+  // const currentWeek = getCurrentWeekDates();
+
+  // const card2Data = currentWeek?.map((dayInfo, index) => {
+  //   const matchingStatusData = dailyStatusData?.response?.find((data) => {
+  //     return dayjs(data?.response?.date).format("MM-DD-YYYY") === dayInfo?.date;
+  //   });
+  //   return {
+  //     id: index + 1,
+  //     day: dayInfo?.day,
+  //     date: dayInfo.date,
+  //     dateString: dayInfo.dateString,
+  //     pending: matchingStatusData?.response?.pending || 0,
+  //     hold: matchingStatusData?.response?.hold || 0,
+  //     completed: matchingStatusData?.response?.completed || 0,
+  //     decline: matchingStatusData?.response?.declined || 0,
+  //     allocated: matchingStatusData?.response?.allocated || 0,
+  //   };
+  // });
+  // const today = new Date().toISOString().split("T")[0];
+  // const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+  //   .toISOString()
+  //   .split("T")[0];
+  // const dayBeforeYesterday = new Date(
+  //   new Date().setDate(new Date().getDate() - 2)
+  // )
+  //   .toISOString()
+  //   .split("T")[0];
+
+  // const rearrangedCard2Data = [
+  //   ...card2Data.filter(
+  //     (data) => data.date === dayjs(dayBeforeYesterday).format("MM-DD-YYYY")
+  //   ),
+  //   ...card2Data.filter(
+  //     (data) => data.date === dayjs(yesterday).format("MM-DD-YYYY")
+  //   ),
+  //   ...card2Data.filter(
+  //     (data) => data.date === dayjs(today).format("MM-DD-YYYY")
+  //   ),
+
+  //   ...card2Data.filter(
+  //     (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
+  //   ),
+  // ];
+  // const router = useRouter();
+  // const uniqueCardData = rearrangedCard2Data?.filter(
+  //   (value, index, self) =>
+  //     self.findIndex((v) => v?.dateString === value?.dateString) === index
+  // );
+  // const sortedData = uniqueCardData?.sort((a, b) => {
+  //   const dateA = new Date(a.dateString);
+  //   const dateB = new Date(b.dateString);
+  //   return dateA - dateB;
+  // });
+  // const uniqueDates = [...new Set(sortedData?.map((date) => date.dateString))];
+  const showPrevious = () => {
+    // if (currentIndex > 0) {
+    //   setCurrentIndex(currentIndex - 1);
+    //   const nextDay = uniqueDates[currentIndex - 1];
+    //   dispatch(getDailyTaskDatas(nextDay));
+    // }
+  };
+
+  const showNext = () => {
+    // if (currentIndex < card2Data?.length - 3) {
+    //   setCurrentIndex(currentIndex + 1);
+    //   const nextDay = uniqueDates[currentIndex + 3];
+    //   dispatch(getDailyTaskDatas(nextDay));
+    // }
+  };
+
+  // const currentDateIndex = sortedData?.find(
+  //   (info) => info?.date === dayjs(currentDate).format("MM-DD-YYYY")
+  // );
+
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -63,113 +164,67 @@ const DailyTask = () => {
     "Saturday",
   ];
 
-  const getCurrentWeekDates = () => {
-    const today = new Date();
-    const currentDay = today.getDay();
-    const weekStart = new Date(today);
-    weekStart.setDate(today.getDate() - currentDay);
-
-    const weekDates = [];
-    for (let i = 0; i < 7; i++) {
-      const nextDay = new Date(weekStart);
-      nextDay.setDate(weekStart.getDate() + i);
-      weekDates.push({
-        day: daysOfWeek[nextDay.getDay()],
-        date: dayjs(nextDay).format("MM-DD-YYYY"),
-        //nextDay.toISOString().split("T")[0],
-        dateString: nextDay.toISOString(),
+  const router = useRouter;
+  useEffect(() => {
+    // {
+    // rearrangedCard2Data
+    //   .slice(currentIndex, currentIndex + 3)
+    //   .map((data, index) => {
+    //     return dispatch(getDailyTaskDatas(data?.dateString, router));
+    //   });
+    // }
+    // if (currentDateIndex?.id > 2 && currentDateIndex?.id < 7) {
+    //   setCurrentIndex(currentDateIndex?.id - 3);
+    // }
+    const days = [];
+    for (let i = 0; i < 3; i++) {
+      const today = new Date();
+      today.setDate(today.getDate() - i);
+      const dayIndex = today.getDay();
+      days.push({
+        day: daysOfWeek[dayIndex],
+        date: dayjs(today).format("MM-DD-YYYY"),
+        dateString: today?.toISOString(),
       });
     }
-    return weekDates;
-  };
 
-  const currentWeek = getCurrentWeekDates();
-
-  const card2Data = currentWeek?.map((dayInfo, index) => {
-    const matchingStatusData = dailyStatusData?.response?.find((data) => {
-      return dayjs(data?.response?.date).format("MM-DD-YYYY") === dayInfo?.date;
+    setSelectedDate(days);
+    days.map((data, index) => {
+      return dispatch(getDailyTaskDatas(data?.dateString, router));
     });
-    return {
-      id: index + 1,
-      day: dayInfo?.day,
-      date: dayInfo.date,
-      dateString: dayInfo.dateString,
-      pending: matchingStatusData?.response?.pending || 0,
-      hold: matchingStatusData?.response?.hold || 0,
-      completed: matchingStatusData?.response?.completed || 0,
-      decline: matchingStatusData?.response?.declined || 0,
-      allocated: matchingStatusData?.response?.allocated || 0,
-    };
-  });
-  const today = new Date().toISOString().split("T")[0];
-  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
-    .toISOString()
-    .split("T")[0];
-  const dayBeforeYesterday = new Date(
-    new Date().setDate(new Date().getDate() - 2)
-  )
-    .toISOString()
-    .split("T")[0];
-
-  const rearrangedCard2Data = [
-    ...card2Data.filter(
-      (data) => data.date === dayjs(dayBeforeYesterday).format("MM-DD-YYYY")
-    ),
-    ...card2Data.filter(
-      (data) => data.date === dayjs(yesterday).format("MM-DD-YYYY")
-    ),
-    ...card2Data.filter(
-      (data) => data.date === dayjs(today).format("MM-DD-YYYY")
-    ),
-
-    ...card2Data.filter(
-      (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
-    ),
-  ];
-  const router = useRouter();
-  const uniqueCardData = rearrangedCard2Data?.filter(
-    (value, index, self) =>
-      self.findIndex((v) => v?.dateString === value?.dateString) === index
-  );
-  const sortedData = uniqueCardData?.sort((a, b) => {
-    const dateA = new Date(a.dateString);
-    const dateB = new Date(b.dateString);
-    return dateA - dateB;
-  });
-  const uniqueDates = [...new Set(sortedData?.map((date) => date.dateString))];
-  const showPrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-      const nextDay = uniqueDates[currentIndex - 1];
-      dispatch(getDailyTaskDatas(nextDay));
-    }
-  };
-
-  const showNext = () => {
-    if (currentIndex < card2Data?.length - 3) {
-      setCurrentIndex(currentIndex + 1);
-      const nextDay = uniqueDates[currentIndex + 3];
-      dispatch(getDailyTaskDatas(nextDay));
-    }
-  };
-
-  const currentDateIndex = sortedData?.find(
-    (info) => info?.date === dayjs(currentDate).format("MM-DD-YYYY")
-  );
-
-  useEffect(() => {
-    {
-      rearrangedCard2Data
-        .slice(currentIndex, currentIndex + 3)
-        .map((data, index) => {
-          return dispatch(getDailyTaskDatas(data?.dateString, router));
-        });
-    }
-    if (currentDateIndex?.id > 2 && currentDateIndex?.id < 7) {
-      setCurrentIndex(currentDateIndex?.id - 3);
-    }
   }, []);
 
+  useEffect(() => {
+    if (dailyStatusData) {
+      getDays(selectedDate, dailyStatusData);
+    }
+  }, [dailyStatusData]);
+
+  const getDays = (selectedDate, statusData) => {
+    const processedDays = selectedDate?.map((dayInfo, index) => {
+      const matchingStatusData = statusData?.find((status) => {
+        return status?.response?.date === dayInfo?.dateString;
+      });
+      return {
+        id: index + 1,
+        day: dayInfo?.day,
+        date: dayInfo?.date,
+        dateString: matchingStatusData?.response?.date,
+        pending: matchingStatusData?.response?.pending || 0,
+        hold: matchingStatusData?.response?.hold || 0,
+        completed: matchingStatusData?.response?.completed || 0,
+        decline: matchingStatusData?.response?.declined || 0,
+        allocated: matchingStatusData?.response?.allocated || 0,
+      };
+    });
+    const sorted = processedDays?.sort((a, b) => {
+      const dateA = new Date(a.dateString);
+      const dateB = new Date(b.dateString);
+      return dateA - dateB;
+    });
+    console.log(sorted)
+    return setCurrentDays(sorted);
+  };
   const getChartOption = (allocated, pending, hold, decline, completed) => {
     return {
       tooltip: {
@@ -253,6 +308,7 @@ const DailyTask = () => {
       ],
     };
   };
+
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -269,94 +325,92 @@ const DailyTask = () => {
                 <Row
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  {sortedData
-                    .slice(currentIndex, currentIndex + 3)
-                    .map((data, index) => (
-                      <Col
-                        key={index}
-                        span={7}
-                        className={styles.sliderdiv}
-                        onClick={() => setSelectedDate(currentWeek[index])}
+                  {currentDays?.map((data, index) => (
+                    <Col
+                      key={index}
+                      span={7}
+                      className={styles.sliderdiv}
+                      // onClick={() => setSelectedDate(currentWeek[index])}
+                    >
+                      <h4
+                        className={styles.headerTitle}
+                        style={{ fontSize: "16px" }}
+                        onClick={() => {
+                          dispatch(
+                            getFilteredList({
+                              dayDate: data?.dateString,
+                            })
+                          );
+                          router.push("/physician/patients");
+                        }}
                       >
-                        <h4
-                          className={styles.headerTitle}
-                          style={{ fontSize: "16px" }}
-                          onClick={() => {
-                            dispatch(
-                              getFilteredList({
-                                dayDate: data?.dateString,
-                              })
-                            );
-                            router.push("/physician/patients");
-                          }}
-                        >
-                          <div className={styles.headerDisplay}>
-                            <span> {data.day}</span>
-                            <span className={styles.dateDisplay}>
-                              {" "}
-                              {`(${data.date})`}{" "}
-                            </span>
+                        <div className={styles.headerDisplay}>
+                          <span> {data.day}</span>
+                          <span className={styles.dateDisplay}>
+                            {" "}
+                            {`(${data.date})`}{" "}
+                          </span>
+                        </div>
+                      </h4>
+                      <Row>
+                        <Col span={12}>
+                          <div className={styles.container}>
+                            <ReactECharts
+                              option={getChartOption(
+                                data?.allocated,
+                                data?.pending,
+                                data?.hold,
+                                data?.decline,
+                                data?.completed
+                              )}
+                              style={{ width: "100%", height: "200px" }}
+                            />
                           </div>
-                        </h4>
-                        <Row>
-                          <Col span={12}>
-                            <div className={styles.container}>
-                              <ReactECharts
-                                option={getChartOption(
-                                  data?.allocated,
-                                  data?.pending,
-                                  data?.hold,
-                                  data?.decline,
-                                  data?.completed
-                                )}
-                                style={{ width: "100%", height: "200px" }}
-                              />
-                            </div>
-                          </Col>
-                          <Col span={12} className={styles.headerTitle}>
-                            <div style={{ paddingLeft: "10px" }}>
-                              {bullets?.map((item) => {
-                                return (
-                                  <div className={styles.container}>
+                        </Col>
+                        <Col span={12} className={styles.headerTitle}>
+                          <div style={{ paddingLeft: "10px" }}>
+                            {bullets?.map((item) => {
+                              return (
+                                <div className={styles.container}>
+                                  <div
+                                    style={{ display: "flex" }}
+                                    onClick={() => {
+                                      dispatch(
+                                        getFilteredList({
+                                          date: data?.dateString,
+                                          status: item?.name,
+                                        })
+                                      );
+                                      router.push("/physician/patients");
+                                    }}
+                                  >
                                     <div
-                                      style={{ display: "flex" }}
-                                      onClick={() => {
-                                        dispatch(
-                                          getFilteredList({
-                                            date: data?.dateString,
-                                            status: item?.name,
-                                          })
-                                        );
-                                        router.push("/physician/patients");
+                                      className={styles.bgColor}
+                                      style={{
+                                        backgroundColor: item.color,
                                       }}
-                                    >
-                                      <div
-                                        className={styles.bgColor}
-                                        style={{
-                                          backgroundColor: item.color,
-                                        }}
-                                      ></div>
-                                      {item.name}
-                                    </div>
-                                    <div className={styles.subText}>
-                                      {item.name === "Pending"
-                                        ? data.pending
-                                        : item.name === "Declined"
-                                        ? data?.decline
-                                        : item.name === "Hold"
-                                        ? data.hold
-                                        : item.name === "Completed"
-                                        ? data?.completed
-                                        : "No data"}
-                                    </div>
+                                    ></div>
+                                    {item.name}
                                   </div>
-                                );
-                              })}
-                            </div>
-                          </Col>
-                        </Row>
-                      </Col>
-                    ))}
+                                  <div className={styles.subText}>
+                                    {item.name === "Pending"
+                                      ? data.pending
+                                      : item.name === "Declined"
+                                      ? data?.decline
+                                      : item.name === "Hold"
+                                      ? data.hold
+                                      : item.name === "Completed"
+                                      ? data?.completed
+                                      : "No data"}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  ))}
                 </Row>
               ) : (
                 "No DateFound"
