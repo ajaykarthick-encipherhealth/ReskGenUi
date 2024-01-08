@@ -50,6 +50,9 @@ export default function Patient() {
     patientId: "",
     patientName: "",
   });
+  const filteratedDashboardData = useSelector(
+    (state) => state.patients.filteredList
+  );
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -58,24 +61,23 @@ export default function Patient() {
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [dueDateStart, setDueDateStart] = useState('');
-  const [dueDateEnd, setDueDateEnd] = useState('');
+  const dueStartDate=filteratedDashboardData?.date?filteratedDashboardData?.date:
+  filteratedDashboardData?.dayDate?filteratedDashboardData?.dayDate:""
+  const [dueDateStart, setDueDateStart] = useState(dueStartDate);
+  const [dueDateEnd, setDueDateEnd] = useState(dueStartDate);
   const [processedStart, setProcessedStart] = useState('');
   const [processedEnd, setProcessedEnd] = useState('');
-  const [statusSelectedValue, setStausSelectedValue] = useState('');
+  const [statusSelectedValue, setStausSelectedValue] = useState(filteratedDashboardData?.status?filteratedDashboardData?.status.toUpperCase():'');
   const [searchTextValue, setSearchTextValue] = useState('');
 
 
   const patientsListFilter = useSelector(
     (state) => state.patients.patientsListFilter
   );
-  const filteratedDashboardData = useSelector(
-    (state) => state.patients.filteredList
-  );
+ 
   const dayDateFormated = filteratedDashboardData?.date
     ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
     : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
@@ -100,25 +102,25 @@ export default function Patient() {
     setLocalUserId(uId);
 
     getFilteApi(pageNo,pageSize,statusSelectedValue,dueDateStart,dueDateEnd,processedStart,processedEnd);    
-    if (filteratedDashboardData?.dayDate) {
-      getFilteApi(
-        pageNo,
-        pageSize,
-        '',
-        filteratedDashboardData?.dayDate,
-        filteratedDashboardData?.dayDate
-      );
-    }
-    if (filteratedDashboardData?.status) {
-      getFilteApi(
-        pageNo,
-        pageSize,
-        filteratedDashboardData?.status.toUpperCase(),
-        filteratedDashboardData?.date,
-        filteratedDashboardData?.date
-      );
-    }
-  }, []);
+    // if (filteratedDashboardData?.dayDate) {
+    //   getFilteApi(
+    //     pageNo,
+    //     pageSize,
+    //     '',
+    //     filteratedDashboardData?.dayDate,
+    //     filteratedDashboardData?.dayDate
+    //   );
+    // }
+    // if (filteratedDashboardData?.status) {
+    //   getFilteApi(
+    //     pageNo,
+    //     pageSize,
+    //     filteratedDashboardData?.status.toUpperCase(),
+    //     filteratedDashboardData?.date,
+    //     filteratedDashboardData?.date
+    //   );
+    // }
+  }, [filteratedDashboardData]);
 
 
 
@@ -156,28 +158,29 @@ export default function Patient() {
      pageNo,
     pageSize,
     statusValue,
+    dStart,
+    dEnd,
     pStart,
     pEnd,
-    dStart,
-    dEnd
+   
   ) => {
     setIsLoading(true);
     var uId = localStorage.getItem("userId");
-    if (filteratedDashboardData) {
-      var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-      if (filteratedDashboardData?.status && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
-      } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
-      } else if (filteratedDashboardData?.status && statusValue !== "ALL") {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
-      } else {
-        resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-      }
-    } else {    
+    // if (filteratedDashboardData) {
+    //   var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+    //   if (filteratedDashboardData?.status && pStart && pEnd) {
+    //     resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+    //   } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
+    //     resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
+    //   } else if (filteratedDashboardData?.status && statusValue !== "ALL") {
+    //     resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
+    //   } else {
+    //     resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
+    //   }
+    // } else {    
       var  resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}`;
       dispatch(getpatientsListFilter(resoureUrl));
-    }
+    // }
   };
 
   const getNameSearch = async (searchtext) => {
