@@ -213,7 +213,7 @@ function PatientTable({
               : "---"}
           </td>
           <td className={TableStyle.childBorder}>
-            <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
+            {data.allocatedBy ?  <Tooltip title={data.allocatedBy }>
               {/* <Avatar
               style={{
                 backgroundColor: "#fde3cf",
@@ -248,9 +248,10 @@ function PatientTable({
                     data.allocatedBy.split("@")[0].slice(1)}
                 </>
               ) : (
-                <>Praveen</>
+               "---"
               )}
-            </Tooltip>
+            </Tooltip> :"---"}
+           
           </td>
           <td className={TableStyle.childBorder}>
             <AntSelect
