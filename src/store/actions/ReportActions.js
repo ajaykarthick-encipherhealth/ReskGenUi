@@ -18,7 +18,7 @@ export const EXPORT = "EXPORT";
 export const SEARCH = "SEARCH";
 export const FILEPATH = "FILEPATH";
 export const FILEDETAILS = "FILEDETAILS";
-export const REPORT='REPORT'
+export const REPORT = "REPORT";
 
 export const selectedRow = (val) => ({
   type: SELECTEDROW,
@@ -90,12 +90,21 @@ export const getUsersList = (id, search) => {
 
 export const getSentDetails = (pagenum, startDate, endDate, search) => {
   return (dispatch) => {
+    dispatch({
+      type: SENT_REPORT,
+      payload: {
+        loading: true,
+      },
+    });
     try {
       SentReport(pagenum, startDate, endDate, search).then((response) => {
         if (response) {
           dispatch({
             type: SENT_REPORT,
-            payload: response,
+            payload: {
+              data: response,
+              loading: false,
+            },
           });
         }
       });
@@ -106,12 +115,21 @@ export const getSentDetails = (pagenum, startDate, endDate, search) => {
 };
 export const getReceivedDetails = (pagenum, startDate, endDate, search) => {
   return (dispatch) => {
+    dispatch({
+      type: RECEIVED_REPORT,
+      payload: {
+        loading: true,
+      },
+    });
     try {
       ReceivedReport(pagenum, startDate, endDate, search).then((response) => {
         if (response) {
           dispatch({
             type: RECEIVED_REPORT,
-            payload: response,
+            payload: {
+              data:response,
+              loading: false,
+            },
           });
         }
       });

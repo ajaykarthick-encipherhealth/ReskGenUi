@@ -136,13 +136,13 @@ const index = () => {
     { label: "All", value: "all" },
   ];
   const ReceivedOptions = [];
-  ReceivedReportDetails?.response?.content?.map((item) => {
+  ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
   });
   const SentOptions = [];
   const uniqueRoles = new Set();
 
-  SentReportDetails?.response?.data?.forEach((data) => {
+  SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
       const role = item.role;
       if (!uniqueRoles.has(role)) {
@@ -453,27 +453,31 @@ const index = () => {
                                   >
                                     <SentReportTable
                                       paginationFirst={paginationSentFirst}
-                                      details={SentReportDetails?.response}
+                                      details={
+                                        SentReportDetails?.data?.response
+                                      }
                                       onSentPageChange={onSentPageChange}
+                                      loading={SentReportDetails?.loading}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
                                     id="my-posts"
                                     eventKey="meatCriteria"
                                   >
-                                    {ReceivedReportDetails?.response
+                                    {ReceivedReportDetails?.data?.response
                                       ?.content && (
                                       <ReceivedReport
                                         paginationFirst={
                                           paginationReceivedFirst
                                         }
                                         details={
-                                          ReceivedReportDetails?.response
+                                          ReceivedReportDetails?.data?.response
                                         }
                                         onPageChange={onReceivedPageChange}
                                         receivedPageNo={receivedPageNo}
                                         receivedStartDate={receivedStartDate}
                                         receivedEndDate={receivedEndDate}
+                                        loading={ReceivedReportDetails?.loading}
                                       />
                                     )}
                                   </Tab.Pane>
