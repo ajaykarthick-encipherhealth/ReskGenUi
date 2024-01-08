@@ -63,17 +63,14 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [dueDateStart, setDueDateStart] = useState('');
-  const [dueDateEnd, setDueDateEnd] = useState('');
-  const [processedStart, setProcessedStart] = useState('');
-  const [processedEnd, setProcessedEnd] = useState('');
-  const [statusSelectedValue, setStausSelectedValue] = useState('');
-  const [searchTextValue, setSearchTextValue] = useState('');
+  const [dueDateStart, setDueDateStart] = useState("");
+  const [dueDateEnd, setDueDateEnd] = useState("");
+  const [processedStart, setProcessedStart] = useState("");
+  const [processedEnd, setProcessedEnd] = useState("");
+  const [statusSelectedValue, setStausSelectedValue] = useState("");
+  const [searchTextValue, setSearchTextValue] = useState("");
 
-
-  const patientsListFilter = useSelector(
-    (state) => state.adminList.tracking
-  );
+  const patientsListFilter = useSelector((state) => state.adminList.tracking);
   const filteratedDashboardData = useSelector(
     (state) => state.patients.filteredList
   );
@@ -99,29 +96,16 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-
-    getFilteApi(pageNo,pageSize,statusSelectedValue,dueDateStart,dueDateEnd,processedStart,processedEnd);    
-    if (filteratedDashboardData?.dayDate) {
-      getFilteApi(
-        pageNo,
-        pageSize,
-        '',
-        filteratedDashboardData?.dayDate,
-        filteratedDashboardData?.dayDate
-      );
-    }
-    if (filteratedDashboardData?.status) {
-      getFilteApi(
-        pageNo,
-        pageSize,
-        filteratedDashboardData?.status.toUpperCase(),
-        filteratedDashboardData?.date,
-        filteratedDashboardData?.date
-      );
-    }
-  }, []);
-
-
+    getFilteApi(
+      pageNo,
+      pageSize,
+      statusSelectedValue,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd
+    );
+  }, [filteratedDashboardData]);
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -143,22 +127,20 @@ export default function Patient() {
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
           createdAt: res.createdAt,
-          patientAllocated:res.patientAllocated,
-          allocatedBy:res.allocatedBy,
-          
-
+          patientAllocated: res.patientAllocated,
+          allocatedBy: res.allocatedBy,
         });
       });
       var newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
       setIsLoading(false);
-      setTableLoading(false);    }
+      setTableLoading(false);
+    }
   }, [patientsListFilter]);
 
-
   const getFilteApi = async (
-     pageNo,
+    pageNo,
     pageSize,
     statusValue,
     pStart,
@@ -168,28 +150,16 @@ export default function Patient() {
   ) => {
     setIsLoading(true);
     var uId = localStorage.getItem("userId");
-    if (filteratedDashboardData) {
-      var resoureUrl = `dbservice/patient/admin/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-      if (filteratedDashboardData?.status && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/admin/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
-      } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
-        resoureUrl = `dbservice/patient/admin/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
-      } else if (filteratedDashboardData?.status && statusValue !== "ALL") {
-        resoureUrl = `dbservice/patient/admin/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
-      } else {
-        resoureUrl = `dbservice/patient/admin/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-      }
-    } else {    
-      var  resoureUrl = `dbservice/patient/admin/filter?=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}`;
-      dispatch(getTrackingList(resoureUrl));
-    }
+
+    var resoureUrl = `dbservice/patient/admin/filter?=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}`;
+    dispatch(getTrackingList(resoureUrl));
   };
 
   const getNameSearch = async (searchtext) => {
-      setIsLoading(true);
-      setSearchTextValue(searchtext)
-      var resoureUrl = `dbservice/patient/admin/filter?=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
-      dispatch(getTrackingList(resoureUrl));
+    setIsLoading(true);
+    setSearchTextValue(searchtext);
+    var resoureUrl = `dbservice/patient/admin/filter?=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
+    dispatch(getTrackingList(resoureUrl));
   };
 
   const addPatientFile = (data) => {
@@ -288,7 +258,7 @@ export default function Patient() {
     setTableLoading(true);
     getFilteApi(
       e.page,
-      e.rows,
+      15,
       statusSelectedValue,
       processedStart,
       processedEnd,
@@ -306,12 +276,12 @@ export default function Patient() {
   ];
   const onChangeStatus = (selectedOption) => {
     var value = selectedOption.value;
-    if(value == "ALL"){
-      value = ''
+    if (value == "ALL") {
+      value = "";
     }
     setStausSelectedValue(value);
     getFilteApi(
-      pageNo,
+      0,
       pageSize,
       value,
       processedStart,
@@ -329,7 +299,7 @@ export default function Patient() {
       setDueDateStart(convertStartDate);
       setDueDateEnd(convertEndDate);
       getFilteApi(
-        pageNo,
+        0,
         pageSize,
         statusSelectedValue,
         processedStart,
@@ -338,16 +308,16 @@ export default function Patient() {
         convertEndDate
       );
     } else {
-      setDueDateStart('');
-      setDueDateEnd('');
+      setDueDateStart("");
+      setDueDateEnd("");
       getFilteApi(
-        pageNo,
+        0,
         pageSize,
         statusSelectedValue,
         processedStart,
         processedEnd,
-        '',
-        ''
+        "",
+        ""
       );
     }
   };
@@ -361,7 +331,7 @@ export default function Patient() {
       setProcessedStart(convertStartDate);
       setProcessedEnd(convertEndDate);
       getFilteApi(
-        pageNo,
+        0,
         pageSize,
         statusSelectedValue,
         convertStartDate,
@@ -370,14 +340,14 @@ export default function Patient() {
         dueDateEnd
       );
     } else {
-      setProcessedStart('');
-      setProcessedEnd('');
+      setProcessedStart("");
+      setProcessedEnd("");
       getFilteApi(
-        pageNo,
+        0,
         pageSize,
         statusSelectedValue,
-        '',
-        '',
+        "",
+        "",
         dueDateStart,
         dueDateEnd
       );
@@ -482,7 +452,9 @@ export default function Patient() {
                               <div className={visitStyles.flags}>
                                 <span
                                   className={visitStyles.completed}
-                                  style={{ backgroundColor: "#15a6ef !important" }}
+                                  style={{
+                                    backgroundColor: "#15a6ef !important",
+                                  }}
                                 ></span>
                                 <span className={visitStyles.flagCodes}>
                                   Computed

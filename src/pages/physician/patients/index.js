@@ -165,7 +165,7 @@ export default function Patient() {
   const getNameSearch = async (searchtext) => {
     setIsLoading(true);
     setSearchTextValue(searchtext);
-    var resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
     dispatch(getpatientsListFilter(resoureUrl));
   };
 
@@ -292,7 +292,7 @@ const onPageChange = (e) => {
     }
     setStausSelectedValue(value);
     getFilteApi(
-      pageNo,
+      0,
       pageSize,
       value,
       dueDateStart,
@@ -311,7 +311,7 @@ const onPageChange = (e) => {
       setDueDateStart(convertStartDate);
       setDueDateEnd(convertEndDate);
       getFilteApi(
-        pageNo,
+        0,
         pageSize,
         statusSelectedValue,
         convertStartDate,
@@ -324,11 +324,11 @@ const onPageChange = (e) => {
       setDueDateStart("");
       setDueDateEnd("");
       getFilteApi(
-        pageNo,
+        0,
         pageSize,
         statusSelectedValue,
-        null,
-        null,
+        "",
+        "",
         processedStart,
         processedEnd,
        
@@ -345,7 +345,7 @@ const onPageChange = (e) => {
       setProcessedStart(convertStartDate);
       setProcessedEnd(convertEndDate);
       getFilteApi(
-        pageNo,
+        0,
         pageSize,
         statusSelectedValue,
         convertStartDate,
@@ -357,13 +357,13 @@ const onPageChange = (e) => {
       setProcessedStart("");
       setProcessedEnd("");
       getFilteApi(
-        pageNo,
+        0,
         pageSize,
         statusSelectedValue,
         dueDateStart,
         dueDateEnd,
-        null,
-        null,
+        "",
+        "",
       );
     }
   };
