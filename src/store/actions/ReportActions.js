@@ -109,12 +109,6 @@ export const getSentDetails = (pagenum, startDate, endDate, search) => {
         }
       });
     } catch (err) {
-      dispatch({
-        type: SENT_REPORT,
-        payload: {
-          loading: false,
-        },
-      });
       console.log(err);
     }
   };
@@ -140,12 +134,6 @@ export const getReceivedDetails = (pagenum, startDate, endDate, search) => {
         }
       });
     } catch (err) {
-      dispatch({
-        type: RECEIVED_REPORT,
-        payload: {
-          loading: false,
-        },
-      });
       console.log(err);
     }
   };
