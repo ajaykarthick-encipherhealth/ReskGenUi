@@ -11576,9 +11576,8 @@ span.mb-1.disease-name {
 }
 
 .ant-popover .ant-popover-content {
-  position: relative;
-  width: auto;
-  left: -170px !important;
+  min-width: 200px;
+  max-width: 500px; 
 }
 
 .raf-main-card {

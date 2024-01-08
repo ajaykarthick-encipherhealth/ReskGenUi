@@ -1341,15 +1341,20 @@ const Hcc = ({ patientHccResult }) => {
 
         setSelectActiveCode(value);
         var splitPoint = "";
-        splitPoint = disDescription;
+        splitPoint = actualDescription.substring(" ", 40);
         setTimeout(() => {
           setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-
           highlight({
-            keyword: actualDescription,
+            keyword: splitPoint,
           });
-
-          var dataset = value + " - (" + splitPoint + ")";
+          var dataset =
+            value +
+            " - (" +
+            disDescription +
+            ")" +
+            " / (" +
+            actualDescription +
+            ")";
           setSelectMeatName(dataset);
           var headerName =
             patientDocumentResult.patientId +
@@ -1358,19 +1363,31 @@ const Hcc = ({ patientHccResult }) => {
             " / " +
             dataset;
           setFileModalHeader(headerName);
-        }, 3000);
+        }, 4000);
         setDocumentLoaded(true);
-        var dataset = value + " - (" + splitPoint + ")";
+        var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
+        var dotLoading = (
+          <div className={visitStyles.loadingFileHeader}>
+            <div className="bouncing-loader">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        );
+
+        // var headerName =
+        // patientDocumentResult.patientId +
+        // " / " +
+        // patientDocumentResult.patientName +
+        // " / " +
+        // dataset +
+        // " -  <div>" +
+        // dotLoading +   "</div>";
+
         setIsLoadingSection(true);
-        var headerName =
-          patientDocumentResult.patientId +
-          " / " +
-          patientDocumentResult.patientName +
-          " / " +
-          dataset +
-          " -  " +
-          "Loading...";
+        var headerName = dotLoading;
         setFileModalHeader(headerName);
         if (testModal == "Suggested") {
           setIsModalOpenCaptureSection(true);
@@ -2627,6 +2644,10 @@ const Hcc = ({ patientHccResult }) => {
                         <span className={visitStyles.deleteFlag}></span>
                         <span className={visitStyles.flagCodes}>DELETED</span>
                       </div>
+                      <div className={visitStyles.flags}>
+                        <span className={visitStyles.nonhccFlag}></span>
+                        <span className={visitStyles.flagCodes}>NON HCC</span>
+                      </div>
                     </div>
                   </div>
                 ) : null}
@@ -2672,12 +2693,23 @@ const Hcc = ({ patientHccResult }) => {
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
-                                            - {data.actualDescription}
+                                            <Popover
+                                              content={data.actualDescription}
+                                              title=""
+                                              trigger="hover"
+                                            >
+                                              - {data.actualDescription}
+                                            </Popover>
                                           </span>
                                         </div>
 
                                         {data.defaultPosition ==
                                         "VALID" ? null : data.defaultPosition ==
+                                          "INVALID" ? (
+                                          <span
+                                            className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
                                           "SUGGESTED" ? (
                                           <span
                                             className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
@@ -2830,13 +2862,26 @@ const Hcc = ({ patientHccResult }) => {
                                                   <span className="valid-dis-name">
                                                     {data.diagnosisCode}
                                                   </span>{" "}
-                                                  - {data.actualDescription}
+                                                  <Popover
+                                                    content={
+                                                      data.actualDescription
+                                                    }
+                                                    title=""
+                                                    trigger="hover"
+                                                  >
+                                                    - {data.actualDescription}
+                                                  </Popover>
                                                 </span>
                                               </div>
                                               {data.defaultPosition ==
                                               "VALID" ? (
                                                 <span
                                                   className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                                ></span>
+                                              ) : data.defaultPosition ==
+                                                "INVALID" ? (
+                                                <span
+                                                  className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
                                                 ></span>
                                               ) : data.defaultPosition ==
                                                 "SUGGESTED" ? (
@@ -3051,12 +3096,23 @@ const Hcc = ({ patientHccResult }) => {
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
-                                            - {data.actualDescription}
+                                            <Popover
+                                              content={data.actualDescription}
+                                              title=""
+                                              trigger="hover"
+                                            >
+                                              - {data.actualDescription}
+                                            </Popover>
                                           </span>
                                         </div>
                                         {data.defaultPosition == "VALID" ? (
                                           <span
                                             className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "INVALID" ? (
+                                          <span
+                                            className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
                                           ></span>
                                         ) : data.defaultPosition ==
                                           "SUGGESTED" ? (
@@ -4046,13 +4102,23 @@ const Hcc = ({ patientHccResult }) => {
                                           <span className="valid-dis-name">
                                             {data.diagnosisCode}
                                           </span>{" "}
-                                          - {data.actualDescription}
+                                          <Popover
+                                            content={data.actualDescription}
+                                            title=""
+                                            trigger="hover"
+                                          >
+                                            - {data.actualDescription}
+                                          </Popover>
                                         </span>
                                       </div>
 
                                       {data.defaultPosition == "VALID" ? (
                                         <span
                                           className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                        ></span>
+                                      ) : data.defaultPosition == "INVALID" ? (
+                                        <span
+                                          className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
                                         ></span>
                                       ) : data.defaultPosition ==
                                         "SUGGESTED" ? (
@@ -4398,13 +4464,26 @@ const Hcc = ({ patientHccResult }) => {
                                                   <span className="valid-dis-name">
                                                     {data.diagnosisCode}
                                                   </span>{" "}
-                                                  - {data.actualDescription}
+                                                  <Popover
+                                                    content={
+                                                      data.actualDescription
+                                                    }
+                                                    title=""
+                                                    trigger="hover"
+                                                  >
+                                                    - {data.actualDescription}
+                                                  </Popover>
                                                 </span>
                                               </div>
                                               {data.defaultPosition ==
                                               "VALID" ? (
                                                 <span
                                                   className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                                ></span>
+                                              ) : data.defaultPosition ==
+                                                "INVALID" ? (
+                                                <span
+                                                  className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
                                                 ></span>
                                               ) : data.defaultPosition ==
                                                 "SUGGESTED" ? (
@@ -4631,12 +4710,23 @@ const Hcc = ({ patientHccResult }) => {
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
-                                            - {data.actualDescription}
+                                            <Popover
+                                              content={data.actualDescription}
+                                              title=""
+                                              trigger="hover"
+                                            >
+                                              - {data.actualDescription}
+                                            </Popover>
                                           </span>
                                         </div>
                                         {data.defaultPosition == "VALID" ? (
                                           <span
                                             className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "INVALID" ? (
+                                          <span
+                                            className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
                                           ></span>
                                         ) : data.defaultPosition ==
                                           "SUGGESTED" ? (
@@ -4940,13 +5030,23 @@ const Hcc = ({ patientHccResult }) => {
                                   <span className="valid-dis-name">
                                     {data.diagnosisCode}
                                   </span>{" "}
-                                  - {data.actualDescription}
+                                  <Popover
+                                    content={data.actualDescription}
+                                    title=""
+                                    trigger="hover"
+                                  >
+                                    - {data.actualDescription}
+                                  </Popover>
                                 </span>
                               </div>
 
                               {data.defaultPosition ==
                               "VALID" ? null : data.defaultPosition ==
-                                "SUGGESTED" ? (
+                                "INVALID" ? (
+                                <span
+                                  className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                                ></span>
+                              ) : data.defaultPosition == "SUGGESTED" ? (
                                 <span
                                   className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
                                 ></span>
