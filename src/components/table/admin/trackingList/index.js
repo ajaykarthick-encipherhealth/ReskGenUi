@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation";
 
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import SpinnerDots from "../../../spinner";
 import { useEffect } from "react";
 
 function TrackingTable({
@@ -149,7 +148,7 @@ function TrackingTable({
               }}
             >
               {data.patientAllocated
-                ? data.patientAllocated.slice(0, 2).toUpperCase()
+                ? data.patientAllocated?.slice(0, 2).toUpperCase()
                 : "P"}
             </Avatar>
             {/* {data.allocatedBy ? (
@@ -232,7 +231,7 @@ function TrackingTable({
           {detailsContent.length <= 0 ? (
             <tr>
               <td colSpan="9">
-                <SpinnerDots />
+                <Empty />
               </td>
             </tr>
           ) : (
