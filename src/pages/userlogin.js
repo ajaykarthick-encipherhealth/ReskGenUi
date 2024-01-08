@@ -106,13 +106,13 @@ export default function UserLogin() {
   });
   const onSubmitRole = (e) => {
     e.preventDefault();
-    notification.success({
-      message: "Login Successfully",
-      duration: 1,
-    });
     if (!selectedRole) {
       setRoleError(true);
     } else {
+      notification.success({
+        message: "Login Successfully",
+        duration: 1,
+      });
       setRoleError(false);
       if (selectedRole === "admin" && !roleError) {
         dispatch(selectedUserRole(selectedRole?.toUpperCase()))
