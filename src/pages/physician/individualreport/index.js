@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFileDetails,
@@ -31,28 +31,35 @@ import Footer from "../../../jsx/layouts/Footer";
 const IndividualReceiverReport = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [tableData, setTableData] = useState([]);
-  const [reportInfo, setReportInfo] = useState(null);
   const [csvTableData, setCSVTableData] = useState([]);
-
-  const [detailsContent, setDetailsContent] = useState(null);
-
+  const [searchValue, setSearchValue] = useState(null);
   const url = useSelector((state) => state.report.uploadFile);
-  useEffect(() => {
-    const reportDatas = localStorage.getItem("reportDatas");
-    const reportDetails = localStorage.getItem("reportInfo");
-    const parsed = JSON.parse(reportDetails);
-    setReportInfo(parsed);
-    const datas = JSON.parse(reportDatas);
-    if (datas?.response?.content) {
-      setDetailsContent(datas?.response?.content);
-    }
-  }, []);
 
+  const reportDatas = useSelector((state) => state.report.receivedDetails);
+  const [reportInfo, setReportInfo] = useState();
+  const [detailsContent, setDetailsContent] = useState(
+    reportDatas?.response?.content
+  );
   useEffect(() => {
-    if (reportInfo?.reportId) {
-      dispatch(getSelectedReportDetails(reportInfo?.reportId, reportInfo));
+    const id = new URLSearchParams(window.location.search).get("reportId");
+    dispatch(getReceivedDetails(0, null, null, null));
+    dispatch(getSelectedReportDetails(id))
+  }, []);
+  useEffect(() => {
+    if (url) {
+      fetchData(url);
     }
-  }, [reportInfo]);
+  }, [url]);
+  useEffect(() => {
+    if (reportDatas) {
+      const id = new URLSearchParams(window.location.search).get("reportId");
+      const ReportData = reportDatas?.response?.content?.filter(
+        (item) => item?.reportId === id
+      );
+      setReportInfo(ReportData[0]);
+      setDetailsContent(reportDatas?.response?.content);
+    }
+  }, [reportDatas]);
 
   const fetchData = async (url) => {
     try {
@@ -69,7 +76,6 @@ const IndividualReceiverReport = () => {
 
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
-
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         setTableData(jsonData);
       }
@@ -77,12 +83,6 @@ const IndividualReceiverReport = () => {
       console.error("Error fetching CSV data:", error);
     }
   };
-
-  useEffect(() => {
-    if (url) {
-      fetchData(url);
-    }
-  }, [url, reportInfo]);
 
   const sortTableByDate = () => {
     const sortedContent = [...detailsContent];
@@ -103,6 +103,7 @@ const IndividualReceiverReport = () => {
   const dispatch = useDispatch();
 
   const performanceSearch = (value) => {
+    setSearchValue(value);
     dispatch(
       getReceivedDetails(
         reportInfo?.receivedPageNo,
@@ -156,6 +157,9 @@ const IndividualReceiverReport = () => {
                       onClick={() => {
                         dispatch(selectedReport({ reportUser: item }));
                         setReportInfo(item);
+                        dispatch(
+                          getSelectedReportDetails(item?.reportId, item)
+                        );
                       }}
                     >
                       <div className={styles.user}>

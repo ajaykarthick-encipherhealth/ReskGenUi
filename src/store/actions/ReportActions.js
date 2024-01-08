@@ -109,7 +109,6 @@ export const getReceivedDetails = (pagenum, startDate, endDate, search) => {
     try {
       ReceivedReport(pagenum, startDate, endDate, search).then((response) => {
         if (response) {
-          localStorage.setItem("reportDatas",JSON.stringify(response))
           dispatch({
             type: RECEIVED_REPORT,
             payload: response,
@@ -125,7 +124,6 @@ export const getSelectedReportDetails = (reportId,reportInfo) => {
   return (dispatch) => {
     try {
       GetSelectedReport(reportId,reportInfo).then((response) => {
-        localStorage.setItem("getReport",JSON.stringify(response?.response))
         if (response) {
           dispatch({
             type: REPORT_DETAILS,
@@ -160,7 +158,7 @@ export const getFileDetails = (pathname,reportInfo) => {
               reportInfo?.receivedEndDate
             )
           );
-          // window.open(response.data)
+        
         }
       }
     } catch (err) {

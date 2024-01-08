@@ -109,8 +109,6 @@ const Header = ({ onNote }) => {
         localStorage.removeItem("loginCheck");
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");
-        localStorage.removeItem("reportDatas");
-        localStorage.removeItem("reportInfo");
         window.location = "/userlogin";
       }
     });
