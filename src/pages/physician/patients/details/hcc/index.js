@@ -41,7 +41,8 @@ import { Offcanvas } from "react-bootstrap";
 import { notification } from "antd";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
-import { ThreeDots } from "react-loader-spinner";
+import Spinner from "../../../../../components/loadingSpinner";
+
 
 const Hcc = ({ patientHccResult }) => {
   const navigate = useRouter();
@@ -1222,16 +1223,7 @@ const Hcc = ({ patientHccResult }) => {
     var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
-        <ThreeDots
-          height={80}
-          width={80}
-          radius={9}
-          color="#04306f"
-          ariaLabel="loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-          timeout={5000}
-        />
+        <Spinner/>
       </div>
     );
     setSelectMeatName(dotLoading);
@@ -1338,16 +1330,7 @@ const Hcc = ({ patientHccResult }) => {
         setSelectMeatName(dataset + " -  " + "Loading...");
         var dotLoading = (
           <div className={visitStyles.loadingFileHeader}>
-            <ThreeDots
-              height={80}
-              width={80}
-              radius={9}
-              color="#04306f"
-              ariaLabel="loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-              timeout={5000}
-            />
+            <Spinner/>
           </div>
         );
         setIsLoadingSection(true);
