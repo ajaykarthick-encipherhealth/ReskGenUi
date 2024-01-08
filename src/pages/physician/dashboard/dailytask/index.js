@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactECharts from "echarts-for-react";
 import left from "../../../../images/dashboard/left.png";
 import right from "../../../../images/dashboard/right.png";
-import { Col, Row } from "antd";
+import { Col, Empty, Row } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
@@ -93,12 +93,6 @@ const DailyTask = () => {
     });
   };
 
-  const showNext = () => {
-    if (currentDays?.length > 3) {
-      const updatedData = currentDays?.shift();
-      setSelectedDate(currentDays);
-    }
-  };
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
@@ -207,7 +201,21 @@ const DailyTask = () => {
       ],
     };
   };
-
+  const showNext = () => {
+    if (currentDays?.length > 3) {
+      const updatedData = currentDays?.shift();
+      const datas = [];
+      const valyes = currentDays?.map((item) => {
+        datas?.push({
+          id: item?.id,
+          day: item?.day,
+          date: item?.date,
+          dateString: item?.dateString,
+        });
+      });
+      setSelectedDate(datas);
+    }
+  };
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -240,7 +248,7 @@ const DailyTask = () => {
                               dayDate: data?.dateString,
                             })
                           );
-                          router.push("/physician/patients");
+                          router?.push("/physician/patients");
                         }}
                       >
                         <div className={styles.headerDisplay}>
@@ -280,7 +288,7 @@ const DailyTask = () => {
                                           status: item?.name,
                                         })
                                       );
-                                      router.push("/physician/patients");
+                                      router?.push("/physician/patients");
                                     }}
                                   >
                                     <div
@@ -300,7 +308,7 @@ const DailyTask = () => {
                                       ? data.hold
                                       : item.name === "Completed"
                                       ? data?.completed
-                                      : "No data"}
+                                      : <Empty/>}
                                   </div>
                                 </div>
                               );

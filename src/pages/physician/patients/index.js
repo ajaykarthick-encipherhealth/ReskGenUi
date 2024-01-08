@@ -106,7 +106,6 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-
     getFilteApi(
       pageNo,
       pageSize,
@@ -239,7 +238,7 @@ export default function Patient() {
       case null:
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
+          ---
           </div>
         );
     }
@@ -258,22 +257,26 @@ export default function Patient() {
     );
   };
 
-  const onPageChange = (e) => {
-    setIsLoading(true);
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    setPageSize(e.rows);
-    setTableLoading(true);
-    getFilteApi(
-      e.page,
-      e.rows,
-      statusSelectedValue,
-      processedStart,
-      processedEnd,
-      dueDateStart,
-      dueDateEnd
-    );
-  };
+const onPageChange = (e) => {
+  setIsLoading(true);
+  setPaginationFirst(e.first);
+  setPageNo(e.page);
+  setPageSize(e.rows);
+  setTableLoading(true);
+  console.log(e,"test");
+  getFilteApi(
+    e.page,
+  15,
+    statusSelectedValue,
+    dueDateStart,
+    dueDateEnd,
+    processedStart,
+    processedEnd,
+   
+  );
+};
+
+
   const statusOptions = [
     { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
@@ -292,10 +295,11 @@ export default function Patient() {
       pageNo,
       pageSize,
       value,
+      dueDateStart,
+      dueDateEnd,
       processedStart,
       processedEnd,
-      dueDateStart,
-      dueDateEnd
+      
     );
   };
   const handleDatePickerChange = (dateString) => {
@@ -310,10 +314,11 @@ export default function Patient() {
         pageNo,
         pageSize,
         statusSelectedValue,
+        convertStartDate,
+        convertEndDate,
         processedStart,
         processedEnd,
-        convertStartDate,
-        convertEndDate
+      
       );
     } else {
       setDueDateStart("");
@@ -322,10 +327,11 @@ export default function Patient() {
         pageNo,
         pageSize,
         statusSelectedValue,
+        null,
+        null,
         processedStart,
         processedEnd,
-        "",
-        ""
+       
       );
     }
   };
@@ -354,10 +360,10 @@ export default function Patient() {
         pageNo,
         pageSize,
         statusSelectedValue,
-        "",
-        "",
         dueDateStart,
-        dueDateEnd
+        dueDateEnd,
+        null,
+        null,
       );
     }
   };
