@@ -4,10 +4,10 @@ export const LIST='LIST'
 export const TRACKING='TRACKING'
 
 
-export const getPatients = (pageNo,pageSize) => {
+export const getPatients = (pageNo,computationStart,computationEnd,status,search) => {
     return (dispatch) => {
       try {
-        PatientsList(pageNo,pageSize).then((response) => {
+        PatientsList(pageNo,computationStart,computationEnd,status,search).then((response) => {
           if (response) {
             dispatch({
               type:LIST,

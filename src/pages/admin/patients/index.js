@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Spinner} from "react-bootstrap";
+import Select from "react-select";
+
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import axios from "../../../utility/axiosConfig";
@@ -10,7 +12,7 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { Spin, notification } from "antd";
+import { DatePicker, Spin, notification } from "antd";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
@@ -35,6 +37,7 @@ export default function Patient() {
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [dates, setDates] = useState(null);
   const [compledtedDate, setCompletedDate] = useState(null);
+  const [selectedOption,SetSelectedOption]=useState("")
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -57,10 +60,19 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
-
+  const[search,setSearch]=useState("")
+  const { RangePicker } = DatePicker;
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.patients);
+
+  const statusOptions = [
+    { label: "ALL", value: "ALL"},
+    { label: "PROCESSING", value: "PROCESSING",status:1 },
+    { label: "COMPUTED", value: "COMPUTED",status:2 },
+    { label: "NOT COMPUTED", value: "NOT COMPUTED" ,status:0},
+  ];
+
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -70,8 +82,9 @@ export default function Patient() {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
-    dispatch(getPatients(pageNo, pageSize));
-  }, [pageNo, pageSize]);
+    console.log(selectedOption)
+    dispatch(getPatients(pageNo,"","",selectedOption,search));
+  }, [pageNo, pageSize,search,selectedOption]);
 
   useEffect(() => {
     if (response?.response) {
@@ -207,6 +220,8 @@ export default function Patient() {
     setValidated(true);
   };
 
+
+
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
     if (data.computing == 2) {
@@ -292,46 +307,46 @@ export default function Patient() {
   };
   const getNameSearch = async (searchtext) => {
     setIsLoading(true);
-
+    setSearch(searchtext)
     // dispatch(getSearchPatients(0,searchtext));
-    if (searchtext?.length > 0) {
-      var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-      if (response.data) {
-        var resultMap = [];
-        var result = response.data.response.content;
-        setTotalElements(response.data.response.totalElements);
+    // if (searchtext?.length > 0) {
+    //   var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
+    //   const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    //   if (response.data) {
+    //     var resultMap = [];
+    //     var result = response.data.response.content;
+    //     setTotalElements(response.data.response.totalElements);
 
-        result.map((res) => {
-          resultMap.push({
-            patientId: res.patientId,
-            patientName: res.patientName,
-            fileName: res.fileName,
-            computing: res.computing,
-            createdAt: res.createdAt,
-            lastModifiedDate: res.lastModifiedDate,
-            dueDate: res.dueDate,
-            allocatedBy: res.allocatedBy,
-            allocatedOn: res.allocatedOn,
-            priority: res.priority,
-            processedStatus: res.processedStatus,
-            createdAt: res.createdAt,
-            processedDate: res.processedDate,
-          });
-        });
-        var newArray = [];
-        newArray = [...patinetListAll, ...resultMap];
-        setPatinetListAll(resultMap);
+    //     result.map((res) => {
+    //       resultMap.push({
+    //         patientId: res.patientId,
+    //         patientName: res.patientName,
+    //         fileName: res.fileName,
+    //         computing: res.computing,
+    //         createdAt: res.createdAt,
+    //         lastModifiedDate: res.lastModifiedDate,
+    //         dueDate: res.dueDate,
+    //         allocatedBy: res.allocatedBy,
+    //         allocatedOn: res.allocatedOn,
+    //         priority: res.priority,
+    //         processedStatus: res.processedStatus,
+    //         createdAt: res.createdAt,
+    //         processedDate: res.processedDate,
+    //       });
+    //     });
+    //     var newArray = [];
+    //     newArray = [...patinetListAll, ...resultMap];
+    //     setPatinetListAll(resultMap);
 
-        setIsLoading(false);
-        setTableLoading(false);
-        //     setTimeout(() => {
-        //     subscribe(resultMap);
-        // }, 3000);
-      }
-    } else {
-      getAllList(response?.response);
-    }
+    //     setIsLoading(false);
+    //     setTableLoading(false);
+    //     //     setTimeout(() => {
+    //     //     subscribe(resultMap);
+    //     // }, 3000);
+    //   }
+    // } else {
+    //   getAllList(response?.response);
+    // }
   };
 
   const submitPatientFile = async () => {
@@ -437,9 +452,10 @@ export default function Patient() {
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
+                      <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
                           <div className="col-xl-2">
-                            <label>Search by Name or ID</label>
+                            <label>Search by Name</label>
                             <div class="form-group has-search">
                               <FontAwesomeIcon
                                 className="fa fa-search form-control-feedback"
@@ -453,16 +469,89 @@ export default function Patient() {
                               />
                             </div>
                           </div>
+                          <div className="col-xl-2">
+                            <label>Select Status</label>
+                            <div class="form-group has-search">
+                              <Select
+                                onChange={(value) =>{
+                                  console.log(value)
+                                  SetSelectedOption(value?.status)
+                                }
+                                }
+                                options={statusOptions}
+                                className="custom-react-select"
+                                isSearchable={false}
+                                placeholder={
+                                  
+                                    "Select Status"
+                                }
+                              />
+                            </div>
+                          </div>
+                          <div className="col-xl-2">
+                            <label>Due Date</label>
+                            <div>
+                              <RangePicker
+                                format="MM-DD-YYYY"
+                                onChange={(dates, dateStrings) => {
+                                  handleDatePickerChange(dateStrings);
+                                }}
+                               
+                              />
+                            </div>
+                          </div>
 
-                          <div className="col-xl-10">
-                            <Button
-                              onClick={addPatientFormId}
-                              className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}
+                          <div className="col-xl-2">
+                            <label>Completed Date</label>
+                            <div>
+                              <RangePicker
+                                format="MM-DD-YYYY"
+                                onChange={(dates, dateStrings) => {
+                                  handleDatePickerChangeProcesseDate(
+                                    dateStrings
+                                  );
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-xl-4">
+                            <label></label>
+                            <div
+                              className={visitStyles.flags_patientsList}
+                              style={{ marginTop: "15px" }}
                             >
-                              + Add Patient Id
-                            </Button>
+                              <div className={visitStyles.flags}>
+                                <span
+                                  className={visitStyles.completed}
+                                  style={{ background: "#3a9b94 !important" }}
+                                ></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Completed
+                                </span>
+                              </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.pending}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Pending
+                                </span>
+                              </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.hold}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Hold
+                                </span>
+                              </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.declined}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Declined
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
+                      </div>
                       </div>
 
                       <div

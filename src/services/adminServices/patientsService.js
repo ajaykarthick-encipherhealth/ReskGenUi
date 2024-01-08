@@ -1,12 +1,15 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
 
-export const PatientsList = async (pageNo) => {
+export const PatientsList = async (pageNo,computationStart,computationEnd,status,search) => {
     const token = localStorage.getItem("token");
     const uId = localStorage.getItem("userId");
+    console.log(status)
+    const filteredStatus= status===undefined?"":status
     try {
       const response = await axios.get(
-        `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false`,
+        `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}`,
+        // https://hcc.encipherhealth.com/secure/dbservice/patient/admin/computation/filter?page=0&size=15&userId=henry%40encipherhealth.onmicrosoft.com&isAllocation=false&searchString=10032&computationStart=2024-01-05T00%3A00%3A00.000Z&computationEnd=2024-01-06T00%3A00%3A00.000Z&status=0
         {
           headers: {
             Authorization: `Bearer ${token}`,

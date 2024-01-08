@@ -82,12 +82,13 @@ export default function Patient() {
   const getAllList = async (
     pageNo,
     pageSize,
-    startDate,
-    endDate,
-    allocate,
-    status
+    startDate="",
+    endDate="",
+    allocate=true,
+    status = 2,
+    search='',
   ) => {
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=uavis01@encipherhealth.onmicrosoft.com&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}`;
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=uavis01@encipherhealth.onmicrosoft.com&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -102,11 +103,11 @@ export default function Patient() {
         });
       });
       if (result.length > 0) {
-        setPatinetListAll(result)
+        setPatinetListAll(result);
       } else {
         setPatinetListAll([]);
       }
-      
+
       setIsLoading(false);
       setTableLoading(false);
     }
@@ -133,7 +134,7 @@ export default function Patient() {
   }, [selectAllChecked]);
 
   const handleReceivedDatePicker = (date, dateString) => {
-    if (dateString[0] == '') {
+    if (dateString[0] == "") {
       getAllList(pageNo, pageSize, "", "", true, 2);
     } else if (dateString.length > 1) {
       const formattedDates = dateString?.map((date, index) => {
@@ -144,6 +145,7 @@ export default function Patient() {
         return formattedDate;
       });
       if (dateString.length > 0) {
+
         getAllList(
           pageNo,
           pageSize,
@@ -315,6 +317,17 @@ export default function Patient() {
     // setIsLoadingBtn(false);
     setSelectFileRadiology(null);
   };
+  const getNameSearch = (search) => {
+    getAllList(
+      pageNo,
+      pageSize,
+      dateRange ? dateRange[0] : "",
+      dateRange ? dateRange[1] : "",
+      true,
+      2,
+      search
+    );
+  };
 
   const onPageChange = (e) => {
     setIsLoading(true);
@@ -330,14 +343,14 @@ export default function Patient() {
     setAddPatientId(false);
     setAllocateModal(true);
   };
-useEffect(() => {
-  if (allocateClicked) {
-    getAllList(pageNo, pageSize, "", "", true, 2);
-    setAllocateClicked(false)
-    setSelectedRowsId([])
-    setSelectAllChecked(false)
-  }
-}, [allocateClicked])
+  useEffect(() => {
+    if (allocateClicked) {
+      getAllList(pageNo, pageSize, "", "", true, 2);
+      setAllocateClicked(false);
+      setSelectedRowsId([]);
+      setSelectAllChecked(false);
+    }
+  }, [allocateClicked]);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -360,7 +373,7 @@ useEffect(() => {
                               />
                               <InputText
                                 type="text"
-                                // onChange={(e) => getNameSearch(e.target.value)}
+                                onChange={(e) => getNameSearch(e.target.value)}
                                 className="form-control new-form-control"
                                 placeholder="Search"
                               />
