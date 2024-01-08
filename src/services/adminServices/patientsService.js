@@ -19,12 +19,12 @@ export const PatientsList = async (pageNo) => {
     }
   };
 
-  export const TrackingList = async (pageNo) => {
+  export const TrackingList = async (url) => {
     const token = localStorage.getItem("token");
     const uId = localStorage.getItem("userId");
     try {
       const response = await axios.get(
-        `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/filter?page=${pageNo}&size=15`,
+        `  ${ENDPOINTS?.apiEndoint}${url}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
