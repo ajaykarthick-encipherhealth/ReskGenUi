@@ -64,20 +64,26 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const dueStartDate=filteratedDashboardData?.date?filteratedDashboardData?.date:
-  filteratedDashboardData?.dayDate?filteratedDashboardData?.dayDate:""
+  const dueStartDate = filteratedDashboardData?.date
+    ? filteratedDashboardData?.date
+    : filteratedDashboardData?.dayDate
+    ? filteratedDashboardData?.dayDate
+    : "";
   const [dueDateStart, setDueDateStart] = useState(dueStartDate);
   const [dueDateEnd, setDueDateEnd] = useState(dueStartDate);
-  const [processedStart, setProcessedStart] = useState('');
-  const [processedEnd, setProcessedEnd] = useState('');
-  const [statusSelectedValue, setStausSelectedValue] = useState(filteratedDashboardData?.status?filteratedDashboardData?.status.toUpperCase():'');
-  const [searchTextValue, setSearchTextValue] = useState('');
-
+  const [processedStart, setProcessedStart] = useState("");
+  const [processedEnd, setProcessedEnd] = useState("");
+  const [statusSelectedValue, setStausSelectedValue] = useState(
+    filteratedDashboardData?.status
+      ? filteratedDashboardData?.status.toUpperCase()
+      : ""
+  );
+  const [searchTextValue, setSearchTextValue] = useState("");
 
   const patientsListFilter = useSelector(
     (state) => state.patients.patientsListFilter
   );
- 
+
   const dayDateFormated = filteratedDashboardData?.date
     ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
     : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
@@ -101,28 +107,16 @@ export default function Patient() {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
 
-    getFilteApi(pageNo,pageSize,statusSelectedValue,dueDateStart,dueDateEnd,processedStart,processedEnd);    
-    // if (filteratedDashboardData?.dayDate) {
-    //   getFilteApi(
-    //     pageNo,
-    //     pageSize,
-    //     '',
-    //     filteratedDashboardData?.dayDate,
-    //     filteratedDashboardData?.dayDate
-    //   );
-    // }
-    // if (filteratedDashboardData?.status) {
-    //   getFilteApi(
-    //     pageNo,
-    //     pageSize,
-    //     filteratedDashboardData?.status.toUpperCase(),
-    //     filteratedDashboardData?.date,
-    //     filteratedDashboardData?.date
-    //   );
-    // }
+    getFilteApi(
+      pageNo,
+      pageSize,
+      statusSelectedValue,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd
+    );
   }, [filteratedDashboardData]);
-
-
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -150,44 +144,30 @@ export default function Patient() {
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
       setIsLoading(false);
-      setTableLoading(false);    }
+      setTableLoading(false);
+    }
   }, [patientsListFilter]);
 
-
   const getFilteApi = async (
-     pageNo,
+    pageNo,
     pageSize,
     statusValue,
     dStart,
     dEnd,
     pStart,
-    pEnd,
-   
+    pEnd
   ) => {
     setIsLoading(true);
     var uId = localStorage.getItem("userId");
-    // if (filteratedDashboardData) {
-    //   var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-    //   if (filteratedDashboardData?.status && pStart && pEnd) {
-    //     resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
-    //   } else if (filteratedDashboardData?.dayDate && pStart && pEnd) {
-    //     resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${pStart}&dueDateEnd=${pEnd}`;
-    //   } else if (filteratedDashboardData?.status && statusValue !== "ALL") {
-    //     resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteratedDashboardData?.status.toUpperCase()}`;
-    //   } else {
-    //     resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-    //   }
-    // } else {    
-      var  resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}`;
-      dispatch(getpatientsListFilter(resoureUrl));
-    // }
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}`;
+    dispatch(getpatientsListFilter(resoureUrl));
   };
 
   const getNameSearch = async (searchtext) => {
-      setIsLoading(true);
-      setSearchTextValue(searchtext)
-      var resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
-      dispatch(getpatientsListFilter(resoureUrl));
+    setIsLoading(true);
+    setSearchTextValue(searchtext);
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
+    dispatch(getpatientsListFilter(resoureUrl));
   };
 
   const addPatientFile = (data) => {
@@ -304,8 +284,8 @@ export default function Patient() {
   ];
   const onChangeStatus = (selectedOption) => {
     var value = selectedOption.value;
-    if(value == "ALL"){
-      value = ''
+    if (value == "ALL") {
+      value = "";
     }
     setStausSelectedValue(value);
     getFilteApi(
@@ -336,16 +316,16 @@ export default function Patient() {
         convertEndDate
       );
     } else {
-      setDueDateStart('');
-      setDueDateEnd('');
+      setDueDateStart("");
+      setDueDateEnd("");
       getFilteApi(
         pageNo,
         pageSize,
         statusSelectedValue,
         processedStart,
         processedEnd,
-        '',
-        ''
+        "",
+        ""
       );
     }
   };
@@ -368,14 +348,14 @@ export default function Patient() {
         dueDateEnd
       );
     } else {
-      setProcessedStart('');
-      setProcessedEnd('');
+      setProcessedStart("");
+      setProcessedEnd("");
       getFilteApi(
         pageNo,
         pageSize,
         statusSelectedValue,
-        '',
-        '',
+        "",
+        "",
         dueDateStart,
         dueDateEnd
       );
