@@ -43,7 +43,7 @@ const IndividualReceiverReport = () => {
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("reportId");
     dispatch(getReceivedDetails(0, null, null, null));
-    dispatch(getSelectedReportDetails(id))
+    dispatch(getSelectedReportDetails(id));
   }, []);
   useEffect(() => {
     if (url) {
@@ -56,6 +56,7 @@ const IndividualReceiverReport = () => {
       const ReportData = reportDatas?.response?.content?.filter(
         (item) => item?.reportId === id
       );
+      console.log(ReportData[0]);
       setReportInfo(ReportData[0]);
       setDetailsContent(reportDatas?.response?.content);
     }
@@ -104,14 +105,7 @@ const IndividualReceiverReport = () => {
 
   const performanceSearch = (value) => {
     setSearchValue(value);
-    dispatch(
-      getReceivedDetails(
-        reportInfo?.receivedPageNo,
-        reportInfo?.receivedStartDate,
-        reportInfo?.receivedEndDate,
-        value
-      )
-    );
+    dispatch(getReceivedDetails(0, null, null, value));
   };
   const debouncedSearch = debounce(performanceSearch, 500);
   const filterChange = (e) => {
@@ -144,56 +138,64 @@ const IndividualReceiverReport = () => {
 
             {/* users */}
             <div className={styles.list}>
-              {detailsContent
-                // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
-                ?.map((item) => (
-                  <div key={item.reportId}>
-                    <div
-                      style={{
-                        display: "flex",
-                        cursor: "pointer",
-                        marginBottom: "10px",
-                      }}
-                      onClick={() => {
-                        dispatch(selectedReport({ reportUser: item }));
-                        setReportInfo(item);
-                        dispatch(
-                          getSelectedReportDetails(item?.reportId, item)
-                        );
-                      }}
-                    >
-                      <div className={styles.user}>
-                        <div>{item?.reportName}</div>
-                        {item?.type && (
-                          <div
-                            style={{ margin: "5px 0 0 5px" }}
-                            className={
-                              item.type === "EXCEL"
-                                ? styles.excelStyle
-                                : styles.csvSTyle
-                            }
-                          >
-                            {item?.type}
+              {searchValue !== null && detailsContent?.length === 0 ? (
+                <div style={{marginTop:"60px"}}>
+                  No data Found
+                </div>
+              ) : (
+                <>
+                  {detailsContent
+                    // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
+                    ?.map((item) => (
+                      <div key={item.reportId}>
+                        <div
+                          style={{
+                            display: "flex",
+                            cursor: "pointer",
+                            marginBottom: "10px",
+                          }}
+                          onClick={() => {
+                            dispatch(selectedReport({ reportUser: item }));
+                            setReportInfo(item);
+                            dispatch(
+                              getSelectedReportDetails(item?.reportId, item)
+                            );
+                          }}
+                        >
+                          <div className={styles.user}>
+                            <div>{item?.reportName}</div>
+                            {item?.type && (
+                              <div
+                                style={{ margin: "5px 0 0 5px" }}
+                                className={
+                                  item.type === "EXCEL"
+                                    ? styles.excelStyle
+                                    : styles.csvSTyle
+                                }
+                              >
+                                {item?.type}
+                              </div>
+                            )}
+                            {item?.role && (
+                              <div
+                                className={
+                                  item.role.toLowerCase() === "download"
+                                    ? styles.download1
+                                    : styles.read
+                                }
+                              >
+                                {item?.role.toLowerCase()}
+                              </div>
+                            )}
                           </div>
-                        )}
-                        {item?.role && (
-                          <div
-                            className={
-                              item.role.toLowerCase() === "download"
-                                ? styles.download1
-                                : styles.read
-                            }
-                          >
-                            {item?.role.toLowerCase()}
-                          </div>
-                        )}
+                        </div>
+                        <div className={styles.date}>
+                          {dayjs(item?.receiveDate).format("DD/MM/YYYY")}
+                        </div>
                       </div>
-                    </div>
-                    <div className={styles.date}>
-                      {dayjs(item?.receiveDate).format("DD/MM/YYYY")}
-                    </div>
-                  </div>
-                ))}
+                    ))}
+                </>
+              )}
             </div>
           </div>
         </div>
