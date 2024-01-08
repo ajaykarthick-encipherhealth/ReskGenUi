@@ -1407,3 +1407,10 @@
 .sticked_head{
   margin-bottom: 20px;
 }
+
+.loadingFileHeader {
+  display: flex;
+  min-height: 50px;
+  max-height: 150px;
+  padding: 10px;
+}
