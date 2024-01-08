@@ -41,6 +41,7 @@ import { Offcanvas } from "react-bootstrap";
 import { notification } from "antd";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
+import { ThreeDots } from "react-loader-spinner";
 
 const Hcc = ({ patientHccResult }) => {
   const navigate = useRouter();
@@ -1221,11 +1222,18 @@ const Hcc = ({ patientHccResult }) => {
     var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-  );
+        <ThreeDots
+          height={80}
+          width={80}
+          radius={9}
+          color="#04306f"
+          ariaLabel="loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          timeout={5000}
+        />
+      </div>
+    );
     setSelectMeatName(dotLoading);
     setIsLoadingSection(true);
     setIsModalOpen(true);
@@ -1329,10 +1337,17 @@ const Hcc = ({ patientHccResult }) => {
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
         var dotLoading = (
-            <div className={visitStyles.loadingFileHeader}>
-              <div></div>
-              <div></div>
-              <div></div>
+          <div className={visitStyles.loadingFileHeader}>
+            <ThreeDots
+              height={80}
+              width={80}
+              radius={9}
+              color="#04306f"
+              ariaLabel="loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+              timeout={5000}
+            />
           </div>
         );
         setIsLoadingSection(true);
@@ -1382,7 +1397,7 @@ const Hcc = ({ patientHccResult }) => {
             dataset;
           setFileModalHeader(headerName);
         }, 2000);
-        setDocumentLoaded(true);       
+        setDocumentLoaded(true);
       } else if (check == "valid2") {
         setSelectActiveCode(value);
         var splitPoint = "";
