@@ -12,22 +12,13 @@ import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
-import {
-  getFilteredList,
-  getpatientsList,
-} from "../../../../store/actions/PatientsActions";
-import { weekdays } from "moment";
-import { useFetcher } from "react-router-dom";
+import { getFilteredList } from "../../../../store/actions/PatientsActions";
 
 const DailyTask = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
   const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
-  const currentDate = dayjs();
-  const startWeekDate = currentDate.startOf("week");
-  const endWeekDate = currentDate.endOf("week");
   const dispatch = useDispatch();
 
   const bullets = [
@@ -48,112 +39,6 @@ const DailyTask = () => {
       name: "Completed",
     },
   ];
-
-  // const currentWeekDates = [];
-  // let dateIterator = startWeekDate;
-
-  // while (
-  //   dateIterator?.isBefore(endWeekDate) ||
-  //   dateIterator?.isSame(endWeekDate, "day")
-  // ) {
-  //   currentWeekDates?.push(dateIterator.format("MM-DD-YYYY"));
-  //   dateIterator = dateIterator?.add(1, "day");
-  // }
-
-  // const getCurrentWeekDates = () => {
-  //   const today = new Date();
-  //   const currentDay = today.getDay();
-  //   const weekStart = new Date(today);
-  //   weekStart.setDate(today.getDate() - currentDay);
-
-  //   const weekDates = [];
-  //   for (let i = 0; i < 7; i++) {
-  //     const nextDay = new Date(weekStart);
-  //     nextDay.setDate(weekStart.getDate() + i);
-  //     weekDates.push({
-  //       day: daysOfWeek[nextDay.getDay()],
-  //       date: dayjs(nextDay).format("MM-DD-YYYY"),
-  //       //nextDay.toISOString().split("T")[0],
-  //       dateString: nextDay.toISOString(),
-  //     });
-  //   }
-  //   return weekDates;
-  // };
-
-  // const currentWeek = getCurrentWeekDates();
-
-  // const card2Data = currentWeek?.map((dayInfo, index) => {
-  //   const matchingStatusData = dailyStatusData?.response?.find((data) => {
-  //     return dayjs(data?.response?.date).format("MM-DD-YYYY") === dayInfo?.date;
-  //   });
-  //   return {
-  //     id: index + 1,
-  //     day: dayInfo?.day,
-  //     date: dayInfo.date,
-  //     dateString: dayInfo.dateString,
-  //     pending: matchingStatusData?.response?.pending || 0,
-  //     hold: matchingStatusData?.response?.hold || 0,
-  //     completed: matchingStatusData?.response?.completed || 0,
-  //     decline: matchingStatusData?.response?.declined || 0,
-  //     allocated: matchingStatusData?.response?.allocated || 0,
-  //   };
-  // });
-  // const today = new Date().toISOString().split("T")[0];
-  // const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
-  //   .toISOString()
-  //   .split("T")[0];
-  // const dayBeforeYesterday = new Date(
-  //   new Date().setDate(new Date().getDate() - 2)
-  // )
-  //   .toISOString()
-  //   .split("T")[0];
-
-  // const rearrangedCard2Data = [
-  //   ...card2Data.filter(
-  //     (data) => data.date === dayjs(dayBeforeYesterday).format("MM-DD-YYYY")
-  //   ),
-  //   ...card2Data.filter(
-  //     (data) => data.date === dayjs(yesterday).format("MM-DD-YYYY")
-  //   ),
-  //   ...card2Data.filter(
-  //     (data) => data.date === dayjs(today).format("MM-DD-YYYY")
-  //   ),
-
-  //   ...card2Data.filter(
-  //     (data) => ![dayBeforeYesterday, yesterday, today].includes(data.date)
-  //   ),
-  // ];
-  // const router = useRouter();
-  // const uniqueCardData = rearrangedCard2Data?.filter(
-  //   (value, index, self) =>
-  //     self.findIndex((v) => v?.dateString === value?.dateString) === index
-  // );
-  // const sortedData = uniqueCardData?.sort((a, b) => {
-  //   const dateA = new Date(a.dateString);
-  //   const dateB = new Date(b.dateString);
-  //   return dateA - dateB;
-  // });
-  // const uniqueDates = [...new Set(sortedData?.map((date) => date.dateString))];
-  const showPrevious = () => {
-    // if (currentIndex > 0) {
-    //   setCurrentIndex(currentIndex - 1);
-    //   const nextDay = uniqueDates[currentIndex - 1];
-    //   dispatch(getDailyTaskDatas(nextDay));
-    // }
-  };
-
-  const showNext = () => {
-    // if (currentIndex < card2Data?.length - 3) {
-    //   setCurrentIndex(currentIndex + 1);
-    //   const nextDay = uniqueDates[currentIndex + 3];
-    //   dispatch(getDailyTaskDatas(nextDay));
-    // }
-  };
-
-  // const currentDateIndex = sortedData?.find(
-  //   (info) => info?.date === dayjs(currentDate).format("MM-DD-YYYY")
-  // );
-
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -166,16 +51,6 @@ const DailyTask = () => {
 
   const router = useRouter;
   useEffect(() => {
-    // {
-    // rearrangedCard2Data
-    //   .slice(currentIndex, currentIndex + 3)
-    //   .map((data, index) => {
-    //     return dispatch(getDailyTaskDatas(data?.dateString, router));
-    //   });
-    // }
-    // if (currentDateIndex?.id > 2 && currentDateIndex?.id < 7) {
-    //   setCurrentIndex(currentDateIndex?.id - 3);
-    // }
     const days = [];
     for (let i = 0; i < 3; i++) {
       const today = new Date();
@@ -189,7 +64,8 @@ const DailyTask = () => {
     }
 
     setSelectedDate(days);
-    days.map((data, index) => {
+
+    days?.map((data, index) => {
       return dispatch(getDailyTaskDatas(data?.dateString, router));
     });
   }, []);
@@ -199,6 +75,30 @@ const DailyTask = () => {
       getDays(selectedDate, dailyStatusData);
     }
   }, [dailyStatusData]);
+
+  const showPrevious = () => {
+    const lastData = currentDays[0];
+    const date = dayjs(lastData?.date).subtract(1, "date");
+    const datas = [
+      {
+        id: currentDays?.length + 1,
+        day: dayjs(date).format("dddd"),
+        date: date?.format("MM-DD-YYYY"),
+        dateString: date?.toISOString(),
+      },
+    ];
+    setSelectedDate((prev) => [...prev, ...datas]);
+    datas?.map((data, index) => {
+      return dispatch(getDailyTaskDatas(data?.dateString, router));
+    });
+  };
+
+  const showNext = () => {
+    if (currentDays?.length > 3) {
+      const updatedData = currentDays?.shift();
+      setSelectedDate(currentDays);
+    }
+  };
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
@@ -222,7 +122,6 @@ const DailyTask = () => {
       const dateB = new Date(b.dateString);
       return dateA - dateB;
     });
-    console.log(sorted)
     return setCurrentDays(sorted);
   };
   const getChartOption = (allocated, pending, hold, decline, completed) => {
@@ -321,11 +220,11 @@ const DailyTask = () => {
               </div>
             </Col>
             <Col span={22}>
-              {currentIndex < 7 ? (
+              {currentDays?.length > 0 ? (
                 <Row
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  {currentDays?.map((data, index) => (
+                  {currentDays?.slice(0, 3)?.map((data, index) => (
                     <Col
                       key={index}
                       span={7}
