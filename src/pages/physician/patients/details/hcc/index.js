@@ -1218,26 +1218,26 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const handleOpenModal = (value, disDescription, encounterDate) => {
-    // getSectionPageNumber(value, encounterDate);
     var splitPoint = disDescription.substring(" ", 20);
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+  );
+    setSelectMeatName(dotLoading);
+    setIsLoadingSection(true);
+    setIsModalOpen(true);
     setTimeout(() => {
-      // setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
       highlight({
         keyword: splitPoint,
         matchCase: true,
-        // wholeWords:true
       });
-      var dataset = value + " - (" + disDescription + ")";
+      var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
     }, 2000);
     setDocumentLoaded(true);
-    var dataset = value + " - (" + disDescription + ")";
-    // setSelectMeatName(dataset);
-    setSelectMeatName(dataset + " -  " + "Loading...");
-    setIsLoadingSection(true);
-    setIsModalOpen(true);
-    // setIsModalOpenValid(true)
-    // getSectionResult(value.toLowerCase());
   };
 
   const getSectionPageNumber = async (header, encounterDate) => {
@@ -1326,6 +1326,24 @@ const Hcc = ({ patientHccResult }) => {
         setNonHccActiveCodes(false);
       }
       if (check === "valid") {
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        var dotLoading = (
+            <div className={visitStyles.loadingFileHeader}>
+              <div></div>
+              <div></div>
+              <div></div>
+          </div>
+        );
+        setIsLoadingSection(true);
+        var headerName = dotLoading;
+        setFileModalHeader(headerName);
+        if (testModal == "Suggested") {
+          setIsModalOpenCaptureSection(true);
+        } else {
+          setIsModalOpenValidCodes(true);
+        }
+
         var fileId = patientFileDTO.fileId;
         const encounterDatesValue = encounterDate.split(",");
         const encounterDatesHeader = encounterDatesValue[0];
@@ -1363,38 +1381,8 @@ const Hcc = ({ patientHccResult }) => {
             " / " +
             dataset;
           setFileModalHeader(headerName);
-        }, 4000);
-        setDocumentLoaded(true);
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
-        var dotLoading = (
-          <div className={visitStyles.loadingFileHeader}>
-            <div className="bouncing-loader">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-        );
-
-        // var headerName =
-        // patientDocumentResult.patientId +
-        // " / " +
-        // patientDocumentResult.patientName +
-        // " / " +
-        // dataset +
-        // " -  <div>" +
-        // dotLoading +   "</div>";
-
-        setIsLoadingSection(true);
-        var headerName = dotLoading;
-        setFileModalHeader(headerName);
-        if (testModal == "Suggested") {
-          setIsModalOpenCaptureSection(true);
-        } else {
-          setIsModalOpenValidCodes(true);
-        }
-        // setIsModalOpenCaptureSection(true);
+        }, 2000);
+        setDocumentLoaded(true);       
       } else if (check == "valid2") {
         setSelectActiveCode(value);
         var splitPoint = "";
