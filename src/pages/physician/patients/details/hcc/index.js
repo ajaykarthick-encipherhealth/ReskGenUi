@@ -4927,8 +4927,8 @@ const Hcc = ({ patientHccResult }) => {
                 <div
                   className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}
                 >
-                  <div className={visitStyles.container}>
-                    <div className={visitStyles.hccStickey_head}>
+                  <div className={visitStyles.validHcccontainer}>
+                    <div className={visitStyles.sticked_head}>
                       {newValidDiseaseList.map((data, i) => (
                         <li>
                           <div
@@ -4944,11 +4944,9 @@ const Hcc = ({ patientHccResult }) => {
                                 </span>
                               </div>
 
-                              {data.defaultPosition == "VALID" ? (
-                                <span
-                                  className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
-                                ></span>
-                              ) : data.defaultPosition == "SUGGESTED" ? (
+                              {data.defaultPosition ==
+                              "VALID" ? null : data.defaultPosition ==
+                                "SUGGESTED" ? (
                                 <span
                                   className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
                                 ></span>
@@ -4957,6 +4955,44 @@ const Hcc = ({ patientHccResult }) => {
                                   className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
                                 ></span>
                               ) : null}
+
+                              <Popconfirm
+                                title="Choose an action"
+                                icon={
+                                  <QuestionCircleOutlined
+                                    style={{
+                                      color: "blue",
+                                    }}
+                                  />
+                                }
+                                okText="Move to Deleted"
+                                cancelText="Move to Suggested"
+                                onCancel={validToSuggested}
+                                okButtonProps={{
+                                  type: buttonClicked ? "primary" : "default",
+                                }}
+                                cancelButtonProps={{
+                                  type: buttonClicked ? "danger" : "default",
+                                }}
+                                description={data.diagnosisCode}
+                                onConfirm={confirmvalid}
+                                placement="leftTop"
+                                onOpenChange={() =>
+                                  onchangeValid(data.diagnosisCode, data)
+                                }
+                              >
+                                <div className={visitStyles.close_icon}>
+                                  {
+                                    <FontAwesomeIcon
+                                      icon={faArrowsAlt}
+                                      style={{
+                                        size: 8,
+                                        color: "#a80404",
+                                      }}
+                                    />
+                                  }
+                                </div>
+                              </Popconfirm>
                             </div>
                             <div className={`${visitStyles.hoverActiveHcc}`}>
                               <div
