@@ -12,7 +12,8 @@
 }
 .msgDiv {
   display: flex;
-  height: auto;
+  /* height:500px;
+  overflow-y: scroll; */
 }
 .msgCOntainer {
   width: 100%;

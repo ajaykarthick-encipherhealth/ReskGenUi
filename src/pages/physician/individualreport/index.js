@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFileDetails,
@@ -30,21 +30,60 @@ import Footer from "../../../jsx/layouts/Footer";
 
 const IndividualReceiverReport = () => {
   const [sortOrder, setSortOrder] = useState("asc");
-  const selectedRow = useSelector((state) => state.report.getReport);
   const [tableData, setTableData] = useState([]);
-  const reportInfo = useSelector((state) => state.report.reportInfo);
-  const fileUrl = useSelector((state) => state.report);
-  const fileExtension = fileUrl?.uploadFile?.split(".").pop();
-  const extention = fileExtension?.split("?").shift();
   const [csvTableData, setCSVTableData] = useState([]);
+  const [searchValue, setSearchValue] = useState(null);
+  const url = useSelector((state) => state.report.uploadFile);
 
-  const ReceivedReportDetails = useSelector(
-    (state) => state.report?.receivedDetails
-  );
-
+  const reportDatas = useSelector((state) => state.report.receivedDetails);
+  const [reportInfo, setReportInfo] = useState();
   const [detailsContent, setDetailsContent] = useState(
-    ReceivedReportDetails?.content
+    reportDatas?.response?.content
   );
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("reportId");
+    dispatch(getReceivedDetails(0, null, null, null));
+    dispatch(getSelectedReportDetails(id));
+  }, []);
+  useEffect(() => {
+    if (url) {
+      fetchData(url);
+    }
+  }, [url]);
+  useEffect(() => {
+    if (reportDatas) {
+      const id = new URLSearchParams(window.location.search).get("reportId");
+      const ReportData = reportDatas?.response?.content?.filter(
+        (item) => item?.reportId === id
+      );
+      console.log(ReportData[0]);
+      setReportInfo(ReportData[0]);
+      setDetailsContent(reportDatas?.response?.content);
+    }
+  }, [reportDatas]);
+
+  const fetchData = async (url) => {
+    try {
+      const response = await fetch(url?.path);
+      if (url?.extention === "csv") {
+        const text = await response.text();
+        const jsonArray = await csvToJson().fromString(text);
+        setCSVTableData(jsonArray);
+      }
+      if (url?.extention === "xlsx") {
+        const arrayBuffer = await response.arrayBuffer();
+        const data = new Uint8Array(arrayBuffer);
+        const workbook = XLSX.read(data, { type: "array" });
+
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        setTableData(jsonData);
+      }
+    } catch (error) {
+      console.error("Error fetching CSV data:", error);
+    }
+  };
 
   const sortTableByDate = () => {
     const sortedContent = [...detailsContent];
@@ -63,63 +102,10 @@ const IndividualReceiverReport = () => {
   };
 
   const dispatch = useDispatch();
-  const fetchData = async (fileUrl) => {
-    try {
-      const response = await fetch(fileUrl?.uploadFile);
-      if (extention === "csv") {
-        const text = await response.text();
-        const jsonArray = await csvToJson().fromString(text);
-        setCSVTableData(jsonArray);
-      }
-      if (extention === "xlsx") {
-        const arrayBuffer = await response.arrayBuffer();
-        const data = new Uint8Array(arrayBuffer);
-        const workbook = XLSX.read(data, { type: "array" });
-
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        setTableData(jsonData);
-      }
-    } catch (error) {
-      console.error("Error fetching CSV data:", error);
-    }
-  };
-  useEffect(() => {
-    if (ReceivedReportDetails?.content) {
-      setDetailsContent(ReceivedReportDetails.content);
-    }
-    if (fileUrl) {
-      fetchData(fileUrl);
-    }
-  }, [ReceivedReportDetails?.content, fileUrl?.uploadFile]);
-
-  useEffect(() => {
-    if (reportInfo?.reportUser?.reportId) {
-      dispatch(getSelectedReportDetails(reportInfo?.reportUser?.reportId));
-    }
-    if (selectedRow?.reportPath) {
-      dispatch(getFileDetails(selectedRow?.reportPath));
-    }
-    dispatch(
-      getReceivedDetails(
-        0,
-        reportInfo?.receivedStartDate,
-        reportInfo?.receivedEndDate
-      )
-    );
-  }, [reportInfo?.reportUser, selectedRow?.reportPath]);
 
   const performanceSearch = (value) => {
-    dispatch(
-      getReceivedDetails(
-        reportInfo?.receivedPageNo,
-        reportInfo?.receivedStartDate,
-        reportInfo?.receivedEndDate,
-        value
-      )
-    );
+    setSearchValue(value);
+    dispatch(getReceivedDetails(0, null, null, value));
   };
   const debouncedSearch = debounce(performanceSearch, 500);
   const filterChange = (e) => {
@@ -152,52 +138,64 @@ const IndividualReceiverReport = () => {
 
             {/* users */}
             <div className={styles.list}>
-              {detailsContent
-                // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
-                ?.map((item) => (
-                  <div key={item.reportId}>
-                    <div
-                      style={{
-                        display: "flex",
-                        cursor: "pointer",
-                        marginBottom: "10px",
-                      }}
-                      onClick={() => {
-                        dispatch(selectedReport({ reportUser: item }));
-                      }}
-                    >
-                      <div className={styles.user}>
-                        <div>{item?.reportName}</div>
-                        {item.type && (
-                          <div
-                            style={{ margin: "5px 0 0 5px" }}
-                            className={
-                              item.type === "csv"
-                                ? styles.csvSTyle
-                                : styles.excelStyle
-                            }
-                          >
-                            {item.type}
+              {searchValue !== null && detailsContent?.length === 0 ? (
+                <div style={{marginTop:"60px"}}>
+                  No data Found
+                </div>
+              ) : (
+                <>
+                  {detailsContent
+                    // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
+                    ?.map((item) => (
+                      <div key={item.reportId}>
+                        <div
+                          style={{
+                            display: "flex",
+                            cursor: "pointer",
+                            marginBottom: "10px",
+                          }}
+                          onClick={() => {
+                            dispatch(selectedReport({ reportUser: item }));
+                            setReportInfo(item);
+                            dispatch(
+                              getSelectedReportDetails(item?.reportId, item)
+                            );
+                          }}
+                        >
+                          <div className={styles.user}>
+                            <div>{item?.reportName}</div>
+                            {item?.type && (
+                              <div
+                                style={{ margin: "5px 0 0 5px" }}
+                                className={
+                                  item.type === "EXCEL"
+                                    ? styles.excelStyle
+                                    : styles.csvSTyle
+                                }
+                              >
+                                {item?.type}
+                              </div>
+                            )}
+                            {item?.role && (
+                              <div
+                                className={
+                                  item.role.toLowerCase() === "download"
+                                    ? styles.download1
+                                    : styles.read
+                                }
+                              >
+                                {item?.role.toLowerCase()}
+                              </div>
+                            )}
                           </div>
-                        )}
-                        {item.role && (
-                          <div
-                            className={
-                              item.role.toLowerCase() === "download"
-                                ? styles.download1
-                                : styles.read
-                            }
-                          >
-                            {item.role.toLowerCase()}
-                          </div>
-                        )}
+                        </div>
+                        <div className={styles.date}>
+                          {dayjs(item?.receiveDate).format("DD/MM/YYYY")}
+                        </div>
                       </div>
-                    </div>
-                    <div className={styles.date}>
-                      {dayjs(item.receiveDate).format("DD/MM/YYYY")}
-                    </div>
-                  </div>
-                ))}
+                    ))}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -207,31 +205,31 @@ const IndividualReceiverReport = () => {
               {" "}
               <Image src={id} alt="noimg" />
               &nbsp; Id: &nbsp;
-              {reportInfo?.reportUser?.reportId}
+              {reportInfo?.reportId}
             </div>
             <div>
               {" "}
               <Image src={file} alt="noimg" /> &nbsp;Name:&nbsp;
-              {reportInfo?.reportUser?.reportName}
+              {reportInfo?.reportName}
             </div>
             <div>
               {" "}
               <Image src={send} alt="noimg" />
               &nbsp;Sender:&nbsp;
-              {reportInfo?.reportUser?.sender}
+              {reportInfo?.sender}
             </div>
             <div>
               {" "}
               <Image src={calender} alt="noimg" />
               &nbsp; Date:&nbsp;
-              {dayjs(reportInfo?.reportUser?.receiveDate).format("DD/MM/YYYY")}
+              {dayjs(reportInfo?.receiveDate).format("DD/MM/YYYY")}
             </div>
             <div>
-              {reportInfo?.reportUser?.role === "DOWNLOAD" ? (
+              {reportInfo?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
                     exportToExcel;
-                    window.open(fileUrl?.uploadFile);
+                    window.open(url);
                   }}
                   className={styles.download}
                   disabled={
@@ -248,7 +246,7 @@ const IndividualReceiverReport = () => {
                   Download
                 </Button>
               ) : (
-                reportInfo?.reportUser?.role === "read" && (
+                reportInfo?.role === "read" && (
                   <Button className={styles.readOption}>Read</Button>
                 )
               )}
@@ -258,10 +256,10 @@ const IndividualReceiverReport = () => {
             <div className={styles.innerFlex}>
               <div
                 className={
-                  extention === "csv" ? styles.csvSTyle : styles.excelStyle
+                  url?.extention === "csv" ? styles.csvSTyle : styles.excelStyle
                 }
               >
-                {selectedRow?.type}
+                {url?.extention === "xlsx" ? "Excel" : "CSV"}
               </div>
             </div>
             <div
@@ -270,17 +268,17 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-              {extention === "csv" ? (
+              {url?.extention === "csv" ? (
                 <CSVDisplay
                   tableData={csvTableData}
-                  fileUrl={fileUrl?.uploadFile}
-                  extention={extention}
+                  fileUrl={url?.path}
+                  extention={url?.extention}
                 />
               ) : (
                 <ExcelDisplay
                   tableData={tableData}
-                  fileUrl={fileUrl?.uploadFile}
-                  extention={extention}
+                  fileUrl={url?.path}
+                  extention={url?.extention}
                 />
               )}
             </div>

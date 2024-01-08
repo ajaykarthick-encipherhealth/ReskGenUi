@@ -11,14 +11,17 @@ import SpinnerDots from "../../spinner";
 
 function CoderReport({
   setModal,
+  modal,
   reportListAll,
   paginationFirst,
   ReportPatientDetails,
   onPageChange,
+  comments,
+  setComments,
 }) {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [comments, setComments] = useState();
+  // const [comments, setComments] = useState();
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -50,12 +53,6 @@ function CoderReport({
   };
 
   const processstatusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
-
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
@@ -106,20 +103,6 @@ function CoderReport({
         );
     }
   };
-
-  const msgContent = (
-    <>
-      {comments && comments[2023] ? (
-        comments[2023]?.map((item, index) => (
-          <div key={index}>
-            <p>{item.comment}</p>
-          </div>
-        ))
-      ) : (
-        <p>Comments not found</p>
-      )}
-    </>
-  );
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -196,7 +179,7 @@ function CoderReport({
                       </td>
 
                       <td
-                        onClick={setModal(false)}
+                        // onClick={setModal(false)}
                         className={TableStyle.childBorder}
                       >
                         {row?.processedDate ? (
@@ -206,18 +189,19 @@ function CoderReport({
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        <Popconfirm title="" description={msgContent}>
-                          <div
-                            onClick={() => {
-                              setComments(row?.comment);
-                            }}
-                            disbaled={true}
-                          >
-                            {row?.comment
-                              ? SVGICON.comment
-                              : SVGICON.emptyComments}
-                          </div>
-                        </Popconfirm>
+                        {/* <Popconfirm title="" description={msgContent}> */}
+                        <div
+                          onClick={() => {
+                            setComments(row?.comment);
+                            setModal(!modal);
+                          }}
+                          disbaled={true}
+                        >
+                          {row?.comment
+                            ? SVGICON.comment
+                            : SVGICON.emptyComments}
+                        </div>
+                        {/* </Popconfirm> */}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.auditedBy ? row?.auditedBy : "---"}
@@ -272,7 +256,7 @@ function CoderReport({
                       </td>
 
                       <td
-                        onClick={setModal(false)}
+                        // onClick={setModal(false)}
                         className={TableStyle.childBorder}
                       >
                         {row?.processedDate
@@ -280,17 +264,18 @@ function CoderReport({
                           : "MM-DD-YYYY"}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        <Popconfirm title="" description={msgContent}>
-                          <div
-                            onClick={() => {
-                              setComments(row?.comment);
-                            }}
-                          >
-                            {row?.comment
-                              ? SVGICON.comment
-                              : SVGICON.emptyComments}
-                          </div>
-                        </Popconfirm>
+                        {/* <Popconfirm title="" description={msgContent}> */}
+                        <div
+                          onClick={() => {
+                            setComments(row?.comment);
+                            setModal(!modal);
+                          }}
+                        >
+                          {row?.comment
+                            ? SVGICON.comment
+                            : SVGICON.emptyComments}
+                        </div>
+                        {/* </Popconfirm> */}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.auditedBy ? row?.auditedBy : "---"}

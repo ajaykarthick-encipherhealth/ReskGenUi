@@ -138,15 +138,16 @@ export const getReceivedDetails = (pagenum, startDate, endDate, search) => {
     }
   };
 };
-export const getSelectedReportDetails = (reportId) => {
+export const getSelectedReportDetails = (reportId,reportInfo) => {
   return (dispatch) => {
     try {
-      GetSelectedReport(reportId).then((response) => {
+      GetSelectedReport(reportId,reportInfo).then((response) => {
         if (response) {
           dispatch({
             type: REPORT_DETAILS,
             payload: response?.response,
           });
+          dispatch(getFileDetails(response?.response?.reportPath,reportInfo))
         }
       });
     } catch (err) {
@@ -154,17 +155,28 @@ export const getSelectedReportDetails = (reportId) => {
     }
   };
 };
-export const getFileDetails = (pathname) => {
+export const getFileDetails = (pathname,reportInfo) => {
   return async (dispatch) => {
     try {
       if (pathname) {
         const response = await getFile(pathname);
         if (response) {
+          const splitPath = pathname?.split(".").pop();
           dispatch({
             type: FILEDETAILS,
-            payload: response.data?.response,
+            payload: {
+              path:response.data?.response,
+              extention:splitPath
+            },
           });
-          // window.open(response.data)
+          dispatch(
+            getReceivedDetails(
+              0,
+              reportInfo?.receivedStartDate,
+              reportInfo?.receivedEndDate
+            )
+          );
+        
         }
       }
     } catch (err) {

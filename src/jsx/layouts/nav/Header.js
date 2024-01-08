@@ -13,7 +13,7 @@ import {
   PhysicanMenuList,
   L2AuditMenuList,
 } from "./Menu";
-import { DownOutlined } from '@ant-design/icons'
+import { DownOutlined } from "@ant-design/icons";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -65,10 +65,10 @@ const Header = ({ onNote }) => {
     setUserName(userName);
     if (userRoleLocal === "admin") {
       setMenuList(AdminMenuList);
-    } else if(userRoleLocal === "l1auditor"){
+    } else if (userRoleLocal === "l1auditor") {
       setMenuList(PhysicanMenuList);
-    }else{
-      setMenuList([])
+    } else {
+      setMenuList([]);
     }
     if (loginCheck != "true") {
       Swal.fire({
@@ -107,6 +107,8 @@ const Header = ({ onNote }) => {
       if (result.isConfirmed) {
         localStorage.clear();
         localStorage.removeItem("loginCheck");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("token");
         window.location = "/userlogin";
       }
     });
@@ -264,15 +266,17 @@ const Header = ({ onNote }) => {
     { label: "Admin", key: "admin" },
     { label: "L1auditor", key: "l1auditor" },
   ];
-  const items =data?.filter(info=>(info?.key?.toLowerCase() !== userRole?.toLowerCase()))
+  const items = data?.filter(
+    (info) => info?.key?.toLowerCase() !== userRole?.toLowerCase()
+  );
 
-  const onClick = ({key}) => {
+  const onClick = ({ key }) => {
     localStorage.setItem("userRole", key);
-   if(key==="admin"){
-     router.push("/admin/user")
-    }else if(key==="l1auditor"){
-     router.push("/physician/dashboard")
-   }
+    if (key === "admin") {
+      router.push("/admin/user");
+    } else if (key === "l1auditor") {
+      router.push("/physician/dashboard");
+    }
   };
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -362,13 +366,13 @@ const Header = ({ onNote }) => {
                                 className="nav-link i-false"
                                 as="div"
                               > */}
-                                <div className="header-info2 d-flex align-items-center">
-                                  <div className="header-media">
-                                    <Image src={IMAGES.profileImage} />
-                                  </div>
-                                </div>
-                              {/* </Dropdown.Toggle> */}
-                              {/* <Dropdown.Menu align="end">
+                            <div className="header-info2 d-flex align-items-center">
+                              <div className="header-media">
+                                <Image src={IMAGES.profileImage} />
+                              </div>
+                            </div>
+                            {/* </Dropdown.Toggle> */}
+                            {/* <Dropdown.Menu align="end">
                                 <div className=" border-0 mb-0">
                                   <span className="dropdown-item ai-icon ">
                                     {SVGICON.Logout}{" "}
@@ -389,16 +393,20 @@ const Header = ({ onNote }) => {
                               <Dropdown
                                 menu={{
                                   items,
-                                  onClick
+                                  onClick,
                                 }}
                                 trigger={["click"]}
                               >
-                                <span className="header-name"
-                                style={{marginLeft:"10px"}}>{userRole}
-                                <DownOutlined  style={{margin:"0 0 0 5px"}}/></span>
-
+                                <span
+                                  className="header-name"
+                                  style={{ marginLeft: "10px" }}
+                                >
+                                  {userRole}
+                                  <DownOutlined
+                                    style={{ margin: "0 0 0 5px" }}
+                                  />
+                                </span>
                               </Dropdown>
-                             
                             </span>
                           ) : null}
                         </div>
