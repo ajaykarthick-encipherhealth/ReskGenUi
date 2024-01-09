@@ -349,8 +349,8 @@ const Export = ({
                   disabled={
                     selectedUser &&
                     selectedUser[0]?.user &&
-                    selectedUser &&
-                    selectedUser[0]?.role
+                    selectedUser[0]?.role &&
+                    selectedUser[0]?.user?.length<=1
                       ? false
                       : true
                   }
