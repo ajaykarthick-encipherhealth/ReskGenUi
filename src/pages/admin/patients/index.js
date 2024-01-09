@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import Select from "react-select";
-
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import axios from "../../../utility/axiosConfig";
@@ -18,6 +17,7 @@ import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
 import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
+import moment from 'moment'
 import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../file-processing/FileUploading";
@@ -36,7 +36,8 @@ export default function Patient() {
   const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [dates, setDates] = useState(null);
-  const [compledtedDate, setCompletedDate] = useState(null);
+  const [computedStartDate, setComputedStartDate] = useState("");
+  const [computedEndDate, setComputedEndDate] = useState("");
   const [selectedOption, SetSelectedOption] = useState("");
   const [inputValue, setInputValue] = useState({
     year: "",
@@ -49,7 +50,6 @@ export default function Patient() {
     patientId: "",
     patientName: "",
   });
-
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -81,9 +81,25 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    // setIsLoading(false);
-    dispatch(getPatients(pageNo, "", "", selectedOption, search));
-  }, [pageNo, pageSize, search, selectedOption]);
+
+    dispatch(
+      getPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search
+      )
+    );
+  }, [
+    pageNo,
+    pageSize,
+    search,
+    selectedOption,
+    computedStartDate,
+    computedEndDate,
+  ]);
+
 
   useEffect(() => {
     if (response?.response) {
@@ -438,7 +454,19 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
-
+  const handleDatePickerChange = (dateString) => {
+    if (dateString[0] != "") {
+      let convertStartDate =
+        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+      let convertEndDate =
+        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+      setComputedStartDate(convertStartDate);
+      setComputedEndDate(convertEndDate);
+    } else {
+      setComputedStartDate("");
+      setComputedEndDate("");
+    }
+  };
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -469,6 +497,7 @@ export default function Patient() {
                                   placeholder="Search"
                                 />
                               </div>
+
                             </div>
                             <div className="col-xl-2">
                               <label>Select Status</label>
@@ -486,26 +515,15 @@ export default function Patient() {
                               </div>
                             </div>
                             <div className="col-xl-2">
-                              <label>Due Date</label>
-                              <div>
-                                <RangePicker
-                                  format="MM-DD-YYYY"
-                                  onChange={(dates, dateStrings) => {
-                                    handleDatePickerChange(dateStrings);
-                                  }}
-                                />
-                              </div>
-                            </div>
+                              <label>Computed Date</label>
 
-                            <div className="col-xl-2">
-                              <label>Completed Date</label>
                               <div>
                                 <RangePicker
                                   format="MM-DD-YYYY"
                                   onChange={(dates, dateStrings) => {
-                                    handleDatePickerChangeProcesseDate(
-                                      dateStrings
-                                    );
+
+                                    handleDatePickerChange(dateStrings);
+
                                   }}
                                 />
                               </div>
