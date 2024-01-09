@@ -319,8 +319,8 @@ const Export = ({
                   onDropdownVisibleChange={(visible) => setOpen(visible)}
                 >
                   {filteredOptions?.map((data) => (
-                    <Option key={data.value} value={data.value}>
-                      {data.label}
+                    <Option key={data?.value} value={data?.value}>
+                      {data?.label}
                     </Option>
                   ))}
                 </Select>

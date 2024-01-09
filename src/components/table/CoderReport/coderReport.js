@@ -192,8 +192,10 @@ function CoderReport({
                         {/* <Popconfirm title="" description={msgContent}> */}
                         <div
                           onClick={() => {
-                            setComments(row?.comment);
-                            setModal(!modal);
+                            if (roe?.comment) {
+                              setComments(row?.comment);
+                              setModal(!modal);
+                            }
                           }}
                           disbaled={true}
                         >
@@ -267,8 +269,10 @@ function CoderReport({
                         {/* <Popconfirm title="" description={msgContent}> */}
                         <div
                           onClick={() => {
-                            setComments(row?.comment);
-                            setModal(!modal);
+                            if (row?.comment) {
+                              setComments(row?.comment);
+                              setModal(!modal);
+                            }
                           }}
                         >
                           {row?.comment
