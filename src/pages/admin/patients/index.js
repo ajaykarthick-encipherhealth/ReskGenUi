@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner} from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import Select from "react-select";
 
 import Header from "../../../jsx/layouts/nav/Header";
@@ -37,7 +37,7 @@ export default function Patient() {
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [dates, setDates] = useState(null);
   const [compledtedDate, setCompletedDate] = useState(null);
-  const [selectedOption,SetSelectedOption]=useState("")
+  const [selectedOption, SetSelectedOption] = useState("");
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -60,17 +60,17 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
-  const[search,setSearch]=useState("")
+  const [search, setSearch] = useState("");
   const { RangePicker } = DatePicker;
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.patients);
 
   const statusOptions = [
-    { label: "ALL", value: "ALL"},
-    { label: "PROCESSING", value: "PROCESSING",status:1 },
-    { label: "COMPUTED", value: "COMPUTED",status:2 },
-    { label: "NOT COMPUTED", value: "NOT COMPUTED" ,status:0},
+    { label: "ALL", value: "ALL" },
+    { label: "PROCESSING", value: "PROCESSING", status: 1 },
+    { label: "COMPUTED", value: "COMPUTED", status: 2 },
+    { label: "NOT COMPUTED", value: "NOT COMPUTED", status: 0 },
   ];
 
   useEffect(() => {
@@ -82,9 +82,8 @@ export default function Patient() {
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     // setIsLoading(false);
-    console.log(selectedOption)
-    dispatch(getPatients(pageNo,"","",selectedOption,search));
-  }, [pageNo, pageSize,search,selectedOption]);
+    dispatch(getPatients(pageNo, "", "", selectedOption, search));
+  }, [pageNo, pageSize, search, selectedOption]);
 
   useEffect(() => {
     if (response?.response) {
@@ -220,8 +219,6 @@ export default function Patient() {
     setValidated(true);
   };
 
-
-
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
     if (data.computing == 2) {
@@ -307,7 +304,7 @@ export default function Patient() {
   };
   const getNameSearch = async (searchtext) => {
     setIsLoading(true);
-    setSearch(searchtext)
+    setSearch(searchtext);
     // dispatch(getSearchPatients(0,searchtext));
     // if (searchtext?.length > 0) {
     //   var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
@@ -381,12 +378,14 @@ export default function Patient() {
       });
       // navigate.push("/admin/file-processing");
       dispatch(getPatients(pageNo, pageSize));
-      eventStreming(ENDPOINTS,
+      eventStreming(
+        ENDPOINTS,
         setParsedData,
         pageNo,
         pageSize,
         getPatients,
-        dispatch);
+        dispatch
+      );
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -452,106 +451,103 @@ export default function Patient() {
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
-                      <div className="tbl-caption  align-items-center">
-                        <div className="row filter-contain">
-                          <div className="col-xl-2">
-                            <label>Search by Name</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => getNameSearch(e.target.value)}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
+                        <div className="tbl-caption  align-items-center">
+                          <div className="row filter-contain">
+                            <div className="col-xl-2">
+                              <label>Search by Name</label>
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) =>
+                                    getNameSearch(e.target.value)
+                                  }
+                                  className="form-control new-form-control"
+                                  placeholder="Search"
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-xl-2">
-                            <label>Select Status</label>
-                            <div class="form-group has-search">
-                              <Select
-                                onChange={(value) =>{
-                                  console.log(value)
-                                  SetSelectedOption(value?.status)
-                                }
-                                }
-                                options={statusOptions}
-                                className="custom-react-select"
-                                isSearchable={false}
-                                placeholder={
-                                  
-                                    "Select Status"
-                                }
-                              />
+                            <div className="col-xl-2">
+                              <label>Select Status</label>
+                              <div class="form-group has-search">
+                                <Select
+                                  onChange={(value) => {
+                                    console.log(value);
+                                    SetSelectedOption(value?.status);
+                                  }}
+                                  options={statusOptions}
+                                  className="custom-react-select"
+                                  isSearchable={false}
+                                  placeholder={"Select Status"}
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-xl-2">
-                            <label>Due Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  handleDatePickerChange(dateStrings);
-                                }}
-                               
-                              />
+                            <div className="col-xl-2">
+                              <label>Due Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    handleDatePickerChange(dateStrings);
+                                  }}
+                                />
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col-xl-2">
-                            <label>Completed Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  handleDatePickerChangeProcesseDate(
-                                    dateStrings
-                                  );
-                                }}
-                              />
+                            <div className="col-xl-2">
+                              <label>Completed Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    handleDatePickerChangeProcesseDate(
+                                      dateStrings
+                                    );
+                                  }}
+                                />
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col-xl-4">
-                            <label></label>
-                            <div
-                              className={visitStyles.flags_patientsList}
-                              style={{ marginTop: "15px" }}
-                            >
-                              <div className={visitStyles.flags}>
-                                <span
-                                  className={visitStyles.completed}
-                                  style={{ background: "#3a9b94 !important" }}
-                                ></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Completed
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.pending}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Pending
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.hold}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Hold
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.declined}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Declined
-                                </span>
+                            <div className="col-xl-4">
+                              <label></label>
+                              <div
+                                className={visitStyles.flags_patientsList}
+                                style={{ marginTop: "15px" }}
+                              >
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.completed}
+                                    style={{ background: "#3a9b94 !important" }}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Completed
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.pending}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Pending
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.hold}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Hold
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.declined}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    Declined
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
                       </div>
 
                       <div
