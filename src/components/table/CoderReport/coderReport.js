@@ -18,11 +18,11 @@ function CoderReport({
   onPageChange,
   comments,
   setComments,
+  selectedRows,
+  setSelectedRows,
+  selectAll,
+  setSelectAll,
 }) {
-  const [selectAll, setSelectAll] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
-  // const [comments, setComments] = useState();
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(selectedRow(selectedRows));

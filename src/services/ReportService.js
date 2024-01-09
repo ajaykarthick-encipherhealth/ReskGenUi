@@ -3,13 +3,12 @@ import ENDPOINTS from "../utility/enpoints";
 
 export const patientDetails = async (pagenum,startDate,endDate,search,filter) => {
   const token = localStorage.getItem("token");
-  const url= search?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&searchstring=${search}`:
-  (startDate && endDate) ?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:
-  filter?`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15&status=${filter}`:`dbservice/patient/patientdetailsl1?pageno=${pagenum}&size=15`
+  const url= search?`dbservice/patient/coderreport?pageno=${pagenum}&size=15&searchstring=${search}`:
+  (startDate && endDate) ?`dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:
+  filter?`dbservice/patient/coderreport?pageno=${pagenum}&size=15&status=${filter}`:`dbservice/patient/coderreport?pageno=${pagenum}&size=15`
   try {
-    const response = await axios.post(
+    const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
-      {},
       {
         headers: {
           Authorization: `Bearer ${token}`,

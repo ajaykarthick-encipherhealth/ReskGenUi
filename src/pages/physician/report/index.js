@@ -30,6 +30,8 @@ const index = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -368,6 +370,9 @@ const index = () => {
                           isModalVisible={isModalVisible}
                           closeModal={closeModal}
                           rowsLength={rowsLength}
+                          setIsModalVisible={setIsModalVisible}
+                          setSelectedRows={setSelectedRows}
+                          setSelectAll={setSelectAll}
                         />
 
                         <div
@@ -443,6 +448,10 @@ const index = () => {
                                       onPageChange={onPageChange}
                                       comments={comments}
                                       setComments={setComments}
+                                      setSelectedRows={setSelectedRows}
+                                      selectedRows={selectedRows}
+                                      setSelectAll={setSelectAll}
+                                      selectAll={selectAll}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
