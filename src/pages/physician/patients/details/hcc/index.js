@@ -1354,12 +1354,13 @@ const Hcc = ({ patientHccResult }) => {
           var pageNumber = result[0] - 1;
           setFileInitialPage(pageNumber);
         }
-
         setSelectActiveCode(value);
         var splitPoint = "";
         splitPoint = actualDescription.substring(" ", 40);
         setTimeout(() => {
+          if(pageNumber){
           setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+          }
           highlight({
             keyword: splitPoint,
           });

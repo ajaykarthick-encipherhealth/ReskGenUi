@@ -3,8 +3,10 @@ import ENDPOINTS from "../utility/enpoints";
 
 export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="") => {
   const token = localStorage.getItem("token");
+
   const searchValue = filter === "ALL" ? "" : filter
  const url=`dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}`
+
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,

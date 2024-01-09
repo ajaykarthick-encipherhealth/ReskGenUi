@@ -51,13 +51,16 @@ const IndividualReceiverReport = () => {
     }
   }, [url]);
   useEffect(() => {
-    if (reportDatas) {
+    if (reportDatas?.data) {
       const id = new URLSearchParams(window.location.search).get("reportId");
-      const ReportData = reportDatas?.response?.content?.filter(
+      const reportdata = reportDatas?.data?.response?.content?.filter(
         (item) => item?.reportId === id
       );
-      setReportInfo(ReportData[0]);
-      setDetailsContent(reportDatas?.response?.content);
+
+      if(reportdata && reportdata?.length > 0){
+        setReportInfo(reportdata[0]);
+      }
+
     }
   }, [reportDatas]);
 
