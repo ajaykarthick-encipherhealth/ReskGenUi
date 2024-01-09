@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import Select from "react-select";
-
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import axios from "../../../utility/axiosConfig";
@@ -181,6 +180,7 @@ export default function Patient() {
     }
     setValidated(true);
   };
+
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -302,6 +302,7 @@ export default function Patient() {
       </div>
     );
   };
+
   const getNameSearch = async (searchtext) => {
     setIsLoading(true);
     setSearch(searchtext);
@@ -496,7 +497,6 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
-
                             <div className="col-xl-2">
                               <label>Completed Date</label>
                               <div>
@@ -510,7 +510,6 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
-
                             <div className="col-xl-4">
                               <label></label>
                               <div
@@ -578,7 +577,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-
                             <Footer />
                           </>
                         )}
