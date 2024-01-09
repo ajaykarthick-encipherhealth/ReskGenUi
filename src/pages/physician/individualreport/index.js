@@ -56,7 +56,6 @@ const IndividualReceiverReport = () => {
       const ReportData = reportDatas?.response?.content?.filter(
         (item) => item?.reportId === id
       );
-      console.log(ReportData[0]);
       setReportInfo(ReportData[0]);
       setDetailsContent(reportDatas?.response?.content);
     }
