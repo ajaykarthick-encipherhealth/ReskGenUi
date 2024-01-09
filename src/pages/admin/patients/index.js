@@ -542,7 +542,7 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-4">
+                            <div className="col-xl-3">
                               <label></label>
                               <div
                                 className={visitStyles.flags_patientsList}
@@ -551,31 +551,34 @@ export default function Patient() {
                                 <div className={visitStyles.flags}>
                                   <span
                                     className={visitStyles.completed}
-                                    style={{ background: "#3a9b94 !important" }}
+                                    style={{ background: "#34ace8 !important" }}
                                   ></span>
                                   <span className={visitStyles.flagCodes}>
-                                    Completed
+                                    Computed
                                   </span>
                                 </div>
                                 <div className={visitStyles.flags}>
-                                  <span className={visitStyles.pending}></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Pending
+                                  <span className={visitStyles.pending} style={{background:"#452b90 !important"}}></span>
+                                  <span className={visitStyles.flagCodes} >
+                                    Processing
                                   </span>
                                 </div>
-                                <div className={visitStyles.flags}>
-                                  <span className={visitStyles.hold}></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Hold
-                                  </span>
-                                </div>
+                               
                                 <div className={visitStyles.flags}>
                                   <span className={visitStyles.declined}></span>
                                   <span className={visitStyles.flagCodes}>
-                                    Declined
+                                  Not Computed
                                   </span>
                                 </div>
                               </div>
+                            </div>
+                            <div className="col-xl-1">
+                              <Button
+                                onClick={addPatientFormId}
+                                className="btn btn-primary btn-sm ms-2 flr"
+                              >
+                                + Add Patient
+                              </Button>
                             </div>
                           </div>
                         </div>

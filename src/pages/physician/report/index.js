@@ -333,7 +333,14 @@ const index = () => {
                                         ? styles.csv
                                         : styles.export
                                     }
-                                    disabled={rowsLength?.length === 0 && true}
+                                    disabled={
+                                      selectedUser &&
+                                      selectedUser[0]?.user &&
+                                      selectedUser[0]?.role &&
+                                      selectedUser[0]?.user?.length<=1
+                                        ? false
+                                        : true
+                                    }
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
