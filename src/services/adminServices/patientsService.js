@@ -3,10 +3,10 @@ import ENDPOINTS from "../../utility/enpoints";
 
 export const PatientsList = async (
   pageNo,
-  computationStart,
-  computationEnd,
+  computationStart="",
+  computationEnd="",
   status,
-  search
+  search=""
 ) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");

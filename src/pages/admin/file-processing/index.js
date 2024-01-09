@@ -19,6 +19,7 @@ import FileProcessingTable from "../../../components/table/admin/FileProcessing/
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
 import SpinnerDots from "../../../components/spinner";
+import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 
 export default function Patient() {
   const [validated, setValidated] = useState(false);
@@ -162,7 +163,7 @@ export default function Patient() {
     setInputValuePatientId({ ...inputValuePatientId, [key]: value });
   };
 
-  const handleSubmit =  (event) => {
+  const handleSubmit = (event) => {
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -192,7 +193,8 @@ export default function Patient() {
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
         inputValuePatientId
       );
-      if (response?.status == 200) {
+      if (response?.status === 200) {
+        dispatch(getPatients(0));
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({

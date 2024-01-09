@@ -136,7 +136,8 @@ const HeadTitle = ({
                 endDate: lastDateWithTime,
               };
               dispatch(getDateRange(dates));
-              setOpenPicker(false);
+              // setOpenPicker(false);
+              setSelectedDates([]);
             }}
           >
             <Button>Clear</Button>
