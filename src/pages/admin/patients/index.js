@@ -81,6 +81,7 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
+
     dispatch(
       getPatients(
         pageNo,
@@ -98,6 +99,7 @@ export default function Patient() {
     computedStartDate,
     computedEndDate,
   ]);
+
 
   useEffect(() => {
     if (response?.response) {
@@ -195,6 +197,7 @@ export default function Patient() {
     }
     setValidated(true);
   };
+
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -316,6 +319,7 @@ export default function Patient() {
       </div>
     );
   };
+
   const getNameSearch = async (searchtext) => {
     setIsLoading(true);
     setSearch(searchtext);
@@ -495,6 +499,7 @@ export default function Patient() {
                                   placeholder="Search"
                                 />
                               </div>
+
                             </div>
                             <div className="col-xl-2">
                               <label>Select Status</label>
@@ -513,16 +518,30 @@ export default function Patient() {
                             </div>
                             <div className="col-xl-2">
                               <label>Computed Date</label>
+
                               <div>
                                 <RangePicker
                                   format="MM-DD-YYYY"
                                   onChange={(dates, dateStrings) => {
+
                                     handleDatePickerChange(dateStrings);
                                   }}
                                 />
                               </div>
                             </div>
-
+                            <div className="col-xl-2">
+                              <label>Completed Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    handleDatePickerChangeProcesseDate(
+                                      dateStrings
+                                    );
+                                  }}
+                                />
+                              </div>
+                            </div>
                             <div className="col-xl-4">
                               <label></label>
                               <div
@@ -590,7 +609,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-
                             <Footer />
                           </>
                         )}

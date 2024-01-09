@@ -12235,7 +12235,6 @@ tbody > tr {
 .ant-ribbon-wrapper {
   position: relative;
   bottom: 26px;
-  right: 8px;
 }
 :where(
     .css-dev-only-do-not-override-zcfrx9

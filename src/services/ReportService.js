@@ -1,11 +1,12 @@
 import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
 
-export const patientDetails = async (pagenum,startDate,endDate,search,filter) => {
+export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="") => {
   const token = localStorage.getItem("token");
-  const url= search?`dbservice/patient/coderreport?pageno=${pagenum}&size=15&searchstring=${search}`:
-  (startDate && endDate) ?`dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}`:
-  filter?`dbservice/patient/coderreport?pageno=${pagenum}&size=15&status=${filter}`:`dbservice/patient/coderreport?pageno=${pagenum}&size=15`
+
+  const searchValue = filter === "ALL" ? "" : filter
+ const url=`dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}`
+
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
@@ -20,13 +21,14 @@ export const patientDetails = async (pagenum,startDate,endDate,search,filter) =>
     console.log(err);
   }
 };
-export const SentReport = async (pagenum,startDate,endDate,search) => {
+export const SentReport = async (pagenum,startDate="",endDate="",search) => {
   const token = localStorage.getItem("token");
-  const url= search?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&searchstring=${search}`:
-  (startDate && endDate) ?`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&senddate=${startDate}&receiveddate=${endDate}`:`dbservice/reportdetails/sent?pageNo=${pagenum}&size=15`
+ 
+  const url= `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
+      
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -38,10 +40,9 @@ export const SentReport = async (pagenum,startDate,endDate,search) => {
     console.log(err);
   }
 };
-export const ReceivedReport = async (pagenum,startDate,endDate,search) => {
+export const ReceivedReport = async (pagenum,startDate="",endDate="",search) => {
   const token = localStorage.getItem("token");
-  const url= search?`dbservice/reportdetails/received?pageNo=${pagenum}&size=15&searchstring=${search}`:
-  (startDate && endDate) ?`dbservice/reportdetails/received?pageNo=${pagenum}&size=15&senddate=${startDate}&receiveddate=${endDate}`:`dbservice/reportdetails/received?pageNo=${pagenum}&size=15`
+  const url= `dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,

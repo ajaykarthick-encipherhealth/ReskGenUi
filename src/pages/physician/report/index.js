@@ -57,6 +57,11 @@ const index = () => {
   const [coderStartDate, setCoderStartDate] = useState();
   const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
+  const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
+  const [coderSearch, setCoderSearch] = useState("");
+  const [sentSearch, setSentSearch] = useState("");
+  const [receivedSearch, setReceivedSearch] = useState("");
+
   const handleCloseModal = () => {
     setModalVisible(false);
   };
@@ -69,18 +74,11 @@ const index = () => {
 
   const performanceSearch = (value) => {
     if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo, startDate, endDate, value));
+      setSentSearch(value);
     } else if (activeTab === "ReceivedReport") {
-      dispatch(
-        getReceivedDetails(
-          receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
-          value
-        )
-      );
+      setReceivedSearch(value);
     } else {
-      dispatch(getReportDetails(pageNo, coderStartDate, coderEndDate, value));
+      setCoderSearch(value);
     }
   };
   const debouncedSearch = debounce(performanceSearch, 500);
@@ -105,21 +103,50 @@ const index = () => {
     setIsLoading(false);
 
     if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo, startDate, endDate));
+      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch));
     }
     if (activeTab === "ReceivedReport") {
       dispatch(
-        getReceivedDetails(receivedPageNo, receivedStartDate, receivedEndDate)
+        getReceivedDetails(
+          receivedPageNo,
+          receivedStartDate,
+          receivedEndDate,
+          receivedSearch
+        )
       );
     }
 
     if (activeTab === "CoderReport") {
-      dispatch(getReportDetails(pageNo, coderStartDate, coderEndDate));
+      dispatch(
+        getReportDetails(
+          pageNo,
+          coderStartDate,
+          coderEndDate,
+          coderSearch,
+          selectedCoderOpt
+        )
+      );
     }
     if (ExportResponse) {
       setIsModalVisible(false);
     }
-  }, [pageNo, sentPageNo, receivedPageNo, activeTab, ExportResponse]);
+  }, [
+    pageNo,
+    sentPageNo,
+    receivedPageNo,
+    activeTab,
+    ExportResponse,
+    selectedCoderOpt,
+    coderSearch,
+    coderStartDate,
+    coderEndDate,
+    startDate,
+    endDate,
+    sentSearch,
+    receivedSearch,
+    receivedStartDate,
+    receivedEndDate,
+  ]);
 
   const ReportPatientDetails = useSelector((state) => state.report?.details);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
@@ -131,11 +158,11 @@ const index = () => {
   }, [ReportPatientDetails]);
 
   const statusOptions = [
-    { label: "Completed", value: "completed" },
-    { label: "Pending", value: "pending" },
-    { label: "Declined", value: "declined" },
-    { label: "Hold", value: "hold" },
-    { label: "All", value: "all" },
+    { label: "Completed", value: "COMPLETED" },
+    { label: "Pending", value: "PENDING" },
+    { label: "Declined", value: "DECLINED" },
+    { label: "Hold", value: "HOLD" },
+    { label: "All", value: "ALL" },
   ];
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -155,6 +182,7 @@ const index = () => {
   });
   const dosOnChange = (selectedOption) => {
     const selectedValue = selectedOption.value;
+    setSelectedCoderOpt(selectedValue);
   };
 
   const onPageChange = (e) => {
@@ -188,55 +216,41 @@ const index = () => {
   const handleDatePickerChange = (date, dateString) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
-        index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
+        index === 1
+          ? date && `${date}T23:59:59.999Z`
+          : date && `${date}T00:00:00.000Z`;
       return formattedDate;
     });
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
     setSelectedDates(date);
-    dispatch(
-      getSentDetails(
-        sentPageNo,
-        date ? formattedDates[0] : null,
-        date ? formattedDates[1] : null
-      )
-    );
   };
 
   const handleReceivedDatePicker = (date, dateString) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
-        index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
+        index === 1
+          ? date && `${date}T23:59:59.999Z`
+          : date && `${date}T00:00:00.000Z`;
       return formattedDate;
     });
     setReceivedStartDate(formattedDates[0]);
     setReceivedEndDate(formattedDates[1]);
     setSelectedDates(date);
-    dispatch(
-      getReceivedDetails(
-        sentPageNo,
-        date ? formattedDates[0] : null,
-        date ? formattedDates[1] : null
-      )
-    );
   };
   const handleCoderPicker = (date, dateString) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
-        index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
+        index === 1
+          ? date && `${date}T23:59:59.999Z`
+          : date && `${date}T00:00:00.000Z`;
       return formattedDate;
     });
     setSelectedDates(date);
     setCoderStartDate(formattedDates[0]);
     setCoderEndDate(formattedDates[1]);
-    dispatch(
-      getReportDetails(
-        pageNo,
-        date ? formattedDates[0] : null,
-        date ? formattedDates[1] : null
-      )
-    );
   };
+  console.log(coderStartDate, coderEndDate);
 
   const rowsLength = useSelector((state) => state.report.row);
   return (
@@ -284,17 +298,6 @@ const index = () => {
                                     <Select
                                       onChange={(selectedOption) => {
                                         dosOnChange(selectedOption);
-                                        dispatch(
-                                          getReportDetails(
-                                            pageNo,
-                                            null,
-                                            null,
-                                            null,
-                                            selectedOption.value === "all"
-                                              ? null
-                                              : selectedOption.value.toUpperCase()
-                                          )
-                                        );
                                       }}
                                       options={statusOptions}
                                       className="custom-react-select"
