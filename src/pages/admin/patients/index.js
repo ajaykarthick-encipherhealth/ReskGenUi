@@ -223,6 +223,7 @@ export default function Patient() {
             message: "Patient Id Created Successfully!",
             duration: 1,
           });
+          dispatch(getPatients(0))
           setAddPatientId(false);
           setIsLoadingBtn(false);
         }
@@ -395,7 +396,7 @@ export default function Patient() {
         message: "Patient File Upload Successfully!",
       });
       // navigate.push("/admin/file-processing");
-      dispatch(getPatients(pageNo, pageSize));
+      dispatch(getPatients(pageNo));
       eventStreming(
         ENDPOINTS,
         setParsedData,

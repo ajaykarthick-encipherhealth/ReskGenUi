@@ -31,7 +31,7 @@ export const eventStreming = (
       const item = data[0];
       if (item?.processStageChart === "FINISHED") {
         setParsedData(data);
-        dispatch(getPatients(pageNo, pageSize));
+        dispatch(getPatients(pageNo));
         sse.close();
       }
     }
