@@ -315,7 +315,7 @@ const Export = ({
                   className={styles.selectDiv}
                   value={selectedList}
                   open={open}
-                  disabled={selectedList?.length === 1}
+                  // disabled={selectedList?.length >= 1}
                   onDropdownVisibleChange={(visible) => setOpen(visible)}
                 >
                   {filteredOptions?.map((data) => (
