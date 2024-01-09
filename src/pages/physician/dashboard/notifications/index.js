@@ -30,19 +30,28 @@ const Notifications = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  const notificationData = notificationResponse?.map((info) => (
-    <div className={styles.msgDiv}>
-      <div style={{ marginTop: "10px" }}> {SVGICON.dashboardNotification}</div>
-      <div className={styles.msgCOntainer}>
-        <span className={styles.description}>{info.content}</span>
-        <div className={styles.time}>
-          {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp;{" "}
-          {moment(info.createdAt).format("hh:mm:A")} &nbsp;{" "}
-          {emailSplitFunction(info.userFrom.userName)} ({info.userFrom?.role})
+  const notificationData = notificationResponse ? (
+    notificationResponse?.map((info) => (
+      <div className={styles.msgDiv}>
+        <div style={{ marginTop: "10px" }}>
+          {" "}
+          {SVGICON.dashboardNotification}
+        </div>
+        <div className={styles.msgCOntainer}>
+          <span className={styles.description}>{info.content}</span>
+          <div className={styles.time}>
+            {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp;{" "}
+            {moment(info.createdAt).format("hh:mm:A")} &nbsp;{" "}
+            {emailSplitFunction(info.userFrom.userName)} ({info.userFrom?.role})
+          </div>
         </div>
       </div>
+    ))
+  ) : (
+    <div className={styles.no_notificarion_container}>
+      <Image src={NoNotification} alt="" />
     </div>
-  ));
+  );
   return (
     <>
       <HeadTitle
