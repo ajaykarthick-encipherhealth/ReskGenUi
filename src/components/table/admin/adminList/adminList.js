@@ -1,14 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import TableStyle from "../../table.module.css";
-
-import { Switch } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleLeft,
-  faAngleRight,
-  faTrash,
-  faPencilAlt,
-} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../../jsx/layouts/Footer";
@@ -17,10 +8,6 @@ export default function AdminList({ userList, getAllList }) {
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-
-  const [totalElements, setTotalElements] = useState(10);
-  const [isLoading, setIsLoading] = useState(true);
-  const [localUserId, setLocalUserId] = useState("");
   const onPageChange = async (event) => {
     const newPageNo = event.page;
     setPageNo(newPageNo);
@@ -49,7 +36,7 @@ export default function AdminList({ userList, getAllList }) {
           </tr>
         </thead>
         <tbody>
-          {userList?.map((item, index) => (
+          {userList?.record?.map((item, index) => (
             <tr key={index} style={{ height: "35px" }}>
               <td
                 className={TableStyle.childBorder}
@@ -79,7 +66,7 @@ export default function AdminList({ userList, getAllList }) {
                 className={TableStyle.childBorder}
                 style={{ height: "40px !important" }}
               >
-                <span>{item.role[0] ? item.role[0] : "---"}</span>
+                <span>{item?.role[0] ? item?.role[0] : "---"}</span>
               </td>
               {/* <td
                 className={TableStyle.childBorder}
@@ -136,10 +123,10 @@ export default function AdminList({ userList, getAllList }) {
         <Paginator
           first={paginationFirst}
           rows={15}
-          totalRecords={46}
+          totalRecords={userList?.count}
           onPageChange={onPageChange}
         />
-        <div className="total-pages">Total count: {46}</div>
+        <div className="total-pages">Total count: {userList?.count}</div>
       </div>
       <Footer />
     </div>

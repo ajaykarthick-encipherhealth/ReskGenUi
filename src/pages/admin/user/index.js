@@ -7,7 +7,8 @@ import Form from "react-bootstrap/Form";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import { ThemeContext } from "../../../context/ThemeContext";
-import { Switch } from "antd";
+import { DatePicker, Switch } from "antd";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { notification } from "antd";
 import {
@@ -26,10 +27,7 @@ import AdminList from "../../../components/table/admin/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 
 const UserList = () => {
-  // const { sidebariconHover} = useContext(ThemeContext);
-
   const sideMenu = useSelector((state) => state.sideMenu);
-
   const [localUserId, setLocalUserId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
@@ -58,7 +56,6 @@ const UserList = () => {
   const [roleValue, setRoleValue] = useState(false);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
 
-
   const [formData, setFormData] = useState({
     name: "",
     emailId: "",
@@ -73,10 +70,15 @@ const UserList = () => {
   const [pageOptions, setPageOptions] = useState(0);
   const [canPreviousPage, setCanPreviousPage] = useState(false);
   const [canNextPage, setCanNextPage] = useState(true);
-  const [canMaxPage, setCanMaxPage] = useState(10);  
+  const [canMaxPage, setCanMaxPage] = useState(10);
   const [addPatientId, setAddPatientId] = useState(false);
-
-
+  const { RangePicker } = DatePicker;
+  const [search, setSearch] = useState("");
+  const [role, setRole] = useState("");
+  const [status, setSelectedStatus] = useState("");
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEnddate] = useState("");
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -107,7 +109,7 @@ const UserList = () => {
     const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
     var result = response.data.response;
     if (response.data.response) {
-      setUserList(result.record != null ? result.record : []);
+      setUserList(result != null ? result : []);
       setIsDataLoading(false);
       setIsLoading(false);
     }
@@ -119,7 +121,6 @@ const UserList = () => {
       ENDPOINTS.apiEndoint + `securityservice/admin/getusers/createuser`,
       data
     );
-    console.log(response);
     var result = response.data.response.record;
     if (response?.status == 201) {
       setAddUser(false);
@@ -130,10 +131,9 @@ const UserList = () => {
   const deletUser = async (userId) => {
     var apiUrl = `management/admin/user?userId=${userId}&orgId=${localOrgId}&tenantId=${localTenantId}`;
     const response = await axios.delete(ENDPOINTS.apiEndoint + apiUrl);
-    console.log(response.data.response.record);
     var result = response.data.response;
     if (response.data.response.record) {
-      setUserList(result.record != null ? result.record : []);
+      setUserList(result != null ? result : []);
       setIsDataLoading(false);
       setIsLoading(false);
       getAllList(tenId, orgId, pageDataCount, pageLimitCount, "");
@@ -248,70 +248,68 @@ const UserList = () => {
         [id]: isChecked,
       },
     }));
-
-    console.log(isStatus);
   };
 
-  const userEdit = (data) => {
-    setAddUser(true);
-  };
-  const userDelete = (data) => {
-    Swal.fire({
-      title: "Do you want delete!",
-      text: data.name,
-      icon: "warning",
-      confirmButtonText: "Logout",
-      showCancelButton: true,
-      confirmButtonText: "Yes",
-      confirmButtonColor: "#DD6B55",
-      closeOnConfirm: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deletUser(data.userId);
-      }
-    });
-  };
+  // const userEdit = (data) => {
+  //   setAddUser(true);
+  // };
+  // const userDelete = (data) => {
+  //   Swal.fire({
+  //     title: "Do you want delete!",
+  //     text: data.name,
+  //     icon: "warning",
+  //     confirmButtonText: "Logout",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Yes",
+  //     confirmButtonColor: "#DD6B55",
+  //     closeOnConfirm: false,
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       deletUser(data.userId);
+  //     }
+  //   });
+  // };
 
-  function validate_password(password) {
-    let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-    if (password.match(check)) {
-      console.log("Your password is strong.");
-    } else {
-      console.log("Meh, not so much.");
-    }
-  }
+  // function validate_password(password) {
+  //   let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+  //   if (password.match(check)) {
+  //     console.log("Your password is strong.");
+  //   } else {
+  //     console.log("Meh, not so much.");
+  //   }
+  // }
 
-  const statusBodyTemplate = (rowData) => {
-    switch (rowData.accountStatus) {
-      case true:
-        return (
-          <span key={rowData.userId}>
-            {" "}
-            <Switch
-              id={rowData.userId}
-              onChange={(event) => switchHandler(event, rowData.userId)}
-              checked
-              checkedChildren="Enabled"
-              unCheckedChildren="Disabled"
-            />
-          </span>
-        );
+  // const statusBodyTemplate = (rowData) => {
+  //   switch (rowData.accountStatus) {
+  //     case true:
+  //       return (
+  //         <span key={rowData.userId}>
+  //           {" "}
+  //           <Switch
+  //             id={rowData.userId}
+  //             onChange={(event) => switchHandler(event, rowData.userId)}
+  //             checked
+  //             checkedChildren="Enabled"
+  //             unCheckedChildren="Disabled"
+  //           />
+  //         </span>
+  //       );
 
-      case false:
-        return (
-          <span key={rowData.userId}>
-            {" "}
-            <Switch
-              id={rowData.userId}
-              onChange={(event) => switchHandler(event, rowData.userId)}
-              checked={false}
-              checkedChildren="Enabled"
-              unCheckedChildren="Disabled"
-            />
-          </span>
-        );
-    }
-  };
+  //     case false:
+  //       return (
+  //         <span key={rowData.userId}>
+  //           {" "}
+  //           <Switch
+  //             id={rowData.userId}
+  //             onChange={(event) => switchHandler(event, rowData.userId)}
+  //             checked={false}
+  //             checkedChildren="Enabled"
+  //             unCheckedChildren="Disabled"
+  //           />
+  //         </span>
+  //       );
+  //   }
+  // };
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -326,23 +324,20 @@ const UserList = () => {
         inputValuePatientId
       );
       if (response?.status == 200) {
-        console.log(response.data)
-        if(response.data.message == "patient Already Present"){
+        if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
             message: "Patient Id Already Present",
-            duration:1
+            duration: 1,
           });
-        }else{
+        } else {
           notification.success({
             message: "Patient Id Created Successfully!",
-            duration:1
+            duration: 1,
           });
           setAddPatientId(false);
           setIsLoadingBtn(false);
-
         }
-      
       } else {
         setIsLoadingBtn(false);
       }
@@ -353,85 +348,117 @@ const UserList = () => {
     setValidated(true);
   };
 
-
-
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <div className="d-flex">
-        <button
-          onClick={() => userEdit(rowData)}
-          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-        >
-          <FontAwesomeIcon icon={faPencilAlt} fontSize={11} />
-        </button>
-        <button
-          onClick={() => userDelete(rowData)}
-          className="btn hegiht10 btn-danger shadow  sharp me-1 action-btn"
-        >
-          <FontAwesomeIcon icon={faTrash} fontSize={11} />
-        </button>
-      </div>
-    );
-  };
-  const addPatientFormId = () => {
-    setValidated(false);
-    setAddPatientId(true);
-  };
+  // const actionBodyTemplate = (rowData) => {
+  //   return (
+  //     <div className="d-flex">
+  //       <button
+  //         onClick={() => userEdit(rowData)}
+  //         className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
+  //       >
+  //         <FontAwesomeIcon icon={faPencilAlt} fontSize={11} />
+  //       </button>
+  //       <button
+  //         onClick={() => userDelete(rowData)}
+  //         className="btn hegiht10 btn-danger shadow  sharp me-1 action-btn"
+  //       >
+  //         <FontAwesomeIcon icon={faTrash} fontSize={11} />
+  //       </button>
+  //     </div>
+  //   );
+  // };
+  // const addPatientFormId = () => {
+  //   setValidated(false);
+  //   setAddPatientId(true);
+  // };
   const handleChangePatientId = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
     setInputValuePatientId({ ...inputValuePatientId, [key]: value });
   };
- 
-
+  const handlePicker = (date, dateString) => {
+    const formattedDates = dateString?.map((date, index) => {
+      const formattedDate =
+        index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
+      return formattedDate;
+    });
+    setStartDate(formattedDates[0]);
+    setEndDate(formattedDates[1]);
+    setSelectedDates(date);
+  };
   return (
     <>
-  <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
         <div class="content-body">
-         
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-xl-12">
-             
-                  <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption  align-items-center">
-                        <div className="row">
-                          <div className="col-xl-2">
-                            <input
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-xl-12">
+                <div className="card-body p-0">
+                  <div className="table-responsive active-projects task-table">
+                    <div className="tbl-caption  align-items-center">
+                      <div className="row" style={{ marginLeft: "5px" }}>
+                        <div className="col-xl-2">
+                          <label>Search by Name</label>
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
                               type="text"
-                              className="form-control"
-                              placeholder="Name"
+                              onChange={(e) => setSearch(e.target.value)}
+                              className="form-control new-form-control"
+                              placeholder="Search"
                             />
                           </div>
-                          <div className="col-xl-2">
-                            <input
-                              type="date"
-                              className="form-control"
-                              placeholder="Date"
+                        </div>
+                        <div className="col-xl-2">
+                          <label>Select Range</label>
+                          <div>
+                            <RangePicker
+                              value={selectedDates}
+                              onChange={handlePicker}
                             />
                           </div>
-                          <div className="col-xl-2">
+                        </div>
+                        <div className="col-xl-2">
+                          <label>Select Role</label>
+                          <div class="form-group has-search">
                             <Select
+                              onChange={(selectedOption) => {
+                                setRole(selectedOption?.value);
+                              }}
                               options={RoleList}
-                              className="custom-react-select"
                               defaultValue={RoleList[0]}
-                              isSearchable={false}
-                            />
-                          </div>
-                          <div className="col-xl-2">
-                            <Select
-                              options={options3}
                               className="custom-react-select"
-                              defaultValue={options3[0]}
                               isSearchable={false}
                             />
                           </div>
-						  <div className='col-xl-4'>
-														<Button onClick={addUserForm} className="btn btn-primary btn-sm ms-2 flr">+ Add User</Button>
-													</div>
-						  {/* <div className="col-xl-2"  style={{width:"14% !important"}}>
+                        </div>
+                        <div className="col-xl-2">
+                          <label>Select Status</label>
+                          <div class="form-group has-search">
+                            <Select
+                              onChange={(selectedOption) => {
+                                setSelectedStatus(selectedOption?.value);
+                              }}
+                              options={options3}
+                              defaultValue={options3[0]}
+                              className="custom-react-select"
+                              isSearchable={false}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-xl-4">
+                          <Button
+                            onClick={addUserForm}
+                            className="btn btn-primary btn-sm ms-2 flr"
+                          >
+                            + Add User
+                          </Button>
+                        </div>
+                        {/* <div className="col-xl-2"  style={{width:"14% !important"}}>
                              
 							 <Button
 							   onClick={addPatientFormId}
@@ -440,16 +467,19 @@ const UserList = () => {
 							   + Add Patient Id
 							 </Button>
 						   </div> */}
-                        </div>
                       </div>
-                      <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
-                      >
-                        
-						<AdminList userList={userList} switchHandler={switchHandler} getAllList={getAllList}/>
+                    </div>
+                    <div
+                      id="task-tbl_wrapper"
+                      className="dataTables_wrapper no-footer"
+                    >
+                      <AdminList
+                        userList={userList}
+                        switchHandler={switchHandler}
+                        getAllList={getAllList}
+                      />
 
-                        {/* <div className="d-flex justify-content-between mrt-15">
+                      {/* <div className="d-flex justify-content-between mrt-15">
 													<span>
 														Page{' '}
 														<strong>
@@ -482,16 +512,15 @@ const UserList = () => {
 														</button>
 													</div>
 												</div> */}
-                      </div>
                     </div>
                   </div>
-          
+                </div>
               </div>
             </div>
           </div>
         </div>
- 
-		<Offcanvas
+
+        <Offcanvas
           onHide={setAddPatientId}
           show={addPatientId}
           className="offcanvas-end"
@@ -556,20 +585,29 @@ const UserList = () => {
             </div>
           </div>
         </Offcanvas>
-		<Offcanvas show={addUser} onHide={setAddUser} className="offcanvas-end  offcanvas-md-size" placement='end'>
-				<div className="offcanvas-header">
-					<h5 className="modal-title" id="#gridSystemModal">Add User</h5>
-					<button type="button" className="btn-close"
-						onClick={() => setAddUser(false)}
-					>
-						<i className="fa-solid fa-xmark"></i>
-					</button>
-				</div>
-				<div className="offcanvas-body">
-					<div className="container-fluid">
-						<Form noValidate validated={validated} onSubmit={handleSubmit}>
-							<div className="row">
-								{/* <div className="col-xl-6 mb-3">
+        <Offcanvas
+          show={addUser}
+          onHide={setAddUser}
+          className="offcanvas-end  offcanvas-md-size"
+          placement="end"
+        >
+          <div className="offcanvas-header">
+            <h5 className="modal-title" id="#gridSystemModal">
+              Add User
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setAddUser(false)}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div className="offcanvas-body">
+            <div className="container-fluid">
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <div className="row">
+                  {/* <div className="col-xl-6 mb-3">
 									<Form.Label>First name  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='firstName' required type="text" onChange={handleChange} />
 								</div>
@@ -577,51 +615,110 @@ const UserList = () => {
 									<Form.Label>Last Name  <span className="text-danger">*</span> </Form.Label>
 									<Form.Control name='lastName' required type="text" onChange={handleChange} />
 								</div> */}
-								<div className="col-xl-6 mb-3">
-									<Form.Label>Name  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='name' required type="text" onChange={handleChange} />
-								</div>
-								<div className="col-xl-6 mb-3">
-									<Form.Label>Email  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='emailId' required type="email" onChange={handleChange} />
-								</div>
-								<div className="col-xl-6 mb-3">
-									<Form.Label>User Name  <span className="text-danger">*</span> </Form.Label>
-									<div className="input-group mb-3">
-										<Form.Control name='userName' required type="text" onChange={handleChange} />
-										{/* <span className="input-group-text">@encipherhealth.com</span> */}
-									</div>
-								</div>
-								<div className="col-xl-6 mb-3">
-									<Form.Label>Mobile Number  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='mobileNumber' required type="number" onChange={handleChange} />
-								</div>
-								<div className="col-xl-6 mb-3">
-									<Form.Label>Role  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='role' as="select" required onChange={handleChange} >
-										<option value="ADMIN">ADMIN</option>
-										<option value="CODER">CODER</option>
-									</Form.Control>
-								</div>
-								<div className="col-xl-6 mb-3">
-									<Form.Label>Password  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='password' required type="text" onChange={handleChange} />
-									<small id="emailHelp" class="form-text text-muted">Please enter an numeric, number with both lowercase and uppercase characters.</small>
-								</div>
-								<div className="col-xl-6 mb-3">
-									<Form.Label>Confirm Password  <span className="text-danger">*</span> </Form.Label>
-									<Form.Control name='password' required type="text" onChange={handleChange} />
-								</div>
-							</div>
-							<div>
-								<Button type='submit' className="btn btn-primary btn-sm me-1">Submit</Button>
-								<Button onClick={() => setAddUser(false)} className="btn btn-danger btn-sm light ms-1">Cancel</Button>
-							</div>
-						</Form>
-					</div>
-				</div>
-			</Offcanvas>
-	  </div>
+                  <div className="col-xl-6 mb-3">
+                    <Form.Label>
+                      Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="name"
+                      required
+                      type="text"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-xl-6 mb-3">
+                    <Form.Label>
+                      Email <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="emailId"
+                      required
+                      type="email"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-xl-6 mb-3">
+                    <Form.Label>
+                      User Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <div className="input-group mb-3">
+                      <Form.Control
+                        name="userName"
+                        required
+                        type="text"
+                        onChange={handleChange}
+                      />
+                      {/* <span className="input-group-text">@encipherhealth.com</span> */}
+                    </div>
+                  </div>
+                  <div className="col-xl-6 mb-3">
+                    <Form.Label>
+                      Mobile Number <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="mobileNumber"
+                      required
+                      type="number"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-xl-6 mb-3">
+                    <Form.Label>
+                      Role <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="role"
+                      as="select"
+                      required
+                      onChange={handleChange}
+                    >
+                      <option value="ADMIN">ADMIN</option>
+                      <option value="CODER">CODER</option>
+                    </Form.Control>
+                  </div>
+                  <div className="col-xl-6 mb-3">
+                    <Form.Label>
+                      Password <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="password"
+                      required
+                      type="text"
+                      onChange={handleChange}
+                    />
+                    <small id="emailHelp" class="form-text text-muted">
+                      Please enter an numeric, number with both lowercase and
+                      uppercase characters.
+                    </small>
+                  </div>
+                  <div className="col-xl-6 mb-3">
+                    <Form.Label>
+                      Confirm Password <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="password"
+                      required
+                      type="text"
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    Submit
+                  </Button>
+                  <Button
+                    onClick={() => setAddUser(false)}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </div>
+        </Offcanvas>
+      </div>
     </>
   );
 };

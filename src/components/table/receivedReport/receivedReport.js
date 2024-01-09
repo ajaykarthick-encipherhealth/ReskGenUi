@@ -47,8 +47,6 @@ function ReceivedReport({
       receivedStartDate: receivedStartDate,
       receivedEndDate: receivedEndDate,
     };
-    // console.log(info?.reportUser?.reportId)
-    localStorage.setItem("reportInfo",JSON.stringify(info?.reportUser))
     dispatch(selectedReport(info));
     router?.push(`/physician/individualreport?reportId=${info?.reportUser?.reportId}`);
   };

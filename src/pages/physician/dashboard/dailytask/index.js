@@ -307,8 +307,8 @@ const DailyTask = () => {
                                       : item.name === "Hold"
                                       ? data.hold
                                       : item.name === "Completed"
-                                      ? data?.completed
-                                      : <Empty/>}
+                                      && data?.completed
+                                      }
                                   </div>
                                 </div>
                               );
@@ -320,7 +320,7 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-                "No DateFound"
+               <Empty/>
               )}
 
               <div className={styles.infoCards}>
