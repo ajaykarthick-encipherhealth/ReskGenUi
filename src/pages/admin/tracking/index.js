@@ -395,7 +395,7 @@ export default function Patient() {
                                 placeholder={
                                   filteratedDashboardData
                                     ? filteratedDashboardData?.status?.toUpperCase()
-                                    : "Select Status"
+                                    : "ALL"
                                 }
                               />
                             </div>
@@ -433,53 +433,25 @@ export default function Patient() {
                               />
                             </div>
                           </div>
-
-                          <div className="col-xl-4">
-                            <label></label>
-                            <div
-                              className={visitStyles.flags_patientsList}
-                              style={{ marginTop: "15px" }}
-                            >
-                              <div className={visitStyles.flags}>
-                                <span
-                                  className={visitStyles.completed}
-                                  style={{ background: "#3a9b94 !important" }}
-                                ></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Completed
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span
-                                  className={visitStyles.completed}
-                                  style={{
-                                    backgroundColor: "#15a6ef !important",
-                                  }}
-                                ></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Computed
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.pending}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Pending
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.hold}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Hold
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.declined}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Declined
-                                </span>
-                              </div>
+                          {/* <div className="col-xl-2">
+                            <label>Allocated To</label>
+                            <div class="form-group has-search">
+                              <Select
+                                onChange={(selectedOption) =>
+                                  onChangeStatus(selectedOption)
+                                }
+                                options={statusOptions}
+                                className="custom-react-select"
+                                isSearchable={false}
+                                placeholder={
+                                  filteratedDashboardData
+                                    ? filteratedDashboardData?.status?.toUpperCase()
+                                    : "Select Status"
+                                }
+                              />
                             </div>
-                          </div>
+                          </div> */}
+                          
                         </div>
                       </div>
 
