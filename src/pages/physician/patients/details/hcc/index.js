@@ -247,10 +247,6 @@ const Hcc = ({ patientHccResult }) => {
 
   const [findFileKeyword, setFindFileKeyword] = useState('');
   const [fileModalTitle, setFileModalTitle] = useState('');
-
-
-
-
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
   };
@@ -1394,31 +1390,7 @@ const Hcc = ({ patientHccResult }) => {
             patientDocumentResult.patientName +
             " / " +
             dataset;
-          setFileModalTitle(headerName)
-        // setTimeout(() => {
-        //   if(pageNumber){
-        //   setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-        //   }
-        //   highlight({
-        //     keyword: splitPoint,
-        //   });
-        //   var dataset =
-        //     value +
-        //     " - (" +
-        //     disDescription +
-        //     ")" +
-        //     " / (" +
-        //     actualDescription +
-        //     ")";
-        //   setSelectMeatName(dataset);
-        //   var headerName =
-        //     patientDocumentResult.patientId +
-        //     " / " +
-        //     patientDocumentResult.patientName +
-        //     " / " +
-        //     dataset;
-        //   setFileModalHeader(headerName);
-        // }, 2000);
+          setFileModalTitle(headerName);
         setDocumentLoaded(true);
       } else if (check == "valid2") {
         setSelectActiveCode(value);
