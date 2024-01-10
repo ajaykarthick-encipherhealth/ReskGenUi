@@ -382,10 +382,6 @@ function FileProcessingTable({ patinetListAll }) {
           },
         }));
 
-  
-    // const statusUploadFunc=()=>{
-
-    // }
     return (
       <div style={{ display: "flex" }}>
         <div style={{ width: "98%" }}>
