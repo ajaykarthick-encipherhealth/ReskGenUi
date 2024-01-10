@@ -53,6 +53,7 @@ function FileProcessingTable({ patinetListAll }) {
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
   );
+  const [count, setCount] = useState(0);
   const [parsedData, setParsedData] = useState([]);
   const [activeId, setActiveId] = useState();
   const dispatch = useDispatch();
@@ -96,7 +97,7 @@ function FileProcessingTable({ patinetListAll }) {
       sse.close();
     };
   }, []);
-
+ 
   useEffect(() => {
     if (activeId && parsedData) {
       parsedData?.map((info) => {
@@ -105,6 +106,13 @@ function FileProcessingTable({ patinetListAll }) {
         }
       });
     }
+    if(parsedData){
+      const interval = setInterval(() => {
+        setCount(prevCount => (prevCount + 5) % 100); 
+      }, 100); 
+    
+      return () => clearInterval(interval);
+     } 
   }, [parsedData, activeId]);
 
   const handleToggleStepper = (index, data) => {
@@ -374,6 +382,10 @@ function FileProcessingTable({ patinetListAll }) {
           },
         }));
 
+  
+    // const statusUploadFunc=()=>{
+
+    // }
     return (
       <div style={{ display: "flex" }}>
         <div style={{ width: "98%" }}>
@@ -438,7 +450,7 @@ function FileProcessingTable({ patinetListAll }) {
                   current={currentIndex}
                   labelPlacement="vertical"
                   items={mappedSteps}
-                  percent={uploadStatus}
+                  percent={count}
                   finishIconBorderColor="#000"
                 />
               </div>

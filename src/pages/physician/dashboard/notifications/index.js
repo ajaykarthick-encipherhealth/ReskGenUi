@@ -30,7 +30,7 @@ const Notifications = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  const notificationData = notificationResponse ? (
+  const notificationData = notificationResponse?.length>0 ? (
     notificationResponse?.map((info) => (
       <div className={styles.msgDiv}>
         <div style={{ marginTop: "10px" }}>
