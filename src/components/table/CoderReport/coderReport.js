@@ -192,7 +192,7 @@ function CoderReport({
                         {/* <Popconfirm title="" description={msgContent}> */}
                         <div
                           onClick={() => {
-                            if (roe?.comment) {
+                            if (row?.comment) {
                               setComments(row?.comment);
                               setModal(!modal);
                             }

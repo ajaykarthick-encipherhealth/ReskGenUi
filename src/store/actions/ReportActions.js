@@ -169,13 +169,13 @@ export const getFileDetails = (pathname,reportInfo) => {
               extention:splitPath
             },
           });
-          dispatch(
-            getReceivedDetails(
-              0,
-              reportInfo?.receivedStartDate,
-              reportInfo?.receivedEndDate
-            )
-          );
+          // dispatch(
+          //   getReceivedDetails(
+          //     0,
+          //     reportInfo?.receivedStartDate,
+          //     reportInfo?.receivedEndDate
+          //   )
+          // );
         
         }
       }
