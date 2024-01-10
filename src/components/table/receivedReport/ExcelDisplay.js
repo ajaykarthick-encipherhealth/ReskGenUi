@@ -7,7 +7,7 @@ const ExcelDisplay = ({ tableData }) => {
   const [data, setData] = useState();
 
   useEffect(() => {
-    if (Array.isArray(tableData) && tableData.length > 0) {
+    if (Array.isArray(tableData) && tableData?.length > 0) {
       const fieldNames = tableData[0];
       const transformedData = tableData?.slice(1).map((row) => {
         const rowData = {};
@@ -19,7 +19,7 @@ const ExcelDisplay = ({ tableData }) => {
 
       const formattedData = transformedData?.map((row) => {
         const values = Object.values(row);
-        return values.map((value) => ({ value }));
+        return values?.map((value) => ({ value }));
       });
 
       setData(formattedData);
@@ -27,13 +27,15 @@ const ExcelDisplay = ({ tableData }) => {
       setData([]);
     }
   }, [tableData]);
+  const allEmpty = data?.every((row) =>
+    row.every((cell) => cell?.value === "")
+  );
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {Array.isArray(data) &&
-      data?.length > 0 &&
-      data[1]?.[0]?.value !== "" ? (
-        data?.length > 0 && <Spreadsheet data={data} onChange={setData} />
+      {Array.isArray(data) && data?.length > 0 && !allEmpty ? (
+        data?.length > 0 &&
+        !allEmpty && <Spreadsheet data={data} onChange={setData} />
       ) : (
         <div
           style={{
@@ -42,7 +44,7 @@ const ExcelDisplay = ({ tableData }) => {
             alignItems: "center",
           }}
         >
-          {data?.length === 0 && "No data Found"}
+          {"No data Found"}
         </div>
       )}
     </div>

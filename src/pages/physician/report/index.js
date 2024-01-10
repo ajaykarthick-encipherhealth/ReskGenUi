@@ -143,9 +143,10 @@ const index = () => {
     startDate,
     endDate,
     sentSearch,
-    receivedSearch,
+    receivedPageNo,
     receivedStartDate,
     receivedEndDate,
+    receivedSearch,
   ]);
 
   const ReportPatientDetails = useSelector((state) => state.report?.details);
@@ -211,6 +212,8 @@ const index = () => {
 
   const closeModal = () => {
     setIsModalVisible(false);
+    setSelectedRows([]);
+    setSelectAll(false)
   };
 
   const handleDatePickerChange = (date, dateString) => {
@@ -250,9 +253,7 @@ const index = () => {
     setCoderStartDate(formattedDates[0]);
     setCoderEndDate(formattedDates[1]);
   };
-  console.log(coderStartDate, coderEndDate);
-
-  const rowsLength = useSelector((state) => state.report.row);
+  const rowsLength = useSelector((state) => state?.report?.row);
   return (
     <>
       <Header />
@@ -332,6 +333,12 @@ const index = () => {
                                       rowsLength?.length === 0
                                         ? styles.csv
                                         : styles.export
+                                    }
+                                    disabled={
+                                      rowsLength?.length > 0 ||
+                                      rowsLength?.data?.length > 0
+                                        ? false
+                                        : true
                                     }
                                   >
                                     <svg

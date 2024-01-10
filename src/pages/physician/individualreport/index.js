@@ -32,19 +32,19 @@ const IndividualReceiverReport = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
-  const [searchValue, setSearchValue] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
   const url = useSelector((state) => state.report.uploadFile);
 
   const reportDatas = useSelector((state) => state.report.receivedDetails);
   const [reportInfo, setReportInfo] = useState();
   const [detailsContent, setDetailsContent] = useState(
-    reportDatas?.response?.content
+    reportDatas?.data?.response?.content
   );
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("reportId");
-    dispatch(getReceivedDetails(0, null, null, null));
+    dispatch(getReceivedDetails(0, "", "", searchValue));
     dispatch(getSelectedReportDetails(id));
-  }, []);
+  }, [searchValue]);
   useEffect(() => {
     if (url) {
       fetchData(url);
@@ -52,6 +52,7 @@ const IndividualReceiverReport = () => {
   }, [url]);
   useEffect(() => {
     if (reportDatas?.data) {
+      setDetailsContent(reportDatas?.data?.response?.content)
       const id = new URLSearchParams(window.location.search).get("reportId");
       const reportdata = reportDatas?.data?.response?.content?.filter(
         (item) => item?.reportId === id
@@ -107,7 +108,7 @@ const IndividualReceiverReport = () => {
 
   const performanceSearch = (value) => {
     setSearchValue(value);
-    dispatch(getReceivedDetails(0, null, null, value));
+    // dispatch(getReceivedDetails(0, null, null, value));
   };
   const debouncedSearch = debounce(performanceSearch, 500);
   const filterChange = (e) => {
