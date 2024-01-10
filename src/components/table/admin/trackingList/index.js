@@ -18,7 +18,6 @@ import { useEffect } from "react";
 
 function TrackingTable({
   patinetListAll,
-
   statusBodyTemplate,
   patientDetails,
 }) {
@@ -137,8 +136,8 @@ function TrackingTable({
             )} */}
           </Tooltip>
         </td>
-        <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
-          <Tooltip title={data.patientAllocated ? data.patientAllocated : "Praveen"}>
+        <td className={TableStyle.childBorder} style={{textAlign:"left"}}>
+          {data?.patientAllocated ?  <Tooltip title={data.patientAllocated }>
             <Avatar
               style={{
                 backgroundColor: "#04306f ",
@@ -149,7 +148,7 @@ function TrackingTable({
             >
               {data.patientAllocated
                 ? data.patientAllocated?.slice(0, 2).toUpperCase()
-                : "P"}
+                : null}
             </Avatar>
             {/* {data.allocatedBy ? (
               <img
@@ -174,9 +173,10 @@ function TrackingTable({
                   data.patientAllocated.split("@")[0].slice(1)}
               </>
             ) : (
-              <>---</>
+              <span style={{textAlign:"center"}}>---</span>
             )}
-          </Tooltip>
+          </Tooltip> : <span style={{textAlign:"center"}}>---</span> }
+         
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}  style={{textAlign:"center"}}>
           {data.allocatedOn
@@ -202,8 +202,8 @@ function TrackingTable({
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th  style={{textAlign:"center"}}>ALLOCATED BY</th>
-            <th  style={{textAlign:"center"}}>ALLOCATED TO</th>
-            <th  style={{textAlign:"center"}}>ALLOCATED TIME</th>
+            <th  style={{textAlign:"left"}}>ALLOCATED TO</th>
+            <th  style={{textAlign:"center"}}>ALLOCATED DATE</th>
             <th
              style={{textAlign:"center"}}
               onClick={() => {
@@ -212,13 +212,13 @@ function TrackingTable({
               }}
             >
               DUE DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
+              {/* <span style={{ padding: "10px", cursor: "pointer" }}>
                 {sortDueOrder === "asc" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
-              </span>
+              </span> */}
              
             </th>
 
