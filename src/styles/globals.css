@@ -12815,38 +12815,37 @@ tbody > tr {
   background-color: rgba(154, 125, 165, 0.2) !important;
   color: rgb(154, 125, 165) !important;
 }
-
 .encounterDateTag1 {
-  background-color: rgb(27 83 255 / 16%) !important;
+  border: 1px solid rgb(27 83 255 / 16%) !important;
   color: #3e566e;
 }
 
 .encounterDateTag2 {
-  background-color: rgba(125, 117, 129, 0.2) !important;
+  border: 1px solid rgba(125, 117, 129, 0.2) !important;
   color: rgb(125, 117, 129) !important;
 }
 .encounterDateTag3 {
-  background-color: rgba(221, 90, 224, 0.2) !important;
+  border: 1px solid rgba(221, 90, 224, 0.2) !important;
   color: rgb(221, 90, 224) !important;
 }
 .encounterDateTag4 {
-  background-color: rgba(37, 138, 62, 0.2) !important;
+  border: 1px solid rgba(37, 138, 62, 0.2) !important;
   color: rgb(37, 138, 62) !important;
 }
 .encounterDateTag5 {
-  background-color: rgba(108, 30, 179, 0.2) !important;
+  border: 1px solid rgba(108, 30, 179, 0.2) !important;
   color: rgb(108, 30, 179) !important;
 }
 .encounterDateTag6 {
-  background-color: rgba(229, 254, 78, 0.2) !important;
+  border: 1px solid rgba(229, 254, 78, 0.2) !important;
   color: rgb(136 143 96) !important;
 }
 .encounterDateTag7 {
-  background-color: rgba(72, 204, 225, 0.2) !important;
+  border: 1px solid rgba(72, 204, 225, 0.2) !important;
   color: rgb(72, 204, 225) !important;
 }
 .encounterDateTag8 {
-  background-color: rgba(236, 175, 165, 0.2);
+  border: 1px solid rgba(236, 175, 165, 0.2);
   color: rgb(236, 175, 165) !important;
 }
 
