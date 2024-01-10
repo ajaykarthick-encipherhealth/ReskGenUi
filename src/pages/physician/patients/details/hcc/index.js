@@ -245,6 +245,12 @@ const Hcc = ({ patientHccResult }) => {
   const [fileInitialPage, setFileInitialPage] = useState(0);
   const [sectionAllColor, setSectionAllColor] = useState([]);
 
+  const [findFileKeyword, setFindFileKeyword] = useState('');
+  const [fileModalTitle, setFileModalTitle] = useState('');
+
+
+
+
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
   };
@@ -270,7 +276,21 @@ const Hcc = ({ patientHccResult }) => {
 
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const handleDocumentLoad = () => {
+    setDocumentLoaded(true); 
+  };
+  const handleDocumentLoadFile = () => {
     setDocumentLoaded(true);
+    if(findFileKeyword){
+      setTimeout(() => {
+        setFileModalHeader(fileModalTitle);
+        if(fileInitialPage){
+        setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
+        }
+        highlight({
+          keyword: findFileKeyword,
+        });       
+      }, 1000);
+    }
   };
 
   const pageClickPdfFile = (e) => {};
@@ -303,7 +323,7 @@ const Hcc = ({ patientHccResult }) => {
     setUserDetails(userSpinner);
 
     setvalidHccDetails(userSpinner);
-  }, []);
+  }, [fileInitialPage,isDocumentLoaded,findFileKeyword,fileModalTitle]);
 
   const getPatientDetails = async (
     patientId,
@@ -1296,6 +1316,7 @@ const Hcc = ({ patientHccResult }) => {
     actualDescription,
     testModal
   ) => {
+    setDocumentLoaded(false);
     if (
       documentPlace == "Radio" ||
       whereCome == "Radio" ||
@@ -1357,14 +1378,8 @@ const Hcc = ({ patientHccResult }) => {
         setSelectActiveCode(value);
         var splitPoint = "";
         splitPoint = actualDescription.substring(" ", 40);
-        setTimeout(() => {
-          if(pageNumber){
-          setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-          }
-          highlight({
-            keyword: splitPoint,
-          });
-          var dataset =
+        setFindFileKeyword(splitPoint)
+        var dataset =
             value +
             " - (" +
             disDescription +
@@ -1379,8 +1394,31 @@ const Hcc = ({ patientHccResult }) => {
             patientDocumentResult.patientName +
             " / " +
             dataset;
-          setFileModalHeader(headerName);
-        }, 2000);
+          setFileModalTitle(headerName)
+        // setTimeout(() => {
+        //   if(pageNumber){
+        //   setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+        //   }
+        //   highlight({
+        //     keyword: splitPoint,
+        //   });
+        //   var dataset =
+        //     value +
+        //     " - (" +
+        //     disDescription +
+        //     ")" +
+        //     " / (" +
+        //     actualDescription +
+        //     ")";
+        //   setSelectMeatName(dataset);
+        //   var headerName =
+        //     patientDocumentResult.patientId +
+        //     " / " +
+        //     patientDocumentResult.patientName +
+        //     " / " +
+        //     dataset;
+        //   setFileModalHeader(headerName);
+        // }, 2000);
         setDocumentLoaded(true);
       } else if (check == "valid2") {
         setSelectActiveCode(value);
@@ -4895,7 +4933,7 @@ const Hcc = ({ patientHccResult }) => {
                       initialPage={fileInitialPage}
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
-                      onDocumentLoad={handleDocumentLoad}
+                      onDocumentLoad={handleDocumentLoadFile}
                       renderLoader={(percentages) => (
                         <div style={{ width: "240px" }}>
                           <ProgressBar progress={Math.round(percentages)} />
