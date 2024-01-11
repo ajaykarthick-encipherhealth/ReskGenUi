@@ -66,6 +66,8 @@ tbody.csvBody tr:nth-child(odd) td {
 
 .list{
   margin: 40px 0px 0 20px;
+  height:100vh;
+  overflow-y: scroll;
 }
 .divContainer {
   height: 30px;

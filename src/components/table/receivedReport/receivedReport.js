@@ -48,7 +48,7 @@ function ReceivedReport({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
-    router?.push(`/physician/individualreport?reportId=${info?.reportUser?.reportId}`);
+    router?.push(`/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`);
   };
 
   return (
