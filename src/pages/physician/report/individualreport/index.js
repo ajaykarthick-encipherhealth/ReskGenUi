@@ -186,7 +186,7 @@ const IndividualReceiverReport = () => {
                           </div>
                         </div>
                         <div className={styles.date}>
-                          {dayjs(item?.receiveDate).format("DD/MM/YYYY")}
+                          {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
                         </div>
                       </div>
                     ))}

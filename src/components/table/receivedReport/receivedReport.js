@@ -80,7 +80,7 @@ function ReceivedReport({
               <tbody>
                 {detailsContent?.map((row, index) => {
                   const formattedDate = row.receiveDate
-                    ? dayjs(row.sendDate).format("DD/MM/YY")
+                    ? dayjs(row.sendDate).format("MM-DD-YYYY")
                     : "Invalid Date";
 
                   return (

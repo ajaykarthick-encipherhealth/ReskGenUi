@@ -78,7 +78,7 @@ function SentReportTable({
               <tbody>
                 {details?.data?.map((row, index) => {
                   const formattedDate = row.sendDate
-                    ? dayjs(row?.sendDate).format("DD/MM/YYYY")
+                    ? dayjs(row?.sendDate).format("MM-DD-YYYY")
                     : "Invalid Date";
                   return (
                     <tr key={index} style={{ height: "40px" }}>
