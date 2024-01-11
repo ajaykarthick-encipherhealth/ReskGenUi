@@ -25,7 +25,6 @@ const HeaderFilters = ({
   setSelectedOption,
   selectOptions,
   defaultSelectValue1,
-  filteratedDashboardData,
 
   // if has 2 selectors
   selectlabel2,
@@ -41,6 +40,7 @@ const HeaderFilters = ({
   defaultEndDate,
   setStartDate,
   setEndDate,
+  isRangePicker,
 
   // if has 2 pickers
   pickerlabe2,
@@ -96,7 +96,6 @@ const HeaderFilters = ({
             selectlabel={selectlabel}
             setSelectedOption={setSelectedOption}
             selectOptions={selectOptions}
-            filteratedDashboardData={filteratedDashboardData}
             defaultSelectValue1={defaultSelectValue1}
           />
         </div>
@@ -117,16 +116,18 @@ const HeaderFilters = ({
           </div>
         </div>
       )}
-      <div className="col-xl-2">
-        <DateRangePicker
-          selectedDates={selectedDates}
-          pickerlabel={pickerlabel}
-          defaultStartDate={defaultStartDate}
-          defaultEndDate={defaultEndDate}
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
-        />
-      </div>
+      {isRangePicker && (
+        <div className="col-xl-2">
+          <DateRangePicker
+            selectedDates={selectedDates}
+            pickerlabel={pickerlabel}
+            defaultStartDate={defaultStartDate}
+            defaultEndDate={defaultEndDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+          />
+        </div>
+      )}
 
       {isAnotherPicker && (
         <>
