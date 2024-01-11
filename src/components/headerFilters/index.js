@@ -1,0 +1,208 @@
+import React from "react";
+import Select from "react-select";
+import { Button } from "react-bootstrap";
+import { DatePicker } from "antd";
+import visitStyles from "../../styles/visitdata.module.css";
+import styles from "../../pages/physician/report/report.module.css";
+import allocateStyle from "../../pages/admin/allocatedUser/allocate/style.module.css";
+import Export from "../../images/svg/Export";
+import Legends from "../legends";
+import DateRangePicker from "../rangepicker";
+import Selector from "../selector";
+import Search from "../search";
+import { handleRnagePicker2 } from "./functions";
+
+const { RangePicker } = DatePicker;
+const HeaderFilters = ({
+  // for search
+  setSearch,
+  isSearch,
+  searchlabel,
+
+  // for select
+  selectlabel,
+  isSelector,
+  setSelectedOption,
+  selectOptions,
+  defaultSelectValue1,
+
+  // if has 2 selectors
+  selectlabel2,
+  defaultSelectValue2,
+  selectOptions2,
+  onSelectChange2,
+
+  // for picker
+  pickerlabel,
+  activeTab,
+  selectedDates,
+  defaultStartDate,
+  defaultEndDate,
+  setStartDate,
+  setEndDate,
+  isRangePicker,
+
+  // if has 2 pickers
+  pickerlabe2,
+  setStartDate2,
+  setEndDate2,
+  selectedDates2,
+  defaultStartDate2,
+  defaultEndDate2,
+  isAnotherPicker,
+
+  // conditions to display extra components
+  addUser,
+  handleExport,
+  rowsLength,
+  addUserForm,
+  isbullets,
+  selectedRowsId,
+  handleOpneModal,
+  isAllocate,
+
+  // bullets
+}) => {
+  const bullets = [
+    {
+      color: "#FFB54D",
+      name: "Pending",
+    },
+    {
+      color: "#AD94FA",
+      name: "Hold",
+    },
+    {
+      color: "#EB5252",
+      name: "Declined",
+    },
+    {
+      color: "#B4EFBA",
+      name: "Completed",
+    },
+  ];
+  return (
+    <div className="row filter-contain">
+      {isSearch && (
+        <div className="col-xl-2">
+          {" "}
+          <Search searchlabel={searchlabel} setSearch={setSearch} />
+        </div>
+      )}
+      {isSelector ? (
+        <div className="col-xl-2">
+          {" "}
+          <Selector
+            selectlabel={selectlabel}
+            setSelectedOption={setSelectedOption}
+            selectOptions={selectOptions}
+            defaultSelectValue1={defaultSelectValue1}
+          />
+        </div>
+      ) : null}
+      {selectOptions2 && (
+        <div className="col-xl-2">
+          <label>{selectlabel2}</label>
+          <div class="form-group has-search">
+            <Select
+              onChange={(selectedOption) => {
+                onSelectChange2(selectedOption);
+              }}
+              options={selectOptions2}
+              defaultValue={defaultSelectValue2}
+              className="custom-react-select"
+              isSearchable={false}
+            />
+          </div>
+        </div>
+      )}
+      {isRangePicker && (
+        <div className="col-xl-2">
+          <DateRangePicker
+            selectedDates={selectedDates}
+            pickerlabel={pickerlabel}
+            defaultStartDate={defaultStartDate}
+            defaultEndDate={defaultEndDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+          />
+        </div>
+      )}
+
+      {isAnotherPicker && (
+        <>
+          <div className="col-xl-2">
+            <label>{pickerlabe2}</label>
+            <div>
+              <RangePicker
+                format="MM-DD-YYYY"
+                value={selectedDates2}
+                onChange={handleRnagePicker2(
+                  date,
+                  dateString,
+                  setStartDate2,
+                  setEndDate2
+                )}
+                defaultValue={[
+                  dayjs(defaultStartDate2, "MM-DD-YYYY"),
+                  dayjs(defaultEndDate2, "MM-DD-YYYY"),
+                ]}
+              />
+            </div>
+          </div>
+
+          <div className={`${isbullets ? "col-xl-4" : "col-xl-4"}`}>
+            <div
+              className={visitStyles.flags_patientsList}
+              style={{ margin: "35px 0 0 20px" }}
+            >
+              <Legends bullets={bullets} />
+            </div>
+          </div>
+        </>
+      )}
+
+      {addUser && (
+        <div className={`${isbullets ? "col-xl-2" : "col-xl-6"}`}>
+          <Button
+            onClick={addUserForm}
+            className="btn btn-primary btn-sm ms-2 flr"
+          >
+            + Add User
+          </Button>
+        </div>
+      )}
+      {isAllocate && (
+        <div className="col-xl-8 mt-4">
+          <button
+            onClick={handleOpneModal}
+            className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
+            disabled={!selectedRowsId.length > 0}
+          >
+            Allocate
+          </button>
+        </div>
+      )}
+      {activeTab === "CoderReport" && (
+        <div className="col-xl-8  d-flex justify-content-end">
+          <div className="row flr">
+            <button
+              onClick={handleExport}
+              className={rowsLength?.length === 0 ? styles.csv : styles.export}
+              disabled={
+                rowsLength?.length > 0 || rowsLength?.data?.length > 0
+                  ? false
+                  : true
+              }
+            >
+              <Export />
+              Export
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default HeaderFilters;
