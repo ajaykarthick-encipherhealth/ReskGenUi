@@ -10,37 +10,57 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
+import { handleRnagePicker2 } from "./functions";
 
 const { RangePicker } = DatePicker;
 const HeaderFilters = ({
-  selectlabel,
+  // for search
+  setSearch,
+  isSearch,
   searchlabel,
-  pickerlabel,
-  handleSearch,
-  activeTab,
-  onSelectChange,
-  selectOptions,
-  handleDatePickerChange,
-  handleReceivedDatePicker,
-  handleCoderPicker,
-  selectedDates,
+
+  // for select
+  selectlabel,
   isSelector,
+  setSelectedOption,
+  selectOptions,
+  defaultSelectValue1,
   filteratedDashboardData,
-  handleDatePickerChange2,
+
+  // if has 2 selectors
+  selectlabel2,
+  defaultSelectValue2,
+  selectOptions2,
+  onSelectChange2,
+
+  // for picker
+  pickerlabel,
+  activeTab,
+  selectedDates,
+  defaultStartDate,
+  defaultEndDate,
+  setStartDate,
+  setEndDate,
+
+  // if has 2 pickers
+  pickerlabe2,
+  setStartDate2,
+  setEndDate2,
+  selectedDates2,
+  defaultStartDate2,
+  defaultEndDate2,
+  isAnotherPicker,
+
+  // conditions to display extra components
   addUser,
   handleExport,
   rowsLength,
   addUserForm,
-  defaultSelectValue1,
-  defaultSelectValue2,
-  selectOptions2,
-  onSelectChange2,
-  selectlabel2,
   isbullets,
   selectedRowsId,
   handleOpneModal,
   isAllocate,
-  isSearch,
+
   // bullets
 }) => {
   const bullets = [
@@ -66,7 +86,7 @@ const HeaderFilters = ({
       {isSearch && (
         <div className="col-xl-2">
           {" "}
-          <Search searchlabel={searchlabel} handleSearch={handleSearch} />
+          <Search searchlabel={searchlabel} setSearch={setSearch} />
         </div>
       )}
       {isSelector ? (
@@ -74,7 +94,7 @@ const HeaderFilters = ({
           {" "}
           <Selector
             selectlabel={selectlabel}
-            onSelectChange={onSelectChange}
+            setSelectedOption={setSelectedOption}
             selectOptions={selectOptions}
             filteratedDashboardData={filteratedDashboardData}
             defaultSelectValue1={defaultSelectValue1}
@@ -100,25 +120,32 @@ const HeaderFilters = ({
       <div className="col-xl-2">
         <DateRangePicker
           selectedDates={selectedDates}
-          activeTab={activeTab}
           pickerlabel={pickerlabel}
-          handleDatePickerChange={handleDatePickerChange}
-          handleReceivedDatePicker={handleReceivedDatePicker}
-          handleCoderPicker={handleCoderPicker}
-          filteratedDashboardData={filteratedDashboardData}
+          defaultStartDate={defaultStartDate}
+          defaultEndDate={defaultEndDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
         />
       </div>
 
-      {handleDatePickerChange2 && (
+      {isAnotherPicker && (
         <>
           <div className="col-xl-2">
-            <label>Completed Date</label>
+            <label>{pickerlabe2}</label>
             <div>
               <RangePicker
                 format="MM-DD-YYYY"
-                onChange={(dates, dateStrings) => {
-                  handleDatePickerChange2(dateStrings);
-                }}
+                value={selectedDates2}
+                onChange={handleRnagePicker2(
+                  date,
+                  dateString,
+                  setStartDate2,
+                  setEndDate2
+                )}
+                defaultValue={[
+                  dayjs(defaultStartDate2, "MM-DD-YYYY"),
+                  dayjs(defaultEndDate2, "MM-DD-YYYY"),
+                ]}
               />
             </div>
           </div>
