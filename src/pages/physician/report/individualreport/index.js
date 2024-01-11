@@ -1,69 +1,43 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import csvToJson from "csvtojson";
+import * as XLSX from "xlsx";
+import dayjs from "dayjs";
+import { Button } from "antd";
+import Image from "next/image";
+import { InputText } from "primereact/inputtext";
 import {
-  getFileDetails,
   getReceivedDetails,
   getSelectedReportDetails,
   selectedReport,
-} from "../../../store/actions/ReportActions";
+} from "../../../../store/actions/ReportActions";
 import ExcelDisplay, {
   exportToExcel,
-} from "../../../components/table/receivedReport/ExcelDisplay";
-import CSVDisplay from "../../../components/table/receivedReport/CSVDisplay";
-import styles from "../../../components/table/receivedReport/receivedReport.module.css";
-import { InputText } from "primereact/inputtext";
-import dayjs from "dayjs";
-import search from "../../../images/report/search.svg";
-import sort from "../../../images/report/sort.svg";
-import id from "../../../images/report/id.svg";
-import file from "../../../images/report/file.svg";
-import calender from "../../../images/report/calender.svg";
-import send from "../../../images/report/send.svg";
-import download from "../../../images/report/download.svg";
-import Image from "next/image";
-import { Button } from "antd";
-import { debounce } from "../report/Export";
-import csvToJson from "csvtojson";
-import * as XLSX from "xlsx";
-import Header from "../../../jsx/layouts/nav/Header";
-import Footer from "../../../jsx/layouts/Footer";
+} from "../../../../components/table/receivedReport/ExcelDisplay";
+import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
+import styles from "../../../../components/table/receivedReport/receivedReport.module.css";
+import search from "../../../../images/report/search.svg";
+import sort from "../../../../images/report/sort.svg";
+import id from "../../../../images/report/id.svg";
+import file from "../../../../images/report/file.svg";
+import calender from "../../../../images/report/calender.svg";
+import send from "../../../../images/report/send.svg";
+import download from "../../../../images/report/download.svg";
+import { debounce } from "../Export";
+import Header from "../../../../jsx/layouts/nav/Header";
+import Footer from "../../../../jsx/layouts/Footer";
 
 const IndividualReceiverReport = () => {
+  const url = useSelector((state) => state.report.uploadFile);
+  const reportDatas = useSelector((state) => state.report.receivedDetails);
   const [sortOrder, setSortOrder] = useState("asc");
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const url = useSelector((state) => state.report.uploadFile);
-
-  const reportDatas = useSelector((state) => state.report.receivedDetails);
   const [reportInfo, setReportInfo] = useState();
   const [detailsContent, setDetailsContent] = useState(
     reportDatas?.data?.response?.content
   );
-  useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("reportId");
-    dispatch(getReceivedDetails(0, "", "", searchValue));
-    dispatch(getSelectedReportDetails(id));
-  }, [searchValue]);
-  useEffect(() => {
-    if (url) {
-      fetchData(url);
-    }
-  }, [url]);
-  useEffect(() => {
-    if (reportDatas?.data) {
-      setDetailsContent(reportDatas?.data?.response?.content)
-      const id = new URLSearchParams(window.location.search).get("reportId");
-      const reportdata = reportDatas?.data?.response?.content?.filter(
-        (item) => item?.reportId === id
-      );
-
-      if(reportdata && reportdata?.length > 0){
-        setReportInfo(reportdata[0]);
-      }
-
-    }
-  }, [reportDatas]);
 
   const fetchData = async (url) => {
     try {
@@ -108,13 +82,34 @@ const IndividualReceiverReport = () => {
 
   const performanceSearch = (value) => {
     setSearchValue(value);
-    // dispatch(getReceivedDetails(0, null, null, value));
   };
   const debouncedSearch = debounce(performanceSearch, 500);
   const filterChange = (e) => {
     debouncedSearch(e.target.value);
   };
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("reportId");
+    dispatch(getReceivedDetails(0, "", "", searchValue));
+    dispatch(getSelectedReportDetails(id));
+  }, [searchValue]);
+  useEffect(() => {
+    if (url) {
+      fetchData(url);
+    }
+  }, [url]);
+  useEffect(() => {
+    if (reportDatas?.data) {
+      setDetailsContent(reportDatas?.data?.response?.content);
+      const id = new URLSearchParams(window.location.search).get("reportId");
+      const reportdata = reportDatas?.data?.response?.content?.filter(
+        (item) => item?.reportId === id
+      );
 
+      if (reportdata && reportdata?.length > 0) {
+        setReportInfo(reportdata[0]);
+      }
+    }
+  }, [reportDatas]);
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -142,9 +137,7 @@ const IndividualReceiverReport = () => {
             {/* users */}
             <div className={styles.list}>
               {searchValue !== null && detailsContent?.length === 0 ? (
-                <div style={{marginTop:"60px"}}>
-                  No data Found
-                </div>
+                <div style={{ marginTop: "60px" }}>No data Found</div>
               ) : (
                 <>
                   {detailsContent
