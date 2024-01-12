@@ -1,6 +1,6 @@
 // for search
 export const searchFunction = (e, setSearch) => {
-  setSearch(e.target.value, setSearch);
+  setSearch(e.target.value);
 };
 
 // for select
