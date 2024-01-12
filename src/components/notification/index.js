@@ -9,7 +9,6 @@ import moment from 'moment';
 
 
 const Notification = ({ notificationResponse }) => {
-  console.log(notificationResponse)
   const [openMsg, setOpenMsg] = useState(false);
   const notificationData = notificationResponse?.content;
   const emailSplitFunction = (email) => {
