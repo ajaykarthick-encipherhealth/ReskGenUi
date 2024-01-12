@@ -1,31 +1,27 @@
-import React, { useState, useContext, useEffect } from "react";
-// import { Dropdown } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
-import { IMAGES, SVGICON } from "../../constant/theme";
-import { ThemeContext } from "../../../context/ThemeContext";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Logout } from "../../../store/actions/AuthActions";
+import dynamic from "next/dynamic";
 import Swal from "sweetalert2";
+import { DownOutlined } from "@ant-design/icons";
+import "react-chat-widget/lib/styles.css";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { Button } from "react-bootstrap";
+import { Badge, Dropdown, Select, Tooltip, Drawer, Popover } from "antd";
+import styles from "../../../styles/file-managemnt.module.css";
+import { IMAGES, SVGICON } from "../../constant/theme";
 import {
   AdminMenuList,
   MenuList,
   PhysicanMenuList,
   L2AuditMenuList,
 } from "./Menu";
-import { DownOutlined } from "@ant-design/icons";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
-import { CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
-import { Badge, Dropdown, Select, Space, Tooltip } from "antd";
-import "react-chat-widget/lib/styles.css";
-import dynamic from "next/dynamic";
 import { getChatReply } from "../../../store/actions/DashboardActions";
-import { Drawer } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 import {
   getNotificationAlert,
   getNotificationList,
@@ -33,12 +29,22 @@ import {
 } from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
 import { getFilteredList } from "../../../store/actions/PatientsActions";
+import CodeIcon from "../../../images/svg/CodeIcon";
+import Search from "../../../components/search";
+import { getCoderDetails } from "../../../store/actions/AuthActions";
 
 const Header = ({ onNote }) => {
   const dispatchValue = useDispatch();
+  const router = useRouter();
+  const notificationAlertData = useSelector(
+    (state) => state?.notificationDatas?.notificationAlert
+  );
+  const notificationResponse = useSelector(
+    (state) => state?.notificationDatas?.notificationList
+  );
+  const codDetails = useSelector((state) => state.auth.codeDetails);
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
-  const router = useRouter();
   const [stateActive, setStateActive] = useState(router.pathname);
   const [userRole, setUserRole] = useState(null);
   const [menuList, setMenuList] = useState([]);
@@ -46,49 +52,8 @@ const Header = ({ onNote }) => {
   const [open, setOpen] = useState(false);
   const [toggleChatBox, setToggleChatBox] = useState(true);
   const [openMsg, setOpenMsg] = useState(false);
-  const notificationAlertData = useSelector(
-    (state) => state?.notificationDatas?.notificationAlert
-  );
-  const notificationResponse = useSelector(
-    (state) => state?.notificationDatas?.notificationList
-  );
-
-  useEffect(() => {
-    var loginCheck = localStorage.getItem("loginCheck");
-    var userName = localStorage.getItem("userName");
-    const userRoleLocal = localStorage.getItem("userRole");
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    getUserIdDetails(userId);
-
-    setUserRole(userRoleLocal);
-    setUserName(userName);
-    if (userRoleLocal === "admin") {
-      setMenuList(AdminMenuList);
-    } else if (userRoleLocal === "l1auditor") {
-      setMenuList(PhysicanMenuList);
-    } else {
-      setMenuList([]);
-    }
-    if (loginCheck != "true") {
-      Swal.fire({
-        title: "Error!",
-        text: "Session Expired",
-        icon: "error",
-        confirmButtonText: "Logout",
-        confirmButtonColor: "#DD6B55",
-        closeOnConfirm: false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location = "/userlogin";
-        }
-      });
-    }
-    window.addEventListener("scroll", () => {
-      setheaderFix(window.scrollY > 50);
-    });
-  }, []);
-
+  const [search, setSearch] = useState("");
+  const [selectedbtn, setSelectedBtn] = useState("ICD-10");
   const onClose = () => {
     setOpen(false);
     setOpenMsg(false);
@@ -113,21 +78,6 @@ const Header = ({ onNote }) => {
       }
     });
   };
-
-  const options = [
-    {
-      value: "jack",
-      label: "Jack",
-    },
-    {
-      value: "lucy",
-      label: "Lucy",
-    },
-    {
-      value: "tom",
-      label: "Tom",
-    },
-  ];
 
   const getUserIdDetails = async (userId) => {
     const token = localStorage.getItem("token");
@@ -156,73 +106,45 @@ const Header = ({ onNote }) => {
 
     // setUserIdDetails(response.data.response);
   };
-
-  const onChange = (value) => {
-    console.log(`selected ${value}`);
-  };
-
-  const onSearch = (value) => {
-    console.log("search:", value);
-  };
-
-  // Filter `option.label` match the user type `input`
-  const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
   const percentage = 95;
+
+  const btnItems = [
+    {
+      id: 1,
+      name: "ICD-10",
+    },
+    {
+      id: 2,
+      name: "HCC",
+    },
+  ];
 
   const PopContent = (
     <>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <button
+      <div style={{ height: "200px" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {btnItems?.map((data) => (
+            <button
+              onClick={() => {
+                setSelectedBtn(data?.name);
+              }}
+              className={
+                selectedbtn === data?.name
+                  ? styles.activeBtn
+                  : styles.inactiveBtn
+              }
+            >
+              {data?.name}
+            </button>
+          ))}
+        </div>
+        <div
           style={{
-            marginRight: "10px",
-            border: "0.2px solid #241571",
-            borderRadius: "8px",
-            background: "#04306F",
-            boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.08)",
-            width: "90px",
-            height: "35px",
-            borderRadius: "6px",
-            color: "#FFF",
+            margin: "10px 50px",
           }}
         >
-          ICD - 10
-        </button>
-
-        <button
-          style={{
-            marginRight: "10px",
-            border: "0.2px solid #241571",
-            borderRadius: "8px",
-            background: "white",
-            boxShadow: "0px 2px 6px 0px rgba(0, 0, 0, 0.08)",
-            width: "90px",
-            height: "35px",
-            borderRadius: "6px",
-            color: "black",
-          }}
-        >
-          ICD - 10
-        </button>
-      </div>
-      <div
-        style={{
-          margin: "10px 50px",
-          width: "146px",
-          height: "22px",
-        }}
-      >
-        <Select
-          showSearch
-          placeholder="Select a person"
-          optionFilterProp="children"
-          onChange={onChange}
-          onSearch={onSearch}
-          filterOption={filterOption}
-          options={options}
-          // style={{ width: "180px", height: "30px" }}
-        />
+          <Search searchlabel={""} setSearch={setSearch} />
+        </div>
       </div>
     </>
   );
@@ -236,13 +158,6 @@ const Header = ({ onNote }) => {
 
   const dispatch = useDispatch();
   const msgReply = useSelector((state) => state.workFlow.chatReply);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const { addResponseMessage } = require("react-chat-widget");
-      addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
-    }
-  }, [msgReply]);
 
   const handleNewUserMessage = (newMessage) => {
     dispatch(getChatReply(newMessage));
@@ -278,6 +193,52 @@ const Header = ({ onNote }) => {
       router.push("/physician/dashboard");
     }
   };
+  useEffect(() => {
+    var loginCheck = localStorage.getItem("loginCheck");
+    var userName = localStorage.getItem("userName");
+    const userRoleLocal = localStorage.getItem("userRole");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    getUserIdDetails(userId);
+
+    setUserRole(userRoleLocal);
+    setUserName(userName);
+    if (userRoleLocal === "admin") {
+      setMenuList(AdminMenuList);
+    } else if (userRoleLocal === "l1auditor") {
+      setMenuList(PhysicanMenuList);
+    } else {
+      setMenuList([]);
+    }
+    if (loginCheck != "true") {
+      Swal.fire({
+        title: "Error!",
+        text: "Session Expired",
+        icon: "error",
+        confirmButtonText: "Logout",
+        confirmButtonColor: "#DD6B55",
+        closeOnConfirm: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location = "/userlogin";
+        }
+      });
+    }
+    window.addEventListener("scroll", () => {
+      setheaderFix(window.scrollY > 50);
+    });
+  }, []);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const { addResponseMessage } = require("react-chat-widget");
+      addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
+    }
+    if (selectedbtn) {
+      dispatch(getCoderDetails({ name: selectedbtn?.toLowerCase(), router }));
+    }
+  }, [msgReply, selectedbtn]);
+
+  console.log(codDetails);
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -322,6 +283,17 @@ const Header = ({ onNote }) => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
+                        {userRole !== "Admin" && (
+                          <Popover
+                            content={PopContent}
+                            placement="bottom"
+                            trigger={"click"}
+                          >
+                            <Button className={styles.codeBtn}>
+                              <CodeIcon /> Codes
+                            </Button>
+                          </Popover>
+                        )}
                         <TerminalComponent
                           handleNewUserMessage={handleNewUserMessage}
                           handleQuickButtonClicked={handleQuickButtonClicked}
@@ -362,10 +334,10 @@ const Header = ({ onNote }) => {
 
                           <div>
                             {/* <Dropdown>
-                              <Dropdown.Toggle
-                                className="nav-link i-false"
-                                as="div"
-                              > */}
+<Dropdown.Toggle
+className="nav-link i-false"
+as="div"
+> */}
                             <div className="header-info2 d-flex align-items-center">
                               <div className="header-media">
                                 <Image src={IMAGES.profileImage} />
@@ -373,13 +345,13 @@ const Header = ({ onNote }) => {
                             </div>
                             {/* </Dropdown.Toggle> */}
                             {/* <Dropdown.Menu align="end">
-                                <div className=" border-0 mb-0">
-                                  <span className="dropdown-item ai-icon ">
-                                    {SVGICON.Logout}{" "}
-                                    <span className="ms-2">Logout </span>
-                                  </span>
-                                </div>
-                              </Dropdown.Menu> */}
+<div className=" border-0 mb-0">
+<span className="dropdown-item ai-icon ">
+{SVGICON.Logout}{" "}
+<span className="ms-2">Logout </span>
+</span>
+</div>
+</Dropdown.Menu> */}
                             {/* </Dropdown> */}
                           </div>
                         </div>
