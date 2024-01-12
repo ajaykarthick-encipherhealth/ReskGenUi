@@ -59,6 +59,30 @@ const Options = [
     label: "RX",
   },
 ];
+const data = [
+  { label: "Admin", key: "admin" },
+  { label: "L1auditor", key: "l1auditor" },
+];
+const codeDta = {
+  status: "SUCCESS",
+  message: "Success!!",
+  response: [
+    {
+      id: "6546413c4f4d3691438862f4",
+      diagnosisCode: "I10",
+      description: "Essential (primary) hypertension",
+      cmsHcc_model_category_V22: 0,
+      cmsHcc_model_category_V24: 0,
+      rxHcc_model_category_V05: 187,
+      rxHcc_model_category_V08: 0,
+      cmsHcc_model_category_V22_for_2023_payment_year: "No",
+      cmsHcc_model_category_V24_for_2023_payment_year: "No",
+      rxHcc_model_category_V05_for_2023_payment_year: "Yes",
+      rxHcc_model_category_V08_for_2023_payment_year: "Yes",
+    },
+  ],
+};
+
 const Header = () => {
   const dispatchValue = useDispatch();
   const router = useRouter();
@@ -69,14 +93,13 @@ const Header = () => {
     (state) => state?.notificationDatas?.notificationList
   );
   const codDetails = useSelector((state) => state.auth.codeDetails);
+  const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
-  const [stateActive, setStateActive] = useState(router.pathname);
   const [userRole, setUserRole] = useState(null);
   const [menuList, setMenuList] = useState([]);
   const [userIdDetails, setUserIdDetails] = useState(null);
   const [open, setOpen] = useState(false);
-  const [toggleChatBox, setToggleChatBox] = useState(true);
   const [openMsg, setOpenMsg] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
@@ -135,24 +158,12 @@ const Header = () => {
   };
   const percentage = 95;
 
-  const codeDta = {
-    status: "SUCCESS",
-    message: "Success!!",
-    response: [
-      {
-        id: "6546413c4f4d3691438862f4",
-        diagnosisCode: "I10",
-        description: "Essential (primary) hypertension",
-        cmsHcc_model_category_V22: 0,
-        cmsHcc_model_category_V24: 0,
-        rxHcc_model_category_V05: 187,
-        rxHcc_model_category_V08: 0,
-        cmsHcc_model_category_V22_for_2023_payment_year: "No",
-        cmsHcc_model_category_V24_for_2023_payment_year: "No",
-        rxHcc_model_category_V05_for_2023_payment_year: "Yes",
-        rxHcc_model_category_V08_for_2023_payment_year: "Yes",
-      },
-    ],
+  const getStatus = (data) => {
+    if (data?.cmsHcc_model_category_V22_for_2023_payment_year === "Yes") {
+      return "CMS";
+    } else if (data?.rxHcc_model_category_V05_for_2023_payment_year === "Yes") {
+      return "RX";
+    } else return "";
   };
   const PopContent = (
     <div className={styles.innerPop}>
@@ -203,10 +214,24 @@ const Header = () => {
         />
       </div>
       <div className={styles.displayDiv}>
-        {codeDta?.response
-          ? codeDta?.response?.map((data) => (
+        {codDetails?.response
+          ? codDetails?.response?.map((data) => (
               <div className={styles.hoverDiv}>
-                {data?.diagnosisCode} {data?.description}
+                {data?.diagnosisCode}
+                {data?.description} &nbsp;
+                {selectedbtn === "HCC" && (
+                  <span
+                    className={
+                      getStatus(data) === "CMS"
+                        ? styles.cmsStatus
+                        : getStatus(data) === "RX"
+                        ? styles.rxStatus
+                        : ""
+                    }
+                  >
+                    {getStatus(data)}
+                  </span>
+                )}
               </div>
             ))
           : null}
@@ -237,15 +262,6 @@ const Header = () => {
     dispatchValue(getNotificationAlertClear([]));
   };
 
-  const emailSplitFunction = (email) => {
-    let emailSplit = email.split("@");
-    return emailSplit[0];
-  };
-
-  const data = [
-    { label: "Admin", key: "admin" },
-    { label: "L1auditor", key: "l1auditor" },
-  ];
   const items = data?.filter(
     (info) => info?.key?.toLowerCase() !== userRole?.toLowerCase()
   );

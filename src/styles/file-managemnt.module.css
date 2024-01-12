@@ -295,8 +295,30 @@
   background-color: #fff;
   cursor: pointer;
   border: 1px solid #ffff;
+  display:flex;
 
 }
 .hoverDiv:hover{
   border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.cmsStatus{
+  background-color: rgba(209, 218, 250, 1);
+  color:rgba(22, 64, 214, 1);
+  padding:2px 0px;
+  width:45px;
+  height:20px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 5px;
+
+}
+.rxStatus{
+  background-color: rgba(212, 247, 245, 1);
+  color:rgba(34, 170, 166, 1);
+  padding:2px 0px;
+  width:45px;
+  height:20px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 5px;
 }
