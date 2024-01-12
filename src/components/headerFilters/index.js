@@ -165,7 +165,7 @@ const HeaderFilters = ({
       )}
 
       {addUser && (
-        <div className={`${isbullets ? "col-xl-2" : "col-xl-6"}`}>
+        <div className={`${isbullets ? "col-xl-2" : "col-xl-4"}`}>
           <Button
             onClick={addUserForm}
             className="btn btn-primary btn-sm ms-2 flr"
