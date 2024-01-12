@@ -213,11 +213,22 @@ const Details = ({}) => {
       ),
     },
     {
-      value: "PATIENT_DISEASED",
+      value: "PATIENT_DECEASED",
       label: (
         <>
-          PATIENT_DISEASED{" "}
+          PATIENT_DECEASED{" "}
           <i className={visitStyles.patient_diseased}>
+            {SVGICON.emptyFlagSmall}
+          </i>{" "}
+        </>
+      ),
+    },
+    {
+      value: "PATIENT_INACTIVE",
+      label: (
+        <>
+          PATIENT_INACTIVE{" "}
+          <i className={visitStyles.patient_inactive}>
             {SVGICON.emptyFlagSmall}
           </i>{" "}
         </>
@@ -1505,16 +1516,25 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PATIENT_DISEASED" ? (
+                          ) : flagFirstData.flag == "PATIENT_DECEASED" ? (
                             <Tooltip
-                              title="PATIENT_DISEASED"
+                              title="PATIENT_DECEASED"
                               placement="bottom"
                             >
                               <i className={visitStyles.patient_diseased}>
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : null}
+                          ) : flagFirstData.flag == "PATIENT_INACTIVE" ? (
+                            <Tooltip
+                              title="PATIENT_INACTIVE"
+                              placement="bottom"
+                            >
+                              <i className={visitStyles.patient_inactive}>
+                                {SVGICON.emptyFlagSmallLarge}
+                              </i>
+                            </Tooltip>
+                          ): null}
                         </span>
                       </div>
                       <div className="col-xl-1 col-sm-12">
@@ -2935,8 +2955,12 @@ const Details = ({}) => {
                                     <i className={visitStyles.no_doc_found}>
                                       {SVGICON.emptyFlagSmall}
                                     </i>
-                                  ) : data.flag == "PATIENT_DISEASED" ? (
+                                  ) : data.flag == "PATIENT_DECEASED" ? (
                                     <i className={visitStyles.patient_diseased}>
+                                      {SVGICON.emptyFlagSmall}
+                                    </i>
+                                  ) : data.flag == "PATIENT_INACTIVE" ? (
+                                    <i className={visitStyles.patient_inactive}>
                                       {SVGICON.emptyFlagSmall}
                                     </i>
                                   ) : null}
