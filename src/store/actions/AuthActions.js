@@ -123,10 +123,10 @@ export function patientDetails(data) {
     payload: data,
   };
 }
-export const getCoderDetails = ({ name,search, router }) => {
+export const getCoderDetails = ({ name,search,selectedOption, router }) => {
   return (dispatch) => {
     try {
-      Coder({ name,search,router }).then((response) => {
+      Coder({ name,search,selectedOption,router }).then((response) => {
         dispatch({
           type: CODER,
           payload: response,

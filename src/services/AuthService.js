@@ -92,12 +92,12 @@ export function isLogin() {
   }
 }
 
-export const Coder = async ({ name,search, router }) => {
+export const Coder = async ({ name,search, selectedOption,router }) => {
   const token = localStorage.getItem("token");
   const codeName = name === "icd-10" ? "icd" : name;
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/disease/${codeName}?disease=${search}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/disease/${codeName}?disease=${search}&filter=${name==="hcc"?selectedOption:""}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

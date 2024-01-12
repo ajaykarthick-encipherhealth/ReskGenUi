@@ -319,11 +319,12 @@ const Header = () => {
         getCoderDetails({
           name: selectedbtn?.toLowerCase(),
           search: search,
+          selectedOption:selectedOption,
           router,
         })
       );
     }
-  }, [msgReply, selectedbtn, search]);
+  }, [msgReply, selectedbtn, search,selectedOption]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
