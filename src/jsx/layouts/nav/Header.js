@@ -32,8 +32,34 @@ import { getFilteredList } from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
 import { getCoderDetails } from "../../../store/actions/AuthActions";
+import Selector from "../../../components/selector";
 
-const Header = ({ onNote }) => {
+const btnItems = [
+  {
+    id: 1,
+    name: "ICD-10",
+  },
+  {
+    id: 2,
+    name: "HCC",
+  },
+];
+
+const Options = [
+  {
+    value: "ALL",
+    label: "ALL",
+  },
+  {
+    value: "CMS",
+    label: "CMS",
+  },
+  {
+    value: "RX",
+    label: "RX",
+  },
+];
+const Header = () => {
   const dispatchValue = useDispatch();
   const router = useRouter();
   const notificationAlertData = useSelector(
@@ -53,6 +79,7 @@ const Header = ({ onNote }) => {
   const [toggleChatBox, setToggleChatBox] = useState(true);
   const [openMsg, setOpenMsg] = useState(false);
   const [search, setSearch] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
   const onClose = () => {
     setOpen(false);
@@ -108,21 +135,35 @@ const Header = ({ onNote }) => {
   };
   const percentage = 95;
 
-  const btnItems = [
-    {
-      id: 1,
-      name: "ICD-10",
-    },
-    {
-      id: 2,
-      name: "HCC",
-    },
-  ];
-
+  const codeDta = {
+    status: "SUCCESS",
+    message: "Success!!",
+    response: [
+      {
+        id: "6546413c4f4d3691438862f4",
+        diagnosisCode: "I10",
+        description: "Essential (primary) hypertension",
+        cmsHcc_model_category_V22: 0,
+        cmsHcc_model_category_V24: 0,
+        rxHcc_model_category_V05: 187,
+        rxHcc_model_category_V08: 0,
+        cmsHcc_model_category_V22_for_2023_payment_year: "No",
+        cmsHcc_model_category_V24_for_2023_payment_year: "No",
+        rxHcc_model_category_V05_for_2023_payment_year: "Yes",
+        rxHcc_model_category_V08_for_2023_payment_year: "Yes",
+      },
+    ],
+  };
   const PopContent = (
-    <>
-      <div style={{ height: "200px" }}>
-        <div style={{ display: "flex", alignItems: "center" }}>
+    <div className={styles.innerPop}>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ width: "70%" }}>
           {btnItems?.map((data) => (
             <button
               onClick={() => {
@@ -138,15 +179,39 @@ const Header = ({ onNote }) => {
             </button>
           ))}
         </div>
-        <div
-          style={{
-            margin: "10px 50px",
-          }}
-        >
-          <Search searchlabel={""} setSearch={setSearch} />
+        <div style={{ width: "30%", marginTop: "-25px" }}>
+          {selectedbtn === "HCC" && (
+            <Selector
+              selectlabel={""}
+              setSelectedOption={setSelectedOption}
+              selectOptions={Options}
+              defaultSelectValue1={Options[0]}
+            />
+          )}
         </div>
       </div>
-    </>
+      <div
+        style={{
+          width: "80%",
+          margin: "10px 50px",
+        }}
+      >
+        <Search
+          searchlabel={""}
+          setSearch={setSearch}
+          style={{ border: "1px solid red" }}
+        />
+      </div>
+      <div className={styles.displayDiv}>
+        {codeDta?.response
+          ? codeDta?.response?.map((data) => (
+              <div className={styles.hoverDiv}>
+                {data?.diagnosisCode} {data?.description}
+              </div>
+            ))
+          : null}
+      </div>
+    </div>
   );
 
   const TerminalComponent = dynamic(
@@ -234,11 +299,16 @@ const Header = ({ onNote }) => {
       addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
     }
     if (selectedbtn) {
-      dispatch(getCoderDetails({ name: selectedbtn?.toLowerCase(), router }));
+      dispatch(
+        getCoderDetails({
+          name: selectedbtn?.toLowerCase(),
+          search: search,
+          router,
+        })
+      );
     }
-  }, [msgReply, selectedbtn]);
+  }, [msgReply, selectedbtn, search]);
 
-  console.log(codDetails);
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -283,7 +353,7 @@ const Header = ({ onNote }) => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-                        {userRole !== "Admin" && (
+                        {userRole !== "admin" && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
