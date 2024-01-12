@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../store/actions/ReportActions";
 import SpinnerDots from "../../spinner";
 import { Empty } from "antd";
+import { dateFormate } from "../../headerFilters/functions";
 
 function ReceivedReport({
   details,
@@ -48,7 +49,9 @@ function ReceivedReport({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
-    router?.push(`/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`);
+    router?.push(
+      `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`
+    );
   };
 
   return (
@@ -79,9 +82,7 @@ function ReceivedReport({
               </thead>
               <tbody>
                 {detailsContent?.map((row, index) => {
-                  const formattedDate = row.receiveDate
-                    ? dayjs(row.sendDate).format("DD/MM/YY")
-                    : "Invalid Date";
+                  const formattedDate = dateFormate(dayjs,row?.sendDate);
 
                   return (
                     <tr

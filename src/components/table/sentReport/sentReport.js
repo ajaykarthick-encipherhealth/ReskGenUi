@@ -5,6 +5,7 @@ import { Empty, Modal, Popover } from "antd";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import SpinnerDots from "../../spinner";
+import { dateFormate } from "../../headerFilters/functions";
 
 function SentReportTable({
   details,
@@ -77,9 +78,8 @@ function SentReportTable({
 
               <tbody>
                 {details?.data?.map((row, index) => {
-                  const formattedDate = row.sendDate
-                    ? dayjs(row?.sendDate).format("DD/MM/YYYY")
-                    : "Invalid Date";
+                  const formattedDate = dateFormate(dayjs,row?.sendDate);
+
                   return (
                     <tr key={index} style={{ height: "40px" }}>
                       <td
