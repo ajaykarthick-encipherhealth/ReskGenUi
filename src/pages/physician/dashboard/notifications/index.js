@@ -12,7 +12,7 @@ import NoNotification from "../../../../images/dashboard/no-notification.png";
 const Notifications = () => {
   const [openNotifications, setOpenNotification] = useState(false);
   const notificationResponse = useSelector(
-    (state) => state?.notificationDatas?.notificationList
+    (state) => state?.notificationDatas?.notificationList.content
   );
 
   const handleOpen = () => {
