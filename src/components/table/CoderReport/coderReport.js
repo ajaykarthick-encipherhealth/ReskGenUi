@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Badge, Empty, Popconfirm, Popover } from "antd";
+import React, { useEffect } from "react";
+import { Badge, Empty} from "antd";
 import TableStyle from "../table.module.css";
 import moment from "moment";
 import { SVGICON } from "../../../jsx/constant/theme";
@@ -7,7 +7,8 @@ import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../jsx/layouts/Footer";
-import SpinnerDots from "../../spinner";
+import dayjs from 'dayjs'
+import { dateFormate } from "../../headerFilters/functions";
 
 function CoderReport({
   setModal,
@@ -182,11 +183,8 @@ function CoderReport({
                         // onClick={setModal(false)}
                         className={TableStyle.childBorder}
                       >
-                        {row?.processedDate ? (
-                          moment(row?.processedDate).format("MM-DD-YYYY")
-                        ) : (
-                          <span color="#6e6e6e">MM-DD-YYYY</span>
-                        )}
+                        {/* {row?.processedDate} */}
+                        {dateFormate(dayjs,row?.processedDate)}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {/* <Popconfirm title="" description={msgContent}> */}
@@ -261,9 +259,8 @@ function CoderReport({
                         // onClick={setModal(false)}
                         className={TableStyle.childBorder}
                       >
-                        {row?.processedDate
-                          ? moment(row?.processedDate).format("MM-DD-YYYY")
-                          : "MM-DD-YYYY"}
+                        {dateFormate(dayjs,row?.processedDate)}
+                        
                       </td>
                       <td className={TableStyle.childBorder}>
                         {/* <Popconfirm title="" description={msgContent}> */}
