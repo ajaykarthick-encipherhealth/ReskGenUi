@@ -1,9 +1,4 @@
 // for search
-// const performanceSearch = (value, setSearch) => {
-//   setSearch(value);
-// };
-// const debouncedSearch = debounce(performanceSearch, 500);
-
 export const searchFunction = (e, setSearch) => {
   setSearch(e.target.value);
 };
@@ -51,4 +46,8 @@ export const handleRnagePicker2 = (
   setStartDate2(formattedDates[0]);
   setEndDate2(formattedDates[1]);
   setSelectedDates2(date);
+};
+
+export const dateFormate = (dayjs, date) => {
+  return date ? dayjs(date).format("MM-DD-YYYY") : <div >MM-DD-YYYY</div>;
 };

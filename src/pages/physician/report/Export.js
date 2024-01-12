@@ -22,7 +22,7 @@ const Export = ({
   rowsLength,
   setIsModalVisible,
   setSelectedRows,
-  setSelectAll
+  setSelectAll,
 }) => {
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
@@ -142,8 +142,10 @@ const Export = ({
   };
 
   const filteredOptions =
-    options &&
-    options.filter((option) => !selectedUser?.user?.includes(option.value));
+    userList &&
+    options?.filter((option) => {
+      return !userList?.some((data) => data?.user?.includes(option?.label));
+    });
 
   const debouncedSearch = debounce((value) => {
     setSearch(value);
@@ -178,10 +180,10 @@ const Export = ({
       });
     });
     setSelectedRows([]);
-    setSelectAll(false)
-    setTimeout(()=>{
+    setSelectAll(false);
+    setTimeout(() => {
       setIsModalVisible(false);
-    },500)
+    }, 500);
   };
 
   const deleteUser = (user) => {
@@ -350,7 +352,7 @@ const Export = ({
                     selectedUser &&
                     selectedUser[0]?.user &&
                     selectedUser[0]?.role &&
-                    selectedUser[0]?.user?.length<=1
+                    selectedUser[0]?.user?.length <= 1
                       ? false
                       : true
                   }

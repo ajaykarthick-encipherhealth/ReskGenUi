@@ -19,7 +19,7 @@ const Selector = ({
           options={selectOptions}
           className="custom-react-select"
           isSearchable={false}
-          defaultSelectValue1={defaultSelectValue1}
+          placeholder={defaultSelectValue1?.label}
         />
       </div>
     </div>

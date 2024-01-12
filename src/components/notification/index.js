@@ -10,7 +10,7 @@ import moment from 'moment';
 
 const Notification = ({ notificationResponse }) => {
   const [openMsg, setOpenMsg] = useState(false);
-
+  const notificationData = notificationResponse?.content;
   const emailSplitFunction = (email) => {
     let emailSplit = email.split("@");
     return capitalizeFirstLetter(emailSplit[0]);
@@ -27,7 +27,7 @@ const Notification = ({ notificationResponse }) => {
     <div className={`card-body chatbox contacts_body p-0`} id='DZ_W_Contacts_Body' >
       {!openMsg ?
       <ul className='contacts'>
-        {notificationResponse?.map(
+        {notificationData?.map(
           (data, i) => (
             <li
               className='active dlab-chat-user'            

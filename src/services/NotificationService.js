@@ -6,7 +6,7 @@ export const NotificationList = async (Id) => {
     try {
       const response = await axios.get(
         `
-         ${ENDPOINTS?.apiEndoint}communication/notification/${Id}?page=${1}&limit=100`,
+         ${ENDPOINTS?.apiEndoint}communication/notification/${Id}?page=${0}&limit=100`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
