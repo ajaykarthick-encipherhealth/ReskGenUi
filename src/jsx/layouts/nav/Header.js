@@ -84,7 +84,7 @@ const codeDta = {
 };
 
 const Header = () => {
-  const dispatchValue = useDispatch();
+  const dispatch = useDispatch();
   const router = useRouter();
   const notificationAlertData = useSelector(
     (state) => state?.notificationDatas?.notificationAlert
@@ -92,6 +92,8 @@ const Header = () => {
   const notificationResponse = useSelector(
     (state) => state?.notificationDatas?.notificationList
   );
+  const msgReply = useSelector((state) => state.workFlow.chatReply);
+
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -104,6 +106,15 @@ const Header = () => {
   const [search, setSearch] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
+
+  const getStatus = (data) => {
+    if (data?.cmsHcc_model_category_V22_for_2023_payment_year === "Yes") {
+      return "CMS";
+    } else if (data?.rxHcc_model_category_V05_for_2023_payment_year === "Yes") {
+      return "RX";
+    } else return "";
+  };
+
   const onClose = () => {
     setOpen(false);
     setOpenMsg(false);
@@ -157,14 +168,6 @@ const Header = () => {
     // setUserIdDetails(response.data.response);
   };
   const percentage = 95;
-
-  const getStatus = (data) => {
-    if (data?.cmsHcc_model_category_V22_for_2023_payment_year === "Yes") {
-      return "CMS";
-    } else if (data?.rxHcc_model_category_V05_for_2023_payment_year === "Yes") {
-      return "RX";
-    } else return "";
-  };
   const PopContent = (
     <div className={styles.innerPop}>
       <div
@@ -246,9 +249,6 @@ const Header = () => {
     }
   );
 
-  const dispatch = useDispatch();
-  const msgReply = useSelector((state) => state.workFlow.chatReply);
-
   const handleNewUserMessage = (newMessage) => {
     dispatch(getChatReply(newMessage));
   };
@@ -319,12 +319,12 @@ const Header = () => {
         getCoderDetails({
           name: selectedbtn?.toLowerCase(),
           search: search,
-          selectedOption:selectedOption,
+          selectedOption: selectedOption,
           router,
         })
       );
     }
-  }, [msgReply, selectedbtn, search,selectedOption]);
+  }, [msgReply, selectedbtn, search, selectedOption]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -417,29 +417,12 @@ const Header = () => {
                           className="header-media d-flex"
                           onClick={logoutFunction}
                         >
-                          {/* <Image src={IMAGES.profileImage}/> */}
-
                           <div>
-                            {/* <Dropdown>
-<Dropdown.Toggle
-className="nav-link i-false"
-as="div"
-> */}
                             <div className="header-info2 d-flex align-items-center">
                               <div className="header-media">
                                 <Image src={IMAGES.profileImage} />
                               </div>
                             </div>
-                            {/* </Dropdown.Toggle> */}
-                            {/* <Dropdown.Menu align="end">
-<div className=" border-0 mb-0">
-<span className="dropdown-item ai-icon ">
-{SVGICON.Logout}{" "}
-<span className="ms-2">Logout </span>
-</span>
-</div>
-</Dropdown.Menu> */}
-                            {/* </Dropdown> */}
                           </div>
                         </div>
                         <div className="mx-15">

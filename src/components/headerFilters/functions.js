@@ -1,9 +1,4 @@
 // for search
-// const performanceSearch = (value, setSearch) => {
-//   setSearch(value);
-// };
-// const debouncedSearch = debounce(performanceSearch, 500);
-
 export const searchFunction = (e, setSearch) => {
   setSearch(e.target.value);
 };
