@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import { UsersList,AddUser } from "../../../services/adminServices/usersService";
 
 export const LIST='LIST'
@@ -37,12 +38,18 @@ export const getUsers = ({pageCount,search,startDate,endDate,status,role}) => {
                 type:CREATE,
                 payload: response.data,
               });
-              dispatch(getUsers(0))
+              
+              if(response?.status ==='SUCCESS'){
+                notification?.success(response?.message)
+                dispatch(getUsers(0))
+              }
             }
           });
        }
       } catch (err) {
         console.log(err);
+    notification?.error(err?.response?.data?.message);
+
       }
     };
   };

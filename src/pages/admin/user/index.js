@@ -16,6 +16,7 @@ import {
 } from "../../../store/actions/adminAction/usersAction";
 import { Paginator } from "primereact/paginator";
 import SpinnerDots from "../../../components/spinner";
+import Footer from "../../../jsx/layouts/Footer";
 
 const UserList = () => {
   const dispatch = useDispatch();
@@ -90,7 +91,7 @@ const UserList = () => {
     const value = e.target.value;
     setFormData({ ...formData, [key]: value });
     if (key == "role") {
-      setRoleValue(value);
+      setRoleValue([value]);
     }
   };
 
@@ -101,7 +102,7 @@ const UserList = () => {
       formData.tenantId = localTenantId;
       formData.orgId = localOrgId;
       formData.role = roleValue;
-      dispatch(getAddUser(formData));
+      dispatch(getAddUser(formData,));
     }
     setValidated(true);
   };
@@ -196,7 +197,7 @@ const UserList = () => {
   useEffect(() => {
     if (usersData) {
       setUserListAll(usersData);
-      setTotalElements(usersData?.response?.totalElements);
+      setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
 
@@ -486,6 +487,7 @@ const UserList = () => {
           </div>
         </Offcanvas>
       </div>
+      <Footer />
     </>
   );
 };

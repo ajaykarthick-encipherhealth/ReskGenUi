@@ -1,19 +1,20 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
+import { notification } from "antd";
 
 export const UsersList = async ({
-  pageCount,
-  search,
-  startDate,
-  endDate,
-  status,
-  role,
+  pageCount = 0,
+  search = "",
+  startDate = "",
+  endDate = "",
+  status = "",
+  role = "",
 }) => {
   const token = localStorage.getItem("token");
   const selectedStatus = status === "ALL" ? "" : status;
   try {
     const response = await axios.get(
-      ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&compuationStart=${startDate}&compuatationEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}`,
+      ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,11 +29,10 @@ export const UsersList = async ({
 
 export const AddUser = async (data) => {
   const token = localStorage.getItem("token");
-  console.log("hg", data);
   try {
     const response = await axios.post(
       ` ${ENDPOINTS?.apiEndoint}securityservice/admin/getusers/createuser`,
-      data ,
+      data,
 
       {
         headers: {
@@ -42,6 +42,7 @@ export const AddUser = async (data) => {
     );
     return response;
   } catch (err) {
-    console.log(err);
+    console.log(err?.response?.data?.message)
+    notification.error(err?.response?.data?.message);
   }
 };

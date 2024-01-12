@@ -56,15 +56,13 @@ export default function AdminList({ userList }) {
                 style={{ height: "40px !important" }}
               >
                 <span>
-                  {moment(item.createdDate).format("DD/MM/YYYY hh:mm A")}
+                  {item?.createdDate?moment(item?.createdDate).format("MM-DD-YYYY"):"---"}
                 </span>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <Footer />
     </div>
   );
 }
