@@ -34,7 +34,8 @@ const UserList = () => {
   const [totalElements, setTotalElements] = useState(10);
 
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     emailId: "",
     password: "",
     role: "",
@@ -100,7 +101,7 @@ const UserList = () => {
       formData.tenantId = localTenantId;
       formData.orgId = localOrgId;
       formData.role = roleValue;
-      dispatch(getAddUser({ data: formData }));
+      dispatch(getAddUser(formData));
     }
     setValidated(true);
   };
@@ -371,10 +372,21 @@ const UserList = () => {
                 <div className="row">
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
-                      Name <span className="text-danger">*</span>{" "}
+                      First Name <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
-                      name="name"
+                      name="firstName"
+                      required
+                      type="text"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-xl-6 mb-3">
+                    <Form.Label>
+                      Last Name <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <Form.Control
+                      name="lastName"
                       required
                       type="text"
                       onChange={handleChange}
@@ -427,7 +439,8 @@ const UserList = () => {
                       onChange={handleChange}
                     >
                       <option value="ADMIN">ADMIN</option>
-                      <option value="CODER">CODER</option>
+                      <option value="L1AUDITOR">L1AUDITOR</option>
+                      <option value="L2AUDITOR">L2AUDITOR</option>
                     </Form.Control>
                   </div>
                   <div className="col-xl-6 mb-3">

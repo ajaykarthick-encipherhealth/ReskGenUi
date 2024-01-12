@@ -27,12 +27,11 @@ export const getUsers = ({pageCount,search,startDate,endDate,status,role}) => {
     };
   };
 
-  export const getAddUser = ({data}) => {
+  export const getAddUser = (data) => {
     return (dispatch) => {
       try {
        if(data){
-        console.log(data)
-        AddUser({data}).then((response) => {
+        AddUser(data).then((response) => {
             if (response) {
               dispatch({
                 type:CREATE,

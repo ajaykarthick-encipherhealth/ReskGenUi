@@ -10,7 +10,7 @@ export const UsersList = async ({
   role,
 }) => {
   const token = localStorage.getItem("token");
-  const selectedStatus=status==='ALL'?"":status
+  const selectedStatus = status === "ALL" ? "" : status;
   try {
     const response = await axios.get(
       ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&compuationStart=${startDate}&compuatationEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}`,
@@ -26,13 +26,13 @@ export const UsersList = async ({
   }
 };
 
-export const AddUser = async ( {data }) => {
+export const AddUser = async (data) => {
   const token = localStorage.getItem("token");
-  console.log("hg",data)
+  console.log("hg", data);
   try {
     const response = await axios.post(
       ` ${ENDPOINTS?.apiEndoint}securityservice/admin/getusers/createuser`,
-      { data },
+      data ,
 
       {
         headers: {
