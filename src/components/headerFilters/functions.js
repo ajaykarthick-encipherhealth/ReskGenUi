@@ -1,11 +1,11 @@
 // for search
-const performanceSearch = (value, setSearch) => {
-  setSearch(value);
-};
-const debouncedSearch = debounce(performanceSearch, 500);
+// const performanceSearch = (value, setSearch) => {
+//   setSearch(value);
+// };
+// const debouncedSearch = debounce(performanceSearch, 500);
 
 export const searchFunction = (e, setSearch) => {
-  debouncedSearch(e.target.value, setSearch);
+  setSearch(e.target.value);
 };
 
 // for select
@@ -14,23 +14,23 @@ export const handleSelector = (option, setSelectedOption) => {
 };
 
 // for rangepicker
-export const handleRnagePicker = (
+export const handleRnagePicker = ({
   date,
   dateString,
   setStartDate,
   setEndDate,
-  setSelectedDates
-) => {
-  const formattedDates = dateString?.map((date, index) => {
+  setSelectedDates,
+}) => {
+  const formattedDates = dateString?.map((data, index) => {
     const formattedDate =
       index === 1
-        ? date && `${date}T23:59:59.999Z`
-        : date && `${date}T00:00:00.000Z`;
+        ? data && `${data}T23:59:59.999Z`
+        : data && `${data}T00:00:00.000Z`;
     return formattedDate;
   });
+  setSelectedDates(date);
   setStartDate(formattedDates[0]);
   setEndDate(formattedDates[1]);
-  setSelectedDates(date);
 };
 
 // if has 2 rangepickers

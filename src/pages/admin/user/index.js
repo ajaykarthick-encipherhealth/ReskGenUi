@@ -25,6 +25,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import AdminList from "../../../components/table/admin/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
+import HeaderFilters from "../../../components/headerFilters";
 
 const UserList = () => {
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -76,9 +77,9 @@ const UserList = () => {
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("");
   const [status, setSelectedStatus] = useState("");
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDates, setSelectedDates] = useState();
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEnddate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -101,14 +102,14 @@ const UserList = () => {
     setLocalTenantId(tenId);
     setLocalUserId(uId);
     setLocalOrgId(orgId);
-    getAllList(tenId, orgId, pageDataCount, pageLimitCount, "");
-  }, []);
+    getAllList(search,startDate,endDate,status);
+  }, [search,startDate,endDate,status]);
 
-  const getAllList = async (tenId, orgId, page, limit, status) => {
-    var apiUrl = `management/admin/getusers?orgId=${orgId}&tenantId=${tenId}&status=${status}&page=${page}&limit=${15}`;
+  const getAllList = async (search,startDate,endDate,status) => {
+    var apiUrl = `dbservice/user/admin/filter?page=0&size=15&searchString=${search}&compuationStart=${startDate}&compuatationEnd=${endDate}&isEnabled=${status}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + apiUrl);
-    var result = response.data.response;
-    if (response.data.response) {
+    var result = response.data.response.content;
+    if (response?.data) {
       setUserList(result != null ? result : []);
       setIsDataLoading(false);
       setIsLoading(false);
@@ -178,9 +179,9 @@ const UserList = () => {
   };
 
   const options3 = [
-    { value: "1", label: "ALL" },
-    { value: "2", label: "Enabled" },
-    { value: "3", label: "Disabled" },
+    { value: "ALL", label: "ALL" },
+    { value: "true", label: "Enabled" },
+    { value: "false", label: "Disabled" },
   ];
   const RoleList = [
     { value: "Coder(Level 1)", label: "Coder(Level 1)" },
@@ -250,66 +251,6 @@ const UserList = () => {
     }));
   };
 
-  // const userEdit = (data) => {
-  //   setAddUser(true);
-  // };
-  // const userDelete = (data) => {
-  //   Swal.fire({
-  //     title: "Do you want delete!",
-  //     text: data.name,
-  //     icon: "warning",
-  //     confirmButtonText: "Logout",
-  //     showCancelButton: true,
-  //     confirmButtonText: "Yes",
-  //     confirmButtonColor: "#DD6B55",
-  //     closeOnConfirm: false,
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       deletUser(data.userId);
-  //     }
-  //   });
-  // };
-
-  // function validate_password(password) {
-  //   let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-  //   if (password.match(check)) {
-  //     console.log("Your password is strong.");
-  //   } else {
-  //     console.log("Meh, not so much.");
-  //   }
-  // }
-
-  // const statusBodyTemplate = (rowData) => {
-  //   switch (rowData.accountStatus) {
-  //     case true:
-  //       return (
-  //         <span key={rowData.userId}>
-  //           {" "}
-  //           <Switch
-  //             id={rowData.userId}
-  //             onChange={(event) => switchHandler(event, rowData.userId)}
-  //             checked
-  //             checkedChildren="Enabled"
-  //             unCheckedChildren="Disabled"
-  //           />
-  //         </span>
-  //       );
-
-  //     case false:
-  //       return (
-  //         <span key={rowData.userId}>
-  //           {" "}
-  //           <Switch
-  //             id={rowData.userId}
-  //             onChange={(event) => switchHandler(event, rowData.userId)}
-  //             checked={false}
-  //             checkedChildren="Enabled"
-  //             unCheckedChildren="Disabled"
-  //           />
-  //         </span>
-  //       );
-  //   }
-  // };
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -348,43 +289,13 @@ const UserList = () => {
     setValidated(true);
   };
 
-  // const actionBodyTemplate = (rowData) => {
-  //   return (
-  //     <div className="d-flex">
-  //       <button
-  //         onClick={() => userEdit(rowData)}
-  //         className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
-  //       >
-  //         <FontAwesomeIcon icon={faPencilAlt} fontSize={11} />
-  //       </button>
-  //       <button
-  //         onClick={() => userDelete(rowData)}
-  //         className="btn hegiht10 btn-danger shadow  sharp me-1 action-btn"
-  //       >
-  //         <FontAwesomeIcon icon={faTrash} fontSize={11} />
-  //       </button>
-  //     </div>
-  //   );
-  // };
-  // const addPatientFormId = () => {
-  //   setValidated(false);
-  //   setAddPatientId(true);
-  // };
   const handleChangePatientId = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
     setInputValuePatientId({ ...inputValuePatientId, [key]: value });
   };
-  const handlePicker = (date, dateString) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1 ? `${date}T23:59:59.999Z` : `${date}T00:00:00.000Z`;
-      return formattedDate;
-    });
-    setStartDate(formattedDates[0]);
-    setEndDate(formattedDates[1]);
-    setSelectedDates(date);
-  };
+
+  console.log(search,role,status,startDate,endDate)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -396,78 +307,36 @@ const UserList = () => {
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
                     <div className="tbl-caption  align-items-center">
-                      <div className="row" style={{ marginLeft: "5px" }}>
-                        <div className="col-xl-2">
-                          <label>Search by Name</label>
-                          <div class="form-group has-search">
-                            <FontAwesomeIcon
-                              className="fa fa-search form-control-feedback"
-                              icon={faSearch}
-                            />
-                            <InputText
-                              type="text"
-                              onChange={(e) => setSearch(e.target.value)}
-                              className="form-control new-form-control"
-                              placeholder="Search"
-                            />
-                          </div>
-                        </div>
-                        <div className="col-xl-2">
-                          <label>Select Range</label>
-                          <div>
-                            <RangePicker
-                              value={selectedDates}
-                              onChange={handlePicker}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-xl-2">
-                          <label>Select Role</label>
-                          <div class="form-group has-search">
-                            <Select
-                              onChange={(selectedOption) => {
-                                setRole(selectedOption?.value);
-                              }}
-                              options={RoleList}
-                              defaultValue={RoleList[0]}
-                              className="custom-react-select"
-                              isSearchable={false}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-xl-2">
-                          <label>Select Status</label>
-                          <div class="form-group has-search">
-                            <Select
-                              onChange={(selectedOption) => {
-                                setSelectedStatus(selectedOption?.value);
-                              }}
-                              options={options3}
-                              defaultValue={options3[0]}
-                              className="custom-react-select"
-                              isSearchable={false}
-                            />
-                          </div>
-                        </div>
+                    <HeaderFilters
+                       setSearch={setSearch}
+                       isSearch={true}
+                       searchlabel="Search By Username"
+                        // select status
+                       selectlabel="Select Status"
+                       isSelector={true}
+                       setSelectedOption={setSelectedStatus}
+                       selectOptions={options3}
+                       defaultSelectValue1={options3[0]}
+                      
+                      //  selecte Role
+                        selectlabel2="Select Role"
+                        selectOptions2={RoleList}
+                        defaultSelectValue2={RoleList[0]}
+                        setSelectedOption2={setRole}
 
-                        <div className="col-xl-4">
-                          <Button
-                            onClick={addUserForm}
-                            className="btn btn-primary btn-sm ms-2 flr"
-                          >
-                            + Add User
-                          </Button>
-                        </div>
-                        {/* <div className="col-xl-2"  style={{width:"14% !important"}}>
-                             
-							 <Button
-							   onClick={addPatientFormId}
-							   className="btn btn-primary btn-sm ms-2 flr"
-							 >
-							   + Add Patient Id
-							 </Button>
-						   </div> */}
-                      </div>
+                        // computation date
+                        pickerlabel="Select Range"
+                        selectedDates={selectedDates}
+                        setSelectedDates={setSelectedDates}
+                        defaultStartDate={""}
+                        defaultEndDate={""}
+                        setStartDate={setStartDate}
+                        setEndDate={setEndDate}
+                        isRangePicker={true}
+                  
+                       
+                      />
+                
                     </div>
                     <div
                       id="task-tbl_wrapper"

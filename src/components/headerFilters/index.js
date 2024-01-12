@@ -30,12 +30,13 @@ const HeaderFilters = ({
   selectlabel2,
   defaultSelectValue2,
   selectOptions2,
-  onSelectChange2,
+  setSelectedOption2,
 
   // for picker
   pickerlabel,
   activeTab,
   selectedDates,
+  setSelectedDates,
   defaultStartDate,
   defaultEndDate,
   setStartDate,
@@ -106,7 +107,7 @@ const HeaderFilters = ({
           <div class="form-group has-search">
             <Select
               onChange={(selectedOption) => {
-                onSelectChange2(selectedOption);
+                setSelectedOption2(selectedOption?.value);
               }}
               options={selectOptions2}
               defaultValue={defaultSelectValue2}
@@ -125,6 +126,7 @@ const HeaderFilters = ({
             defaultEndDate={defaultEndDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
+            setSelectedDates={setSelectedDates}
           />
         </div>
       )}

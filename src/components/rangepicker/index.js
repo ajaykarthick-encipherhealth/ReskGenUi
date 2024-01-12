@@ -1,6 +1,7 @@
 import { DatePicker } from "antd";
 import React from "react";
 import { handleRnagePicker } from "../headerFilters/functions";
+import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 const DateRangePicker = ({
@@ -10,6 +11,7 @@ const DateRangePicker = ({
   setEndDate,
   defaultStartDate,
   defaultEndDate,
+  setSelectedDates,
 }) => {
   return (
     <div>
@@ -17,16 +19,23 @@ const DateRangePicker = ({
       <div>
         <RangePicker
           value={selectedDates}
-          onChange={handleRnagePicker(
-            date,
-            dateString,
-            setStartDate,
-            setEndDate
-          )}
-          defaultValue={[
-            dayjs(defaultStartDate, "MM-DD-YYYY"),
-            dayjs(defaultEndDate, "MM-DD-YYYY"),
-          ]}
+          onChange={(date, dateString) =>
+            handleRnagePicker({
+              date,
+              dateString,
+              setStartDate,
+              setEndDate,
+              setSelectedDates,
+            })
+          }
+          defaultValue={
+            defaultEndDate && defaultStartDate
+              ? [
+                  dayjs(defaultStartDate, "MM-DD-YYYY"),
+                  dayjs(defaultEndDate, "MM-DD-YYYY"),
+                ]
+              : []
+          }
         />
       </div>
     </div>

@@ -36,7 +36,7 @@ export default function AdminList({ userList, getAllList }) {
           </tr>
         </thead>
         <tbody>
-          {userList?.record?.map((item, index) => (
+          {userList?.map((item, index) => (
             <tr key={index} style={{ height: "35px" }}>
               <td
                 className={TableStyle.childBorder}
