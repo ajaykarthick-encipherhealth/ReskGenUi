@@ -12,6 +12,7 @@ import { NotificationReducer } from "./reducers/NotificationReducer";
 import { createWrapper } from "next-redux-wrapper";
 import { AdminPatientsReducer } from "./reducers/adminRecucers/fileProcessingReducer";
 import { AdminPatientsListReducer } from "./reducers/adminRecucers/patientsReducers"
+import { AdminUsersReducer } from "./reducers/adminRecucers/usewrsReducer";
 
 const middleware = applyMiddleware(thunk);
 
@@ -28,7 +29,8 @@ const reducers = combineReducers({
   patients:PatientsReducer,
   notificationDatas:NotificationReducer,
   adminPatient:AdminPatientsReducer,
-  adminList:AdminPatientsListReducer
+  adminList:AdminPatientsListReducer,
+  adminUsers:AdminUsersReducer,
   //form: reduxFormReducer,
 });
 
