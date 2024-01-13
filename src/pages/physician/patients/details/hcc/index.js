@@ -415,6 +415,7 @@ const Hcc = ({ patientHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
+            providerName:res.providerName
           });
         });
 
@@ -2532,7 +2533,7 @@ const Hcc = ({ patientHccResult }) => {
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-          {moment(res).format("MM/DD/YYYY")}
+          {moment(res).format("MMM/DD")}
         </span>
       );
       return sectionMapArr;
@@ -2789,6 +2790,17 @@ const Hcc = ({ patientHccResult }) => {
                                       <div
                                         className={`${visitStyles.hoverActiveHcc}`}
                                       >
+                                        {data.providerName ?
+                                         <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >                                            
+                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
+                                            <i>{SVGICON.patientNameIcon}</i>
+                                            {
+                                                data.providerName
+                                            }
+                                          </Badge>
+                                        </div>:null}
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
