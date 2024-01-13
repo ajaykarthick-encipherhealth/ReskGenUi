@@ -38,7 +38,6 @@ import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
 import AllocateModal from "../../../admin/allocatedUser/allocate";
 
-
 const Details = ({}) => {
   const navigate = useRouter();
   const { RangePicker } = DatePicker;
@@ -125,16 +124,13 @@ const Details = ({}) => {
   const [allocateModal, setAllocateModal] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
 
-
-
-
   const flagPostList = [
     {
       value: "PATIENT_NAME_MISSED",
       label: (
         <>
-          PATIENT_NAME_MISSED{" "}
-          <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmall}</i>{" "}
+          PATIENT_NAME_MISSED
+          <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -142,8 +138,8 @@ const Details = ({}) => {
       value: "PATIENT_DOB_MISSED",
       label: (
         <>
-          PATIENT_DOB_MISSED{" "}
-          <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmall}</i>{" "}
+          PATIENT_DOB_MISSED
+          <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -151,8 +147,8 @@ const Details = ({}) => {
       value: "MRN_ID_MISMATCH",
       label: (
         <>
-          MRN_ID_MISMATCH{" "}
-          <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i>{" "}
+          MRN_ID_MISMATCH
+          <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -160,8 +156,8 @@ const Details = ({}) => {
       value: "PROVIDER_SIGN_MISSED",
       label: (
         <>
-          PROVIDER_SIGN_MISSED{" "}
-          <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i>{" "}
+          PROVIDER_SIGN_MISSED
+          <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -169,10 +165,10 @@ const Details = ({}) => {
       value: "PROVIDER_SIGNATURE_MISSED",
       label: (
         <>
-          PROVIDER_SIGNATURE_MISSED{" "}
+          PROVIDER_SIGNATURE_MISSED
           <i className={visitStyles.signature_missed}>
             {SVGICON.emptyFlagSmall}
-          </i>{" "}
+          </i>
         </>
       ),
     },
@@ -180,8 +176,8 @@ const Details = ({}) => {
       value: "PROVIDER_CREDENTIAL_MISSED",
       label: (
         <>
-          PROVIDER_CREDENTIAL_MISSED{" "}
-          <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmall}</i>{" "}
+          PROVIDER_CREDENTIAL_MISSED
+          <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -189,8 +185,8 @@ const Details = ({}) => {
       value: "PROVIDER_SIGN_STATUS_PENDING",
       label: (
         <>
-          PROVIDER_SIGN_STATUS_PENDING{" "}
-          <i className={visitStyles.sign_status}>{SVGICON.emptyFlagSmall}</i>{" "}
+          PROVIDER_SIGN_STATUS_PENDING
+          <i className={visitStyles.sign_status}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -198,8 +194,8 @@ const Details = ({}) => {
       value: "NO_HCC_FOUND",
       label: (
         <>
-          NO_HCC_FOUND{" "}
-          <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmall}</i>{" "}
+          NO_HCC_FOUND
+          <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -207,19 +203,30 @@ const Details = ({}) => {
       value: "NO_VALID_DOCUMENT_FOUND",
       label: (
         <>
-          NO_VALID_DOCUMENT_FOUND{" "}
-          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmall}</i>{" "}
+          NO_VALID_DOCUMENT_FOUND
+          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
     {
-      value: "PATIENT_DISEASED",
+      value: "PATIENT_DECEASED",
       label: (
         <>
-          PATIENT_DISEASED{" "}
+          PATIENT_DECEASED
           <i className={visitStyles.patient_diseased}>
             {SVGICON.emptyFlagSmall}
-          </i>{" "}
+          </i>
+        </>
+      ),
+    },
+    {
+      value: "PATIENT_INACTIVE",
+      label: (
+        <>
+          PATIENT_INACTIVE
+          <i className={visitStyles.patient_inactive}>
+            {SVGICON.emptyFlagSmall}
+          </i>
         </>
       ),
     },
@@ -301,10 +308,12 @@ const Details = ({}) => {
     );
     setPatienIdDetails(response.data.response);
     var result = response.data.response;
-    var data = [{
-      id: result.patientId,
-      name: result.patientName,
-    }]
+    var data = [
+      {
+        id: result.patientId,
+        name: result.patientName,
+      },
+    ];
     setSelectedRowsId(data);
     const menu = (
       <Menu>
@@ -624,12 +633,11 @@ const Details = ({}) => {
           `dbservice/patient/compute/get?patientid=${patientId}&orgid=${localOrgId}`
       );
       if (response.data) {
-      var result = response.data.response;
-      setPatientDocumentResult(result);  
+        var result = response.data.response;
+        setPatientDocumentResult(result);
       }
       setActiveTab(1);
-      setIsLoadingDos(false);  
-      
+      setIsLoadingDos(false);
     }
     if (pageTitle == "NON HCC") {
       setActiveTab(2);
@@ -793,8 +801,7 @@ const Details = ({}) => {
       dos: selectedDosValue,
     };
 
-
-   try {
+    try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
         postData
@@ -1259,10 +1266,66 @@ const Details = ({}) => {
 
     setUserDetails(data);
   };
+  const renderFlagIcon = (flag) => {
+    switch (flag) {
+      case "PATIENT_NAME_MISSED":
+        return (
+          <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmall}</i>
+        );
+      case "PATIENT_DOB_MISSED":
+        return (
+          <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmall}</i>
+        );
+      case "MRN_ID_MISMATCH":
+        return (
+          <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i>
+        );
+      case "PROVIDER_SIGN_MISSED":
+        return (
+          <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i>
+        );
+      case "PROVIDER_SIGNATURE_MISSED":
+        return (
+          <i className={visitStyles.signature_missed}>
+            {SVGICON.emptyFlagSmall}
+          </i>
+        );
+      case "PROVIDER_CREDENTIAL_MISSED":
+        return (
+          <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmall}</i>
+        );
+      case "PROVIDER_SIGN_STATUS_PENDING":
+        return (
+          <i className={visitStyles.sign_status}>{SVGICON.emptyFlagSmall}</i>
+        );
+      case "NO_HCC_FOUND":
+        return (
+          <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmall}</i>
+        );
+      case "NO_VALID_DOCUMENT_FOUND":
+        return (
+          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmall}</i>
+        );
+      case "PATIENT_DECEASED":
+        return (
+          <i className={visitStyles.patient_diseased}>
+            {SVGICON.emptyFlagSmall}
+          </i>
+        );
+      case "PATIENT_INACTIVE":
+        return (
+          <i className={visitStyles.patient_inactive}>
+            {SVGICON.emptyFlagSmall}
+          </i>
+        );
+      default:
+        return null;
+    }
+  };
 
-  const allocatePatient = () =>{
+  const allocatePatient = () => {
     setAllocateModal(true);
-  }
+  };
 
   return (
     <>
@@ -1328,7 +1391,7 @@ const Details = ({}) => {
                               <div className="col-xl-2 col-sm-12">
                                 <i className={visitStyles.dob_icon}>
                                   {SVGICON.DatebirthIcon}
-                                </i>{" "}
+                                </i>
                                 <label>DOB</label>
                                 <h6 className="ageDtails">
                                   {patientDocumentResult.dob}
@@ -1342,7 +1405,7 @@ const Details = ({}) => {
                         <div className={visitStyles.priorityStatus}>
                           {patienIdDetails?.priority == "URGENT" ? (
                             <div className={visitStyles.priorityStatusIcon}>
-                              <i>{SVGICON.alert}</i>{" "}
+                              <i>{SVGICON.alert}</i>
                               <span
                                 style={{
                                   fontSize: "13px",
@@ -1351,7 +1414,7 @@ const Details = ({}) => {
                                 }}
                               >
                                 Urgent
-                              </span>{" "}
+                              </span>
                             </div>
                           ) : patienIdDetails.priority == "HIGH" ? (
                             <div className={visitStyles.priorityStatusIcon}>
@@ -1366,8 +1429,7 @@ const Details = ({}) => {
                                 }}
                               >
                                 High
-                              </span>{" "}
-
+                              </span>
                             </div>
                           ) : patienIdDetails.priority == "NORMAL" ? (
                             <div className={visitStyles.priorityStatusIcon}>
@@ -1382,14 +1444,13 @@ const Details = ({}) => {
                                 }}
                               >
                                 Normal
-                              </span>{" "}
+                              </span>
                             </div>
-
                           ) : (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i className={TableStyle.lowFlag}>
                                 {SVGICON.alert}
-                              </i>{" "}
+                              </i>
                               <span
                                 style={{
                                   fontSize: "13px",
@@ -1398,7 +1459,7 @@ const Details = ({}) => {
                                 }}
                               >
                                 Low
-                              </span>{" "}
+                              </span>
                             </div>
                           )}
 
@@ -1505,12 +1566,21 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PATIENT_DISEASED" ? (
+                          ) : flagFirstData.flag == "PATIENT_DECEASED" ? (
                             <Tooltip
-                              title="PATIENT_DISEASED"
+                              title="PATIENT_DECEASED"
                               placement="bottom"
                             >
                               <i className={visitStyles.patient_diseased}>
+                                {SVGICON.emptyFlagSmallLarge}
+                              </i>
+                            </Tooltip>
+                          ) : flagFirstData.flag == "PATIENT_INACTIVE" ? (
+                            <Tooltip
+                              title="PATIENT_INACTIVE"
+                              placement="bottom"
+                            >
+                              <i className={visitStyles.patient_inactive}>
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
@@ -1557,34 +1627,27 @@ const Details = ({}) => {
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">
-                        {userRole == "admin" ?
-                        <div className={`${visitStyles.actionbtnContainer}`}>
-                          <div className="patient-status"     onClick={() => {
-                                    allocatePatient();
-                                  }}>
-              <span className={`badge processed-text cr-pointer`}>ALLOCATE</span>
-            </div>
-                        </div> : <div className={`${visitStyles.actionbtnContainer}`}>
-                          {patienIdDetails.processedStatus == "COMPLETED" ? (
-                            <Dropdown.Button
-                              type="primary"
-                              className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
-                              icon={<DownOutlined />}
-                              overlay={
-                                activeTab == 3
-                                  ? actionItems2
-                                  : activeTab == 4
-                                  ? actionItems3
-                                  : actionItems
-                              }
+                        {userRole == "admin" ? (
+                          <div className={`${visitStyles.actionbtnContainer}`}>
+                            <div
+                              className="patient-status"
+                              onClick={() => {
+                                allocatePatient();
+                              }}
                             >
-                              COMPLETED
-                            </Dropdown.Button>
-                          ) : patienIdDetails.processedStatus == "DECLINED" ? (
-                            <div className={`col-xl-12`}>
+                              <span
+                                className={`badge processed-text cr-pointer`}
+                              >
+                                ALLOCATE
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className={`${visitStyles.actionbtnContainer}`}>
+                            {patienIdDetails.processedStatus == "COMPLETED" ? (
                               <Dropdown.Button
                                 type="primary"
-                                className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
+                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
                                 icon={<DownOutlined />}
                                 overlay={
                                   activeTab == 3
@@ -1594,29 +1657,30 @@ const Details = ({}) => {
                                     : actionItems
                                 }
                               >
-                                DECLINED
+                                COMPLETED
                               </Dropdown.Button>
-                            </div>
-                          ) : patienIdDetails.processedStatus == "HOLD" ? (
-                            <Dropdown.Button
-                              type="primary"
-                              className={`holdBtnHcc ${visitStyles.holdBtnHcc}`}
-                              icon={<DownOutlined />}
-                              overlay={
-                                activeTab == 3
-                                  ? actionItems2
-                                  : activeTab == 4
-                                  ? actionItems3
-                                  : actionItems
-                              }
-                            >
-                              HOLD
-                            </Dropdown.Button>
-                          ) : (
-                            <div className={`col-xl-12`}>
+                            ) : patienIdDetails.processedStatus ==
+                              "DECLINED" ? (
+                              <div className={`col-xl-12`}>
+                                <Dropdown.Button
+                                  type="primary"
+                                  className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
+                                  icon={<DownOutlined />}
+                                  overlay={
+                                    activeTab == 3
+                                      ? actionItems2
+                                      : activeTab == 4
+                                      ? actionItems3
+                                      : actionItems
+                                  }
+                                >
+                                  DECLINED
+                                </Dropdown.Button>
+                              </div>
+                            ) : patienIdDetails.processedStatus == "HOLD" ? (
                               <Dropdown.Button
                                 type="primary"
-                                className={`pendingBtn ${visitStyles.pendingBtn}`}
+                                className={`holdBtnHcc ${visitStyles.holdBtnHcc}`}
                                 icon={<DownOutlined />}
                                 overlay={
                                   activeTab == 3
@@ -1626,11 +1690,28 @@ const Details = ({}) => {
                                     : actionItems
                                 }
                               >
-                                PENDING
+                                HOLD
                               </Dropdown.Button>
-                            </div>
-                          )}
-                        </div>}
+                            ) : (
+                              <div className={`col-xl-12`}>
+                                <Dropdown.Button
+                                  type="primary"
+                                  className={`pendingBtn ${visitStyles.pendingBtn}`}
+                                  icon={<DownOutlined />}
+                                  overlay={
+                                    activeTab == 3
+                                      ? actionItems2
+                                      : activeTab == 4
+                                      ? actionItems3
+                                      : actionItems
+                                  }
+                                >
+                                  PENDING
+                                </Dropdown.Button>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <div
                         className={
@@ -1684,7 +1765,7 @@ const Details = ({}) => {
                                         >
                                           <div className="menu-icon">
                                             <Image src={data.iconStyle} />
-                                          </div>{" "}
+                                          </div>
                                           <span
                                             className={`${visitStyles.sideNavText}`}
                                           >
@@ -1767,7 +1848,7 @@ const Details = ({}) => {
                             <div className="row">
                               <div className="col-xl-12 mb-3">
                                 <Form.Label>
-                                  Reason <span className="text-danger">*</span>{" "}
+                                  Reason <span className="text-danger">*</span>
                                 </Form.Label>
                                 <textarea
                                   className="form-control"
@@ -1817,7 +1898,7 @@ const Details = ({}) => {
                             <div className="row">
                               <div className="col-xl-12 mb-3">
                                 <Form.Label>
-                                  Reason <span className="text-danger">*</span>{" "}
+                                  Reason <span className="text-danger">*</span>
                                 </Form.Label>
                                 <textarea
                                   className="form-control"
@@ -1867,7 +1948,7 @@ const Details = ({}) => {
                             <div className="row">
                               <div className="col-xl-12 mb-3">
                                 <Form.Label>
-                                  Reason <span className="text-danger">*</span>{" "}
+                                  Reason <span className="text-danger">*</span>
                                 </Form.Label>
                                 <textarea
                                   className="form-control"
@@ -1917,7 +1998,7 @@ const Details = ({}) => {
                             <div className="row">
                               <div className="col-xl-12 mb-3">
                                 <Form.Label>
-                                  Reason <span className="text-danger">*</span>{" "}
+                                  Reason <span className="text-danger">*</span>
                                 </Form.Label>
                                 <textarea
                                   className="form-control"
@@ -1967,7 +2048,7 @@ const Details = ({}) => {
                             <div className="row">
                               <div className="col-xl-12 mb-3">
                                 <Form.Label>
-                                  Reason <span className="text-danger">*</span>{" "}
+                                  Reason <span className="text-danger">*</span>
                                 </Form.Label>
                                 <textarea
                                   className="form-control"
@@ -2027,8 +2108,8 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Patient Id{" "}
-                                <span className="text-danger">*</span>{" "}
+                                Patient Id
+                                <span className="text-danger">*</span>
                               </Form.Label>
                               <Form.Control
                                 name="patientId"
@@ -2040,8 +2121,8 @@ const Details = ({}) => {
                             </div>
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Year of Service{" "}
-                                <span className="text-danger">*</span>{" "}
+                                Year of Service
+                                <span className="text-danger">*</span>
                               </Form.Label>
                               <Form.Control
                                 name="year"
@@ -2110,8 +2191,8 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Patient Id{" "}
-                                <span className="text-danger">*</span>{" "}
+                                Patient Id
+                                <span className="text-danger">*</span>
                               </Form.Label>
                               <Form.Control
                                 name="patientId"
@@ -2123,8 +2204,8 @@ const Details = ({}) => {
                             </div>
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Year of Service{" "}
-                                <span className="text-danger">*</span>{" "}
+                                Year of Service
+                                <span className="text-danger">*</span>
                               </Form.Label>
                               <Form.Control
                                 name="year"
@@ -2444,7 +2525,6 @@ const Details = ({}) => {
                                             visitStyles.timelineheading
                                           }
                                         >
-                                          {" "}
                                           {item.diagnosisCode} - Moved from
                                           invalid to valid
                                         </span>
@@ -2494,7 +2574,7 @@ const Details = ({}) => {
                                             visitStyles.timelineheading
                                           }
                                         >
-                                          Changed from{" "}
+                                          Changed from
                                           {item.previousProcessedState} to
                                           COMPLETD
                                         </span>
@@ -2554,7 +2634,7 @@ const Details = ({}) => {
                                             visitStyles.timelineheading
                                           }
                                         >
-                                          Changed from{" "}
+                                          Changed from
                                           {item.previousProcessedState} to HOLD
                                         </span>
                                       ) : item.action == "DECLINED" ? (
@@ -2563,10 +2643,9 @@ const Details = ({}) => {
                                             visitStyles.timelineheading
                                           }
                                         >
-                                          {" "}
-                                          Changed from{" "}
+                                          Changed from
                                           {item.previousProcessedState} to
-                                          DECLINED{" "}
+                                          DECLINED
                                         </span>
                                       ) : item.action == "PENDING" ? (
                                         <span
@@ -2574,16 +2653,14 @@ const Details = ({}) => {
                                             visitStyles.timelineheading
                                           }
                                         >
-                                          {" "}
-                                          Changed from{" "}
+                                          Changed from
                                           {item.previousProcessedState} to
-                                          DECLINED{" "}
+                                          DECLINED
                                         </span>
                                       ) : null}
                                       <span
                                         className={visitStyles.timelineDate}
                                       >
-                                        {" "}
                                         {moment(item.createdDate).format(
                                           "MM-DD-YYYY hh:mm:A"
                                         )}
@@ -2669,8 +2746,7 @@ const Details = ({}) => {
                               className={visitStyles.circleCard}
                               onClick={handleFilterClick}
                             >
-                              {" "}
-                              <span></span>{" "}
+                              <span></span>
                               {showIcons ? (
                                 <FontAwesomeIcon
                                   icon={faClose}
@@ -2838,7 +2914,6 @@ const Details = ({}) => {
                                 </Tooltip>
                               </div>
                               <span className={visitStyles.commentsTime}>
-                                {" "}
                                 {moment(data.commentCreatedAt).format(
                                   "MM-DD-YYYY hh:mm:A"
                                 )}
@@ -2892,54 +2967,13 @@ const Details = ({}) => {
                           </Form>
 
                           {flagResultList.map((data, index) => (
-                            <div className={visitStyles.comments_card}>
+                            <div
+                              className={visitStyles.comments_card}
+                              key={index}
+                            >
                               <div className={`${visitStyles.commentNameHead}`}>
                                 <span className={visitStyles.commentsName}>
-                                  {data.flag}
-                                  {data.flag == "PATIENT_NAME_MISSED" ? (
-                                    <i className={visitStyles.name_missed}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag == "PATIENT_DOB_MISSED" ? (
-                                    <i className={visitStyles.dob_missed}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag == "MRN_ID_MISMATCH" ? (
-                                    <i className={visitStyles.id_missed}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag == "PROVIDER_SIGN_MISSED" ? (
-                                    <i className={visitStyles.sign_missed}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag ==
-                                    "PROVIDER_SIGNATURE_MISSED" ? (
-                                    <i className={visitStyles.signature_missed}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag ==
-                                    "PROVIDER_CREDENTIAL_MISSED" ? (
-                                    <i className={visitStyles.cred_missed}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag ==
-                                    "PROVIDER_SIGN_STATUS_PENDING" ? (
-                                    <i className={visitStyles.sign_status}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag == "NO_HCC_FOUND" ? (
-                                    <i className={visitStyles.no_hcc_found}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag == "NO_VALID_DOCUMENT_FOUND" ? (
-                                    <i className={visitStyles.no_doc_found}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : data.flag == "PATIENT_DISEASED" ? (
-                                    <i className={visitStyles.patient_diseased}>
-                                      {SVGICON.emptyFlagSmall}
-                                    </i>
-                                  ) : null}
+                                  {data.flag && renderFlagIcon(data.flag)}
                                 </span>
                                 <Tooltip
                                   placement="bottom"
@@ -2964,7 +2998,6 @@ const Details = ({}) => {
                                 {data.comments}
                               </span>
                               <span className={visitStyles.commentsTime}>
-                                {" "}
                                 {moment(data.commentCreatedAt).format(
                                   "MM-DD-YYYY hh:mm:A"
                                 )}
@@ -3033,7 +3066,6 @@ const Details = ({}) => {
                                 </Tooltip>
                               </div>
                               <span className={visitStyles.commentsTime}>
-                                {" "}
                                 {moment(data.notesCreatedAt).format(
                                   "MM-DD-YYYY hh:mm:A"
                                 )}
