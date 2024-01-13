@@ -2,8 +2,13 @@ import React from "react";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import Footer from "../../../../jsx/layouts/Footer";
+import { Switch } from "antd";
 
 export default function AdminList({ userList }) {
+  const onChange = (item,checked) => {
+    console.log(item)
+    console.log(`switch to ${checked}`);
+  };
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -15,6 +20,7 @@ export default function AdminList({ userList }) {
             <th>Email</th>
             <th>Role</th>
             <th>Date Created</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -58,6 +64,11 @@ export default function AdminList({ userList }) {
                 <span>
                   {item?.createdDate?moment(item?.createdDate).format("MM-DD-YYYY"):"---"}
                 </span>
+              </td>
+              <td
+                className={TableStyle.lastBorder}
+               style={{ height: "40px !important" }}>
+              <Switch defaultChecked onChange={(checked)=>onChange(item,checked)} style={{color:"red"}} />
               </td>
             </tr>
           ))}
