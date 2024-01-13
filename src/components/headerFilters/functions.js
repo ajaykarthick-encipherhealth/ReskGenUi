@@ -9,13 +9,13 @@ export const handleSelector = (option, setSelectedOption) => {
 };
 
 // for rangepicker
-export const handleRnagePicker = ({
+export const handleRnagePicker = (
   date,
   dateString,
   setStartDate,
   setEndDate,
   setSelectedDates,
-}) => {
+) => {
   const formattedDates = dateString?.map((data, index) => {
     const formattedDate =
       index === 1
@@ -23,18 +23,18 @@ export const handleRnagePicker = ({
         : data && `${data}T00:00:00.000Z`;
     return formattedDate;
   });
-  setSelectedDates(date);
+  // setSelectedDates(date);
   setStartDate(formattedDates[0]);
   setEndDate(formattedDates[1]);
 };
 
 // if has 2 rangepickers
-export const handleRnagePicker2 = (
+export const handleRnagePicker2 = ({
   date,
   dateString,
   setStartDate2,
   setEndDate2,
-  setSelectedDates2
+  setSelectedDates2}
 ) => {
   const formattedDates = dateString?.map((date, index) => {
     const formattedDate =
@@ -45,7 +45,7 @@ export const handleRnagePicker2 = (
   });
   setStartDate2(formattedDates[0]);
   setEndDate2(formattedDates[1]);
-  setSelectedDates2(date);
+  // setSelectedDates2(date);
 };
 
 export const dateFormate = (dayjs, date) => {
