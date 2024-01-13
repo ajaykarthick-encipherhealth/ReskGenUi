@@ -106,7 +106,25 @@ function AddPatientListTable({
             </td>
 
             <td
-             style={{textAlign:"center"}}
+              className={TableStyle.childBorder}
+              style={{ textAlign: "center" }}
+            >
+              {data?.allocatedBy ? data?.allocatedBy : "--"}
+            </td>
+            <td
+              className={TableStyle.childBorder}
+              style={{ textAlign: "center" }}
+            >
+              {data?.createdBy ? data?.createdBy : "--"}
+            </td>
+            <td
+              className={TableStyle.childBorder}
+              style={{ textAlign: "center" }}
+            >
+              {data?.patientAllocated ? data?.patientAllocated : "--"}
+            </td>
+            <td
+              style={{ textAlign: "center" }}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
@@ -115,7 +133,7 @@ function AddPatientListTable({
                 : "---"}
             </td>
             <td
-             style={{textAlign:"center"}}
+              style={{ textAlign: "center" }}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
@@ -124,13 +142,16 @@ function AddPatientListTable({
                 : "---"}
             </td>
             <td
-             style={{marginLeft:"10px"}}
+              style={{ marginLeft: "10px" }}
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
               {statusBodyTemplate(data)}
             </td>
-            <td className={TableStyle.lastBorder}  style={{textAlign:"center"}}>
+            <td
+              className={TableStyle.lastBorder}
+              style={{ textAlign: "center" }}
+            >
               {actionBodyTemplate(data)}
             </td>
           </tr>
@@ -146,9 +167,11 @@ function AddPatientListTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-
+            <th style={{ textAlign: "center" }}>ALLOCATED BY</th>
+            <th style={{ textAlign: "center" }}>ALLOCATED TO</th>
+            <th style={{ textAlign: "center" }}>CREATED BY</th>
             <th
-             style={{textAlign:"center"}}
+              style={{ textAlign: "center" }}
               onClick={() => {
                 requestSort("lastModifiedDate");
                 sortTableByDate();
@@ -164,7 +187,7 @@ function AddPatientListTable({
               </span>
             </th>
             <th
-             style={{textAlign:"center"}}
+              style={{ textAlign: "center" }}
               onClick={() => {
                 requestSort("lastModifiedDate");
                 sortTableByDate();
@@ -180,7 +203,7 @@ function AddPatientListTable({
               </span>
             </th>
 
-            <th style={{paddingLeft:"55px"}}>STATUS</th>
+            <th style={{ paddingLeft: "55px" }}>STATUS</th>
             <th>Upload</th>
           </tr>
         </thead>

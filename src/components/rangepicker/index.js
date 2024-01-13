@@ -20,13 +20,13 @@ const DateRangePicker = ({
         <RangePicker
           value={selectedDates}
           onChange={(date, dateString) =>
-            handleRnagePicker({
+            handleRnagePicker(
               date,
               dateString,
               setStartDate,
               setEndDate,
               setSelectedDates,
-            })
+            )
           }
           defaultValue={
             defaultEndDate && defaultStartDate

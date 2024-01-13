@@ -57,153 +57,236 @@ const HeaderFilters = ({
   handleExport,
   rowsLength,
   addUserForm,
-  isbullets,
   selectedRowsId,
   handleOpneModal,
   isAllocate,
 
-  // bullets
+  // allocatedBY
+  isAllocatedBySelector,
+  allocatedBylabel,
+  allocatedByOptoons,
+  setSelAllocatedBy,
+  defaultAllocatedBy,
+
+  // allocatedTo
+  isAllocatedToSelector,
+  allocatedTolabel,
+  allocatedToOptoons,
+  setSelAllocatedTo,
+  defaultAllocateTo,
+
+  // createdTo
+  isCreatedBySelector,
+  createdTolabel,
+  createdByOptoons,
+  setSelCreatedBy,
+  defaultCreatedBy,
+
+  bullets,
 }) => {
-  const bullets = [
-    {
-      color: "#FFB54D",
-      name: "Pending",
-    },
-    {
-      color: "#AD94FA",
-      name: "Hold",
-    },
-    {
-      color: "#EB5252",
-      name: "Declined",
-    },
-    {
-      color: "#B4EFBA",
-      name: "Completed",
-    },
-  ];
+  // const bullets = [
+  //   {
+  //     color: "#FFB54D",
+  //     name: "Pending",
+  //   },
+  //   {
+  //     color: "#AD94FA",
+  //     name: "Hold",
+  //   },
+  //   {
+  //     color: "#EB5252",
+  //     name: "Declined",
+  //   },
+  //   {
+  //     color: "#B4EFBA",
+  //     name: "Completed",
+  //   },
+  // ];
   return (
-    <div className="row filter-contain">
-      {isSearch && (
-        <div className="col-xl-2">
-          {" "}
-          <Search searchlabel={searchlabel} setSearch={setSearch} />
-        </div>
-      )}
-      {isSelector ? (
-        <div className="col-xl-2">
-          {" "}
-          <Selector
-            selectlabel={selectlabel}
-            setSelectedOption={setSelectedOption}
-            selectOptions={selectOptions}
-            defaultSelectValue1={defaultSelectValue1}
-          />
-        </div>
-      ) : null}
-      {selectOptions2 && (
-        <div className="col-xl-2">
-          <label>{selectlabel2}</label>
-          <div class="form-group has-search">
-            <Select
-              onChange={(selectedOption) => {
-                setSelectedOption2(selectedOption?.value);
-              }}
-              options={selectOptions2}
-              defaultValue={defaultSelectValue2}
-              className="custom-react-select"
-              isSearchable={false}
+    <>
+      <div className="row filter-contain">
+        {isSearch && (
+          <div className="col-xl-2">
+            {" "}
+            <Search searchlabel={searchlabel} setSearch={setSearch} />
+          </div>
+        )}
+        {isSelector ? (
+          <div className="col-xl-2" style={{ zIndex: "999" }}>
+            {" "}
+            <Selector
+              selectlabel={selectlabel}
+              setSelectedOption={setSelectedOption}
+              selectOptions={selectOptions}
+              defaultSelectValue1={defaultSelectValue1}
             />
           </div>
-        </div>
-      )}
-      {isRangePicker && (
-        <div className="col-xl-2">
-          <DateRangePicker
-            selectedDates={selectedDates}
-            pickerlabel={pickerlabel}
-            defaultStartDate={defaultStartDate}
-            defaultEndDate={defaultEndDate}
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            setSelectedDates={setSelectedDates}
-          />
-        </div>
-      )}
-
-      {isAnotherPicker && (
-        <>
+        ) : null}
+        {selectOptions2 && (
           <div className="col-xl-2">
-            <label>{pickerlabe2}</label>
-            <div>
-              <RangePicker
-                format="MM-DD-YYYY"
-                value={selectedDates2}
-                onChange={handleRnagePicker2(
-                  date,
-                  dateString,
-                  setStartDate2,
-                  setEndDate2
-                )}
-                defaultValue={[
-                  dayjs(defaultStartDate2, "MM-DD-YYYY"),
-                  dayjs(defaultEndDate2, "MM-DD-YYYY"),
-                ]}
+            <label>{selectlabel2}</label>
+            <div class="form-group has-search">
+              <Select
+                onChange={(selectedOption) => {
+                  setSelectedOption2(selectedOption?.value);
+                }}
+                options={selectOptions2}
+                defaultValue={defaultSelectValue2}
+                className="custom-react-select"
+                isSearchable={false}
               />
             </div>
           </div>
-
-          <div className={`${isbullets ? "col-xl-4" : "col-xl-4"}`}>
-            <div
-              className={visitStyles.flags_patientsList}
-              style={{ margin: "35px 0 0 20px" }}
-            >
-              <Legends bullets={bullets} />
-            </div>
+        )}
+        {isRangePicker && (
+          <div className="col-xl-2">
+            <DateRangePicker
+              selectedDates={selectedDates}
+              pickerlabel={pickerlabel}
+              defaultStartDate={defaultStartDate}
+              defaultEndDate={defaultEndDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              setSelectedDates={setSelectedDates}
+            />
           </div>
-        </>
-      )}
+        )}
 
-      {addUser && (
-        <div className={`${isbullets ? "col-xl-2" : "col-xl-4"}`}>
-          <Button
-            onClick={addUserForm}
-            className="btn btn-primary btn-sm ms-2 flr"
-          >
-            + Add User
-          </Button>
-        </div>
-      )}
-      {isAllocate && (
-        <div className="col-xl-8 mt-4">
-          <button
-            onClick={handleOpneModal}
-            className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
-            disabled={!selectedRowsId.length > 0}
-          >
-            Allocate
-          </button>
-        </div>
-      )}
-      {activeTab === "CoderReport" && (
-        <div className="col-xl-8  d-flex justify-content-end">
-          <div className="row flr">
-            <button
-              onClick={handleExport}
-              className={rowsLength?.length === 0 ? styles.csv : styles.export}
-              disabled={
-                rowsLength?.length > 0 || rowsLength?.data?.length > 0
-                  ? false
-                  : true
-              }
+        {isAnotherPicker && (
+          <>
+            <div className="col-xl-2">
+              <label>{pickerlabe2}</label>
+              <div>
+                <RangePicker
+                  format="MM-DD-YYYY"
+                  value={selectedDates2}
+                  onChange={(date, dateString) =>
+                    handleRnagePicker2({
+                      date,
+                      dateString,
+                      setStartDate2,
+                      setEndDate2,
+                    })
+                  }
+                  defaultValue={
+                    defaultEndDate2 && defaultStartDate2
+                      ? [
+                          dayjs(defaultStartDate2, "MM-DD-YYYY"),
+                          dayjs(defaultEndDate2, "MM-DD-YYYY"),
+                        ]
+                      : []
+                  }
+                />
+              </div>
+            </div>
+
+            {bullets && (
+              <div className={`${bullets ? "col-xl-3" : "col-xl-4"}`}>
+                <div
+                  className={visitStyles.flags_patientsList}
+                  style={{ margin: "35px 0 0 0px" }}
+                >
+                  <Legends bullets={bullets} />
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {addUser && (
+          <div className={`${bullets ? "col-xl-1" : "col-xl-4"}`}>
+            <Button
+              onClick={addUserForm}
+              className="btn btn-primary btn-sm ms-2 flr"
             >
-              <Export />
-              Export
+              + Add User
+            </Button>
+          </div>
+        )}
+        {isAllocate && (
+          <div className="col-xl-8 mt-4">
+            <button
+              onClick={handleOpneModal}
+              className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
+              disabled={!selectedRowsId.length > 0}
+            >
+              Allocate
             </button>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+        {activeTab === "CoderReport" && (
+          <div className="col-xl-8  d-flex justify-content-end">
+            <div className="row flr">
+              <button
+                onClick={handleExport}
+                className={
+                  rowsLength?.length === 0 ? styles.csv : styles.export
+                }
+                disabled={
+                  rowsLength?.length > 0 || rowsLength?.data?.length > 0
+                    ? false
+                    : true
+                }
+              >
+                <Export />
+                Export
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={{ marginTop: "40px" }}>
+        {isAllocatedBySelector &&
+          isAllocatedToSelector &&
+          isCreatedBySelector && (
+            <div className="row filter-contain">
+              <div className="col-xl-2">
+                <label>{allocatedBylabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    onChange={(selectedOption) => {
+                      setSelAllocatedBy(selectedOption?.value);
+                    }}
+                    options={allocatedByOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultAllocatedBy}
+                  />
+                </div>
+              </div>
+              <div className="col-xl-2">
+                <label>{allocatedTolabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    onChange={(selectedOption) => {
+                      setSelAllocatedTo(selectedOption?.value);
+                    }}
+                    options={allocatedToOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultAllocateTo}
+                  />
+                </div>
+              </div>
+              <div className="col-xl-2">
+                <label>{createdTolabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    onChange={(selectedOption) => {
+                      setSelCreatedBy(selectedOption?.value);
+                    }}
+                    options={createdByOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultCreatedBy}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+      </div>
+    </>
   );
 };
 

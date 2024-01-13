@@ -147,15 +147,15 @@ const Header = () => {
     );
     setUserIdDetails(response.data.response);
     var userId = response.data.response?.id;
-    dispatchValue(getNotificationList(userId));
+    dispatch(getNotificationList(userId));
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userId}?token=${token}`
     );
     sse.addEventListener("user-list-event", (event) => {
       const data = JSON.parse(event.data);
       if (data.length != 0) {
-        dispatchValue(getNotificationAlert(data));
-        dispatchValue(getNotificationList(userId));
+        dispatch(getNotificationAlert(data));
+        dispatch(getNotificationList(userId));
       }
     });
     sse.onerror = () => {

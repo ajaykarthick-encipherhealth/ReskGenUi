@@ -3,17 +3,28 @@ import ENDPOINTS from "../../utility/enpoints";
 
 export const PatientsList = async (
   pageNo,
-  computationStart="",
-  computationEnd="",
+  computationStart = "",
+  computationEnd = "",
   status,
-  search=""
+  search = "",
+  completedStartDate,
+  completedEndDate,
+  selAllocatedTo,
+  selAllocatedBy,
+  selCreatedBy
 ) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
   const filteredStatus = status === undefined ? "" : status;
   try {
     const response = await axios.get(
-      `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}`,
+      `  ${
+        ENDPOINTS?.apiEndoint
+      }dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&completedStartDate=${completedStartDate}&completedEndDate=${completedEndDate}&patientCreatedBy=${
+        selAllocatedBy === "All" ? "" : selAllocatedBy
+      }&patientAllocatedTo=${
+        selAllocatedTo === "All" ? "" : selAllocatedTo
+      }&patientAllocatedBy=${selCreatedBy === "All" ? "" : selCreatedBy}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
