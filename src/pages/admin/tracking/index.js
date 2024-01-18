@@ -42,6 +42,8 @@ export default function Patient() {
   const [dates, setDates] = useState(null);
   const [compledtedDate, setCompletedDate] = useState(null);
   const { RangePicker } = DatePicker;
+  const [selAllocatedTo, setSelAllocatedTo] = useState("");
+
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -184,6 +186,17 @@ export default function Patient() {
       });
     }
   };
+ 
+  const allocatedToOptions = [
+    { label: "All", value: "All" },
+    ...patinetListAll
+      ?.map((item) =>
+        item?.patientAllocated
+          ? { label: item?.patientAllocated, value: item?.patientAllocated }
+          : null
+      )
+      .filter(Boolean),
+  ]
 
   const processstatusBodyTemplate = (rowData) => {
     switch (rowData.processedStatus) {
@@ -366,7 +379,32 @@ export default function Patient() {
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
-                        <div className="row filter-contain">
+                        <HeaderFilters
+                          setSearch={setSearchTextValue}
+                          isSearch={true}
+                          searchlabel="Search By Username"
+                          // select status
+
+                          isSelector={false}
+                          // due date
+                          isRangePicker={true}
+                          setStartDate={setDueDateStart}
+                          setEndDate={setDueDateEnd}
+                          pickerlabel="Due date"
+                          j
+                          // completed date
+                          isAnotherPicker={true}
+                          setStartDate2={setProcessedStart}
+                          setEndDate2={setProcessedEnd}
+                          pickerlabel2="Completed date"
+                          // allocatedTo
+                          isAllocatedToSelector={true}
+                          allocatedTolabel="Allocated to"
+                          allocatedToOptoons={allocatedToOptions}
+                          setSelAllocatedTo={setSelAllocatedTo}
+                          defaultAllocateTo="All"
+                        />
+                        {/* <div className="row filter-contain">
                           <div className="col-xl-2">
                             <label>Search by Name or ID</label>
                             <div class="form-group has-search">
@@ -433,7 +471,7 @@ export default function Patient() {
                               />
                             </div>
                           </div>
-                          {/* <div className="col-xl-2">
+                          <div className="col-xl-2">
                             <label>Allocated To</label>
                             <div class="form-group has-search">
                               <Select
@@ -450,9 +488,9 @@ export default function Patient() {
                                 }
                               />
                             </div>
-                          </div> */}
+                          </div>
                           
-                        </div>
+                        </div> */}
                       </div>
 
                       <div

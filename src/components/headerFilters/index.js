@@ -237,54 +237,56 @@ const HeaderFilters = ({
       </div>
 
       <div style={{ marginTop: "40px" }}>
-        {isAllocatedBySelector &&
-          isAllocatedToSelector &&
-          isCreatedBySelector && (
-            <div className="row filter-contain">
-              <div className="col-xl-2">
-                <label>{allocatedBylabel}</label>
-                <div class="form-group has-search">
-                  <Select
-                    onChange={(selectedOption) => {
-                      setSelAllocatedBy(selectedOption?.value);
-                    }}
-                    options={allocatedByOptoons}
-                    className="custom-react-select"
-                    isSearchable={false}
-                    placeholder={defaultAllocatedBy}
-                  />
-                </div>
-              </div>
-              <div className="col-xl-2">
-                <label>{allocatedTolabel}</label>
-                <div class="form-group has-search">
-                  <Select
-                    onChange={(selectedOption) => {
-                      setSelAllocatedTo(selectedOption?.value);
-                    }}
-                    options={allocatedToOptoons}
-                    className="custom-react-select"
-                    isSearchable={false}
-                    placeholder={defaultAllocateTo}
-                  />
-                </div>
-              </div>
-              <div className="col-xl-2">
-                <label>{createdTolabel}</label>
-                <div class="form-group has-search">
-                  <Select
-                    onChange={(selectedOption) => {
-                      setSelCreatedBy(selectedOption?.value);
-                    }}
-                    options={createdByOptoons}
-                    className="custom-react-select"
-                    isSearchable={false}
-                    placeholder={defaultCreatedBy}
-                  />
-                </div>
+        <div className="row filter-contain">
+          {isAllocatedBySelector && (
+            <div className="col-xl-2">
+              <label>{allocatedBylabel}</label>
+              <div class="form-group has-search">
+                <Select
+                  onChange={(selectedOption) => {
+                    setSelAllocatedBy(selectedOption?.value);
+                  }}
+                  options={allocatedByOptoons}
+                  className="custom-react-select"
+                  isSearchable={false}
+                  placeholder={defaultAllocatedBy}
+                />
               </div>
             </div>
           )}
+          {isAllocatedToSelector && (
+            <div className="col-xl-2">
+              <label>{allocatedTolabel}</label>
+              <div class="form-group has-search">
+                <Select
+                  onChange={(selectedOption) => {
+                    setSelAllocatedTo(selectedOption?.value);
+                  }}
+                  options={allocatedToOptoons}
+                  className="custom-react-select"
+                  isSearchable={false}
+                  placeholder={defaultAllocateTo}
+                />
+              </div>
+            </div>
+          )}
+          {isCreatedBySelector && (
+            <div className="col-xl-2">
+              <label>{createdTolabel}</label>
+              <div class="form-group has-search">
+                <Select
+                  onChange={(selectedOption) => {
+                    setSelCreatedBy(selectedOption?.value);
+                  }}
+                  options={createdByOptoons}
+                  className="custom-react-select"
+                  isSearchable={false}
+                  placeholder={defaultCreatedBy}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
