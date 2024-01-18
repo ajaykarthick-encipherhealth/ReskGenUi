@@ -112,8 +112,8 @@ const DailyTask = () => {
       };
     });
     const sorted = processedDays?.sort((a, b) => {
-      const dateA = new Date(a.dateString);
-      const dateB = new Date(b.dateString);
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
       return dateA - dateB;
     });
     return setCurrentDays(sorted);
@@ -216,6 +216,7 @@ const DailyTask = () => {
       setSelectedDate(datas);
     }
   };
+
   return (
     <>
       <HeadTitle header="Daily Task" />
