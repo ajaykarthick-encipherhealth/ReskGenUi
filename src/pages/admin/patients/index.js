@@ -43,10 +43,10 @@ const bullets = [
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "ALL" },
-  { label: "PROCESSING", value: "PROCESSING", status: 1 },
-  { label: "COMPUTED", value: "COMPUTED", status: 2 },
-  { label: "NOT COMPUTED", value: "NOT COMPUTED", status: 0 },
+  { label: "ALL", value: "" },
+  { label: "PROCESSING", value: "1", status: 1 },
+  { label: "COMPUTED", value: "2", status: 2 },
+  { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 
 export default function Patient() {
@@ -128,45 +128,41 @@ export default function Patient() {
       )
       .filter(Boolean),
   ];
-  useEffect(
-    () => {
-      var tenId = localStorage.getItem("tenantId");
-      var uId = localStorage.getItem("userId");
-      var orgId = localStorage.getItem("orgId");
-      // var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-      setTenantId(tenId);
-      setLocalOrgId(orgId);
-      setLocalUserId(uId);
+  useEffect(() => {
+    var tenId = localStorage.getItem("tenantId");
+    var uId = localStorage.getItem("userId");
+    var orgId = localStorage.getItem("orgId");
+    // var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+    setTenantId(tenId);
+    setLocalOrgId(orgId);
+    setLocalUserId(uId);
 
-      dispatch(
-        getPatients(
-          pageNo,
-          computedStartDate,
-          computedEndDate,
-          selectedOption,
-          search,
-          completedStartDate,
-          completedEndDate,
-          selAllocatedTo,
-          selAllocatedBy,
-          selCreatedBy
-        )
-      );
-    },
-    [
-      pageNo,
-      pageSize,
-      search,
-      selectedOption,
-      computedStartDate,
-      computedEndDate,
-      completedStartDate,
-      completedEndDate,
-      selAllocatedTo,
-      selAllocatedBy,
-      selCreatedBy,
-    ]
-  );
+    dispatch(
+      getPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo,
+        selAllocatedBy,
+        selCreatedBy
+      )
+    );
+  }, [
+    pageNo,
+    computedStartDate,
+    computedEndDate,
+    selectedOption,
+    search,
+    completedStartDate,
+    completedEndDate,
+    selAllocatedTo,
+    selAllocatedBy,
+    selCreatedBy,
+  ]);
 
   useEffect(() => {
     if (response?.response) {

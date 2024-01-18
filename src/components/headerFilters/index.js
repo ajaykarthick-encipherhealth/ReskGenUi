@@ -158,7 +158,7 @@ const HeaderFilters = ({
               <label>{pickerlabe2}</label>
               <div>
                 <RangePicker
-                  format="MM-DD-YYYY"
+                  format="YYYY-MM-DD"
                   value={selectedDates2}
                   onChange={(date, dateString) =>
                     handleRnagePicker2({
@@ -171,8 +171,8 @@ const HeaderFilters = ({
                   defaultValue={
                     defaultEndDate2 && defaultStartDate2
                       ? [
-                          dayjs(defaultStartDate2, "MM-DD-YYYY"),
-                          dayjs(defaultEndDate2, "MM-DD-YYYY"),
+                          dayjs(defaultStartDate2, "YYYY-MM-DD"),
+                          dayjs(defaultEndDate2, "YYYY-MM-DD"),
                         ]
                       : []
                   }
@@ -237,56 +237,58 @@ const HeaderFilters = ({
       </div>
 
       <div style={{ marginTop: "40px" }}>
-        <div className="row filter-contain">
-          {isAllocatedBySelector && (
-            <div className="col-xl-2">
-              <label>{allocatedBylabel}</label>
-              <div class="form-group has-search">
-                <Select
-                  onChange={(selectedOption) => {
-                    setSelAllocatedBy(selectedOption?.value);
-                  }}
-                  options={allocatedByOptoons}
-                  className="custom-react-select"
-                  isSearchable={false}
-                  placeholder={defaultAllocatedBy}
-                />
+      
+            <div className="row filter-contain">
+              {isAllocatedBySelector &&
+              <div className="col-xl-2">
+                <label>{allocatedBylabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    onChange={(selectedOption) => {
+                      setSelAllocatedBy(selectedOption?.value);
+                    }}
+                    options={allocatedByOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultAllocatedBy}
+                  />
+                </div>
               </div>
-            </div>
-          )}
-          {isAllocatedToSelector && (
-            <div className="col-xl-2">
-              <label>{allocatedTolabel}</label>
-              <div class="form-group has-search">
-                <Select
-                  onChange={(selectedOption) => {
-                    setSelAllocatedTo(selectedOption?.value);
-                  }}
-                  options={allocatedToOptoons}
-                  className="custom-react-select"
-                  isSearchable={false}
-                  placeholder={defaultAllocateTo}
-                />
+}
+{isAllocatedToSelector &&
+              <div className="col-xl-2">
+                <label>{allocatedTolabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    onChange={(selectedOption) => {
+                      setSelAllocatedTo(selectedOption?.value);
+                    }}
+                    options={allocatedToOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultAllocateTo}
+                  />
+                </div>
               </div>
-            </div>
-          )}
-          {isCreatedBySelector && (
-            <div className="col-xl-2">
-              <label>{createdTolabel}</label>
-              <div class="form-group has-search">
-                <Select
-                  onChange={(selectedOption) => {
-                    setSelCreatedBy(selectedOption?.value);
-                  }}
-                  options={createdByOptoons}
-                  className="custom-react-select"
-                  isSearchable={false}
-                  placeholder={defaultCreatedBy}
-                />
+}
+{isCreatedBySelector &&
+              <div className="col-xl-2">
+                <label>{createdTolabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    onChange={(selectedOption) => {
+                      setSelCreatedBy(selectedOption?.value);
+                    }}
+                    options={createdByOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultCreatedBy}
+                  />
+                </div>
               </div>
+}
             </div>
-          )}
-        </div>
+            
       </div>
     </>
   );
