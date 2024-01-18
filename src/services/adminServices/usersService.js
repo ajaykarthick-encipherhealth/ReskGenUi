@@ -42,7 +42,40 @@ export const AddUser = async (data) => {
     );
     return response;
   } catch (err) {
-    console.log(err?.response?.data?.message)
-    notification.error(err?.response?.data?.message);
+    console.log(err?.response?.data?.message);
+    notification.error({ description: err?.response?.data?.message });
+  }
+};
+
+export const EnableUser = async (checked,userName,role) => {
+  const token = localStorage.getItem("token");
+  var tenId = localStorage.getItem("tenantId");
+  var uId = localStorage.getItem("userId");
+  var orgId = localStorage.getItem("orgId");
+
+  const data={
+    orgId: orgId,
+    tenantId: tenId,
+    userId: uId,
+    accountEnabled:checked,
+    userName:userName,
+  }
+  const datas=role? {...data,role:[role]}:data
+  console.log(datas)
+  try {
+    const response = await axios.put(
+      ` ${ENDPOINTS?.apiEndoint}/management/admin/updateuser`,
+      datas,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    notification.error({
+      description: err?.response?.data?.message || "An error occurred.",
+    });
   }
 };

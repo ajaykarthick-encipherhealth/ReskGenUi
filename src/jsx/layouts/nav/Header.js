@@ -310,11 +310,13 @@ const Header = () => {
     });
   }, []);
   useEffect(() => {
+    const userRoleLocal = localStorage.getItem("userRole");
+
     if (typeof window !== "undefined") {
       const { addResponseMessage } = require("react-chat-widget");
       addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
     }
-    if (selectedbtn) {
+    if (selectedbtn && userRoleLocal!=="admin" ) {
       dispatch(
         getCoderDetails({
           name: selectedbtn?.toLowerCase(),

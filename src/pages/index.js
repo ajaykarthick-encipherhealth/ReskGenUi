@@ -4,6 +4,7 @@ import Router from "next/router";
 export default class Index extends Component {
   componentDidMount = () => {
     var userLogin = localStorage.getItem("loginCheck");
+    
     if(userLogin == "true"){
       Router.push("/physician/dashboard");
     }else{
