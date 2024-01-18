@@ -1,6 +1,7 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
 import { notification } from "antd";
+import { ENABLE, getUsers } from "../../store/actions/adminAction/usersAction";
 
 export const UsersList = async ({
   pageCount = 0,
@@ -42,40 +43,50 @@ export const AddUser = async (data) => {
     );
     return response;
   } catch (err) {
-    console.log(err?.response?.data?.message);
     notification.error({ description: err?.response?.data?.message });
   }
 };
 
-export const EnableUser = async (checked,userName,role) => {
-  const token = localStorage.getItem("token");
-  var tenId = localStorage.getItem("tenantId");
-  var uId = localStorage.getItem("userId");
-  var orgId = localStorage.getItem("orgId");
+export const enableUser = (checked, user, role) => {
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    var tenId = localStorage.getItem("tenantId");
+    var orgId = localStorage.getItem("orgId");
 
-  const data={
-    orgId: orgId,
-    tenantId: tenId,
-    userId: uId,
-    accountEnabled:checked,
-    userName:userName,
-  }
-  const datas=role? {...data,role:[role]}:data
-  console.log(datas)
-  try {
-    const response = await axios.put(
-      ` ${ENDPOINTS?.apiEndoint}/management/admin/updateuser`,
-      datas,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const data = {
+      orgId: orgId,
+      tenantId: tenId,
+      userId: user?.userId,
+      accountEnabled: checked,
+      userName: user?.userName,
+    };
+
+    const datas = role ? { ...data, role: [role] } : data;
+
+    try {
+      const response = await axios.put(
+        `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
+        datas,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response?.data) {
+        dispatch({
+          type: ENABLE,
+          payload: response.data,
+        });
+        notification.success({
+          description: response?.data?.message,
+        });
+        dispatch(getUsers(0));
       }
-    );
-    return response;
-  } catch (err) {
-    notification.error({
-      description: err?.response?.data?.message || "An error occurred.",
-    });
-  }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 };
+

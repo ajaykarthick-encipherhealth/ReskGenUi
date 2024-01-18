@@ -66,27 +66,21 @@ export const getAddUser = (data) => {
   };
 };
 
-export const getEnableUser = (checked,userName,role, setSelectedRow) => {
-  return (dispatch) => {
-    try {
-   
-        EnableUser(checked,userName,role).then((response) => {
-          if (response) {
-            dispatch({
-              type: ENABLE,
-              payload: response.data,
-            });
-
-            if (response?.status === "SUCCESS") {
-              notification?.success({ description: response?.message });
-              dispatch(getUsers(0));
-              setSelectedRow(null);
-            }
-          }
-        });
-      
-    } catch (err) {
-      console.log(err);
-    }
-  };
-};
+// export const getEnableUser = (checked, userName, role) => {
+//   return (dispatch) => {
+//     try {
+//       EnableUser(checked, userName, role).then((response) => {
+//         if (response) {
+          // dispatch({
+          //   type: ENABLE,
+          //   payload: response.data,
+          // });
+//           dispatch(getUsers(0));
+          
+//         }
+//       });
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+// };

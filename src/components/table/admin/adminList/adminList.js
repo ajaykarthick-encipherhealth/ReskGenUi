@@ -5,7 +5,9 @@ import { Switch } from "antd";
 import { useDispatch } from "react-redux";
 import Selector from "../../../selector";
 import EditButton from "../../../../images/adminUsers/EditButton";
-import { getEnableUser } from "../../../../store/actions/adminAction/usersAction";
+// import { getEnableUser } from "../../../../store/actions/adminAction/usersAction";
+import { dateFormate } from "../../../headerFilters/functions";
+import { enableUser } from "../../../../services/adminServices/usersService";
 
 export default function AdminList({ userList }) {
   const dispatch = useDispatch();
@@ -14,14 +16,6 @@ export default function AdminList({ userList }) {
   const [checked, setChecked] = useState(false);
   const [rowData, setRowData] = useState();
 
-  // var tenId = localStorage.getItem("tenantId");
-  // var uId = localStorage.getItem("userId");
-  // var orgId = localStorage.getItem("orgId");
-  // const data = {
-  //   orgId: orgId,
-  //   tenantId: tenId,
-  //   userId: uId,
-  // };
   const filteredData = userList?.filter((item) => item?.id === selectedRow);
   const Options =
     filteredData?.flatMap((item) =>
@@ -31,20 +25,18 @@ export default function AdminList({ userList }) {
   const toggleEditRole = (rowId) => {
     setSelectedRow((prevRow) => (prevRow === rowId?.id ? null : rowId?.id));
     setRowData(rowId);
-    // dispatch(getEnableUser(checked,rowData?.userName,selectedOption, setSelectedRow));
+    setChecked(checked)
   };
 
   const onChange = (item, checked) => {
-    // setRowData(item);
-    // setChecked(checked);
-    dispatch(getEnableUser(checked, item?.userName, null, setSelectedRow));
+    dispatch(enableUser(checked, item, null, setSelectedRow));
   };
   useEffect(() => {
     if (selectedOption) {
       dispatch(
-        getEnableUser(
+        enableUser(
           checked,
-          rowData?.userName,
+          rowData,
           selectedOption,
           setSelectedRow
         )
@@ -98,7 +90,7 @@ export default function AdminList({ userList }) {
                 className={TableStyle.childBorder}
                 style={{ height: "40px !important" }}
               >
-                {selectedRow === item?.id && Options?.length > 1 ? (
+                {selectedRow === item?.id? (
                   <div style={{ margin: "-20px 0px 0px -20px", width: "70%" }}>
                     <Selector
                       selectlabel=""
@@ -116,11 +108,7 @@ export default function AdminList({ userList }) {
                 className={TableStyle.lastBorder}
                 style={{ height: "40px !important" }}
               >
-                <span>
-                  {item?.createdDate
-                    ? moment(item?.createdDate).format("MM-DD-YYYY")
-                    : "---"}
-                </span>
+                <span>{dateFormate(item?.createdDate)}</span>
               </td>
               <td
                 className={TableStyle.childBorder}
@@ -138,7 +126,7 @@ export default function AdminList({ userList }) {
                 style={{ height: "40px !important" }}
               >
                 <Switch
-                  defaultChecked
+                  defaultChecked={item?.accountStatus}
                   onChange={(checked) => onChange(item, checked)}
                   style={{ color: "red" }}
                 />
