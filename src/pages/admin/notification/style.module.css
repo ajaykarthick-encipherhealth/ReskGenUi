@@ -1,0 +1,12 @@
+
+.ant_select_form{
+    width: 100% !important;
+}
+.commentsFormControl {
+    border-radius: 6px;
+    border: 1px solid #cecece;
+    background: transparent;
+    width: 100%;
+    padding: 15px;
+  }
+  
