@@ -65,22 +65,3 @@ export const getAddUser = (data) => {
     }
   };
 };
-
-// export const getEnableUser = (checked, userName, role) => {
-//   return (dispatch) => {
-//     try {
-//       EnableUser(checked, userName, role).then((response) => {
-//         if (response) {
-          // dispatch({
-          //   type: ENABLE,
-          //   payload: response.data,
-          // });
-//           dispatch(getUsers(0));
-          
-//         }
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-// };

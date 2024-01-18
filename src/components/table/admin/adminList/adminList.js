@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
-import TableStyle from "../../table.module.css";
-import { Switch } from "antd";
 import { useDispatch } from "react-redux";
+import { Switch } from "antd";
+import TableStyle from "../../table.module.css";
 import Selector from "../../../selector";
 import EditButton from "../../../../images/adminUsers/EditButton";
-// import { getEnableUser } from "../../../../store/actions/adminAction/usersAction";
 import { dateFormate } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 
-export default function AdminList({ userList }) {
+const AdminList = ({ userList }) => {
   const dispatch = useDispatch();
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedOption, setSelectedOption] = useState();
@@ -25,7 +23,7 @@ export default function AdminList({ userList }) {
   const toggleEditRole = (rowId) => {
     setSelectedRow((prevRow) => (prevRow === rowId?.id ? null : rowId?.id));
     setRowData(rowId);
-    setChecked(checked)
+    setChecked(checked);
   };
 
   const onChange = (item, checked) => {
@@ -33,14 +31,7 @@ export default function AdminList({ userList }) {
   };
   useEffect(() => {
     if (selectedOption) {
-      dispatch(
-        enableUser(
-          checked,
-          rowData,
-          selectedOption,
-          setSelectedRow
-        )
-      );
+      dispatch(enableUser(checked, rowData, selectedOption, setSelectedRow));
     }
   }, [selectedOption]);
 
@@ -90,7 +81,7 @@ export default function AdminList({ userList }) {
                 className={TableStyle.childBorder}
                 style={{ height: "40px !important" }}
               >
-                {selectedRow === item?.id? (
+                {selectedRow === item?.id ? (
                   <div style={{ margin: "-20px 0px 0px -20px", width: "70%" }}>
                     <Selector
                       selectlabel=""
@@ -137,4 +128,6 @@ export default function AdminList({ userList }) {
       </table>
     </div>
   );
-}
+};
+
+export default AdminList;
