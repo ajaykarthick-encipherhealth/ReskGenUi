@@ -31,8 +31,8 @@ const DateRangePicker = ({
           defaultValue={
             defaultEndDate && defaultStartDate
               ? [
-                  dayjs(defaultStartDate, "MM-DD-YYYY"),
-                  dayjs(defaultEndDate, "MM-DD-YYYY"),
+                  dayjs(defaultStartDate, "YYYY-MM-DD"),
+                  dayjs(defaultEndDate, "YYYY-MM-DD"),
                 ]
               : []
           }

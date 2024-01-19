@@ -18,6 +18,17 @@ import { Paginator } from "primereact/paginator";
 import SpinnerDots from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 
+const options3 = [
+  { value: "ALL", label: "ALL" },
+  { value: "true", label: "Enabled" },
+  { value: "false", label: "Disabled" },
+];
+const RoleList = [
+  { value: "ADMIN", label: "Admin" },
+  { value: "L1AUDITOR", label: "L1Auditor" },
+  { value: "L2AUDITOR", label: "L2Auditor" },
+];
+
 const UserList = () => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
@@ -56,30 +67,6 @@ const UserList = () => {
     patientId: "",
     patientName: "",
   });
-  // const createUser = async (data) => {
-  //   setIsLoading(true);
-  //   const response = await axios.post(
-  //     ENDPOINTS.apiEndoint + `securityservice/admin/getusers/createuser`,
-  //     data
-  //   );
-  //   var result = response.data.response.record;
-  //   if (response?.status == 201) {
-  //     setAddUser(false);
-  //     getAllList(localTenantId, localOrgId, pageDataCount, pageLimitCount, "");
-  //   } else {
-  //   }
-  // };
-  // const deletUser = async (userId) => {
-  //   var apiUrl = `management/admin/user?userId=${userId}&orgId=${localOrgId}&tenantId=${localTenantId}`;
-  //   const response = await axios.delete(ENDPOINTS.apiEndoint + apiUrl);
-  //   var result = response.data.response;
-  //   if (response.data.response.record) {
-  //     setUserList(result != null ? result : []);
-  //     setIsDataLoading(false);
-  //     setIsLoading(false);
-  //     getAllList(tenId, orgId, pageDataCount, pageLimitCount, "");
-  //   }
-  // };
 
   const addUserForm = () => {
     setValidated(false);
@@ -116,17 +103,6 @@ const UserList = () => {
   //   } else {
   //   }
   // };
-
-  const options3 = [
-    { value: "ALL", label: "ALL" },
-    { value: "true", label: "Enabled" },
-    { value: "false", label: "Disabled" },
-  ];
-  const RoleList = [
-    { value: "ADMIN", label: "Admin" },
-    { value: "L1AUDITOR", label: "L1Auditor" },
-    { value: "L2AUDITOR", label: "L2Auditor" },
-  ];
 
   // const roleChange = async (e) => {
   //   console.log(e.value);

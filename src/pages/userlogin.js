@@ -23,7 +23,7 @@ export default function UserLogin() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const onLogin = async (e) => {
     setIsLoading(true);
     e.preventDefault();
@@ -83,13 +83,13 @@ export default function UserLogin() {
         });
       }
     } catch (err) {
-     if(err){
-      notification.error({
-        message: "Login Failed",
-        duration: 1,
-      });
-      setIsLoading(false);
-     }
+      if (err) {
+        notification.error({
+          message: "Login Failed",
+          duration: 1,
+        });
+        setIsLoading(false);
+      }
       // notification.error({
       //     message: "Login Failed"
       // });
@@ -97,11 +97,13 @@ export default function UserLogin() {
   };
   const items = [];
   const data = role?.map((info) => {
-    if(info.toLowerCase() ==="admin"){
-      items?.push({ value: "Admin", label:"Admin"},{ value: "L1auditor", label: 'L1auditor' });
-    }
-    else{
-      items?.push({ value: info, label: info })
+    if (info?.toLowerCase() === "admin") {
+      items?.push(
+        { value: "Admin", label: "Admin" },
+        { value: "L1auditor", label: "L1auditor" }
+      );
+    } else {
+      items?.push({ value: info, label: info });
     }
   });
   const onSubmitRole = (e) => {
@@ -115,13 +117,13 @@ export default function UserLogin() {
       });
       setRoleError(false);
       if (selectedRole === "admin" && !roleError) {
-        dispatch(selectedUserRole(selectedRole?.toUpperCase()))
-        localStorage.setItem("userRole", selectedRole)
-        router.push("/admin/user");
-      } else if(selectedRole === "l1auditor" && !roleError) {
-        dispatch(selectedUserRole(selectedRole?.toUpperCase()))
-        localStorage.setItem("userRole", selectedRole)
-        router.push("/physician/dashboard");
+        dispatch(selectedUserRole(selectedRole?.toUpperCase()));
+        localStorage.setItem("userRole", selectedRole);
+        router?.push("/admin/user");
+      } else if (selectedRole === "l1auditor" && !roleError) {
+        dispatch(selectedUserRole(selectedRole?.toUpperCase()));
+        localStorage.setItem("userRole", selectedRole);
+        router?.push("/physician/dashboard");
       }
     }
   };
@@ -195,7 +197,7 @@ export default function UserLogin() {
                         onClick={() => {
                           setDisplayRoles(false);
                           setIsLoading(false);
-                          setSelectedRole("")
+                          setSelectedRole("");
                         }}
                       >
                         {"BACK"}
