@@ -45,10 +45,28 @@ export const getPatients = (
   };
 };
 
-export const getTrackingList = (pageNo, pageSize) => {
+export const getTrackingList = (
+  pageNo,
+  dStart ,
+  dEnd ,
+  search,
+  status,
+  pStart,
+  pEnd,
+  selAllocatedTo
+) => {
   return (dispatch) => {
     try {
-      TrackingList(pageNo, pageSize).then((response) => {
+      TrackingList(
+        pageNo,
+        dStart ,
+        dEnd ,
+        search,
+        status,
+        pStart,
+        pEnd,
+        selAllocatedTo
+      ).then((response) => {
         if (response) {
           dispatch({
             type: TRACKING,

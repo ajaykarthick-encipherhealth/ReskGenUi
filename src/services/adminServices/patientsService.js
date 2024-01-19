@@ -15,7 +15,10 @@ export const PatientsList = async (
 ) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
-  const filteredStatus = status === undefined ? "" : status;
+ 
+  const filteredStatus =
+    status === undefined
+      ? "":status;
   try {
     const response = await axios.get(
       `  ${
@@ -37,15 +40,34 @@ export const PatientsList = async (
   }
 };
 
-export const TrackingList = async (url) => {
+export const TrackingList = async (
+  pageNo,
+  dStart = "",
+  dEnd = "",
+  search = "",
+  status,
+  pStart="",
+  pEnd="",
+  selAllocatedTo,
+  pageSize = 15
+) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
+
+  const filteredStatus =
+  status === undefined
+      ? "": status
   try {
-    const response = await axios.get(`  ${ENDPOINTS?.apiEndoint}${url}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/filter?userId=${uId}&page=${pageNo}&size=${pageSize}&computing=${filteredStatus}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${search}&patientAllocated=${
+          selAllocatedTo === "All" ? "" : selAllocatedTo
+        }`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response;
   } catch (err) {
     console.log(err);
