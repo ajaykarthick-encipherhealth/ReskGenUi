@@ -290,8 +290,8 @@ function CoderReport({
                         {dateFormate(dayjs, row?.processedDate)}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {/* <Popconfirm title="" description={msgContent}> */}
                         <div
+                          disabled={row?.comment ? false : true}
                           onClick={() => {
                             if (row?.comment) {
                               setComments(row?.comment);
@@ -304,7 +304,6 @@ function CoderReport({
                             ? SVGICON.comment
                             : SVGICON.emptyComments}
                         </div>
-                        {/* </Popconfirm> */}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.auditedBy ? row?.auditedBy : "---"}
@@ -362,15 +361,12 @@ function CoderReport({
                         {row?.patientName ? row?.patientName : "---"}
                       </td>
 
-                      <td
-                        // onClick={setModal(false)}
-                        className={TableStyle.childBorder}
-                      >
+                      <td className={TableStyle.childBorder}>
                         {dateFormate(dayjs, row?.processedDate)}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {/* <Popconfirm title="" description={msgContent}> */}
                         <div
+                          disabled={row?.comment ? false : true}
                           onClick={() => {
                             if (row?.comment) {
                               setComments(row?.comment);
@@ -382,7 +378,6 @@ function CoderReport({
                             ? SVGICON.comment
                             : SVGICON.emptyComments}
                         </div>
-                        {/* </Popconfirm> */}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.auditedBy ? row?.auditedBy : "---"}
