@@ -32,7 +32,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Select, Popover, Menu, DatePicker, Dropdown } from "antd";
+import { Popconfirm, Select, Popover, Menu, DatePicker, Dropdown ,Option} from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
@@ -43,6 +43,7 @@ import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
 import Spinner from "../../../../../components/loadingSpinner";
 import styles from "./styles.module.css";
+import { getFilePageNumber } from "../../../../../services/PatientsListSevice";
 
 
 const Hcc = ({ patientHccResult }) => {
@@ -250,6 +251,10 @@ const Hcc = ({ patientHccResult }) => {
   const [fileModalTitle, setFileModalTitle] = useState("");
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
   const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
+  const [isDosSelect, setIsDosSelect] = useState(false);
+  const [pageNumberOptions, setPageNumberOptions] = useState([]);
+
+
 
 
   const handleAddButtonClick = () => {
@@ -2628,6 +2633,47 @@ const Hcc = ({ patientHccResult }) => {
       if (form.checkValidity() === true) {        
      }
   };
+  const selectTab =(number)=>{
+    setFlagTagActive(false)
+    setIsDosSelect(false)
+    switch (number) {
+      case 1:
+        setFlagTagActive(true)
+        break;
+      case 5:
+        getFileDosPageNumber();
+        break;
+      default:
+        null;
+    }
+  }
+
+  const getFileDosPageNumber = async() =>{
+    var result = await getFilePageNumber(patientHccResult.fileId);
+    var groupPageNumber = [];
+      for (var key in result?.response) {
+        var opationArray = [];
+        var pageNumbervalue = result.response[key];
+        for (var key2 in pageNumbervalue) {
+          console.log(key2)
+          opationArray.push(
+            { label: key2 +" page - "+ pageNumbervalue[key2], value: pageNumbervalue[key2]}, 
+          )
+        }
+        groupPageNumber.push(
+          {
+            label:key,
+            options: opationArray
+        })
+      }
+      setPageNumberOptions(groupPageNumber)
+    setTimeout(() => {
+      setIsDosSelect(true)
+
+    }, 3000);
+    console.log(groupPageNumber)
+    console.log(patientHccResult)
+  }
 
   return (
     <>
@@ -2644,7 +2690,7 @@ const Hcc = ({ patientHccResult }) => {
                         eventKey="validDiseases"
                         className={visitStyles.navColor}
                         activeClassName={visitStyles.activeLink}
-                        onClick={() => setFlagTagActive(true)}
+                        onClick={() => selectTab(1)}
                       >
                         Visit Data
                       </Nav.Link>
@@ -2654,7 +2700,7 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="comboDiseases"
                         className={visitStyles.navColor}
-                        onClick={() => setFlagTagActive(false)}
+                        onClick={() => selectTab(2)}
                       >
                         Combination Codes
                       </Nav.Link>
@@ -2664,7 +2710,7 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="meatCriteria"
                         className={visitStyles.navColor}
-                        onClick={() => setFlagTagActive(false)}
+                        onClick={() => selectTab(3)}
                       >
                         MEAT Criteria
                       </Nav.Link>
@@ -2674,7 +2720,7 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="RafScore"
                         className={visitStyles.navColor}
-                        onClick={() => setFlagTagActive(false)}
+                        onClick={() => selectTab(4)}
                       >
                         RAF Score
                       </Nav.Link>
@@ -2684,7 +2730,7 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="file"
                         className={visitStyles.navColor}
-                        onClick={() => setFlagTagActive(false)}
+                        onClick={() => selectTab(5)}
                       >
                         File
                       </Nav.Link>
@@ -2694,7 +2740,7 @@ const Hcc = ({ patientHccResult }) => {
                         to="#my-posts"
                         eventKey="query"
                         className={visitStyles.navColor}
-                        onClick={() => setFlagTagActive(false)}
+                        onClick={() => selectTab(6)}
                       >
                         Query
                       </Nav.Link>
@@ -2723,6 +2769,13 @@ const Hcc = ({ patientHccResult }) => {
                     </div>
                   </div>
                 ) : null}
+                 {isDosSelect == true ? (
+                <div className="col-xl-4">
+                <Select className={`ant_select_form`}>
+                onChange={handleChange}
+                 options={pageNumberOptions}
+                  </Select>
+                </div>   ) : null}
               </div>
 
               <Tab.Content>

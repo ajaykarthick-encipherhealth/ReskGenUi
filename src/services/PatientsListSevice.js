@@ -74,3 +74,21 @@ export const PatientsListFilter = async (url) => {
   }
 };
 
+export const getFilePageNumber = async (fileId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/pageNumber/startAndStopPageNo?fileId=${fileId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+
