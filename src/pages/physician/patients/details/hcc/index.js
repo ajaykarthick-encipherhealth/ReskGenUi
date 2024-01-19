@@ -32,7 +32,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Select, Popover, Menu, DatePicker, Dropdown ,Option} from "antd";
+import { Popconfirm, Select, Popover, Menu, DatePicker, Dropdown} from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
@@ -44,7 +44,7 @@ import { Avatar, Tooltip } from "antd";
 import Spinner from "../../../../../components/loadingSpinner";
 import styles from "./styles.module.css";
 import { getFilePageNumber } from "../../../../../services/PatientsListSevice";
-
+const { Option } = Select;
 
 const Hcc = ({ patientHccResult }) => {
   const navigate = useRouter();
