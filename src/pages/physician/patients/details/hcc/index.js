@@ -2777,6 +2777,7 @@ const Hcc = ({ patientHccResult }) => {
                <Select  className={`ant_select_form`} 
                 onChange={handleChangePageNumber}   
                 options={pageNumberOptions}
+                placeholder="Dos Page Number"
                 />
                 </div>   ) : null}
               </div>
