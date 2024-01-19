@@ -2874,14 +2874,15 @@ const Hcc = ({ patientHccResult }) => {
                                               <i>{SVGICON.patientNameIcon}</i>
                                               {data.providerName}
                                             </Badge>
+                                            {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}
                                           </div>
                                         ) : null}
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
-                                          {getEncounterDateBackground(
-                                            data.encounterDateSplit
-                                          )}
+                                        
                                           {data.isManuallyAdded == true ? (
                                             <Badge
                                               className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
