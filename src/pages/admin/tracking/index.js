@@ -1,50 +1,87 @@
 import React, { useState, useEffect } from "react";
 import { Button, Spinner } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import Select from "react-select";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
-import { Offcanvas } from "react-bootstrap";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker } from "antd";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { notification } from "antd";
+import { DatePicker, Spin, notification } from "antd";
 import { InputText } from "primereact/inputtext";
-import moment from "moment";
 import { Paginator } from "primereact/paginator";
-import PatientTable from "../../../components/table/PatientList/patientList";
-import dayjs from "dayjs";
-import Image from "next/image";
-import calender from "../../../images/dashboard/calender.png";
-import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
-import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
+import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
+import moment from "moment";
+import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
+import FileUploading from "../file-processing/FileUploading";
+import Addpatients from "../file-processing/Addpatiens";
+import SpinnerDots from "../../../components/spinner";
+import { LoadingOutlined } from "@ant-design/icons";
+import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
+import HeaderFilters from "../../../components/headerFilters";
 import TrackingTable from "../../../components/table/admin/trackingList";
+import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
+
+const bullets = [
+  {
+    color: "#34ace8",
+    name: "Computed",
+  },
+  {
+    color: "#452b90",
+    name: "Processing",
+  },
+  {
+    color: "#be3144",
+    name: "Not Computed",
+  },
+];
+
+const statusOptions = [
+  { label: "ALL", value: "" },
+  { label: "PROCESSING", value: "1", status: 1 },
+  { label: "COMPUTED", value: "2", status: 2 },
+  { label: "NOT COMPUTED", value: "0", status: 0 },
+];
+
 
 export default function Patient() {
+  const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  const navigate = useRouter();
+  const response = useSelector((state) => state.adminList.tracking);
+  const filteratedDashboardData = useSelector(
+    (state) => state.patients.filteredList
+  );
+
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
+  const [isLoadingBtn, setIsLoadingBtn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [dates, setDates] = useState(null);
-  const [compledtedDate, setCompletedDate] = useState(null);
-  const { RangePicker } = DatePicker;
+  const [completedStartDate, setCompletedStartDate] = useState("");
+  const [completedEndDate, setCompletedEndDate] = useState("");
+  const [computedStartDate, setComputedStartDate] = useState("");
+  const [computedEndDate, setComputedEndDate] = useState("");
+  const [selectedOption, SetSelectedOption] = useState("");
+  const [searchTextValue, setSearchTextValue] = useState("");
+  const [dueDateStart, setDueDateStart] = useState("");
+  const [dueDateEnd, setDueDateEnd] = useState("");
+  const [processedStart, setProcessedStart] = useState("");
+  const [processedEnd, setProcessedEnd] = useState("");
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
+    patientId: "",
+    processStageId: "",
     patientId: "",
   });
   const [inputValuePatientId, setInputValuePatientId] = useState({
@@ -55,40 +92,52 @@ export default function Patient() {
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
-
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [dueDateStart, setDueDateStart] = useState("");
-  const [dueDateEnd, setDueDateEnd] = useState("");
-  const [processedStart, setProcessedStart] = useState("");
-  const [processedEnd, setProcessedEnd] = useState("");
-  const [statusSelectedValue, setStausSelectedValue] = useState("");
-  const [searchTextValue, setSearchTextValue] = useState("");
+  const [parsedData, setParsedData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [selAllocatedTo, setSelAllocatedTo] = useState("");
+  const [selAllocatedBy, setSelAllocatedBy] = useState("");
+  const [selCreatedBy, setSelCreatedBy] = useState("");
 
-  const patientsListFilter = useSelector((state) => state.adminList.tracking);
-  const filteratedDashboardData = useSelector(
-    (state) => state.patients.filteredList
-  );
-  const dayDateFormated = filteratedDashboardData?.date
-    ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
-    : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
-  const [defaultStartDate, setDefaultStartDate] = useState(
-    dayjs(dayDateFormated).format("MM-DD-YYYY")
-  );
-  const [defaultEndDate, setDefaultEndDate] = useState(
-    dayjs(dayDateFormated).format("MM-DD-YYYY")
-  );
+  const allocatedToOptions = [
+    { label: "All", value: "All" },
+    ...patinetListAll
+      ?.map((item) =>
+        item?.patientAllocated
+          ? { label: item?.patientAllocated, value: item?.patientAllocated }
+          : null
+      )
+      .filter(Boolean),
+  ];
 
-  useEffect(() => {
-    setDefaultStartDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
-    setDefaultEndDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
-  }, [dayDateFormated]);
+  const allocatedByOptionsSet = new Set();
+  const allocatedByOptions = [
+    { label: "All", value: "All" },
+    ...patinetListAll
+      ?.map((item) => {
+        if (item?.allocatedBy && !allocatedByOptionsSet.has(item.allocatedBy)) {
+          allocatedByOptionsSet.add(item.allocatedBy);
+          return { label: item.allocatedBy, value: item.allocatedBy };
+        }
+        return null;
+      })
+      .filter(Boolean),
+  ];
 
+  const createdByOptions = [
+    { label: "All", value: "All" },
+    ...patinetListAll
+      ?.map((item) =>
+        item?.createdBy
+          ? { label: item?.createdBy, value: item?.createdBy }
+          : null
+      )
+      .filter(Boolean),
+  ];
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -96,24 +145,42 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    getFilteApi(
-      pageNo,
-      pageSize,
-      statusSelectedValue,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd
+    dispatch(
+      getTrackingList(
+        pageNo,
+        dueDateStart,
+        dueDateEnd,
+        searchTextValue,
+        selectedOption,
+        processedStart,
+        processedEnd,
+        selAllocatedTo
+      )
     );
-  }, [filteratedDashboardData]);
+  }, [
+    pageNo,
+    dueDateStart,
+    dueDateEnd,
+    searchTextValue,
+    processedStart,
+    processedEnd,
+    selAllocatedTo,
+    selectedOption
+  ]);
 
   useEffect(() => {
-    if (patientsListFilter) {
+    if (response?.response) {
+      getAllList(response?.response);
+    }
+  }, [parsedData, response, pageNo, pageSize]);
+
+  const getAllList = (info) => {
+    if (info) {
       var resultMap = [];
-      var result = patientsListFilter?.response?.content;
-      setTotalElements(patientsListFilter?.response?.totalElements);
+      var result = info?.content;
+      setTotalElements(info?.totalElements);
       result?.map((res) => {
-        resultMap.push({
+        resultMap?.push({
           patientId: res.patientId,
           patientName: res.patientName,
           fileName: res.fileName,
@@ -134,40 +201,100 @@ export default function Patient() {
       var newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
+
       setIsLoading(false);
       setTableLoading(false);
+      //     setTimeout(() => {
+      //     subscribe(resultMap);
+      // }, 3000);
     }
-  }, [patientsListFilter]);
-
-  const getFilteApi = async (
-    pageNo,
-    pageSize,
-    statusValue,
-    pStart,
-    pEnd,
-    dStart,
-    dEnd
-  ) => {
-    setIsLoading(true);
-    var uId = localStorage.getItem("userId");
-
-    var resoureUrl = `dbservice/patient/admin/filter?=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}`;
-    dispatch(getTrackingList(resoureUrl));
   };
 
-  const getNameSearch = async (searchtext) => {
-    setIsLoading(true);
-    setSearchTextValue(searchtext);
-    var resoureUrl = `dbservice/patient/admin/filter?=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
-    dispatch(getTrackingList(resoureUrl));
+  const addPatientFormId = () => {
+    setValidated(false);
+    setAddPatientId(true);
   };
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
+    inputValue.processStageId = data.processStageId;
+    inputValue.patientId = data.patientId;
     setValidated(false);
     setAddPatient(true);
     setIsLoadingBtn(false);
+  };
+
+  const onChangeFile = (e) => {
+    setSelectFile(e[0]);
+  };
+
+  const handleChange = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setInputValue({ ...inputValue, [key]: value });
+  };
+
+  const handleChangePatientId = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setInputValuePatientId({ ...inputValuePatientId, [key]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+      setIsLoadingBtn(true);
+      event.preventDefault();
+      event.stopPropagation();
+      if (selectFile != null) {
+        submitPatientFile();
+      }
+      if (selectFileRadiology != null) {
+        submitRadiology();
+      }
+    }
+    setValidated(true);
+  };
+
+  const handleSubmitPatientId = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    inputValuePatientId.allocatedBy = localUserId;
+    inputValuePatientId.computing = 0;
+    // inputValuePatientId.allocatedUserId = localUserId;
+
+    if (form.checkValidity() === true) {
+      setIsLoadingBtn(true);
+      const response = await axios.post(
+        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
+        inputValuePatientId
+      );
+      if (response?.status == 200) {
+        if (response.data.message == "patient Already Present") {
+          setIsLoadingBtn(false);
+          notification.warning({
+            message: "Patient Id Already Present",
+            duration: 1,
+          });
+        } else {
+          notification.success({
+            message: "Patient Id Created Successfully!",
+            duration: 1,
+          });
+          dispatch(getTrackingList(0));
+          setAddPatientId(false);
+          setIsLoadingBtn(false);
+        }
+      } else {
+        setIsLoadingBtn(false);
+      }
+      // setAddPatientId(false);
+      getAllList(response?.response);
+    }
+
+    setValidated(true);
   };
 
   const gotoPatientDetails = (data) => {
@@ -186,60 +313,64 @@ export default function Patient() {
   };
 
   const processstatusBodyTemplate = (rowData) => {
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
-        );
+    const isFinished =
+      parsedData?.length > 0 &&
+      parsedData?.find(
+        (data) =>
+          data?.patientId === rowData?.patientId &&
+          data?.processStageChart === "FINISHED"
+      ) !== undefined;
 
-      case "PENDING":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
-
-      case "DECLINED":
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge notComputed-text`}>Not Computed</span>
-          </div>
-        );
-      case "COMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge computed-text`}>Computed</span>
-          </div>
-        );
-      case "HOLD":
-        return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
-        );
-      case null:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
-    }
+    const rowStatus =
+      rowData?.computing === 0 && parsedData?.length === 0
+        ? "Not Computed"
+        : rowData?.computing == 1
+        ? "Processing"
+        : isFinished || rowData?.computing == 2
+        ? "Computed"
+        : "Not Computed";
+    // console.log(isFinished)
+    return (
+      <div className="patient-status">
+        <div
+          className={visitStyles.roleStyle}
+          style={{
+            backgroundColor:
+              rowStatus === "Computed"
+                ? "#cceeff "
+                : rowStatus === "Processing"
+                ? "#dfd8f3"
+                : "#F1DEDA",
+            color:
+              rowStatus === "Computed"
+                ? " #285563"
+                : rowStatus === "Processing"
+                ? "#452b90"
+                : "#BA704F",
+          }}
+        >
+          {rowStatus === "Processing" && (
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 16,
+                  }}
+                  spin
+                />
+              }
+              style={{ color: "#452b90", margin: "0 10px 0 0" }}
+            />
+          )}
+          {rowStatus}
+        </div>
+      </div>
+    );
   };
 
   const actionBodyTemplate = (rowData) => {
     return (
-      <div className="d-flex justify-content-center">
+      <div className="d-flex ">
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
@@ -250,45 +381,97 @@ export default function Patient() {
     );
   };
 
+  const submitPatientFile = async () => {
+    // setIsLoadingBtn(false);
+    // setAddPatient(false);
+    const formData = new FormData();
+    formData.append("file", selectFile);
+    formData.append("dos", inputValue.year);
+    formData.append("orgid", localOrgId);
+    formData.append("tenantid", tenantId);
+    formData.append("userid", localUserId);
+    formData.append("patientid", inputValue.patientId);
+    formData.append("patientname", inputValue.name);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    setSelectFile(formData);
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `aiservice/ai/upload
+      `,
+      formData,
+      headers
+    );
+    if (response?.status === 200) {
+      getAllList(response);
+
+      notification.success({
+        message: "Patient File Upload Successfully!",
+      });
+      // navigate.push("/admin/file-processing");
+      dispatch(getTrackingList(pageNo));
+      eventStreming(
+        ENDPOINTS,
+        setParsedData,
+        pageNo,
+        pageSize,
+        getTrackingList,
+        dispatch
+      );
+      setAddPatient(false);
+      setAddPatient(false);
+      setIsLoadingBtn(false);
+      // dispatch(getMessagesList())
+    } else {
+      setIsLoadingBtn(false);
+    }
+    setAddPatient(false);
+    setIsLoadingBtn(false);
+    getAllList(localUserId);
+  };
+  const submitRadiology = async () => {
+    const formData = new FormData();
+    formData.append("file", selectFileRadiology);
+    formData.append("orgid", localOrgId);
+    formData.append("tenantid", tenantId);
+    formData.append("userid", localUserId);
+    formData.append("patientid", inputValue.patientId);
+    formData.append("patientname", inputValue.name);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    setSelectFile(formData);
+    const response = await axios.post(
+      ENDPOINTS.apiEndointFileUploadHcc +
+        `aiservice/ai/upload/radiology
+    `,
+      formData,
+      headers
+    );
+    if (response?.status == 202) {
+      getAllList(localUserId, pageNo, pageSize);
+      setAddPatient(false);
+      setIsLoadingBtn(false);
+    } else {
+      setIsLoadingBtn(false);
+    }
+    setAddPatient(false);
+    // setIsLoadingBtn(false);
+    setSelectFileRadiology(null);
+  };
+
   const onPageChange = (e) => {
     setIsLoading(true);
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getFilteApi(
-      e.page,
-      15,
-      statusSelectedValue,
-      processedStart,
-      processedEnd,
-      dueDateStart,
-      dueDateEnd
-    );
-  };
-  const statusOptions = [
-    { label: "ALL", value: "ALL" },
-    { label: "COMPLETED", value: "COMPLETED" },
-    { label: "PENDING", value: "PENDING" },
-    { label: "COMPUTED", value: "COMPUTED" },
-    { label: "DECLINED", value: "DECLINED" },
-    { label: "HOLD", value: "HOLD" },
-  ];
-  const onChangeStatus = (selectedOption) => {
-    var value = selectedOption.value;
-    if (value == "ALL") {
-      value = "";
-    }
-    setStausSelectedValue(value);
-    getFilteApi(
-      0,
-      pageSize,
-      value,
-      processedStart,
-      processedEnd,
-      dueDateStart,
-      dueDateEnd
-    );
+    getAllList(response?.response);
   };
   const handleDatePickerChange = (dateString) => {
     if (dateString[0] != "") {
@@ -296,64 +479,13 @@ export default function Patient() {
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
       let convertEndDate =
         moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setDueDateStart(convertStartDate);
-      setDueDateEnd(convertEndDate);
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        processedStart,
-        processedEnd,
-        convertStartDate,
-        convertEndDate
-      );
+      setComputedStartDate(convertStartDate);
+      setComputedEndDate(convertEndDate);
     } else {
-      setDueDateStart("");
-      setDueDateEnd("");
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        processedStart,
-        processedEnd,
-        "",
-        ""
-      );
+      setComputedStartDate("");
+      setComputedEndDate("");
     }
   };
-
-  const handleDatePickerChangeProcesseDate = (dateString) => {
-    if (dateString[0] != "") {
-      let convertStartDate =
-        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-      let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setProcessedStart(convertStartDate);
-      setProcessedEnd(convertEndDate);
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        convertStartDate,
-        convertEndDate,
-        dueDateStart,
-        dueDateEnd
-      );
-    } else {
-      setProcessedStart("");
-      setProcessedEnd("");
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        "",
-        "",
-        dueDateStart,
-        dueDateEnd
-      );
-    }
-  };
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -366,92 +498,36 @@ export default function Patient() {
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
-                        <div className="row filter-contain">
-                          <div className="col-xl-2">
-                            <label>Search by Name or ID</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => getNameSearch(e.target.value)}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-2">
-                            <label>Select Status</label>
-                            <div class="form-group has-search">
-                              <Select
-                                onChange={(selectedOption) =>
-                                  onChangeStatus(selectedOption)
-                                }
-                                options={statusOptions}
-                                className="custom-react-select"
-                                isSearchable={false}
-                                placeholder={
-                                  filteratedDashboardData
-                                    ? filteratedDashboardData?.status?.toUpperCase()
-                                    : "ALL"
-                                }
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-2">
-                            <label>Due Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  handleDatePickerChange(dateStrings);
-                                }}
-                                defaultValue={
-                                  filteratedDashboardData
-                                    ? [
-                                        dayjs(defaultStartDate, "MM-DD-YYYY"),
-                                        dayjs(defaultEndDate, "MM-DD-YYYY"),
-                                      ]
-                                    : []
-                                }
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-xl-2">
-                            <label>Completed Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  handleDatePickerChangeProcesseDate(
-                                    dateStrings
-                                  );
-                                }}
-                              />
-                            </div>
-                          </div>
-                          {/* <div className="col-xl-2">
-                            <label>Allocated To</label>
-                            <div class="form-group has-search">
-                              <Select
-                                onChange={(selectedOption) =>
-                                  onChangeStatus(selectedOption)
-                                }
-                                options={statusOptions}
-                                className="custom-react-select"
-                                isSearchable={false}
-                                placeholder={
-                                  filteratedDashboardData
-                                    ? filteratedDashboardData?.status?.toUpperCase()
-                                    : "Select Status"
-                                }
-                              />
-                            </div>
-                          </div> */}
-                          
+                        <div className="tbl-caption  align-items-center">
+                          <HeaderFilters
+                            setSearch={setSearchTextValue}
+                            isSearch={true}
+                            searchlabel="Search By Username"
+                            // select status
+                            selectlabel="Select Status"
+                            isSelector={true}
+                            setSelectedOption={SetSelectedOption}
+                            selectOptions={statusOptions}
+                            defaultSelectValue1={"Select Status"}
+                            // due date
+                            isRangePicker={true}
+                            setStartDate={setDueDateStart}
+                            setEndDate={setDueDateEnd}
+                            pickerlabel="Due date"
+                            // completed date
+                            isAnotherPicker={true}
+                            setStartDate2={setProcessedStart}
+                            setEndDate2={setProcessedEnd}
+                            pickerlabe2="Completed date"
+                            // allocatedTo
+                            isAllocatedToSelector={true}
+                            allocatedTolabel="Allocated to"
+                            allocatedToOptoons={allocatedToOptions}
+                            setSelAllocatedTo={setSelAllocatedTo}
+                            defaultAllocateTo="All"
+                            bullets={bullets}
+                            isNextRow={true}
+                          />
                         </div>
                       </div>
 
@@ -460,7 +536,7 @@ export default function Patient() {
                         className="dataTables_wrapper no-footer"
                       >
                         {isLoading ? (
-                          <LoadingSpinner />
+                          <SpinnerDots />
                         ) : (
                           <>
                             <TrackingTable
@@ -483,7 +559,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-
                             <Footer />
                           </>
                         )}

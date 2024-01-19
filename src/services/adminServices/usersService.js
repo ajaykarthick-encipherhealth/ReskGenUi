@@ -1,6 +1,7 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
 import { notification } from "antd";
+import { ENABLE, getUsers } from "../../store/actions/adminAction/usersAction";
 
 export const UsersList = async ({
   pageCount = 0,
@@ -42,7 +43,50 @@ export const AddUser = async (data) => {
     );
     return response;
   } catch (err) {
-    console.log(err?.response?.data?.message)
-    notification.error(err?.response?.data?.message);
+    notification.error({ description: err?.response?.data?.message });
   }
 };
+
+export const enableUser = (checked, user, role) => {
+  return async (dispatch) => {
+    const token = localStorage.getItem("token");
+    var tenId = localStorage.getItem("tenantId");
+    var orgId = localStorage.getItem("orgId");
+
+    const data = {
+      orgId: orgId,
+      tenantId: tenId,
+      userId: user?.userId,
+      accountEnabled: checked,
+      userName: user?.userName,
+    };
+
+    const datas = role ? { ...data, role: [role] } : data;
+
+    try {
+      const response = await axios.put(
+        `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
+        datas,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response?.data) {
+        dispatch({
+          type: ENABLE,
+          payload: response.data,
+        });
+        notification.success({
+          description: response?.data?.message,
+        });
+        dispatch(getUsers(0));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+

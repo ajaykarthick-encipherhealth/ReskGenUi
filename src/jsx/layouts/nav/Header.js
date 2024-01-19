@@ -63,25 +63,6 @@ const data = [
   { label: "Admin", key: "admin" },
   { label: "L1auditor", key: "l1auditor" },
 ];
-const codeDta = {
-  status: "SUCCESS",
-  message: "Success!!",
-  response: [
-    {
-      id: "6546413c4f4d3691438862f4",
-      diagnosisCode: "I10",
-      description: "Essential (primary) hypertension",
-      cmsHcc_model_category_V22: 0,
-      cmsHcc_model_category_V24: 0,
-      rxHcc_model_category_V05: 187,
-      rxHcc_model_category_V08: 0,
-      cmsHcc_model_category_V22_for_2023_payment_year: "No",
-      cmsHcc_model_category_V24_for_2023_payment_year: "No",
-      rxHcc_model_category_V05_for_2023_payment_year: "Yes",
-      rxHcc_model_category_V08_for_2023_payment_year: "Yes",
-    },
-  ],
-};
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -104,15 +85,22 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const [openMsg, setOpenMsg] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState("All");
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
 
   const getStatus = (data) => {
-    if (data?.cmsHcc_model_category_V22_for_2023_payment_year === "Yes") {
+    const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
+    const isRX = data?.rxHcc_model_category_V08_for_2023_payment_year;
+
+    if (isCMS === "Yes" && isRX === "Yes") {
+      return "CMS RX";
+    } else if (isCMS === "Yes") {
       return "CMS";
-    } else if (data?.rxHcc_model_category_V05_for_2023_payment_year === "Yes") {
+    } else if (isRX === "Yes") {
       return "RX";
-    } else return "";
+    } else {
+      return "";
+    }
   };
 
   const onClose = () => {
@@ -223,17 +211,22 @@ const Header = () => {
                 {data?.diagnosisCode}
                 {data?.description} &nbsp;
                 {selectedbtn === "HCC" && (
-                  <span
-                    className={
-                      getStatus(data) === "CMS"
-                        ? styles.cmsStatus
-                        : getStatus(data) === "RX"
-                        ? styles.rxStatus
-                        : ""
-                    }
-                  >
-                    {getStatus(data)}
-                  </span>
+                  <>
+                    {getStatus(data) === "CMS" && (
+                      <span className={styles.cmsStatus}>
+                        {getStatus(data)}
+                      </span>
+                    )}
+                    {getStatus(data) === "RX" && (
+                      <span className={styles.rxStatus}>{getStatus(data)}</span>
+                    )}
+                    {getStatus(data) === "CMS RX" && (
+                      <>
+                        <span className={styles.cmsStatus}>CMS</span>
+                        <span className={styles.rxStatus}>RX</span>
+                      </>
+                    )}
+                  </>
                 )}
               </div>
             ))
@@ -310,16 +303,18 @@ const Header = () => {
     });
   }, []);
   useEffect(() => {
+    const userRoleLocal = localStorage.getItem("userRole");
+
     if (typeof window !== "undefined") {
       const { addResponseMessage } = require("react-chat-widget");
       addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
     }
-    if (selectedbtn) {
+    if (selectedbtn && userRoleLocal!=="admin" ) {
       dispatch(
         getCoderDetails({
           name: selectedbtn?.toLowerCase(),
-          search: search,
-          selectedOption: selectedOption,
+          search: search.toUpperCase(),
+          selectedOption: selectedOption.toLowerCase(),
           router,
         })
       );
