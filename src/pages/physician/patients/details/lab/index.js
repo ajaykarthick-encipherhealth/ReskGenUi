@@ -721,7 +721,7 @@ const Lab = ({}) => {
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-          {moment(res).format("MM/DD")}
+          {moment(res).format("MMM DD")}
         </Badge>
       );
       return sectionMapArr;

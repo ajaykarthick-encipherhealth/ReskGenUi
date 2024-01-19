@@ -1292,7 +1292,7 @@ const NonHcc = ({ patientNonHccResult }) => {
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-          {moment(res).format("MM/DD")}
+          {moment(res).format("MMM DD")}
         </span>
       );
       return sectionMapArr;

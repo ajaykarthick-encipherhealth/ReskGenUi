@@ -32,7 +32,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
+import { Popconfirm, Select, Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
@@ -42,6 +42,7 @@ import { notification } from "antd";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
 import Spinner from "../../../../../components/loadingSpinner";
+import styles from "./styles.module.css";
 
 
 const Hcc = ({ patientHccResult }) => {
@@ -245,8 +246,12 @@ const Hcc = ({ patientHccResult }) => {
   const [fileInitialPage, setFileInitialPage] = useState(0);
   const [sectionAllColor, setSectionAllColor] = useState([]);
 
-  const [findFileKeyword, setFindFileKeyword] = useState('');
-  const [fileModalTitle, setFileModalTitle] = useState('');
+  const [findFileKeyword, setFindFileKeyword] = useState("");
+  const [fileModalTitle, setFileModalTitle] = useState("");
+  const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
+  const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
+
+
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
   };
@@ -272,19 +277,21 @@ const Hcc = ({ patientHccResult }) => {
 
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const handleDocumentLoad = () => {
-    setDocumentLoaded(true); 
+    setDocumentLoaded(true);
   };
   const handleDocumentLoadFile = () => {
     setDocumentLoaded(true);
-    if(findFileKeyword){
+    if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
-        if(fileInitialPage){
-        setTargetPages((targetPage) => targetPage.pageIndex === fileInitialPage);
+        if (fileInitialPage) {
+          setTargetPages(
+            (targetPage) => targetPage.pageIndex === fileInitialPage
+          );
         }
         highlight({
           keyword: findFileKeyword,
-        });       
+        });
       }, 1000);
     }
   };
@@ -319,7 +326,7 @@ const Hcc = ({ patientHccResult }) => {
     setUserDetails(userSpinner);
 
     setvalidHccDetails(userSpinner);
-  }, [fileInitialPage,isDocumentLoaded,findFileKeyword,fileModalTitle]);
+  }, [fileInitialPage, isDocumentLoaded, findFileKeyword, fileModalTitle]);
 
   const getPatientDetails = async (
     patientId,
@@ -415,7 +422,7 @@ const Hcc = ({ patientHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName:res.providerName
+            providerName: res.providerName,
           });
         });
 
@@ -1234,13 +1241,15 @@ const Hcc = ({ patientHccResult }) => {
     setConfirmCompleteModal(false);
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
+    setIsMeatQueryModal(false);
+    setMeatQueriedDetailsModal(false)
   };
 
   const handleOpenModal = (value, disDescription, encounterDate) => {
     var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
-        <Spinner/>
+        <Spinner />
       </div>
     );
     setSelectMeatName(dotLoading);
@@ -1348,7 +1357,7 @@ const Hcc = ({ patientHccResult }) => {
         setSelectMeatName(dataset + " -  " + "Loading...");
         var dotLoading = (
           <div className={visitStyles.loadingFileHeader}>
-            <Spinner/>
+            <Spinner />
           </div>
         );
         setIsLoadingSection(true);
@@ -1375,23 +1384,23 @@ const Hcc = ({ patientHccResult }) => {
         setSelectActiveCode(value);
         var splitPoint = "";
         splitPoint = actualDescription.substring(" ", 40);
-        setFindFileKeyword(splitPoint)
+        setFindFileKeyword(splitPoint);
         var dataset =
-            value +
-            " - (" +
-            disDescription +
-            ")" +
-            " / (" +
-            actualDescription +
-            ")";
-          setSelectMeatName(dataset);
-          var headerName =
-            patientDocumentResult.patientId +
-            " / " +
-            patientDocumentResult.patientName +
-            " / " +
-            dataset;
-          setFileModalTitle(headerName);
+          value +
+          " - (" +
+          disDescription +
+          ")" +
+          " / (" +
+          actualDescription +
+          ")";
+        setSelectMeatName(dataset);
+        var headerName =
+          patientDocumentResult.patientId +
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          dataset;
+        setFileModalTitle(headerName);
         setDocumentLoaded(true);
       } else if (check == "valid2") {
         setSelectActiveCode(value);
@@ -2533,7 +2542,7 @@ const Hcc = ({ patientHccResult }) => {
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-          {moment(res).format("MMM/DD")}
+          {moment(res).format("MMM DD")}
         </span>
       );
       return sectionMapArr;
@@ -2563,6 +2572,61 @@ const Hcc = ({ patientHccResult }) => {
       );
       return sectionMapArr;
     }
+  };
+
+  const addMeatQuery = (value) => {
+    setIsMeatQueryModal(true);
+  };
+
+  const meatQueriedComments =()=>{
+    setMeatQueriedDetailsModal(true)
+  }
+
+  const headersList = [
+    { value: "A/P", label: "A/P" },
+    { value: "PMH", label: "PMH" },
+    { value: "HPI", label: "HPI" },
+    { value: "Physical Exam", label: "Physical Exam" },
+    { value: "VITALS", label: "VITALS" },
+    { value: "OTHERS", label: "OTHERS" },
+  ];
+
+  const meatQueryList = [
+    {
+      diagnosisCode: "I50.1",
+      description: "Coronary artery disease (CAD) in native artery",
+      publishedBy: "Michael Johnson",
+      date: "12/01/2024 & 15:32:39",
+      reason: "Reason for changes in Meat query",
+    },
+  ];
+
+  const queryReasons = [
+    { value: "Diagnosis Not Supported", label: "Diagnosis Not Supported" },
+    { value: "H/o condition", label: "H/o condition" },
+    { value: "MEAT not Sufficient", label: "MEAT not Sufficient" },
+    { value: "Imaging Query", label: "Imaging Query" },
+    { value: "More Specific Diagnosis", label: "More Specific Diagnosis" },
+    { value: "OTHERS", label: "OTHERS" },
+  ];
+  const imagingtest = [
+    { value: "CT Chest", label: "CT Chest" },
+    { value: "CT abdomen", label: "CT abdomen" },
+    { value: "Chest Xray", label: "Chest Xray" },
+    { value: "CT Cervix", label: "CT Cervix" },
+  ];
+  const dosListMeat = [
+    { value: "08/01/2023", label: "08/01/2023" },
+    { value: "24/06/2023", label: "24/06/2023" },
+  ];
+
+  const handleSubmitMeatQuery = async (event) => {
+    setIsMeatQueryModal(false)
+    setMeatQueriedDetailsModal(true)
+    const form = event.currentTarget;
+    event.preventDefault();
+      if (form.checkValidity() === true) {        
+     }
   };
 
   return (
@@ -2623,6 +2687,16 @@ const Hcc = ({ patientHccResult }) => {
                         onClick={() => setFlagTagActive(false)}
                       >
                         File
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="query"
+                        className={visitStyles.navColor}
+                        onClick={() => setFlagTagActive(false)}
+                      >
+                        Query
                       </Nav.Link>
                     </Nav.Item>
                   </Nav>
@@ -2790,17 +2864,18 @@ const Hcc = ({ patientHccResult }) => {
                                       <div
                                         className={`${visitStyles.hoverActiveHcc}`}
                                       >
-                                        {data.providerName ?
-                                         <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >                                            
-                                          <Badge className={`mt-2 text-start ${visitStyles.provider_name}`}>
-                                            <i>{SVGICON.patientNameIcon}</i>
-                                            {
-                                                data.providerName
-                                            }
-                                          </Badge>
-                                        </div>:null}
+                                        {data.providerName ? (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            <Badge
+                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                            >
+                                              <i>{SVGICON.patientNameIcon}</i>
+                                              {data.providerName}
+                                            </Badge>
+                                          </div>
+                                        ) : null}
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
@@ -3623,6 +3698,14 @@ const Hcc = ({ patientHccResult }) => {
                                         />
                                       </div>
                                     </Popconfirm>
+                                    {item.isMeatCriteriaPresent === false ? (
+                                      <div
+                                        onClick={() => addMeatQuery()}
+                                        className={visitStyles.add_meat_query}
+                                      >
+                                        {SVGICON.meatQueryIcon}
+                                      </div>
+                                    ) : null}
                                   </div>
                                 </div>
                               </div>
@@ -4835,6 +4918,86 @@ const Hcc = ({ patientHccResult }) => {
                     ) : null}
                   </div>
                 </Tab.Pane>
+                <Tab.Pane id="my-posts" eventKey="query">
+                  <div className="my-post-content pt-3">
+                    <div className={visitStyles.meat_head_card}>
+                      <div className="row">
+                        <div className="col-xl-1">
+                          <label>Codes</label>
+                        </div>
+                        <div className="col-xl-2">
+                          <label>Description</label>
+                        </div>
+                        <div className="col-xl-2">
+                          <label>Published By</label>
+                        </div>
+                        <div className="col-xl-2">
+                          <label>Date & Time</label>
+                        </div>
+                        <div className="col-xl-2">
+                          <label>Message</label>
+                        </div>
+                        <div className="col-xl-2">
+                          <label>Reason</label>
+                        </div>
+                        <div className="col-xl-1">
+                          <label></label>
+                        </div>
+                      </div>
+                    </div>
+                    {meatQueryList.length != 0 ? (
+                      <div className={visitStyles.container}>
+                        <div className={visitStyles.hccStickey_head}>
+                          {meatQueryList?.map((item) => {
+                            return (
+                              <div
+                                className={`${visitStyles.meat_details_card}`}
+                              >
+                                <div className="row">
+                                  <div className="col-xl-1 d-grid">
+                                    <span className="font-bold meat-name-details">
+                                      {item.diagnosisCode}
+                                    </span>
+                                  </div>
+                                  <div className="col-xl-2">
+                                    <span className="meat-name-details">
+                                      {item.description}
+                                    </span>
+                                  </div>
+                                  <div className="col-xl-2 d-grid">
+                                    <span className="meat-name-details">
+                                      {item.publishedBy}
+                                    </span>
+                                  </div>
+                                  <div className="col-xl-2 d-grid">
+                                    <span className="meat-name-details">
+                                      {item.date}
+                                    </span>
+                                  </div>
+                                  <div className="col-xl-2 d-grid">
+                                    <span onClick={meatQueriedComments} className="cr-pointer meat-name-details">
+                                    {SVGICON.comment}
+                                    </span>
+                                  </div>
+                                  <div className="col-xl-2 d-grid">
+                                    <span className="meat-name-details">
+                                      {item.reason}
+                                    </span>
+                                  </div>
+                                  <div className="col-xl-1 meatclose">
+                                    <span className="meat-name-details">
+                                      Edit
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                </Tab.Pane>
               </Tab.Content>
             </Tab.Container>
           </div>
@@ -5446,6 +5609,158 @@ const Hcc = ({ patientHccResult }) => {
           </div>
         </div>
       </Offcanvas>
+
+      <Offcanvas
+        onHide={handleCloseModal}
+        show={isMeatQueryModal}
+        className="offcanvas-end"
+        placement="end"
+      >
+        <div className="offcanvas-header">
+          <h5 className="modal-title" id="#gridSystemModal">
+            Meat Query
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => handleCloseModal()}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="offcanvas-body">
+          <div className="container-fluid">
+            <Form noValidate  onSubmit={handleSubmitMeatQuery}>
+              <div className="row">
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                    DX Code <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    id="dxcode"
+                    name="dxcode"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>Provider name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="providerName"
+                    name="providerName"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-xl-12 mb-4">
+                  <Form.Label>
+                    Quick Query <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Select className={`ant_select_form`}>
+                    {headersList?.map((data) => (
+                      <Option key={data?.value} value={data?.value}>
+                        {data?.label}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="col-xl-12 mb-4">
+                  <Form.Label>
+                    Imaging Query <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Select className={`ant_select_form`}>
+                    {imagingtest?.map((data) => (
+                      <Option key={data?.value} value={data?.value}>
+                        {data?.label}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="col-xl-12 mb-4">
+                  <Form.Label>
+                    DOS <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Select className={`ant_select_form`}>
+                    {dosListMeat?.map((data) => (
+                      <Option key={data?.value} value={data?.value}>
+                        {data?.label}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="col-xl-12 mb-4">
+                  <Form.Label>
+                    Query Reason <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Select className={`ant_select_form`}>
+                    {queryReasons?.map((data) => (
+                      <Option key={data?.value} value={data?.value}>
+                        {data?.label}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+
+              <div>
+                <Button type="submit" className="btn btn-primary btn-sm me-1">
+                  Submit
+                </Button>
+                <Button
+                  onClick={() => handleCloseModal()}
+                  className="btn btn-danger btn-sm light ms-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </Form>
+          </div>
+        </div>
+      </Offcanvas>
+      <Modal
+          title="Meat Queried"
+          centered
+          open={meatQueriedDetailsModal}
+          onOk={handleCloseModal}
+          onCancel={handleCloseModal}
+          footer={null}
+          className="meat-queriedmodal"
+        >
+          <div className="offcanvas-body">
+            <div className="container-fluid">
+            <div className="row">
+                <div className="col-xl-6">
+                <div className={styles.publishedByDetails}>
+                  <span className={styles.meatQueried_head}>ICD-10</span>
+                  <p  className={styles.meatQueried_details}>F31.9 - Bipolar Disorder</p>
+                </div>
+                 </div>
+                  <div className="col-xl-6">
+                  <div className={styles.publishedByDetails}>
+                  <span className={styles.meatQueried_head}>Published By :</span>
+                  <p  className={styles.publisheddetails}>Name - Michael Johnson</p>
+                  <p  className={styles.publisheddetails}>Date & Time - 12/01/2024 & 15:32:39 </p>
+                  <p  className={styles.publisheddetails}>Reason - Reason for change the query...... </p>
+                </div>
+                 </div>
+                </div>
+              <div className={styles.meatCommentCard}>
+              <div className={styles.meatCommentCard2}>               
+                <div>
+                  <span className={styles.meatQueried_head}>Subject</span>
+                  <p  className={styles.meatQueried_details}>We've pinpointed the following details that may pertain to records associated with JOAN BAUER.</p>
+                </div>
+                <div>
+                  <span className={styles.meatQueried_head}>Dear Dr.Chang, Khai MD</span>
+                  <p className={styles.meatQueried_details}>Please confirm if the patient currently has diagnosis of Bipolar disorder, unspecified. It was previously reported on 09-15-2022. Please update the chart with the most current status (active/resolved) and the current treatment/plan for the condition, if any. Thank you</p>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
     </>
   );
 };

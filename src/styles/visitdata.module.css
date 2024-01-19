@@ -1426,3 +1426,22 @@
 .loadingFileHeader svg {
   height: 17px;
 }
+.add_meat_query {
+  width: 16px;
+  height: 15px;
+  border-radius: 4px;
+  background: #ABDAED;
+  text-align: center;
+  margin-left: 5px;
+  margin-top: 7px;
+  cursor: pointer;
+}
+.add_meat_query svg {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ant_select_form{
+  width: 100% !important;
+}

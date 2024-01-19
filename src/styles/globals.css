@@ -11305,8 +11305,9 @@ tr {
 .meatclose {
   display: flex !important;
   justify-content: center;
-  margin-top: 30px;
   cursor: pointer;
+  text-align: center;
+  align-items: center;
 }
 
 .card.combo-head-card {
@@ -13359,11 +13360,13 @@ overflow: scroll;
   height: 730px;
   overflow: scroll;
 }
+.ant_select_form {
+  width: 100% !important;
+}
 .ant_select_form > .ant-select-selector{
   min-height: 42px !important;
   border: 1px solid #e6e6e6 !important;
 }
-
 .overlay-loading {
   cursor: pointer;
   display: flex;
@@ -13379,4 +13382,7 @@ overflow: scroll;
   opacity: 0;
   transition: opacity 0.5s ease;
   opacity: 1;
+}
+.meat-queriedmodal > .ant-modal-content{
+  width: 655px;
 }
