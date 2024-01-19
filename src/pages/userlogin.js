@@ -1,42 +1,28 @@
 import React, { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/router";
+import { notification } from "antd";
+import Image from "next/image";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styles from "../styles/auth.module.css";
 import ENDPOINTS from "../utility/enpoints";
 import axios from "../utility/axiosConfig";
-import { useRouter } from "next/router";
 import LoginBack from "../images/logo/login-back.jpg";
-import { Dropdown, Select, Space, notification } from "antd";
-import Image from "next/image";
 import { IMAGES } from "../jsx/constant/theme";
-import { useDispatch } from "react-redux";
-import { selectedUserRole } from "../store/actions/AuthActions";
 
 export default function UserLogin() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [role, setRole] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
-  // const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [displayRoles, setDisplayRoles] = useState(false);
-  const [selectedRole, setSelectedRole] = useState(null);
-  const [roleError, setRoleError] = useState(false);
-
-  const dispatch = useDispatch();
   const onLogin = async (e) => {
     setIsLoading(true);
     e.preventDefault();
     let emailSplit = email.split("@");
-
-    // if (email == "physician@gmail.com") {
-    //     localStorage.setItem("userRole", 'physician')
-    //     router.push("/physician/home");
-    //     notification.success({
-    //         message: "Login Successful",
-    //     });
-
-    // }
     try {
       const postData = {
         username: email,
@@ -48,33 +34,17 @@ export default function UserLogin() {
         postData
       );
       var result = response.data.response;
-      if (response.data.status == "SUCCESS") {
-        // if (emailSplit[0] === "ajgith01") {
-        //   localStorage.setItem("userRole", "Coder-L2");
-        // } else {
-        // localStorage.setItem("userRolesList", result?.roles);
+      if (response?.data?.status === "SUCCESS") {
         setRole(result?.roles);
-        // }
+        localStorage.setItem("roles", result?.roles);
         localStorage.setItem("token", result.access_token);
         localStorage.setItem("tenantId", result.tenantId);
         localStorage.setItem("userId", result.userEmail);
         localStorage.setItem("orgId", result.organizationId);
         localStorage.setItem("userName", emailSplit[0]);
         localStorage.setItem("loginCheck", true);
-
-        // const userRoleLocal = localStorage.getItem("userRole");
-        // if (userRoleLocal === "admin") {
-        //   router.push("/admin/user");
-        // } else {
-        //   router.push("/physician/dashboard");
-        // }
-        // notification.success({
-        //   message: response?.data?.message
-        //     ? response?.data?.message
-        //     : "Login Successfully",
-        //   duration: 1,
-        // });
-        setDisplayRoles(true);
+        setIsLoading(false);
+        router?.push("/twofactorAuthentication/Authentication");
       } else {
         setIsLoading(false);
         notification.error({
@@ -83,51 +53,17 @@ export default function UserLogin() {
         });
       }
     } catch (err) {
-      if (err) {
-        notification.error({
-          message: "Login Failed",
-          duration: 1,
-        });
-        setIsLoading(false);
-      }
-      // notification.error({
-      //     message: "Login Failed"
-      // });
-    }
-  };
-  const items = [];
-  const data = role?.map((info) => {
-    if (info?.toLowerCase() === "admin") {
-      items?.push(
-        { value: "Admin", label: "Admin" },
-        { value: "L1auditor", label: "L1auditor" }
-      );
-    } else {
-      items?.push({ value: info, label: info });
-    }
-  });
-  const onSubmitRole = (e) => {
-    e.preventDefault();
-    if (!selectedRole) {
-      setRoleError(true);
-    } else {
-      notification.success({
-        message: "Login Successfully",
+      notification.error({
+        message: "Login Failed",
         duration: 1,
       });
-      setRoleError(false);
-      if (selectedRole === "admin" && !roleError) {
-        dispatch(selectedUserRole(selectedRole?.toUpperCase()));
-        localStorage.setItem("userRole", selectedRole);
-        router?.push("/admin/user");
-      } else if (selectedRole === "l1auditor" && !roleError) {
-        dispatch(selectedUserRole(selectedRole?.toUpperCase()));
-        localStorage.setItem("userRole", selectedRole);
-        router?.push("/physician/dashboard");
-      }
+      setIsLoading(false);
     }
   };
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -153,103 +89,47 @@ export default function UserLogin() {
                 <span>Login</span>
               </h6>
 
-              {/* {props.errorMessage && (
-                            <div className='bg-red-300 text-red-900 border border-red-900 p-1 my-2'>
-                                {props.errorMessage}
-                            </div>
-                        )}
-                        {props.successMessage && (
-                            <div className='bg-green-300 text-green-900 border border-green-900 p-1 my-2'>
-                                {props.successMessage}
-                            </div>
-                        )}	
-                        				 */}
-              {displayRoles ? (
-                <form onSubmit={onSubmitRole}>
-                  <div className="mb-4">
-                    <label className="mb-1 text-dark">Select Role</label>
-                    <div
-                      style={{
-                        height: "100px",
-                        marginTop: "5px",
-                      }}
-                    >
-                      <Select
-                        style={{ width: "100%", height: "2.75rem" }}
-                        placeholder="Select Role"
-                        onChange={(value) => {
-                          setSelectedRole(value?.toLowerCase());
-                          setRoleError(false);
-                        }}
-                        options={items}
-                      />
-                    </div>
-                    {roleError && (
-                      <span className="text-danger fs-12">
-                        Please Select Role
-                      </span>
-                    )}
-                  </div>
-                  <div className="d-flex">
-                    <div className="col-lg-6 mx-2">
-                      <button
-                        className="btn btn-primary btn-block"
-                        onClick={() => {
-                          setDisplayRoles(false);
-                          setIsLoading(false);
-                          setSelectedRole("");
-                        }}
-                      >
-                        {"BACK"}
-                      </button>
-                    </div>
-                    <div className="col-lg-6">
-                      <button
-                        type="submit"
-                        className="btn btn-primary btn-block"
-                      >
-                        {"NEXT"}
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              ) : (
-                <form onSubmit={onLogin}>
-                  <div className="mb-4">
-                    <label className="mb-1 text-dark">Email</label>
+              <form onSubmit={onLogin}>
+                <div className="mb-4">
+                  <label className="mb-1 text-dark">Email</label>
+                  <input
+                    type="email"
+                    className="form-control form-control-lg"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  {errors.email && (
+                    <div className="text-danger fs-12 mt-3">{errors.email}</div>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <label className="mb-1 text-dark">Password</label>
+                  <div>
                     <input
-                      type="email"
-                      className="form-control form-control-lg"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {errors.email && (
-                      <div className="text-danger fs-12">{errors.email}</div>
-                    )}
-                  </div>
-                  <div className="mb-4">
-                    <label className="mb-1 text-dark">Password</label>
-                    <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       className="form-control form-control-lg"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
-                    {errors.password && (
-                      <div className="text-danger fs-12">{errors.password}</div>
-                    )}
+                    <div className="input-group-append">
+                      <span className={styles.passwordBox}>
+                        <FontAwesomeIcon
+                          onClick={handleTogglePasswordVisibility}
+                          icon={showPassword ? faEye : faEyeSlash}
+                        />
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-center mb-4">
-                    <button type="submit" className="btn btn-primary btn-block">
-                      {isLoading ? "Loading..." : "LOGIN"}
-                    </button>
-                  </div>
-                </form>
-              )}
-
-              {/* <p className="text-center">Not registered ?  
-                                <Link to={"/signup"} className="btn-link text-primary"> Signup</Link>
-                            </p>								 */}
+                  {errors.password && (
+                    <div className="text-danger fs-12">{errors.password}</div>
+                  )}
+                </div>
+                <div className="text-center mb-4">
+                  <button type="submit" className="btn btn-primary btn-block">
+                    {isLoading ? "Loading..." : "LOGIN"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
