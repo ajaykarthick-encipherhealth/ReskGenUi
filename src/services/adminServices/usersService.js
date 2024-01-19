@@ -89,4 +89,3 @@ export const enableUser = (checked, user, role) => {
     }
   };
 };
-

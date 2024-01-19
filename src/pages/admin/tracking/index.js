@@ -1,29 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner } from "react-bootstrap";
-import Select from "react-select";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { DatePicker, Spin, notification } from "antd";
-import { InputText } from "primereact/inputtext";
+import { Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
-import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
-import moment from "moment";
-import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
-import FileUploading from "../file-processing/FileUploading";
-import Addpatients from "../file-processing/Addpatiens";
 import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
-import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
 import TrackingTable from "../../../components/table/admin/trackingList";
 import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
@@ -50,27 +39,15 @@ const statusOptions = [
   { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 
-
 export default function Patient() {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.tracking);
-  const filteratedDashboardData = useSelector(
-    (state) => state.patients.filteredList
-  );
-
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
-  const [addPatientId, setAddPatientId] = useState(false);
-  const [selectFile, setSelectFile] = useState(null);
-  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [completedStartDate, setCompletedStartDate] = useState("");
-  const [completedEndDate, setCompletedEndDate] = useState("");
-  const [computedStartDate, setComputedStartDate] = useState("");
-  const [computedEndDate, setComputedEndDate] = useState("");
   const [selectedOption, SetSelectedOption] = useState("");
   const [searchTextValue, setSearchTextValue] = useState("");
   const [dueDateStart, setDueDateStart] = useState("");
@@ -84,10 +61,6 @@ export default function Patient() {
     processStageId: "",
     patientId: "",
   });
-  const [inputValuePatientId, setInputValuePatientId] = useState({
-    patientId: "",
-    patientName: "",
-  });
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -98,10 +71,8 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
-  const [search, setSearch] = useState("");
+
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
-  const [selAllocatedBy, setSelAllocatedBy] = useState("");
-  const [selCreatedBy, setSelCreatedBy] = useState("");
 
   const allocatedToOptions = [
     { label: "All", value: "All" },
@@ -114,30 +85,6 @@ export default function Patient() {
       .filter(Boolean),
   ];
 
-  const allocatedByOptionsSet = new Set();
-  const allocatedByOptions = [
-    { label: "All", value: "All" },
-    ...patinetListAll
-      ?.map((item) => {
-        if (item?.allocatedBy && !allocatedByOptionsSet.has(item.allocatedBy)) {
-          allocatedByOptionsSet.add(item.allocatedBy);
-          return { label: item.allocatedBy, value: item.allocatedBy };
-        }
-        return null;
-      })
-      .filter(Boolean),
-  ];
-
-  const createdByOptions = [
-    { label: "All", value: "All" },
-    ...patinetListAll
-      ?.map((item) =>
-        item?.createdBy
-          ? { label: item?.createdBy, value: item?.createdBy }
-          : null
-      )
-      .filter(Boolean),
-  ];
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -165,7 +112,7 @@ export default function Patient() {
     processedStart,
     processedEnd,
     selAllocatedTo,
-    selectedOption
+    selectedOption,
   ]);
 
   useEffect(() => {
@@ -204,15 +151,7 @@ export default function Patient() {
 
       setIsLoading(false);
       setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
     }
-  };
-
-  const addPatientFormId = () => {
-    setValidated(false);
-    setAddPatientId(true);
   };
 
   const addPatientFile = (data) => {
@@ -223,78 +162,6 @@ export default function Patient() {
     setValidated(false);
     setAddPatient(true);
     setIsLoadingBtn(false);
-  };
-
-  const onChangeFile = (e) => {
-    setSelectFile(e[0]);
-  };
-
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
-  };
-
-  const handleChangePatientId = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValuePatientId({ ...inputValuePatientId, [key]: value });
-  };
-
-  const handleSubmit = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      event.preventDefault();
-      event.stopPropagation();
-      if (selectFile != null) {
-        submitPatientFile();
-      }
-      if (selectFileRadiology != null) {
-        submitRadiology();
-      }
-    }
-    setValidated(true);
-  };
-
-  const handleSubmitPatientId = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    inputValuePatientId.allocatedBy = localUserId;
-    inputValuePatientId.computing = 0;
-    // inputValuePatientId.allocatedUserId = localUserId;
-
-    if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
-        inputValuePatientId
-      );
-      if (response?.status == 200) {
-        if (response.data.message == "patient Already Present") {
-          setIsLoadingBtn(false);
-          notification.warning({
-            message: "Patient Id Already Present",
-            duration: 1,
-          });
-        } else {
-          notification.success({
-            message: "Patient Id Created Successfully!",
-            duration: 1,
-          });
-          dispatch(getTrackingList(0));
-          setAddPatientId(false);
-          setIsLoadingBtn(false);
-        }
-      } else {
-        setIsLoadingBtn(false);
-      }
-      // setAddPatientId(false);
-      getAllList(response?.response);
-    }
-
-    setValidated(true);
   };
 
   const gotoPatientDetails = (data) => {
@@ -329,7 +196,6 @@ export default function Patient() {
         : isFinished || rowData?.computing == 2
         ? "Computed"
         : "Not Computed";
-    // console.log(isFinished)
     return (
       <div className="patient-status">
         <div
@@ -381,90 +247,6 @@ export default function Patient() {
     );
   };
 
-  const submitPatientFile = async () => {
-    // setIsLoadingBtn(false);
-    // setAddPatient(false);
-    const formData = new FormData();
-    formData.append("file", selectFile);
-    formData.append("dos", inputValue.year);
-    formData.append("orgid", localOrgId);
-    formData.append("tenantid", tenantId);
-    formData.append("userid", localUserId);
-    formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
-    if (response?.status === 200) {
-      getAllList(response);
-
-      notification.success({
-        message: "Patient File Upload Successfully!",
-      });
-      // navigate.push("/admin/file-processing");
-      dispatch(getTrackingList(pageNo));
-      eventStreming(
-        ENDPOINTS,
-        setParsedData,
-        pageNo,
-        pageSize,
-        getTrackingList,
-        dispatch
-      );
-      setAddPatient(false);
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-      // dispatch(getMessagesList())
-    } else {
-      setIsLoadingBtn(false);
-    }
-    setAddPatient(false);
-    setIsLoadingBtn(false);
-    getAllList(localUserId);
-  };
-  const submitRadiology = async () => {
-    const formData = new FormData();
-    formData.append("file", selectFileRadiology);
-    formData.append("orgid", localOrgId);
-    formData.append("tenantid", tenantId);
-    formData.append("userid", localUserId);
-    formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
-        `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-    } else {
-      setIsLoadingBtn(false);
-    }
-    setAddPatient(false);
-    // setIsLoadingBtn(false);
-    setSelectFileRadiology(null);
-  };
-
   const onPageChange = (e) => {
     setIsLoading(true);
     setPaginationFirst(e.first);
@@ -473,19 +255,7 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
-  const handleDatePickerChange = (dateString) => {
-    if (dateString[0] != "") {
-      let convertStartDate =
-        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-      let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setComputedStartDate(convertStartDate);
-      setComputedEndDate(convertEndDate);
-    } else {
-      setComputedStartDate("");
-      setComputedEndDate("");
-    }
-  };
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
