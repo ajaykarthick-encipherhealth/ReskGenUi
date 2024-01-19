@@ -13362,6 +13362,7 @@ overflow: scroll;
 
 .ant-switch.ant-switch-checked {
   background: #241571 !important;
+}
 
 .ant_select_form > .ant-select-selector{
   min-height: 42px !important;
