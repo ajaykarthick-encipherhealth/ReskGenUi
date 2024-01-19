@@ -2665,7 +2665,7 @@ const Hcc = ({ patientHccResult }) => {
         }
         groupPageNumber.push(
           {
-            label:key,
+            label:moment(key).format("MM-DD-YYYY"),
             options: opationArray
         })
       }
