@@ -296,11 +296,22 @@
 }
 
 .provider_name {
-  background:#f2f4f6 !important;
+  /* background:#f2f4f6 !important;
   color: #36297e;
   font-size: 10px;
   font-weight: 500;
-  border-radius: 6px !important;
+  border-radius: 30px !important;
+  margin: 0px 0px 0px 5px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px; */
+  color: #36297e;
+  background:#f2f4f6 !important;
+  font-weight: 600;
+  font-size: 11px;
+  border-radius: 30px !important;
   margin: 0px 0px 0px 5px;
   height: 20px;
   display: inline-flex;
@@ -1425,4 +1436,23 @@
 }
 .loadingFileHeader svg {
   height: 17px;
+}
+.add_meat_query {
+  width: 16px;
+  height: 15px;
+  border-radius: 4px;
+  background: #ABDAED;
+  text-align: center;
+  margin-left: 5px;
+  margin-top: 7px;
+  cursor: pointer;
+}
+.add_meat_query svg {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ant_select_form{
+  width: 100% !important;
 }
