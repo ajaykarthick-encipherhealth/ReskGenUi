@@ -253,6 +253,8 @@ const Hcc = ({ patientHccResult }) => {
   const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
   const [isDosSelect, setIsDosSelect] = useState(false);
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
+  const [fileDosPageNumber, setFileDosPageNumber] = useState(0);
+
 
 
 
@@ -331,7 +333,7 @@ const Hcc = ({ patientHccResult }) => {
     setUserDetails(userSpinner);
 
     setvalidHccDetails(userSpinner);
-  }, [fileInitialPage, isDocumentLoaded, findFileKeyword, fileModalTitle]);
+  }, [fileInitialPage, isDocumentLoaded, findFileKeyword, fileModalTitle,fileDosPageNumber]);
 
   const getPatientDetails = async (
     patientId,
@@ -2635,7 +2637,8 @@ const Hcc = ({ patientHccResult }) => {
   };
   const selectTab =(number)=>{
     setFlagTagActive(false)
-    setIsDosSelect(false)
+    setIsDosSelect(false);
+    setFileDosPageNumber(0)
     switch (number) {
       case 1:
         setFlagTagActive(true)
@@ -2667,12 +2670,12 @@ const Hcc = ({ patientHccResult }) => {
         })
       }
       setPageNumberOptions(groupPageNumber)
-    setTimeout(() => {
-      setIsDosSelect(true)
+      setIsDosSelect(true);
+  }
 
-    }, 3000);
-    console.log(groupPageNumber)
-    console.log(patientHccResult)
+  const handleChangePageNumber = async(value) =>{
+    var pageIndex = value - 1;
+    setFileDosPageNumber(pageIndex)
   }
 
   return (
@@ -2770,11 +2773,11 @@ const Hcc = ({ patientHccResult }) => {
                   </div>
                 ) : null}
                  {isDosSelect == true ? (
-                <div className="col-xl-4">
-                <Select className={`ant_select_form`}>
-                onChange={handleChange}
-                 options={pageNumberOptions}
-                  </Select>
+                <div className="col-xl-3">
+               <Select  className={`ant_select_form`} 
+                onChange={handleChangePageNumber}   
+                options={pageNumberOptions}
+                />
                 </div>   ) : null}
               </div>
 
@@ -4392,6 +4395,7 @@ const Hcc = ({ patientHccResult }) => {
                             {" "}
                             <Viewer
                               fileUrl={selectFileURL}
+                              initialPage={fileDosPageNumber}
                               onChange={pageClickPdfFile}
                               plugins={[defaultLayoutPluginInstance]}
                               onDocumentLoad={handleDocumentLoad}
