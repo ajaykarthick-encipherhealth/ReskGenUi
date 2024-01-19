@@ -47,8 +47,8 @@ const btnItems = [
 
 const Options = [
   {
-    value: "ALL",
-    label: "ALL",
+    value: "both",
+    label: "BOTH",
   },
   {
     value: "CMS",
@@ -85,7 +85,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const [openMsg, setOpenMsg] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedOption, setSelectedOption] = useState("All");
+  const [selectedOption, setSelectedOption] = useState("Both");
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
 
   const getStatus = (data) => {
@@ -208,8 +208,8 @@ const Header = () => {
         {codDetails?.response
           ? codDetails?.response?.map((data) => (
               <div className={styles.hoverDiv}>
-                {data?.diagnosisCode}
-                {data?.description} &nbsp;
+                {data?.diagnosisCode} &nbsp;
+                {data?.description} 
                 {selectedbtn === "HCC" && (
                   <>
                     {getStatus(data) === "CMS" && (
