@@ -2813,8 +2813,8 @@ export const SVGICON = {
   emptyFlag: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width="25"
+      height="25"
       viewBox="0 0 800 800"
       fill="none"
     >
@@ -3070,8 +3070,8 @@ export const SVGICON = {
   emptyFlag: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width="25"
+      height="25"
       viewBox="0 0 800 800"
       fill="none"
     >
