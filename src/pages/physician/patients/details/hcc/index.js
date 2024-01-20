@@ -3454,7 +3454,7 @@ const Hcc = ({ patientHccResult }) => {
                               </div>
                             </div>
                           </div>
-                          {comboDiseaseCodesList.length != 0 ? (
+                          {comboDiseaseCodesList?.length != 0 ? (
                             <div className={visitStyles.container}>
                               <div className={visitStyles.hccStickey_head}>
                                 {comboDiseaseCodesList?.map((item) => {
@@ -3520,7 +3520,7 @@ const Hcc = ({ patientHccResult }) => {
                             </div>
                           ) : null}
 
-                          {comboDiseaseCodesList.length == 0 ? (
+                          {comboDiseaseCodesList?.length == 0 ? (
                             <div>
                               <span className="no-patient-data">
                                 No Combination Codes
@@ -3550,7 +3550,7 @@ const Hcc = ({ patientHccResult }) => {
                               </div>
                             </div>
                           </div>
-                          {invalidComboDiseaseCodesList.length != 0 ? (
+                          {invalidComboDiseaseCodesList?.length != 0 ? (
                             <>
                               <div className={visitStyles.container}>
                                 <div className={visitStyles.hccStickey_head}>
