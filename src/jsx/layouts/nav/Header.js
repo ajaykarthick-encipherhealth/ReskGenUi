@@ -309,9 +309,13 @@ const Header = () => {
         { key: "l2auditor", label: "L2auditor" }
       );
     } else if (userRoleLocal === "l1auditor") {
-      items?.push({ key: "l2auditor", label: "L2auditor" });
+      items?.push({ key: "admin", label: "Admin" },
+        { key: "l2auditor", label: "L2auditor" });
     } else {
-      items?.push({ key: "l2auditor", label: "L2auditor" });
+      items?.push(
+        { key: "admin", label: "Admin" },
+        { key: "l1auditor", label: "L1auditor" },
+        { key: "l2auditor", label: "L2auditor" });
     }
     setDropdownContent(items);
   }, []);
@@ -439,10 +443,7 @@ const Header = () => {
                           </span>
 
                           {userIdDetails != "" ? (
-                            <span className="ms-2 d-flex mt-1">
-                              {userRole === "l2auditor" ? (
-                                "L2 Auditor"
-                              ) : (
+                            <span className="ms-2 d-flex mt-1">                           
                                 <Dropdown
                                   menu={{
                                     items,
@@ -460,7 +461,6 @@ const Header = () => {
                                     />
                                   </span>
                                 </Dropdown>
-                              )}
                             </span>
                           ) : null}
                         </div>
