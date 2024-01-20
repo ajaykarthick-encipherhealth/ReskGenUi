@@ -251,6 +251,7 @@ const Hcc = ({ patientHccResult }) => {
   const [fileModalTitle, setFileModalTitle] = useState("");
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
   const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
+  const [meatQueriedDetailsShow, setMeatQueriedDetailsShow] = useState(true);
   const [isDosSelect, setIsDosSelect] = useState(false);
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [fileDosPageNumber, setFileDosPageNumber] = useState(0);
@@ -2591,6 +2592,7 @@ const Hcc = ({ patientHccResult }) => {
 
   const meatQueriedComments = () => {
     setMeatQueriedDetailsModal(true);
+    setMeatQueriedDetailsShow(false);
   };
 
   const headersList = [
@@ -2674,6 +2676,7 @@ const Hcc = ({ patientHccResult }) => {
 
   const handleSubmitMeatQuery = async (event) => {
     setIsMeatQueryModal(false);
+    setMeatQueriedDetailsShow(true);
     setMeatQueriedDetailsModal(true);
     const form = event.currentTarget;
     event.preventDefault();
@@ -5930,7 +5933,7 @@ const Hcc = ({ patientHccResult }) => {
         </div>
       </Offcanvas>
       <Modal
-        title="Meat Queried"
+        title="Meat Queried Details"
         centered
         open={meatQueriedDetailsModal}
         onOk={handleCloseModal}
@@ -5940,6 +5943,7 @@ const Hcc = ({ patientHccResult }) => {
       >
         <div className="offcanvas-body">
           <div className="container-fluid">
+            {meatQueriedDetailsShow ?
             <div className="row">
               <div className="col-xl-6">
                 <div className={styles.publishedByDetails}>
@@ -5965,7 +5969,7 @@ const Hcc = ({ patientHccResult }) => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div>:null}
             <div className={styles.meatCommentCard}>
               <div className={styles.meatCommentCard2}>
                 <div>
@@ -5989,6 +5993,12 @@ const Hcc = ({ patientHccResult }) => {
                 </div>
               </div>
             </div>
+            {meatQueriedDetailsShow ?
+            <div className={styles.meat_queryfooterBtn}>
+              <button className={styles.meat_querySaveBtn} onClick={() => setMeatQueriedDetailsModal(false)}>
+                Save
+              </button>
+            </div>:null}
           </div>
         </div>
       </Modal>
