@@ -91,6 +91,7 @@ const FileUploading = ({
                 {"Submit"}
               </Button>
               <Button
+                className="btn-sm me-1"
                 onClick={() => setAddPatient(false)}
                 style={{
                   backgroundColor: "#ffdede",
