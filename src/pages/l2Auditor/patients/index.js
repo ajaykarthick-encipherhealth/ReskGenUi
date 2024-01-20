@@ -18,7 +18,7 @@ import { notification } from "antd";
 import { InputText } from "primereact/inputtext";
 import moment from "moment";
 import { Paginator } from "primereact/paginator";
-import PatientTable from "../../../components/table/PatientList/patientList";
+import PatientTable from "../table/PatientList/patientList";
 import dayjs from "dayjs";
 import Image from "next/image";
 import calender from "../../../images/dashboard/calender.png";
