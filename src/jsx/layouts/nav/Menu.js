@@ -108,3 +108,23 @@ export const L2AuditMenuList = [
     to: "/coder/auditing",
   },
 ];
+export const L2AuditorMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/l2Auditor/dashboard",
+  },
+
+  {
+    title: "Auditing View",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/l2Auditor/patients",
+  },
+  {
+    title: "Report",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/l2Auditor/report",
+  },
+];
+
+

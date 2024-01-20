@@ -18,6 +18,7 @@ import {
   MenuList,
   PhysicanMenuList,
   L2AuditMenuList,
+  L2AuditorMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
@@ -59,10 +60,7 @@ const Options = [
     label: "RX",
   },
 ];
-const data = [
-  { label: "Admin", key: "admin" },
-  { label: "L1auditor", key: "l1auditor" },
-];
+
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -87,7 +85,7 @@ const Header = () => {
   const [search, setSearch] = useState("");
   const [selectedOption, setSelectedOption] = useState("Both");
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
-
+   const[dropdownContent, setDropdownContent] = useState()
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
     const isRX = data?.rxHcc_model_category_V08_for_2023_payment_year;
@@ -152,8 +150,7 @@ const Header = () => {
     return () => {
       sse.close();
     };
-
-    // setUserIdDetails(response.data.response);
+    
   };
   const percentage = 95;
   const PopContent = (
@@ -255,7 +252,7 @@ const Header = () => {
     dispatchValue(getNotificationAlertClear([]));
   };
 
-  const items = data?.filter(
+  const items = dropdownContent?.filter(
     (info) => info?.key?.toLowerCase() !== userRole?.toLowerCase()
   );
 
@@ -265,6 +262,9 @@ const Header = () => {
       router.push("/admin/user");
     } else if (key === "l1auditor") {
       router.push("/physician/dashboard");
+    }
+    else if (key === "l2auditor") {
+      router.push("/l2Auditor/dashboard");
     }
   };
   useEffect(() => {
@@ -281,7 +281,9 @@ const Header = () => {
       setMenuList(AdminMenuList);
     } else if (userRoleLocal === "l1auditor") {
       setMenuList(PhysicanMenuList);
-    } else {
+    } else if (userRoleLocal === "l2auditor") {
+      setMenuList(L2AuditorMenuList);
+    }else {
       setMenuList([]);
     }
     if (loginCheck != "true") {
@@ -301,6 +303,24 @@ const Header = () => {
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
+
+    const items = [];
+   
+      if (userRoleLocal === "admin") {
+        items?.push(
+          { key: "l1auditor", label: "L1auditor" },
+          { key: "l2auditor", label: "L2auditor" }
+        );
+      } else if (userRoleLocal === "l1auditor"){
+        items?.push(
+          { key: "l2auditor", label: "L2auditor" }
+        );
+      }
+      else {
+        items?.push({ key: "l2auditor", label: "L2auditor" });
+      }
+      setDropdownContent(items)
+    
   }, []);
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
