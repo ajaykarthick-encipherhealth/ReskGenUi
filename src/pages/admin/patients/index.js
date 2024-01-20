@@ -505,7 +505,7 @@ export default function Patient() {
                           <HeaderFilters
                             setSearch={setSearch}
                             isSearch={true}
-                            searchlabel="Search By Username"
+                            searchlabel="Search By Patient Id / Name"
                             // select status
                             selectlabel="Select Status"
                             isSelector={true}

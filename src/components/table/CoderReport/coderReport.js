@@ -226,8 +226,8 @@ function CoderReport({
                 <th>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
-                <th>Flag </th>
-                <th>Status</th>
+                <th>FLAG </th>
+                <th>STATUS</th>
                 <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
