@@ -286,7 +286,16 @@ export default function Patient() {
             message: "Patient Id Created Successfully!",
             duration: 1,
           });
-          dispatch(getPatients(0));
+          dispatch(getPatients( pageNo,
+            computedStartDate,
+            computedEndDate,
+            selectedOption,
+            search,
+            completedStartDate,
+            completedEndDate,
+            selAllocatedTo,
+            selAllocatedBy,
+            selCreatedBy));
           setAddPatientId(false);
           setIsLoadingBtn(false);
         }
@@ -548,6 +557,7 @@ export default function Patient() {
                             addUserForm={addPatientFormId}
                             bullets={bullets}
                             isNextRow={true}
+                            btnTitle="Add Patient"
                           />
                         </div>
                       </div>
