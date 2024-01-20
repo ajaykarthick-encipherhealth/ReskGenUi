@@ -13393,3 +13393,6 @@ overflow: scroll;
 .meat-queriedmodal > .ant-modal-content{
   width: 655px;
 }
+.width-max-content{
+  width: max-content !important;
+}
