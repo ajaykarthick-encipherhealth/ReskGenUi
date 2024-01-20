@@ -464,6 +464,7 @@ const Hcc = ({ patientHccResult }) => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
+              providerName: res.providerName,
             });
           });
         }
@@ -485,6 +486,7 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Radio",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
+              providerName: res.providerName,
             });
           });
 
@@ -538,6 +540,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
                 defaultPosition: res.defaultPosition,
+                providerName: res.providerName,
               });
             } else {
               // suggestListAll.push({
@@ -558,6 +561,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
+                providerName: res.providerName,
               });
             }
           });
@@ -2985,21 +2989,23 @@ const Hcc = ({ patientHccResult }) => {
                                       <div
                                         className={`${visitStyles.hoverActiveHcc}`}
                                       >
-                                        {data.providerName ? (
+                                       
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
+                                             {data.providerName ? (
                                             <Badge
                                               className={`mt-2 text-start ${visitStyles.provider_name}`}
                                             >
                                               <i>{SVGICON.patientNameIcon}</i>
                                               {data.providerName}
                                             </Badge>
+                                            ) : null}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}
                                           </div>
-                                        ) : null}
+                                        
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
@@ -3211,9 +3217,21 @@ const Hcc = ({ patientHccResult }) => {
                                               className={`${visitStyles.hoverActiveHcc}`}
                                             >
                                               <div className="">
-                                                {getEncounterDateBackground(
-                                                  data.encounterDateSplit
-                                                )}
+                                              <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                             {data.providerName ? (
+                                            <Badge
+                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                            >
+                                              <i>{SVGICON.patientNameIcon}</i>
+                                              {data.providerName}
+                                            </Badge>
+                                            ) : null}
+                                            {getEncounterDateBackground(
+                                              data.encounterDateSplit
+                                            )}
+                                          </div>
                                                 {data.getPlace == "Lab" ? (
                                                   <Tooltip title="LAB">
                                                     <span
@@ -3392,9 +3410,21 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.hoverActiveHcc}`}
                                       >
                                         <div className="">
-                                          {getEncounterDateBackground(
-                                            data.encounterDateSplit
-                                          )}
+                                        <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                             {data.providerName ? (
+                                            <Badge
+                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                            >
+                                              <i>{SVGICON.patientNameIcon}</i>
+                                              {data.providerName}
+                                            </Badge>
+                                            ) : null}
+                                            {getEncounterDateBackground(
+                                              data.encounterDateSplit
+                                            )}
+                                          </div>
                                         </div>
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
@@ -4414,11 +4444,23 @@ const Hcc = ({ patientHccResult }) => {
                                       className={`${visitStyles.hoverActiveHcc}`}
                                     >
                                       <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                             {data.providerName ? (
+                                            <Badge
+                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                            >
+                                              <i>{SVGICON.patientNameIcon}</i>
+                                              {data.providerName}
+                                            </Badge>
+                                            ) : null}
+                                            {getEncounterDateBackground(
+                                              data.encounterDateSplit
+                                            )}
+                                          </div>
+                                      <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {getEncounterDateBackground(
-                                          data.encounterDateSplit
-                                        )}
+                                      >                                        
                                         {data.isManuallyAdded == true ? (
                                           <Badge
                                             className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
@@ -4821,9 +4863,21 @@ const Hcc = ({ patientHccResult }) => {
                                               className={`${visitStyles.hoverActiveHcc}`}
                                             >
                                               <div className="">
-                                                {getEncounterDateBackground(
-                                                  data.encounterDateSplit
-                                                )}
+                                              <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                             {data.providerName ? (
+                                            <Badge
+                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                            >
+                                              <i>{SVGICON.patientNameIcon}</i>
+                                              {data.providerName}
+                                            </Badge>
+                                            ) : null}
+                                            {getEncounterDateBackground(
+                                              data.encounterDateSplit
+                                            )}
+                                          </div>
                                                 {data.getPlace == "Lab" ? (
                                                   <Tooltip title="LAB">
                                                     <span
@@ -5014,9 +5068,21 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.hoverActiveHcc}`}
                                       >
                                         <div className="">
-                                          {getEncounterDateBackground(
-                                            data.encounterDateSplit
-                                          )}
+                                        <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                             {data.providerName ? (
+                                            <Badge
+                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                            >
+                                              <i>{SVGICON.patientNameIcon}</i>
+                                              {data.providerName}
+                                            </Badge>
+                                            ) : null}
+                                            {getEncounterDateBackground(
+                                              data.encounterDateSplit
+                                            )}
+                                          </div>
                                         </div>
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
