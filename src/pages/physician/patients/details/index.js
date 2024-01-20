@@ -245,7 +245,7 @@ const Details = ({}) => {
     } else {
       const response = await axios.get(
         ENDPOINTS.apiEndoint +
-          `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${100}`
+          `dbservice/patient/filter?patientAllocated=${localUserId}&page=${0}&size=${100}`
       );
       var result = response.data.response.content;
       setPatientList(result);
@@ -914,7 +914,7 @@ const Details = ({}) => {
       setFlagContainerActiveTitle("My Work Queue");
       const response = await axios.get(
         ENDPOINTS.apiEndoint +
-          `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${100}`
+          `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${15}&processedStatus=&dueDateStart=&dueDateEnd=&processedStart=&processedEnd=&searchString=`
       );
       var result = response.data.response.content;
       setPatientList(result);
@@ -978,7 +978,7 @@ const Details = ({}) => {
   const getFiltePatientListStatus = async (value) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/patient/filter?userId=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`
+        `dbservice/patient/filter?patientAllocated=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`
     );
     var result = response.data.response.content;
     setPatientList(result);
