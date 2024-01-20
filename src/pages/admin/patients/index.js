@@ -286,16 +286,20 @@ export default function Patient() {
             message: "Patient Id Created Successfully!",
             duration: 1,
           });
-          dispatch(getPatients( pageNo,
-            computedStartDate,
-            computedEndDate,
-            selectedOption,
-            search,
-            completedStartDate,
-            completedEndDate,
-            selAllocatedTo,
-            selAllocatedBy,
-            selCreatedBy));
+          dispatch(
+            getPatients(
+              pageNo,
+              computedStartDate,
+              computedEndDate,
+              selectedOption,
+              search,
+              completedStartDate,
+              completedEndDate,
+              selAllocatedTo,
+              selAllocatedBy,
+              selCreatedBy
+            )
+          );
           setAddPatientId(false);
           setIsLoadingBtn(false);
         }
@@ -424,14 +428,36 @@ export default function Patient() {
         message: "Patient File Upload Successfully!",
       });
       // navigate.push("/admin/file-processing");
-      dispatch(getPatients(pageNo));
+      dispatch(
+        getPatients(
+          pageNo,
+          computedStartDate,
+          computedEndDate,
+          selectedOption,
+          search,
+          completedStartDate,
+          completedEndDate,
+          selAllocatedTo,
+          selAllocatedBy,
+          selCreatedBy
+        )
+      );
       eventStreming(
         ENDPOINTS,
         setParsedData,
         pageNo,
         pageSize,
         getPatients,
-        dispatch
+        dispatch,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo,
+        selAllocatedBy,
+        selCreatedBy
       );
       setAddPatient(false);
       setAddPatient(false);
