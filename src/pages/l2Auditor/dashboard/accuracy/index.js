@@ -153,7 +153,7 @@ const Accuracy = () => {
   return (
     <>
       <HeadTitle header="Accuracy Score" />
-      <div className={styles.card3} style={{height:"500px"}}>
+      <div className={styles.card3} >
         <Card borderRadius="28px" padding="10px" >
           <div className={styles.buttonDiv}>
             <div className={styles.picker}>
@@ -188,7 +188,7 @@ const Accuracy = () => {
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              {/* <ReactECharts
+              <ReactECharts
                 option={option}
                 style={{
                   width: "100%",
@@ -196,10 +196,10 @@ const Accuracy = () => {
                   marginTop: "-30px",
                   overflowX: "hidden",
                 }}
-              /> */}
-              <SpeedometerChart />
+              />
+              {/* <SpeedometerChart /> */}
             </div>
-            {/* <div className={styles.accuracy}>
+            <div className={styles.accuracy}>
               <div className={styles.header}>
                 <Image src={accuracy} className={styles.Img} />
                 <div className={styles.heading}>Accuracy</div>
@@ -216,7 +216,7 @@ const Accuracy = () => {
                   ? `${accuracyDatas?.response[highlightIndex + 1]}%`
                   : "0%"}</span>
               </div>
-            </div> */}
+            </div>
           </div>
         </Card>
       </div>
