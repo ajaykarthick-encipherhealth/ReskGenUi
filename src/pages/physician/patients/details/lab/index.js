@@ -117,7 +117,7 @@ const Lab = ({}) => {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("validDiseases");
+  const [activeTabHead, setActiveTabHead] = useState("file");
 
   const [unmatchHccListRadiology, setUnMatchHccListRadiology] = useState([]);
   const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
@@ -786,6 +786,16 @@ const Lab = ({}) => {
               <div className="row">
                 <div className="col-xl-11">
                   <Nav as="ul" className="nav nav-tabs">
+                  <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="file"
+                        className={visitStyles.navColor}
+                        activeClassName={visitStyles.activeLink}
+                      >
+                        File
+                      </Nav.Link>
+                    </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
@@ -804,16 +814,6 @@ const Lab = ({}) => {
                         activeClassName={visitStyles.activeLink}
                       >
                         MEAT Criteria
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <Nav.Link
-                        to="#my-posts"
-                        eventKey="file"
-                        className={visitStyles.navColor}
-                        activeClassName={visitStyles.activeLink}
-                      >
-                        File
                       </Nav.Link>
                     </Nav.Item>
                   </Nav>

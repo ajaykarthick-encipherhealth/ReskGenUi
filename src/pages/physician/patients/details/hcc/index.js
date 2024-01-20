@@ -111,7 +111,7 @@ const Hcc = ({ patientHccResult }) => {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("validDiseases");
+  const [activeTabHead, setActiveTabHead] = useState("file");
 
   const [unmatchHccListRadiology, setUnMatchHccListRadiology] = useState([]);
   const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
@@ -212,7 +212,7 @@ const Hcc = ({ patientHccResult }) => {
   const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
   const [isSideNavShow, setIsSideNavShow] = useState(false);
   const [timelineData, setTimeLineData] = useState([]);
-  const [flagTagActive, setFlagTagActive] = useState(true);
+  const [flagTagActive, setFlagTagActive] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
   const [patienIdDetails, setPatienIdDetails] = useState("");
   const [commentList, setCommentList] = useState([]);
@@ -252,7 +252,7 @@ const Hcc = ({ patientHccResult }) => {
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
   const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
   const [meatQueriedDetailsShow, setMeatQueriedDetailsShow] = useState(true);
-  const [isDosSelect, setIsDosSelect] = useState(false);
+  const [isDosSelect, setIsDosSelect] = useState(true);
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [fileDosPageNumber, setFileDosPageNumber] = useState(0);
   const [selectPreviousCode, setSelectPreviousCode] = useState(null);
@@ -334,10 +334,9 @@ const Hcc = ({ patientHccResult }) => {
     setvalidHccDetails(userSpinner);
   }, [
     fileInitialPage,
-    isDocumentLoaded,
     findFileKeyword,
     fileModalTitle,
-    fileDosPageNumber,
+    fileDosPageNumber
   ]);
 
   const getPatientDetails = async (
@@ -346,6 +345,7 @@ const Hcc = ({ patientHccResult }) => {
     tenId,
     fileloadCondition
   ) => {
+    getFileDosPageNumber();
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
     setNewUnMatchHccList([]);
@@ -1311,17 +1311,19 @@ const Hcc = ({ patientHccResult }) => {
     if (result?.length) {
       var pageNumber = result[0] - 1;
       setFileInitialPage(pageNumber);
+      setFileDosPageNumber(pageNumber)
     }
 
     // getSectionPageNumber(headerNames, encounterDate);
 
     var splitPoint = disDescription.substring(" ", 40);
     setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-    highlight({
-      keyword: actualDescription,
-      // matchCase: true,
-      // wholeWords:true
-    });
+    setFindFileKeyword(actualDescription);
+    // highlight({
+    //   keyword: actualDescription,
+    //   // matchCase: true,
+    //   // wholeWords:true
+    // });
   };
   const handleOpenModalCombinationCode = async (
     value,
@@ -2686,13 +2688,17 @@ const Hcc = ({ patientHccResult }) => {
   const selectTab = (number) => {
     setFlagTagActive(false);
     setIsDosSelect(false);
+    setFindFileKeyword(null);
+    setFileInitialPage(0);
     setFileDosPageNumber(0);
     switch (number) {
       case 1:
         setFlagTagActive(true);
+        setIsDosSelect(false);
         break;
       case 5:
         getFileDosPageNumber();
+        setIsDosSelect(true);
         break;
       default:
         null;
@@ -2718,10 +2724,10 @@ const Hcc = ({ patientHccResult }) => {
       });
     }
     setPageNumberOptions(groupPageNumber);
-    setIsDosSelect(true);
   };
 
   const handleChangePageNumber = async (value) => {
+    setFindFileKeyword(null)
     var pageIndex = value - 1;
     setFileDosPageNumber(pageIndex);
   };
@@ -2743,6 +2749,16 @@ const Hcc = ({ patientHccResult }) => {
               <div className="row">
                 <div className="col-xl-8">
                   <Nav as="ul" className="nav nav-tabs">
+                  <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="file"
+                        className={visitStyles.navColor}
+                        onClick={() => selectTab(5)}
+                      >
+                        File
+                      </Nav.Link>
+                    </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
@@ -2783,17 +2799,7 @@ const Hcc = ({ patientHccResult }) => {
                       >
                         RAF Score
                       </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <Nav.Link
-                        to="#my-posts"
-                        eventKey="file"
-                        className={visitStyles.navColor}
-                        onClick={() => selectTab(5)}
-                      >
-                        File
-                      </Nav.Link>
-                    </Nav.Item>
+                    </Nav.Item>                 
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
@@ -4454,9 +4460,8 @@ const Hcc = ({ patientHccResult }) => {
                             <Viewer
                               fileUrl={selectFileURL}
                               initialPage={fileDosPageNumber}
-                              onChange={pageClickPdfFile}
                               plugins={[defaultLayoutPluginInstance]}
-                              onDocumentLoad={handleDocumentLoad}
+                              onDocumentLoad={handleDocumentLoadFile}
                               renderLoader={(percentages) => (
                                 <div style={{ width: "240px" }}>
                                   <ProgressBar
@@ -5544,7 +5549,12 @@ const Hcc = ({ patientHccResult }) => {
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
                       initialPage={fileInitialPage}
-                      onDocumentLoad={handleDocumentLoad}
+                      onDocumentLoad={handleDocumentLoadFile}
+                      renderLoader={(percentages) => (
+                        <div style={{ width: "240px" }}>
+                          <ProgressBar progress={Math.round(percentages)} />
+                        </div>
+                      )}
                     />
                   </div>
                 </Worker>

@@ -111,7 +111,7 @@ const NonHcc = ({ patientNonHccResult }) => {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("validDiseases");
+  const [activeTabHead, setActiveTabHead] = useState("file");
 
   const [unmatchHccListRadiology, setUnMatchHccListRadiology] = useState([]);
   const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
@@ -1313,6 +1313,16 @@ const NonHcc = ({ patientNonHccResult }) => {
           <div className="custom-tab-1">
             <Tab.Container defaultActiveKey={activeTabHead}>
               <Nav as="ul" className="nav nav-tabs">
+              <Nav.Item as="li" className="nav-item">
+                  <Nav.Link
+                    to="#my-posts"
+                    className={visitStyles.navColor}
+                    activeClassName={visitStyles.activeLink}
+                    eventKey="file"
+                  >
+                    File
+                  </Nav.Link>
+                </Nav.Item>
                 <Nav.Item as="li" className="nav-item">
                   <Nav.Link
                     to="#my-posts"
@@ -1343,17 +1353,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                     MEAT Criteria
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item as="li" className="nav-item">
-                  <Nav.Link
-                    to="#my-posts"
-                    className={visitStyles.navColor}
-                    activeClassName={visitStyles.activeLink}
-                    eventKey="file"
-                  >
-                    File
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
+             </Nav>
               <Tab.Content>
                 <Tab.Pane id="my-posts" eventKey="validDiseases">
                   <div className="my-post-content pt-3">
