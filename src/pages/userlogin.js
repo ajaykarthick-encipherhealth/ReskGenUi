@@ -27,7 +27,7 @@ export default function UserLogin() {
     e.preventDefault();
     let emailSplit = email.split("@");
 
-    dispatch(getMFAValidation(email,router))
+    dispatch(getMFAValidation(email,router,password))
     // router?.push(`/twofactorAuthentication/Authentication?${email}`);
     // try {
     //   const postData = {

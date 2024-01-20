@@ -4,7 +4,11 @@ import { useDispatch } from "react-redux";
 import Image from "next/image";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
-import { getQrCode, getValidateCode } from "../../store/actions/AuthActions";
+import {
+  getQrCode,
+  getValidateCode,
+  loginAction,
+} from "../../store/actions/AuthActions";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -14,8 +18,9 @@ const index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [seconds, setSeconds] = useState(30);
-  const [enableMFA, setEnableMFA] = useState();
+  const [enableMFA, setEnableMFA] = useState(false);
   const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
   const [skip, setSkip] = useState();
   const [code, setCode] = useState([]);
 
@@ -34,6 +39,7 @@ const index = () => {
     setEnableMFA(searchParams.get("mfa"));
     setUsername(searchParams.get("username"));
     setSkip(searchParams.get("skipEntry"));
+    setPassword(searchParams.get("password"));
     const intervalId = setInterval(() => {
       setSeconds((prevSeconds) => {
         if (prevSeconds === 0) {
@@ -51,7 +57,7 @@ const index = () => {
       <section className={styles.innerdiv}>
         <Image src={twofactorImage} alt="noimg" className={styles.imgDiv} />
         <span className={styles.header}>MF Authentication</span>
-        {!enableMFA ? (
+        {enableMFA ? (
           <>
             <div className={styles.content}>
               Protecting your tickets is our top priority. Please confirm your
@@ -95,13 +101,21 @@ const index = () => {
         )}
 
         <div className={styles.lastContainer}>
-          {!enableMFA ? (
+          {enableMFA ? (
             <>
               <button
                 className={styles.sendBtn}
                 onClick={() => {
-                  const codeString = code?.join(",");
-                  dispatch(getValidateCode(username, codeString, true,router));
+                  const codeString = code?.join("");
+                  dispatch(
+                    getValidateCode(
+                      username,
+                      codeString,
+                      router,
+                      password,
+                      "validate"
+                    )
+                  );
                 }}
               >
                 SUBMIT
@@ -114,17 +128,17 @@ const index = () => {
               >
                 BACK
               </button>
-              <div className={styles.redirect}>
+              {/* <div className={styles.redirect}>
                 <span className={styles.code}> Didn't get a Code? </span>
                 <span className={styles.link}>Send again</span>
-              </div>
+              </div> */}
             </>
           ) : (
             <>
               <button
                 className={styles.sendBtn}
                 onClick={() => {
-                  dispatch(getQrCode(username,router))
+                  dispatch(getQrCode(username, router));
                 }}
               >
                 ENABLE MFA
@@ -133,7 +147,9 @@ const index = () => {
                 <button
                   className={styles.sendBtn}
                   onClick={() => {
-                    router?.push(`/twofactorAuthentication/SelectRole`);
+                    dispatch(
+                      loginAction(username, password, router, code?.join(""))
+                    );
                   }}
                 >
                   SETUP LATER

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Select } from "antd";
+import { Select, notification } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { selectedUserRole } from "../../store/actions/AuthActions";
@@ -11,11 +11,13 @@ import styles from "../../styles/auth.module.css";
 const SelectRole = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [username, setUsername] = useState();
+  const [password,setPassword]=useState()
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
-  const [role, setRole] = useState(null);
+  const [role, setRole] = useState([]);
   const items = [];
-  const data = role?.map((info) => {
+  const data = role?.length>0 && role?.map((info) => {
     if (info?.toLowerCase() === "admin") {
       items?.push(
         { value: "Admin", label: "Admin" },
@@ -47,8 +49,13 @@ const SelectRole = () => {
     }
   };
   useEffect(() => {
-    setRole(localStorage.getItem("roles"));
-  }, []);
+    console.log(localStorage.getItem("roles"))
+    const searchParams = new URLSearchParams(window.location.search);
+    setUsername(searchParams.get("username"));
+    setPassword(searchParams.get("password"))
+    setRole([localStorage.getItem("roles")]);
+  }, [])
+
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -104,7 +111,7 @@ const SelectRole = () => {
                       className={styles.backBtn}
                       onClick={() => {
                         setRoleError(false);
-                        router?.push("/twofactorAuthentication/Authentication");
+                        router?.push(`/twofactorAuthentication/Authentication?mfa=true&username=${username}&password=${password}`);
                       }}
                     >
                       {"BACK"}

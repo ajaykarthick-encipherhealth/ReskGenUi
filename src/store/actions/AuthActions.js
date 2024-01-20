@@ -60,14 +60,14 @@ export function Logout(navigate) {
   };
 }
 
-export const getMFAValidation = (username, route) => {
+export const getMFAValidation = (username, route, password) => {
   return (dispatch) => {
     mfaValidation(username, route).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response?.data?.response) {
         route?.push(
-          `/twofactorAuthentication/Authentication?mfa=${mfa}&skipEntry=${skip}&username=${username}`
+          `/twofactorAuthentication/Authentication?mfa=${mfa}&skipEntry=${skip}&username=${username}&password=${password}`
         );
       }
     });
@@ -78,27 +78,36 @@ export const getQrCode = (username, route) => {
   return (dispatch) => {
     enableMFA(username, route).then((response) => {
       if (response?.data?.response) {
+        dispatch({
+          type: VERIFYCODE,
+          payload: response?.data?.response?.secretImageUri,
+        });
         const url = response?.data?.response?.secretImageUri;
-        route?.push(
-          `/twofactorAuthentication/GetOTP?username=${username}&url=${url}`
-        );
+        route?.push(`/twofactorAuthentication/GetOTP?username=${username}`);
       }
     });
   };
 };
-export const getValidateCode = (username, code, validate, route) => {
+export const getValidateCode = (username, code, route, password, validate) => {
   return (dispatch) => {
     verifyCode(username, code, route).then((response) => {
       if (response?.data?.response) {
         if (validate) {
-          route?.push(`/twofactorAuthentication/Authentication`);
+          dispatch(loginAction(username, password, route, code));
+          route?.push(
+            `/twofactorAuthentication/SelectRole?username=${username}&password=${password}`
+          );
         } else {
+          notification.error({
+            message: "AUthentication added",
+            duration: 1,
+          });
           route?.push(`/userlogin`);
         }
-      }else{
+      } else {
         notification.error({
-          description:"Entered pin is wrong.Re-verify the pin"
-        })
+          description: "Entered pin is wrong.Re-verify the pin",
+        });
       }
     });
   };
@@ -108,19 +117,28 @@ export function LogInRoute(navigate) {
   navigate("/dashboard");
 }
 
-export function loginAction(email, password, navigate) {
+export function loginAction(email, password, router, code) {
   return (dispatch) => {
-    login(email, password)
+    login(email, password, code)
       .then((response) => {
-        saveTokenInLocalStorage(response.data);
-        localStorage.setItem("token", response.data.access_token);
-        runLogoutTimer(dispatch, response.data.expires_in * 1000, navigate);
-        dispatch(loginConfirmedAction(response.data));
-        navigate("/dashboard");
+        var result = response.data.response;
+        let emailSplit = email?.split("@");
+
+        if (response?.data?.status === "SUCCESS") {
+          localStorage.setItem("roles", result?.roles);
+          localStorage.setItem("token", result.access_token);
+          localStorage.setItem("tenantId", result.tenantId);
+          localStorage.setItem("userId", result.userEmail);
+          localStorage.setItem("orgId", result.organizationId);
+          localStorage.setItem("userName", emailSplit[0]);
+          localStorage.setItem("loginCheck", true);
+          router?.push(
+            `/twofactorAuthentication/SelectRole?username=${email}&password=${password}`
+          );
+        }
       })
-      .catch((error) => {
-        const errorMessage = formatError(error.response.data);
-        dispatch(loginFailedAction(errorMessage));
+      .catch((err) => {
+        console.log(err);
       });
   };
 }
