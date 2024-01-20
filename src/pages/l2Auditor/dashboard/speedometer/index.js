@@ -19,7 +19,7 @@ const SpeedometerChart = () => {
         const inc = Math.round((Math.random() - 0.5) * 20);
 
         let newVal = point.y + inc;
-        if (newVal < 0 || newVal > 200) {
+        if (newVal < 0 || newVal > 100) {
           newVal = point.y - inc;
         }
 
@@ -54,7 +54,7 @@ const SpeedometerChart = () => {
     },
     yAxis: {
       min: 0,
-      max: 200,
+      max: 100,
       tickPixelInterval: 72,
       tickPosition: 'inside',
       tickLength: 20,
@@ -70,7 +70,7 @@ const SpeedometerChart = () => {
       plotBands: [
         {
           from: 0,
-          to: 200,
+          to: 100,
           color: {
             linearGradient: {
               x1: 0,

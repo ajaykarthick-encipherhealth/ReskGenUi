@@ -97,12 +97,19 @@ export default function UserLogin() {
   };
   const items = [];
   const data = role?.map((info) => {
-    if (info?.toLowerCase() === "admin") {
+    if (info === "ADMIN") {
       items?.push(
         { value: "Admin", label: "Admin" },
-        { value: "L1auditor", label: "L1auditor" }
+        { value: "L1auditor", label: "L1auditor" },
+        { value: "L2auditor", label: "L2auditor" }
       );
-    } else {
+    } else if (info?.toLowerCase() === "l1auditor"){
+      items?.push(
+        { value: "L1auditor", label: "L1auditor" },
+        { value: "L2auditor", label: "L2auditor" }
+      );
+    }
+    else {
       items?.push({ value: info, label: info });
     }
   });
@@ -124,6 +131,10 @@ export default function UserLogin() {
         dispatch(selectedUserRole(selectedRole?.toUpperCase()));
         localStorage.setItem("userRole", selectedRole);
         router?.push("/physician/dashboard");
+      }else if (selectedRole === "l2auditor" && !roleError) {
+        dispatch(selectedUserRole(selectedRole?.toUpperCase()));
+        localStorage.setItem("userRole", selectedRole);
+        router?.push("/l2Auditor/dashboard");
       }
     }
   };

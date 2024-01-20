@@ -1,0 +1,48 @@
+.meatCommentCard {
+    width: 584px;
+    border-radius: 16px;
+    background: #1B627E;
+}
+
+.meatCommentCard2 {
+    width: 576px;
+    border-radius: 16px;
+    border: 0.5px solid #1B627E;
+    margin-left: 10px;
+    background: #FFF;
+    padding: 10px 0px 0px 10px;
+}
+
+.meatCommentDetails {
+    padding: 10px;
+}
+
+.publishedByDetails{
+    border-radius: 16px;
+    border: 0.5px solid #C4C4C4;
+    margin: 10px 0px 10px 0px;
+    padding: 10px 0px 0px 10px;
+    height: 105px;
+}
+
+.meatQueried_head {
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.48px;
+}
+
+.meatQueried_details {
+    color: #000;
+    font-size: 12px !important;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.4px;
+}
+.publisheddetails {
+    color: #000;
+    font-size: 12px !important;
+    margin-bottom: 0px;
+}
