@@ -92,12 +92,16 @@ export function isLogin() {
   }
 }
 
-export const Coder = async ({ name,search, selectedOption,router }) => {
+export const Coder = async ({ name, search, selectedOption, router }) => {
   const token = localStorage.getItem("token");
   const codeName = name === "icd-10" ? "icd" : name;
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/disease/${codeName}?disease=${search}&filter=${name==="hcc"?selectedOption:""}`,
+      `${
+        ENDPOINTS?.apiEndoint
+      }dbservice/disease/${codeName}?disease=${search}&filter=${
+        name === "hcc" ? selectedOption : ""
+      }`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,5 +113,42 @@ export const Coder = async ({ name,search, selectedOption,router }) => {
     if (err?.response?.status === 401) {
       router?.push("/userlogin");
     }
+  }
+};
+
+export const enableMFA = async (username) => {
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}securityservice/auth/enablemfa?userName=${username}`
+    );
+    return response;
+  } catch (Err) {
+    console.log(Err);
+  }
+};
+export const verifyCode = async (username, code) => {
+  const datas = {
+    username: username,
+    code: code,
+  };
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}securityservice/auth/verify/mfa`,
+      datas
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const mfaValidation = async (username) => {
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}securityservice/auth/mfaValidation?userName=${username}`
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
   }
 };

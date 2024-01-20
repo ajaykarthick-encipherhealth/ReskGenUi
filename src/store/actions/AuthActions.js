@@ -8,7 +8,11 @@ import {
   saveTokenInLocalStorage,
   signUp,
   Coder,
+  mfaValidation,
+  enableMFA,
+  verifyCode,
 } from "../../services/AuthService";
+import { notification } from "antd";
 
 export const SIGNUP_CONFIRMED_ACTION = "[signup action] confirmed signup";
 export const SIGNUP_FAILED_ACTION = "[signup action] failed signup";
@@ -20,6 +24,8 @@ export const NAVTOGGLE = "NAVTOGGLE";
 export const PATIENT_DETAILS = "";
 export const SELECTEDROLE = "SELECTEDROLE";
 export const CODER = "CODER";
+export const ENABLEMFA = "ENABLEMFA";
+export const VERIFYCODE = "VERIFYCODE";
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -53,6 +59,50 @@ export function Logout(navigate) {
     type: LOGOUT_ACTION,
   };
 }
+
+export const getMFAValidation = (username, route) => {
+  return (dispatch) => {
+    mfaValidation(username, route).then((response) => {
+      const skip = response?.data?.response?.skipEntryAvailable;
+      const mfa = response?.data?.response?.mfaIsEnabled;
+      if (response?.data?.response) {
+        route?.push(
+          `/twofactorAuthentication/Authentication?mfa=${mfa}&skipEntry=${skip}&username=${username}`
+        );
+      }
+    });
+  };
+};
+
+export const getQrCode = (username, route) => {
+  return (dispatch) => {
+    enableMFA(username, route).then((response) => {
+      if (response?.data?.response) {
+        const url = response?.data?.response?.secretImageUri;
+        route?.push(
+          `/twofactorAuthentication/GetOTP?username=${username}&url=${url}`
+        );
+      }
+    });
+  };
+};
+export const getValidateCode = (username, code, validate, route) => {
+  return (dispatch) => {
+    verifyCode(username, code, route).then((response) => {
+      if (response?.data?.response) {
+        if (validate) {
+          route?.push(`/twofactorAuthentication/Authentication`);
+        } else {
+          route?.push(`/userlogin`);
+        }
+      }else{
+        notification.error({
+          description:"Entered pin is wrong.Re-verify the pin"
+        })
+      }
+    });
+  };
+};
 
 export function LogInRoute(navigate) {
   navigate("/dashboard");
@@ -123,10 +173,10 @@ export function patientDetails(data) {
     payload: data,
   };
 }
-export const getCoderDetails = ({ name,search,selectedOption, router }) => {
+export const getCoderDetails = ({ name, search, selectedOption, router }) => {
   return (dispatch) => {
     try {
-      Coder({ name,search,selectedOption,router }).then((response) => {
+      Coder({ name, search, selectedOption, router }).then((response) => {
         dispatch({
           type: CODER,
           payload: response,

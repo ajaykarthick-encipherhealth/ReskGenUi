@@ -1,28 +1,39 @@
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
+import { getQrCode, getValidateCode } from "../../store/actions/AuthActions";
 
-const codeLength = 6;
+export const codeLength = 6;
+export const generateCodeArray = () =>
+  Array.from({ length: codeLength + 1 }, (_, index) => index + 1);
+
 const index = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [seconds, setSeconds] = useState(30);
-  const [enableMFA, setEnableMFA] = useState(false);
-  const generateCodeArray = () =>
-    Array.from({ length: codeLength + 1 }, (_, index) => index + 1);
+  const [enableMFA, setEnableMFA] = useState();
+  const [username, setUsername] = useState();
+  const [skip, setSkip] = useState();
+  const [code, setCode] = useState([]);
+
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
   const handleInput = (index, e) => {
     const value = e.target.value;
-
+    setCode((prev) => [...prev, ...value]);
     if (value.length === 1 && index < inputRefs?.length - 1) {
       inputRefs[index + 1].current.focus();
     }
   };
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setEnableMFA(searchParams.get("mfa"));
+    setUsername(searchParams.get("username"));
+    setSkip(searchParams.get("skipEntry"));
     const intervalId = setInterval(() => {
       setSeconds((prevSeconds) => {
         if (prevSeconds === 0) {
@@ -89,7 +100,8 @@ const index = () => {
               <button
                 className={styles.sendBtn}
                 onClick={() => {
-                  setEnableMFA(true);
+                  const codeString = code?.join(",");
+                  dispatch(getValidateCode(username, codeString, true,router));
                 }}
               >
                 SUBMIT
@@ -104,9 +116,7 @@ const index = () => {
               </button>
               <div className={styles.redirect}>
                 <span className={styles.code}> Didn't get a Code? </span>
-                <Link href="/" className={styles.link}>
-                  Send again
-                </Link>
+                <span className={styles.link}>Send again</span>
               </div>
             </>
           ) : (
@@ -114,19 +124,21 @@ const index = () => {
               <button
                 className={styles.sendBtn}
                 onClick={() => {
-                  router?.push("/twofactorAuthentication/GetOTP");
+                  dispatch(getQrCode(username,router))
                 }}
               >
                 ENABLE MFA
               </button>
-              <button
-                className={styles.sendBtn}
-                onClick={() => {
-                  setEnableMFA(false);
-                }}
-              >
-                SETUP LATER
-              </button>
+              {skip && (
+                <button
+                  className={styles.sendBtn}
+                  onClick={() => {
+                    router?.push(`/twofactorAuthentication/SelectRole`);
+                  }}
+                >
+                  SETUP LATER
+                </button>
+              )}
             </>
           )}
         </div>
