@@ -49,7 +49,6 @@ const SelectRole = () => {
     }
   };
   useEffect(() => {
-    console.log(localStorage.getItem("roles"))
     const searchParams = new URLSearchParams(window.location.search);
     setUsername(searchParams.get("username"));
     setPassword(searchParams.get("password"))
