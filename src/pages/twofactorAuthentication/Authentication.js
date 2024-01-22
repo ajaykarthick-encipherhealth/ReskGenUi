@@ -146,7 +146,7 @@ const index = () => {
                   className={styles.sendBtn}
                   onClick={() => {
                     dispatch(
-                      loginAction(username, password, router, code?.join(""))
+                      loginAction(username, router, code?.join(""))
                     );
                   }}
                 >

@@ -17,13 +17,23 @@ export function signUp(email, password) {
   );
 }
 
-export function login(email, password,code) {
+export function login(email, password, code) {
   const postData = {
     username: email,
     password: password,
-    code:code,  
+    code: code,
   };
-  return axiosApi.post(ENDPOINTS.apiEndoint + `securityservice/auth/login`, postData);
+  const datas =
+    code?.length > 0
+      ? postData
+      : {
+          username: email,
+          password: password,
+        };
+  return axiosApi.post(
+    ENDPOINTS.apiEndoint + `securityservice/auth/login`,
+    datas
+  );
 }
 
 export function formatError(errorResponse) {
@@ -130,7 +140,7 @@ export const verifyCode = async (username, code) => {
   const datas = {
     username: username,
     code: code,
-    newMfa:true
+    newMfa: true,
   };
   try {
     const response = await axios.post(
