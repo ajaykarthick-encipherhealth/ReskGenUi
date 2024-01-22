@@ -12,21 +12,29 @@ const SelectRole = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [username, setUsername] = useState();
-  const [password,setPassword]=useState()
+  const [password, setPassword] = useState();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [role, setRole] = useState([]);
   const items = [];
-  const data = role?.length>0 && role?.map((info) => {
-    if (info?.toLowerCase() === "admin") {
-      items?.push(
-        { value: "Admin", label: "Admin" },
-        { value: "L1auditor", label: "L1auditor" }
-      );
-    } else {
-      items?.push({ value: info, label: info });
-    }
-  });
+  const data =
+    role?.length > 0 &&
+    role?.map((info) => {
+      if (info?.toLowerCase() === "admin") {
+        items?.push(
+          { value: "Admin", label: "Admin" },
+          { value: "L1auditor", label: "L1auditor" },
+          { value: "L2auditor", label: "L2auditor" }
+        );
+      } else if (info?.toLowerCase() === "l1auditor") {
+        items?.push(
+          { value: "L1auditor", label: "L1auditor" },
+          { value: "L2auditor", label: "L2auditor" }
+        );
+      } else {
+        items?.push({ value: info, label: info });
+      }
+    });
   const onSubmitRole = (e) => {
     e.preventDefault();
     if (!selectedRole) {
@@ -36,6 +44,7 @@ const SelectRole = () => {
         message: "Login Successfully",
         duration: 1,
       });
+      localStorage.removeItem("password");
       setRoleError(false);
       if (selectedRole === "admin" && !roleError) {
         dispatch(selectedUserRole(selectedRole?.toUpperCase()));
@@ -51,9 +60,9 @@ const SelectRole = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setUsername(searchParams.get("username"));
-    setPassword(searchParams.get("password"))
+    setPassword(searchParams.get("password"));
     setRole([localStorage.getItem("roles")]);
-  }, [])
+  }, []);
 
   return (
     <div className="page-wraper">
@@ -110,7 +119,9 @@ const SelectRole = () => {
                       className={styles.backBtn}
                       onClick={() => {
                         setRoleError(false);
-                        router?.push(`/twofactorAuthentication/Authentication?mfa=true&username=${username}&password=${password}`);
+                        router?.push(
+                          `/twofactorAuthentication/Authentication?mfa=true&username=${username}`
+                        );
                       }}
                     >
                       {"BACK"}

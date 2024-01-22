@@ -36,7 +36,9 @@ const index = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    setEnableMFA(searchParams.get("mfa"));
+    const mfaParam = searchParams.get("mfa");
+    const enableMFAValue = mfaParam === "true";
+    setEnableMFA(enableMFAValue);
     setUsername(searchParams.get("username"));
     setSkip(searchParams.get("skipEntry"));
     setPassword(searchParams.get("password"));
@@ -108,13 +110,7 @@ const index = () => {
                 onClick={() => {
                   const codeString = code?.join("");
                   dispatch(
-                    getValidateCode(
-                      username,
-                      codeString,
-                      router,
-                      password,
-                      "validate"
-                    )
+                    getValidateCode(username, codeString, router, "validate")
                   );
                 }}
               >
@@ -138,7 +134,9 @@ const index = () => {
               <button
                 className={styles.sendBtn}
                 onClick={() => {
-                  dispatch(getQrCode(username, router));
+                  router?.push(
+                    `/twofactorAuthentication/GetOTP?username=${username}`
+                  );
                 }}
               >
                 ENABLE MFA

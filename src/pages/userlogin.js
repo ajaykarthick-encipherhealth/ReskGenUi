@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 
 export default function UserLogin() {
   const router = useRouter();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [role, setRole] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +25,7 @@ export default function UserLogin() {
   const onLogin = async (e) => {
     setIsLoading(true);
     e.preventDefault();
-    dispatch(getMFAValidation(email,router,password))
+    dispatch(getMFAValidation(email, router, password));
   };
 
   const handleTogglePasswordVisibility = () => {
@@ -76,7 +76,10 @@ export default function UserLogin() {
                       type={showPassword ? "text" : "password"}
                       className="form-control form-control-lg"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => {
+                        localStorage.setItem("password", e.target.value);
+                        setPassword(e.target.value);
+                      }}
                     />
                     <div className="input-group-append">
                       <span className={styles.passwordBox}>

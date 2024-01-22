@@ -1,6 +1,3 @@
-import React from "react";
-//import { useNavigate } from "react-router-dom";
-
 import {
   formatError,
   login,
@@ -60,14 +57,14 @@ export function Logout(navigate) {
   };
 }
 
-export const getMFAValidation = (username, route, password) => {
+export const getMFAValidation = (username, route) => {
   return (dispatch) => {
     mfaValidation(username, route).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response?.data?.response) {
         route?.push(
-          `/twofactorAuthentication/Authentication?mfa=${mfa}&skipEntry=${skip}&username=${username}&password=${password}`
+          `/twofactorAuthentication/Authentication?mfa=${mfa}&skipEntry=${skip}&username=${username}`
         );
       }
     });
@@ -82,20 +79,19 @@ export const getQrCode = (username, route) => {
           type: VERIFYCODE,
           payload: response?.data?.response?.secretImageUri,
         });
-        const url = response?.data?.response?.secretImageUri;
-        route?.push(`/twofactorAuthentication/GetOTP?username=${username}`);
       }
     });
   };
 };
-export const getValidateCode = (username, code, route, password, validate) => {
+export const getValidateCode = (username, code, route, validate) => {
+  const password = localStorage.getItem("password");
   return (dispatch) => {
     verifyCode(username, code, route).then((response) => {
       if (response?.data?.response) {
         if (validate) {
           dispatch(loginAction(username, password, route, code));
           route?.push(
-            `/twofactorAuthentication/SelectRole?username=${username}&password=${password}`
+            `/twofactorAuthentication/SelectRole?username=${username}`
           );
         } else {
           notification.success({

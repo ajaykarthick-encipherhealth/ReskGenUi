@@ -8,15 +8,14 @@ import redirect from "../../images/svg/redirect.svg";
 import hamburgermenu from "../../images/svg/hamburgermenu.svg";
 import settings from "../../images/svg/settings.svg";
 import { codeLength, generateCodeArray } from "./Authentication";
-import { getValidateCode } from "../../store/actions/AuthActions";
+import { getQrCode, getValidateCode } from "../../store/actions/AuthActions";
 import { useSelector } from "react-redux";
 
 const GetOTP = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const url=useSelector(state=>state.auth.qrcode)
+  const url = useSelector((state) => state.auth.qrcode);
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
-//   const [url, setUrl] = useState();
   const [username, setUsername] = useState();
   const [code, setCode] = useState([]);
 
@@ -29,11 +28,10 @@ const GetOTP = () => {
   };
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    // setUrl(searchParams.get("url"));
     setUsername(searchParams.get("username"));
+    dispatch(getQrCode(searchParams.get("username"), router));
   }, []);
 
-  console.log(url)
   return (
     <div className={styles.contentMainDIv}>
       <div className={styles.mfaMainDiv}>
@@ -105,7 +103,7 @@ const GetOTP = () => {
             style={{ width: "16%", margin: "auto" }}
             onClick={() => {
               const codeString = code?.join("");
-              dispatch(getValidateCode(username, codeString,router));
+              dispatch(getValidateCode(username, codeString, router));
             }}
           >
             VALIDATE
