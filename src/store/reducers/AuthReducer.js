@@ -8,6 +8,7 @@ import {
   PATIENT_DETAILS,
   SELECTEDROLE,
   CODER,
+  VERIFYCODE
 } from "../actions/AuthActions";
 
 const initialState = {
@@ -24,6 +25,7 @@ const initialState = {
   selectedRole: null,
   // count : false,
   codeDetails: null,
+  qrcode:""
 };
 
 const initialStatePatient = {
@@ -93,6 +95,12 @@ export function AuthReducer(state = initialState, action) {
     return {
       ...state,
       codeDetails: action.payload,
+    };
+  }
+  if (action.type === VERIFYCODE) {
+    return {
+      ...state,
+      qrcode: action.payload,
     };
   }
   return state;
