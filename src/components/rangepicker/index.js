@@ -12,6 +12,11 @@ const DateRangePicker = ({
   defaultStartDate,
   defaultEndDate,
   setSelectedDates,
+  activeTab,
+  setReceivedStartDate,
+  setReceivedEndDate,
+  setCoderStartDate,
+  setCoderEndDate,
 }) => {
   return (
     <div>
@@ -26,6 +31,11 @@ const DateRangePicker = ({
               setStartDate,
               setEndDate,
               setSelectedDates,
+              activeTab,
+              setReceivedStartDate,
+              setReceivedEndDate,
+              setCoderStartDate,
+              setCoderEndDate
             )
           }
           defaultValue={

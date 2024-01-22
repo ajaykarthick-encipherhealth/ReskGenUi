@@ -4,7 +4,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputText } from "primereact/inputtext";
 import { searchFunction } from "../headerFilters/functions";
 
-const Search = ({ searchlabel, setSearch }) => {
+const Search = ({
+  searchlabel,
+  setSearch,
+  setSentSearch,
+  setReceivedSearch,
+  setCoderSearch,
+  activeTab,
+}) => {
   return (
     <div>
       <label>{searchlabel}</label>
@@ -15,7 +22,16 @@ const Search = ({ searchlabel, setSearch }) => {
         />
         <InputText
           type="text"
-          onChange={(e) => searchFunction(e,setSearch)}
+          onChange={(e) =>
+            searchFunction(
+              e,
+              setSearch,
+              setSentSearch,
+              setReceivedSearch,
+              setCoderSearch,
+              activeTab
+            )
+          }
           className="form-control new-form-control"
           placeholder="Search"
         />

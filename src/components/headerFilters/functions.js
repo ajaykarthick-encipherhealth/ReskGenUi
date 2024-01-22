@@ -1,6 +1,21 @@
 // for search
-export const searchFunction = (e, setSearch) => {
-  setSearch(e.target.value);
+export const searchFunction = (
+  e,
+  setSearch,
+  setSentSearch,
+  setReceivedSearch,
+  setCoderSearch,
+  activeTab
+) => {
+  if (activeTab === "SentReport") {
+    setSentSearch(e.target.value);
+  } else if (activeTab === "ReceivedReport") {
+    setReceivedSearch(e.target.value);
+  } else if (activeTab === "CoderReport") {
+    setCoderSearch(e.target.value);
+  } else {
+    setSearch(e.target.value);
+  }
 };
 
 // for select
@@ -15,6 +30,11 @@ export const handleRnagePicker = (
   setStartDate,
   setEndDate,
   setSelectedDates,
+  activeTab,
+  setReceivedStartDate,
+  setReceivedEndDate,
+  setCoderStartDate,
+  setCoderEndDate
 ) => {
   const formattedDates = dateString?.map((data, index) => {
     const formattedDate =
@@ -24,8 +44,21 @@ export const handleRnagePicker = (
     return formattedDate;
   });
   // setSelectedDates(date);
-  setStartDate(formattedDates[0]);
-  setEndDate(formattedDates[1]);
+  if (activeTab === "SentReport") {
+    setStartDate(formattedDates[0]);
+    setEndDate(formattedDates[1]);
+  } else if (activeTab === "ReceivedReport") {
+    setReceivedStartDate(formattedDates[0]);
+    setReceivedEndDate(formattedDates[1]);
+  } else if (activeTab === "CoderReport") {
+    setCoderStartDate(formattedDates[0]);
+    setCoderEndDate(formattedDates[1]);
+  } else {
+    setStartDate(formattedDates[0]);
+    setEndDate(formattedDates[1]);
+  }
+
+  
 };
 
 // if has 2 rangepickers
@@ -34,8 +67,8 @@ export const handleRnagePicker2 = ({
   dateString,
   setStartDate2,
   setEndDate2,
-  setSelectedDates2}
-) => {
+  setSelectedDates2,
+}) => {
   const formattedDates = dateString?.map((date, index) => {
     const formattedDate =
       index === 1
@@ -49,5 +82,14 @@ export const handleRnagePicker2 = ({
 };
 
 export const dateFormate = (dayjs, date) => {
-  return date ? dayjs(date).format("MM-DD-YYYY") : <div >MM-DD-YYYY</div>;
+  return date ? dayjs(date).format("MM-DD-YYYY") : <div>MM-DD-YYYY</div>;
+};
+
+//sorting
+export const sortFunction = (sortOrder, setSortOrder) => {
+  if (sortOrder === "ASC") {
+    setSortOrder("DESC");
+  } else {
+    setSortOrder("ASC");
+  }
 };

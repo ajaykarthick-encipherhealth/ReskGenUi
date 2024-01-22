@@ -1,9 +1,6 @@
-import styles from "./report.module.css";
 import React, { useState, useEffect } from "react";
 import { Modal, DatePicker } from "antd";
-import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
-import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
@@ -12,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
+import styles from "./report.module.css";
+import Header from "../../../jsx/layouts/nav/Header";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
@@ -22,6 +21,16 @@ import {
   getSentDetails,
 } from "../../../store/actions/ReportActions";
 import SpinnerDots from "../../../components/spinner";
+import HeaderFilters from "../../../components/headerFilters";
+
+const { RangePicker } = DatePicker;
+const statusOptions = [
+  { label: "Completed", value: "COMPLETED" },
+  { label: "Pending", value: "PENDING" },
+  { label: "Declined", value: "DECLINED" },
+  { label: "Hold", value: "HOLD" },
+  { label: "All", value: "ALL" },
+];
 
 const index = () => {
   const dispatch = useDispatch();
@@ -33,10 +42,6 @@ const index = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const [tenantId, setTenantId] = useState("");
-  const [localOrgId, setLocalOrgId] = useState("");
-  const [localUserId, setLocalUserId] = useState("");
-
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
@@ -45,11 +50,7 @@ const index = () => {
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
 
-  const [tableLoading, setTableLoading] = useState(true);
   const [modal, setModal] = useState(false);
-  const { RangePicker } = DatePicker;
-
-  const [modalVisible, setModalVisible] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [receivedStartDate, setReceivedStartDate] = useState();
@@ -61,10 +62,8 @@ const index = () => {
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
+  const [receivedSortOrder, setReceivedSortOrder] = useState("ASC");
+  const [sortField, setSortField] = useState(null);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -94,14 +93,7 @@ const index = () => {
   const ExportResponse = useSelector((state) => state.report?.exportRes);
 
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
-    setTenantId(tenId);
-    setLocalOrgId(orgId);
-    setLocalUserId(uId);
     setIsLoading(false);
-
     if (activeTab === "SentReport") {
       dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch));
     }
@@ -111,7 +103,9 @@ const index = () => {
           receivedPageNo,
           receivedStartDate,
           receivedEndDate,
-          receivedSearch
+          receivedSearch,
+          sortField,
+          receivedSortOrder
         )
       );
     }
@@ -147,6 +141,8 @@ const index = () => {
     receivedStartDate,
     receivedEndDate,
     receivedSearch,
+    receivedSortOrder,
+    sortField,
   ]);
 
   const ReportPatientDetails = useSelector((state) => state.report?.details);
@@ -158,13 +154,6 @@ const index = () => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
 
-  const statusOptions = [
-    { label: "Completed", value: "COMPLETED" },
-    { label: "Pending", value: "PENDING" },
-    { label: "Declined", value: "DECLINED" },
-    { label: "Hold", value: "HOLD" },
-    { label: "All", value: "ALL" },
-  ];
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
@@ -187,15 +176,8 @@ const index = () => {
   };
 
   const onPageChange = (e) => {
-    // console.log(dates);
-    // console.log(compledtedDate);
-    // console.log(e);
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    // setPageSize(e.rows);
-    setTableLoading(true);
-    // getAllList(localUserId, e.page, e.rows);
-    // setPageNo(e?.pageCount);
   };
   const onReceivedPageChange = (e) => {
     setPaginationReceivedFirst(e.first);
@@ -213,7 +195,7 @@ const index = () => {
   const closeModal = () => {
     setIsModalVisible(false);
     setSelectedRows([]);
-    setSelectAll(false)
+    setSelectAll(false);
   };
 
   const handleDatePickerChange = (date, dateString) => {
@@ -269,111 +251,33 @@ const index = () => {
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
                         <div className="tbl-caption  align-items-center">
-                          <div className="row filter-contain">
-                            <div className="col-xl-2">
-                              <label>Search by Name</label>
-                              <div class="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-                                <InputText
-                                  type="text"
-                                  onChange={(e) => filterChangePatientId(e)}
-                                  className="form-control new-form-control"
-                                  placeholder="Search"
-                                />
-                              </div>
-                            </div>
-                            {activeTab === "CoderReport" ? (
-                              <div className="col-xl-2">
-                                <label>Select Status</label>
-                                <div class="form-group has-search">
-                                  {/* <InputText
-                                  type="text"
-                                  onChange={(e) => filterChangePatientName(e)}
-                                  className="form-control new-form-control"
-                                  placeholder="Status"
-                                /> */}
-                                  {activeTab === "CoderReport" && (
-                                    <Select
-                                      onChange={(selectedOption) => {
-                                        dosOnChange(selectedOption);
-                                      }}
-                                      options={statusOptions}
-                                      className="custom-react-select"
-                                      isSearchable={false}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                            ) : null}
-
-                            <div className="col-xl-2">
-                              <label>Select Range</label>
-                              <div>
-                                <RangePicker
-                                  value={selectedDates}
-                                  onChange={
-                                    activeTab === "SentReport"
-                                      ? handleDatePickerChange
-                                      : activeTab === "ReceivedReport"
-                                      ? handleReceivedDatePicker
-                                      : handleCoderPicker
-                                  }
-                                />
-                              </div>
-                            </div>
-                            {activeTab === "CoderReport" && (
-                              <div className="col-xl-6">
-                                <div className="row flr">
-                                  <button
-                                    onClick={handleExport}
-                                    className={
-                                      rowsLength?.length === 0
-                                        ? styles.csv
-                                        : styles.export
-                                    }
-                                    disabled={
-                                      rowsLength?.length > 0 ||
-                                      rowsLength?.data?.length > 0
-                                        ? false
-                                        : true
-                                    }
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="15"
-                                      height="15"
-                                      viewBox="0 0 20 20"
-                                      fill="none"
-                                      className="me-2"
-                                    >
-                                      <path
-                                        d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
-                                        stroke="#133DD4"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      />
-                                      <path
-                                        d="M10 12.4999V3.0166"
-                                        stroke="#133DD4"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      />
-                                      <path
-                                        d="M12.7916 4.87467L9.9999 2.08301L7.20825 4.87467"
-                                        stroke="#133DD4"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      />
-                                    </svg>
-                                    Export
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-                          </div>
+                          <HeaderFilters
+                            // search
+                            setSentSearch={setSentSearch}
+                            setReceivedSearch={setReceivedSearch}
+                            setCoderSearch={setCoderSearch}
+                            isSearch={true}
+                            searchlabel="Search by Name"
+                            // selector
+                            selectlabel="Select Status"
+                            isSelector={
+                              activeTab === "CoderReport" ? true : false
+                            }
+                            setSelectedOption={setSelectedCoderOpt}
+                            selectOptions={statusOptions}
+                            defaultSelectValue1={""}
+                            // rangepicker
+                            isRangePicker={true}
+                            pickerlabel="Select Range"
+                            setStartDate={setStartDate}
+                            setEndDate={setEndDate}
+                            setReceivedStartDate={setReceivedStartDate}
+                            setReceivedEndDate={setReceivedEndDate}
+                            setCoderStartDate={setCoderStartDate}
+                            setCoderEndDate={setCoderEndDate}
+                            activeTab={activeTab}
+                            rowsLength={rowsLength}
+                          />
                         </div>
                         <Export
                           isModalVisible={isModalVisible}
@@ -498,6 +402,9 @@ const index = () => {
                                         receivedStartDate={receivedStartDate}
                                         receivedEndDate={receivedEndDate}
                                         loading={ReceivedReportDetails?.loading}
+                                        setSortOrder={setReceivedSortOrder}
+                                        sortOrder={receivedSortOrder}
+                                        setSortField={setSortField}
                                       />
                                     )}
                                   </Tab.Pane>

@@ -9149,6 +9149,7 @@ table th:last-child {
 
 .flr {
   float: right !important;
+  align-items: center;
 }
 
 .height450 {

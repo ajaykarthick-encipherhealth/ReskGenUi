@@ -40,9 +40,9 @@ export const SentReport = async (pagenum,startDate="",endDate="",search) => {
     console.log(err);
   }
 };
-export const ReceivedReport = async (pagenum,startDate="",endDate="",search) => {
+export const ReceivedReport = async (pagenum,startDate="",endDate="",search,sortfield,sortdirection) => {
   const token = localStorage.getItem("token");
-  const url= `dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}`
+  const url= `dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sortfield}&sortdirection=${sortdirection}`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,

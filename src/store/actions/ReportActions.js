@@ -113,7 +113,7 @@ export const getSentDetails = (pagenum, startDate, endDate, search) => {
     }
   };
 };
-export const getReceivedDetails = (pagenum, startDate, endDate, search) => {
+export const getReceivedDetails = (pagenum, startDate, endDate, search,sortfield,sortdirection) => {
   return (dispatch) => {
     dispatch({
       type: RECEIVED_REPORT,
@@ -122,7 +122,7 @@ export const getReceivedDetails = (pagenum, startDate, endDate, search) => {
       },
     });
     try {
-      ReceivedReport(pagenum, startDate, endDate, search).then((response) => {
+      ReceivedReport(pagenum, startDate, endDate, search,sortfield,sortdirection).then((response) => {
         if (response) {
           dispatch({
             type: RECEIVED_REPORT,
