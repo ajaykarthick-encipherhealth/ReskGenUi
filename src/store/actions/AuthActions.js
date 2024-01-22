@@ -84,6 +84,7 @@ export const getQrCode = (username, route) => {
   };
 };
 export const getValidateCode = (username, code, route, validate) => {
+  const password = localStorage.getItem("password");
   return (dispatch) => {
     verifyCode(username, code, route).then((response) => {
       if (response?.data?.response) {

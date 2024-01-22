@@ -156,7 +156,8 @@ export const verifyCode = async (username, code) => {
 export const mfaValidation = async (username) => {
   try {
     const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint}securityservice/auth/mfaValidation?userName=${username}`
+      `${ENDPOINTS?.apiEndoint}securityservice/auth/mfaValidation`,
+      { userName: username }
     );
     return response;
   } catch (err) {

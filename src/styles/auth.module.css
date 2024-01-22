@@ -128,9 +128,7 @@
   
 .mfaMainDiv {
   display: flex;
-  height: 100%;
-  /* background-color: #fff; */
- 
+  height: 60%;
   justify-content: space-between;
 }
 .instrucDIv {
