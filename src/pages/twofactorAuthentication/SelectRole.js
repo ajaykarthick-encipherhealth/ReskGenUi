@@ -12,7 +12,6 @@ const SelectRole = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [role, setRole] = useState([]);
@@ -60,7 +59,6 @@ const SelectRole = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setUsername(searchParams.get("username"));
-    setPassword(searchParams.get("password"));
     setRole([localStorage.getItem("roles")]);
   }, []);
 
