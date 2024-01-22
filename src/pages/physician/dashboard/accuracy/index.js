@@ -12,6 +12,15 @@ import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 
+export const getISOWeekNumber = (date) => {
+  const currentDate = new Date(date);
+  currentDate.setHours(0, 0, 0, 0);
+  currentDate.setDate(currentDate.getDate() + 3 - ((currentDate.getDay() + 6) % 7));
+  const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+  const weekNumber = Math.ceil(((currentDate - startOfYear) / 86400000 + 1) / 7);
+
+  return weekNumber;
+};
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstDayWeek = firstDayOfMonth.getDay();
@@ -58,6 +67,7 @@ const Accuracy = () => {
     { length: numberOfWeeks },
     (_, index) => `Week ${index + 1}`
   );
+
   const router = useRouter();
   useEffect(() => {
     dispatch(getAccuracyScore(currentBtn, selectedMonth, selectedYear, router));
@@ -94,7 +104,7 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     highlightIndex = currentDate.getDate() - 1;
   } else if (currentBtn === "Weekly") {
-    const currentWeek = getDateWeek(currentDate);
+    const currentWeek = getISOWeekNumber(currentDate);
 
     highlightIndex = currentWeek - 1;
   }
@@ -207,7 +217,7 @@ const Accuracy = () => {
                   ? `Day ${currentDate.getDate()}`
                   : currentBtn === "Monthly"
                   ? `Month ${monthNames[currentDate.getMonth()]}`
-                  : `Week ${getDateWeek(currentDate)}`}
+                  : `Week ${getISOWeekNumber(currentDate)}`}
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>{accuracyDatas?.response 

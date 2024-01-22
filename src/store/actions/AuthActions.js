@@ -84,12 +84,11 @@ export const getQrCode = (username, route) => {
   };
 };
 export const getValidateCode = (username, code, route, validate) => {
-  const password = localStorage.getItem("password");
   return (dispatch) => {
     verifyCode(username, code, route).then((response) => {
       if (response?.data?.response) {
         if (validate && password) {
-          dispatch(loginAction(username, password, route, code));
+          dispatch(loginAction(username, route, code));
         } else {
           notification.success({
             message: "Code verified successfully",
@@ -110,7 +109,8 @@ export function LogInRoute(navigate) {
   navigate("/dashboard");
 }
 
-export function loginAction(email, password, router, code) {
+export function loginAction(email, router, code) {
+  const password = localStorage.getItem("password");
   return (dispatch) => {
     login(email, password, code)
       .then((response) => {
