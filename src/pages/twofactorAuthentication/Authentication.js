@@ -20,7 +20,6 @@ const index = () => {
   const [seconds, setSeconds] = useState(30);
   const [enableMFA, setEnableMFA] = useState(false);
   const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
   const [skip, setSkip] = useState();
   const [code, setCode] = useState([]);
 
@@ -40,8 +39,9 @@ const index = () => {
     const enableMFAValue = mfaParam === "true";
     setEnableMFA(enableMFAValue);
     setUsername(searchParams.get("username"));
-    setSkip(searchParams.get("skipEntry"));
-    setPassword(searchParams.get("password"));
+    const skipParam = searchParams.get("skipEntry");
+    const skipValue = skipParam === "true";
+    setSkip(skipValue);
     const intervalId = setInterval(() => {
       setSeconds((prevSeconds) => {
         if (prevSeconds === 0) {
