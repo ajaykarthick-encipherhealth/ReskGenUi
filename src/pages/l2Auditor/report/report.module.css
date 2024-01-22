@@ -1,0 +1,208 @@
+.maincontainer {
+  position: relative;
+}
+.content-body .container-fluid {
+  background: #f0f6fe;
+}
+.export {
+  width: 108px;
+  height: 38px;
+  flex-shrink: 0;
+
+  border-radius: 8px;
+  border: 1px solid #133dd4;
+  background: rgba(19, 61, 212, 0.15);
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  color: #133dd4 !important;
+  font-family: Manrope;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.48px;
+  display: flex;
+  margin-right: 17px;
+  padding: 10px;
+}
+
+.export:hover {
+  text-decoration: none !important;
+}
+.custom-table table > thead {
+  background-color: #133dd4;
+}
+.comments {
+  width: 180px;
+  cursor: pointer;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 0.2px solid #000;
+  background: #f4f4f4;
+  color: #000;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 180% */
+  letter-spacing: 0.6px;
+}
+.heads {
+  width: 100%;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: #04306f;
+  text-align: center;
+}
+.headText {
+  color: #fff;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+}
+.datas {
+  color: #04306f;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.78px;
+}
+.data {
+  margin-top: 10px;
+}
+.description {
+  color: #000;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 150% */
+  letter-spacing: 0.72px;
+}
+.commentsIcon {
+  text-align: center;
+  cursor: pointer;
+}
+/* .excel:active {
+  width: 100px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 8px;
+
+  background: #04306f;
+  border: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  color: #fff;
+
+  background: #04306f !important;
+  border: none !important;
+  color: #fff !important;
+
+  font-family: Manrope;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+} */
+.excel:active {
+  background-color: #04306f;
+  color: #fff;
+  border: none !important;
+}
+.excel:focus {
+  background-color: #04306f;
+  color: #fff;
+  border: none !important;
+}
+.excel:hover {
+  color: black;
+}
+.csv {
+  width: 100px;
+  height: 40px;
+  color: black;
+  text-align: center;
+  padding-top: 5px;
+  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
+  margin-right: 10px;
+  border-radius: 8px;
+}
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  background-color: #04306f !important;
+}
+.excel {
+  width: 100px;
+  height: 40px;
+  /* border-radius: 8px; */
+  /* border: 0.5px solid #b1aeae; */
+  /* flex-shrink: 0;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background: #f5f9fe;
+  font-family: Manrope; */
+  color: black;
+  text-align: center;
+  padding-top: 5px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
+  margin-right: 10px;
+}
+.dateDisplay {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  width: 300px;
+  height: 40px;
+  box-shadow: 0px 2px 6px 0px #00000014;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.footerBtn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.modelCon {
+  width: 50% !important;
+}
+.selectDiv {
+  width: 85% !important;
+  margin-right: 20px;
+}
+.displayDiv {
+  width: 90%;
+  height: 150px;
+  display: block;
+  margin-left: 50px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  /* overflow-y: scroll; */
+  padding: 5px;
+  box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
+}
+/* .innerdiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+.userName {
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+  box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}

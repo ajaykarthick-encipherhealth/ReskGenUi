@@ -17,7 +17,16 @@ export const eventStreming = (
   pageNo,
   pageSize,
   getPatients,
-  dispatch
+  dispatch,
+  computedStartDate,
+  computedEndDate,
+  selectedOption,
+  search,
+  completedStartDate,
+  completedEndDate,
+  selAllocatedTo,
+  selAllocatedBy,
+  selCreatedBy
 ) => {
   const id = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -31,7 +40,20 @@ export const eventStreming = (
       const item = data[0];
       if (item?.processStageChart === "FINISHED") {
         setParsedData(data);
-        dispatch(getPatients(pageNo));
+        dispatch(
+          getPatients(
+            pageNo,
+            computedStartDate,
+            computedEndDate,
+            selectedOption,
+            search,
+            completedStartDate,
+            completedEndDate,
+            selAllocatedTo,
+            selAllocatedBy,
+            selCreatedBy
+          )
+        );
         sse.close();
       }
     }
@@ -97,7 +119,7 @@ function FileProcessingTable({ patinetListAll }) {
       sse.close();
     };
   }, []);
- 
+
   useEffect(() => {
     if (activeId && parsedData) {
       parsedData?.map((info) => {
@@ -106,13 +128,13 @@ function FileProcessingTable({ patinetListAll }) {
         }
       });
     }
-    if(parsedData){
+    if (parsedData) {
       const interval = setInterval(() => {
-        setCount(prevCount => (prevCount + 5) % 100); 
-      }, 100); 
-    
+        setCount((prevCount) => (prevCount + 5) % 100);
+      }, 100);
+
       return () => clearInterval(interval);
-     } 
+    }
   }, [parsedData, activeId]);
 
   const handleToggleStepper = (index, data) => {

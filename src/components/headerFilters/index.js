@@ -85,6 +85,7 @@ const HeaderFilters = ({
 
   bullets,
   isNextRow,
+  btnTitle
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   // const bullets = [
@@ -203,9 +204,9 @@ const HeaderFilters = ({
             >
               <Button
                 onClick={addUserForm}
-                className="btn btn-primary btn-sm ms-2 flr"
+                className="btn btn-primary btn-sm ms-2 flr width-max-content"
               >
-                + Add User
+                + {btnTitle}
               </Button>
             </div>
           )}

@@ -66,7 +66,7 @@ const Addpatients = ({
               <Button type="submit" className="btn btn-primary btn-sm me-1">
                 {"Submit"}
               </Button>
-              <Button
+              <Button className="btn-sm me-1"
                 onClick={() => setAddPatientId(false)}
                 style={{
                   backgroundColor: "#ffdede",

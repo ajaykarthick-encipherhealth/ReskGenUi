@@ -224,6 +224,7 @@ const UserList = () => {
                         isRangePicker={true}
                         addUser={true}
                         addUserForm={addUserForm}
+                        btnTitle="Add User"
                       />
                     </div>
                     <div

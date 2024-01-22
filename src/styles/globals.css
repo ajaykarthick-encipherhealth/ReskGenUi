@@ -13371,6 +13371,9 @@ overflow: scroll;
   min-height: 42px !important;
   border: 1px solid #e6e6e6 !important;
 }
+.ant_select_form > .ant-select-arrow{
+  margin-top: 0px !important;
+}
 .overlay-loading {
   cursor: pointer;
   display: flex;
@@ -13389,4 +13392,7 @@ overflow: scroll;
 }
 .meat-queriedmodal > .ant-modal-content{
   width: 655px;
+}
+.width-max-content{
+  width: max-content !important;
 }

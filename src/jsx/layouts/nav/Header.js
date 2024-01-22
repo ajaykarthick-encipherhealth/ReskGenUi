@@ -18,6 +18,7 @@ import {
   MenuList,
   PhysicanMenuList,
   L2AuditMenuList,
+  L2AuditorMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
@@ -47,8 +48,8 @@ const btnItems = [
 
 const Options = [
   {
-    value: "ALL",
-    label: "ALL",
+    value: "both",
+    label: "BOTH",
   },
   {
     value: "CMS",
@@ -58,10 +59,6 @@ const Options = [
     value: "RX",
     label: "RX",
   },
-];
-const data = [
-  { label: "Admin", key: "admin" },
-  { label: "L1auditor", key: "l1auditor" },
 ];
 
 const Header = () => {
@@ -85,9 +82,9 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const [openMsg, setOpenMsg] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedOption, setSelectedOption] = useState("All");
+  const [selectedOption, setSelectedOption] = useState("Both");
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
-
+  const [dropdownContent, setDropdownContent] = useState();
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
     const isRX = data?.rxHcc_model_category_V08_for_2023_payment_year;
@@ -152,8 +149,6 @@ const Header = () => {
     return () => {
       sse.close();
     };
-
-    // setUserIdDetails(response.data.response);
   };
   const percentage = 95;
   const PopContent = (
@@ -208,8 +203,8 @@ const Header = () => {
         {codDetails?.response
           ? codDetails?.response?.map((data) => (
               <div className={styles.hoverDiv}>
-                {data?.diagnosisCode}
-                {data?.description} &nbsp;
+                {data?.diagnosisCode} &nbsp;
+                {data?.description}
                 {selectedbtn === "HCC" && (
                   <>
                     {getStatus(data) === "CMS" && (
@@ -255,7 +250,7 @@ const Header = () => {
     dispatchValue(getNotificationAlertClear([]));
   };
 
-  const items = data?.filter(
+  const items = dropdownContent?.filter(
     (info) => info?.key?.toLowerCase() !== userRole?.toLowerCase()
   );
 
@@ -265,6 +260,8 @@ const Header = () => {
       router.push("/admin/user");
     } else if (key === "l1auditor") {
       router.push("/physician/dashboard");
+    } else if (key === "l2auditor") {
+      router.push("/l2Auditor/dashboard");
     }
   };
   useEffect(() => {
@@ -281,6 +278,8 @@ const Header = () => {
       setMenuList(AdminMenuList);
     } else if (userRoleLocal === "l1auditor") {
       setMenuList(PhysicanMenuList);
+    } else if (userRoleLocal === "l2auditor") {
+      setMenuList(L2AuditorMenuList);
     } else {
       setMenuList([]);
     }
@@ -301,6 +300,24 @@ const Header = () => {
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
+
+    const items = [];
+
+    if (userRoleLocal === "admin") {
+      items?.push(
+        { key: "l1auditor", label: "L1auditor" },
+        { key: "l2auditor", label: "L2auditor" }
+      );
+    } else if (userRoleLocal === "l1auditor") {
+      items?.push({ key: "admin", label: "Admin" },
+        { key: "l2auditor", label: "L2auditor" });
+    } else {
+      items?.push(
+        { key: "admin", label: "Admin" },
+        { key: "l1auditor", label: "L1auditor" },
+        { key: "l2auditor", label: "L2auditor" });
+    }
+    setDropdownContent(items);
   }, []);
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
@@ -309,7 +326,7 @@ const Header = () => {
       const { addResponseMessage } = require("react-chat-widget");
       addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
     }
-    if (selectedbtn && userRoleLocal!=="admin" ) {
+    if (selectedbtn && userRoleLocal !== "admin") {
       dispatch(
         getCoderDetails({
           name: selectedbtn?.toLowerCase(),
@@ -426,24 +443,24 @@ const Header = () => {
                           </span>
 
                           {userIdDetails != "" ? (
-                            <span className="ms-2 d-flex mt-1">
-                              <Dropdown
-                                menu={{
-                                  items,
-                                  onClick,
-                                }}
-                                trigger={["click"]}
-                              >
-                                <span
-                                  className="header-name"
-                                  style={{ marginLeft: "10px" }}
+                            <span className="ms-2 d-flex mt-1">                           
+                                <Dropdown
+                                  menu={{
+                                    items,
+                                    onClick,
+                                  }}
+                                  trigger={["click"]}
                                 >
-                                  {userRole}
-                                  <DownOutlined
-                                    style={{ margin: "0 0 0 5px" }}
-                                  />
-                                </span>
-                              </Dropdown>
+                                  <span
+                                    className="header-name"
+                                    style={{ marginLeft: "10px" }}
+                                  >
+                                    {userRole}
+                                    <DownOutlined
+                                      style={{ margin: "0 0 0 5px" }}
+                                    />
+                                  </span>
+                                </Dropdown>
                             </span>
                           ) : null}
                         </div>

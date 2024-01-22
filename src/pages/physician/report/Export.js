@@ -24,12 +24,14 @@ const Export = ({
   setSelectedRows,
   setSelectAll,
 }) => {
+  const usersList = useSelector((state) => state.report.usersList);
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
   const [userList, setUsersList] = useState([]);
   const [selectedList, setSelectedList] = useState([]);
   const [open, setOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
   const [form] = Form.useForm();
   const checkBoxData = [
     {
@@ -114,15 +116,22 @@ const Export = ({
   const [checkall, setCheckAll] = useState(checkBoxData);
 
   useEffect(() => {
+    setCurrentUser(localStorage.getItem("userId"));
+
     var orgId = localStorage.getItem("orgId");
     dispatch(getUsersList(orgId, search));
   }, [search]);
   const dispatch = useDispatch();
-  const usersList = useSelector((state) => state.report.usersList);
-  const options = usersList?.response?.map((data) => ({
-    label: data.userName,
-    value: data.userName,
-  }));
+
+  const options = usersList?.response
+    ?.map(
+      (data) =>
+        data.userName !== currentUser && {
+          label: data.userName,
+          value: data.userName,
+        }
+    )
+    .filter(Boolean);
 
   const handleSelectedOption = (value) => {
     setSelectedList(value);
