@@ -36,7 +36,9 @@ const index = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    setEnableMFA(searchParams.get("mfa"));
+    const mfaParam = searchParams.get("mfa");
+    const enableMFAValue = mfaParam === "true";
+    setEnableMFA(enableMFAValue);
     setUsername(searchParams.get("username"));
     setSkip(searchParams.get("skipEntry"));
     setPassword(searchParams.get("password"));

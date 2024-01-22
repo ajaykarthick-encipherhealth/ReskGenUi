@@ -8,7 +8,7 @@ import redirect from "../../images/svg/redirect.svg";
 import hamburgermenu from "../../images/svg/hamburgermenu.svg";
 import settings from "../../images/svg/settings.svg";
 import { codeLength, generateCodeArray } from "./Authentication";
-import { getValidateCode } from "../../store/actions/AuthActions";
+import { getQrCode, getValidateCode } from "../../store/actions/AuthActions";
 import { useSelector } from "react-redux";
 
 const GetOTP = () => {
