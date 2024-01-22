@@ -19,6 +19,10 @@ const HeaderFilters = ({
   setSearch,
   isSearch,
   searchlabel,
+  // for report
+  setSentSearch,
+  setReceivedSearch,
+  setCoderSearch,
 
   // for select
   selectlabel,
@@ -43,6 +47,11 @@ const HeaderFilters = ({
   setStartDate,
   setEndDate,
   isRangePicker,
+  // for report
+  setReceivedStartDate,
+  setReceivedEndDate,
+  setCoderStartDate,
+  setCoderEndDate,
 
   // if has 2 pickers
   pickerlabe2,
@@ -85,7 +94,7 @@ const HeaderFilters = ({
 
   bullets,
   isNextRow,
-  btnTitle
+  btnTitle,
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   // const bullets = [
@@ -113,7 +122,14 @@ const HeaderFilters = ({
           {isSearch && (
             <div className="col-xl-2">
               {" "}
-              <Search searchlabel={searchlabel} setSearch={setSearch} />
+              <Search
+                searchlabel={searchlabel}
+                setSearch={setSearch}
+                activeTab={activeTab}
+                setSentSearch={setSentSearch}
+                setReceivedSearch={setReceivedSearch}
+                setCoderSearch={setCoderSearch}
+              />
             </div>
           )}
           {isSelector ? (
@@ -152,7 +168,12 @@ const HeaderFilters = ({
                 defaultEndDate={defaultEndDate}
                 setStartDate={setStartDate}
                 setEndDate={setEndDate}
+                activeTab={activeTab}
                 setSelectedDates={setSelectedDates}
+                setReceivedStartDate={setReceivedStartDate}
+                setReceivedEndDate={setReceivedEndDate}
+                setCoderStartDate={setCoderStartDate}
+                setCoderEndDate={setCoderEndDate}
               />
             </div>
           )}
@@ -222,8 +243,8 @@ const HeaderFilters = ({
             </div>
           )}
           {activeTab === "CoderReport" && (
-            <div className="col-xl-8  d-flex justify-content-end">
-              <div className="row flr">
+            <div className="col-xl-6  d-flex justify-content-end">
+              <div className="row flr mt-3">
                 <button
                   onClick={handleExport}
                   className={

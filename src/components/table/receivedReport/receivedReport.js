@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../store/actions/ReportActions";
 import SpinnerDots from "../../spinner";
 import { Empty } from "antd";
-import { dateFormate } from "../../headerFilters/functions";
+import { dateFormate, sortFunction } from "../../headerFilters/functions";
 
 function ReceivedReport({
   details,
@@ -19,26 +19,16 @@ function ReceivedReport({
   receivedEndDate,
   paginationFirst,
   loading,
+  sortOrder,
+  setSortOrder,
+  setSortField
 }) {
-  const [sortOrder, setSortOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
   const dispatch = useDispatch();
   useEffect(() => {
     setDetailsContent(details?.content);
   }, [details]);
-
-  const sortTableByDate = () => {
-    const sortedContent = [...detailsContent];
-    if (sortOrder === "asc") {
-      sortedContent.sort((a, b) => dayjs(a.sendDate).diff(dayjs(b.sendDate)));
-      setSortOrder("desc");
-    } else {
-      sortedContent.sort((a, b) => dayjs(b.sendDate).diff(dayjs(a.sendDate)));
-      setSortOrder("asc");
-    }
-    setDetailsContent(sortedContent);
-  };
 
   const router = useRouter();
   const handleReceiverReport = (row) => {
@@ -70,9 +60,11 @@ function ReceivedReport({
                   <th>REPORT NAME</th>
                   <th>ACCESS TYPE</th>
                   <th>SENDER</th>
-                  <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
+                  <th style={{ cursor: "pointer" }} onClick={()=>{
+                    setSortField("sendDate")
+                    sortFunction(sortOrder,setSortOrder)}}>
                     DATE{" "}
-                    {sortOrder === "asc" ? (
+                    {sortOrder === "ASC" ? (
                       <ArrowUpOutlined />
                     ) : (
                       <ArrowDownOutlined />
