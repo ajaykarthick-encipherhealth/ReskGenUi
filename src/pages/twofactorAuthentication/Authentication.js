@@ -108,13 +108,7 @@ const index = () => {
                 onClick={() => {
                   const codeString = code?.join("");
                   dispatch(
-                    getValidateCode(
-                      username,
-                      codeString,
-                      router,
-                      password,
-                      "validate"
-                    )
+                    getValidateCode(username, codeString, router, "validate")
                   );
                 }}
               >
@@ -138,7 +132,9 @@ const index = () => {
               <button
                 className={styles.sendBtn}
                 onClick={() => {
-                  dispatch(getQrCode(username, router));
+                  router?.push(
+                    `/twofactorAuthentication/GetOTP?username=${username}`
+                  );
                 }}
               >
                 ENABLE MFA
