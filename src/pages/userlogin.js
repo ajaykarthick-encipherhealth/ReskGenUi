@@ -25,48 +25,7 @@ export default function UserLogin() {
   const onLogin = async (e) => {
     setIsLoading(true);
     e.preventDefault();
-    let emailSplit = email.split("@");
-
     dispatch(getMFAValidation(email,router,password))
-    // router?.push(`/twofactorAuthentication/Authentication?${email}`);
-    // try {
-    //   const postData = {
-    //     username: email,
-    //     password: password,
-    //     code:"",
-    //     skip:true
-    //   };
-    //   const response = await axios.post(
-    //     ENDPOINTS.apiEndoint + `securityservice/auth/login`,
-    //     postData
-    //   );
-    //   console.log(response.data.response)
-    //   var result = response.data.response;
-    //   if (response?.data?.status === "SUCCESS") {
-    //     setRole(result?.roles);
-    //     localStorage.setItem("roles", result?.roles);
-    //     localStorage.setItem("token", result.access_token);
-    //     localStorage.setItem("tenantId", result.tenantId);
-    //     localStorage.setItem("userId", result.userEmail);
-    //     localStorage.setItem("orgId", result.organizationId);
-    //     localStorage.setItem("userName", emailSplit[0]);
-    //     localStorage.setItem("loginCheck", true);
-    //     setIsLoading(false);
-    //     router?.push(`/twofactorAuthentication/Authentication?${email}`);
-    //   } else {
-    //     setIsLoading(false);
-    //     notification.error({
-    //       message: response?.data?.message,
-    //       duration: 1,
-    //     });
-    //   }
-    // } catch (err) {
-    //   notification.error({
-    //     message: "Login Failed",
-    //     duration: 1,
-    //   });
-    //   setIsLoading(false);
-    // }
   };
 
   const handleTogglePasswordVisibility = () => {

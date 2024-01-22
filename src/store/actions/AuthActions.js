@@ -98,8 +98,8 @@ export const getValidateCode = (username, code, route, password, validate) => {
             `/twofactorAuthentication/SelectRole?username=${username}&password=${password}`
           );
         } else {
-          notification.error({
-            message: "AUthentication added",
+          notification.success({
+            message: "Code verified successfully",
             duration: 1,
           });
           route?.push(`/userlogin`);
