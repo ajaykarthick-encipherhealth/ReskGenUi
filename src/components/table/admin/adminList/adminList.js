@@ -1,39 +1,90 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Switch } from "antd";
+import { Popover, Select, Switch } from "antd";
 import TableStyle from "../../table.module.css";
-import Selector from "../../../selector";
+import styles from "../../../../styles/auth.module.css";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { dateFormate } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 
+const items = [
+  { value: "ADMIN", label: "Admin", role: "admin" },
+  { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
+  { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
+];
 const AdminList = ({ userList }) => {
   const dispatch = useDispatch();
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [selectedOption, setSelectedOption] = useState();
-  const [checked, setChecked] = useState(false);
+  const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [isMultiple, setIsMultiple] = useState(false);
 
-  const filteredData = userList?.filter((item) => item?.id === selectedRow);
-  const Options =
-    filteredData?.flatMap((item) =>
-      item?.role?.map((data) => ({ label: data, value: data }))
-    ) ?? [];
-
-  const toggleEditRole = (rowId) => {
-    setSelectedRow((prevRow) => (prevRow === rowId?.id ? null : rowId?.id));
-    setRowData(rowId);
+  const onChange = (item, checked) => {
+    setRowData(item);
     setChecked(checked);
   };
 
-  const onChange = (item, checked) => {
-    dispatch(enableUser(checked, item, null, setSelectedRow));
+  const handleRows = (value) => {
+    const updatedValue = Array.isArray(value) ? value : [value];
+    setSelectedRoles(updatedValue);
   };
+  const getContent = (data) => {
+    return (
+      <div style={{ height: "250px" }}>
+        <div style={{ height: "200px" }}>
+          <div style={{ width: "100%", display: "flex" }}>
+            <button
+              className={styles.sendBtn}
+              style={{ width: "50%", marginRight: "5px" }}
+              onClick={() => {
+                setIsMultiple(true);
+              }}
+            >
+              Include Previous Roles
+            </button>
+            <button
+              className={styles.sendBtn}
+              style={{ width: "50%" }}
+              onClick={() => {
+                setIsMultiple(false);
+              }}
+            >
+              Selected Role Only
+            </button>
+          </div>
+          <Select
+            style={{ width: "100%" }}
+            mode={isMultiple ? "multiple" : ""}
+            onChange={handleRows}
+            options={items}
+            placeholder={!data?.role[0] && "Select Role"}
+            defaultValue={isMultiple ? [data?.role[0]] : data?.role[0]}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "end",
+          }}
+        >
+          <button
+            className={styles.sendBtn}
+            onClick={() => {
+              if (selectedRoles?.length > 0) {
+                dispatch(enableUser(checkedd, rowData, selectedRoles));
+              }
+            }}
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   useEffect(() => {
-    if (selectedOption) {
-      dispatch(enableUser(checked, rowData, selectedOption, setSelectedRow));
-    }
-  }, [selectedOption]);
+    dispatch(enableUser(checkedd, rowData));
+  }, [checkedd, rowData]);
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -81,18 +132,26 @@ const AdminList = ({ userList }) => {
                 className={TableStyle.childBorder}
                 style={{ height: "40px !important" }}
               >
-                {selectedRow === item?.id ? (
-                  <div style={{ margin: "-20px 0px 0px -20px", width: "70%" }}>
-                    <Selector
-                      selectlabel=""
-                      setSelectedOption={setSelectedOption}
-                      selectOptions={Options}
-                      defaultSelectValue1={Options[0]}
+                <div
+                  style={{
+                    margin: "-20px 0px 0px -20px",
+                    width: "70%",
+                  }}
+                >
+                  {item?.role?.length > 0 ? (
+                    <Select
+                      className={`custom-ant-select ${TableStyle.customAntSelect}`}
+                      style={{ width: "100%", marginTop: "15px" }}
+                      options={item?.role?.map((data) => ({
+                        value: data,
+                        label: data,
+                      }))}
+                      defaultValue={item?.role[0]}
                     />
-                  </div>
-                ) : (
-                  <span>{item?.role[0] ? item?.role[0] : "---"}</span>
-                )}
+                  ) : (
+                    "---"
+                  )}
+                </div>
               </td>
 
               <td
@@ -108,8 +167,20 @@ const AdminList = ({ userList }) => {
                   cursor: "pointer",
                 }}
               >
-                <div onClick={() => toggleEditRole(item)}>
-                  <EditButton />
+                <div>
+                  <Popover
+                    content={() => getContent(item)}
+                    title="Change Role"
+                    trigger="click"
+                  >
+                    <div
+                      onClick={() => {
+                        setRowData(item);
+                      }}
+                    >
+                      <EditButton />
+                    </div>
+                  </Popover>
                 </div>
               </td>
               <td
