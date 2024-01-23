@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Popover, Select, Switch } from "antd";
 import TableStyle from "../../table.module.css";
-import Selector from "../../../selector";
+
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { dateFormate } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 import styles from "../../../../styles/auth.module.css";
-import { Button } from "react-bootstrap";
+
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
@@ -71,7 +71,7 @@ const AdminList = ({ userList }) => {
           <button
             className={styles.sendBtn}
             onClick={() => {
-              if(selectedRoles?.length>0){
+              if (selectedRoles?.length > 0) {
                 dispatch(enableUser(checkedd, rowData, selectedRoles));
               }
             }}

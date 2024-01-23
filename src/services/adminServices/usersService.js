@@ -63,7 +63,7 @@ export const enableUser = (checked, user, role) => {
 
     const datas = role ? { ...data, role: role } : data;
 
-    if ( user && (checked ||role)) {
+    if (user && (checked || role)) {
       try {
         const response = await axios.put(
           `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
