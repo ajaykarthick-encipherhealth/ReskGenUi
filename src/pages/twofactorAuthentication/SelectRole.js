@@ -22,13 +22,13 @@ const SelectRole = () => {
       if (info?.toLowerCase() === "admin") {
         items?.push(
           { value: "Admin", label: "Admin" },
-          { value: "L1auditor", label: "L1auditor" },
-          { value: "L2auditor", label: "L2auditor" }
+          { value: "L2auditor", label: "L2auditor" },
+          { value: "L1auditor", label: "L1auditor" }
         );
-      } else if (info?.toLowerCase() === "l1auditor") {
+      } else if (info?.toLowerCase() === "l2auditor") {
         items?.push(
-          { value: "L1auditor", label: "L1auditor" },
-          { value: "L2auditor", label: "L2auditor" }
+          { value: "L2auditor", label: "L2auditor" },
+          { value: "L1auditor", label: "L1auditor" }
         );
       } else {
         items?.push({ value: info, label: info });
@@ -45,14 +45,18 @@ const SelectRole = () => {
       });
       localStorage.removeItem("password");
       setRoleError(false);
-      if (selectedRole === "admin" && !roleError) {
-        dispatch(selectedUserRole(selectedRole?.toUpperCase()));
-        localStorage.setItem("userRole", selectedRole);
-        router?.push("/admin/user");
-      } else if (selectedRole === "l1auditor" && !roleError) {
-        dispatch(selectedUserRole(selectedRole?.toUpperCase()));
-        localStorage.setItem("userRole", selectedRole);
-        router?.push("/physician/dashboard");
+      const rolesMapping = {
+        admin: { userRole: "admin", route: "/admin/user" },
+        l1auditor: { userRole: "l1auditor", route: "/physician/dashboard" },
+        l2auditor: { userRole: "l2auditor", route: "/l2Auditor/dashboard" },
+      };
+    
+      const selectedRoleInfo = rolesMapping[selectedRole];
+    
+      if (selectedRoleInfo && !roleError) {
+        localStorage.setItem("userRole", selectedRoleInfo.userRole);
+        localStorage.setItem("role", selectedRole);
+        router?.push(selectedRoleInfo.route);
       }
     }
   };

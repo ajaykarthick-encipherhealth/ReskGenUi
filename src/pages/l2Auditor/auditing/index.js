@@ -27,7 +27,7 @@ import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
 
-export default function Patient() {
+export default function Auditing() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();

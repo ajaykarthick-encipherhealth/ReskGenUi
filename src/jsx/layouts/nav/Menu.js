@@ -115,14 +115,14 @@ export const L2AuditorMenuList = [
     to: "/l2Auditor/dashboard",
   },
   {
-    title: "User Management",
+    title: "User Queue",
     iconStyle: SVGICON.Usermanagement,
     to: "/l2Auditor/user",
   },
   {
-    title: "Auditing View",
+    title: "Audited Queue",
     iconStyle: SVGICON.patientListIcon,
-    to: "/l2Auditor/patients",
+    to: "/l2Auditor/auditing",
   },
   {
     title: "Report",
