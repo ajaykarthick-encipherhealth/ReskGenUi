@@ -92,3 +92,59 @@ export const getFilePageNumber = async (fileId) => {
   }
 };
 
+export const getMeatQueryList = async (dos,patientId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?dosYear=${dos}&patientId=${patientId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+
+export const submitMeatQuery = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/storequery`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+
+export const updateMeatQuery = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.put(
+      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/updateQueryComment`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+

@@ -43,7 +43,12 @@ import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
 import Spinner from "../../../../../components/loadingSpinner";
 import styles from "./styles.module.css";
-import { getFilePageNumber } from "../../../../../services/PatientsListSevice";
+import {
+  getFilePageNumber,
+  getMeatQueryList,
+  submitMeatQuery,
+  updateMeatQuery,
+} from "../../../../../services/PatientsListSevice";
 const { Option } = Select;
 
 const Hcc = ({ patientHccResult }) => {
@@ -146,6 +151,14 @@ const Hcc = ({ patientHccResult }) => {
     encodedDate: "",
     flag: "",
     comments: "",
+    description: "",
+    queryReason: "",
+    providerName: "",
+    imagingTestHeader: "",
+    headerName: "",
+    queryComment: "",
+    reason: "",
+    diagnosisCodeQuery:""
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -256,7 +269,10 @@ const Hcc = ({ patientHccResult }) => {
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [fileDosPageNumber, setFileDosPageNumber] = useState(0);
   const [selectPreviousCode, setSelectPreviousCode] = useState(null);
+  const [meatQueryList, setMeatQueryList] = useState([]);
   const [meatQueryListPrevious, setMeatQueryListPrevious] = useState([]);
+  const [meatQueryResult, setMeatQueryResult] = useState([]);
+  const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -332,12 +348,7 @@ const Hcc = ({ patientHccResult }) => {
     setUserDetails(userSpinner);
 
     setvalidHccDetails(userSpinner);
-  }, [
-    fileInitialPage,
-    findFileKeyword,
-    fileModalTitle,
-    fileDosPageNumber
-  ]);
+  }, [fileInitialPage, findFileKeyword, fileModalTitle, fileDosPageNumber]);
 
   const getPatientDetails = async (
     patientId,
@@ -1315,7 +1326,7 @@ const Hcc = ({ patientHccResult }) => {
     if (result?.length) {
       var pageNumber = result[0] - 1;
       setFileInitialPage(pageNumber);
-      setFileDosPageNumber(pageNumber)
+      setFileDosPageNumber(pageNumber);
     }
 
     // getSectionPageNumber(headerNames, encounterDate);
@@ -2592,11 +2603,30 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
 
-  const addMeatQuery = (value) => {
+  const addMeatQuery = (value, condition) => {
+    inputValue.diagnosisCodeQuery = value.diagnosisCode;
+    if (condition == "Add") {
+      setMeatQueryUpdate(false);
+      inputValue.providerName = "";
+      inputValue.headerName = "";
+      inputValue.imagingTestHeader = "";
+      inputValue.description = "";
+      inputValue.queryReason = "";
+      inputValue.reason = "";
+    } else {
+      inputValue.providerName = value.providerName;
+      inputValue.headerName = value.headerName;
+      inputValue.imagingTestHeader = value.imagingTestHeader;
+      inputValue.description = value.description;
+      inputValue.queryReason = value.queryReason;
+      inputValue.reason = value.reason;
+      setMeatQueryUpdate(true);
+    }
     setIsMeatQueryModal(true);
   };
 
-  const meatQueriedComments = () => {
+  const meatQueriedComments = (value) => {
+    setMeatQueryResult(value);
     setMeatQueriedDetailsModal(true);
     setMeatQueriedDetailsShow(false);
   };
@@ -2610,57 +2640,6 @@ const Hcc = ({ patientHccResult }) => {
     { value: "OTHERS", label: "OTHERS" },
   ];
 
-  const meatQueryList = [
-    {
-      diagnosisCode: "E03.9",
-      description: "Hypothyroidism",
-      queryComment:
-        "Please confirm if the patient currently has a diagnosis of XXX. It was previously reported on mm-dd-yyyy under PMH/Problem List. Please update the chart with the most current status (active/resolved) and the current treatment/plan for the condition if any. Thank you!Diagnosis listed under Assessment/problem list/PMH/Radiology/Lab, whereas there is no supporting documentation found. Please evaluate and update the condition with current management if the diagnosis is active.  Thank you.",
-      queryVersion: 1,
-      createdAt: "2024-01-18T10:30:18.960Z",
-      createdBy: "Michael Johnson",
-      reason: "Reason for changes in Meat query",
-    },
-    {
-      diagnosisCode: "I27.20",
-      description: "Pulmonary hypertension",
-      queryComment:
-        "Please confirm if the patient currently has a diagnosis of XXX. It was previously reported on mm-dd-yyyy under PMH/Problem List. Please update the chart with the most current status (active/resolved) and the current treatment/plan for the condition if any. Thank you!Diagnosis listed under Assessment/problem list/PMH/Radiology/Lab, whereas there is no supporting documentation found. Please evaluate and update the condition with current management if the diagnosis is active.  Thank you.",
-      queryVersion: 1,
-      createdAt: "2024-01-18T10:30:18.960Z",
-      createdBy: "Michael Johnson",
-      reason: "Reason for changes in Meat query",
-    },
-    {
-      diagnosisCode: "I27.20",
-      description: "Pulmonary hypertension",
-      queryComment:
-        "Please confirm if the patient currently has a diagnosis of XXX. It was previously reported on mm-dd-yyyy under PMH/Problem List. Please update the chart with the most current status (active/resolved) and the current treatment/plan for the condition if any. Thank you!Diagnosis listed under Assessment/problem list/PMH/Radiology/Lab, whereas there is no supporting documentation found. Please evaluate and update the condition with current management if the diagnosis is active.  Thank you.",
-      queryVersion: 2,
-      createdAt: "2024-01-16T10:30:18.960Z",
-      createdBy: "Michael Johnson",
-      reason: "Reason for changes in Meat query",
-    },
-    {
-      diagnosisCode: "I27.20",
-      description: "Pulmonary hypertension",
-      queryComment:
-        "Please confirm if the patient currently has a diagnosis of XXX. It was previously reported on mm-dd-yyyy under PMH/Problem List. Please update the chart with the most current status (active/resolved) and the current treatment/plan for the condition if any. Thank you!Diagnosis listed under Assessment/problem list/PMH/Radiology/Lab, whereas there is no supporting documentation found. Please evaluate and update the condition with current management if the diagnosis is active.  Thank you.",
-      queryVersion: 3,
-      createdAt: "2024-01-17T10:30:18.960Z",
-      createdBy: "Michael Johnson",
-      reason: "Reason for changes in Meat query",
-    },
-    {
-      diagnosisCode: "E03.9",
-      description: "Hypothyroidism",
-      queryComment: "test",
-      queryVersion: 2,
-      createdAt: "2024-01-17T10:30:18.960Z",
-      createdBy: "Michael Johnson",
-      reason: "Reason for changes in Meat query",
-    },
-  ];
   const queryReasons = [
     { value: "Diagnosis Not Supported", label: "Diagnosis Not Supported" },
     { value: "H/o condition", label: "H/o condition" },
@@ -2681,15 +2660,61 @@ const Hcc = ({ patientHccResult }) => {
   ];
 
   const handleSubmitMeatQuery = async (event) => {
-    setIsMeatQueryModal(false);
-    setMeatQueriedDetailsShow(true);
-    setMeatQueriedDetailsModal(true);
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
+      var dataformat = {
+        patientId: localPatientId,
+        diagnosisCode: inputValue.diagnosisCodeQuery,
+        queryReason: inputValue.queryReason,
+        Reason: inputValue.reason,
+        providerName: inputValue.providerName,
+        imagingTestHeader: inputValue.imagingTestHeader,
+        headerName: inputValue.headerName,
+        dosYear: selectedDosValue,
+        description: inputValue.description,
+      };
+      var result = await submitMeatQuery(dataformat);
+      if (result.status == "SUCCESS") {
+        setMeatQueryResult(result.response);
+        inputValue.queryComment = result.response.queryComment;
+        setIsMeatQueryModal(false);
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1,
+        });
+        setMeatQueriedDetailsModal(true);
+        setMeatQueriedDetailsShow(true);
+        var result = await getMeatQueryList(selectedDosValue, localPatientId);
+        setMeatQueryList(result.response);
+      } else {
+      }
     }
   };
-  const selectTab = (number) => {
+  const updateMeatQueryComments = async () => {
+    var updateDataformat = {
+      patientId: localPatientId,
+      diagnosisCode: inputValue.diagnosisCodeQuery,
+      dos: selectedDosValue,
+      queryComment: inputValue.queryComment,
+    };
+    var result = await updateMeatQuery(updateDataformat);
+    if (result.status == "SUCCESS") {
+      setMeatQueryResult(result.response);
+      setIsMeatQueryModal(false);
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+      setMeatQueriedDetailsModal(false);
+      setMeatQueriedDetailsShow(false);
+    } else {
+    }
+  };
+  const selectTab = async (number) => {
+    setSelectPreviousCode(null);
     setFlagTagActive(false);
     setIsDosSelect(false);
     setFindFileKeyword(null);
@@ -2704,6 +2729,10 @@ const Hcc = ({ patientHccResult }) => {
         getFileDosPageNumber();
         setIsDosSelect(true);
         break;
+      case 6:
+        var result = await getMeatQueryList(selectedDosValue, localPatientId);
+        setMeatQueryList(result.response);
+        break;
       default:
         null;
     }
@@ -2716,7 +2745,6 @@ const Hcc = ({ patientHccResult }) => {
       var opationArray = [];
       var pageNumbervalue = result.response[key];
       for (var key2 in pageNumbervalue) {
-        console.log(key2);
         opationArray.push({
           label: key2 + " page - " + pageNumbervalue[key2],
           value: pageNumbervalue[key2],
@@ -2731,17 +2759,32 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const handleChangePageNumber = async (value) => {
-    setFindFileKeyword(null)
+    setFindFileKeyword(null);
     var pageIndex = value - 1;
     setFileDosPageNumber(pageIndex);
   };
 
   const getPreviousData = (code, action) => {
     const result = meatQueryList.filter(
-      (res) => res.diagnosisCode == code && res.queryVersion != 1
-    );   
-      setSelectPreviousCode(code);   
-      setMeatQueryListPrevious(result);
+      (res) => res.diagnosisCode == code && res.currentQuery != true
+    );
+    setSelectPreviousCode(code);
+    var querySort = result;
+    querySort.sort(function (a, b) {
+      return b.queryVersion - a.queryVersion;
+    });
+    setMeatQueryListPrevious(querySort);
+  };
+
+  const handleSelect = (value, title) => {
+    setInputValue({ ...inputValue, [title]: value });
+  };
+
+  const emailSplitFunction = (email) => {
+    if (meatQueriedDetailsModal) {
+      let emailSplit = email?.split("@");
+      return emailSplit[0].charAt(0).toUpperCase() + emailSplit[0].slice(1);
+    }
   };
 
   return (
@@ -2753,7 +2796,7 @@ const Hcc = ({ patientHccResult }) => {
               <div className="row">
                 <div className="col-xl-8">
                   <Nav as="ul" className="nav nav-tabs">
-                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey="file"
@@ -2803,7 +2846,7 @@ const Hcc = ({ patientHccResult }) => {
                       >
                         RAF Score
                       </Nav.Link>
-                    </Nav.Item>                 
+                    </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
@@ -2989,23 +3032,22 @@ const Hcc = ({ patientHccResult }) => {
                                       <div
                                         className={`${visitStyles.hoverActiveHcc}`}
                                       >
-                                       
-                                          <div
-                                            className={`${visitStyles.encounterAndSectionHeader}`}
-                                          >
-                                             {data.providerName ? (
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {data.providerName ? (
                                             <Badge
                                               className={`mt-2 text-start ${visitStyles.provider_name}`}
                                             >
                                               <i>{SVGICON.patientNameIcon}</i>
                                               {data.providerName}
                                             </Badge>
-                                            ) : null}
-                                            {getEncounterDateBackground(
-                                              data.encounterDateSplit
-                                            )}
-                                          </div>
-                                        
+                                          ) : null}
+                                          {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}
+                                        </div>
+
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
@@ -3217,21 +3259,25 @@ const Hcc = ({ patientHccResult }) => {
                                               className={`${visitStyles.hoverActiveHcc}`}
                                             >
                                               <div className="">
-                                              <div
-                                            className={`${visitStyles.encounterAndSectionHeader}`}
-                                          >
-                                             {data.providerName ? (
-                                            <Badge
-                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                            >
-                                              <i>{SVGICON.patientNameIcon}</i>
-                                              {data.providerName}
-                                            </Badge>
-                                            ) : null}
-                                            {getEncounterDateBackground(
-                                              data.encounterDateSplit
-                                            )}
-                                          </div>
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {data.providerName ? (
+                                                    <Badge
+                                                      className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                    >
+                                                      <i>
+                                                        {
+                                                          SVGICON.patientNameIcon
+                                                        }
+                                                      </i>
+                                                      {data.providerName}
+                                                    </Badge>
+                                                  ) : null}
+                                                  {getEncounterDateBackground(
+                                                    data.encounterDateSplit
+                                                  )}
+                                                </div>
                                                 {data.getPlace == "Lab" ? (
                                                   <Tooltip title="LAB">
                                                     <span
@@ -3410,16 +3456,16 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.hoverActiveHcc}`}
                                       >
                                         <div className="">
-                                        <div
+                                          <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                             {data.providerName ? (
-                                            <Badge
-                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                            >
-                                              <i>{SVGICON.patientNameIcon}</i>
-                                              {data.providerName}
-                                            </Badge>
+                                            {data.providerName ? (
+                                              <Badge
+                                                className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                              >
+                                                <i>{SVGICON.patientNameIcon}</i>
+                                                {data.providerName}
+                                              </Badge>
                                             ) : null}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
@@ -3851,7 +3897,9 @@ const Hcc = ({ patientHccResult }) => {
                                     </Popconfirm>
                                     {item.isMeatCriteriaPresent === false ? (
                                       <div
-                                        onClick={() => addMeatQuery()}
+                                        onClick={() =>
+                                          addMeatQuery(item, "Add")
+                                        }
                                         className={visitStyles.add_meat_query}
                                       >
                                         {SVGICON.meatQueryIcon}
@@ -4444,23 +4492,23 @@ const Hcc = ({ patientHccResult }) => {
                                       className={`${visitStyles.hoverActiveHcc}`}
                                     >
                                       <div
-                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {data.providerName ? (
+                                          <Badge
+                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
                                           >
-                                             {data.providerName ? (
-                                            <Badge
-                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                            >
-                                              <i>{SVGICON.patientNameIcon}</i>
-                                              {data.providerName}
-                                            </Badge>
-                                            ) : null}
-                                            {getEncounterDateBackground(
-                                              data.encounterDateSplit
-                                            )}
-                                          </div>
+                                            <i>{SVGICON.patientNameIcon}</i>
+                                            {data.providerName}
+                                          </Badge>
+                                        ) : null}
+                                        {getEncounterDateBackground(
+                                          data.encounterDateSplit
+                                        )}
+                                      </div>
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >                                        
+                                      >
                                         {data.isManuallyAdded == true ? (
                                           <Badge
                                             className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
@@ -4863,21 +4911,25 @@ const Hcc = ({ patientHccResult }) => {
                                               className={`${visitStyles.hoverActiveHcc}`}
                                             >
                                               <div className="">
-                                              <div
-                                            className={`${visitStyles.encounterAndSectionHeader}`}
-                                          >
-                                             {data.providerName ? (
-                                            <Badge
-                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                            >
-                                              <i>{SVGICON.patientNameIcon}</i>
-                                              {data.providerName}
-                                            </Badge>
-                                            ) : null}
-                                            {getEncounterDateBackground(
-                                              data.encounterDateSplit
-                                            )}
-                                          </div>
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {data.providerName ? (
+                                                    <Badge
+                                                      className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                                    >
+                                                      <i>
+                                                        {
+                                                          SVGICON.patientNameIcon
+                                                        }
+                                                      </i>
+                                                      {data.providerName}
+                                                    </Badge>
+                                                  ) : null}
+                                                  {getEncounterDateBackground(
+                                                    data.encounterDateSplit
+                                                  )}
+                                                </div>
                                                 {data.getPlace == "Lab" ? (
                                                   <Tooltip title="LAB">
                                                     <span
@@ -5068,16 +5120,16 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.hoverActiveHcc}`}
                                       >
                                         <div className="">
-                                        <div
+                                          <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                             {data.providerName ? (
-                                            <Badge
-                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                            >
-                                              <i>{SVGICON.patientNameIcon}</i>
-                                              {data.providerName}
-                                            </Badge>
+                                            {data.providerName ? (
+                                              <Badge
+                                                className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                              >
+                                                <i>{SVGICON.patientNameIcon}</i>
+                                                {data.providerName}
+                                              </Badge>
                                             ) : null}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
@@ -5132,44 +5184,44 @@ const Hcc = ({ patientHccResult }) => {
                         </div>
                       </div>
                     </div>
-                    {meatQueryList.length != 0 ? (
+                    {meatQueryList?.length != 0 ? (
                       <div className={visitStyles.container}>
                         <div className={visitStyles.hccStickey_head}>
                           {meatQueryList?.map((item) => (
                             <>
-                              {item.queryVersion == 1 ? (
+                              {item.currentQuery == true ? (
                                 <div
                                   className={`${visitStyles.meat_details_card}`}
                                 >
-                                   <>
-                                   {item.diagnosisCode == selectPreviousCode ?
-                                 <div className="d-flex justify-content-between">
-                                   <span className={styles.currentBadge}>
-                                    Current
-                                  </span>
-                                  <span
-                                  className={styles.moreBtn}
-                                  onClick={() => setSelectPreviousCode(null)
-                                  }
-                                >
-                                  Less
-                                </span>
-                                  </div>
-                                  :
-                                  <div className="text-end">
-                                     <span
-                                  className={styles.moreBtn}
-                                  onClick={() =>
-                                    getPreviousData(
-                                      item.diagnosisCode,
-                                    )
-                                  }
-                                >
-                                  More
-                                </span>
-                                  </div>
-                                 }                         
-                                   </>
+                                  <>
+                                    {item.diagnosisCode ==
+                                    selectPreviousCode ? (
+                                      <div className="d-flex justify-content-between">
+                                        <span className={styles.currentBadge}>
+                                          Current
+                                        </span>
+                                        <span
+                                          className={styles.moreBtn}
+                                          onClick={() =>
+                                            setSelectPreviousCode(null)
+                                          }
+                                        >
+                                          Less
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <div className="text-end">
+                                        <span
+                                          className={styles.moreBtn}
+                                          onClick={() =>
+                                            getPreviousData(item.diagnosisCode)
+                                          }
+                                        >
+                                          More
+                                        </span>
+                                      </div>
+                                    )}
+                                  </>
                                   <div className="row">
                                     <div className="col-xl-1 d-grid">
                                       <span className="font-bold meat-name-details">
@@ -5198,7 +5250,9 @@ const Hcc = ({ patientHccResult }) => {
                                     </div>
                                     <div className="col-xl-2 d-grid">
                                       <span
-                                        onClick={meatQueriedComments}
+                                        onClick={() =>
+                                          meatQueriedComments(item)
+                                        }
                                         className="cr-pointer meat-name-details"
                                       >
                                         {SVGICON.comment}
@@ -5209,22 +5263,24 @@ const Hcc = ({ patientHccResult }) => {
                                         {item.reason}
                                       </span>
                                     </div>
-                                    <div className="col-xl-1">                                      
-                                    <div
-                                        onClick={() => addMeatQuery()}
+                                    <div className="col-xl-1">
+                                      <div
+                                        onClick={() =>
+                                          addMeatQuery(item, "Update")
+                                        }
                                         className={styles.edit_meat_query}
                                       >
                                         {SVGICON.meatQueryEdit}
                                       </div>
                                     </div>
                                   </div>
-                                  {item.diagnosisCode == selectPreviousCode ? (                                    <>
-                                     <span className={styles.previousBadge}>
-                                            Previous
-                                        </span>
+                                  {item.diagnosisCode == selectPreviousCode ? (
+                                    <>
+                                      <span className={styles.previousBadge}>
+                                        Previous
+                                      </span>
                                       {meatQueryListPrevious?.map((item) => (
                                         <div>
-                                         
                                           <div className="row">
                                             <div className="col-xl-1 d-grid">
                                               <span className="font-bold meat-name-details">
@@ -5257,7 +5313,9 @@ const Hcc = ({ patientHccResult }) => {
                                             </div>
                                             <div className="col-xl-2 d-grid">
                                               <span
-                                                onClick={meatQueriedComments}
+                                                onClick={() =>
+                                                  meatQueriedComments(item)
+                                                }
                                                 className="cr-pointer meat-name-details"
                                               >
                                                 {SVGICON.comment}
@@ -5928,8 +5986,9 @@ const Hcc = ({ patientHccResult }) => {
                   <Form.Control
                     required
                     type="text"
-                    id="dxcode"
-                    name="dxcode"
+                    id="diagnosisCodeQuery"
+                    name="diagnosisCodeQuery"
+                    value={inputValue?.diagnosisCodeQuery}
                     onChange={handleChange}
                   />
                 </div>
@@ -5939,6 +5998,7 @@ const Hcc = ({ patientHccResult }) => {
                     type="text"
                     id="providerName"
                     name="providerName"
+                    value={inputValue?.providerName}
                     onChange={handleChange}
                   />
                 </div>
@@ -5946,7 +6006,11 @@ const Hcc = ({ patientHccResult }) => {
                   <Form.Label>
                     Quick Query <span className="text-danger">*</span>{" "}
                   </Form.Label>
-                  <Select className={`ant_select_form`}>
+                  <Select
+                    defaultValue={inputValue?.headerName}
+                    className={`ant_select_form`}
+                    onChange={(value) => handleSelect(value, "headerName")}
+                  >
                     {headersList?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}
@@ -5958,7 +6022,13 @@ const Hcc = ({ patientHccResult }) => {
                   <Form.Label>
                     Imaging Query <span className="text-danger">*</span>{" "}
                   </Form.Label>
-                  <Select className={`ant_select_form`}>
+                  <Select
+                    defaultValue={inputValue?.imagingTestHeader}
+                    className={`ant_select_form`}
+                    onChange={(value) =>
+                      handleSelect(value, "imagingTestHeader")
+                    }
+                  >
                     {imagingtest?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}
@@ -5966,24 +6036,28 @@ const Hcc = ({ patientHccResult }) => {
                     ))}
                   </Select>
                 </div>
-                <div className="col-xl-12 mb-4">
+                {/* <div className="col-xl-12 mb-4">
                   <Form.Label>
                     DOS <span className="text-danger">*</span>{" "}
                   </Form.Label>
-                  <Select className={`ant_select_form`}>
+                  <Select className={`ant_select_form`} onChange={handleChange}>
                     {dosListMeat?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}
                       </Option>
                     ))}
                   </Select>
-                </div>
+                </div> */}
 
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
                     Query Reason <span className="text-danger">*</span>{" "}
                   </Form.Label>
-                  <Select className={`ant_select_form`}>
+                  <Select
+                    defaultValue={inputValue?.queryReason}
+                    className={`ant_select_form`}
+                    onChange={(value) => handleSelect(value, "queryReason")}
+                  >
                     {queryReasons?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}
@@ -5991,11 +6065,39 @@ const Hcc = ({ patientHccResult }) => {
                     ))}
                   </Select>
                 </div>
+                <div className="col-xl-12 mb-4">
+                  <Form.Label>
+                    Description <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <textarea
+                    className="form-control"
+                    id="description"
+                    name="description"
+                    onChange={handleChange}
+                    value={inputValue?.description}
+                    rows="5"
+                  ></textarea>
+                </div>
+                {meatQueryUpdate ? (
+                  <div className="col-xl-12 mb-4">
+                    <Form.Label>
+                      Reason <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+                    <textarea
+                      className="form-control"
+                      id="reason"
+                      name="reason"
+                      onChange={handleChange}
+                      rows="5"
+                      value={inputValue?.reason}
+                    ></textarea>
+                  </div>
+                ) : null}
               </div>
 
               <div>
                 <Button type="submit" className="btn btn-primary btn-sm me-1">
-                  Submit
+                  {meatQueryUpdate ? "Update" : "Submit"}
                 </Button>
                 <Button
                   onClick={() => handleCloseModal()}
@@ -6019,62 +6121,72 @@ const Hcc = ({ patientHccResult }) => {
       >
         <div className="offcanvas-body">
           <div className="container-fluid">
-            {meatQueriedDetailsShow ?
-            <div className="row">
-              <div className="col-xl-6">
-                <div className={styles.publishedByDetails}>
-                  <span className={styles.meatQueried_head}>ICD-10</span>
-                  <p className={styles.meatQueried_details}>
-                    F31.9 - Bipolar Disorder
-                  </p>
+            {meatQueriedDetailsShow ? (
+              <div className="row">
+                <div className="col-xl-6">
+                  <div className={styles.publishedByDetails}>
+                    <span className={styles.meatQueried_head}>{meatQueryResult.diagnosisCode}</span>
+                    <p className={styles.meatQueried_details}>
+                      {meatQueryResult.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="col-xl-6">
+                  <div className={styles.publishedByDetails}>
+                    <span className={styles.meatQueried_head}>
+                      Published By :
+                    </span>
+                    <p className={styles.publisheddetails}>
+                      Name - {emailSplitFunction(meatQueryResult.createdBy)}
+                    </p>
+                    <p className={styles.publisheddetails}>
+                      Date & Time -{" "}
+                      {moment(meatQueryResult.createdAt).format(
+                        "MM-DD-YYYY && HH:MM:SS"
+                      )}
+                    </p>
+                    <p className={styles.publisheddetails}>
+                      Reason - {meatQueryResult.reason}
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="col-xl-6">
-                <div className={styles.publishedByDetails}>
-                  <span className={styles.meatQueried_head}>
-                    Published By :
-                  </span>
-                  <p className={styles.publisheddetails}>
-                    Name - Michael Johnson
-                  </p>
-                  <p className={styles.publisheddetails}>
-                    Date & Time - 12/01/2024 & 15:32:39{" "}
-                  </p>
-                  <p className={styles.publisheddetails}>
-                    Reason - Reason for change the query......{" "}
-                  </p>
-                </div>
-              </div>
-            </div>:null}
+            ) : null}
             <div className={styles.meatCommentCard}>
               <div className={styles.meatCommentCard2}>
                 <div>
                   <span className={styles.meatQueried_head}>Subject</span>
                   <p className={styles.meatQueried_details}>
-                    We've pinpointed the following details that may pertain to
-                    records associated with JOAN BAUER.
+                  We've pinpointed the following details that may pertain to records associated with <b>{patientHccResult.patientName}</b>.
                   </p>
                 </div>
                 <div>
-                  <span className={styles.meatQueried_head}>
-                    Dear Dr.Chang, Khai MD
-                  </span>
+                  <span className={styles.meatQueried_head}>Dear Dr {meatQueryResult.providerName}</span>
+                  {!meatQueriedDetailsShow ?
                   <p className={styles.meatQueried_details}>
-                    Please confirm if the patient currently has diagnosis of
-                    Bipolar disorder, unspecified. It was previously reported on
-                    09-15-2022. Please update the chart with the most current
-                    status (active/resolved) and the current treatment/plan for
-                    the condition, if any. Thank you
-                  </p>
+                    {meatQueryResult.queryComment}
+                  </p>:
+                    <textarea
+                    className={`${styles.queryTextarea}`}
+                      id="queryComment"
+                      name="queryComment"
+                      onChange={handleChange}
+                      rows="5"
+                      value={inputValue.queryComment}
+                    ></textarea>}
                 </div>
               </div>
             </div>
-            {meatQueriedDetailsShow ?
-            <div className={styles.meat_queryfooterBtn}>
-              <button className={styles.meat_querySaveBtn} onClick={() => setMeatQueriedDetailsModal(false)}>
-                Save
-              </button>
-            </div>:null}
+            {meatQueriedDetailsShow ? (
+              <div className={styles.meat_queryfooterBtn}>
+                <button
+                  className={styles.meat_querySaveBtn}
+                  onClick={() => updateMeatQueryComments(false)}
+                >
+                  Save
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </Modal>
