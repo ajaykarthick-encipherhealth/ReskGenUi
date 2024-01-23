@@ -7,6 +7,7 @@ import EditButton from "../../../../images/adminUsers/EditButton";
 import { dateFormate } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 import styles from "../../../../styles/auth.module.css";
+import { Button } from "react-bootstrap";
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
@@ -14,58 +15,77 @@ const items = [
 ];
 const AdminList = ({ userList }) => {
   const dispatch = useDispatch();
-  const [selectedOption, setSelectedOption] = useState();
   const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
+  const [isMultiple, setIsMultiple] = useState(false);
 
   const onChange = (item, checked) => {
     setRowData(item);
     setChecked(checked);
   };
 
+  const handleRows = (value) => {
+    const updatedValue = Array.isArray(value) ? value : [value];
+    setSelectedRoles(updatedValue);
+  };
   const getContent = (data) => {
     return (
       <div style={{ height: "250px" }}>
-        <div style={{ width: "100%", display: "flex" }}>
+        <div style={{ height: "200px" }}>
+          <div style={{ width: "100%", display: "flex" }}>
+            <button
+              className={styles.sendBtn}
+              style={{ width: "50%", marginRight: "5px" }}
+              onClick={() => {
+                setIsMultiple(true);
+              }}
+            >
+              Include Previous Roles
+            </button>
+            <button
+              className={styles.sendBtn}
+              style={{ width: "50%" }}
+              onClick={() => {
+                setIsMultiple(false);
+              }}
+            >
+              Selected Role Only
+            </button>
+          </div>
+          <Select
+            style={{ width: "100%" }}
+            mode={isMultiple ? "multiple" : ""}
+            onChange={handleRows}
+            options={items}
+            placeholder={!data?.role[0] && "Select Role"}
+            defaultValue={isMultiple ? [data?.role[0]] : data?.role[0]}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "end",
+          }}
+        >
           <button
             className={styles.sendBtn}
-            style={{ width: "50%", marginRight: "5px" }}
-            disabled={selectedOption ? false : true}
             onClick={() => {
-              const updatedRoles = [...data.role, selectedOption];
-              setSelectedRoles(updatedRoles);
+              if(selectedRoles?.length>0){
+                dispatch(enableUser(checkedd, rowData, selectedRoles));
+              }
             }}
           >
-            Include Previous Roles
-          </button>
-          <button
-            className={styles.sendBtn}
-            style={{ width: "50%" }}
-            disabled={selectedOption ? false : true}
-            onClick={() => {
-              setSelectedRoles([selectedOption]);
-            }}
-          >
-            Selected Role Only
+            Save
           </button>
         </div>
-        <Selector
-          selectlabel=""
-          setSelectedOption={setSelectedOption}
-          selectOptions={items}
-          defaultSelectValue1={items[0]}
-        />
       </div>
     );
   };
 
   useEffect(() => {
-    if(selectedRoles?.length>0){
-
-      dispatch(enableUser(checkedd, rowData, selectedRoles));
-    }
-  }, [selectedRoles, checkedd, rowData]);
+    dispatch(enableUser(checkedd, rowData));
+  }, [checkedd, rowData]);
 
   return (
     <div className={TableStyle.classContaineer}>
