@@ -13,16 +13,13 @@ function AllocatedAdminList({
   selectAllChecked,
   setSelectAllChecked,
   setSelectedRowsId,
-  selectedRowsId
+  selectedRowsId,
+  selectedChart,
 }) {
-  const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState();
-
-  const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
 
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -30,11 +27,6 @@ function AllocatedAdminList({
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: null,
-  });
-  const [hoveredAvatar, setHoveredAvatar] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState({
-    id: "meat-01",
-    value: "HIGH",
   });
 
   const handleRowCheckboxChange = (row) => {
@@ -55,27 +47,12 @@ function AllocatedAdminList({
     setSelectedRows(updatedRows);
   };
 
-  const handleAvatarHover = (data) => {
-    setHoveredAvatar(data);
-  };
-
-  const handleAvatarClick = (data) => {
-    gotoPatientDetails(data);
-  };
-
   const requestSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
     setSortConfig({ key, direction });
-  };
-
-  const getClassNamesFor = (name) => {
-    if (!sortConfig) {
-      return;
-    }
-    return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
   const gotoPatientDetails = (data) => {
@@ -92,19 +69,6 @@ function AllocatedAdminList({
       });
     }
   };
-
-  const handleTableRowClick = (e) => {
-    const targetTd = e.target.closest("td");
-    if (targetTd) {
-      const dataIndex = targetTd.parentElement.rowIndex - 1;
-      const clickedData = patinetListAll[dataIndex];
-      gotoPatientDetails(clickedData);
-    }
-  };
-
-  const TickMark = () => (
-    <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
-  );
 
   const sortTableByDate = (value) => {
     const sortedContent = [...detailsContent];
@@ -136,7 +100,7 @@ function AllocatedAdminList({
   const renderRows = () => {
     return detailsContent?.map((data, index) => (
       <tr
-      style={{height:"35px"}}
+        style={{ height: "35px" }}
         key={index}
         onClick={() => {
           dispatch(
@@ -147,37 +111,31 @@ function AllocatedAdminList({
           );
         }}
       >
-        <td className={TableStyle.firstTdBorder}>
-          {data.patientId}
-        </td>
-        <td className={TableStyle.childBorder}>
-          {data.patientName}
-        </td>
+        <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
+        <td className={TableStyle.childBorder}>{data.patientName}</td>
         <td className={TableStyle.childBorder}>
           {data.computedDate
             ? moment.utc(data.computedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-
-        {/* <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {statusBodyTemplate(data)}
-        </td> */}
-        {/* <td className={TableStyle.childBorder}>{actionBodyTemplate(data)}</td> */}
         <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
           <input
             type="checkbox"
             onChange={() => {
               handleRowCheckboxChange(data);
               setSelectedRowsId((prev) => {
-                const currentIds = prev.map(item => item.id);
+                const currentIds = prev.map((item) => item.id);
                 if (!currentIds.includes(data.patientId)) {
-                  return [...prev, { id: data.patientId, name: data.patientName }];
+                  return [
+                    ...prev,
+                    { id: data.patientId, name: data.patientName },
+                  ];
                 } else {
                   return prev.filter((item) => item.id !== data.patientId);
-                }                
+                }
               });
             }}
-            checked={selectedRowsId.some(item => item.id === data.patientId)}
+            checked={selectedRowsId.some((item) => item.id === data.patientId)}
             style={{
               width: "20px",
               height: "20px",
@@ -190,9 +148,11 @@ function AllocatedAdminList({
       </tr>
     ));
   };
-useEffect(() => {
-  setDetailsContent(patinetListAll)
-}, [patinetListAll])
+
+  useEffect(() => {
+    setDetailsContent(patinetListAll);
+  }, [patinetListAll]);
+
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -232,7 +192,10 @@ useEffect(() => {
                     borderRadius: "4px",
                     backgroundColor: "pink",
                   }}
-                    checked={selectAllChecked}
+                  checked={
+                    selectAllChecked &&
+                    selectedRowsId.length == selectedChart.length
+                  }
                 />
               </div>
             </th>
