@@ -23,21 +23,28 @@ const DailyTask = () => {
 
   const bullets = [
     {
+      color: "#64B4BE",
+      name: "Audited",
+    },
+    {
       color: "#FFB54D",
       name: "Pending",
     },
     {
-      color: "#AD94FA",
+      color: "#F4CE14",
       name: "Hold",
+    },
+    {
+      color: "#C26100",
+      name: "ReAudit",
     },
     {
       color: "#EB5252",
       name: "Declined",
     },
-    {
-      color: "#B4EFBA",
-      name: "Completed",
-    },
+ 
+ 
+  
   ];
   const daysOfWeek = [
     "Sunday",
@@ -138,6 +145,13 @@ const DailyTask = () => {
           data: [
             {
               value: pending,
+              name: "Audited",
+              itemStyle: {
+                color: "#64B4BE",
+              },
+            },
+            {
+              value: pending,
               name: "Pending",
               itemStyle: {
                 color: "#FFB54D",
@@ -147,21 +161,21 @@ const DailyTask = () => {
               value: hold,
               name: "Hold",
               itemStyle: {
-                color: "#AD94FA",
+                color: "#F4CE14",
               },
             },
             {
               value: decline,
-              name: "Declined",
+              name: "ReAudit",
               itemStyle: {
-                color: "#EB5252",
+                color: "#C26100;",
               },
             },
             {
               value: completed,
-              name: "Completed",
+              name: "Declined",
               itemStyle: {
-                color: "#B4EFBA",
+                color: "#EB5252",
               },
             },
           ],

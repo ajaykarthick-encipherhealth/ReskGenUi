@@ -11,7 +11,7 @@ import { Col, Row } from "antd";
 import HeadTitle from "../../../../components/headtitle";
 import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
-import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
+import audited from "../../.../../../../images/dashboard/audited.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 
@@ -33,15 +33,15 @@ const WorkFlow = () => {
     {
       id: 2,
       icon: pending,
-      title: "Pending",
+      title: "Audited",
       charts: worlFlowData?.response?.pending,
       days: "Last 30 days",
-      bg: pendingbg,
+      bg: audited,
     },
     {
       id: 3,
       icon: hold,
-      title: "Hold",
+      title: "Re Audit",
       charts: worlFlowData?.response?.hold,
       days: "Last 30 days",
       bg: holdbg,
@@ -49,8 +49,24 @@ const WorkFlow = () => {
     {
       id: 4,
       icon: completed,
-      title: "Completed",
+      title: "Audit Hold",
       charts: worlFlowData?.response?.completed,
+      days: "Last 30 days",
+      bg: completedbg,
+    },
+    {
+      id: 5,
+      icon: allocated,
+      title: "Pending",
+      charts: worlFlowData?.response?.hold,
+      days: "Last 30 days",
+      bg: holdbg,
+    },
+    {
+      id: 6,
+      icon: allocated,
+      title: "Decline",
+      charts: worlFlowData?.response?.decline,
       days: "Last 30 days",
       bg: completedbg,
     },
