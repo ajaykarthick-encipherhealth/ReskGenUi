@@ -5,12 +5,15 @@
 }
 
 .meatCommentCard2 {
-    width: 576px;
+    width: 610px;
     border-radius: 16px;
     border: 0.5px solid #1B627E;
     margin-left: 10px;
     background: #FFF;
     padding: 10px 0px 0px 10px;
+    min-height: 100px;
+    max-height: 220px;
+
 }
 
 .meatCommentDetails {
@@ -129,4 +132,15 @@
     text-align: center;
     margin-top: 20px;
 
+}
+
+.queryTextarea{
+    height: 100px !important;
+    width: 98% !important;
+    color: #000;
+    font-size: 12px !important;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 17.75rem;
+    border-radius: 8px !important;
 }
