@@ -85,6 +85,8 @@ const Header = () => {
   const [selectedOption, setSelectedOption] = useState("Both");
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
   const [dropdownContent, setDropdownContent] = useState();
+  const [currentRole, setCurrentRole] = useState();
+
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
     const isRX = data?.rxHcc_model_category_V08_for_2023_payment_year;
@@ -264,26 +266,31 @@ const Header = () => {
       router.push("/l2Auditor/dashboard");
     }
   };
+  const getMenuListByRole = (role) => {
+    switch (role) {
+      case "admin":
+        return AdminMenuList;
+      case "l1auditor":
+        return PhysicanMenuList;
+      case "l2auditor":
+        return L2AuditorMenuList;
+      default:
+        return [];
+    }
+  };
   useEffect(() => {
     var loginCheck = localStorage.getItem("loginCheck");
     var userName = localStorage.getItem("userName");
     const userRoleLocal = localStorage.getItem("userRole");
     const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
+    const userRole = localStorage.getItem("role");
     getUserIdDetails(userId);
-
     setUserRole(userRoleLocal);
+    setCurrentRole(userRole);
     setUserName(userName);
-    if (userRoleLocal === "admin") {
-      setMenuList(AdminMenuList);
-    } else if (userRoleLocal === "l1auditor") {
-      setMenuList(PhysicanMenuList);
-    } else if (userRoleLocal === "l2auditor") {
-      setMenuList(L2AuditorMenuList);
-    } else {
-      setMenuList([]);
-    }
-    if (loginCheck != "true") {
+    setMenuList(getMenuListByRole(userRoleLocal));
+
+    if (loginCheck !== "true") {
       Swal.fire({
         title: "Error!",
         text: "Session Expired",
@@ -297,26 +304,30 @@ const Header = () => {
         }
       });
     }
+
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
 
     const items = [];
 
-    if (userRoleLocal === "admin") {
-      items?.push(
+    if (userRole === "admin") {
+      items.push(
         { key: "l1auditor", label: "L1auditor" },
         { key: "l2auditor", label: "L2auditor" }
       );
-    } else if (userRoleLocal === "l1auditor") {
-      items?.push({ key: "admin", label: "Admin" },
-        { key: "l2auditor", label: "L2auditor" });
-    } else {
-      items?.push(
-        { key: "admin", label: "Admin" },
-        { key: "l1auditor", label: "L1auditor" },
-        { key: "l2auditor", label: "L2auditor" });
+      if (userRoleLocal === "l1auditor" || userRoleLocal === "l2auditor") {
+        items.push({ key: "admin", label: "Admin" });
+      }
     }
+
+    if (userRole === "l2auditor") {
+      items.push({ key: "l1auditor", label: "L1auditor" });
+      if (userRoleLocal === "l1auditor") {
+        items.push({ key: "l2auditor", label: "L2auditor" });
+      }
+    }
+
     setDropdownContent(items);
   }, []);
   useEffect(() => {
@@ -443,7 +454,8 @@ const Header = () => {
                           </span>
 
                           {userIdDetails != "" ? (
-                            <span className="ms-2 d-flex mt-1">                           
+                            currentRole !== "l1auditor" ? (
+                              <span className="ms-2 d-flex mt-1">
                                 <Dropdown
                                   menu={{
                                     items,
@@ -461,7 +473,12 @@ const Header = () => {
                                     />
                                   </span>
                                 </Dropdown>
-                            </span>
+                              </span>
+                            ) : (
+                              <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
+                                L1auditor
+                              </span>
+                            )
                           ) : null}
                         </div>
                       </div>

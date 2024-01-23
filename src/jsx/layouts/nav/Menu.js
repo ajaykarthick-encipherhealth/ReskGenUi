@@ -122,7 +122,7 @@ export const L2AuditorMenuList = [
   {
     title: "Auditing View",
     iconStyle: SVGICON.patientListIcon,
-    to: "/l2Auditor/patients",
+    to: "/l2Auditor/auditing",
   },
   {
     title: "Report",
