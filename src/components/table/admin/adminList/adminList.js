@@ -1,39 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Switch } from "antd";
+import { Dropdown, Popover, Select, Switch } from "antd";
 import TableStyle from "../../table.module.css";
 import Selector from "../../../selector";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { dateFormate } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 
+const items = [
+  { value: "ADMIN", label: "Admin", role: "admin" },
+  { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
+  { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
+];
 const AdminList = ({ userList }) => {
   const dispatch = useDispatch();
-  const [selectedRow, setSelectedRow] = useState(null);
   const [selectedOption, setSelectedOption] = useState();
-  const [checked, setChecked] = useState(false);
+  const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
-
-  const filteredData = userList?.filter((item) => item?.id === selectedRow);
-  const Options =
-    filteredData?.flatMap((item) =>
-      item?.role?.map((data) => ({ label: data, value: data }))
-    ) ?? [];
-
-  const toggleEditRole = (rowId) => {
-    setSelectedRow((prevRow) => (prevRow === rowId?.id ? null : rowId?.id));
-    setRowData(rowId);
-    setChecked(checked);
-  };
+  const [openPop, setOpenPop] = useState(false);
 
   const onChange = (item, checked) => {
-    dispatch(enableUser(checked, item, null, setSelectedRow));
+    setRowData(item);
+    setChecked(checked);
   };
   useEffect(() => {
-    if (selectedOption) {
-      dispatch(enableUser(checked, rowData, selectedOption, setSelectedRow));
-    }
-  }, [selectedOption]);
+    dispatch(enableUser(checkedd, rowData, selectedOption));
+  }, [selectedOption, checkedd, rowData]);
+
+  const getContent = (data) => {
+    return (
+      <div style={{ height: "200px" }}>
+        <Selector
+          selectlabel=""
+          setSelectedOption={setSelectedOption}
+          selectOptions={items.filter((info) =>
+            data?.role?.every((opt) => opt.toLowerCase() !== info?.role)
+          )}
+          defaultSelectValue1={{ label: data?.role[0], value: data?.role[0] }}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -81,18 +88,26 @@ const AdminList = ({ userList }) => {
                 className={TableStyle.childBorder}
                 style={{ height: "40px !important" }}
               >
-                {selectedRow === item?.id ? (
-                  <div style={{ margin: "-20px 0px 0px -20px", width: "70%" }}>
-                    <Selector
-                      selectlabel=""
-                      setSelectedOption={setSelectedOption}
-                      selectOptions={Options}
-                      defaultSelectValue1={Options[0]}
+                <div
+                  style={{
+                    margin: "-20px 0px 0px -20px",
+                    width: "70%",
+                  }}
+                >
+                  {item?.role?.length > 0 ? (
+                    <Select
+                      className={`custom-ant-select ${TableStyle.customAntSelect}`}
+                      style={{ width: "100%", marginTop: "15px" }}
+                      options={item?.role?.map((data) => ({
+                        value: data,
+                        label: data,
+                      }))}
+                      defaultValue={item?.role[0]}
                     />
-                  </div>
-                ) : (
-                  <span>{item?.role[0] ? item?.role[0] : "---"}</span>
-                )}
+                  ) : (
+                    "---"
+                  )}
+                </div>
               </td>
 
               <td
@@ -108,8 +123,20 @@ const AdminList = ({ userList }) => {
                   cursor: "pointer",
                 }}
               >
-                <div onClick={() => toggleEditRole(item)}>
-                  <EditButton />
+                <div>
+                  <Popover
+                    content={() => getContent(item)}
+                    title="Change Role"
+                    trigger="click"
+                  >
+                    <div
+                      onClick={() => {
+                        setOpenPop(!openPop);
+                      }}
+                    >
+                      <EditButton />
+                    </div>
+                  </Popover>
                 </div>
               </td>
               <td

@@ -63,29 +63,31 @@ export const enableUser = (checked, user, role) => {
 
     const datas = role ? { ...data, role: [role] } : data;
 
-    try {
-      const response = await axios.put(
-        `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
-        datas,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    if (checked || user || role) {
+      try {
+        const response = await axios.put(
+          `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
+          datas,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      if (response?.data) {
-        dispatch({
-          type: ENABLE,
-          payload: response.data,
-        });
-        notification.success({
-          description: response?.data?.message,
-        });
-        dispatch(getUsers(0));
+        if (response?.data) {
+          dispatch({
+            type: ENABLE,
+            payload: response.data,
+          });
+          notification.success({
+            description: response?.data?.message,
+          });
+          dispatch(getUsers(0));
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
 };
