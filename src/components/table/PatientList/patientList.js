@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { Paginator } from "primereact/paginator";
 import SpinnerDots from "../../spinner";
+import { priorityOptions } from "../../headerFilters/functions";
 
 const { Option } = AntSelect;
 
@@ -43,46 +44,6 @@ function PatientTable({
   const dispatch = useDispatch();
   const navigate = useRouter();
 
-  const priorityOptions = [
-    {
-      value: "URGENT",
-      label: (
-        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "HIGH",
-      label: (
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "NORMAL",
-      label: (
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#4466ff " }}>
-            Normal
-          </span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "LOW",
-      label: (
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-        </>
-      ),
-    },
-  ];
 
   const [sortConfig, setSortConfig] = useState({
     key: null,

@@ -1,3 +1,5 @@
+import { SVGICON } from "../../jsx/constant/theme";
+import TableStyle from '../table/table.module.css'
 // for search
 export const searchFunction = (
   e,
@@ -91,5 +93,97 @@ export const sortFunction = (sortOrder, setSortOrder) => {
     setSortOrder("DESC");
   } else {
     setSortOrder("ASC");
+  }
+};
+export const priorityOptions = [
+  {
+    value: "URGENT",
+    label: (
+      <>
+        <i>{SVGICON.alert}</i>{" "}
+        <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
+      </>
+    ),
+  },
+  {
+    value: "HIGH",
+    label: (
+      <>
+        <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+        <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
+      </>
+    ),
+  },
+  {
+    value: "NORMAL",
+    label: (
+      <>
+        <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+        <span style={{ fontSize: "13px", color: "#4466ff " }}>
+          Normal
+        </span>{" "}
+      </>
+    ),
+  },
+  {
+    value: "LOW",
+    label: (
+      <>
+        <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+        <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
+      </>
+    ),
+  },
+];
+
+export  const processstatusBodyTemplate = (rowData) => {
+  switch (rowData.processedStatus) {
+    case "COMPLETED":
+      return (
+        <div className="patient-status">
+          <span className={`badge processed-text`}>Completed</span>
+        </div>
+      );
+
+    case "PENDING":
+      return (
+        <div className="patient-status">
+          <span className={`badge processing-text`}>Pending</span>
+        </div>
+      );
+
+    case "DECLINED":
+      return (
+        <div className="patient-status">
+          <span className={`badge failed-text`} style={{ color: "red" }}>
+            Declined
+          </span>
+        </div>
+      );
+
+    case "NOTCOMPUTED":
+      return (
+        <div className="patient-status">
+          <span className={`badge notComputed-text`}>Not Computed</span>
+        </div>
+      );
+    case "COMPUTED":
+      return (
+        <div className="patient-status">
+          <span className={`badge computed-text`}>Computed</span>
+        </div>
+      );
+    case "HOLD":
+      return (
+        <div className="patient-status">
+          <span className={`badge hold-text`}>Hold</span>
+        </div>
+      );
+    case null:
+      return (
+        <div className="patient-status">
+        ---
+        </div>
+      );
   }
 };

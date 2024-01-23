@@ -116,7 +116,7 @@ export const L2AuditorMenuList = [
   },
   {
     title: "User Queue",
-    iconStyle: SVGICON.Usermanagement,
+    iconStyle: SVGICON.adminUser,
     to: "/l2Auditor/user",
   },
   {

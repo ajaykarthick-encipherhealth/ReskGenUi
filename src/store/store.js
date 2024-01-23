@@ -7,7 +7,7 @@ import { DashboardReducer } from "./reducers/DashboradReducer";
 import { PatientsReducer } from "./reducers/PatientsReducer";
 import { ReportReducer } from "./reducers/ReportReducer";
 import { NotificationReducer } from "./reducers/NotificationReducer";
-
+import { L1UsersReducer } from "./reducers/l2Reducers/usersReducers";
 //import { reducer as reduxFormReducer } from 'redux-form';
 import { createWrapper } from "next-redux-wrapper";
 import { AdminPatientsReducer } from "./reducers/adminRecucers/fileProcessingReducer";
@@ -31,6 +31,7 @@ const reducers = combineReducers({
   adminPatient:AdminPatientsReducer,
   adminList:AdminPatientsListReducer,
   adminUsers:AdminUsersReducer,
+  l1User:L1UsersReducer
   //form: reduxFormReducer,
 });
 

@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Paginator } from "primereact/paginator";
-import AdminList from "../table/adminList/adminList";
-import Header from "../../../jsx/layouts/nav/Header";
-import HeaderFilters from "../../../components/headerFilters";
-import SpinnerDots from "../../../components/spinner";
-import Footer from "../../../jsx/layouts/Footer";
-import { getL2Users } from "../../../store/actions/l2Actions/userActions";
+import TableStyle from "../../../../components/table/table.module.css";
+import Header from "../../../../jsx/layouts/nav/Header";
+import HeaderFilters from "../../../../components/headerFilters";
+import SpinnerDots from "../../../../components/spinner";
+import Footer from "../../../../jsx/layouts/Footer";
+import { getL2Users } from "../../../../store/actions/l2Actions/userActions";
+import UserQueue from "../../table/adminList/userQueue";
 
-const UserList = () => {
+const index = () => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.l1User.data);
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -35,7 +36,17 @@ const UserList = () => {
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
-    // dispatch(getL2Users({ pageCount, orgId, search }));
+    //  getFilteApi(
+    //     0,
+    //     pageSize,
+    // search,
+    //     statusSelectedValue,
+    //     dueStartDate,
+    //     dueEndDate,
+    //     completedStart,
+    //     completedEnd,
+
+    //   );
   }, [pageCount, search]);
 
   const response = {
@@ -43,27 +54,36 @@ const UserList = () => {
     message: "Success!!",
     response: [
       {
-        createdBy: null,
-        updatedBy: "ranjith01@encipherhealth.onmicrosoft.com",
-        id: "99032e79-98f9-4f99-9f65-54d5f4c639ef",
-        role: ["ADMIN"],
-        organizationId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-        userId: "fa1b21aa-9773-4f2a-b5a1-6bd04123f669",
-        email: "ranjith@innoura.com",
-        managerId: "praveen01@encipherhealth.onmicrosoft.com",
-        tenantId: "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-        userName: "ranjith01@encipherhealth.onmicrosoft.com",
-        firstName: "Ranjith",
-        lastName: "Kumar R",
-        userType: "Member",
-        accountStatus: "true",
-        totalFileProcessed: 41,
-        totalFileAllocated: 97,
-        totalFilePending: 21,
-        totalFileHold: 3,
-        totalFileDeclined: 3,
-        createdDate: null,
-        lastModifiedDate: "2024-01-23T12:39:32.472Z",
+        active: true,
+        allocatedBy: "henry@encipherhealth.onmicrosoft.com",
+        allocatedOn: "2024-01-20T16:16:20.104Z",
+        auditedBy: null,
+        auditedDate: null,
+        auditedStatus: null,
+        computedDate: "2024-01-20T13:08:06.815Z",
+        computing: 2,
+        createdAt: "2024-01-20T13:00:53.461Z",
+        createdBy: "ranjith01@encipherhealth.onmicrosoft.com",
+        createdDate: "2024-01-20T13:00:53.461Z",
+        dueDate: "2024-01-22T00:00:00Z",
+        fileName: null,
+        lastModifiedDate: "2024-01-20T16:16:21.181Z",
+        patientAllocated: "ranjith01@encipherhealth.onmicrosoft.com",
+        patientId: "logesh-100",
+        patientName: "logesh",
+        priority: "URGENT",
+        processStageChart: "FINISHED",
+        processStageId: "338c3432-d594-4434-9700-08a2e36e159b",
+        processStageIdLab: null,
+        processStageIdRadiology: null,
+        processStageLab: null,
+        processStageRadiology: null,
+        processedDate: null,
+        processedStatus: "PENDING",
+        rafScore: 1.149,
+        updatedAt: "2024-01-20T16:16:21.181Z",
+        updatedBy: "anonymousUser",
+        version: null,
       },
     ],
   };
@@ -91,7 +111,7 @@ const UserList = () => {
                       {userListAll?.loading ? (
                         <SpinnerDots />
                       ) : (
-                        <AdminList
+                        <UserQueue
                           userList={response?.response}
                           setPageCount={setPageCount}
                         />
@@ -105,7 +125,7 @@ const UserList = () => {
                             onPageChange={onPageChange}
                           />
                           <div className="total-pages">
-                            Total count: {totalElements?totalElements:0}
+                            Total count: {totalElements ? totalElements : 0}
                           </div>
                         </div>
                       </div>
@@ -122,4 +142,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default index;
