@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Dropdown, Popover, Select, Switch } from "antd";
+import { Popover, Select, Switch } from "antd";
 import TableStyle from "../../table.module.css";
 import Selector from "../../../selector";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { dateFormate } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
-
+import styles from "../../../../styles/auth.module.css";
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
@@ -17,30 +17,55 @@ const AdminList = ({ userList }) => {
   const [selectedOption, setSelectedOption] = useState();
   const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
-  const [openPop, setOpenPop] = useState(false);
+  const [selectedRoles, setSelectedRoles] = useState([]);
 
   const onChange = (item, checked) => {
     setRowData(item);
     setChecked(checked);
   };
-  useEffect(() => {
-    dispatch(enableUser(checkedd, rowData, selectedOption));
-  }, [selectedOption, checkedd, rowData]);
 
   const getContent = (data) => {
     return (
-      <div style={{ height: "200px" }}>
+      <div style={{ height: "250px" }}>
+        <div style={{ width: "100%", display: "flex" }}>
+          <button
+            className={styles.sendBtn}
+            style={{ width: "50%", marginRight: "5px" }}
+            disabled={selectedOption ? false : true}
+            onClick={() => {
+              const updatedRoles = [...data.role, selectedOption];
+              setSelectedRoles(updatedRoles);
+            }}
+          >
+            Include Previous Roles
+          </button>
+          <button
+            className={styles.sendBtn}
+            style={{ width: "50%" }}
+            disabled={selectedOption ? false : true}
+            onClick={() => {
+              setSelectedRoles([selectedOption]);
+            }}
+          >
+            Selected Role Only
+          </button>
+        </div>
         <Selector
           selectlabel=""
           setSelectedOption={setSelectedOption}
-          selectOptions={items.filter((info) =>
-            data?.role?.every((opt) => opt.toLowerCase() !== info?.role)
-          )}
-          defaultSelectValue1={{ label: data?.role[0], value: data?.role[0] }}
+          selectOptions={items}
+          defaultSelectValue1={items[0]}
         />
       </div>
     );
   };
+
+  useEffect(() => {
+    if(selectedRoles?.length>0){
+
+      dispatch(enableUser(checkedd, rowData, selectedRoles));
+    }
+  }, [selectedRoles, checkedd, rowData]);
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -131,7 +156,7 @@ const AdminList = ({ userList }) => {
                   >
                     <div
                       onClick={() => {
-                        setOpenPop(!openPop);
+                        setRowData(item);
                       }}
                     >
                       <EditButton />
