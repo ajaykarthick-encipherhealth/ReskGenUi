@@ -336,7 +336,7 @@ const Header = () => {
         })
       );
     }
-  }, [msgReply, selectedbtn, search, selectedOption]);
+  }, [ msgReply,selectedbtn, search, selectedOption]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
