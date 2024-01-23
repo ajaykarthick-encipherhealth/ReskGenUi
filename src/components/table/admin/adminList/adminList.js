@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Popover, Select, Switch } from "antd";
 import TableStyle from "../../table.module.css";
-
+import styles from "../../../../styles/auth.module.css";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { dateFormate } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
-import styles from "../../../../styles/auth.module.css";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
