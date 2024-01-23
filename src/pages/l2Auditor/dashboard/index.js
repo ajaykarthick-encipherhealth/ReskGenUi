@@ -56,7 +56,7 @@ const index = () => {
           </Row>
           <Row className={styles.RowCon}>
             <Col span={14} className={styles.column2}>
-         
+            <CompletedStatus />
             </Col>
             <Col span={9} offset={1} className={styles.columns}>
               <HoldStatus />
