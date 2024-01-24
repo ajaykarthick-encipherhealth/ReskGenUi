@@ -288,14 +288,7 @@ const Details = ({}) => {
     setOpenPicker(false);
     setOpenPicker2(false);
     var result = await patientListFilter(
-      localUserId,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      0
+      localUserId,"","","","","","",0
     );
     setPatientList(result.response.content);
     setTotalElements(result?.response?.totalElements);
@@ -957,13 +950,11 @@ const Details = ({}) => {
     setFlagContainerActive(value);
     if (value == "Filter") {
       setFlagContainerActiveTitle("My Work Queue");
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${10}&processedStatus=&dueDateStart=&dueDateEnd=&processedStart=&processedEnd=&searchString=`
+      var result = await patientListFilter(
+        localUserId,"","","","","","",0
       );
-      var result = response.data.response.content;
-      setTotalElements(response.data?.response?.totalElements);
-      setPatientList(result);
+      setPatientList(result.response.content);
+      setTotalElements(result?.response?.totalElements);
       setFilterDataLoading(false);
     }
 
