@@ -348,29 +348,29 @@ const Details = ({}) => {
     var result = response.data.response;
     var data = [
       {
-        id: result.patientId,
-        name: result.patientName,
+        id: result?.patientId,
+        name: result?.patientName,
       },
     ];
     setSelectedRowsId(data);
     const menu = (
       <Menu>
-        {result.processedStatus != "HOLD" ? (
+        {result?.processedStatus != "HOLD" ? (
           <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "PENDING" &&
-        result.processedStatus != "COMPUTED" ? (
+        {result?.processedStatus != "PENDING" &&
+        result?.processedStatus != "COMPUTED" ? (
           <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "DECLINE" ? (
+        {result?.processedStatus != "DECLINE" ? (
           <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
             <div className="patient-status">
               <span className={`badge failed-text`} style={{ color: "red" }}>
@@ -380,7 +380,7 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
 
-        {result.processedStatus != "COMPLETE" ? (
+        {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETE</span>
@@ -392,21 +392,21 @@ const Details = ({}) => {
 
     const menu2 = (
       <Menu>
-        {result.processedStatus != "HOLD" ? (
+        {result?.processedStatus != "HOLD" ? (
           <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "PENDING" ? (
+        {result?.processedStatus != "PENDING" ? (
           <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "DECLINE" ? (
+        {result?.processedStatus != "DECLINE" ? (
           <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
             <div className="patient-status">
               <span className={`badge failed-text`} style={{ color: "red" }}>
@@ -416,7 +416,7 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
 
-        {result.processedStatus != "COMPLETE" ? (
+        {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETE</span>
@@ -434,21 +434,21 @@ const Details = ({}) => {
     );
     const menu3 = (
       <Menu>
-        {result.processedStatus != "HOLD" ? (
+        {result?.processedStatus != "HOLD" ? (
           <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "PENDING" ? (
+        {result?.processedStatus != "PENDING" ? (
           <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "DECLINE" ? (
+        {result?.processedStatus != "DECLINE" ? (
           <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
             <div className="patient-status">
               <span className={`badge failed-text`} style={{ color: "red" }}>
@@ -458,7 +458,7 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
 
-        {result.processedStatus != "COMPLETE" ? (
+        {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETE</span>
@@ -1500,7 +1500,7 @@ const Details = ({}) => {
                                 Urgent
                               </span>
                             </div>
-                          ) : patienIdDetails.priority == "HIGH" ? (
+                          ) : patienIdDetails?.priority == "HIGH" ? (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i className={TableStyle.highFlag}>
                                 {SVGICON.alert}
@@ -1515,7 +1515,7 @@ const Details = ({}) => {
                                 High
                               </span>
                             </div>
-                          ) : patienIdDetails.priority == "NORMAL" ? (
+                          ) : patienIdDetails?.priority == "NORMAL" ? (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i className={TableStyle.normalFlag}>
                                 {SVGICON.alert}
@@ -1559,7 +1559,7 @@ const Details = ({}) => {
                       <div className="col-xl-1 col-sm-12 d-flex">
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
-                          {patientDetails.rafScore != null ? (
+                          {patientDetails?.rafScore != null ? (
                             <h6 className="ageDtails">
                               {(patientDetails.rafScore?.score).toFixed(3)}
                             </h6>
@@ -1571,7 +1571,7 @@ const Details = ({}) => {
                           className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}
                         >
                           {/* {flagFirstData.flag} */}
-                          {flagFirstData.flag == "PATIENT_NAME_MISSED" ? (
+                          {flagFirstData?.flag == "PATIENT_NAME_MISSED" ? (
                             <Tooltip
                               title="PATIENT_NAME_MISSED"
                               placement="bottom"
@@ -1580,7 +1580,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PATIENT_DOB_MISSED" ? (
+                          ) : flagFirstData?.flag == "PATIENT_DOB_MISSED" ? (
                             <Tooltip
                               title="PATIENT_DOB_MISSED"
                               placement="bottom"
@@ -1589,13 +1589,13 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "MRN_ID_MISMATCH" ? (
+                          ) : flagFirstData?.flag == "MRN_ID_MISMATCH" ? (
                             <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
                               <i className={visitStyles.id_missed}>
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PROVIDER_SIGN_MISSED" ? (
+                          ) : flagFirstData?.flag == "PROVIDER_SIGN_MISSED" ? (
                             <Tooltip
                               title="PROVIDER_SIGN_MISSED"
                               placement="bottom"
@@ -1604,7 +1604,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag ==
+                          ) : flagFirstData?.flag ==
                             "PROVIDER_SIGNATURE_MISSED" ? (
                             <Tooltip
                               title="PROVIDER_SIGNATURE_MISSED"
@@ -1614,7 +1614,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag ==
+                          ) : flagFirstData?.flag ==
                             "PROVIDER_CREDENTIAL_MISSED" ? (
                             <Tooltip
                               title="PROVIDER_CREDENTIAL_MISSED"
@@ -1624,7 +1624,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag ==
+                          ) : flagFirstData?.flag ==
                             "PROVIDER_SIGN_STATUS_PENDING" ? (
                             <Tooltip
                               title="PROVIDER_SIGN_STATUS_PENDING"
@@ -1634,13 +1634,13 @@ const Details = ({}) => {
                                 {SVGICON.emptemptyFlagSmallLargeyFlag}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "NO_HCC_FOUND" ? (
+                          ) : flagFirstData?.flag == "NO_HCC_FOUND" ? (
                             <Tooltip title="NO_HCC_FOUND" placement="bottom">
                               <i className={visitStyles.no_hcc_found}>
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag ==
+                          ) : flagFirstData?.flag ==
                             "NO_VALID_DOCUMENT_FOUND" ? (
                             <Tooltip
                               title="NO_VALID_DOCUMENT_FOUND"
@@ -1650,7 +1650,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PATIENT_DECEASED" ? (
+                          ) : flagFirstData?.flag == "PATIENT_DECEASED" ? (
                             <Tooltip
                               title="PATIENT_DECEASED"
                               placement="bottom"
@@ -1659,7 +1659,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PATIENT_INACTIVE" ? (
+                          ) : flagFirstData?.flag == "PATIENT_INACTIVE" ? (
                             <Tooltip
                               title="PATIENT_INACTIVE"
                               placement="bottom"
@@ -1728,7 +1728,7 @@ const Details = ({}) => {
                           </div>
                         ) : (
                           <div className={`${visitStyles.actionbtnContainer}`}>
-                            {patienIdDetails.processedStatus == "COMPLETED" ? (
+                            {patienIdDetails?.processedStatus == "COMPLETED" ? (
                               <Dropdown.Button
                                 type="primary"
                                 className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
@@ -1743,7 +1743,7 @@ const Details = ({}) => {
                               >
                                 COMPLETED
                               </Dropdown.Button>
-                            ) : patienIdDetails.processedStatus ==
+                            ) : patienIdDetails?.processedStatus ==
                               "DECLINED" ? (
                               <div className={`col-xl-12`}>
                                 <Dropdown.Button
@@ -1761,7 +1761,7 @@ const Details = ({}) => {
                                   DECLINED
                                 </Dropdown.Button>
                               </div>
-                            ) : patienIdDetails.processedStatus == "HOLD" ? (
+                            ) : patienIdDetails?.processedStatus == "HOLD" ? (
                               <Dropdown.Button
                                 type="primary"
                                 className={`holdBtnHcc ${visitStyles.holdBtnHcc}`}
