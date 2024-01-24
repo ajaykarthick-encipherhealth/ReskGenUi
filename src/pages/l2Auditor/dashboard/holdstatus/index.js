@@ -3,10 +3,10 @@ import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import { Modal } from "antd";
-import { getHoldStatusData } from "../../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
+import { getHoldStatusData } from "../../../../store/actions/l2Action/DashboardAction";
 
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
@@ -15,7 +15,7 @@ const HoldStatus = () => {
   useEffect(() => {
     dispatch(getHoldStatusData(router));
   }, []);
-  const holdStatusData = useSelector((state) => state.workFlow.holdStatus);
+  const holdStatusData = useSelector((state) => state.l2Dashboard.holdStatus);
 
   const handleOpen = () => {
     setOpenHoldStatus(!openHoldStatus);

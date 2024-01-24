@@ -8,9 +8,9 @@ import Card from "../../../../components/card/index";
 import styles from "./styles.module.css";
 import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
+import { getAccuracyScore } from "../../../../store/actions/l2Action/DashboardAction";
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -51,7 +51,7 @@ const Accuracy = () => {
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const dispatch = useDispatch();
-  const accuracyDatas = useSelector((state) => state?.workFlow?.accuracy);
+  const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
   const numberOfWeeks = accuracyDatas?.response && Object.keys(accuracyDatas?.response)?.length;
 
   const weekNames = Array.from(

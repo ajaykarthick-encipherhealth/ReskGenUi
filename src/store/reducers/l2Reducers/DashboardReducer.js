@@ -20,7 +20,7 @@ import {
     chatReply:null
   };
   
-  export const DashboardReducers = (state = initialState, action) => {
+  export const L2DashboardReducers = (state = initialState, action) => {
     if (action.type === WORKFLOWDATA) {
       return {
         ...state,
