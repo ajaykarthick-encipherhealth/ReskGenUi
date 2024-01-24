@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import SpeedometerChart from "../speedometer";
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -197,7 +196,6 @@ const Accuracy = () => {
                   overflowX: "hidden",
                 }}
               />
-              {/* <SpeedometerChart /> */}
             </div>
             <div className={styles.accuracy}>
               <div className={styles.header}>

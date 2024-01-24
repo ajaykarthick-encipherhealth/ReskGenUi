@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import Footer from "../../../jsx/layouts/Footer";
-import SpeedometerChart from "./speedometer";
 
 const index = () => {
   const currentDate = dayjs();

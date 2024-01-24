@@ -123,6 +123,7 @@ const Details = ({}) => {
   const [userRole, setUserRole] = useState("");
   const [allocateModal, setAllocateModal] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
+  const [selectedChart, setSelectedChart] = useState([]);
 
   const flagPostList = [
     {
@@ -3099,6 +3100,8 @@ const Details = ({}) => {
         setOpen={setAllocateModal}
         selectedRowsId={selectedRowsId}
         setSelectedRowsId={setSelectedRowsId}
+        setSelectedChart={setSelectedChart}
+        selectedChart={selectedChart}
       />
     </>
   );
