@@ -15,7 +15,7 @@ export async function workStatusApi(startDate, endDate, router) {
     return response.data;
   } catch (err) {
     if (err?.response?.status === 401) {
-      router.push("/userlogin");
+      router.push("/login");
     }
   }
 }
@@ -34,7 +34,7 @@ export const DailyTaskApi = async (date, router) => {
     return response.data;
   } catch (err) {
     if (err?.response?.status === 401) {
-      router?.push("/userlogin");
+      router?.push("/login");
     }
   }
 };
@@ -60,7 +60,7 @@ export const accuracyScore = async (btn, month, year, router) => {
     return response.data;
   } catch (err) {
     if (err?.response?.status === 401) {
-      router.push("/userlogin");
+      router.push("/login");
     }
   }
 };
@@ -80,7 +80,7 @@ export const CompletedScore = async (btn, date, month, year, router) => {
     return response.data;
   } catch (err) {
     if (err?.response?.status === 401) {
-      router.push("/userlogin");
+      router.push("/login");
     }
   }
 };
@@ -99,7 +99,7 @@ export const HoldStatus = async (router) => {
     return response.data;
   } catch (err) {
     if (err.response.status === 401) {
-      router.push("/userlogin");
+      router.push("/login");
     }
   }
 };
