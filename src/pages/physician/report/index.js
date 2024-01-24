@@ -277,6 +277,7 @@ const index = () => {
                             setCoderEndDate={setCoderEndDate}
                             activeTab={activeTab}
                             rowsLength={rowsLength}
+                            setIsModalVisible={setIsModalVisible}
                           />
                         </div>
                         <Export
