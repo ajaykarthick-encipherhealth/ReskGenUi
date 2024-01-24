@@ -35,7 +35,7 @@ const UserList = () => {
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
-    // dispatch(getL2Users({ pageCount, orgId, search }));
+    dispatch(getL2Users({ pageCount, orgId, search }));
   }, [pageCount, search]);
 
   const response = {
@@ -92,7 +92,7 @@ const UserList = () => {
                         <SpinnerDots />
                       ) : (
                         <AdminList
-                          userList={response?.response}
+                          userList={userListAll?userListAll:response?.response}
                           setPageCount={setPageCount}
                         />
                       )}
