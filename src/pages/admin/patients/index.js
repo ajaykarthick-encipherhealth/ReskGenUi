@@ -26,6 +26,7 @@ import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
+import { generateOptionsList } from "../../../components/headerFilters/functions";
 
 const bullets = [
   {
@@ -93,41 +94,6 @@ export default function Patient() {
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
 
-  const allocatedToOptions = [
-    { label: "All", value: "All" },
-    ...patinetListAll
-      ?.map((item) =>
-        item?.patientAllocated
-          ? { label: item?.patientAllocated, value: item?.patientAllocated }
-          : null
-      )
-      .filter(Boolean),
-  ];
-
-  const allocatedByOptionsSet = new Set();
-  const allocatedByOptions = [
-    { label: "All", value: "All" },
-    ...patinetListAll
-      ?.map((item) => {
-        if (item?.allocatedBy && !allocatedByOptionsSet.has(item.allocatedBy)) {
-          allocatedByOptionsSet.add(item.allocatedBy);
-          return { label: item.allocatedBy, value: item.allocatedBy };
-        }
-        return null;
-      })
-      .filter(Boolean),
-  ];
-
-  const createdByOptions = [
-    { label: "All", value: "All" },
-    ...patinetListAll
-      ?.map((item) =>
-        item?.createdBy
-          ? { label: item?.createdBy, value: item?.createdBy }
-          : null
-      )
-      .filter(Boolean),
-  ];
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -199,6 +165,7 @@ export default function Patient() {
           computedDate: res.computedDate,
           lastModifiedDate: res.lastModifiedDate,
           createdDate: res.createdDate,
+          createdBy: res.createdBy,
         });
       });
       var newArray = [];
@@ -511,19 +478,7 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
-  const handleDatePickerChange = (dateString) => {
-    if (dateString[0] != "") {
-      let convertStartDate =
-        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-      let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-      setComputedStartDate(convertStartDate);
-      setComputedEndDate(convertEndDate);
-    } else {
-      setComputedStartDate("");
-      setComputedEndDate("");
-    }
-  };
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -565,19 +520,31 @@ export default function Patient() {
                             // allocated by
                             isAllocatedBySelector={true}
                             allocatedBylabel="Select AllocatedBy"
-                            allocatedByOptoons={allocatedByOptions}
+                            allocatedByOptoons={generateOptionsList(
+                              patinetListAll,
+                              "allocatedBy",
+                              "All"
+                            )}
                             setSelAllocatedBy={setSelAllocatedBy}
                             defaultAllocatedBy={"All"}
                             // allocated to
                             isAllocatedToSelector={true}
                             allocatedTolabel="Select AllocatedTo"
-                            allocatedToOptoons={allocatedToOptions}
+                            allocatedToOptoons={generateOptionsList(
+                              patinetListAll,
+                              "patientAllocated",
+                              "All"
+                            )}
                             setSelAllocatedTo={setSelAllocatedTo}
                             defaultCreatedBy={"All"}
                             // created by
                             isCreatedBySelector={true}
                             createdTolabel="Select CreatedTo"
-                            createdByOptoons={createdByOptions}
+                            createdByOptoons={generateOptionsList(
+                              patinetListAll,
+                              "createdBy",
+                              "All"
+                            )}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}
                             addUserForm={addPatientFormId}

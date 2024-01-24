@@ -45,6 +45,7 @@ export const PhysicanMenuList = [
     title: "Report",
     iconStyle: SVGICON.ReportIcon,
     to: "/physician/report",
+    childRoute: "/physician/report/individualreport",
   },
   {
     title: "Working Status",
@@ -116,8 +117,11 @@ export const L2AuditorMenuList = [
   },
   {
     title: "User Queue",
-    iconStyle: SVGICON.Usermanagement,
+    iconStyle: SVGICON.adminUser,
     to: "/l2Auditor/user",
+    childRoute: "/l2Auditor/user/userQueue",
+    childRoute2: "/l2Auditor/user/details",
+
   },
   {
     title: "Audited Queue",
