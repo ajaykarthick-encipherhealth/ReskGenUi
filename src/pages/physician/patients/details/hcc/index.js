@@ -6157,7 +6157,7 @@ const Hcc = ({ patientHccResult }) => {
                 <div>
                   <span className={styles.meatQueried_head}>Subject</span>
                   <p className={styles.meatQueried_details}>
-                  We've pinpointed the following details that may pertain to records associated with <b>{patientHccResult.patientName}</b>.
+                  We've pinpointed the following details that may pertain to records associated with <b>{patientHccResult?.patientName}</b>.
                   </p>
                 </div>
                 <div>

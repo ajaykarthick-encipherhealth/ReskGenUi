@@ -13397,3 +13397,9 @@ overflow: scroll;
 .width-max-content{
   width: max-content !important;
 }
+.patient-filte-page{
+  margin-top: 20px;
+}
+.patient-filte-page >.p-paginator> span.p-paginator-pages{
+  display: none;
+}

@@ -340,7 +340,6 @@ function CoderReport({
                             height: "20px",
                             flexhrink: "0",
                             borderRadius: "4px",
-                            backgroundColor: "pink",
                           }}
                         />
                       </td>
@@ -416,6 +415,7 @@ function CoderReport({
                             flexhrink: "0",
                             borderRadius: "4px",
                             backgroundColor: "pink",
+                            cursor: "pointer",
                           }}
                         />
                       </td>

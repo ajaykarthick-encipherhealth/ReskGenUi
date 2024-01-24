@@ -112,7 +112,8 @@ const HeaderFilters = ({
   bullets,
   isNextRow,
   btnTitle,
-  badges
+  badges,
+  setIsModalVisible
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   return (
@@ -276,7 +277,7 @@ const HeaderFilters = ({
             <div className="col-xl-6  d-flex justify-content-end">
               <div className="row flr mt-3">
                 <button
-                  onClick={handleExport}
+                  onClick={()=>{setIsModalVisible(true)}}
                   className={
                     rowsLength?.length === 0 ? styles.csv : styles.export
                   }

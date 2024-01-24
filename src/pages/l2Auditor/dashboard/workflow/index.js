@@ -11,7 +11,14 @@ import { Col, Row } from "antd";
 import HeadTitle from "../../../../components/headtitle";
 import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
-import audited from "../../.../../../../images/dashboard/audited.png";
+import reAuditbg from "../../.../../../../images/dashboard/reAuditbg.png";
+import auditedbg from "../../.../../../../images/dashboard/auditedbg.png";
+import auditHold from "../../.../../../../images/dashboard/auditHold.png";
+import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
+import auditDecliendbg from "../../.../../../../images/dashboard/auditDecliendbg.png";
+
+
+
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 
@@ -36,7 +43,7 @@ const WorkFlow = () => {
       title: "Audited",
       charts: worlFlowData?.response?.pending,
       days: "Last 30 days",
-      bg: audited,
+      bg: auditedbg,
     },
     {
       id: 3,
@@ -44,7 +51,7 @@ const WorkFlow = () => {
       title: "Re Audit",
       charts: worlFlowData?.response?.hold,
       days: "Last 30 days",
-      bg: holdbg,
+      bg: reAuditbg,
     },
     {
       id: 4,
@@ -52,7 +59,7 @@ const WorkFlow = () => {
       title: "Audit Hold",
       charts: worlFlowData?.response?.completed,
       days: "Last 30 days",
-      bg: completedbg,
+      bg: auditHold,
     },
     {
       id: 5,
@@ -60,7 +67,7 @@ const WorkFlow = () => {
       title: "Pending",
       charts: worlFlowData?.response?.hold,
       days: "Last 30 days",
-      bg: holdbg,
+      bg: pendingbg,
     },
     {
       id: 6,
@@ -68,7 +75,7 @@ const WorkFlow = () => {
       title: "Decline",
       charts: worlFlowData?.response?.decline,
       days: "Last 30 days",
-      bg: completedbg,
+      bg: auditDecliendbg,
     },
   ];
 

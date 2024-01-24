@@ -13,6 +13,7 @@ import { createWrapper } from "next-redux-wrapper";
 import { AdminPatientsReducer } from "./reducers/adminRecucers/fileProcessingReducer";
 import { AdminPatientsListReducer } from "./reducers/adminRecucers/patientsReducers"
 import { AdminUsersReducer } from "./reducers/adminRecucers/usewrsReducer";
+import { DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
 
 const middleware = applyMiddleware(thunk);
 
@@ -25,6 +26,7 @@ const reducers = combineReducers({
   patientDetails: PatientStore,
   todoReducers,
   workFlow: DashboardReducer,
+  workFlows: DashboardReducers,
   report:ReportReducer,
   patients:PatientsReducer,
   notificationDatas:NotificationReducer,

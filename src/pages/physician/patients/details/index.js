@@ -31,12 +31,14 @@ import { notification } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
+import { Paginator } from "primereact/paginator";
 import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
 import AllocateModal from "../../../admin/allocatedUser/allocate";
+import { patientListFilter } from "../../../../services/PatientsListSevice";
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -107,6 +109,7 @@ const Details = ({}) => {
   const [notesList, setNotesList] = useState([]);
   const [flagResultList, setFlagResultList] = useState([]);
   const [openPicker, setOpenPicker] = useState(false);
+  const [openPicker2, setOpenPicker2] = useState(false);
   const [actionItems, setActionItems] = useState([]);
   const [actionItems2, setActionItems2] = useState([]);
   const [actionItems3, setActionItems3] = useState([]);
@@ -123,6 +126,17 @@ const Details = ({}) => {
   const [userRole, setUserRole] = useState("");
   const [allocateModal, setAllocateModal] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
+  const [selectedChart, setSelectedChart] = useState([]);
+  const [processedStatus, setProcessedStatus] = useState("");
+  const [searchtext, setSearchtext] = useState("");
+  const [dueDateStart, setDueDateStart] = useState("");
+  const [dueDateEnd, setDueDateEnd] = useState("");
+  const [processedStart, setProcessedStart] = useState("");
+  const [processedEnd, setProcessedEnd] = useState("");
+  const [pageNo, setPageNo] = useState(0);
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [totalElements, setTotalElements] = useState(10);
+
 
   const flagPostList = [
     {
@@ -233,27 +247,51 @@ const Details = ({}) => {
   ];
 
   const filterChangePatientId = async (e) => {
-    setFilter(e.target.value);
-    var value = e.target.value;
-    if (value) {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/patient/compute/search?searchtext=${value}&pageno=${0}&pagesize=${100}`
-      );
-      var result = response.data.response.content;
-      setPatientList(result);
-    } else {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/patient/filter?patientAllocated=${localUserId}&page=${0}&size=${100}`
-      );
-      var result = response.data.response.content;
-      setPatientList(result);
-    }
+    setSearchtext(e.target.value);
+    var result = await patientListFilter(
+      localUserId,
+      processedStatus,
+      e.target.value,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd,
+      pageNo
+    );
+    setOpenPicker(false);
+    setOpenPicker2(false);
+    setPatientList(result.response.content);
+    setTotalElements(result?.response?.totalElements);
+  };
+  const onPageChange = async (e) => {
+    setPaginationFirst(e.first);
+    setPageNo(e.page);
+    var result = await patientListFilter(
+      localUserId,
+      processedStatus,
+      searchtext,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd,
+      e.page
+    );
+    setPatientList(result.response.content);
+    setTotalElements(result?.response?.totalElements);
   };
 
   const handleFilterClick = () => {
     setShowIcons(!showIcons);
+  };
+  const closeFilterIcons = async () => {
+    setShowIcons(false);
+    setOpenPicker(false);
+    setOpenPicker2(false);
+    var result = await patientListFilter(
+      localUserId,"","","","","","",0
+    );
+    setPatientList(result.response.content);
+    setTotalElements(result?.response?.totalElements);
   };
   const handleShowCard = () => {
     setShowCard(!showCard);
@@ -912,12 +950,11 @@ const Details = ({}) => {
     setFlagContainerActive(value);
     if (value == "Filter") {
       setFlagContainerActiveTitle("My Work Queue");
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${15}&processedStatus=&dueDateStart=&dueDateEnd=&processedStart=&processedEnd=&searchString=`
+      var result = await patientListFilter(
+        localUserId,"","","","","","",0
       );
-      var result = response.data.response.content;
-      setPatientList(result);
+      setPatientList(result.response.content);
+      setTotalElements(result?.response?.totalElements);
       setFilterDataLoading(false);
     }
 
@@ -976,12 +1013,21 @@ const Details = ({}) => {
   };
 
   const getFiltePatientListStatus = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/patient/filter?patientAllocated=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`
+    setProcessedStatus(value);
+    var result = await patientListFilter(
+      localUserId,
+      value,
+      searchtext,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd,
+      pageNo
     );
-    var result = response.data.response.content;
-    setPatientList(result);
+    setOpenPicker(false);
+    setOpenPicker2(false);
+    setPatientList(result.response.content);
+    setTotalElements(result?.response?.totalElements);
   };
 
   const handleSubmitFlag = async (event) => {
@@ -1194,8 +1240,46 @@ const Details = ({}) => {
     setFilterDataLoading(false);
   };
 
-  const handleDatePickerChange = (dateString) => {
-    // getFiltePatientListDate(dateString[0],dateString[1])
+  const handleDatePickerChange = async (dateString) => {
+    let convertStartDate =
+      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+    let convertEndDate =
+      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+    setDueDateStart(convertStartDate);
+    setDueDateEnd(convertEndDate);
+    var result = await patientListFilter(
+      localUserId,
+      processedStatus,
+      searchtext,
+      convertStartDate,
+      convertEndDate,
+      processedStart,
+      processedEnd,
+      pageNo
+    );
+    setPatientList(result.response.content);
+    setTotalElements(result?.response?.totalElements);
+  };
+
+  const handleChangeprocessedDate = async (dateString) => {
+    let convertStartDate =
+      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+    let convertEndDate =
+      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+    setProcessedStart(convertStartDate);
+    setProcessedEnd(convertEndDate);
+    var result = await patientListFilter(
+      localUserId,
+      processedStatus,
+      searchtext,
+      dueDateStart,
+      dueDateEnd,
+      convertStartDate,
+      convertEndDate,
+      pageNo
+    );
+    setPatientList(result.response.content);
+    setTotalElements(result?.response?.totalElements);
   };
 
   const handleActionClick = (value) => {
@@ -2685,88 +2769,98 @@ const Details = ({}) => {
                         )}
                       </div>
                     ) : flagContainerActive == "Filter" ? (
-                      <div className={`row ${visitStyles.patientListHead}`}>
-                        <div
-                          className={visitStyles.flags}
-                          style={{ marginTop: "15px", marginBottom: "20px" }}
-                        >
-                          <div className={visitStyles.flags}>
-                            <span
-                              className={visitStyles.completed}
-                              style={{ background: "#3a9b94 !important" }}
-                            ></span>
-                            <span className={visitStyles.flagCodes}>
-                              Completed
-                            </span>
-                          </div>
-                          <div className={visitStyles.flags}>
-                            <span className={visitStyles.pending}></span>
-                            <span className={visitStyles.flagCodes}>
-                              Pending
-                            </span>
-                          </div>
-                          <div className={visitStyles.flags}>
-                            <span className={visitStyles.hold}></span>
-                            <span className={visitStyles.flagCodes}>Hold</span>
-                          </div>
-                          <div className={visitStyles.flags}>
-                            <span className={visitStyles.declined}></span>
-                            <span className={visitStyles.flagCodes}>
-                              Declined
-                            </span>
-                          </div>
+                      <>    <div className={`row ${visitStyles.patientListHead}`}>
+                      <div
+                        className={visitStyles.flags}
+                        style={{ marginTop: "15px", marginBottom: "20px" }}
+                      >
+                        <div className={visitStyles.flags}>
+                          <span
+                            className={visitStyles.completed}
+                            style={{ background: "#3a9b94 !important" }}
+                          ></span>
+                          <span className={visitStyles.flagCodes}>
+                            Completed
+                          </span>
                         </div>
-                        <div className="col-xl-9">
-                          <div class="form-group has-search">
-                            <FontAwesomeIcon
-                              className="fa fa-search form-control-feedback"
-                              icon={faSearch}
-                            />
-                            <InputText
-                              type="text"
-                              onChange={(e) => filterChangePatientId(e)}
-                              className="form-control new-form-control"
-                              placeholder="Search"
-                            />
-                            <RangePicker
-                              open={openPicker}
-                              onChange={(dates, dateStrings) => {
-                                setSelectedDates(dates);
-                                handleDatePickerChange(dateStrings);
-                              }}
-                              suffixIcon={false}
-                              className={visitStyles.datepicker}
-                            />
-                          </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.pending}></span>
+                          <span className={visitStyles.flagCodes}>
+                            Pending
+                          </span>
                         </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.hold}></span>
+                          <span className={visitStyles.flagCodes}>Hold</span>
+                        </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.declined}></span>
+                          <span className={visitStyles.flagCodes}>
+                            Declined
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-xl-9">
+                        <div class="form-group has-search">
+                          <FontAwesomeIcon
+                            className="fa fa-search form-control-feedback"
+                            icon={faSearch}
+                          />
+                          <InputText
+                            type="text"
+                            onChange={(e) => filterChangePatientId(e)}
+                            className="form-control new-form-control"
+                            placeholder="Search"
+                          />
+                          <RangePicker
+                            open={openPicker}
+                            onChange={(dates, dateStrings) => {
+                              handleDatePickerChange(dateStrings);
+                            }}
+                            suffixIcon={false}
+                            className={visitStyles.datepicker}
+                          />
+                          <RangePicker
+                            open={openPicker2}
+                            onChange={(dates, dateStrings) => {
+                              handleChangeprocessedDate(dateStrings);
+                            }}
+                            suffixIcon={false}
+                            className={visitStyles.datepicker}
+                          />
+                        </div>
+                      </div>
 
-                        <div className="col-xl-3">
-                          <div className={visitStyles.content}>
-                            <span
-                              className={visitStyles.circleCard}
-                              onClick={handleFilterClick}
-                            >
-                              <span></span>
-                              {showIcons ? (
-                                <FontAwesomeIcon
-                                  icon={faClose}
-                                  height={30}
-                                  width={30}
-                                  color="#A20404"
-                                />
-                              ) : (
-                                SVGICON.filter
-                              )}
-                            </span>
-                            {showIcons && (
-                              <div className={visitStyles.iconContainer}>
+                      <div className="col-xl-3">
+                        <div className={visitStyles.content}>
+                          <span
+                            className={visitStyles.circleCard}
+                            onClick={handleFilterClick}
+                          >
+                            <span></span>
+                            {showIcons ? (
+                              <FontAwesomeIcon
+                                icon={faClose}
+                                height={30}
+                                width={30}
+                                color="#A20404"
+                                onClick={() => closeFilterIcons(false)}
+                              />
+                            ) : (
+                              SVGICON.filter
+                            )}
+                          </span>
+                          {showIcons && (
+                            <div className={visitStyles.iconContainer}>
+                              <Tooltip title="Status" placement="left">
                                 <span
                                   className={visitStyles.circleCard}
                                   onClick={handleShowCard}
                                 >
                                   {SVGICON.dashboard}
                                 </span>
-
+                              </Tooltip>
+                              <Tooltip title="Due Date" placement="left">
                                 <span
                                   className={visitStyles.circleCard}
                                   onClick={() => {
@@ -2775,87 +2869,114 @@ const Details = ({}) => {
                                 >
                                   {SVGICON.dateIcon}
                                 </span>
-                              </div>
-                            )}
-                            {showCard && (
-                              <div
-                                className={visitStyles.menuCard}
-                                onMouseEnter={() => setShowCard(true)}
-                                onMouseLeave={() => setShowCard(false)}
+                              </Tooltip>
+                              <Tooltip
+                                title="Completed Date"
+                                placement="left"
                               >
-                                <ul>
-                                  {statuses.map((status, index) => (
-                                    <li
-                                      onClick={() =>
-                                        getFiltePatientListStatus(status)
-                                      }
-                                      className={visitStyles.nameList}
-                                      key={index}
-                                    >
-                                      {status}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {!filterDataLoading ? (
-                          <>
-                            <div className={visitStyles.patientListHead}>
-                              <ul
-                                className={`${visitStyles.patientDetailsHead}`}
-                              >
-                                {patientList.map((data, index) => (
+                                <span
+                                  className={visitStyles.circleCard}
+                                  onClick={() => {
+                                    setOpenPicker2(!openPicker2);
+                                  }}
+                                >
+                                  {SVGICON.dateIcon}
+                                </span>
+                              </Tooltip>
+                            </div>
+                          )}
+                          {showCard && (
+                            <div
+                              className={visitStyles.menuCard}
+                              onMouseEnter={() => setShowCard(true)}
+                              onMouseLeave={() => setShowCard(false)}
+                            >
+                              <ul>
+                                {statuses.map((status, index) => (
                                   <li
-                                    className={`${visitStyles.nameList} ${visitStyles.patientList}`}
-                                    key={index}
                                     onClick={() =>
-                                      getPatientListToDetails(
-                                        data.patientId,
-                                        localOrgId,
-                                        localTenantId
-                                      )
+                                      getFiltePatientListStatus(status)
                                     }
+                                    className={visitStyles.nameList}
+                                    key={index}
                                   >
-                                    {data.patientId} - {data.patientName}
-                                    {data.processedStatus == "COMPLETED" ? (
-                                      <span
-                                        className={visitStyles.completed}
-                                        style={{
-                                          background: "#3a9b94 !important",
-                                        }}
-                                      ></span>
-                                    ) : data.processedStatus == "PENDING" ||
-                                      data.processedStatus == "COMPUTED" ? (
-                                      <span
-                                        className={visitStyles.pending}
-                                      ></span>
-                                    ) : data.processedStatus == "HOLD" ? (
-                                      <span className={visitStyles.hold}></span>
-                                    ) : data.processedStatus == "DECLINED" ? (
-                                      <span
-                                        className={visitStyles.declined}
-                                      ></span>
-                                    ) : null}
+                                    {status}
                                   </li>
                                 ))}
-                                {patientList.length == 0 ? (
-                                  <h5 className="text-center">NO DATA</h5>
-                                ) : null}
                               </ul>
                             </div>
-                          </>
-                        ) : (
-                          <div className={visitStyles.userDetailsCard}>
-                            <div className="bouncing-loader">
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                            </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
+                      {!filterDataLoading ? (
+                        <>
+                          <div className={visitStyles.patientListHead}>
+                            <ul
+                              className={`${visitStyles.patientDetailsHead}`}
+                            >
+                              {patientList.map((data, index) => (
+                                <li
+                                  className={`${visitStyles.nameList} ${visitStyles.patientList}`}
+                                  key={index}
+                                  onClick={() =>
+                                    getPatientListToDetails(
+                                      data.patientId,
+                                      localOrgId,
+                                      localTenantId
+                                    )
+                                  }
+                                >
+                                  {data.patientId} - {data.patientName}
+                                  {data.processedStatus == "COMPLETED" ? (
+                                    <span
+                                      className={visitStyles.completed}
+                                      style={{
+                                        background: "#3a9b94 !important",
+                                      }}
+                                    ></span>
+                                  ) : data.processedStatus == "PENDING" ||
+                                    data.processedStatus == "COMPUTED" ? (
+                                    <span
+                                      className={visitStyles.pending}
+                                    ></span>
+                                  ) : data.processedStatus == "HOLD" ? (
+                                    <span className={visitStyles.hold}></span>
+                                  ) : data.processedStatus == "DECLINED" ? (
+                                    <span
+                                      className={visitStyles.declined}
+                                    ></span>
+                                  ) : null}
+                                </li>
+                              ))}
+                              {patientList.length == 0 ? (
+                                <h5 className="text-center">NO DATA</h5>
+                              ) : null}
+                            </ul>
+                           
+                          </div>
+                          
+                        </>
+                      ) : (
+                        <div className={visitStyles.userDetailsCard}>
+                          <div className="bouncing-loader">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="patient-filte-page">
+                    <Paginator
+                                first={paginationFirst}
+                                rows={15}
+                                totalRecords={totalElements}
+                                onPageChange={onPageChange}
+                              />
+                    </div>
+                   
+                    </>
+                  
                     ) : flagContainerActive == "Comments" ? (
                       <div className="offcanvas-body">
                         <div className="container-fluid">
@@ -3099,6 +3220,8 @@ const Details = ({}) => {
         setOpen={setAllocateModal}
         selectedRowsId={selectedRowsId}
         setSelectedRowsId={setSelectedRowsId}
+        setSelectedChart={setSelectedChart}
+        selectedChart={selectedChart}
       />
     </>
   );

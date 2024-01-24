@@ -8,7 +8,8 @@ import { Col, Empty, Row } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
-import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
+import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
+
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
@@ -18,7 +19,7 @@ const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
-  const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
+  const dailyStatusData = useSelector((state) => state.workFlows.dailyTask);
   const dispatch = useDispatch();
 
   const bullets = [
@@ -147,7 +148,7 @@ const DailyTask = () => {
               value: pending,
               name: "Audited",
               itemStyle: {
-                color: "#64B4BE",
+                color: "#D4EAED",
               },
             },
             {
@@ -165,7 +166,7 @@ const DailyTask = () => {
               },
             },
             {
-              value: decline,
+              value: hold,
               name: "ReAudit",
               itemStyle: {
                 color: "#C26100;",
