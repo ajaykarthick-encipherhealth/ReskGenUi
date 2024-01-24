@@ -122,7 +122,7 @@ const Header = () => {
         localStorage.removeItem("loginCheck");
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");
-        window.location = "/userlogin";
+        window.location = "/login";
       }
     });
   };
@@ -300,7 +300,7 @@ const Header = () => {
         closeOnConfirm: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location = "/userlogin";
+          window.location = "/login";
         }
       });
     }

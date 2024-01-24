@@ -57,7 +57,8 @@ export function Logout(navigate) {
   };
 }
 
-export const getMFAValidation = (username, route) => {
+export const getMFAValidation = (username, route,password) => {
+  localStorage.setItem("password", password);
   return (dispatch) => {
     mfaValidation(username, route).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
@@ -95,7 +96,7 @@ export const getValidateCode = (username, code, route, validate) => {
             message: "Code verified successfully",
             duration: 1,
           });
-          route?.push(`/userlogin`);
+          route?.push(`/login`);
         }
       } else {
         notification.error({
