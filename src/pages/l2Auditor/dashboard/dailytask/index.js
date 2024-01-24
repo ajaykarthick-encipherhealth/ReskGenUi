@@ -148,7 +148,7 @@ const DailyTask = () => {
               value: pending,
               name: "Audited",
               itemStyle: {
-                color: "#64B4BE",
+                color: "#D4EAED",
               },
             },
             {
@@ -166,7 +166,7 @@ const DailyTask = () => {
               },
             },
             {
-              value: decline,
+              value: hold,
               name: "ReAudit",
               itemStyle: {
                 color: "#C26100;",
