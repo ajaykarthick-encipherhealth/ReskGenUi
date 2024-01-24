@@ -12004,6 +12004,17 @@ tbody > tr {
   background: #dfd8f3 !important;
   border-radius: 6px !important;
 }
+.Auditprocessing-text {
+  color: #452b90;
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  background: #FBE7D0 !important;
+  border-radius: 6px !important;
+}
 .computed-text {
   color: #285563;
   font-family: "Manrope", sans-serif !important;
@@ -12035,7 +12046,28 @@ tbody > tr {
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.78px;
-
+  border-radius: 6px !important;
+}
+.Audithold-text {
+  background-color: #FFEBAD;
+  color: rgb(245, 106, 0);
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  border-radius: 6px !important;
+}
+.audited-text {
+  background-color: #D4EAED;
+  color: rgb(245, 106, 0);
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
   border-radius: 6px !important;
 }
 .failed-text {

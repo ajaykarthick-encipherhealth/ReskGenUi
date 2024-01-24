@@ -14,6 +14,7 @@ import { AdminPatientsReducer } from "./reducers/adminRecucers/fileProcessingRed
 import { AdminPatientsListReducer } from "./reducers/adminRecucers/patientsReducers"
 import { AdminUsersReducer } from "./reducers/adminRecucers/usewrsReducer";
 import { DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
+import { WorkReducers } from "./reducers/l2Reducers/AuditReducer";
 
 const middleware = applyMiddleware(thunk);
 
@@ -29,6 +30,7 @@ const reducers = combineReducers({
   workFlows: DashboardReducers,
   report:ReportReducer,
   patients:PatientsReducer,
+  AuditWork:  WorkReducers,
   notificationDatas:NotificationReducer,
   adminPatient:AdminPatientsReducer,
   adminList:AdminPatientsListReducer,
