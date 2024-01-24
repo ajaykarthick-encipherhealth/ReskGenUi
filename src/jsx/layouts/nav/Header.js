@@ -365,7 +365,8 @@ const Header = () => {
                       <li
                         className={` ${
                           stateActive === data.to ||
-                          stateActive === data.childRoute
+                          stateActive === data.childRoute ||
+                          stateActive === data.childRoute2
                             ? "header-active"
                             : ""
                         }`}
