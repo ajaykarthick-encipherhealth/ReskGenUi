@@ -1,30 +1,83 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { notification } from "antd";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/auth.module.css";
-import ENDPOINTS from "../utility/enpoints";
-import axios from "../utility/axiosConfig";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
 import { getMFAValidation } from "../store/actions/AuthActions";
-import { useDispatch } from "react-redux";
 
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const getValidatePassword = (password) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+
+    if (password.length < 8) {
+      setErrors({
+        email: "",
+        password: "Password should be greater than 8 characters",
+      });
+      setIsLoading(false);
+      return false;
+    }
+    if (password.length > 14) {
+      setErrors({
+        email: "",
+        password: "Password should be less than 14 characters",
+      });
+      setIsLoading(false);
+      return false;
+    }
+    if (!passwordRegex.test(password)) {
+      setErrors({
+        email: "",
+        password:
+          "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character",
+      });
+      setIsLoading(false);
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
+    if (!emailRegex.test(email)) {
+      setErrors({
+        email: "Invalid email",
+        password: "",
+      });
+      setIsLoading(false);
+      return false;
+    }
+
+    return true;
+  };
   const onLogin = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
+    const emailValidation = validateEmail(email);
+    const passValidation = getValidatePassword(password);
+    if (!passValidation || !emailValidation) {
+      return;
+    }
+    setIsLoading(true);
+    setErrors({
+      email: "",
+      password: "",
+    });
     dispatch(getMFAValidation(email, router, password));
   };
 
@@ -65,8 +118,10 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  {errors.email && (
-                    <div className="text-danger fs-12 mt-3">{errors.email}</div>
+                  {errors?.email && (
+                    <div className="text-danger fs-12 mt-3">
+                      {errors?.email}
+                    </div>
                   )}
                 </div>
                 <div className="mb-4">
@@ -90,8 +145,8 @@ export default function Login() {
                       </span>
                     </div>
                   </div>
-                  {errors.password && (
-                    <div className="text-danger fs-12">{errors.password}</div>
+                  {errors?.password && (
+                    <div className="text-danger fs-12">{errors?.password}</div>
                   )}
                 </div>
                 <div className="text-center mb-4">
