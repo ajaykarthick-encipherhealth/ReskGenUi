@@ -1,12 +1,41 @@
 import React from "react";
-import { Empty, Select, Tooltip } from "antd";
+import { Empty, Select, Tooltip, Badge } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
-import { useRouter } from "next/router";
 import moment from "moment";
-import { priorityOptions, processstatusBodyTemplate } from "../../../../components/headerFilters/functions";
+import {
+  priorityOptions,
+  processstatusBodyTemplate,
+} from "../../../../components/headerFilters/functions";
 
 const UserQueue = ({ userList }) => {
-  const router = useRouter();
+  const badgeDisplay = (data) => {
+    if (data?.isAudited) {
+      return (
+        <Badge.Ribbon
+          text="Audited"
+          color="#377880"
+          placement="start"
+        ></Badge.Ribbon>
+      );
+    } else if (data.isReAudited) {
+      return (
+        <Badge.Ribbon
+          text="Re Audit"
+          color="#FFBE00"
+          placement="start"
+        ></Badge.Ribbon>
+      );
+    } else if (data.isAuditHold) {
+      return (
+        <Badge.Ribbon
+          text="Audite Hold"
+          color="#964B00"
+          placement="start"
+        ></Badge.Ribbon>
+      );
+    } else return null;
+  };
+
   const dummyProfileImageUrl =
     "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
   const nullImg =
@@ -17,26 +46,37 @@ const UserQueue = ({ userList }) => {
     ) : (
       userList?.map((data, index) => (
         <tr key={index}>
-          <td
-            className={TableStyle.firstTdBorder}
-           
-          >
-            {data.patientId}
+          <td className={TableStyle.firstTdBorder}>
+            {data?.isAudited || data?.isReAudited || data?.isAuditHold ? (
+              <span style={{ position: "relative", left: "0px", top: "10px" }}>
+                {badgeDisplay(data)}
+              </span>
+            ) : null}
+            <span
+              style={{
+                paddingLeft: "40px",
+              }}
+            >
+              {data.patientId}
+            </span>
           </td>
-          <td className={TableStyle.childBorder} >
-            {data.patientName}
-          </td>
-          <td className={TableStyle.childBorder} >
+          <td className={TableStyle.childBorder}>{data.patientName}</td>
+          <td className={TableStyle.childBorder}>
             {data.allocatedOn
               ? moment(data.allocatedOn).format("MM-DD-YYYY")
               : "---"}
           </td>
-          <td className={TableStyle.childBorder} >
+          <td className={TableStyle.childBorder}>
             {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
           </td>
-          <td className={TableStyle.childBorder} >
+          <td className={TableStyle.childBorder}>
             {data.processedDate
               ? moment(data.processedDate).format("MM-DD-YYYY")
+              : "---"}
+          </td>
+          <td className={TableStyle.childBorder}>
+            {data.auditedDate
+              ? moment(data.auditedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
           <td className={TableStyle.childBorder}>
@@ -90,7 +130,6 @@ const UserQueue = ({ userList }) => {
           <td className={TableStyle.childBorder}>
             {processstatusBodyTemplate(data)}
           </td>
-          {/* <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td> */}
         </tr>
       ))
     );
@@ -100,15 +139,15 @@ const UserQueue = ({ userList }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>PATIENT ID</th>
+            <th style={{ paddingLeft: "60px" }}>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th>ALLOCATED DATE</th>
             <th>DUE DATE</th>
             <th>COMPLETED DATE</th>
-
+            <th>AUDITED DATE</th>
             <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
-            <th>STATUS</th>
+            <th style={{ paddingLeft: "40px" }}>STATUS</th>
           </tr>
         </thead>
 

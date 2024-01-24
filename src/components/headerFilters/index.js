@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
-import { DatePicker } from "antd";
-import visitStyles from "../../styles/visitdata.module.css";
+import { Badge, DatePicker, Popover } from "antd";
+import Image from "next/image";
 import styles from "../../pages/physician/report/report.module.css";
 import allocateStyle from "../../pages/admin/allocatedUser/allocate/style.module.css";
 import Export from "../../images/svg/Export";
@@ -11,7 +11,8 @@ import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
 import { handleRnagePicker2 } from "./functions";
-import { UpCircleOutlined, DownCircleOutlined } from "@ant-design/icons";
+import filter from "../../images/svg/filter.svg";
+import warning from "../../images/svg/warning.svg";
 
 const { RangePicker } = DatePicker;
 const HeaderFilters = ({
@@ -62,6 +63,22 @@ const HeaderFilters = ({
   defaultEndDate2,
   isAnotherPicker,
 
+  // if has allocated date picker
+  pickerlabe3,
+  defaultStartDate3,
+  defaultEndDate3,
+  setStartDate3,
+  setEndDate3,
+  isAnotherPicker2,
+
+  // if has audited date oicker
+  pickerlabe4,
+  setStartDate4,
+  setEndDate4,
+  defaultStartDate4,
+  defaultEndDate4,
+  isAnotherPicker3,
+
   // conditions to display extra components
   addUser,
   handleExport,
@@ -95,26 +112,9 @@ const HeaderFilters = ({
   bullets,
   isNextRow,
   btnTitle,
+  badges
 }) => {
   const [showFilters, setShowFilters] = useState(false);
-  // const bullets = [
-  //   {
-  //     color: "#FFB54D",
-  //     name: "Pending",
-  //   },
-  //   {
-  //     color: "#AD94FA",
-  //     name: "Hold",
-  //   },
-  //   {
-  //     color: "#EB5252",
-  //     name: "Declined",
-  //   },
-  //   {
-  //     color: "#B4EFBA",
-  //     name: "Completed",
-  //   },
-  // ];
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -208,14 +208,44 @@ const HeaderFilters = ({
             </>
           )}
 
+          {isNextRow && (
+            <div
+              className={"col-xl-1"}
+              style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <button className={styles.filterBtn}>
+                <Image src={filter} /> {showFilters ? "Hide" : "Filter"}
+              </button>
+            </div>
+          )}
           {bullets && (
-            <div className={`${bullets ? "col-xl-3" : "col-xl-4"}`}>
-              <div
-                className={visitStyles.flags_patientsList}
-                style={{ margin: "35px 0 0 0px" }}
+            <div
+              className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
+              style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
+            >
+              <Popover
+                content={
+                  <>
+                  <Legends
+                    bullets={bullets}
+                    display="block"
+                    padding="0 0px 10px 0"
+                  />
+                   {badges?.map(data=>(
+                    <div style={{marginBottom:"10px"}}> 
+                       <Image src={data.src} width={20} height={30}/>
+                       <span style={{marginLeft:"5px"}}>{data?.name}</span>
+                    </div>
+                   ))}
+                  </>
+                 
+                }
+                trigger={["click"]}
+                placement="bottom"
               >
-                <Legends bullets={bullets} />
-              </div>
+                <Image src={warning} />
+              </Popover>
             </div>
           )}
           {addUser && (
@@ -263,23 +293,6 @@ const HeaderFilters = ({
             </div>
           )}
         </div>
-
-        {isNextRow && (
-          <div
-            style={{ width: "2%", margin: "10px 0 0 10px", cursor: "pointer" }}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            {showFilters ? (
-              <UpCircleOutlined
-                style={{ fontSize: "26px", color: "#888888" }}
-              />
-            ) : (
-              <DownCircleOutlined
-                style={{ fontSize: "26px", color: "#888888" }}
-              />
-            )}
-          </div>
-        )}
       </div>
       {showFilters && (
         <div style={{ marginTop: "50px" }}>
@@ -331,6 +344,46 @@ const HeaderFilters = ({
                   />
                 </div>
               </div>
+            )}
+            {isAnotherPicker2 && (
+              <>
+                <div className="col-xl-2">
+                  <label>{pickerlabe3}</label>
+                  <div>
+                    <RangePicker
+                      format="MM-DD-YYYY"
+                      onChange={(date, dateString) => {
+                        handleRnagePicker2({
+                          date,
+                          dateString,
+                          setStartDate3,
+                          setEndDate3,
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+            {isAnotherPicker3 && (
+              <>
+                <div className="col-xl-2">
+                  <label>{pickerlabe4}</label>
+                  <div>
+                    <RangePicker
+                      format="MM-DD-YYYY"
+                      onChange={(date, dateString) =>
+                        handleRnagePicker2({
+                          date,
+                          dateString,
+                          setStartDate4,
+                          setEndDate4,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </div>
