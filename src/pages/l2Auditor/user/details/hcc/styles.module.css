@@ -1,0 +1,146 @@
+.meatCommentCard {
+    width: 584px;
+    border-radius: 16px;
+    background: #1B627E;
+}
+
+.meatCommentCard2 {
+    width: 610px;
+    border-radius: 16px;
+    border: 0.5px solid #1B627E;
+    margin-left: 10px;
+    background: #FFF;
+    padding: 10px 0px 0px 10px;
+    min-height: 100px;
+    max-height: 220px;
+
+}
+
+.meatCommentDetails {
+    padding: 10px;
+}
+
+.publishedByDetails {
+    border-radius: 16px;
+    border: 0.5px solid #C4C4C4;
+    margin: 10px 0px 10px 0px;
+    padding: 10px 0px 0px 10px;
+    height: 105px;
+}
+
+.meatQueried_head {
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.48px;
+}
+
+.meatQueried_details {
+    color: #000;
+    font-size: 12px !important;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.4px;
+}
+
+.publisheddetails {
+    color: #000;
+    font-size: 12px !important;
+    margin-bottom: 0px;
+}
+
+.l1auditorBadge {
+    border-radius: 6px;
+    background: #FED0BB;
+    width: 102px;
+    height: 20px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    color: #000;
+    font-size: 12px;
+    text-align: center;
+}
+
+.l2auditorBadge {
+    border-radius: 6px;
+    background: #E9C46A;
+    width: 102px;
+    height: 20px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    color: #000;
+    font-size: 12px;
+    text-align: center;
+}
+
+.moreBtn {
+    color: #133DD4;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration-line: underline;
+    cursor: pointer;
+}
+
+.currentBadge {
+    color: #FFF;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.48px;
+    border-radius: 6px;
+    background: #457B9D;
+    width: 66px;
+    height: 20px;
+    display: block;
+    text-align: center;
+}
+
+.previousBadge {
+    color: #FFF;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.48px;
+    border-radius: 6px;
+    background: #9C6644;
+    width: 66px;
+    height: 20px;
+    display: block;
+    text-align: center;
+}
+
+.edit_meat_query {
+    border-radius: 6px;
+    background: #04306F;
+    width: 26px;
+    height: 26px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.meat_querySaveBtn {
+    color: #133DD4;
+    font-size: 12px;
+    border-radius: 8px;
+    border: 1px solid #133DD4;
+    background: rgba(19, 61, 212, 0.15);
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+    width: 74px;
+    height: 32px;
+}
+.meat_queryfooterBtn{
+    text-align: center;
+    margin-top: 20px;
+
+}
+
+.queryTextarea{
+    height: 100px !important;
+    width: 98% !important;
+    color: #000;
+    font-size: 12px !important;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 17.75rem;
+    border-radius: 8px !important;
+}

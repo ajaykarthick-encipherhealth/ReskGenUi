@@ -31,14 +31,12 @@ import { notification } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
-import { Paginator } from "primereact/paginator";
 import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
 import AllocateModal from "../../../admin/allocatedUser/allocate";
-import { patientListFilter } from "../../../../services/PatientsListSevice";
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -109,7 +107,6 @@ const Details = ({}) => {
   const [notesList, setNotesList] = useState([]);
   const [flagResultList, setFlagResultList] = useState([]);
   const [openPicker, setOpenPicker] = useState(false);
-  const [openPicker2, setOpenPicker2] = useState(false);
   const [actionItems, setActionItems] = useState([]);
   const [actionItems2, setActionItems2] = useState([]);
   const [actionItems3, setActionItems3] = useState([]);
@@ -126,17 +123,6 @@ const Details = ({}) => {
   const [userRole, setUserRole] = useState("");
   const [allocateModal, setAllocateModal] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
-  const [selectedChart, setSelectedChart] = useState([]);
-  const [processedStatus, setProcessedStatus] = useState("");
-  const [searchtext, setSearchtext] = useState("");
-  const [dueDateStart, setDueDateStart] = useState("");
-  const [dueDateEnd, setDueDateEnd] = useState("");
-  const [processedStart, setProcessedStart] = useState("");
-  const [processedEnd, setProcessedEnd] = useState("");
-  const [pageNo, setPageNo] = useState(0);
-  const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
-
 
   const flagPostList = [
     {
@@ -247,51 +233,27 @@ const Details = ({}) => {
   ];
 
   const filterChangePatientId = async (e) => {
-    setSearchtext(e.target.value);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      e.target.value,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    setPatientList(result.response.content);
-    setTotalElements(result?.response?.totalElements);
-  };
-  const onPageChange = async (e) => {
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      e.page
-    );
-    setPatientList(result.response.content);
-    setTotalElements(result?.response?.totalElements);
+    setFilter(e.target.value);
+    var value = e.target.value;
+    if (value) {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/patient/compute/search?searchtext=${value}&pageno=${0}&pagesize=${100}`
+      );
+      var result = response.data.response.content;
+      setPatientList(result);
+    } else {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/patient/filter?patientAllocated=${localUserId}&page=${0}&size=${100}`
+      );
+      var result = response.data.response.content;
+      setPatientList(result);
+    }
   };
 
   const handleFilterClick = () => {
     setShowIcons(!showIcons);
-  };
-  const closeFilterIcons = async () => {
-    setShowIcons(false);
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    var result = await patientListFilter(
-      localUserId,"","","","","","",0
-    );
-    setPatientList(result.response.content);
-    setTotalElements(result?.response?.totalElements);
   };
   const handleShowCard = () => {
     setShowCard(!showCard);
@@ -348,29 +310,29 @@ const Details = ({}) => {
     var result = response.data.response;
     var data = [
       {
-        id: result.patientId,
-        name: result.patientName,
+        id: result?.patientId,
+        name: result?.patientName,
       },
     ];
     setSelectedRowsId(data);
     const menu = (
       <Menu>
-        {result.processedStatus != "HOLD" ? (
+        {result?.processedStatus != "HOLD" ? (
           <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "PENDING" &&
-        result.processedStatus != "COMPUTED" ? (
+        {result?.processedStatus != "PENDING" &&
+        result?.processedStatus != "COMPUTED" ? (
           <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "DECLINE" ? (
+        {result?.processedStatus != "DECLINE" ? (
           <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
             <div className="patient-status">
               <span className={`badge failed-text`} style={{ color: "red" }}>
@@ -380,7 +342,7 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
 
-        {result.processedStatus != "COMPLETE" ? (
+        {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETE</span>
@@ -392,21 +354,21 @@ const Details = ({}) => {
 
     const menu2 = (
       <Menu>
-        {result.processedStatus != "HOLD" ? (
+        {result?.processedStatus != "HOLD" ? (
           <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "PENDING" ? (
+        {result?.processedStatus != "PENDING" ? (
           <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "DECLINE" ? (
+        {result?.processedStatus != "DECLINE" ? (
           <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
             <div className="patient-status">
               <span className={`badge failed-text`} style={{ color: "red" }}>
@@ -416,7 +378,7 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
 
-        {result.processedStatus != "COMPLETE" ? (
+        {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETE</span>
@@ -434,21 +396,21 @@ const Details = ({}) => {
     );
     const menu3 = (
       <Menu>
-        {result.processedStatus != "HOLD" ? (
+        {result?.processedStatus != "HOLD" ? (
           <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "PENDING" ? (
+        {result?.processedStatus != "PENDING" ? (
           <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
         ) : null}
-        {result.processedStatus != "DECLINE" ? (
+        {result?.processedStatus != "DECLINE" ? (
           <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
             <div className="patient-status">
               <span className={`badge failed-text`} style={{ color: "red" }}>
@@ -458,7 +420,7 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
 
-        {result.processedStatus != "COMPLETE" ? (
+        {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETE</span>
@@ -950,11 +912,12 @@ const Details = ({}) => {
     setFlagContainerActive(value);
     if (value == "Filter") {
       setFlagContainerActiveTitle("My Work Queue");
-      var result = await patientListFilter(
-        localUserId,"","","","","","",0
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${15}&processedStatus=&dueDateStart=&dueDateEnd=&processedStart=&processedEnd=&searchString=`
       );
-      setPatientList(result.response.content);
-      setTotalElements(result?.response?.totalElements);
+      var result = response.data.response.content;
+      setPatientList(result);
       setFilterDataLoading(false);
     }
 
@@ -1013,21 +976,12 @@ const Details = ({}) => {
   };
 
   const getFiltePatientListStatus = async (value) => {
-    setProcessedStatus(value);
-    var result = await patientListFilter(
-      localUserId,
-      value,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      pageNo
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/patient/filter?patientAllocated=${localUserId}&page=${0}&size=${10}&processedStatus=${value}`
     );
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    setPatientList(result.response.content);
-    setTotalElements(result?.response?.totalElements);
+    var result = response.data.response.content;
+    setPatientList(result);
   };
 
   const handleSubmitFlag = async (event) => {
@@ -1240,46 +1194,8 @@ const Details = ({}) => {
     setFilterDataLoading(false);
   };
 
-  const handleDatePickerChange = async (dateString) => {
-    let convertStartDate =
-      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-    let convertEndDate =
-      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate);
-    setDueDateEnd(convertEndDate);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      convertStartDate,
-      convertEndDate,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setPatientList(result.response.content);
-    setTotalElements(result?.response?.totalElements);
-  };
-
-  const handleChangeprocessedDate = async (dateString) => {
-    let convertStartDate =
-      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-    let convertEndDate =
-      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setProcessedStart(convertStartDate);
-    setProcessedEnd(convertEndDate);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      convertStartDate,
-      convertEndDate,
-      pageNo
-    );
-    setPatientList(result.response.content);
-    setTotalElements(result?.response?.totalElements);
+  const handleDatePickerChange = (dateString) => {
+    // getFiltePatientListDate(dateString[0],dateString[1])
   };
 
   const handleActionClick = (value) => {
@@ -1500,7 +1416,7 @@ const Details = ({}) => {
                                 Urgent
                               </span>
                             </div>
-                          ) : patienIdDetails.priority == "HIGH" ? (
+                          ) : patienIdDetails?.priority == "HIGH" ? (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i className={TableStyle.highFlag}>
                                 {SVGICON.alert}
@@ -1515,7 +1431,7 @@ const Details = ({}) => {
                                 High
                               </span>
                             </div>
-                          ) : patienIdDetails.priority == "NORMAL" ? (
+                          ) : patienIdDetails?.priority == "NORMAL" ? (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i className={TableStyle.normalFlag}>
                                 {SVGICON.alert}
@@ -1571,7 +1487,7 @@ const Details = ({}) => {
                           className={`${visitStyles.commentsName} ${visitStyles.statusFLag}`}
                         >
                           {/* {flagFirstData.flag} */}
-                          {flagFirstData.flag == "PATIENT_NAME_MISSED" ? (
+                          {flagFirstData?.flag == "PATIENT_NAME_MISSED" ? (
                             <Tooltip
                               title="PATIENT_NAME_MISSED"
                               placement="bottom"
@@ -1580,7 +1496,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PATIENT_DOB_MISSED" ? (
+                          ) : flagFirstData?.flag == "PATIENT_DOB_MISSED" ? (
                             <Tooltip
                               title="PATIENT_DOB_MISSED"
                               placement="bottom"
@@ -1589,13 +1505,13 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "MRN_ID_MISMATCH" ? (
+                          ) : flagFirstData?.flag == "MRN_ID_MISMATCH" ? (
                             <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
                               <i className={visitStyles.id_missed}>
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PROVIDER_SIGN_MISSED" ? (
+                          ) : flagFirstData?.flag == "PROVIDER_SIGN_MISSED" ? (
                             <Tooltip
                               title="PROVIDER_SIGN_MISSED"
                               placement="bottom"
@@ -1614,7 +1530,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag ==
+                          ) : flagFirstData?.flag ==
                             "PROVIDER_CREDENTIAL_MISSED" ? (
                             <Tooltip
                               title="PROVIDER_CREDENTIAL_MISSED"
@@ -1624,7 +1540,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag ==
+                          ) : flagFirstData?.flag ==
                             "PROVIDER_SIGN_STATUS_PENDING" ? (
                             <Tooltip
                               title="PROVIDER_SIGN_STATUS_PENDING"
@@ -1634,13 +1550,13 @@ const Details = ({}) => {
                                 {SVGICON.emptemptyFlagSmallLargeyFlag}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "NO_HCC_FOUND" ? (
+                          ) : flagFirstData?.flag == "NO_HCC_FOUND" ? (
                             <Tooltip title="NO_HCC_FOUND" placement="bottom">
                               <i className={visitStyles.no_hcc_found}>
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag ==
+                          ) : flagFirstData?.flag ==
                             "NO_VALID_DOCUMENT_FOUND" ? (
                             <Tooltip
                               title="NO_VALID_DOCUMENT_FOUND"
@@ -1650,7 +1566,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PATIENT_DECEASED" ? (
+                          ) : flagFirstData?.flag == "PATIENT_DECEASED" ? (
                             <Tooltip
                               title="PATIENT_DECEASED"
                               placement="bottom"
@@ -1659,7 +1575,7 @@ const Details = ({}) => {
                                 {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
-                          ) : flagFirstData.flag == "PATIENT_INACTIVE" ? (
+                          ) : flagFirstData?.flag == "PATIENT_INACTIVE" ? (
                             <Tooltip
                               title="PATIENT_INACTIVE"
                               placement="bottom"
@@ -1728,7 +1644,7 @@ const Details = ({}) => {
                           </div>
                         ) : (
                           <div className={`${visitStyles.actionbtnContainer}`}>
-                            {patienIdDetails.processedStatus == "COMPLETED" ? (
+                            {patienIdDetails?.processedStatus == "COMPLETED" ? (
                               <Dropdown.Button
                                 type="primary"
                                 className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
@@ -1743,7 +1659,7 @@ const Details = ({}) => {
                               >
                                 COMPLETED
                               </Dropdown.Button>
-                            ) : patienIdDetails.processedStatus ==
+                            ) : patienIdDetails?.processedStatus ==
                               "DECLINED" ? (
                               <div className={`col-xl-12`}>
                                 <Dropdown.Button
@@ -1761,7 +1677,7 @@ const Details = ({}) => {
                                   DECLINED
                                 </Dropdown.Button>
                               </div>
-                            ) : patienIdDetails.processedStatus == "HOLD" ? (
+                            ) : patienIdDetails?.processedStatus == "HOLD" ? (
                               <Dropdown.Button
                                 type="primary"
                                 className={`holdBtnHcc ${visitStyles.holdBtnHcc}`}
@@ -1829,7 +1745,7 @@ const Details = ({}) => {
                                   </div>
                                 </div>
                                 <ul>
-                                  {tabList.map((data, index) => (
+                                  {tabList?.map((data, index) => (
                                     <Tooltip
                                       title={data.title}
                                       placement="right"
@@ -2769,98 +2685,88 @@ const Details = ({}) => {
                         )}
                       </div>
                     ) : flagContainerActive == "Filter" ? (
-                      <>    <div className={`row ${visitStyles.patientListHead}`}>
-                      <div
-                        className={visitStyles.flags}
-                        style={{ marginTop: "15px", marginBottom: "20px" }}
-                      >
-                        <div className={visitStyles.flags}>
-                          <span
-                            className={visitStyles.completed}
-                            style={{ background: "#3a9b94 !important" }}
-                          ></span>
-                          <span className={visitStyles.flagCodes}>
-                            Completed
-                          </span>
+                      <div className={`row ${visitStyles.patientListHead}`}>
+                        <div
+                          className={visitStyles.flags}
+                          style={{ marginTop: "15px", marginBottom: "20px" }}
+                        >
+                          <div className={visitStyles.flags}>
+                            <span
+                              className={visitStyles.completed}
+                              style={{ background: "#3a9b94 !important" }}
+                            ></span>
+                            <span className={visitStyles.flagCodes}>
+                              Completed
+                            </span>
+                          </div>
+                          <div className={visitStyles.flags}>
+                            <span className={visitStyles.pending}></span>
+                            <span className={visitStyles.flagCodes}>
+                              Pending
+                            </span>
+                          </div>
+                          <div className={visitStyles.flags}>
+                            <span className={visitStyles.hold}></span>
+                            <span className={visitStyles.flagCodes}>Hold</span>
+                          </div>
+                          <div className={visitStyles.flags}>
+                            <span className={visitStyles.declined}></span>
+                            <span className={visitStyles.flagCodes}>
+                              Declined
+                            </span>
+                          </div>
                         </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.pending}></span>
-                          <span className={visitStyles.flagCodes}>
-                            Pending
-                          </span>
+                        <div className="col-xl-9">
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
+                              type="text"
+                              onChange={(e) => filterChangePatientId(e)}
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                            />
+                            <RangePicker
+                              open={openPicker}
+                              onChange={(dates, dateStrings) => {
+                                setSelectedDates(dates);
+                                handleDatePickerChange(dateStrings);
+                              }}
+                              suffixIcon={false}
+                              className={visitStyles.datepicker}
+                            />
+                          </div>
                         </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.hold}></span>
-                          <span className={visitStyles.flagCodes}>Hold</span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.declined}></span>
-                          <span className={visitStyles.flagCodes}>
-                            Declined
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-xl-9">
-                        <div class="form-group has-search">
-                          <FontAwesomeIcon
-                            className="fa fa-search form-control-feedback"
-                            icon={faSearch}
-                          />
-                          <InputText
-                            type="text"
-                            onChange={(e) => filterChangePatientId(e)}
-                            className="form-control new-form-control"
-                            placeholder="Search"
-                          />
-                          <RangePicker
-                            open={openPicker}
-                            onChange={(dates, dateStrings) => {
-                              handleDatePickerChange(dateStrings);
-                            }}
-                            suffixIcon={false}
-                            className={visitStyles.datepicker}
-                          />
-                          <RangePicker
-                            open={openPicker2}
-                            onChange={(dates, dateStrings) => {
-                              handleChangeprocessedDate(dateStrings);
-                            }}
-                            suffixIcon={false}
-                            className={visitStyles.datepicker}
-                          />
-                        </div>
-                      </div>
 
-                      <div className="col-xl-3">
-                        <div className={visitStyles.content}>
-                          <span
-                            className={visitStyles.circleCard}
-                            onClick={handleFilterClick}
-                          >
-                            <span></span>
-                            {showIcons ? (
-                              <FontAwesomeIcon
-                                icon={faClose}
-                                height={30}
-                                width={30}
-                                color="#A20404"
-                                onClick={() => closeFilterIcons(false)}
-                              />
-                            ) : (
-                              SVGICON.filter
-                            )}
-                          </span>
-                          {showIcons && (
-                            <div className={visitStyles.iconContainer}>
-                              <Tooltip title="Status" placement="left">
+                        <div className="col-xl-3">
+                          <div className={visitStyles.content}>
+                            <span
+                              className={visitStyles.circleCard}
+                              onClick={handleFilterClick}
+                            >
+                              <span></span>
+                              {showIcons ? (
+                                <FontAwesomeIcon
+                                  icon={faClose}
+                                  height={30}
+                                  width={30}
+                                  color="#A20404"
+                                />
+                              ) : (
+                                SVGICON.filter
+                              )}
+                            </span>
+                            {showIcons && (
+                              <div className={visitStyles.iconContainer}>
                                 <span
                                   className={visitStyles.circleCard}
                                   onClick={handleShowCard}
                                 >
                                   {SVGICON.dashboard}
                                 </span>
-                              </Tooltip>
-                              <Tooltip title="Due Date" placement="left">
+
                                 <span
                                   className={visitStyles.circleCard}
                                   onClick={() => {
@@ -2869,114 +2775,87 @@ const Details = ({}) => {
                                 >
                                   {SVGICON.dateIcon}
                                 </span>
-                              </Tooltip>
-                              <Tooltip
-                                title="Completed Date"
-                                placement="left"
+                              </div>
+                            )}
+                            {showCard && (
+                              <div
+                                className={visitStyles.menuCard}
+                                onMouseEnter={() => setShowCard(true)}
+                                onMouseLeave={() => setShowCard(false)}
                               >
-                                <span
-                                  className={visitStyles.circleCard}
-                                  onClick={() => {
-                                    setOpenPicker2(!openPicker2);
-                                  }}
-                                >
-                                  {SVGICON.dateIcon}
-                                </span>
-                              </Tooltip>
-                            </div>
-                          )}
-                          {showCard && (
-                            <div
-                              className={visitStyles.menuCard}
-                              onMouseEnter={() => setShowCard(true)}
-                              onMouseLeave={() => setShowCard(false)}
-                            >
-                              <ul>
-                                {statuses.map((status, index) => (
+                                <ul>
+                                  {statuses.map((status, index) => (
+                                    <li
+                                      onClick={() =>
+                                        getFiltePatientListStatus(status)
+                                      }
+                                      className={visitStyles.nameList}
+                                      key={index}
+                                    >
+                                      {status}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {!filterDataLoading ? (
+                          <>
+                            <div className={visitStyles.patientListHead}>
+                              <ul
+                                className={`${visitStyles.patientDetailsHead}`}
+                              >
+                                {patientList.map((data, index) => (
                                   <li
-                                    onClick={() =>
-                                      getFiltePatientListStatus(status)
-                                    }
-                                    className={visitStyles.nameList}
+                                    className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                                     key={index}
+                                    onClick={() =>
+                                      getPatientListToDetails(
+                                        data.patientId,
+                                        localOrgId,
+                                        localTenantId
+                                      )
+                                    }
                                   >
-                                    {status}
+                                    {data.patientId} - {data.patientName}
+                                    {data.processedStatus == "COMPLETED" ? (
+                                      <span
+                                        className={visitStyles.completed}
+                                        style={{
+                                          background: "#3a9b94 !important",
+                                        }}
+                                      ></span>
+                                    ) : data.processedStatus == "PENDING" ||
+                                      data.processedStatus == "COMPUTED" ? (
+                                      <span
+                                        className={visitStyles.pending}
+                                      ></span>
+                                    ) : data.processedStatus == "HOLD" ? (
+                                      <span className={visitStyles.hold}></span>
+                                    ) : data.processedStatus == "DECLINED" ? (
+                                      <span
+                                        className={visitStyles.declined}
+                                      ></span>
+                                    ) : null}
                                   </li>
                                 ))}
+                                {patientList.length == 0 ? (
+                                  <h5 className="text-center">NO DATA</h5>
+                                ) : null}
                               </ul>
                             </div>
-                          )}
-                        </div>
+                          </>
+                        ) : (
+                          <div className={visitStyles.userDetailsCard}>
+                            <div className="bouncing-loader">
+                              <div></div>
+                              <div></div>
+                              <div></div>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {!filterDataLoading ? (
-                        <>
-                          <div className={visitStyles.patientListHead}>
-                            <ul
-                              className={`${visitStyles.patientDetailsHead}`}
-                            >
-                              {patientList.map((data, index) => (
-                                <li
-                                  className={`${visitStyles.nameList} ${visitStyles.patientList}`}
-                                  key={index}
-                                  onClick={() =>
-                                    getPatientListToDetails(
-                                      data.patientId,
-                                      localOrgId,
-                                      localTenantId
-                                    )
-                                  }
-                                >
-                                  {data.patientId} - {data.patientName}
-                                  {data.processedStatus == "COMPLETED" ? (
-                                    <span
-                                      className={visitStyles.completed}
-                                      style={{
-                                        background: "#3a9b94 !important",
-                                      }}
-                                    ></span>
-                                  ) : data.processedStatus == "PENDING" ||
-                                    data.processedStatus == "COMPUTED" ? (
-                                    <span
-                                      className={visitStyles.pending}
-                                    ></span>
-                                  ) : data.processedStatus == "HOLD" ? (
-                                    <span className={visitStyles.hold}></span>
-                                  ) : data.processedStatus == "DECLINED" ? (
-                                    <span
-                                      className={visitStyles.declined}
-                                    ></span>
-                                  ) : null}
-                                </li>
-                              ))}
-                              {patientList.length == 0 ? (
-                                <h5 className="text-center">NO DATA</h5>
-                              ) : null}
-                            </ul>
-                           
-                          </div>
-                          
-                        </>
-                      ) : (
-                        <div className={visitStyles.userDetailsCard}>
-                          <div className="bouncing-loader">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="patient-filte-page">
-                    <Paginator
-                                first={paginationFirst}
-                                rows={15}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                    </div>
-                   
-                    </>
-                  
                     ) : flagContainerActive == "Comments" ? (
                       <div className="offcanvas-body">
                         <div className="container-fluid">
@@ -3220,8 +3099,6 @@ const Details = ({}) => {
         setOpen={setAllocateModal}
         selectedRowsId={selectedRowsId}
         setSelectedRowsId={setSelectedRowsId}
-        setSelectedChart={setSelectedChart}
-        selectedChart={selectedChart}
       />
     </>
   );

@@ -8,18 +8,17 @@ import { Col, Empty, Row } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
-import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
-
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
+import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
-  const dailyStatusData = useSelector((state) => state.workFlows.dailyTask);
+  const dailyStatusData = useSelector((state) => state.l2Dashboard.dailyTask);
   const dispatch = useDispatch();
 
   const bullets = [
@@ -37,12 +36,9 @@ const DailyTask = () => {
     },
     {
       color: "#C26100",
-      name: "ReAudit",
+      name: "ReAudited",
     },
-    {
-      color: "#EB5252",
-      name: "Declined",
-    },
+  
  
  
   
@@ -112,11 +108,11 @@ const DailyTask = () => {
         day: dayInfo?.day,
         date: dayInfo?.date,
         dateString: matchingStatusData?.response?.date,
-        pending: matchingStatusData?.response?.pending || 0,
-        hold: matchingStatusData?.response?.hold || 0,
-        completed: matchingStatusData?.response?.completed || 0,
-        decline: matchingStatusData?.response?.declined || 0,
-        allocated: matchingStatusData?.response?.allocated || 0,
+        pending: matchingStatusData?.response?.auditPending || 0,
+        hold: matchingStatusData?.response?.auditHold || 0,
+        audited: matchingStatusData?.response?.audited || 0,
+        reAudited:matchingStatusData?.response?.reAudited || 0,
+        allocated: matchingStatusData?.response?.auditAllocated|| 0,
       };
     });
     const sorted = processedDays?.sort((a, b) => {
@@ -126,7 +122,7 @@ const DailyTask = () => {
     });
     return setCurrentDays(sorted);
   };
-  const getChartOption = (allocated, pending, hold, decline, completed) => {
+  const getChartOption = (allocated, pending, hold, audited, reAudited) => {
     return {
       tooltip: {
         trigger: "item",
@@ -145,10 +141,10 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: pending,
+              value: audited,
               name: "Audited",
               itemStyle: {
-                color: "#D4EAED",
+                color: "#64B4BE",
               },
             },
             {
@@ -166,19 +162,13 @@ const DailyTask = () => {
               },
             },
             {
-              value: hold,
-              name: "ReAudit",
+              value: reAudited,
+              name: "ReAudited",
               itemStyle: {
-                color: "#C26100;",
+                color: "#C26100",
               },
             },
-            {
-              value: completed,
-              name: "Declined",
-              itemStyle: {
-                color: "#EB5252",
-              },
-            },
+           
           ],
         },
         {
@@ -283,8 +273,8 @@ const DailyTask = () => {
                                 data?.allocated,
                                 data?.pending,
                                 data?.hold,
-                                data?.decline,
-                                data?.completed
+                                data?.reAudited,
+                                data?.audited
                               )}
                               style={{ width: "100%", height: "200px" }}
                             />
@@ -318,12 +308,12 @@ const DailyTask = () => {
                                   <div className={styles.subText}>
                                     {item.name === "Pending"
                                       ? data.pending
-                                      : item.name === "Declined"
-                                      ? data?.decline
+                                      : item.name === "Audited"
+                                      ? data?.audited
                                       : item.name === "Hold"
                                       ? data.hold
-                                      : item.name === "Completed"
-                                      && data?.completed
+                                      : item.name === "ReAudited"
+                                      && data?.reAudited
                                       }
                                   </div>
                                 </div>

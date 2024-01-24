@@ -148,3 +148,20 @@ export const updateMeatQuery = async (data) => {
   }
 };
 
+export const patientListFilter = async (userId,status,searchText,startDate,endDate,processedStart,processedEnd,pageNo) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/filter?patientAllocated=${userId}&page=${pageNo}&size=${10}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+

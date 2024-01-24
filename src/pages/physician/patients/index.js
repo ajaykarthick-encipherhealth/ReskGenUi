@@ -1,54 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import Select from "react-select";
-import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
-import { Offcanvas } from "react-bootstrap";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { DatePicker } from "antd";
 import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import { notification } from "antd";
 import { InputText } from "primereact/inputtext";
 import moment from "moment";
-import { Paginator } from "primereact/paginator";
-import PatientTable from "../../../components/table/PatientList/patientList";
 import dayjs from "dayjs";
-import Image from "next/image";
-import calender from "../../../images/dashboard/calender.png";
+import { Paginator } from "primereact/paginator";
+import visitStyles from "../../../styles/visitdata.module.css";
+import Header from "../../../jsx/layouts/nav/Header";
+import { patientDetails } from "../../../store/actions/AuthActions";
+import PatientTable from "../../../components/table/PatientList/patientList";
 import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
-import visitStyles from "../../../styles/visitdata.module.css";
 import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
+import { processstatusBodyTemplate } from "../../../components/headerFilters/functions";
 
+const { RangePicker } = DatePicker;
 export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [addPatient, setAddPatient] = useState(false);
-  const [addPatientId, setAddPatientId] = useState(false);
-  const [selectFile, setSelectFile] = useState(null);
-  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [dates, setDates] = useState(null);
-  const [compledtedDate, setCompletedDate] = useState(null);
-  const { RangePicker } = DatePicker;
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
     patientId: "",
-  });
-  const [inputValuePatientId, setInputValuePatientId] = useState({
-    patientId: "",
-    patientName: "",
   });
   const filteratedDashboardData = useSelector(
     (state) => state.patients.filteredList
@@ -63,7 +46,6 @@ export default function Patient() {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
   const dueStartDate = filteratedDashboardData?.date
     ? filteratedDashboardData?.date
     : filteratedDashboardData?.dayDate
@@ -189,58 +171,6 @@ export default function Patient() {
       notification.warning({
         message: data.patientId + " file not processed Please wait",
       });
-    }
-  };
-
-  const processstatusBodyTemplate = (rowData) => {
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
-        );
-
-      case "PENDING":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
-
-      case "DECLINED":
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge notComputed-text`}>Not Computed</span>
-          </div>
-        );
-      case "COMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge computed-text`}>Computed</span>
-          </div>
-        );
-      case "HOLD":
-        return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
-        );
-      case null:
-        return (
-          <div className="patient-status">
-          ---
-          </div>
-        );
     }
   };
 

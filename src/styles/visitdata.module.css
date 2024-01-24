@@ -1307,12 +1307,11 @@
   border-radius: 10px;
 }
 .patientDetailsHead {
-  height: 75vh;
-  overflow: hidden;
+  height: 65vh;
   margin-right: 0px;
 }
 .patientDetailsHead:hover {
-  height: 75vh;
+  height: 65vh;
   overflow-y: scroll;
   margin-right: 0px;
 }

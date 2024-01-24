@@ -1911,7 +1911,6 @@ const Hcc = ({ patientHccResult }) => {
     setMeatCriteriaListNonHcc([]);
     // setIsLoading(true);
     setIsModalComments(false);
-    setValidated(false);
     // var patientId = localStorage.getItem("patientId");
     // const response = await axios.get(ENDPOINTS.apiEndoint + "dbservice/patient/compute/get?patientid=ambal&orgid=ambal");
     const response = await axios.get(
@@ -5776,7 +5775,6 @@ const Hcc = ({ patientHccResult }) => {
                       Reason <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <textarea
-                      required
                       className="form-control"
                       id="notes"
                       name="notes"
@@ -6159,7 +6157,7 @@ const Hcc = ({ patientHccResult }) => {
                 <div>
                   <span className={styles.meatQueried_head}>Subject</span>
                   <p className={styles.meatQueried_details}>
-                  We've pinpointed the following details that may pertain to records associated with <b>{patientHccResult?.patientName}</b>.
+                  We've pinpointed the following details that may pertain to records associated with <b>{patientHccResult.patientName}</b>.
                   </p>
                 </div>
                 <div>

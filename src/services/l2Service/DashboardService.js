@@ -1,11 +1,12 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
 
+// chnaged
 export async function workStatusApi(startDate, endDate, router) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}management/dashboard/tile/statistics?start=${startDate}&end=${endDate}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/audit/statistics/processed/range?startDate=${startDate}&endDate=${endDate}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -15,16 +16,18 @@ export async function workStatusApi(startDate, endDate, router) {
     return response.data;
   } catch (err) {
     if (err?.response?.status === 401) {
-      router.push("/userlogin");
+      router.push("/login");
     }
   }
 }
 
+// chnaged
 export const DailyTaskApi = async (date, router) => {
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}management/dashboard/daily/statistics?date=${date}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/audit/statistics/processed?username=${userId}&date=${date}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,7 +37,7 @@ export const DailyTaskApi = async (date, router) => {
     return response.data;
   } catch (err) {
     if (err?.response?.status === 401) {
-      router?.push("/userlogin");
+      router?.push("/login");
     }
   }
 };
@@ -60,7 +63,7 @@ export const accuracyScore = async (btn, month, year, router) => {
     return response.data;
   } catch (err) {
     if (err?.response?.status === 401) {
-      router.push("/userlogin");
+      router.push("/login");
     }
   }
 };
@@ -80,16 +83,17 @@ export const CompletedScore = async (btn, date, month, year, router) => {
     return response.data;
   } catch (err) {
     if (err?.response?.status === 401) {
-      router.push("/userlogin");
+      router.push("/login");
     }
   }
 };
 
+// chnaged
 export const HoldStatus = async (router) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/dashboard/hold/charts`,
+      `${ENDPOINTS?.apiEndoint}dbservice/audit/hold/charts`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -99,7 +103,7 @@ export const HoldStatus = async (router) => {
     return response.data;
   } catch (err) {
     if (err.response.status === 401) {
-      router.push("/userlogin");
+      router.push("/login");
     }
   }
 };
