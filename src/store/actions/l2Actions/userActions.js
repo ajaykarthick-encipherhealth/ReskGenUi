@@ -11,7 +11,7 @@ export const getL2Users = ({ pageCount, orgId, search }) => {
       },
     });
     try {
-      l2Users(pageCount, orgId, search).then((response) => {
+      l2Users({pageCount, orgId, search}).then((response) => {
         dispatch({
           type: USERS,
           payload: {
