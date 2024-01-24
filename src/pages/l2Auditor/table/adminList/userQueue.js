@@ -6,8 +6,10 @@ import {
   priorityOptions,
   processstatusBodyTemplate,
 } from "../../../../components/headerFilters/functions";
+import { useRouter } from "next/router";
 
 const UserQueue = ({ userList }) => {
+  const router=useRouter()
   const badgeDisplay = (data) => {
     if (data?.isAudited) {
       return (
@@ -45,7 +47,7 @@ const UserQueue = ({ userList }) => {
       <Empty />
     ) : (
       userList?.map((data, index) => (
-        <tr key={index}>
+        <tr key={index} onClick={()=>router.push("details")}>
           <td className={TableStyle.firstTdBorder}>
             {data?.isAudited || data?.isReAudited || data?.isAuditHold ? (
               <span style={{ position: "relative", left: "0px", top: "10px" }}>

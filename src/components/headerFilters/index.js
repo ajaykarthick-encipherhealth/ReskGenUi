@@ -232,7 +232,7 @@ const HeaderFilters = ({
                     display="block"
                     padding="0 0px 10px 0"
                   />
-                   {badges?.map(data=>(
+                   {badges?.length>0 && badges?.map(data=>(
                     <div style={{marginBottom:"10px"}}> 
                        <Image src={data.src} width={20} height={30}/>
                        <span style={{marginLeft:"5px"}}>{data?.name}</span>
