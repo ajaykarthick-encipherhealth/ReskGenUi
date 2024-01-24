@@ -8,18 +8,17 @@ import { Col, Empty, Row } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
-import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
-
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
+import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
-  const dailyStatusData = useSelector((state) => state.workFlows.dailyTask);
+  const dailyStatusData = useSelector((state) => state.l2Dashboard.dailyTask);
   const dispatch = useDispatch();
 
   const bullets = [

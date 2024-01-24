@@ -8,11 +8,11 @@ import Accuracy from "./accuracy";
 import Notifications from "./notifications";
 import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
-import { getWorkFlow } from "../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import Footer from "../../../jsx/layouts/Footer";
+import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
 
 const index = () => {
   const currentDate = dayjs();

@@ -23,7 +23,7 @@ import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 
 const WorkFlow = () => {
-  const worlFlowData = useSelector((state) => state?.workFlow?.data);
+  const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
   const [openPicker, setOpenPicker] = useState(false);
   const handleOpen = () => {
     setOpenPicker(!openPicker);
