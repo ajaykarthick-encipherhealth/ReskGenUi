@@ -1,8 +1,9 @@
-import { USERS } from "../../actions/l2Action/userActions";
+import { USERS ,INDIVIAULUSER} from "../../actions/l2Action/userActions";
 
 
   const initialState = {
     data: null,
+    userData:null
     
   };
   
@@ -13,7 +14,12 @@ import { USERS } from "../../actions/l2Action/userActions";
         data: action.payload,
       };
     }
-  
+    if (action.type === INDIVIAULUSER) {
+      return {
+        ...state,
+        userData: action.payload,
+      };
+    }
     return state;
   };
   

@@ -1,8 +1,12 @@
-import { L2UsersReducer } from "../../reducers/l2Reducers/usersReducers";
+import {
+  l2Users,
+  L2IndividualUser,
+} from "../../../services/l2Service/userService";
 
 export const USERS = "USERS";
+export const INDIVIAULUSER='INDIVIAULUSER'
 
-export const getL2Users = ({ pageCount, orgId, search }) => {
+export const getL2Users = (page, search) => {
   return (dispatch) => {
     dispatch({
       type: USERS,
@@ -11,16 +15,68 @@ export const getL2Users = ({ pageCount, orgId, search }) => {
       },
     });
     try {
-      L2UsersReducer({pageCount, orgId, search}).then((response) => {
-       if(response){
-         dispatch({
-          type: USERS,
-          payload: {
-            data: response?.data,
-            loading: false,
-          },
-        });
-       }
+      l2Users(page, search).then((response) => {
+        if (response) {
+          dispatch({
+            type: USERS,
+            payload: {
+              data: response?.data,
+              loading: false,
+            },
+          });
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const getL2IndividualUser = (
+  pageNo,
+  search,
+  selectedOption,
+  selAllocatedBy,
+  dueStartDate,
+  dueEndDate,
+  completedStartDate,
+  completedEndDate,
+  auditedStartDate,
+  auditedEndDate,
+  allocatedStartDate,
+  allocatedEndDate
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: USERS,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      L2IndividualUser(
+        pageNo,
+        search,
+        selectedOption,
+        selAllocatedBy,
+        dueStartDate,
+        dueEndDate,
+        completedStartDate,
+        completedEndDate,
+        auditedStartDate,
+        auditedEndDate,
+        allocatedStartDate,
+        allocatedEndDate
+      ).then((response) => {
+        if (response) {
+          dispatch({
+            type: INDIVIAULUSER,
+            payload: {
+              data: response?.data,
+              loading: false,
+            },
+          });
+        }
       });
     } catch (err) {
       console.log(err);

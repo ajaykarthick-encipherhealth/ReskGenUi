@@ -62,23 +62,21 @@ function SentReportTable({
         <SpinnerDots />
       ) : (
         <>
-          {details?.data?.length === 0 ? (
-            <Empty />
-          ) : (
-            <table className={TableStyle.classTable}>
-              <thead className={TableStyle.classTTotalhead}>
-                <tr>
-                  <th>REPORT ID</th>
-                  <th>REPORT NAME</th>
-                  {/* <th>SENDER</th> */}
-                  <th>USER LIST</th>
-                  <th>DATE</th>
-                </tr>
-              </thead>
+          <table className={TableStyle.classTable}>
+            <thead className={TableStyle.classTTotalhead}>
+              <tr>
+                <th>REPORT ID</th>
+                <th>REPORT NAME</th>
+                {/* <th>SENDER</th> */}
+                <th>USER LIST</th>
+                <th>DATE</th>
+              </tr>
+            </thead>
 
-              <tbody>
-                {details?.data?.map((row, index) => {
-                  const formattedDate = dateFormate(dayjs,row?.sendDate);
+            <tbody>
+              {details?.data?.length > 0 ? (
+                details?.data?.map((row, index) => {
+                  const formattedDate = dateFormate(dayjs, row?.sendDate);
 
                   return (
                     <tr key={index} style={{ height: "40px" }}>
@@ -140,10 +138,16 @@ function SentReportTable({
                       </td>
                     </tr>
                   );
-                })}
-              </tbody>
-            </table>
-          )}
+                })
+              ) : (
+                <tr>
+                  <td colSpan={4}>
+                    <Empty />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </>
       )}
       <div className="pagination-container">

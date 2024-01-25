@@ -11,12 +11,11 @@ import { getL2Users } from "../../../store/actions/l2Action/userActions";
 
 const UserList = () => {
   const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.l2User.data);
+  const usersData = useSelector((state) => state.l2User?.data);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
-
-  const [totalElements, setTotalElements] = useState(10);
+  const [totalElements, setTotalElements] = useState(15);
   const [pageCount, setPageCount] = useState(0);
 
   const [search, setSearch] = useState(" ");
@@ -28,45 +27,15 @@ const UserList = () => {
 
   useEffect(() => {
     if (usersData) {
-      setUserListAll(usersData);
-      setTotalElements(usersData?.response?.totalElements);
+      setUserListAll(usersData?.data?.response);
+      setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    dispatch(getL2Users({ pageCount, orgId, search }));
+    dispatch(getL2Users( pageCount,search ));
   }, [pageCount, search]);
 
-  const response = {
-    status: "SUCCESS",
-    message: "Success!!",
-    response: [
-      {
-        createdBy: null,
-        updatedBy: "ranjith01@encipherhealth.onmicrosoft.com",
-        id: "99032e79-98f9-4f99-9f65-54d5f4c639ef",
-        role: ["ADMIN"],
-        organizationId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
-        userId: "fa1b21aa-9773-4f2a-b5a1-6bd04123f669",
-        email: "ranjith@innoura.com",
-        managerId: "praveen01@encipherhealth.onmicrosoft.com",
-        tenantId: "b4d34e42-79a6-478e-b3af-12ce7311fa09",
-        userName: "ranjith01@encipherhealth.onmicrosoft.com",
-        firstName: "Ranjith",
-        lastName: "Kumar R",
-        userType: "Member",
-        accountStatus: "true",
-        totalFileProcessed: 41,
-        totalFileAllocated: 97,
-        totalFilePending: 21,
-        totalFileHold: 3,
-        totalFileDeclined: 3,
-        createdDate: null,
-        lastModifiedDate: "2024-01-23T12:39:32.472Z",
-      },
-    ],
-  };
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -92,7 +61,7 @@ const UserList = () => {
                         <SpinnerDots />
                       ) : (
                         <AdminList
-                          userList={userListAll?.length>0?userListAll:response?.response}
+                          userList={userListAll}
                           setPageCount={setPageCount}
                         />
                       )}

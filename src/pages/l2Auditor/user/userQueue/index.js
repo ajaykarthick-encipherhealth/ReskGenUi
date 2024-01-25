@@ -47,7 +47,7 @@ const statusOptions = [
 ];
 const index = () => {
   const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.l1User.data);
+  const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -72,28 +72,26 @@ const index = () => {
 
   useEffect(() => {
     if (usersData) {
-      setUserListAll(usersData);
-      setTotalElements(usersData?.response?.totalElements);
+      setUserListAll(usersData?.data?.response);
+      setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    // getFilteApi(
-    //   0,
-    //   pageNo,
-    //   search,
-    //   selectedOption,
-    //   selAllocatedBy,
-    //   dueStartDate,
-    //   dueEndDate,
-    //   completedStartDate,
-    //   completedEndDate,
-    //   auditedStartDate,
-    //   auditedEndDate,
-    //   allocatedStartDate,
-    //   allocatedEndDate
-    // );
+    // dispatch(L2IndividualUser(
+      // pageNo,
+      // search,
+      // selectedOption,
+      // selAllocatedBy,
+      // dueStartDate,
+      // dueEndDate,
+      // completedStartDate,
+      // completedEndDate,
+      // auditedStartDate,
+      // auditedEndDate,
+      // allocatedStartDate,
+      // allocatedEndDate
+    // ))
   }, [
     pageNo,
     search,

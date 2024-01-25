@@ -7,7 +7,6 @@ import { DashboardReducer } from "./reducers/DashboradReducer";
 import { PatientsReducer } from "./reducers/PatientsReducer";
 import { AuditReportReducer, ReportReducer } from "./reducers/ReportReducer";
 import { NotificationReducer } from "./reducers/NotificationReducer";
-import { L2UsersReducer } from "./reducers/l2Reducers/usersReducers";
 //import { reducer as reduxFormReducer } from 'redux-form';
 import { createWrapper } from "next-redux-wrapper";
 import { AdminPatientsReducer } from "./reducers/adminRecucers/fileProcessingReducer";
@@ -16,6 +15,8 @@ import { AdminUsersReducer } from "./reducers/adminRecucers/usewrsReducer";
 import { DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
 import { WorkReducers } from "./reducers/l2Reducers/AuditReducer";
 import { L2DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
+import L2UsersReducer from './reducers/l2Reducers/usersReducers';
+
 const middleware = applyMiddleware(thunk);
 
 const composeEnhancers = compose;
