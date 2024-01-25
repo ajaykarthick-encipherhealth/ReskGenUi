@@ -48,7 +48,7 @@ const HoldStatus = () => {
         </tr>
       </thead>
       <tbody className={styles.body}>
-        {holdStatusData?.data?.response ? (
+        {holdStatusData?.data?.response?.length>0 ? (
           processedData?.map((item, index) => (
             <tr
               key={index}
