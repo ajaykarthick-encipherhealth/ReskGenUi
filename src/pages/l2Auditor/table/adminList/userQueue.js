@@ -51,7 +51,7 @@ const UserQueue = ({ userList }) => {
           key={index}
           onClick={() => {
             localStorage.setItem("patientId", data?.patientId);
-            router.push("details");
+            router?.push("details");
           }}
         >
           <td className={TableStyle.firstTdBorder}>

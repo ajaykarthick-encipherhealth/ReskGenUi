@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import Image from "next/image";
 import { useSelector } from "react-redux";
 import { Paginator } from "primereact/paginator";
+import styles from "../../../physician/report/report.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../../components/headerFilters";
 import SpinnerDots from "../../../../components/spinner";
 import Footer from "../../../../jsx/layouts/Footer";
 import UserQueue from "../../table/adminList/userQueue";
 import { generateOptionsList } from "../../../../components/headerFilters/functions";
-import audited from '../../../../images/svg/audited.svg'
-import reAudit from '../../../../images/svg/reAudit.svg'
-import auditHold from '../../../../images/svg/auditHold.svg'
+import audited from "../../../../images/svg/audited.svg";
+import reAudit from "../../../../images/svg/reAudit.svg";
+import auditHold from "../../../../images/svg/auditHold.svg";
+import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
+import leftArrow from "../../../../images/svg/leftArrow.svg";
 
 const bullets = [
   {
@@ -26,28 +31,29 @@ const badges = [
   {
     color: "#377880",
     name: "Audited",
-    src:audited
+    src: audited,
   },
   {
     color: "#FFBE00",
     name: "Re Audit",
-    src:reAudit
+    src: reAudit,
   },
   {
     color: "#964B00",
     name: "Audit Hold",
-    src:auditHold
+    src: auditHold,
   },
 ];
 
 const statusOptions = [
   { label: "ALL", value: "" },
   { label: "COMPLETED", value: "2", status: 2 },
-  { label: "DECLINE", value: "0", status: 0 },
+  { label: "DECLINED", value: "3", status: 0 },
 ];
 const index = () => {
   const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.l1User.data);
+  const router = useRouter();
+  const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -64,6 +70,7 @@ const index = () => {
   const [auditedEndDate, setAuditedEnsDate] = useState("");
   const [totalElements, setTotalElements] = useState(10);
   const [search, setSearch] = useState("");
+  const [userName, setUserName] = useState();
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -72,28 +79,33 @@ const index = () => {
 
   useEffect(() => {
     if (usersData) {
-      setUserListAll(usersData);
-      setTotalElements(usersData?.response?.totalElements);
+      setUserListAll(usersData?.data?.response);
+      setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    // getFilteApi(
-    //   0,
-    //   pageNo,
-    //   search,
-    //   selectedOption,
-    //   selAllocatedBy,
-    //   dueStartDate,
-    //   dueEndDate,
-    //   completedStartDate,
-    //   completedEndDate,
-    //   auditedStartDate,
-    //   auditedEndDate,
-    //   allocatedStartDate,
-    //   allocatedEndDate
-    // );
+    const searchParams = new URLSearchParams(window.location.search);
+    setUserName(searchParams.get("userId"));
+    if (searchParams.get("userId")) {
+      dispatch(
+        getL2IndividualUser(
+          searchParams.get("userId"),
+          pageNo,
+          search,
+          selectedOption,
+          selAllocatedBy,
+          dueStartDate,
+          dueEndDate,
+          completedStartDate,
+          completedEndDate,
+          auditedStartDate,
+          auditedEndDate,
+          allocatedStartDate,
+          allocatedEndDate
+        )
+      );
+    }
   }, [
     pageNo,
     search,
@@ -109,86 +121,29 @@ const index = () => {
     allocatedEndDate,
   ]);
 
-  const response = {
-    status: "SUCCESS",
-    message: "Success!!",
-    response: [
-      {
-        active: true,
-        allocatedBy: "henry@encipherhealth.onmicrosoft.com",
-        allocatedOn: "2024-01-20T16:16:20.104Z",
-        auditedBy: "henry@encipherhealth.onmicrosoft.com",
-        auditedDate: "2024-01-20T13:00:53.461Z",
-        auditedStatus: null,
-        computedDate: "2024-01-20T13:08:06.815Z",
-        computing: 2,
-        createdAt: "2024-01-20T13:00:53.461Z",
-        createdBy: "ranjith01@encipherhealth.onmicrosoft.com",
-        createdDate: "2024-01-20T13:00:53.461Z",
-        dueDate: "2024-01-22T00:00:00Z",
-        fileName: null,
-        lastModifiedDate: "2024-01-20T16:16:21.181Z",
-        patientAllocated: "ranjith01@encipherhealth.onmicrosoft.com",
-        patientId: "logesh-100",
-        patientName: "logesh",
-        priority: "URGENT",
-        isAudited:true,
-        processStageChart: "FINISHED",
-        processStageId: "338c3432-d594-4434-9700-08a2e36e159b",
-        processStageIdLab: null,
-        processStageIdRadiology: null,
-        processStageLab: null,
-        processStageRadiology: null,
-        processedDate: null,
-        processedStatus: "PENDING",
-        rafScore: 1.149,
-        updatedAt: "2024-01-20T16:16:21.181Z",
-        updatedBy: "anonymousUser",
-        version: null,
-      },
-      {
-        active: true,
-        allocatedBy: "mars@encipherhealth.onmicrosoft.com",
-        allocatedOn: "2024-01-20T16:16:20.104Z",
-        auditedBy: "henry@encipherhealth.onmicrosoft.com",
-        auditedDate: "2024-01-20T13:00:53.461Z",
-        auditedStatus: null,
-        computedDate: "2024-01-20T13:08:06.815Z",
-        computing: 2,
-        createdAt: "2024-01-20T13:00:53.461Z",
-        createdBy: "ranjith01@encipherhealth.onmicrosoft.com",
-        createdDate: "2024-01-20T13:00:53.461Z",
-        dueDate: "2024-01-22T00:00:00Z",
-        fileName: null,
-        lastModifiedDate: "2024-01-20T16:16:21.181Z",
-        patientAllocated: "ranjith01@encipherhealth.onmicrosoft.com",
-        patientId: "logesh-100",
-        patientName: "logesh",
-        priority: "URGENT",
-        isReAudited:true,
-        processStageChart: "FINISHED",
-        processStageId: "338c3432-d594-4434-9700-08a2e36e159b",
-        processStageIdLab: null,
-        processStageIdRadiology: null,
-        processStageLab: null,
-        processStageRadiology: null,
-        processedDate: null,
-        processedStatus: "PENDING",
-        rafScore: 1.149,
-        updatedAt: "2024-01-20T16:16:21.181Z",
-        updatedBy: "anonymousUser",
-        version: null,
-      },
-    ],
-  };
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
+
         <div class="content-body">
           <div className="container-fluid">
             <div className="row">
+              <div
+                className={"col-xl-12"}
+                style={{ margin: "30px 0 30px 40px", cursor: "pointer" }}
+              >
+                <button
+                  style={{ width: "40px" }}
+                  className={styles.filterBtn}
+                  onClick={() => {
+                    router.push("/l2Auditor/user");
+                  }}
+                >
+                  <Image src={leftArrow} />
+                </button>
+                <span className={styles.titleBar}>{userName}</span>
+              </div>
               <div className="col-xl-12">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
@@ -221,11 +176,7 @@ const index = () => {
                         // allocated by
                         isAllocatedBySelector={true}
                         allocatedBylabel="Select AllocatedBy"
-                        allocatedByOptoons={generateOptionsList(
-                          response?.response,
-                          "allocatedBy",
-                          "All"
-                        )}
+                        allocatedByOptoons={[]}
                         setSelAllocatedBy={setSelAllocatedBy}
                         defaultAllocatedBy={"All"}
                         // allocated date
@@ -252,13 +203,10 @@ const index = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {userListAll?.loading ? (
+                      {usersData?.loading ? (
                         <SpinnerDots />
                       ) : (
-                        <UserQueue
-                          userList={response?.response}
-                         
-                        />
+                        <UserQueue userList={userListAll?.content} />
                       )}
                       <div>
                         <div className="pagination-container">

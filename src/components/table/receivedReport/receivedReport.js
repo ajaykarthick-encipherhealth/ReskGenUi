@@ -21,7 +21,7 @@ function ReceivedReport({
   loading,
   sortOrder,
   setSortOrder,
-  setSortField
+  setSortField,
 }) {
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
@@ -50,31 +50,33 @@ function ReceivedReport({
         <SpinnerDots />
       ) : (
         <>
-          {detailsContent?.length === 0 ? (
-            <Empty />
-          ) : (
-            <table className={TableStyle.classTable}>
-              <thead className={TableStyle.classTTotalhead}>
-                <tr>
-                  <th>REPORT ID</th>
-                  <th>REPORT NAME</th>
-                  <th>ACCESS TYPE</th>
-                  <th>SENDER</th>
-                  <th style={{ cursor: "pointer" }} onClick={()=>{
-                    setSortField("sendDate")
-                    sortFunction(sortOrder,setSortOrder)}}>
-                    DATE{" "}
-                    {sortOrder === "ASC" ? (
-                      <ArrowUpOutlined />
-                    ) : (
-                      <ArrowDownOutlined />
-                    )}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {detailsContent?.map((row, index) => {
-                  const formattedDate = dateFormate(dayjs,row?.sendDate);
+          <table className={TableStyle.classTable}>
+            <thead className={TableStyle.classTTotalhead}>
+              <tr>
+                <th>REPORT ID</th>
+                <th>REPORT NAME</th>
+                <th>ACCESS TYPE</th>
+                <th>SENDER</th>
+                <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setSortField("sendDate");
+                    sortFunction(sortOrder, setSortOrder);
+                  }}
+                >
+                  DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {detailsContent?.length > 0 ? (
+                detailsContent?.map((row, index) => {
+                  const formattedDate = dateFormate(dayjs, row?.sendDate);
 
                   return (
                     <tr
@@ -135,10 +137,16 @@ function ReceivedReport({
                       </td>
                     </tr>
                   );
-                })}
-              </tbody>
-            </table>
-          )}
+                })
+              ) : (
+                <tr>
+                  <td colSpan={5}>
+                    <Empty />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </>
       )}
       <div className="pagination-container">

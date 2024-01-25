@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { getAccuracyScore } from "../../../../store/actions/l2Action/DashboardAction";
-import { Spin } from "antd";
+import { Empty, Spin } from "antd";
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -211,7 +211,7 @@ const Accuracy = () => {
                 ):<div
                 className={spinSTYles.spinStyle}
                >
-                 No datas Found
+                <Empty/>
                </div>
               )}
             </div>

@@ -210,3 +210,8 @@
   border-radius: 8px;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
 }
+.titleBar{
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 10px;
+}

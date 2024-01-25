@@ -252,7 +252,7 @@ function CoderReport({
           </thead>
 
           <tbody className={TableStyle.bodytable}>
-            {reportListAll?.data?.length > 0 &&
+            {reportListAll?.data?.length > 0?
               reportListAll?.data?.map((row, index) => (
                 <tr
                   key={index}
@@ -422,7 +422,12 @@ function CoderReport({
                     </>
                   )}
                 </tr>
-              ))}
+              )):
+              <tr>
+              <td colSpan={11}>
+                <Empty />
+              </td>
+            </tr>}
           </tbody>
         </table>
       )}

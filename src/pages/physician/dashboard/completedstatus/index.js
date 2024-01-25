@@ -11,7 +11,7 @@ import { monthNames, getDays } from "../accuracy";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import { Spin } from "antd";
+import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
 
@@ -194,7 +194,9 @@ const CompletedStatus = () => {
               style={{ width: "100%", height: "300px", marginTop: "-15px" }}
             />
           ) : (
-            <div className={spinSTYles.spinStyle}>No datas Found</div>
+            <div className={spinSTYles.spinStyle}>
+              <Empty/>
+            </div>
           )}
           <div className={styles.bulletContainer}>
             <Legends bullets={bullets} />
