@@ -30,6 +30,10 @@ import { notification } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
+import Spinner from "../../../../../components/loadingSpinner";
+import {
+  getProviderDetails,
+} from "../../../../../services/PatientsListSevice";
 
 const NonHcc = ({ patientNonHccResult }) => {
   const navigate = useRouter();
@@ -232,6 +236,7 @@ const NonHcc = ({ patientNonHccResult }) => {
   const [inputValueFileDate, setInputValueFileDate] = useState("");
   const [patientFileDTO, setPatientFileDTO] = useState("");
   const [fileInitialPage, setFileInitialPage] = useState(0);
+  const [providerDetails, setProviderDetails] = useState("");
 
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const handleDocumentLoad = () => {
@@ -1255,17 +1260,56 @@ const NonHcc = ({ patientNonHccResult }) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        <span
-          className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+        <Popover
+          onClick={() => getEncounterDetails(res)}
+          content={providerDetails}
+          title=""
+          placement="bottom"
+          trigger="click"
         >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </span>
+          <span
+            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          >
+            <i>
+              <CalendarOutlined className={visitStyles.calenderIcon} />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        </Popover>
       );
       return sectionMapArr;
     });
+  };
+
+  const getEncounterDetails = async (date) => {
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <Spinner />
+      </div>
+    );
+    setProviderDetails(dotLoading);
+    var encounterDate = moment(date).format("MM/DD/YYYY");
+    var result = await getProviderDetails(localPatientId, encounterDate);
+    var data = "";
+    if (result?.status == "SUCCESS") {
+      var datas = result.response;
+      data = (
+        <div className="validhcc-details">
+          <div>Provider Name : {datas.providerName}</div>
+          <div>Authorized Provider : {datas.authorizedProvider}</div>
+          <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
+          <div>No Credential : {datas.noCredential}</div>
+          <div>UnSigned : {datas.unSigned}</div>
+        </div>
+      );
+    } else {
+      data = (
+        <div className="validhcc-details">
+          <div>Provider Not Found</div>
+        </div>
+      );
+    }
+    setProviderDetails(data);
   };
 
   const handleChangeSuggested = async (e) => {

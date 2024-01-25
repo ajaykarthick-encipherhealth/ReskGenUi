@@ -32,8 +32,10 @@ import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import Select from "react-select";
 import { Modal } from "antd";
-
-import Link from "next/link";
+import {
+  getProviderDetails,
+} from "../../../../../services/PatientsListSevice";
+import Spinner from "../../../../../components/loadingSpinner";
 
 const Lab = ({}) => {
   const navigate = useRouter();
@@ -238,6 +240,7 @@ const Lab = ({}) => {
   const [inputValueFileDate, setInputValueFileDate] = useState("");
 
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
+  const [providerDetails, setProviderDetails] = useState("");
   const handleDocumentLoad = () => {
     setDocumentLoaded(true);
   };
@@ -698,21 +701,56 @@ const Lab = ({}) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        // (<Badge
-        // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
-        // {res}</Badge>)
-
-        <Badge
-          className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+        <Popover
+          onClick={() => getEncounterDetails(res)}
+          content={providerDetails}
+          title=""
+          placement="bottom"
+          trigger="click"
         >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </Badge>
+          <span
+            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          >
+            <i>
+              <CalendarOutlined className={visitStyles.calenderIcon} />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        </Popover>
       );
       return sectionMapArr;
     });
+  };
+
+  const getEncounterDetails = async (date) => {
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <Spinner />
+      </div>
+    );
+    setProviderDetails(dotLoading);
+    var encounterDate = moment(date).format("MM/DD/YYYY");
+    var result = await getProviderDetails(localPatientId, encounterDate);
+    var data = "";
+    if (result?.status == "SUCCESS") {
+      var datas = result.response;
+      data = (
+        <div className="validhcc-details">
+          <div>Provider Name : {datas.providerName}</div>
+          <div>Authorized Provider : {datas.authorizedProvider}</div>
+          <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
+          <div>No Credential : {datas.noCredential}</div>
+          <div>UnSigned : {datas.unSigned}</div>
+        </div>
+      );
+    } else {
+      data = (
+        <div className="validhcc-details">
+          <div>Provider Not Found</div>
+        </div>
+      );
+    }
+    setProviderDetails(data);
   };
 
   const confirmInvalidMeat = () =>

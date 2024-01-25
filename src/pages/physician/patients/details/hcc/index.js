@@ -51,6 +51,7 @@ import {
   getMeatQueryList,
   submitMeatQuery,
   updateMeatQuery,
+  getProviderDetails,
 } from "../../../../../services/PatientsListSevice";
 const { Option } = Select;
 
@@ -276,6 +277,7 @@ const Hcc = ({ patientHccResult }) => {
   const [meatQueryListPrevious, setMeatQueryListPrevious] = useState([]);
   const [meatQueryResult, setMeatQueryResult] = useState([]);
   const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
+  const [providerDetails, setProviderDetails] = useState("");
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -335,22 +337,13 @@ const Hcc = ({ patientHccResult }) => {
     setLocalTenantId(tenId);
     getPatientDetails(patientId, orgId, tenId);
 
-    var userSpinner = (
-      <div className={visitStyles.userDetailsCard}>
-        <div className="bouncing-loader">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <Spinner />
       </div>
     );
-
-    var currentTime = moment().format("hh:mm");
-    setCurrentTime(currentTime);
-
-    setUserDetails(userSpinner);
-
-    setvalidHccDetails(userSpinner);
+    setUserDetails(dotLoading);
+    setvalidHccDetails(dotLoading);
   }, [fileInitialPage, findFileKeyword, fileModalTitle, fileDosPageNumber]);
 
   const getPatientDetails = async (
@@ -2565,21 +2558,56 @@ const Hcc = ({ patientHccResult }) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        // (<Badge
-        // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
-        // {res}</Badge>)
-
-        <span
-          className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+        <Popover
+          onClick={() => getEncounterDetails(res)}
+          content={providerDetails}
+          title=""
+          placement="bottom"
+          trigger="click"
         >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </span>
+          <span
+            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          >
+            <i>
+              <CalendarOutlined className={visitStyles.calenderIcon} />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        </Popover>
       );
       return sectionMapArr;
     });
+  };
+
+  const getEncounterDetails = async (date) => {
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <Spinner />
+      </div>
+    );
+    setProviderDetails(dotLoading);
+    var encounterDate = moment(date).format("MM/DD/YYYY");
+    var result = await getProviderDetails(localPatientId, encounterDate);
+    var data = "";
+    if (result?.status == "SUCCESS") {
+      var datas = result.response;
+      data = (
+        <div className="validhcc-details">
+          <div>Provider Name : {datas.providerName}</div>
+          <div>Authorized Provider : {datas.authorizedProvider}</div>
+          <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
+          <div>No Credential : {datas.noCredential}</div>
+          <div>UnSigned : {datas.unSigned}</div>
+        </div>
+      );
+    } else {
+      data = (
+        <div className="validhcc-details">
+          <div>Provider Not Found</div>
+        </div>
+      );
+    }
+    setProviderDetails(data);
   };
 
   const getCaptureSectionBackgroundMeat = (value, dis, encounterDate) => {
@@ -5123,8 +5151,8 @@ const Hcc = ({ patientHccResult }) => {
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
                                             {getProviderNameList(
-                                                    data?.providerName
-                                                  )}
+                                              data?.providerName
+                                            )}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}

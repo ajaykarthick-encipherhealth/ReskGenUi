@@ -33,35 +33,17 @@ import {
   faArrowsAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
-import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import Select from "react-select";
 import { Modal } from "antd";
-import { Button } from "react-bootstrap";
-
-import { Space, Spin } from "antd";
-// import { searchPlugin ,NextIcon, PreviousIcon, RenderSearchProps,} from '@react-pdf-viewer/search';
-import { Icon, MinimalButton, Position } from "@react-pdf-viewer/core";
-import {
-  NextIcon,
-  PreviousIcon,
-  RenderSearchProps,
-  searchPlugin,
-} from "@react-pdf-viewer/search";
-import Form from "react-bootstrap/Form";
-import { Offcanvas } from "react-bootstrap";
-import { InfoCircleOutlined, DownOutlined } from "@ant-design/icons";
-import Link from "next/link";
-import { notification } from "antd";
-// import { C } from "@fullcalendar/core/internal-common";
-
-import { actions as patientActions } from "../../../../../stores/patients";
-import { connect } from "react-redux";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {
+  getProviderDetails,
+} from "../../../../../services/PatientsListSevice";
+import Spinner from "../../../../../components/loadingSpinner";
 
-import { Avatar, Tooltip } from "antd";
+
 
 const Radiology = ({}) => {
   const navigate = useRouter();
@@ -272,6 +254,7 @@ const Radiology = ({}) => {
     useState(false);
   const [dragFileDate, setdragFileDate] = useState(false);
   const [inputValueFileDate, setInputValueFileDate] = useState("");
+  const [providerDetails, setProviderDetails] = useState("");
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -961,21 +944,56 @@ const Radiology = ({}) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        // (<Badge
-        // className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}>
-        // {res}</Badge>)
-
-        <Badge
-          className={`mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+        <Popover
+          onClick={() => getEncounterDetails(res)}
+          content={providerDetails}
+          title=""
+          placement="bottom"
+          trigger="click"
         >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </Badge>
+          <span
+            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          >
+            <i>
+              <CalendarOutlined className={visitStyles.calenderIcon} />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        </Popover>
       );
       return sectionMapArr;
     });
+  };
+
+  const getEncounterDetails = async (date) => {
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <Spinner />
+      </div>
+    );
+    setProviderDetails(dotLoading);
+    var encounterDate = moment(date).format("MM/DD/YYYY");
+    var result = await getProviderDetails(localPatientId, encounterDate);
+    var data = "";
+    if (result?.status == "SUCCESS") {
+      var datas = result.response;
+      data = (
+        <div className="validhcc-details">
+          <div>Provider Name : {datas.providerName}</div>
+          <div>Authorized Provider : {datas.authorizedProvider}</div>
+          <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
+          <div>No Credential : {datas.noCredential}</div>
+          <div>UnSigned : {datas.unSigned}</div>
+        </div>
+      );
+    } else {
+      data = (
+        <div className="validhcc-details">
+          <div>Provider Not Found</div>
+        </div>
+      );
+    }
+    setProviderDetails(data);
   };
 
   const getProviderNameList = (data) => {
