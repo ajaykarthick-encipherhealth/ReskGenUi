@@ -42,6 +42,8 @@ import {
   patientListFilter,
   auditPatientupdate,
 } from "../../../../services/PatientsListSevice";
+import LoadingSpinner from "../../../../../components/loadingSpinner";
+
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -3019,11 +3021,7 @@ const Details = ({}) => {
                             </>
                           ) : (
                             <div className={visitStyles.userDetailsCard}>
-                              <div className="bouncing-loader">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                              </div>
+                               <LoadingSpinner />
                             </div>
                           )}
                         </div>
