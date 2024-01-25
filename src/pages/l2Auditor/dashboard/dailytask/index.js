@@ -53,7 +53,7 @@ const DailyTask = () => {
     "Saturday",
   ];
 
-  const router = useRouter;
+  const router = useRouter();
   useEffect(() => {
     const days = [];
     for (let i = 0; i < 3; i++) {

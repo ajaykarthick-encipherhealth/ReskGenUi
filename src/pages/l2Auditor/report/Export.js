@@ -118,7 +118,7 @@ const Export = ({
     dispatch(getUsersList(orgId, search));
   }, [search]);
   const dispatch = useDispatch();
-  const usersList = useSelector((state) => state.report.usersList);
+  const usersList = useSelector((state) => state.AuditReport.usersList);
   const options = usersList?.response?.map((data) => ({
     label: data.userName,
     value: data.userName,
