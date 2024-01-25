@@ -764,27 +764,30 @@ const Lab = ({}) => {
     // getSectionResult(value.toLowerCase());
   };
 
-  const getProviderNameList = (data) =>{
-    var value =  data?.map((res) => (
-     <Badge                                            
-     className={
-       res.authorizedProvider === true
-         ? `mt-2 text-start ${visitStyles.provider_name}`
-         : `mt-2 text-start ${visitStyles.un_provider_name}`
-     }
-     >
-       <i> <FontAwesomeIcon
-               icon={faCircleUser}
-               style={{
-                 size: 10,
-                 color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
-               }}
-             /></i>
-       {res.providerName}
-     </Badge>
-     ))
-     return value;
-   }
+  const getProviderNameList = (data) => {
+    var value = data?.map((res) => (
+      <Badge
+        className={
+          res.authorizedProvider === true
+            ? `mt-2 text-start ${visitStyles.provider_name}`
+            : `mt-2 text-start ${visitStyles.un_provider_name}`
+        }
+      >
+        <i>
+          {" "}
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            style={{
+              size: 10,
+              color: res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+            }}
+          />
+        </i>
+        {res.providerName}
+      </Badge>
+    ));
+    return value;
+  };
 
   return (
     <>
@@ -877,7 +880,9 @@ const Lab = ({}) => {
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
-                                        {getProviderNameList(data?.providerName)}
+                                        {getProviderNameList(
+                                          data?.providerName
+                                        )}
                                         {getEncounterDateBackground(
                                           data.encounterDateSplit
                                         )}

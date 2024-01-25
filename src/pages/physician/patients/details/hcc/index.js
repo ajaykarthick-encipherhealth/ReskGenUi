@@ -161,7 +161,7 @@ const Hcc = ({ patientHccResult }) => {
     headerName: "",
     queryComment: "",
     reason: "",
-    diagnosisCodeQuery:""
+    diagnosisCodeQuery: "",
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -448,7 +448,7 @@ const Hcc = ({ patientHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName:res.provider,
+            providerName: res.provider,
           });
         });
 
@@ -2791,27 +2791,30 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
 
-  const getProviderNameList = (data) =>{
-   var value =  data?.map((res) => (
-    <Badge                                            
-    className={
-      res.authorizedProvider === true
-        ? `mt-2 text-start ${visitStyles.provider_name}`
-        : `mt-2 text-start ${visitStyles.un_provider_name}`
-    }
-    >
-      <i> <FontAwesomeIcon
-              icon={faCircleUser}
-              style={{
-                size: 10,
-                color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
-              }}
-            /></i>
-      {res.providerName}
-    </Badge>
-    ))
+  const getProviderNameList = (data) => {
+    var value = data?.map((res) => (
+      <Badge
+        className={
+          res.authorizedProvider === true
+            ? `mt-2 text-start ${visitStyles.provider_name}`
+            : `mt-2 text-start ${visitStyles.un_provider_name}`
+        }
+      >
+        <i>
+          {" "}
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            style={{
+              size: 10,
+              color: res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+            }}
+          />
+        </i>
+        {res.providerName}
+      </Badge>
+    ));
     return value;
-  }
+  };
 
   return (
     <>
@@ -3061,16 +3064,16 @@ const Hcc = ({ patientHccResult }) => {
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
-                                           {getProviderNameList(data?.providerName)}
-                                             {getEncounterDateBackground(
+                                          {getProviderNameList(
+                                            data?.providerName
+                                          )}
+                                          {getEncounterDateBackground(
                                             data.encounterDateSplit
-                                          )}                                      
+                                          )}
                                         </div>
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >
-                                         
-                                        </div>
+                                        ></div>
 
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
@@ -3286,7 +3289,9 @@ const Hcc = ({ patientHccResult }) => {
                                                 <div
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
-                                                {getProviderNameList(data?.providerName)}
+                                                  {getProviderNameList(
+                                                    data?.providerName
+                                                  )}
                                                   {getEncounterDateBackground(
                                                     data.encounterDateSplit
                                                   )}
@@ -3472,7 +3477,9 @@ const Hcc = ({ patientHccResult }) => {
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                            {getProviderNameList(data?.providerName)}
+                                            {getProviderNameList(
+                                              data?.providerName
+                                            )}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}
@@ -4500,7 +4507,9 @@ const Hcc = ({ patientHccResult }) => {
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
-                                        {getProviderNameList(data?.providerName)}
+                                        {getProviderNameList(
+                                          data?.providerName
+                                        )}
                                         {getEncounterDateBackground(
                                           data.encounterDateSplit
                                         )}
@@ -4913,7 +4922,9 @@ const Hcc = ({ patientHccResult }) => {
                                                 <div
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
-                                                  {getProviderNameList(data?.providerName)}
+                                                  {getProviderNameList(
+                                                    data?.providerName
+                                                  )}
                                                   {getEncounterDateBackground(
                                                     data.encounterDateSplit
                                                   )}
@@ -5111,23 +5122,31 @@ const Hcc = ({ patientHccResult }) => {
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                             {data?.providerName?.map((res) => (
-                                            <Badge                                            
-                                            className={
-                                              res.authorizedProvider === true
-                                                ? `mt-2 text-start ${visitStyles.provider_name}`
-                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
-                                            }
-                                            >
-                                              <i> <FontAwesomeIcon
-                                                      icon={faCircleUser}
-                                                      style={{
-                                                        size: 10,
-                                                        color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
-                                                      }}
-                                                    /></i>
-                                              {res.providerName}
-                                            </Badge>
+                                            {data?.providerName?.map((res) => (
+                                              <Badge
+                                                className={
+                                                  res.authorizedProvider ===
+                                                  true
+                                                    ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                    : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                                }
+                                              >
+                                                <i>
+                                                  {" "}
+                                                  <FontAwesomeIcon
+                                                    icon={faCircleUser}
+                                                    style={{
+                                                      size: 10,
+                                                      color:
+                                                        res.authorizedProvider ===
+                                                        true
+                                                          ? "#ffa500"
+                                                          : "#ff0000cc",
+                                                    }}
+                                                  />
+                                                </i>
+                                                {res.providerName}
+                                              </Badge>
                                             ))}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
@@ -6124,7 +6143,9 @@ const Hcc = ({ patientHccResult }) => {
               <div className="row">
                 <div className="col-xl-6">
                   <div className={styles.publishedByDetails}>
-                    <span className={styles.meatQueried_head}>{meatQueryResult.diagnosisCode}</span>
+                    <span className={styles.meatQueried_head}>
+                      {meatQueryResult.diagnosisCode}
+                    </span>
                     <p className={styles.meatQueried_details}>
                       {meatQueryResult.description}
                     </p>
@@ -6156,23 +6177,29 @@ const Hcc = ({ patientHccResult }) => {
                 <div>
                   <span className={styles.meatQueried_head}>Subject</span>
                   <p className={styles.meatQueried_details}>
-                  We've pinpointed the following details that may pertain to records associated with <b>{patientHccResult?.patientName}</b>.
+                    We've pinpointed the following details that may pertain to
+                    records associated with{" "}
+                    <b>{patientHccResult?.patientName}</b>.
                   </p>
                 </div>
                 <div>
-                  <span className={styles.meatQueried_head}>Dear Dr {meatQueryResult.providerName}</span>
-                  {!meatQueriedDetailsShow ?
-                  <p className={styles.meatQueried_details}>
-                    {meatQueryResult.queryComment}
-                  </p>:
+                  <span className={styles.meatQueried_head}>
+                    Dear Dr {meatQueryResult.providerName}
+                  </span>
+                  {!meatQueriedDetailsShow ? (
+                    <p className={styles.meatQueried_details}>
+                      {meatQueryResult.queryComment}
+                    </p>
+                  ) : (
                     <textarea
-                    className={`${styles.queryTextarea}`}
+                      className={`${styles.queryTextarea}`}
                       id="queryComment"
                       name="queryComment"
                       onChange={handleChange}
                       rows="5"
                       value={inputValue.queryComment}
-                    ></textarea>}
+                    ></textarea>
+                  )}
                 </div>
               </div>
             </div>

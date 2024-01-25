@@ -978,27 +978,30 @@ const Radiology = ({}) => {
     });
   };
 
-  const getProviderNameList = (data) =>{
-    var value =  data?.map((res) => (
-     <Badge                                            
-     className={
-       res.authorizedProvider === true
-         ? `mt-2 text-start ${visitStyles.provider_name}`
-         : `mt-2 text-start ${visitStyles.un_provider_name}`
-     }
-     >
-       <i> <FontAwesomeIcon
-               icon={faCircleUser}
-               style={{
-                 size: 10,
-                 color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
-               }}
-             /></i>
-       {res.providerName}
-     </Badge>
-     ))
-     return value;
-   }
+  const getProviderNameList = (data) => {
+    var value = data?.map((res) => (
+      <Badge
+        className={
+          res.authorizedProvider === true
+            ? `mt-2 text-start ${visitStyles.provider_name}`
+            : `mt-2 text-start ${visitStyles.un_provider_name}`
+        }
+      >
+        <i>
+          {" "}
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            style={{
+              size: 10,
+              color: res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+            }}
+          />
+        </i>
+        {res.providerName}
+      </Badge>
+    ));
+    return value;
+  };
 
   return (
     <>
@@ -1009,7 +1012,7 @@ const Radiology = ({}) => {
               <div className="row">
                 <div className="col-xl-11">
                   <Nav as="ul" className="nav nav-tabs">
-                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey="file"
@@ -1049,7 +1052,6 @@ const Radiology = ({}) => {
                         MEAT Criteria
                       </Nav.Link>
                     </Nav.Item>
-                
                   </Nav>
                 </div>
                 <div className="col-xl-1">
@@ -1130,14 +1132,16 @@ const Radiology = ({}) => {
                                     <div
                                       className={`${visitStyles.hoverActiveHcc}`}
                                     >
-                                     <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                   {getProviderNameList(data?.providerName)}
-                                    {getEncounterDateBackground(
-                                      data.encounterDateSplit
-                                    )}
-                                  </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {getProviderNameList(
+                                          data?.providerName
+                                        )}
+                                        {getEncounterDateBackground(
+                                          data.encounterDateSplit
+                                        )}
+                                      </div>
                                       <div>
                                         {getCaptureSectionBackground(
                                           data.capturedSections,
@@ -1221,13 +1225,15 @@ const Radiology = ({}) => {
                                       className={`${visitStyles.hoverActiveHcc}`}
                                     >
                                       <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                   {getProviderNameList(data?.providerName)}
-                                    {getEncounterDateBackground(
-                                      data.encounterDateSplit
-                                    )}
-                                  </div>
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {getProviderNameList(
+                                          data?.providerName
+                                        )}
+                                        {getEncounterDateBackground(
+                                          data.encounterDateSplit
+                                        )}
+                                      </div>
                                       <div>
                                         {getCaptureSectionBackground(
                                           data.capturedSections,
@@ -1521,7 +1527,7 @@ const Radiology = ({}) => {
                         </div>
                       </div>
                     </div>
-                  </div>                
+                  </div>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="meatCriteria">
                   <div className="my-post-content pt-3">
@@ -1760,7 +1766,7 @@ const Radiology = ({}) => {
                         </div>
                       ) : null}
                     </div>
-                  </div>                
+                  </div>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
                   <div className="my-post-content pt-3">
@@ -1846,10 +1852,10 @@ const Radiology = ({}) => {
                                 <div
                                   className={`${visitStyles.hoverActiveHcc}`}
                                 >
-                                 <div
+                                  <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
-                                 {getProviderNameList(data?.providerName)}
+                                    {getProviderNameList(data?.providerName)}
                                     {getEncounterDateBackground(
                                       data.encounterDateSplit
                                     )}
@@ -1968,14 +1974,16 @@ const Radiology = ({}) => {
                                         <div
                                           className={`${visitStyles.hoverActiveHcc}`}
                                         >
-                                         <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                   {getProviderNameList(data?.providerName)}
-                                    {getEncounterDateBackground(
-                                      data.encounterDateSplit
-                                    )}
-                                  </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getProviderNameList(
+                                              data?.providerName
+                                            )}
+                                            {getEncounterDateBackground(
+                                              data.encounterDateSplit
+                                            )}
+                                          </div>
                                           <div>
                                             {getCaptureSectionBackgroundFile(
                                               data.capturedSections,
