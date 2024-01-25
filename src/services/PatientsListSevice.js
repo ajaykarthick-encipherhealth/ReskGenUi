@@ -182,3 +182,22 @@ export const getProviderDetails = async (patiendId,encounterDate) => {
   }
 };
 
+export const auditPatientupdate = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.put(
+      `${ENDPOINTS?.apiEndoint}dbservice/change/audit`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+
