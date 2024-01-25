@@ -41,8 +41,9 @@ import AllocateModal from "../../../admin/allocatedUser/allocate";
 import {
   patientListFilter,
   auditPatientupdate,
+  reAuditupdate
 } from "../../../../services/PatientsListSevice";
-import LoadingSpinner from "../../../../../components/loadingSpinner";
+import LoadingSpinner from "../../../../components/loadingSpinner";
 
 
 const Details = ({}) => {
@@ -594,14 +595,21 @@ const Details = ({}) => {
     event.preventDefault();
     if (form.checkValidity() === true) {
       setConfirmNotesModalValid(false);
-      if (isValidAction == "declineFunction") {
-        handleSubmitHccDeclineApi();
-      }
-      if (isValidAction == "holdFunction") {
-        handleSubmitHccHold();
-      }
-      if (isValidAction == "pendingFunction") {
-        handleSubmitHccPending();
+      switch (isValidAction) {
+        case "declineFunction":
+          handleSubmitHccDeclineApi();
+          break;
+        case "holdFunction":
+          handleSubmitHccHold();
+          break;
+        case "pendingFunction":
+          handleSubmitHccPending();
+          break;
+          case "reAuditFunction":
+           handleSubmitReAudit();
+            break;
+        default:
+          null;
       }
     }
     setValidated(true);
@@ -1430,16 +1438,57 @@ const Details = ({}) => {
     setAllocateModal(true);
   };
   const auditPatient = (value) => {
+    if(value == "audit"){
     setConfirmAuditModal(true);
+    }else{
+      setIsValidAction("reAuditFunction");
+      setConfirmNotesModalHold(true);
+    }
   };
   const updateAudit = async()=>{
-    var data = {
+    var postData = {
+      userId: localUserId,
       patientId: localPatientId,
+      patientName: patientDocumentResult.patientName,
+      fileId: patientDocumentResult.patientName,
+      orgId: patientDocumentResult.orgId,
+      tenantId: patientDocumentResult.tenantId,
+      dob: patientDocumentResult.dob,
+      gender: patientDocumentResult.gender,
+      age: patientDocumentResult.age,
+      validDisease: patientDocumentResult.validDisease,
+      invalidDisease: patientDocumentResult.invalidDisease,
+      unmatchedDisease: patientDocumentResult.unmatchedDisease,
+      comboDisease: patientDocumentResult.comboDisease,
+      meatCriteria: patientDocumentResult.meatCriteria,
+      rafScore: patientDocumentResult.rafScore,
+      dosFiltered: patientDocumentResult.dosFiltered,
+      fileDetailDTO: patientDocumentResult.fileDetailDTO,
+      deletedDiseases: patientDocumentResult.deletedDiseases,
       dos: selectedDosValue,
     };
-    var result = await auditPatientupdate(data);
+    var result = await auditPatientupdate(postData);
     if (result.status == "SUCCESS") {
+      getPatientIdDetails(localPatientId);
       setConfirmAuditModal(false);   
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  }
+  const handleSubmitReAudit = async()=>{
+    var postData = {
+      orgId: localOrgId,
+      patientId: localPatientId,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    var result = await reAuditupdate(postData);
+    if (result.status == "SUCCESS") {
+      getPatientIdDetails(localPatientId);
+      setConfirmNotesModalHold(false);   
       notification.success({
         message: result.message,
         placement: "top",
@@ -1770,19 +1819,34 @@ const Details = ({}) => {
                                 className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
                                 icon={<DownOutlined />}
                                 overlay={ <Menu>
+                                  {patienIdDetails?.auditedStatus == "REAUDIT" ?
                                   <Menu.Item key="1" onClick={() => auditPatient("audit")}>
                                     <div className="patient-status">
-                                      <span className={`badge hold-text`}>Audit</span>
+                                      <span className={`badge hold-text`}>AUDIT</span>
+                                    </div>
+                                  </Menu.Item> :
+                                  patienIdDetails?.auditedStatus == "AUDITED" ?
+                                  <Menu.Item key="2" onClick={() => auditPatient("re-audit")}>
+                                    <div className="patient-status">
+                                      <span className={`badge failed-text`}>REAUDIT</span>
+                                    </div>
+                                  </Menu.Item>:
+                                  <>
+                                  <Menu.Item key="1" onClick={() => auditPatient("audit")}>
+                                    <div className="patient-status">
+                                      <span className={`badge hold-text`}>AUDIT</span>
                                     </div>
                                   </Menu.Item>
                                   <Menu.Item key="2" onClick={() => auditPatient("re-audit")}>
-                                    <div className="patient-status">
-                                      <span className={`badge failed-text`}>Re-Audit</span>
-                                    </div>
-                                  </Menu.Item>
+                                  <div className="patient-status">
+                                    <span className={`badge failed-text`}>REAUDIT</span>
+                                  </div>
+                                </Menu.Item>
+                                  </>
+                                  }
                                   </Menu>}
                               >
-                                Audit
+                                {patienIdDetails?.auditedStatus == "REAUDIT" ? "REAUDIT" : "AUDITED"}
                               </Dropdown.Button>
                           </div>
                         ) : (
@@ -2044,6 +2108,7 @@ const Details = ({}) => {
                                   Reason <span className="text-danger">*</span>
                                 </Form.Label>
                                 <textarea
+                                  required
                                   className="form-control"
                                   id="notes"
                                   name="notes"

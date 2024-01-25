@@ -185,8 +185,27 @@ export const getProviderDetails = async (patiendId,encounterDate) => {
 export const auditPatientupdate = async (data) => {
   const token = localStorage.getItem("token");
   try {
-    const response = await axios.put(
-      `${ENDPOINTS?.apiEndoint}dbservice/change/audit`,
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/status/audit`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+
+export const reAuditupdate = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/status/reaudit`,
       data,
       {
         headers: {
