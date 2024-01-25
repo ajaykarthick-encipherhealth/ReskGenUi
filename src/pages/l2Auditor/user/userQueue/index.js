@@ -11,6 +11,7 @@ import { generateOptionsList } from "../../../../components/headerFilters/functi
 import audited from '../../../../images/svg/audited.svg'
 import reAudit from '../../../../images/svg/reAudit.svg'
 import auditHold from '../../../../images/svg/auditHold.svg'
+import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
 
 const bullets = [
   {
@@ -78,7 +79,7 @@ const index = () => {
   }, [usersData]);
 
   useEffect(() => {
-    // dispatch(L2IndividualUser(
+    // dispatch(getL2IndividualUser(
       // pageNo,
       // search,
       // selectedOption,
@@ -250,11 +251,11 @@ const index = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {userListAll?.loading ? (
+                      {usersData?.loading ? (
                         <SpinnerDots />
                       ) : (
                         <UserQueue
-                          userList={response?.response}
+                          userList={userListAll}
                          
                         />
                       )}

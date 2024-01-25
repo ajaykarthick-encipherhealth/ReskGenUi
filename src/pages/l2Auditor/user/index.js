@@ -57,7 +57,7 @@ const UserList = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {userListAll?.loading ? (
+                      {usersData?.loading ? (
                         <SpinnerDots />
                       ) : (
                         <AdminList
