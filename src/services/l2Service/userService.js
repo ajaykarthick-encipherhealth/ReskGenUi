@@ -20,6 +20,7 @@ export const l2Users = async (page, search) => {
 };
 
 export const L2IndividualUser = async (
+  uId,
   pageNo,
   search,
   selectedOption,
@@ -34,12 +35,12 @@ export const L2IndividualUser = async (
   allocatedEndDate
 ) => {
   const token = localStorage.getItem("token");
-  const uId = localStorage.getItem("userId");
-
-  const filteredStatus = status === undefined ? "" : status;
+  const filteredStatus = selectedOption === undefined ? "" : selectedOption;
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/user/getuserbymanageridbypage?orgid=${orgId}&searchstring=${search}&page=${page}&size=15`,
+      `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/auditor/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&completedStartDate=${completedStartDate}&completedEndDate=${completedEndDate}
+     &dueDateStart=${dueStartDate}&dueDateEnd=${dueEndDate}&auditAllocatedBy=${selAllocatedBy}&auditedStartDate=${auditedStartDate}&auditedEndDate=${auditedEndDate}&allocatedStartDate=${allocatedStartDate}&allocatedEndDate=${allocatedEndDate}
+     `,
       {
         headers: {
           Authorization: `Bearer ${token}`,

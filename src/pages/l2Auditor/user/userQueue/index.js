@@ -79,20 +79,22 @@ const index = () => {
   }, [usersData]);
 
   useEffect(() => {
-    // dispatch(getL2IndividualUser(
-      // pageNo,
-      // search,
-      // selectedOption,
-      // selAllocatedBy,
-      // dueStartDate,
-      // dueEndDate,
-      // completedStartDate,
-      // completedEndDate,
-      // auditedStartDate,
-      // auditedEndDate,
-      // allocatedStartDate,
-      // allocatedEndDate
-    // ))
+    const searchParams = new URLSearchParams(window.location.search);
+    dispatch(getL2IndividualUser(
+      searchParams.get("userId"),
+      pageNo,
+      search,
+      selectedOption,
+      selAllocatedBy,
+      dueStartDate,
+      dueEndDate,
+      completedStartDate,
+      completedEndDate,
+      auditedStartDate,
+      auditedEndDate,
+      allocatedStartDate,
+      allocatedEndDate
+    ))
   }, [
     pageNo,
     search,

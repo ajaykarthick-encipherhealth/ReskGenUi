@@ -33,6 +33,7 @@ export const getL2Users = (page, search) => {
 };
 
 export const getL2IndividualUser = (
+  uId,
   pageNo,
   search,
   selectedOption,
@@ -55,6 +56,7 @@ export const getL2IndividualUser = (
     });
     try {
       L2IndividualUser(
+        uId,
         pageNo,
         search,
         selectedOption,

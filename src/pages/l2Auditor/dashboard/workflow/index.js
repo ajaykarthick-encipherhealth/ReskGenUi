@@ -7,7 +7,7 @@ import Card from "../../../../components/card";
 import allocated from "../../../../images/dashboard/allocated.png";
 import pending from "../../../../images/dashboard/pending.png";
 import hold from "../../../../images/dashboard/hold.png";
-import { Col, Row, Spin } from "antd";
+import { Col, Empty, Row, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
 import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
@@ -91,7 +91,7 @@ const WorkFlow = () => {
            <Spin loading={worlFlowData?.loading} />
          </div>
         ) : (
-          worlFlowData?.data?.response && (
+          worlFlowData?.data?.response ? (
             <Row className={styles.carddiv}>
               {card1Data?.map((data) => (
                 <Col
@@ -114,7 +114,9 @@ const WorkFlow = () => {
                 </Col>
               ))}
             </Row>
-          )
+          ):<div className={spinSTYles.spinStyle}>
+            <Empty/>
+          </div>
         )}
       </Card>
     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { Modal, Spin } from "antd";
+import { Empty, Modal, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
@@ -64,7 +64,7 @@ const HoldStatus = () => {
           ))
         ) : (
           <tr>
-            <td colSpan="2">No data found</td>
+            <td colSpan="2"><Empty/></td>
           </tr>
         )}
       </tbody>
