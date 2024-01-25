@@ -1812,7 +1812,7 @@ const Details = ({}) => {
                               </span>
                             </div>
                           </div>
-                        ) : userRole == "l1auditor" ? (
+                        ) : userRole == "l2auditor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown.Button
                                 type="primary"
