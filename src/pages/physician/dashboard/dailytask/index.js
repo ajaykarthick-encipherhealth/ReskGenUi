@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactECharts from "echarts-for-react";
 import left from "../../../../images/dashboard/left.png";
 import right from "../../../../images/dashboard/right.png";
-import { Col, Empty, Row } from "antd";
+import { Col, Empty, Row, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
@@ -72,7 +72,7 @@ const DailyTask = () => {
 
   useEffect(() => {
     if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData);
+      getDays(selectedDate,  dailyStatusData?.data?.response);
     }
   }, [dailyStatusData]);
 
@@ -321,7 +321,17 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-               <Empty/>
+                <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Spin loading={dailyStatusData?.loading} />
+              </div>
               )}
 
               <div className={styles.infoCards}>

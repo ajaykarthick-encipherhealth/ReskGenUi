@@ -4,7 +4,7 @@ import {
   accuracyScore,
   CompletedScore,
   HoldStatus,
-  ChatBot
+  ChatBot,
 } from "../../services/DashboardService";
 
 export const WORKFLOWDATA = "WORKFLOWDATA";
@@ -14,7 +14,7 @@ export const ACCURACY = "ACCURACY";
 export const COMPLETED = "COMPLETED";
 export const HOLD_STATUS = "HOLD_STATUS";
 export const SELECTED_DAY = "SELECTED_DAY";
-export const CHATBOT='CHATBOT'
+export const CHATBOT = "CHATBOT";
 
 export const getSelectedDay = (day) => ({
   type: SELECTED_DAY,
@@ -27,11 +27,20 @@ export const getDateRange = (val) => ({
 
 export const getWorkFlow = (startDate, endDate, router) => {
   return (dispatch) => {
+    dispatch({
+      type: WORKFLOWDATA,
+      payload: {
+        loding: true,
+      },
+    });
     try {
       workStatusApi(startDate, endDate, router).then((response) => {
         dispatch({
           type: WORKFLOWDATA,
-          payload: response,
+          payload: {
+            data: response,
+            loding: false,
+          },
         });
       });
     } catch (err) {
@@ -41,45 +50,90 @@ export const getWorkFlow = (startDate, endDate, router) => {
 };
 export const getDailyTaskDatas = (date, router) => {
   return (dispatch) => {
-    DailyTaskApi(date, router).then((response) => {
-      dispatch({
-        type: DAILY_TASK,
-        payload: response,
-      });
+    dispatch({
+      type: DAILY_TASK,
+      payload: { loading: true },
     });
+    try {
+      DailyTaskApi(date, router).then((response) => {
+        dispatch({
+          type: DAILY_TASK,
+          payload: { data: response, loading: false },
+        });
+      });
+    } catch (Err) {
+      console.log(Err);
+    }
   };
 };
 
 export const getAccuracyScore = (btn, month, year, router) => {
   return (dispatch) => {
-    accuracyScore(btn, month, year, router).then((response) => {
-      dispatch({
-        type: ACCURACY,
-        payload: response,
-      });
+    dispatch({
+      type: ACCURACY,
+      payload: {
+        loading: true,
+      },
     });
+    try {
+      accuracyScore(btn, month, year, router).then((response) => {
+        dispatch({
+          type: ACCURACY,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 };
 
 export const getCOmpletedScore = (btn, date, month, year, router) => {
   return (dispatch) => {
-    CompletedScore(btn, date, month, year, router).then((response) => {
-      dispatch({
-        type: COMPLETED,
-        payload: response,
-      });
+    dispatch({
+      type: COMPLETED,
+      payload: { loading: true },
     });
+    try {
+      CompletedScore(btn, date, month, year, router).then((response) => {
+        dispatch({
+          type: COMPLETED,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (Err) {
+      console.log(Err);
+    }
   };
 };
 
 export const getHoldStatusData = (router) => {
   return (dispatch) => {
-    HoldStatus(router).then((response) => {
-      dispatch({
-        type: HOLD_STATUS,
-        payload: response,
-      });
+    dispatch({
+      type: HOLD_STATUS,
+      payload: {
+        loading: true,
+      },
     });
+    try {
+      HoldStatus(router).then((response) => {
+        dispatch({
+          type: HOLD_STATUS,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 };
 
@@ -93,4 +147,3 @@ export const getChatReply = (msg) => {
     });
   };
 };
-
