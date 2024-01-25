@@ -38,7 +38,12 @@ import Radiology from "./radiology/index";
 import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
 import AllocateModal from "../../../admin/allocatedUser/allocate";
-import { patientListFilter } from "../../../../services/PatientsListSevice";
+import {
+  patientListFilter,
+  auditPatientupdate,
+} from "../../../../services/PatientsListSevice";
+import LoadingSpinner from "../../../../../components/loadingSpinner";
+
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -136,7 +141,7 @@ const Details = ({}) => {
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
-
+  const [confirmAuditModal,setConfirmAuditModal] = useState(false)
 
   const flagPostList = [
     {
@@ -288,7 +293,14 @@ const Details = ({}) => {
     setOpenPicker(false);
     setOpenPicker2(false);
     var result = await patientListFilter(
-      localUserId,"","","","","","",0
+      localUserId,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      0
     );
     setPatientList(result.response.content);
     setTotalElements(result?.response?.totalElements);
@@ -951,7 +963,14 @@ const Details = ({}) => {
     if (value == "Filter") {
       setFlagContainerActiveTitle("My Work Queue");
       var result = await patientListFilter(
-        localUserId,"","","","","","",0
+        localUserId,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0
       );
       setPatientList(result.response.content);
       setTotalElements(result?.response?.totalElements);
@@ -1410,6 +1429,24 @@ const Details = ({}) => {
   const allocatePatient = () => {
     setAllocateModal(true);
   };
+  const auditPatient = (value) => {
+    setConfirmAuditModal(true);
+  };
+  const updateAudit = async()=>{
+    var data = {
+      patientId: localPatientId,
+      dos: selectedDosValue,
+    };
+    var result = await auditPatientupdate(data);
+    if (result.status == "SUCCESS") {
+      setConfirmAuditModal(false);   
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  }
 
   return (
     <>
@@ -1725,6 +1762,28 @@ const Details = ({}) => {
                                 ALLOCATE
                               </span>
                             </div>
+                          </div>
+                        ) : userRole == "l2auditor" ? (
+                          <div className={`${visitStyles.actionbtnContainer}`}>
+                            <Dropdown.Button
+                                type="primary"
+                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                                icon={<DownOutlined />}
+                                overlay={ <Menu>
+                                  <Menu.Item key="1" onClick={() => auditPatient("audit")}>
+                                    <div className="patient-status">
+                                      <span className={`badge hold-text`}>Audit</span>
+                                    </div>
+                                  </Menu.Item>
+                                  <Menu.Item key="2" onClick={() => auditPatient("re-audit")}>
+                                    <div className="patient-status">
+                                      <span className={`badge failed-text`}>Re-Audit</span>
+                                    </div>
+                                  </Menu.Item>
+                                  </Menu>}
+                              >
+                                Audit
+                              </Dropdown.Button>
                           </div>
                         ) : (
                           <div className={`${visitStyles.actionbtnContainer}`}>
@@ -2769,214 +2828,212 @@ const Details = ({}) => {
                         )}
                       </div>
                     ) : flagContainerActive == "Filter" ? (
-                      <>    <div className={`row ${visitStyles.patientListHead}`}>
-                      <div
-                        className={visitStyles.flags}
-                        style={{ marginTop: "15px", marginBottom: "20px" }}
-                      >
-                        <div className={visitStyles.flags}>
-                          <span
-                            className={visitStyles.completed}
-                            style={{ background: "#3a9b94 !important" }}
-                          ></span>
-                          <span className={visitStyles.flagCodes}>
-                            Completed
-                          </span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.pending}></span>
-                          <span className={visitStyles.flagCodes}>
-                            Pending
-                          </span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.hold}></span>
-                          <span className={visitStyles.flagCodes}>Hold</span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.declined}></span>
-                          <span className={visitStyles.flagCodes}>
-                            Declined
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-xl-9">
-                        <div class="form-group has-search">
-                          <FontAwesomeIcon
-                            className="fa fa-search form-control-feedback"
-                            icon={faSearch}
-                          />
-                          <InputText
-                            type="text"
-                            onChange={(e) => filterChangePatientId(e)}
-                            className="form-control new-form-control"
-                            placeholder="Search"
-                          />
-                          <RangePicker
-                            open={openPicker}
-                            onChange={(dates, dateStrings) => {
-                              handleDatePickerChange(dateStrings);
-                            }}
-                            suffixIcon={false}
-                            className={visitStyles.datepicker}
-                          />
-                          <RangePicker
-                            open={openPicker2}
-                            onChange={(dates, dateStrings) => {
-                              handleChangeprocessedDate(dateStrings);
-                            }}
-                            suffixIcon={false}
-                            className={visitStyles.datepicker}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-xl-3">
-                        <div className={visitStyles.content}>
-                          <span
-                            className={visitStyles.circleCard}
-                            onClick={handleFilterClick}
+                      <>
+                        {" "}
+                        <div className={`row ${visitStyles.patientListHead}`}>
+                          <div
+                            className={visitStyles.flags}
+                            style={{ marginTop: "15px", marginBottom: "20px" }}
                           >
-                            <span></span>
-                            {showIcons ? (
+                            <div className={visitStyles.flags}>
+                              <span
+                                className={visitStyles.completed}
+                                style={{ background: "#3a9b94 !important" }}
+                              ></span>
+                              <span className={visitStyles.flagCodes}>
+                                Completed
+                              </span>
+                            </div>
+                            <div className={visitStyles.flags}>
+                              <span className={visitStyles.pending}></span>
+                              <span className={visitStyles.flagCodes}>
+                                Pending
+                              </span>
+                            </div>
+                            <div className={visitStyles.flags}>
+                              <span className={visitStyles.hold}></span>
+                              <span className={visitStyles.flagCodes}>
+                                Hold
+                              </span>
+                            </div>
+                            <div className={visitStyles.flags}>
+                              <span className={visitStyles.declined}></span>
+                              <span className={visitStyles.flagCodes}>
+                                Declined
+                              </span>
+                            </div>
+                          </div>
+                          <div className="col-xl-9">
+                            <div class="form-group has-search">
                               <FontAwesomeIcon
-                                icon={faClose}
-                                height={30}
-                                width={30}
-                                color="#A20404"
-                                onClick={() => closeFilterIcons(false)}
+                                className="fa fa-search form-control-feedback"
+                                icon={faSearch}
                               />
-                            ) : (
-                              SVGICON.filter
-                            )}
-                          </span>
-                          {showIcons && (
-                            <div className={visitStyles.iconContainer}>
-                              <Tooltip title="Status" placement="left">
-                                <span
-                                  className={visitStyles.circleCard}
-                                  onClick={handleShowCard}
-                                >
-                                  {SVGICON.dashboard}
-                                </span>
-                              </Tooltip>
-                              <Tooltip title="Due Date" placement="left">
-                                <span
-                                  className={visitStyles.circleCard}
-                                  onClick={() => {
-                                    setOpenPicker(!openPicker);
-                                  }}
-                                >
-                                  {SVGICON.dateIcon}
-                                </span>
-                              </Tooltip>
-                              <Tooltip
-                                title="Completed Date"
-                                placement="left"
+                              <InputText
+                                type="text"
+                                onChange={(e) => filterChangePatientId(e)}
+                                className="form-control new-form-control"
+                                placeholder="Search"
+                              />
+                              <RangePicker
+                                open={openPicker}
+                                onChange={(dates, dateStrings) => {
+                                  handleDatePickerChange(dateStrings);
+                                }}
+                                suffixIcon={false}
+                                className={visitStyles.datepicker}
+                              />
+                              <RangePicker
+                                open={openPicker2}
+                                onChange={(dates, dateStrings) => {
+                                  handleChangeprocessedDate(dateStrings);
+                                }}
+                                suffixIcon={false}
+                                className={visitStyles.datepicker}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-xl-3">
+                            <div className={visitStyles.content}>
+                              <span
+                                className={visitStyles.circleCard}
+                                onClick={handleFilterClick}
                               >
-                                <span
-                                  className={visitStyles.circleCard}
-                                  onClick={() => {
-                                    setOpenPicker2(!openPicker2);
-                                  }}
-                                >
-                                  {SVGICON.dateIcon}
-                                </span>
-                              </Tooltip>
-                            </div>
-                          )}
-                          {showCard && (
-                            <div
-                              className={visitStyles.menuCard}
-                              onMouseEnter={() => setShowCard(true)}
-                              onMouseLeave={() => setShowCard(false)}
-                            >
-                              <ul>
-                                {statuses.map((status, index) => (
-                                  <li
-                                    onClick={() =>
-                                      getFiltePatientListStatus(status)
-                                    }
-                                    className={visitStyles.nameList}
-                                    key={index}
-                                  >
-                                    {status}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      {!filterDataLoading ? (
-                        <>
-                          <div className={visitStyles.patientListHead}>
-                            <ul
-                              className={`${visitStyles.patientDetailsHead}`}
-                            >
-                              {patientList.map((data, index) => (
-                                <li
-                                  className={`${visitStyles.nameList} ${visitStyles.patientList}`}
-                                  key={index}
-                                  onClick={() =>
-                                    getPatientListToDetails(
-                                      data.patientId,
-                                      localOrgId,
-                                      localTenantId
-                                    )
-                                  }
-                                >
-                                  {data.patientId} - {data.patientName}
-                                  {data.processedStatus == "COMPLETED" ? (
+                                <span></span>
+                                {showIcons ? (
+                                  <FontAwesomeIcon
+                                    icon={faClose}
+                                    height={30}
+                                    width={30}
+                                    color="#A20404"
+                                    onClick={() => closeFilterIcons(false)}
+                                  />
+                                ) : (
+                                  SVGICON.filter
+                                )}
+                              </span>
+                              {showIcons && (
+                                <div className={visitStyles.iconContainer}>
+                                  <Tooltip title="Status" placement="left">
                                     <span
-                                      className={visitStyles.completed}
-                                      style={{
-                                        background: "#3a9b94 !important",
+                                      className={visitStyles.circleCard}
+                                      onClick={handleShowCard}
+                                    >
+                                      {SVGICON.dashboard}
+                                    </span>
+                                  </Tooltip>
+                                  <Tooltip title="Due Date" placement="left">
+                                    <span
+                                      className={visitStyles.circleCard}
+                                      onClick={() => {
+                                        setOpenPicker(!openPicker);
                                       }}
-                                    ></span>
-                                  ) : data.processedStatus == "PENDING" ||
-                                    data.processedStatus == "COMPUTED" ? (
+                                    >
+                                      {SVGICON.dateIcon}
+                                    </span>
+                                  </Tooltip>
+                                  <Tooltip
+                                    title="Completed Date"
+                                    placement="left"
+                                  >
                                     <span
-                                      className={visitStyles.pending}
-                                    ></span>
-                                  ) : data.processedStatus == "HOLD" ? (
-                                    <span className={visitStyles.hold}></span>
-                                  ) : data.processedStatus == "DECLINED" ? (
-                                    <span
-                                      className={visitStyles.declined}
-                                    ></span>
+                                      className={visitStyles.circleCard}
+                                      onClick={() => {
+                                        setOpenPicker2(!openPicker2);
+                                      }}
+                                    >
+                                      {SVGICON.dateIcon}
+                                    </span>
+                                  </Tooltip>
+                                </div>
+                              )}
+                              {showCard && (
+                                <div
+                                  className={visitStyles.menuCard}
+                                  onMouseEnter={() => setShowCard(true)}
+                                  onMouseLeave={() => setShowCard(false)}
+                                >
+                                  <ul>
+                                    {statuses.map((status, index) => (
+                                      <li
+                                        onClick={() =>
+                                          getFiltePatientListStatus(status)
+                                        }
+                                        className={visitStyles.nameList}
+                                        key={index}
+                                      >
+                                        {status}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          {!filterDataLoading ? (
+                            <>
+                              <div className={visitStyles.patientListHead}>
+                                <ul
+                                  className={`${visitStyles.patientDetailsHead}`}
+                                >
+                                  {patientList.map((data, index) => (
+                                    <li
+                                      className={`${visitStyles.nameList} ${visitStyles.patientList}`}
+                                      key={index}
+                                      onClick={() =>
+                                        getPatientListToDetails(
+                                          data.patientId,
+                                          localOrgId,
+                                          localTenantId
+                                        )
+                                      }
+                                    >
+                                      {data.patientId} - {data.patientName}
+                                      {data.processedStatus == "COMPLETED" ? (
+                                        <span
+                                          className={visitStyles.completed}
+                                          style={{
+                                            background: "#3a9b94 !important",
+                                          }}
+                                        ></span>
+                                      ) : data.processedStatus == "PENDING" ||
+                                        data.processedStatus == "COMPUTED" ? (
+                                        <span
+                                          className={visitStyles.pending}
+                                        ></span>
+                                      ) : data.processedStatus == "HOLD" ? (
+                                        <span
+                                          className={visitStyles.hold}
+                                        ></span>
+                                      ) : data.processedStatus == "DECLINED" ? (
+                                        <span
+                                          className={visitStyles.declined}
+                                        ></span>
+                                      ) : null}
+                                    </li>
+                                  ))}
+                                  {patientList.length == 0 ? (
+                                    <h5 className="text-center">NO DATA</h5>
                                   ) : null}
-                                </li>
-                              ))}
-                              {patientList.length == 0 ? (
-                                <h5 className="text-center">NO DATA</h5>
-                              ) : null}
-                            </ul>
-                           
-                          </div>
-                          
-                        </>
-                      ) : (
-                        <div className={visitStyles.userDetailsCard}>
-                          <div className="bouncing-loader">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                          </div>
+                                </ul>
+                              </div>
+                            </>
+                          ) : (
+                            <div className={visitStyles.userDetailsCard}>
+                               <LoadingSpinner />
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                    <div className="patient-filte-page">
-                    <Paginator
-                                first={paginationFirst}
-                                rows={15}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                    </div>
-                   
-                    </>
-                  
+                        <div className="patient-filte-page">
+                          <Paginator
+                            first={paginationFirst}
+                            rows={15}
+                            totalRecords={totalElements}
+                            onPageChange={onPageChange}
+                          />
+                        </div>
+                      </>
                     ) : flagContainerActive == "Comments" ? (
                       <div className="offcanvas-body">
                         <div className="container-fluid">
@@ -3214,6 +3271,19 @@ const Details = ({}) => {
           </div>
         </div>
       </div>
+
+      {confirmAuditModal ? (
+        <div className={visitStyles.completedModal}>
+          <Modal
+            title="Are you sure to audit this task?"
+            open={true}
+            centered
+            onOk={updateAudit}
+            onCancel={() =>setConfirmAuditModal(false)
+            }
+          ></Modal>
+        </div>
+      ) : null}
 
       <AllocateModal
         open={allocateModal}
