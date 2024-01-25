@@ -12,7 +12,7 @@ import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { getAccuracyScore } from "../../../../store/actions/l2Action/DashboardAction";
 import { Spin } from "antd";
-
+import spinSTYles from "../../../../styles/auth.module.css";
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstDayWeek = firstDayOfMonth.getDay();
@@ -190,18 +190,11 @@ const Accuracy = () => {
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading ? (
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
+                <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : (
+                accuracyDatas?.loading===false && accuracyDatas?.data?.response?
                 option && (
                   <ReactECharts
                     option={option}
@@ -212,7 +205,11 @@ const Accuracy = () => {
                       overflowX: "hidden",
                     }}
                   />
-                )
+                ):<div
+                className={spinSTYles.spinStyle}
+               >
+                 No datas Found
+               </div>
               )}
             </div>
             <div className={styles.accuracy}>

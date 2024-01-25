@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
 import { getHoldStatusData } from "../../../../store/actions/l2Action/DashboardAction";
-
+import spinSTYles from '../../../../styles/auth.module.css'
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
   const dispatch = useDispatch();
@@ -109,13 +109,7 @@ const HoldStatus = () => {
       >
         {holdStatusData?.laoding ? (
           <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+          className={spinSTYles.spinStyle}
           >
             <Spin loading={holdStatusData?.loading} />
           </div>

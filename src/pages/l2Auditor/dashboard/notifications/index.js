@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
-
+import spinSTYles from '../../../../styles/auth.module.css'
 const Notifications = () => {
   const [openNotifications, setOpenNotification] = useState(false);
   const notificationResponse = useSelector(
@@ -92,13 +92,7 @@ const Notifications = () => {
       >
         {notificationResponse?.loading ? (
           <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+          className={spinSTYles.spinStyle}
           >
             <Spin loading={notificationResponse?.loading} />
           </div>

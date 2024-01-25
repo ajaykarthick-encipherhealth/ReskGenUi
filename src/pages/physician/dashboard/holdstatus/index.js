@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
 import { getHoldStatusData } from "../../../../store/actions/l2Action/DashboardAction";
-
+import spinSTYles from "../../../../styles/auth.module.css";
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const HoldStatus = () => {
         </tr>
       </thead>
       <tbody className={styles.body}>
-        {processedData?.length > 0 ? (
+        {holdStatusData?.data?.response ? (
           processedData?.map((item, index) => (
             <tr
               key={index}
@@ -80,20 +80,19 @@ const HoldStatus = () => {
       />
       <div className={styles.card6}>
         <Card borderRadius="28px" padding="10px">
-          {holdStatusData?.laoding ? (
+          {holdStatusData?.loading ? (
             <div
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+            className={spinSTYles.spinStyle}
             >
               <Spin loading={holdStatusData?.loading} />
             </div>
           ) : (
-            <div className={styles.container}> {TableData}</div>
+            holdStatusData?.loading === false && (
+              <div className={styles.container} style={{ height: "500px" }}>
+                {" "}
+                {TableData} 
+              </div>
+            )
           )}
         </Card>
       </div>
@@ -107,23 +106,17 @@ const HoldStatus = () => {
         closable={true}
         onCancel={handleOk}
       >
-        {holdStatusData?.laoding ? (
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+        {holdStatusData?.loading ? (
+          <div className={spinSTYles.spinStyle}>
             <Spin loading={holdStatusData?.loading} />
           </div>
         ) : (
-          <div className={styles.container} style={{ height: "500px" }}>
-            {" "}
-            {TableData}
-          </div>
+          holdStatusData?.loading === false && holdStatusData?.data?.response && (
+            <div className={styles.container} style={{ height: "500px" }}>
+              {" "}
+              {TableData}
+            </div>
+          )
         )}
       </Modal>
     </>

@@ -13,7 +13,7 @@ import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
-
+import spinSTYles from '../../../../styles/auth.module.css'
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -342,13 +342,7 @@ const DailyTask = () => {
                 </Row>
               ) : (
                 <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+                className={spinSTYles.spinStyle}
                 >
                   <Spin loading={dailyStatusData?.loading} />
                 </div>

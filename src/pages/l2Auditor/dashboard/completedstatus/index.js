@@ -13,7 +13,7 @@ import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Spin } from "antd";
 import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
-
+import spinSTYles from "../../../../styles/auth.module.css";
 const CompletedStatus = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
@@ -183,22 +183,17 @@ const CompletedStatus = () => {
           </div>
 
           {completedDatas?.loading ? (
-            <div
-              style={{
-                width: "100%",
-                height: "90%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <div className={spinSTYles.spinStyle}>
               <Spin loading={completedDatas?.loading} />
             </div>
-          ) : (
+          ) : completedDatas?.loading === false &&
+            completedDatas?.data?.response ? (
             <ReactECharts
               option={option}
               style={{ width: "100%", height: "300px", marginTop: "-15px" }}
             />
+          ) : (
+            <div className={spinSTYles.spinStyle}>No datas Found</div>
           )}
           <div className={styles.bulletContainer}>
             <Legends bullets={bullets} />

@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
-
+import spinSTYles from "../../../../styles/auth.module.css";
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -72,7 +72,7 @@ const DailyTask = () => {
 
   useEffect(() => {
     if (dailyStatusData) {
-      getDays(selectedDate,  dailyStatusData?.data?.response);
+      getDays(selectedDate, dailyStatusData?.data?.response);
     }
   }, [dailyStatusData]);
 
@@ -92,7 +92,6 @@ const DailyTask = () => {
       return dispatch(getDailyTaskDatas(data?.dateString, router));
     });
   };
-
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
@@ -307,9 +306,8 @@ const DailyTask = () => {
                                       ? data?.decline
                                       : item.name === "Hold"
                                       ? data.hold
-                                      : item.name === "Completed"
-                                      && data?.completed
-                                      }
+                                      : item.name === "Completed" &&
+                                        data?.completed}
                                   </div>
                                 </div>
                               );
@@ -321,17 +319,9 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-                <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Spin loading={dailyStatusData?.loading} />
-              </div>
+                <div className={spinSTYles.spinStyle}>
+                  <Spin loading={dailyStatusData?.loading} />
+                </div>
               )}
 
               <div className={styles.infoCards}>

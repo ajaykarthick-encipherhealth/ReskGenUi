@@ -122,10 +122,10 @@
   line-height: 28px;
 }
 .contentMainDIv {
-    height: 100vh;
-    background-color: #fff;
-  }
-  
+  height: 100vh;
+  background-color: #fff;
+}
+
 .mfaMainDiv {
   display: flex;
   height: 60%;
@@ -165,14 +165,20 @@
   font-weight: 600;
   color: rgba(51, 154, 240, 1);
 }
-.verifyDiv{
-    width:100%;
-    height:200px;
-    background-color: #fff;
-    position: absolute;
+.verifyDiv {
+  width: 100%;
+  height: 200px;
+  background-color: #fff;
+  position: absolute;
 }
-.btnDiv{
-    width:100%;
-    display:flex;
-
+.btnDiv {
+  width: 100%;
+  display: flex;
+}
+.spinStyle {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

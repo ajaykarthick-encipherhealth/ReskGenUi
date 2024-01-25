@@ -6,6 +6,7 @@ import accuracy from "../../../../images/dashboard/accuracy.png";
 import Image from "next/image";
 import Card from "../../../../components/card/index";
 import styles from "./styles.module.css";
+import spinSTYles from '../../../../styles/auth.module.css'
 import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
@@ -191,17 +192,12 @@ const Accuracy = () => {
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading ? (
                 <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+                 className={spinSTYles.spinStyle}
                 >
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : (
+                accuracyDatas?.loading===false &&accuracyDatas?.data?.response?
                 option && (
                   <ReactECharts
                     option={option}
@@ -212,7 +208,11 @@ const Accuracy = () => {
                       overflowX: "hidden",
                     }}
                   />
-                )
+                ):<div
+                className={spinSTYles.spinStyle}
+               >
+                 No datas Found
+               </div>
               )}
             </div>
             <div className={styles.accuracy}>
@@ -229,8 +229,8 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {accuracyDatas?.response
-                    ? `${accuracyDatas?.response[highlightIndex + 1]}%`
+                  {accuracyDatas?.data?.response
+                    ? `${accuracyDatas?.data?.response[highlightIndex + 1]}%`
                     : "0%"}
                 </span>
               </div>

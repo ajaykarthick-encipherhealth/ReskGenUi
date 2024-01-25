@@ -16,7 +16,7 @@ import auditedbg from "../../.../../../../images/dashboard/auditedbg.png";
 import auditHold from "../../.../../../../images/dashboard/auditHold.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
-
+import spinSTYles from '../../../../styles/auth.module.css'
 import { useSelector } from "react-redux";
 
 const WorkFlow = () => {
@@ -87,7 +87,7 @@ const WorkFlow = () => {
       />
       <Card borderRadius="28px">
         {worlFlowData?.loading ? (
-         <div style={{width:"100%",height:"100%", display:"flex",justifyContent:"center",alignItems:"center"}}>
+         <div className={spinSTYles.spinStyle}>
            <Spin loading={worlFlowData?.loading} />
          </div>
         ) : (

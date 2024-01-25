@@ -14,6 +14,7 @@ import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
+import spinSTYles from '../../../../styles/auth.module.css'
 
 const WorkFlow = () => {
   const worlFlowData = useSelector((state) => state?.workFlow?.data);
@@ -68,13 +69,7 @@ const WorkFlow = () => {
       <Card borderRadius="28px">
         {worlFlowData?.loading ? (
           <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+          className={spinSTYles.spinStyle}
           >
             <Spin loading={worlFlowData?.loading} />
           </div>
