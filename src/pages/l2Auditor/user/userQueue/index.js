@@ -193,13 +193,7 @@ const index = () => {
                         isAllocatedBySelector={true}
                         allocatedBylabel="Select AllocatedBy"
                         allocatedByOptoons={
-                          userListAll?.content?.length > 0
-                            ? generateOptionsList(
-                                userListAll?.content,
-                                "allocatedBy",
-                                "All"
-                              )
-                            : []
+                          []
                         }
                         setSelAllocatedBy={setSelAllocatedBy}
                         defaultAllocatedBy={"All"}
