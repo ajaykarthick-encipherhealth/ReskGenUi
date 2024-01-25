@@ -15,22 +15,9 @@ import { highlightPlugin } from "@react-pdf-viewer/highlight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
-  faCheck,
-  faAdd,
-  faInfo,
-  faUser,
-  faSearch,
-  faCheckCircle,
-  faArrowLeft,
   faPlus,
-  faUserCircle,
-  faVenusMars,
-  faCalendarAlt,
-  faIdCardClip,
-  faCog,
-  faClock,
   faArrowsAlt,
-  faCalendar,
+  faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
@@ -283,12 +270,7 @@ const NonHcc = ({ patientNonHccResult }) => {
     setvalidHccDetails(userSpinner);
   }, []);
 
-  const getPatientDetails = async (
-    patientId,
-    orgId,
-    tenId,
-    reload
-  ) => {
+  const getPatientDetails = async (patientId, orgId, tenId, reload) => {
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
     setNewUnMatchHccList([]);
@@ -308,15 +290,15 @@ const NonHcc = ({ patientNonHccResult }) => {
 
     var result = patientNonHccResult;
 
-    if(reload == "reload"){
-    var patientId = localStorage.getItem("patientId");
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-      `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
-    );
-    result = response.data.response;
+    if (reload == "reload") {
+      var patientId = localStorage.getItem("patientId");
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+      );
+      result = response.data.response;
     }
-  
+
     if (result) {
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -384,7 +366,6 @@ const NonHcc = ({ patientNonHccResult }) => {
             defaultPosition: res.defaultPosition,
           });
         });
-
         result.invalidDisease.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
           invalidDiseaseNewRes.push({
@@ -396,6 +377,7 @@ const NonHcc = ({ patientNonHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
+            providerName: res.provider,
           });
         });
 
@@ -487,15 +469,6 @@ const NonHcc = ({ patientNonHccResult }) => {
                 defaultPosition: res.defaultPosition,
               });
             } else {
-              // suggestListAll.push({
-              //   actualDescription: res.actualDescription,
-              //   diagnosisCodeFinding: res.diagnosisCodeFinding,
-              //   isHccValid: res.isHccValid,
-              //   capturedSections: res.capturedSections,
-              //   diagnosisCode: res.diagnosisCodeFinding,
-              //   encounterDate: res.encounterDate,
-              //   getPlace: "Hcc",
-              // });
               suggestListAllNonHcc.push({
                 actualDescription: res.actualDescription,
                 diagnosisCodeFinding: res.diagnosisCode,
@@ -523,8 +496,8 @@ const NonHcc = ({ patientNonHccResult }) => {
           invalidDiseasesArray.push({ name: invalidDis[key] });
         }
         for (var key in validDis) {
-          validDiseasesArray.push({ name: validDis[key] });        }
-
+          validDiseasesArray.push({ name: validDis[key] });
+        }
 
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -537,7 +510,6 @@ const NonHcc = ({ patientNonHccResult }) => {
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
-
 
         var capturedSectionsColorsMatching = [];
         var capturedSectionsArr = [];
@@ -612,7 +584,6 @@ const NonHcc = ({ patientNonHccResult }) => {
           });
         });
 
-
         const response = await axios.get(
           ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
         );
@@ -642,7 +613,6 @@ const NonHcc = ({ patientNonHccResult }) => {
           );
         });
 
-
         var newArrayColorMatchs = [];
         newArrayColorMatchs = [
           ...sectionColorResultMatch,
@@ -650,7 +620,6 @@ const NonHcc = ({ patientNonHccResult }) => {
         ];
 
         setCaptureSectionMatching(newArrayColorMatchs);
-
 
         // setCaptureSectionMatching(capturedSectionsColorsMatching);
 
@@ -915,7 +884,7 @@ const NonHcc = ({ patientNonHccResult }) => {
       );
     });
 
-   const confirmInvalid = () =>
+  const confirmInvalid = () =>
     new Promise((resolve) => {
       resolve(setConfirmNotesModalInValid(true));
     });
@@ -1197,7 +1166,7 @@ const NonHcc = ({ patientNonHccResult }) => {
         placement: "top",
         duration: 1,
       });
-      getPatientDetails(localPatientId, localOrgId, localTenantId,"reload");
+      getPatientDetails(localPatientId, localOrgId, localTenantId, "reload");
     } else {
     }
   };
@@ -1226,7 +1195,7 @@ const NonHcc = ({ patientNonHccResult }) => {
         placement: "top",
         duration: 1,
       });
-      getPatientDetails(localPatientId, localOrgId, localTenantId,"reload");
+      getPatientDetails(localPatientId, localOrgId, localTenantId, "reload");
     } else {
     }
   };
@@ -1268,7 +1237,7 @@ const NonHcc = ({ patientNonHccResult }) => {
               documentPlace,
               encounterDate,
               headerNames,
-              actualDescription,
+              actualDescription
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
@@ -1299,7 +1268,6 @@ const NonHcc = ({ patientNonHccResult }) => {
     });
   };
 
-
   const handleChangeSuggested = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
@@ -1313,7 +1281,7 @@ const NonHcc = ({ patientNonHccResult }) => {
           <div className="custom-tab-1">
             <Tab.Container defaultActiveKey={activeTabHead}>
               <Nav as="ul" className="nav nav-tabs">
-              <Nav.Item as="li" className="nav-item">
+                <Nav.Item as="li" className="nav-item">
                   <Nav.Link
                     to="#my-posts"
                     className={visitStyles.navColor}
@@ -1353,7 +1321,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                     MEAT Criteria
                   </Nav.Link>
                 </Nav.Item>
-             </Nav>
+              </Nav>
               <Tab.Content>
                 <Tab.Pane id="my-posts" eventKey="validDiseases">
                   <div className="my-post-content pt-3">
@@ -1419,9 +1387,38 @@ const NonHcc = ({ patientNonHccResult }) => {
                                     <div
                                       className={`${visitStyles.hoverActiveHcc}`}
                                     >
-                                      {getEncounterDateBackground(
-                                        data.encounterDateSplit
-                                      )}
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {data?.providerName?.map((res) => (
+                                          <Badge
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
+                                          >
+                                            <i>
+                                              {" "}
+                                              <FontAwesomeIcon
+                                                icon={faCircleUser}
+                                                style={{
+                                                  size: 10,
+                                                  color:
+                                                    res.authorizedProvider ===
+                                                    true
+                                                      ? "#ffa500"
+                                                      : "#ff0000cc",
+                                                }}
+                                              />
+                                            </i>
+                                            {res.providerName}
+                                          </Badge>
+                                        ))}
+                                        {getEncounterDateBackground(
+                                          data.encounterDateSplit
+                                        )}
+                                      </div>
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
@@ -2020,9 +2017,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                 <Tab.Pane id="my-posts" eventKey="RafScore">
                   <div className="my-post-content pt-3">
                     <div className="row">
-                      <div className="col-xl-3">
-                       
-                      </div>
+                      <div className="col-xl-3"></div>
                       {rafScore != null ? (
                         <div className="col-xl-12">
                           {rafScore.scoreOutputDTOList != null ? (
@@ -2389,7 +2384,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                   >
                     {" "}
                     <Viewer
-                    initialPage={fileInitialPage}
+                      initialPage={fileInitialPage}
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
                       onDocumentLoad={handleDocumentLoad}

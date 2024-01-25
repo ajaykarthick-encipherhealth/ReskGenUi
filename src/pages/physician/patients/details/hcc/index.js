@@ -29,6 +29,9 @@ import {
   faClock,
   faArrowsAlt,
   faCalendar,
+  faCircle,
+  faCircleUp,
+  faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
@@ -158,7 +161,7 @@ const Hcc = ({ patientHccResult }) => {
     headerName: "",
     queryComment: "",
     reason: "",
-    diagnosisCodeQuery:""
+    diagnosisCodeQuery: "",
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -445,7 +448,7 @@ const Hcc = ({ patientHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res.providerName,
+            providerName: res.provider,
           });
         });
 
@@ -475,7 +478,7 @@ const Hcc = ({ patientHccResult }) => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
-              providerName: res.providerName,
+              providerName: res.provider,
             });
           });
         }
@@ -497,7 +500,7 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Radio",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
-              providerName: res.providerName,
+              providerName: res.provider,
             });
           });
 
@@ -551,7 +554,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
                 defaultPosition: res.defaultPosition,
-                providerName: res.providerName,
+                providerName: res.provider,
               });
             } else {
               // suggestListAll.push({
@@ -572,7 +575,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
-                providerName: res.providerName,
+                providerName: res.provider,
               });
             }
           });
@@ -2788,6 +2791,31 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
 
+  const getProviderNameList = (data) => {
+    var value = data?.map((res) => (
+      <Badge
+        className={
+          res.authorizedProvider === true
+            ? `mt-2 text-start ${visitStyles.provider_name}`
+            : `mt-2 text-start ${visitStyles.un_provider_name}`
+        }
+      >
+        <i>
+          {" "}
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            style={{
+              size: 10,
+              color: res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+            }}
+          />
+        </i>
+        {res.providerName}
+      </Badge>
+    ));
+    return value;
+  };
+
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>
@@ -3036,18 +3064,16 @@ const Hcc = ({ patientHccResult }) => {
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
-                                          {data.providerName ? (
-                                            <Badge
-                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                            >
-                                              <i>{SVGICON.patientNameIcon}</i>
-                                              {data.providerName}
-                                            </Badge>
-                                          ) : null}
+                                          {getProviderNameList(
+                                            data?.providerName
+                                          )}
                                           {getEncounterDateBackground(
                                             data.encounterDateSplit
                                           )}
                                         </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        ></div>
 
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
@@ -3263,18 +3289,9 @@ const Hcc = ({ patientHccResult }) => {
                                                 <div
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
-                                                  {data.providerName ? (
-                                                    <Badge
-                                                      className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                                    >
-                                                      <i>
-                                                        {
-                                                          SVGICON.patientNameIcon
-                                                        }
-                                                      </i>
-                                                      {data.providerName}
-                                                    </Badge>
-                                                  ) : null}
+                                                  {getProviderNameList(
+                                                    data?.providerName
+                                                  )}
                                                   {getEncounterDateBackground(
                                                     data.encounterDateSplit
                                                   )}
@@ -3460,14 +3477,9 @@ const Hcc = ({ patientHccResult }) => {
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                            {data.providerName ? (
-                                              <Badge
-                                                className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                              >
-                                                <i>{SVGICON.patientNameIcon}</i>
-                                                {data.providerName}
-                                              </Badge>
-                                            ) : null}
+                                            {getProviderNameList(
+                                              data?.providerName
+                                            )}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}
@@ -4495,14 +4507,9 @@ const Hcc = ({ patientHccResult }) => {
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
-                                        {data.providerName ? (
-                                          <Badge
-                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                          >
-                                            <i>{SVGICON.patientNameIcon}</i>
-                                            {data.providerName}
-                                          </Badge>
-                                        ) : null}
+                                        {getProviderNameList(
+                                          data?.providerName
+                                        )}
                                         {getEncounterDateBackground(
                                           data.encounterDateSplit
                                         )}
@@ -4915,18 +4922,9 @@ const Hcc = ({ patientHccResult }) => {
                                                 <div
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
-                                                  {data.providerName ? (
-                                                    <Badge
-                                                      className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                                    >
-                                                      <i>
-                                                        {
-                                                          SVGICON.patientNameIcon
-                                                        }
-                                                      </i>
-                                                      {data.providerName}
-                                                    </Badge>
-                                                  ) : null}
+                                                  {getProviderNameList(
+                                                    data?.providerName
+                                                  )}
                                                   {getEncounterDateBackground(
                                                     data.encounterDateSplit
                                                   )}
@@ -5124,14 +5122,9 @@ const Hcc = ({ patientHccResult }) => {
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                            {data.providerName ? (
-                                              <Badge
-                                                className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                              >
-                                                <i>{SVGICON.patientNameIcon}</i>
-                                                {data.providerName}
-                                              </Badge>
-                                            ) : null}
+                                            {getProviderNameList(
+                                                    data?.providerName
+                                                  )}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}
@@ -6127,7 +6120,9 @@ const Hcc = ({ patientHccResult }) => {
               <div className="row">
                 <div className="col-xl-6">
                   <div className={styles.publishedByDetails}>
-                    <span className={styles.meatQueried_head}>{meatQueryResult.diagnosisCode}</span>
+                    <span className={styles.meatQueried_head}>
+                      {meatQueryResult.diagnosisCode}
+                    </span>
                     <p className={styles.meatQueried_details}>
                       {meatQueryResult.description}
                     </p>
@@ -6159,23 +6154,29 @@ const Hcc = ({ patientHccResult }) => {
                 <div>
                   <span className={styles.meatQueried_head}>Subject</span>
                   <p className={styles.meatQueried_details}>
-                  We've pinpointed the following details that may pertain to records associated with <b>{patientHccResult?.patientName}</b>.
+                    We've pinpointed the following details that may pertain to
+                    records associated with{" "}
+                    <b>{patientHccResult?.patientName}</b>.
                   </p>
                 </div>
                 <div>
-                  <span className={styles.meatQueried_head}>Dear Dr {meatQueryResult.providerName}</span>
-                  {!meatQueriedDetailsShow ?
-                  <p className={styles.meatQueried_details}>
-                    {meatQueryResult.queryComment}
-                  </p>:
+                  <span className={styles.meatQueried_head}>
+                    Dear Dr {meatQueryResult.providerName}
+                  </span>
+                  {!meatQueriedDetailsShow ? (
+                    <p className={styles.meatQueried_details}>
+                      {meatQueryResult.queryComment}
+                    </p>
+                  ) : (
                     <textarea
-                    className={`${styles.queryTextarea}`}
+                      className={`${styles.queryTextarea}`}
                       id="queryComment"
                       name="queryComment"
                       onChange={handleChange}
                       rows="5"
                       value={inputValue.queryComment}
-                    ></textarea>}
+                    ></textarea>
+                  )}
                 </div>
               </div>
             </div>
