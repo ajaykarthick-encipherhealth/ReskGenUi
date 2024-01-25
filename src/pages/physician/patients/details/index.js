@@ -611,16 +611,6 @@ const Details = ({}) => {
         default:
           null;
       }
-      
-      // if (isValidAction == "declineFunction") {
-      //   handleSubmitHccDeclineApi();
-      // }
-      // if (isValidAction == "holdFunction") {
-      //   handleSubmitHccHold();
-      // }
-      // if (isValidAction == "pendingFunction") {
-      //   handleSubmitHccPending();
-      // }
     }
     setValidated(true);
   };
