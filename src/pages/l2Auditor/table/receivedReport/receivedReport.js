@@ -6,8 +6,6 @@ import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../../store/actions/ReportActions";
-
-
 import { Empty } from "antd";
 import Footer from "../../../../jsx/layouts/Footer";
 import { dateFormate } from "../../../../components/headerFilters/functions";

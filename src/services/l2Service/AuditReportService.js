@@ -3,9 +3,10 @@ import ENDPOINTS from "../../utility/enpoints";
 
 export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="") => {
   const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
 
   const searchValue = filter === "ALL" ? "" : filter
- const url=`dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}`
+ const url=`dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}`
 
   try {
     const response = await axios.get(
@@ -21,6 +22,28 @@ export const patientDetails = async (pagenum,startDate="",endDate="",search,filt
     console.log(err);
   }
 };
+export const TeamReport = async (pagenum,startDate="",endDate="",search,filter="") => {
+    const token = localStorage.getItem("token");
+    const orgId = localStorage.getItem("orgId");
+  
+    const searchValue = filter === "ALL" ? "" : filter
+   const url=`dbservice/patient/auditorreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}`
+  
+    try {
+      const response = await axios.get(
+        `${ENDPOINTS?.apiEndoint}${url}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 export const AuditSentReport = async (pagenum,startDate="",endDate="",search) => {
   const token = localStorage.getItem("token");
  

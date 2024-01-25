@@ -3,6 +3,7 @@ import Select from "react-select";
 import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
 import Image from "next/image";
+import dayjs from 'dayjs'
 import styles from "../../pages/physician/report/report.module.css";
 import allocateStyle from "../../pages/admin/allocatedUser/allocate/style.module.css";
 import Export from "../../images/svg/Export";
@@ -185,8 +186,8 @@ const HeaderFilters = ({
                 <label>{pickerlabe2}</label>
                 <div>
                   <RangePicker
-                    format="MM-DD-YYYY"
-                    value={selectedDates2}
+                    format="YYYY-MM-DD"
+                    // value={dayjs(selectedDates2).format('MM-DD-YYYY')}
                     onChange={(date, dateString) =>
                       handleRnagePicker2({
                         date,
@@ -198,8 +199,8 @@ const HeaderFilters = ({
                     defaultValue={
                       defaultEndDate2 && defaultStartDate2
                         ? [
-                            dayjs(defaultStartDate2, "MM-DD-YYYY"),
-                            dayjs(defaultEndDate2, "MM-DD-YYYY"),
+                            dayjs(defaultStartDate2, "YYYY-MM-DD"),
+                            dayjs(defaultEndDate2, "YYYY-MM-DD"),
                           ]
                         : []
                     }
@@ -352,7 +353,7 @@ const HeaderFilters = ({
                   <label>{pickerlabe3}</label>
                   <div>
                     <RangePicker
-                      format="MM-DD-YYYY"
+                      format="YYYY-MM-DD"
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
                           date,
@@ -372,7 +373,7 @@ const HeaderFilters = ({
                   <label>{pickerlabe4}</label>
                   <div>
                     <RangePicker
-                      format="MM-DD-YYYY"
+                      format="YYYY-MM-DD"
                       onChange={(date, dateString) =>
                         handleRnagePicker2({
                           date,

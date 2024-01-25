@@ -23,6 +23,7 @@ const DateRangePicker = ({
       <label>{pickerlabel}</label>
       <div>
         <RangePicker
+          format={"YYYY-MM-DD"}
           value={selectedDates}
           onChange={(date, dateString) =>
             handleRnagePicker(
