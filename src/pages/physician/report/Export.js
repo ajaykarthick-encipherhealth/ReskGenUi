@@ -24,7 +24,7 @@ const Export = ({
   setSelectedRows,
   setSelectAll,
 }) => {
-  const usersList = useSelector((state) => state.report.usersList);
+  const usersList = useSelector((state) => state.report?.usersList);
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
@@ -165,7 +165,7 @@ const Export = ({
 
   const onFinish = (values) => {
     const patientIds = rowsLength?.data?.map((item) => item?.patientId);
-    const userAndAccess = userList.reduce((result, { user, role }) => {
+    const userAndAccess = userList?.reduce((result, { user, role }) => {
       result[user] = role;
       return result;
     }, {});
