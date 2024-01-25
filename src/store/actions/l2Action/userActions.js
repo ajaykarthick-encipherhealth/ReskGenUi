@@ -48,7 +48,7 @@ export const getL2IndividualUser = (
 ) => {
   return (dispatch) => {
     dispatch({
-      type: USERS,
+      type: INDIVIAULUSER,
       payload: {
         loading: true,
       },
