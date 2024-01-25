@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactECharts from "echarts-for-react";
 import left from "../../../../images/dashboard/left.png";
 import right from "../../../../images/dashboard/right.png";
-import { Col, Empty, Row } from "antd";
+import { Col, Empty, Row, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
-
+import spinSTYles from "../../../../styles/auth.module.css";
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -72,7 +72,7 @@ const DailyTask = () => {
 
   useEffect(() => {
     if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData);
+      getDays(selectedDate, dailyStatusData?.data?.response);
     }
   }, [dailyStatusData]);
 
@@ -326,7 +326,9 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-                <Empty />
+                <div className={spinSTYles.spinStyle}>
+                  <Spin loading={dailyStatusData?.loading} />
+                </div>
               )}
 
               <div className={styles.infoCards}>

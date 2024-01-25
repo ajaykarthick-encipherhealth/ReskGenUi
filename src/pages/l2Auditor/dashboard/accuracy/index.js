@@ -11,7 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { getAccuracyScore } from "../../../../store/actions/l2Action/DashboardAction";
-
+import { Spin } from "antd";
+import spinSTYles from "../../../../styles/auth.module.css";
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstDayWeek = firstDayOfMonth.getDay();
@@ -52,7 +53,9 @@ const Accuracy = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const dispatch = useDispatch();
   const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
-  const numberOfWeeks = accuracyDatas?.response && Object.keys(accuracyDatas?.response)?.length;
+  const numberOfWeeks =
+    accuracyDatas?.data?.response &&
+    Object.keys(accuracyDatas?.data?.response)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -100,8 +103,8 @@ const Accuracy = () => {
   }
 
   let data = [];
-  if (currentBtn && accuracyDatas?.response) {
-    data = Object.values(accuracyDatas?.response);
+  if (currentBtn && accuracyDatas?.data?.response) {
+    data = Object.values(accuracyDatas?.data?.response);
   }
   const option = {
     xAxis: {
@@ -115,8 +118,8 @@ const Accuracy = () => {
       show: true,
 
       formatter: function (params) {
-        let tooltipContent = '';
-      
+        let tooltipContent = "";
+
         if (Array.isArray(params)) {
           params.forEach((item) => {
             const allocatedValue = Number(item.data).toFixed(2);
@@ -126,10 +129,9 @@ const Accuracy = () => {
           const allocatedValue = Number(params.data).toFixed(2);
           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
         }
-      
+
         return tooltipContent;
       },
-      
     },
     series: [
       {
@@ -152,8 +154,8 @@ const Accuracy = () => {
   return (
     <>
       <HeadTitle header="Accuracy Score" />
-      <div className={styles.card3} >
-        <Card borderRadius="28px" padding="10px" >
+      <div className={styles.card3}>
+        <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
             <div className={styles.picker}>
               <YearPicker
@@ -187,15 +189,28 @@ const Accuracy = () => {
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              <ReactECharts
-                option={option}
-                style={{
-                  width: "100%",
-                  height: "340px",
-                  marginTop: "-30px",
-                  overflowX: "hidden",
-                }}
-              />
+              {accuracyDatas?.loading ? (
+                <div className={spinSTYles.spinStyle}>
+                  <Spin loading={accuracyDatas?.loading} />
+                </div>
+              ) : (
+                accuracyDatas?.loading===false && accuracyDatas?.data?.response?
+                option && (
+                  <ReactECharts
+                    option={option}
+                    style={{
+                      width: "100%",
+                      height: "340px",
+                      marginTop: "-30px",
+                      overflowX: "hidden",
+                    }}
+                  />
+                ):<div
+                className={spinSTYles.spinStyle}
+               >
+                 No datas Found
+               </div>
+              )}
             </div>
             <div className={styles.accuracy}>
               <div className={styles.header}>
@@ -210,9 +225,11 @@ const Accuracy = () => {
                   : `Week ${getDateWeek(currentDate)}`}
               </div>
               <div className={styles.percentage}>
-                <span className={styles.insideTitle}>{accuracyDatas?.response 
-                  ? `${accuracyDatas?.response[highlightIndex + 1]}%`
-                  : "0%"}</span>
+                <span className={styles.insideTitle}>
+                  {accuracyDatas?.response
+                    ? `${accuracyDatas?.response[highlightIndex + 1]}%`
+                    : "0%"}
+                </span>
               </div>
             </div>
           </div>

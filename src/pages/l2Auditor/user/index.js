@@ -7,11 +7,11 @@ import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
 import SpinnerDots from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
-import { getL2Users } from "../../../store/actions/l2Actions/userActions";
+import { getL2Users } from "../../../store/actions/l2Action/userActions";
 
 const UserList = () => {
   const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.l1User.data);
+  const usersData = useSelector((state) => state.l2User.data);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);

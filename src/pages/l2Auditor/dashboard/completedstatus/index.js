@@ -10,9 +10,10 @@ import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import { getCOmpletedScore } from "../../../../store/actions/DashboardActions";
 import { useRouter } from "next/router";
-
+import { Spin } from "antd";
+import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
+import spinSTYles from "../../../../styles/auth.module.css";
 const CompletedStatus = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
@@ -36,21 +37,23 @@ const CompletedStatus = () => {
   }, [currentBtn, selectedMonth, selectedYear]);
 
   const completedDatas = useSelector((state) => state?.workFlow?.completed);
-  const CompletedSortedData = completedDatas?.response?.completedData?.sort(
-    (a, b) => a._id.month - b._id.month
-  );
-  const ALlocatedSortedData = completedDatas?.response?.allocatedData?.sort(
-    (a, b) => a._id.month - b._id.month
-  );
+  const CompletedSortedData =
+    completedDatas?.data?.response?.completedData?.sort(
+      (a, b) => a._id.month - b._id.month
+    );
+  const ALlocatedSortedData =
+    completedDatas?.data?.response?.allocatedData?.sort(
+      (a, b) => a._id.month - b._id.month
+    );
 
   const allocatedData = CompletedSortedData?.map((item) => item?.count);
   const completedData = ALlocatedSortedData?.map((item) => item?.count);
 
   const completedWeeks = new Set(
-    completedDatas?.response?.completedData?.map((item) => item._id.week)
+    completedDatas?.data?.response?.completedData?.map((item) => item._id.week)
   );
   const allocatedWeeks = new Set(
-    completedDatas?.response?.allocatedData?.map((item) => item._id.week)
+    completedDatas?.data?.response?.allocatedData?.map((item) => item._id.week)
   );
   const uniqueWeeks = new Set([...completedWeeks, ...allocatedWeeks]);
 
@@ -179,10 +182,19 @@ const CompletedStatus = () => {
             </div>
           </div>
 
-          <ReactECharts
-            option={option}
-            style={{ width: "100%", height: "300px", marginTop: "-15px" }}
-          />
+          {completedDatas?.loading ? (
+            <div className={spinSTYles.spinStyle}>
+              <Spin loading={completedDatas?.loading} />
+            </div>
+          ) : completedDatas?.loading === false &&
+            completedDatas?.data?.response ? (
+            <ReactECharts
+              option={option}
+              style={{ width: "100%", height: "300px", marginTop: "-15px" }}
+            />
+          ) : (
+            <div className={spinSTYles.spinStyle}>No datas Found</div>
+          )}
           <div className={styles.bulletContainer}>
             <Legends bullets={bullets} />
           </div>

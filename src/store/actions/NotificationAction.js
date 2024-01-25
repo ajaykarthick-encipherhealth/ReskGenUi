@@ -1,52 +1,52 @@
-import {NotificationList} from "../../services/NotificationService";
+import { NotificationList } from "../../services/NotificationService";
 
 export const NOTIFICATION_ALERT = "NOTIFICATION_ALERT";
 export const NOTIFICATION_LIST = "NOTIFICATION_LIST";
 export const NOTIFICATION_ALERT_CLEAR = "NOTIFICATION_ALERT_CLEAR";
 
-
-
-
 export const getNotificationAlert = (data) => {
-    return (dispatch) => {
-      try {
-      
-          dispatch({
-            type: NOTIFICATION_ALERT,
-            payload: data,
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  return (dispatch) => {
+    try {
+      dispatch({
+        type: NOTIFICATION_ALERT,
+        payload: data,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
+};
 
-
-  export const getNotificationAlertClear = (data) => {
-    return (dispatch) => {
-      try {
-      
-          dispatch({
-            type: NOTIFICATION_ALERT_CLEAR,
-            payload: data,
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    };
+export const getNotificationAlertClear = (data) => {
+  return (dispatch) => {
+    try {
+      dispatch({
+        type: NOTIFICATION_ALERT_CLEAR,
+        payload: data,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
-  
-  export const getNotificationList = (userId) => {
-    return (dispatch) => {
-      try {
-        NotificationList(userId).then((response) => {
-          dispatch({
-            type: NOTIFICATION_LIST,
-            payload: response,
-          });
+};
+
+export const getNotificationList = (userId) => {
+  return (dispatch) => {
+    dispatch({
+      type: NOTIFICATION_LIST,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      NotificationList(userId).then((response) => {
+        dispatch({
+          type: NOTIFICATION_LIST,
+          payload: { data: response, loading: false },
         });
-      } catch (err) {
-        console.log(err);
-      }
-    };
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
+};
