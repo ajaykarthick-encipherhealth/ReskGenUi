@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactECharts from "echarts-for-react";
 import left from "../../../../images/dashboard/left.png";
 import right from "../../../../images/dashboard/right.png";
-import { Col, Empty, Row } from "antd";
+import { Col, Empty, Row, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
@@ -38,10 +38,10 @@ const DailyTask = () => {
       color: "#C26100",
       name: "ReAudited",
     },
-  
- 
- 
-  
+    {
+      color: "#EB5252",
+      name: "Declined",
+    },
   ];
   const daysOfWeek = [
     "Sunday",
@@ -53,7 +53,7 @@ const DailyTask = () => {
     "Saturday",
   ];
 
-  const router = useRouter;
+  const router = useRouter();
   useEffect(() => {
     const days = [];
     for (let i = 0; i < 3; i++) {
@@ -76,7 +76,7 @@ const DailyTask = () => {
 
   useEffect(() => {
     if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData);
+      getDays(selectedDate, dailyStatusData?.data?.response);
     }
   }, [dailyStatusData]);
 
@@ -97,7 +97,6 @@ const DailyTask = () => {
     });
   };
 
-
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = statusData?.find((status) => {
@@ -111,8 +110,9 @@ const DailyTask = () => {
         pending: matchingStatusData?.response?.auditPending || 0,
         hold: matchingStatusData?.response?.auditHold || 0,
         audited: matchingStatusData?.response?.audited || 0,
-        reAudited:matchingStatusData?.response?.reAudited || 0,
-        allocated: matchingStatusData?.response?.auditAllocated|| 0,
+        reAudited: matchingStatusData?.response?.reAudited || 0,
+        allocated: matchingStatusData?.response?.auditAllocated || 0,
+        declined: matchingStatusData?.response?.auditDeclined || 0,
       };
     });
     const sorted = processedDays?.sort((a, b) => {
@@ -122,7 +122,14 @@ const DailyTask = () => {
     });
     return setCurrentDays(sorted);
   };
-  const getChartOption = (allocated, pending, hold, audited, reAudited) => {
+  const getChartOption = (
+    allocated,
+    pending,
+    hold,
+    audited,
+    reAudited,
+    declined
+  ) => {
     return {
       tooltip: {
         trigger: "item",
@@ -168,7 +175,13 @@ const DailyTask = () => {
                 color: "#C26100",
               },
             },
-           
+            {
+              value: declined,
+              name: "Declined",
+              itemStyle: {
+                color: "#EB5252",
+              },
+            },
           ],
         },
         {
@@ -248,14 +261,14 @@ const DailyTask = () => {
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
-                        onClick={() => {
-                          dispatch(
-                            getFilteredList({
-                              dayDate: data?.dateString,
-                            })
-                          );
-                          router?.push("/physician/patients");
-                        }}
+                        // onClick={() => {
+                        //   dispatch(
+                        //     getFilteredList({
+                        //       dayDate: data?.dateString,
+                        //     })
+                        //   );
+                        //   router?.push("/l2Auditor/user");
+                        // }}
                       >
                         <div className={styles.headerDisplay}>
                           <span> {data.day}</span>
@@ -274,7 +287,8 @@ const DailyTask = () => {
                                 data?.pending,
                                 data?.hold,
                                 data?.reAudited,
-                                data?.audited
+                                data?.audited,
+                                data?.declined
                               )}
                               style={{ width: "100%", height: "200px" }}
                             />
@@ -287,15 +301,15 @@ const DailyTask = () => {
                                 <div className={styles.container}>
                                   <div
                                     style={{ display: "flex" }}
-                                    onClick={() => {
-                                      dispatch(
-                                        getFilteredList({
-                                          date: data?.dateString,
-                                          status: item?.name,
-                                        })
-                                      );
-                                      router?.push("/physician/patients");
-                                    }}
+                                    // onClick={() => {
+                                    //   dispatch(
+                                    //     getFilteredList({
+                                    //       date: data?.dateString,
+                                    //       status: item?.name,
+                                    //     })
+                                    //   );
+                                    //   router?.push("/physician/patients");
+                                    // }}
                                   >
                                     <div
                                       className={styles.bgColor}
@@ -313,8 +327,9 @@ const DailyTask = () => {
                                       : item.name === "Hold"
                                       ? data.hold
                                       : item.name === "ReAudited"
-                                      && data?.reAudited
-                                      }
+                                      ? data?.reAudited
+                                      : item.name === "Declined" &&
+                                        data.declined}
                                   </div>
                                 </div>
                               );
@@ -326,7 +341,17 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-               <Empty/>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Spin loading={dailyStatusData?.loading} />
+                </div>
               )}
 
               <div className={styles.infoCards}>

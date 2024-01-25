@@ -1,4 +1,4 @@
-import { l2Users } from "../../../services/l2Services/userService";
+import { L2UsersReducer } from "../../reducers/l2Reducers/usersReducers";
 
 export const USERS = "USERS";
 
@@ -11,14 +11,16 @@ export const getL2Users = ({ pageCount, orgId, search }) => {
       },
     });
     try {
-      l2Users({pageCount, orgId, search}).then((response) => {
-        dispatch({
+      L2UsersReducer({pageCount, orgId, search}).then((response) => {
+       if(response){
+         dispatch({
           type: USERS,
           payload: {
             data: response?.data,
             loading: false,
           },
         });
+       }
       });
     } catch (err) {
       console.log(err);

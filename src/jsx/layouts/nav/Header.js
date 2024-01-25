@@ -70,6 +70,7 @@ const Header = () => {
   const notificationResponse = useSelector(
     (state) => state?.notificationDatas?.notificationList
   );
+
   const msgReply = useSelector((state) => state.workFlow.chatReply);
 
   const codDetails = useSelector((state) => state.auth.codeDetails);
@@ -499,7 +500,7 @@ const Header = () => {
         open={open}
       >
         {!openMsg ? (
-          <Notification notificationResponse={notificationResponse} />
+          <Notification notificationResponse={notificationResponse?.data} />
         ) : null}
       </Drawer>
     </div>

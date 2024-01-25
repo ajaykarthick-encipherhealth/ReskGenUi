@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Paginator } from "primereact/paginator";
-import TableStyle from "../../../../components/table/table.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../../components/headerFilters";
 import SpinnerDots from "../../../../components/spinner";
 import Footer from "../../../../jsx/layouts/Footer";
-import { getL2Users } from "../../../../store/actions/l2Actions/userActions";
 import UserQueue from "../../table/adminList/userQueue";
 import { generateOptionsList } from "../../../../components/headerFilters/functions";
 import audited from '../../../../images/svg/audited.svg'
