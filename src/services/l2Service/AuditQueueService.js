@@ -77,7 +77,7 @@ export const GetWorkListFilters = async (
       ? "":status;
     try {
       const response = await axios.get(
-        `${ENDPOINTS?.apiEndoint}dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${filteredStatus}&dueDateStart=${computationStart}&dueDateEnd=${computationEnd}&processedStart=${completedStartDate}&processedEnd=${completedEndDate}&searchString=${search}&sortfield=${sortfield}&sortdirection=${sortdirection}`,
+        `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/workqueue/filter?&page=${pageNo}&size=${pageSize}&auditedStatus=${filteredStatus}&auditDueDateStart=${computationStart}&auditDueDateEnd=${computationEnd}&auditedDateStart=${completedStartDate}&auditedDateEnd=${completedEndDate}&searchString=${search}&sortfield=${sortfield}&sortdirection=${sortdirection}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

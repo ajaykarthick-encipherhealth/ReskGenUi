@@ -6,10 +6,12 @@ import {
     exportData,
     usersList,
     getFile,
+    TeamReport,
   } from "../../../services/l2Service/AuditReportService";
   import { notification } from "antd";
   
   export const REPORT_PATIENTS_DETAILS = "REPORT_PATIENTS_DETAILS";
+  export const TEAM_REPORT = "TEAM_REPORT"
   export const SENT_REPORT = "SENT_REPORT";
   export const RECEIVED_REPORT = "RECEIVED_REPORT";
   export const REPORT_DETAILS = "REPORT_DETAILS";
@@ -54,6 +56,32 @@ import {
       }
     };
   };
+
+  export const getTeamReportDetails = (
+    pagenum,
+    startDate,
+    endDate,
+    search,
+    filter
+  ) => {
+    return (dispatch) => {
+      try {
+        TeamReport(pagenum, startDate, endDate, search, filter).then(
+          (response) => {
+            if (response) {
+              dispatch({
+                type: TEAM_REPORT,
+                payload: response.data,
+              });
+            }
+          }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  };
+
   
   export const getExportDetails = (data) => {
     return (dispatch) => {

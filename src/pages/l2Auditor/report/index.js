@@ -20,8 +20,10 @@ import {
   getReceivedDetails,
   getReportDetails,
   getSentDetails,
+  getTeamReportDetails,
 } from "../../../store/actions/l2Action/AuditReportAction";
 import SpinnerDots from "../../../components/spinner";
+import TeamReport from "../table/CoderReport copy/coderReport";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ const index = () => {
   const [activeTab, setActiveTab] = useState("AuditReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
+  const [filteredTeam, setFilteredTeam] = useState([]);
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -127,6 +130,19 @@ const index = () => {
         )
       );
     }
+  
+    if (activeTab === "TeamReport") {
+      dispatch(
+        getTeamReportDetails(
+          pageNo,
+          coderStartDate,
+          coderEndDate,
+          coderSearch,
+          selectedCoderOpt
+        )
+      );
+    }
+
     if (ExportResponse) {
       setIsModalVisible(false);
     }
@@ -148,15 +164,19 @@ const index = () => {
     receivedEndDate,
     receivedSearch,
   ]);
+  const TeamReportDetails = useSelector((state) => state.AuditReport?.teamDetails);
 
   const ReportPatientDetails = useSelector((state) => state.AuditReport?.details);
   const SentReportDetails = useSelector((state) => state.AuditReport?.sentDetails);
   const ReceivedReportDetails = useSelector(
-    (state) => state.report?.receivedDetails
+    (state) => state.AuditReport?.receivedDetails
   );
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
+    
   }, [ReportPatientDetails]);
+
+console.log(TeamReportDetails,"test");
 
   const statusOptions = [
     { label: "Completed", value: "COMPLETED" },
@@ -415,6 +435,21 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       setSelectedDates(null);
+                                      setActiveTab("TeamReport");
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="team"
+                                    >
+                                      Team Report
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      setSelectedDates(null);
                                       setActiveTab("SentReport");
                                     }}
                                   >
@@ -453,6 +488,26 @@ const index = () => {
                                       paginationFirst={paginationFirst}
                                       ReportPatientDetails={
                                         ReportPatientDetails?.response
+                                      }
+                                      onPageChange={onPageChange}
+                                      comments={comments}
+                                      setComments={setComments}
+                                      setSelectedRows={setSelectedRows}
+                                      selectedRows={selectedRows}
+                                      setSelectAll={setSelectAll}
+                                      selectAll={selectAll}
+                                    />
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="team"
+                                  >
+                                    <TeamReport
+                                      setModal={setModal}
+                                      modal={modal}
+                                      paginationFirst={paginationFirst}
+                                      ReportPatientDetails={
+                                        TeamReportDetails?.response
                                       }
                                       onPageChange={onPageChange}
                                       comments={comments}

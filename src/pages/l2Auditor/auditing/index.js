@@ -17,26 +17,34 @@ import { getWorkListFilter } from "../../../store/actions/l2Action/AuditorAction
 
 const bullets = [
   {
-    color: "#34ace8",
-    name: "Computed",
+    color: "#377880",
+    name: "AUDITED",
   },
   {
-    color: "#452b90",
-    name: "Processing",
+    color: "#E28213",
+    name: "PENDING",
   },
   {
-    color: "#be3144",
-    name: "Not Computed",
+    color: "#964B00",
+    name: "RE AUDIT",
+  },
+  {
+    color: "red",
+    name: "DECLINED",
+  },
+  {
+    color: "#CE9900",
+    name: "AUDIT HOLD",
   },
 ];
 
 const statusOptions = [
-  { label: "ALL", value: "all" },
+  { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
   { label: "PENDING", value: "PENDING" },
-  { label: "RE AUDIT", value: "RE AUDIT"},
+  { label: "RE AUDIT", value: "REAUDIT"},
   { label: "DECLINED", value: "DECLINED" },
-  { label: "AUDIT HOLD", value: "AUDIT HOLD" },
+  { label: "AUDIT HOLD", value: "AUDITHOLD" },
 ];
 
 export default function Patient() {
@@ -152,6 +160,7 @@ export default function Patient() {
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
           createdAt: res.createdAt,
+          auditedStatus:res.auditedStatus
         });
       });
       var newArray = [];
@@ -194,7 +203,7 @@ console.log(patinetListAll,"patinetListAll");
   };
 
   const processstatusBodyTemplate = (rowData) => {
-    switch (rowData.processedStatus) {
+    switch (rowData.auditedStatus) {
     
       case "PENDING":
         return (
