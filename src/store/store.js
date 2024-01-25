@@ -5,7 +5,7 @@ import { AuthReducer, PatientStore } from "./reducers/AuthReducer";
 import todoReducers from "./reducers/Reducers";
 import { DashboardReducer } from "./reducers/DashboradReducer";
 import { PatientsReducer } from "./reducers/PatientsReducer";
-import { ReportReducer } from "./reducers/ReportReducer";
+import { AuditReportReducer, ReportReducer } from "./reducers/ReportReducer";
 import { NotificationReducer } from "./reducers/NotificationReducer";
 import { L1UsersReducer } from "./reducers/l2Reducers/usersReducers";
 //import { reducer as reduxFormReducer } from 'redux-form';
@@ -29,6 +29,7 @@ const reducers = combineReducers({
   workFlow: DashboardReducer,
   workFlows: DashboardReducers,
   report:ReportReducer,
+  AuditReport:AuditReportReducer,
   patients:PatientsReducer,
   AuditWork:  WorkReducers,
   notificationDatas:NotificationReducer,
@@ -36,7 +37,8 @@ const reducers = combineReducers({
   adminList:AdminPatientsListReducer,
   adminUsers:AdminUsersReducer,
   l2Dashboard:L2DashboardReducers,
-  l1User:L1UsersReducer
+  l1User:L1UsersReducer,
+
   //form: reduxFormReducer,
 });
 
