@@ -15,11 +15,8 @@ import reAuditbg from "../../.../../../../images/dashboard/reAuditbg.png";
 import auditedbg from "../../.../../../../images/dashboard/auditedbg.png";
 import auditHold from "../../.../../../../images/dashboard/auditHold.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
-import auditDecliendbg from "../../.../../../../images/dashboard/auditDecliendbg.png";
+import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 
-
-
-import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 
 const WorkFlow = () => {
