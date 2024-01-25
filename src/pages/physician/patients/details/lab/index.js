@@ -21,23 +21,10 @@ import { useRouter } from "next/navigation";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faClose,
+  faCircleUser,
   faCheck,
-  faAdd,
   faInfo,
-  faUser,
-  faSearch,
-  faCheckCircle,
-  faArrowLeft,
-  faPlus,
-  faUserCircle,
-  faVenusMars,
-  faCalendarAlt,
-  faIdCardClip,
-  faCog,
-  faClock,
   faArrowsAlt,
-  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
@@ -340,7 +327,6 @@ const Lab = ({}) => {
         );
 
         validDiseaseNewRes = result.validDisease[dateofService];
-
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
           validDisArray.push({
@@ -352,6 +338,7 @@ const Lab = ({}) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
+            providerName: res.provider,
           });
         });
         var capturedSectionsColorsMatching = [];
@@ -786,7 +773,7 @@ const Lab = ({}) => {
               <div className="row">
                 <div className="col-xl-11">
                   <Nav as="ul" className="nav nav-tabs">
-                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey="file"
@@ -865,9 +852,38 @@ const Lab = ({}) => {
                                     <div
                                       className={`${visitStyles.hoverActiveHcc}`}
                                     >
-                                      {getEncounterDateBackground(
-                                        data.encounterDateSplit
-                                      )}
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        {data?.providerName?.map((res) => (
+                                          <Badge
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
+                                          >
+                                            <i>
+                                              {" "}
+                                              <FontAwesomeIcon
+                                                icon={faCircleUser}
+                                                style={{
+                                                  size: 10,
+                                                  color:
+                                                    res.authorizedProvider ===
+                                                    true
+                                                      ? "#ffa500"
+                                                      : "#ff0000cc",
+                                                }}
+                                              />
+                                            </i>
+                                            {res.providerName}
+                                          </Badge>
+                                        ))}
+                                        {getEncounterDateBackground(
+                                          data.encounterDateSplit
+                                        )}
+                                      </div>
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
@@ -1267,9 +1283,37 @@ const Lab = ({}) => {
                                 <div
                                   className={`${visitStyles.hoverActiveHcc}`}
                                 >
-                                  {getEncounterDateBackground(
-                                    data.encounterDateSplit
-                                  )}
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {data?.providerName?.map((res) => (
+                                      <Badge
+                                        className={
+                                          res.authorizedProvider === true
+                                            ? `mt-2 text-start ${visitStyles.provider_name}`
+                                            : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                        }
+                                      >
+                                        <i>
+                                          {" "}
+                                          <FontAwesomeIcon
+                                            icon={faCircleUser}
+                                            style={{
+                                              size: 10,
+                                              color:
+                                                res.authorizedProvider === true
+                                                  ? "#ffa500"
+                                                  : "#ff0000cc",
+                                            }}
+                                          />
+                                        </i>
+                                        {res.providerName}
+                                      </Badge>
+                                    ))}
+                                    {getEncounterDateBackground(
+                                      data.encounterDateSplit
+                                    )}
+                                  </div>
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >

@@ -165,3 +165,20 @@ export const patientListFilter = async (userId,status,searchText,startDate,endDa
   }
 };
 
+export const getProviderDetails = async (patiendId,encounterDate) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/provider?patientId=${patiendId}&encounterDate=${encounterDate}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+

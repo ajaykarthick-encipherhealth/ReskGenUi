@@ -29,6 +29,9 @@ import {
   faClock,
   faArrowsAlt,
   faCalendar,
+  faCircle,
+  faCircleUp,
+  faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
@@ -434,6 +437,22 @@ const Hcc = ({ patientHccResult }) => {
         // invalidDiseaseNewRes =validDisArray;
         var validDisArray = [];
         var validEncounterDateArray = [];
+        var providerRes =  [
+          {
+              "providerName": "Gloria M. Hernandez",
+              "authorizedProvider": true,
+              "unAuthorizeProvider": false,
+              "noCredential": false,
+              "unSigned": false
+          },
+          {
+            "providerName": "Sarah Bou Nader",
+            "authorizedProvider": false,
+            "unAuthorizeProvider": false,
+            "noCredential": false,
+            "unSigned": false
+        },
+      ]
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
           validDisArray.push({
@@ -445,7 +464,7 @@ const Hcc = ({ patientHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res.providerName,
+            providerName: res.provider,
           });
         });
 
@@ -475,7 +494,7 @@ const Hcc = ({ patientHccResult }) => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
-              providerName: res.providerName,
+              providerName: res.provider,
             });
           });
         }
@@ -497,7 +516,7 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Radio",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
-              providerName: res.providerName,
+              providerName: res.provider,
             });
           });
 
@@ -551,7 +570,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
                 defaultPosition: res.defaultPosition,
-                providerName: res.providerName,
+                providerName: res.provider,
               });
             } else {
               // suggestListAll.push({
@@ -572,7 +591,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
-                providerName: res.providerName,
+                providerName: res.provider,
               });
             }
           });
@@ -3036,17 +3055,32 @@ const Hcc = ({ patientHccResult }) => {
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
-                                          {data.providerName ? (
-                                            <Badge
-                                              className={`mt-2 text-start ${visitStyles.provider_name}`}
+                                             {data?.providerName?.map((res) => (
+                                            <Badge                                            
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
                                             >
-                                              <i>{SVGICON.patientNameIcon}</i>
-                                              {data.providerName}
+                                              <i> <FontAwesomeIcon
+                                                      icon={faCircleUser}
+                                                      style={{
+                                                        size: 10,
+                                                        color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+                                                      }}
+                                                    /></i>
+                                              {res.providerName}
                                             </Badge>
-                                          ) : null}
-                                          {getEncounterDateBackground(
+                                            ))}
+                                             {getEncounterDateBackground(
                                             data.encounterDateSplit
-                                          )}
+                                          )}                                      
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                         
                                         </div>
 
                                         <div
@@ -3263,18 +3297,24 @@ const Hcc = ({ patientHccResult }) => {
                                                 <div
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
-                                                  {data.providerName ? (
-                                                    <Badge
-                                                      className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                                    >
-                                                      <i>
-                                                        {
-                                                          SVGICON.patientNameIcon
-                                                        }
-                                                      </i>
-                                                      {data.providerName}
-                                                    </Badge>
-                                                  ) : null}
+                                                 {data?.providerName?.map((res) => (
+                                            <Badge                                            
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
+                                            >
+                                              <i> <FontAwesomeIcon
+                                                      icon={faCircleUser}
+                                                      style={{
+                                                        size: 10,
+                                                        color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+                                                      }}
+                                                    /></i>
+                                              {res.providerName}
+                                            </Badge>
+                                            ))}
                                                   {getEncounterDateBackground(
                                                     data.encounterDateSplit
                                                   )}
@@ -3460,14 +3500,24 @@ const Hcc = ({ patientHccResult }) => {
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                            {data.providerName ? (
-                                              <Badge
-                                                className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                              >
-                                                <i>{SVGICON.patientNameIcon}</i>
-                                                {data.providerName}
-                                              </Badge>
-                                            ) : null}
+                                            {data?.providerName?.map((res) => (
+                                            <Badge                                            
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
+                                            >
+                                              <i> <FontAwesomeIcon
+                                                      icon={faCircleUser}
+                                                      style={{
+                                                        size: 10,
+                                                        color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+                                                      }}
+                                                    /></i>
+                                              {res.providerName}
+                                            </Badge>
+                                            ))}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}
@@ -4495,14 +4545,24 @@ const Hcc = ({ patientHccResult }) => {
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
-                                        {data.providerName ? (
-                                          <Badge
-                                            className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                          >
-                                            <i>{SVGICON.patientNameIcon}</i>
-                                            {data.providerName}
-                                          </Badge>
-                                        ) : null}
+                                        {data?.providerName?.map((res) => (
+                                            <Badge                                            
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
+                                            >
+                                              <i> <FontAwesomeIcon
+                                                      icon={faCircleUser}
+                                                      style={{
+                                                        size: 10,
+                                                        color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+                                                      }}
+                                                    /></i>
+                                              {res.providerName}
+                                            </Badge>
+                                            ))}
                                         {getEncounterDateBackground(
                                           data.encounterDateSplit
                                         )}
@@ -4915,18 +4975,24 @@ const Hcc = ({ patientHccResult }) => {
                                                 <div
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
-                                                  {data.providerName ? (
-                                                    <Badge
-                                                      className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                                    >
-                                                      <i>
-                                                        {
-                                                          SVGICON.patientNameIcon
-                                                        }
-                                                      </i>
-                                                      {data.providerName}
-                                                    </Badge>
-                                                  ) : null}
+                                                  {data?.providerName?.map((res) => (
+                                            <Badge                                            
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
+                                            >
+                                              <i> <FontAwesomeIcon
+                                                      icon={faCircleUser}
+                                                      style={{
+                                                        size: 10,
+                                                        color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+                                                      }}
+                                                    /></i>
+                                              {res.providerName}
+                                            </Badge>
+                                            ))}
                                                   {getEncounterDateBackground(
                                                     data.encounterDateSplit
                                                   )}
@@ -5124,14 +5190,24 @@ const Hcc = ({ patientHccResult }) => {
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                            {data.providerName ? (
-                                              <Badge
-                                                className={`mt-2 text-start ${visitStyles.provider_name}`}
-                                              >
-                                                <i>{SVGICON.patientNameIcon}</i>
-                                                {data.providerName}
-                                              </Badge>
-                                            ) : null}
+                                             {data?.providerName?.map((res) => (
+                                            <Badge                                            
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
+                                            >
+                                              <i> <FontAwesomeIcon
+                                                      icon={faCircleUser}
+                                                      style={{
+                                                        size: 10,
+                                                        color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+                                                      }}
+                                                    /></i>
+                                              {res.providerName}
+                                            </Badge>
+                                            ))}
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}

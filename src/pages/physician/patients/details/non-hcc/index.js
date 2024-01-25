@@ -15,22 +15,9 @@ import { highlightPlugin } from "@react-pdf-viewer/highlight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
-  faCheck,
-  faAdd,
-  faInfo,
-  faUser,
-  faSearch,
-  faCheckCircle,
-  faArrowLeft,
   faPlus,
-  faUserCircle,
-  faVenusMars,
-  faCalendarAlt,
-  faIdCardClip,
-  faCog,
-  faClock,
   faArrowsAlt,
-  faCalendar,
+  faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
@@ -384,7 +371,6 @@ const NonHcc = ({ patientNonHccResult }) => {
             defaultPosition: res.defaultPosition,
           });
         });
-
         result.invalidDisease.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
           invalidDiseaseNewRes.push({
@@ -396,6 +382,7 @@ const NonHcc = ({ patientNonHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
+            providerName: res.provider,
           });
         });
 
@@ -468,7 +455,7 @@ const NonHcc = ({ patientNonHccResult }) => {
               defaultPosition: res.defaultPosition,
             });
           });
-        }
+        } 
 
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
@@ -487,15 +474,6 @@ const NonHcc = ({ patientNonHccResult }) => {
                 defaultPosition: res.defaultPosition,
               });
             } else {
-              // suggestListAll.push({
-              //   actualDescription: res.actualDescription,
-              //   diagnosisCodeFinding: res.diagnosisCodeFinding,
-              //   isHccValid: res.isHccValid,
-              //   capturedSections: res.capturedSections,
-              //   diagnosisCode: res.diagnosisCodeFinding,
-              //   encounterDate: res.encounterDate,
-              //   getPlace: "Hcc",
-              // });
               suggestListAllNonHcc.push({
                 actualDescription: res.actualDescription,
                 diagnosisCodeFinding: res.diagnosisCode,
@@ -1419,9 +1397,31 @@ const NonHcc = ({ patientNonHccResult }) => {
                                     <div
                                       className={`${visitStyles.hoverActiveHcc}`}
                                     >
-                                      {getEncounterDateBackground(
-                                        data.encounterDateSplit
-                                      )}
+                                     <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                             {data?.providerName?.map((res) => (
+                                            <Badge                                            
+                                            className={
+                                              res.authorizedProvider === true
+                                                ? `mt-2 text-start ${visitStyles.provider_name}`
+                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
+                                            }
+                                            >
+                                              <i> <FontAwesomeIcon
+                                                      icon={faCircleUser}
+                                                      style={{
+                                                        size: 10,
+                                                        color:res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+                                                      }}
+                                                    /></i>
+                                              {res.providerName}
+                                            </Badge>
+                                            ))}
+                                             {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}                                      
+                                        </div>
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
