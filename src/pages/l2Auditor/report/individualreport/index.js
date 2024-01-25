@@ -28,8 +28,8 @@ import Header from "../../../../jsx/layouts/nav/Header";
 import Footer from "../../../../jsx/layouts/Footer";
 
 const IndividualReceiverReport = () => {
-  const url = useSelector((state) => state.report.uploadFile);
-  const reportDatas = useSelector((state) => state.report.receivedDetails);
+  const url = useSelector((state) => state.AuditReport.uploadFile);
+  const reportDatas = useSelector((state) => state.AuditReport.receivedDetails);
   const [sortOrder, setSortOrder] = useState("asc");
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);

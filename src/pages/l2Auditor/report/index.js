@@ -20,13 +20,13 @@ import {
   getReceivedDetails,
   getReportDetails,
   getSentDetails,
-} from "../../../store/actions/ReportActions";
+} from "../../../store/actions/l2Action/AuditReportAction";
 import SpinnerDots from "../../../components/spinner";
 
 const index = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("CoderReport");
+  const [activeTab, setActiveTab] = useState("AuditReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -91,7 +91,7 @@ const index = () => {
     debouncedSearch(value);
   };
 
-  const ExportResponse = useSelector((state) => state.report?.exportRes);
+  const ExportResponse = useSelector((state) => state.AuditReport?.exportRes);
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -116,7 +116,7 @@ const index = () => {
       );
     }
 
-    if (activeTab === "CoderReport") {
+    if (activeTab === "AuditReport") {
       dispatch(
         getReportDetails(
           pageNo,
@@ -149,8 +149,8 @@ const index = () => {
     receivedSearch,
   ]);
 
-  const ReportPatientDetails = useSelector((state) => state.report?.details);
-  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
+  const ReportPatientDetails = useSelector((state) => state.AuditReport?.details);
+  const SentReportDetails = useSelector((state) => state.AuditReport?.sentDetails);
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
@@ -285,7 +285,7 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            {activeTab === "CoderReport" ? (
+                            {activeTab === "AuditReport" ? (
                               <div className="col-xl-2">
                                 <label>Select Status</label>
                                 <div class="form-group has-search">
@@ -295,7 +295,7 @@ const index = () => {
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                                  {activeTab === "CoderReport" && (
+                                  {activeTab === "AuditReport" && (
                                     <Select
                                       onChange={(selectedOption) => {
                                         dosOnChange(selectedOption);
@@ -324,7 +324,7 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            {activeTab === "CoderReport" && (
+                            {activeTab === "AuditReport" && (
                               <div className="col-xl-6">
                                 <div className="row flr">
                                   <button
@@ -400,14 +400,14 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       setSelectedDates(null);
-                                      setActiveTab("CoderReport");
+                                      setActiveTab("AuditReport");
                                     }}
                                   >
                                     <Nav.Link
                                       to="#my-posts"
                                       eventKey="validDiseases"
                                     >
-                                      Coder Report
+                                      Audit Report
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item

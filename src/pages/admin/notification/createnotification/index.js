@@ -19,7 +19,7 @@ export const debounce = (func, delay) => {
 
 const CreateNotification = ({ open, setOpen }) => {
   const dispatch = useDispatch();
-  const usersList = useSelector((state) => state.report.usersList);
+  const usersList = useSelector((state) => state.report?.usersList);
   const options = usersList?.response?.map((data) => ({
     label: data.userName,
     value: data.userName,
