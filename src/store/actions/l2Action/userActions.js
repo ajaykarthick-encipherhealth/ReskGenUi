@@ -4,7 +4,7 @@ import {
 } from "../../../services/l2Service/userService";
 
 export const USERS = "USERS";
-export const INDIVIAULUSER='INDIVIAULUSER'
+export const INDIVIAULUSER = "INDIVIAULUSER";
 
 export const getL2Users = (page, search) => {
   return (dispatch) => {
@@ -20,7 +20,7 @@ export const getL2Users = (page, search) => {
           dispatch({
             type: USERS,
             payload: {
-              data: response?.data,
+              data: response,
               loading: false,
             },
           });
@@ -45,7 +45,11 @@ export const getL2IndividualUser = (
   auditedStartDate,
   auditedEndDate,
   allocatedStartDate,
-  allocatedEndDate
+  allocatedEndDate,
+  allocatedDateOrder,
+  dueDateOrder,
+  completedDateOrder,
+  auditedDateOrder
 ) => {
   return (dispatch) => {
     dispatch({
@@ -68,7 +72,11 @@ export const getL2IndividualUser = (
         auditedStartDate,
         auditedEndDate,
         allocatedStartDate,
-        allocatedEndDate
+        allocatedEndDate,
+        allocatedDateOrder,
+        dueDateOrder,
+        completedDateOrder,
+        auditedDateOrder
       ).then((response) => {
         if (response) {
           dispatch({

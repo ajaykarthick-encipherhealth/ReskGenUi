@@ -27,7 +27,7 @@ const AdminList = ({ userList }) => {
                 key={index}
                 style={{ height: "35px" }}
                 onClick={() =>
-                  router.push(`user/userQueue?userId=${item?.userId}`)
+                  router.push(`user/userQueue?userId=${item?.userName}`)
                 }
               >
                 {/* user id */}

@@ -7,7 +7,7 @@ import { USERS ,INDIVIAULUSER} from "../../actions/l2Action/userActions";
     
   };
   
-  export const L2UsersReducer = (state = initialState, action) => {
+  export const L2UserReducers = (state = initialState, action) => {
     if (action.type === USERS) {
       return {
         ...state,

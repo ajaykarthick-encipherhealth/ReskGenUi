@@ -32,23 +32,22 @@ export const L2IndividualUser = async (
   auditedStartDate,
   auditedEndDate,
   allocatedStartDate,
-  allocatedEndDate
+  allocatedEndDate,
+  allocatedDateOrder,
+  dueDateOrder,
+  completedDateOrder,
+  auditedDateOrder
 ) => {
   const token = localStorage.getItem("token");
-  const filteredStatus = selectedOption === undefined ? "" : selectedOption;
+  const filteredStatus =
+    selectedOption === undefined
+      ? ""
+      : completedStartDate && completedEndDate
+      ? 2
+      : selectedOption;
   try {
     const response = await axios.get(
-      `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/auditor/filter?page=${pageNo}&size=15&userId=${uId}
-    &isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}
-    &completedStartDate=${completedStartDate}
-    &completedEndDate=${completedEndDate}
-     &dueDateStart=${dueStartDate}
-     &dueDateEnd=${dueEndDate}
-     &auditAllocatedBy=${selAllocatedBy}
-     &auditedStartDate=${auditedStartDate}
-     &auditedEndDate=${auditedEndDate}
-     &allocatedStartDate=${allocatedStartDate}
-     &allocatedEndDate=${allocatedEndDate}
+      `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computing=${filteredStatus}&searchString=${search}&completedStartDate=${completedStartDate}&completedEndDate=${completedEndDate}&dueDateStart=${dueStartDate}&dueDateEnd=${dueEndDate}&auditAllocatedBy=${selAllocatedBy}&auditDueDateStart=${auditedStartDate}&auditDueDateEnd=${auditedEndDate}&allocatedStartDate=${allocatedStartDate}&allocatedEndDate=${allocatedEndDate}
      `,
       {
         headers: {

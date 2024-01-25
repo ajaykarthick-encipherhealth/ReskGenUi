@@ -61,7 +61,7 @@ const UserList = () => {
                         <SpinnerDots />
                       ) : (
                         <AdminList
-                          userList={userListAll}
+                          userList={userListAll?.content}
                           setPageCount={setPageCount}
                         />
                       )}

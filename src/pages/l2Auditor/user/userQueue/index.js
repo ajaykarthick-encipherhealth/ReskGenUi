@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import Image from "next/image";
 import { useSelector } from "react-redux";
 import { Paginator } from "primereact/paginator";
+import styles from "../../../physician/report/report.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../../components/headerFilters";
 import SpinnerDots from "../../../../components/spinner";
@@ -12,6 +15,7 @@ import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
 import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
+import leftArrow from "../../../../images/svg/leftArrow.svg";
 
 const bullets = [
   {
@@ -44,10 +48,11 @@ const badges = [
 const statusOptions = [
   { label: "ALL", value: "" },
   { label: "COMPLETED", value: "2", status: 2 },
-  { label: "DECLINE", value: "0", status: 0 },
+  { label: "DECLINED", value: "3", status: 0 },
 ];
 const index = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [pageNo, setPageNo] = useState(0);
@@ -65,7 +70,21 @@ const index = () => {
   const [auditedEndDate, setAuditedEnsDate] = useState("");
   const [totalElements, setTotalElements] = useState(10);
   const [search, setSearch] = useState("");
-
+  const [userName, setUserName] = useState();
+  const [filed, setFiled] = useState();
+  const [allocatedDateOrder, setAllocatedDateOrder] = useState('ASC');
+  const [dueDateOrder, setDueDateOrder] = useState({
+    order: "ASC",
+    field: "dueDate",
+  });
+  const [completedDateOrder, setCompletedDateOrder] = useState({
+    order: "ASC",
+    field: "processedDate",
+  });
+  const [auditedDateOrder, setAuditedDateOrder] = useState({
+    order: "ASC",
+    field: "auditedDate",
+  });
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -80,23 +99,28 @@ const index = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    dispatch(
-      getL2IndividualUser(
-        searchParams.get("userId"),
-        pageNo,
-        search,
-        selectedOption,
-        selAllocatedBy,
-        dueStartDate,
-        dueEndDate,
-        completedStartDate,
-        completedEndDate,
-        auditedStartDate,
-        auditedEndDate,
-        allocatedStartDate,
-        allocatedEndDate
-      )
-    );
+    setUserName(searchParams.get("userId"));
+    if (searchParams.get("userId")) {
+      const AllocatesortOrder = allocatedDateOrder?.field === filed;
+      const dueSort = dueDateOrder?.field === filed;
+      dispatch(
+        getL2IndividualUser(
+          searchParams.get("userId"),
+          pageNo,
+          search,
+          selectedOption,
+          selAllocatedBy,
+          dueStartDate,
+          dueEndDate,
+          completedStartDate,
+          completedEndDate,
+          auditedStartDate,
+          auditedEndDate,
+          allocatedStartDate,
+          allocatedEndDate
+        )
+      );
+    }
   }, [
     pageNo,
     search,
@@ -112,13 +136,30 @@ const index = () => {
     allocatedEndDate,
   ]);
 
+  console.log(allocatedDateOrder)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
+
         <div class="content-body">
           <div className="container-fluid">
             <div className="row">
+              <div
+                className={"col-xl-12"}
+                style={{ margin: "30px 0 30px 40px", cursor: "pointer" }}
+              >
+                <button
+                  style={{ width: "40px" }}
+                  className={styles.filterBtn}
+                  onClick={() => {
+                    router.push("/l2Auditor/user");
+                  }}
+                >
+                  <Image src={leftArrow} />
+                </button>
+                <span className={styles.titleBar}>{userName}</span>
+              </div>
               <div className="col-xl-12">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
@@ -151,11 +192,15 @@ const index = () => {
                         // allocated by
                         isAllocatedBySelector={true}
                         allocatedBylabel="Select AllocatedBy"
-                        allocatedByOptoons={generateOptionsList(
-                          userListAll,
-                          "allocatedBy",
-                          "All"
-                        )}
+                        allocatedByOptoons={
+                          userListAll?.content?.length > 0
+                            ? generateOptionsList(
+                                userListAll?.content,
+                                "allocatedBy",
+                                "All"
+                              )
+                            : []
+                        }
                         setSelAllocatedBy={setSelAllocatedBy}
                         defaultAllocatedBy={"All"}
                         // allocated date
@@ -185,7 +230,18 @@ const index = () => {
                       {usersData?.loading ? (
                         <SpinnerDots />
                       ) : (
-                        <UserQueue userList={userListAll} />
+                        <UserQueue
+                          userList={userListAll?.content}
+                          allocatedDateOrder={allocatedDateOrder}
+                          setAllocatedDateOrder={setAllocatedDateOrder}
+                          dueDateOrder={dueDateOrder}
+                          setDueDateOrder={setDueDateOrder}
+                          completedDateOrder={completedDateOrder}
+                          setCompletedDateOrder={setCompletedDateOrder}
+                          auditedDateOrder={auditedDateOrder}
+                          setAuditedDateOrder={setAuditedDateOrder}
+                          setField={setFiled}
+                        />
                       )}
                       <div>
                         <div className="pagination-container">

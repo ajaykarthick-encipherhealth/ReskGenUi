@@ -520,31 +520,43 @@ export default function Patient() {
                             // allocated by
                             isAllocatedBySelector={true}
                             allocatedBylabel="Select AllocatedBy"
-                            allocatedByOptoons={generateOptionsList(
-                              patinetListAll,
-                              "allocatedBy",
-                              "All"
-                            )}
+                            allocatedByOptoons={
+                              patinetListAll?.length > 0
+                                ? generateOptionsList(
+                                    patinetListAll,
+                                    "allocatedBy",
+                                    "All"
+                                  )
+                                : []
+                            }
                             setSelAllocatedBy={setSelAllocatedBy}
                             defaultAllocatedBy={"All"}
                             // allocated to
                             isAllocatedToSelector={true}
                             allocatedTolabel="Select AllocatedTo"
-                            allocatedToOptoons={generateOptionsList(
-                              patinetListAll,
-                              "patientAllocated",
-                              "All"
-                            )}
+                            allocatedToOptoons={
+                              patinetListAll?.length > 0
+                                ? generateOptionsList(
+                                    patinetListAll,
+                                    "patientAllocated",
+                                    "All"
+                                  )
+                                : []
+                            }
                             setSelAllocatedTo={setSelAllocatedTo}
                             defaultCreatedBy={"All"}
                             // created by
                             isCreatedBySelector={true}
                             createdTolabel="Select CreatedTo"
-                            createdByOptoons={generateOptionsList(
-                              patinetListAll,
-                              "createdBy",
-                              "All"
-                            )}
+                            createdByOptoons={
+                              patinetListAll?.length > 0
+                                ? generateOptionsList(
+                                    patinetListAll,
+                                    "createdBy",
+                                    "All"
+                                  )
+                                : []
+                            }
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}
                             addUserForm={addPatientFormId}
