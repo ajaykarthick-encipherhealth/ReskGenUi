@@ -93,7 +93,6 @@ const DailyTask = () => {
     });
   };
 
-
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = statusData?.find((status) => {
@@ -217,6 +216,13 @@ const DailyTask = () => {
     }
   };
 
+  const uniqueData = currentDays?.filter((value, index, self) => {
+    const firstIndex = self?.findIndex(
+      (item) => item?.day === value?.day && item?.date === value?.date
+    );
+    return index === firstIndex;
+  });
+
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -233,7 +239,7 @@ const DailyTask = () => {
                 <Row
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  {currentDays?.slice(0, 3)?.map((data, index) => (
+                  {uniqueData?.slice(0, 3)?.map((data, index) => (
                     <Col
                       key={index}
                       span={7}
@@ -307,9 +313,8 @@ const DailyTask = () => {
                                       ? data?.decline
                                       : item.name === "Hold"
                                       ? data.hold
-                                      : item.name === "Completed"
-                                      && data?.completed
-                                      }
+                                      : item.name === "Completed" &&
+                                        data?.completed}
                                   </div>
                                 </div>
                               );
@@ -321,7 +326,7 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-               <Empty/>
+                <Empty />
               )}
 
               <div className={styles.infoCards}>
