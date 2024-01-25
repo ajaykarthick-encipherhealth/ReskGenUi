@@ -38,8 +38,17 @@ export const L2IndividualUser = async (
   const filteredStatus = selectedOption === undefined ? "" : selectedOption;
   try {
     const response = await axios.get(
-      `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/auditor/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&completedStartDate=${completedStartDate}&completedEndDate=${completedEndDate}
-     &dueDateStart=${dueStartDate}&dueDateEnd=${dueEndDate}&auditAllocatedBy=${selAllocatedBy}&auditedStartDate=${auditedStartDate}&auditedEndDate=${auditedEndDate}&allocatedStartDate=${allocatedStartDate}&allocatedEndDate=${allocatedEndDate}
+      `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/computation/auditor/filter?page=${pageNo}&size=15&userId=${uId}
+    &isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}
+    &completedStartDate=${completedStartDate}
+    &completedEndDate=${completedEndDate}
+     &dueDateStart=${dueStartDate}
+     &dueDateEnd=${dueEndDate}
+     &auditAllocatedBy=${selAllocatedBy}
+     &auditedStartDate=${auditedStartDate}
+     &auditedEndDate=${auditedEndDate}
+     &allocatedStartDate=${allocatedStartDate}
+     &allocatedEndDate=${allocatedEndDate}
      `,
       {
         headers: {
