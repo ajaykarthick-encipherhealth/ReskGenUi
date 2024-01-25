@@ -216,6 +216,13 @@ const DailyTask = () => {
     }
   };
 
+  const uniqueData = currentDays?.filter((value, index, self) => {
+    const firstIndex = self?.findIndex(
+      (item) => item?.day === value?.day && item?.date === value?.date
+    );
+    return index === firstIndex;
+  });
+
   return (
     <>
       <HeadTitle header="Daily Task" />
@@ -232,7 +239,7 @@ const DailyTask = () => {
                 <Row
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  {currentDays?.slice(0, 3)?.map((data, index) => (
+                  {uniqueData?.slice(0, 3)?.map((data, index) => (
                     <Col
                       key={index}
                       span={7}
