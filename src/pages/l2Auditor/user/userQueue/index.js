@@ -71,20 +71,7 @@ const index = () => {
   const [totalElements, setTotalElements] = useState(10);
   const [search, setSearch] = useState("");
   const [userName, setUserName] = useState();
-  const [filed, setFiled] = useState();
-  const [allocatedDateOrder, setAllocatedDateOrder] = useState('ASC');
-  const [dueDateOrder, setDueDateOrder] = useState({
-    order: "ASC",
-    field: "dueDate",
-  });
-  const [completedDateOrder, setCompletedDateOrder] = useState({
-    order: "ASC",
-    field: "processedDate",
-  });
-  const [auditedDateOrder, setAuditedDateOrder] = useState({
-    order: "ASC",
-    field: "auditedDate",
-  });
+
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -101,8 +88,6 @@ const index = () => {
     const searchParams = new URLSearchParams(window.location.search);
     setUserName(searchParams.get("userId"));
     if (searchParams.get("userId")) {
-      const AllocatesortOrder = allocatedDateOrder?.field === filed;
-      const dueSort = dueDateOrder?.field === filed;
       dispatch(
         getL2IndividualUser(
           searchParams.get("userId"),
@@ -136,7 +121,6 @@ const index = () => {
     allocatedEndDate,
   ]);
 
-  console.log(allocatedDateOrder)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -192,9 +176,7 @@ const index = () => {
                         // allocated by
                         isAllocatedBySelector={true}
                         allocatedBylabel="Select AllocatedBy"
-                        allocatedByOptoons={
-                          []
-                        }
+                        allocatedByOptoons={[]}
                         setSelAllocatedBy={setSelAllocatedBy}
                         defaultAllocatedBy={"All"}
                         // allocated date
@@ -224,18 +206,7 @@ const index = () => {
                       {usersData?.loading ? (
                         <SpinnerDots />
                       ) : (
-                        <UserQueue
-                          userList={userListAll?.content}
-                          allocatedDateOrder={allocatedDateOrder}
-                          setAllocatedDateOrder={setAllocatedDateOrder}
-                          dueDateOrder={dueDateOrder}
-                          setDueDateOrder={setDueDateOrder}
-                          completedDateOrder={completedDateOrder}
-                          setCompletedDateOrder={setCompletedDateOrder}
-                          auditedDateOrder={auditedDateOrder}
-                          setAuditedDateOrder={setAuditedDateOrder}
-                          setField={setFiled}
-                        />
+                        <UserQueue userList={userListAll?.content} />
                       )}
                       <div>
                         <div className="pagination-container">
