@@ -71,7 +71,7 @@ import {
             if (response) {
               dispatch({
                 type: TEAM_REPORT,
-                payload: response.data,
+                payload: response?.data,
               });
             }
           }

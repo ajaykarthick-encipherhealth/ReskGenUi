@@ -171,7 +171,7 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
-  console.log(patinetListAll, "patinetListAll");
+
   const addPatientFormId = () => {
     setValidated(false);
     setAddPatientId(true);
