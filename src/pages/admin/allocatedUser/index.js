@@ -24,6 +24,10 @@ import AllocatedAdminList from "../../../components/table/admin/allocatedAdminLi
 import allocateStyle from "./allocate/style.module.css";
 import AllocateModal from "./allocate";
 import moment from "moment/moment";
+import { Tab, Nav } from "react-bootstrap";
+import LoadingSpinner from "../../../jsx/components/spinner/spinner";
+import SpinnerDots from "../../../components/spinner";
+import L2AllocatedAdminList from "./table/l2AuditedTable";
 const { RangePicker } = DatePicker;
 export default function Patient() {
   const navigate = useRouter();
@@ -44,6 +48,7 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const sideMenu = useSelector((state) => state.sideMenu);
+  const [activeTab, setActiveTab] = useState("L1 Auditor");
 
   useEffect(() => {
     if (typeof pageNo == "number") {
@@ -220,8 +225,53 @@ export default function Patient() {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {isLoading ? (
-                          <Spinner />
+                          <div
+                            className="profile-tab"
+                            style={{ marginTop: "20px" }}
+                          >
+                            <div className="custom-tab-1">
+                              <Tab.Container defaultActiveKey="validDiseases">
+                                <Nav as="ul" className="nav nav-tabs">
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      // setSelectedDates(null);
+                                      setActiveTab("L1 Auditor");
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="validDiseases"
+                                    >
+                                      L1 Auditor Allocation
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      // setSelectedDates(null);
+                                      setActiveTab("L2 Auditor");
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="team"
+                                    >
+                                      L2 Auditor Allocation
+                                    </Nav.Link>
+                                  </Nav.Item>
+                            
+                            
+                                </Nav>
+                                <Tab.Content>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="validDiseases"
+                                  >
+                                  {isLoading ? (
+                          <SpinnerDots />
                         ) : (
                           <>
                             <AllocatedAdminList
@@ -249,6 +299,55 @@ export default function Patient() {
                             <Footer />
                           </>
                         )}
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="team"
+                                  >
+                                       {isLoading ? (
+                          <SpinnerDots />
+                        ) : (
+                          <>
+                            <L2AllocatedAdminList
+                              patinetListAll={patinetListAll}
+                              selectAllChecked={selectAllChecked}
+                              setSelectAllChecked={setSelectAllChecked}
+                              selectedRowsId={selectedRowsId}
+                              setSelectedRowsId={setSelectedRowsId}
+                              selectedChart={headerCheckValidation}
+                            />
+                            <div>
+                              <div className="pagination-container">
+                                <Paginator
+                                  first={paginationFirst}
+                                  rows={15}
+                                  totalRecords={totalElements}
+                                  onPageChange={onPageChange}
+                                />
+                                <div className="total-pages">
+                                  Total count: {totalElements}
+                                </div>
+                              </div>
+                            </div>
+
+                            <Footer />
+                          </>
+                        )}
+                                  </Tab.Pane>
+                              
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="RafScore"
+                                  ></Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="file"
+                                  ></Tab.Pane>
+                                </Tab.Content>
+                              </Tab.Container>
+                            </div>
+                          </div>
+                    
                       </div>
                     </div>
                   </div>

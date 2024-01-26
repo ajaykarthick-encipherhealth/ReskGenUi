@@ -23,7 +23,7 @@ import {
   getTeamReportDetails,
 } from "../../../store/actions/l2Action/AuditReportAction";
 import SpinnerDots from "../../../components/spinner";
-import TeamReport from "../table/CoderReport copy/coderReport";
+import TeamReport from "../table/TeamReport/teamReport";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -409,7 +409,7 @@ console.log(TeamReportDetails,"test");
                           className="dataTables_wrapper no-footer"
                         >
                           <div
-                            className="profile-tab "
+                            className="profile-tab"
                             style={{ marginTop: "20px" }}
                           >
                             <div className="custom-tab-1">
