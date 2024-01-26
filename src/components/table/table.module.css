@@ -148,6 +148,12 @@
 .customAntSelect > span{
   display: none !important;
 }
+.subTitle{
+  font-weight:700;
+  font-size:16px;
+}
 
-
-
+.innerAlignments{
+  width:100px;
+  text-align:center;
+}

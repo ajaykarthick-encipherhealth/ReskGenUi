@@ -19,35 +19,18 @@ export const l2Users = async (page, search) => {
   }
 };
 
-export const L2IndividualUser = async (
-  uId,
-  pageNo,
-  search,
-  selectedOption,
-  selAllocatedBy,
-  dueStartDate,
-  dueEndDate,
-  completedStartDate,
-  completedEndDate,
-  auditedStartDate,
-  auditedEndDate,
-  allocatedStartDate,
-  allocatedEndDate,
-  allocatedDateOrder,
-  dueDateOrder,
-  completedDateOrder,
-  auditedDateOrder
-) => {
+export const L2IndividualUser = async (datas) => {
   const token = localStorage.getItem("token");
   const filteredStatus =
-    selectedOption === undefined
+    datas?.selectedOption === undefined
       ? ""
-      : completedStartDate && completedEndDate
-      ? 2
-      : selectedOption;
+      : datas?.completedStartDate && datas?.completedEndDate
+      ? "COMPLETED"
+      : datas?.selectedOption;
+      
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computing=${filteredStatus}&searchString=${search}&completedStartDate=${completedStartDate}&completedEndDate=${completedEndDate}&dueDateStart=${dueStartDate}&dueDateEnd=${dueEndDate}&auditAllocatedBy=${selAllocatedBy}&auditDueDateStart=${auditedStartDate}&auditDueDateEnd=${auditedEndDate}&allocatedStartDate=${allocatedStartDate}&allocatedEndDate=${allocatedEndDate}
+      `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/filter?page=${datas?.pageNo}&size=15&userId=${datas?.uId}&isAllocation=false&processedStatus=${filteredStatus}&auditedStatus=${datas?.selectedAuditOption}&searchString=${datas?.search}&completedStartDate=${datas?.completedStartDate}&completedEndDate=${datas?.completedEndDate}&auditCompletedStartDate=${datas?.aduitCompletedStartDate}&auditCompletedEndDate=${datas?.aduitCompletedEndDate}&dueDateStart=${datas?.dueStartDate}&dueDateEnd=${datas?.dueEndDate}&auditDueDateStart=${datas?.aduitDueStartDate}&auditDueDateEnd=${datas?.aduitDueEndDate}&allocatedBy=${datas?.selAllocatedBy}&auditAllocatedBy=${datas?.selAuditAllocatedBy}&auditDueDateStart=${datas?.auditedStartDate}&auditDueDateEnd=${datas?.auditedEndDate}&allocatedStartDate=${datas?.allocatedStartDate}&allocatedEndDate=${datas?.allocatedEndDate}&sortField=${datas?.sort?.sortField}&sortdirection=${datas?.sort?.sortDir}
      `,
       {
         headers: {

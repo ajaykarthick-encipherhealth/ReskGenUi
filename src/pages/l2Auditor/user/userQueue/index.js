@@ -16,6 +16,7 @@ import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
 import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
+import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 
 const bullets = [
   {
@@ -47,8 +48,15 @@ const badges = [
 
 const statusOptions = [
   { label: "ALL", value: "" },
-  { label: "COMPLETED", value: "2", status: 2 },
-  { label: "DECLINED", value: "3", status: 0 },
+  { label: "COMPLETED", value: "COMPLETED" },
+  { label: "DECLINED", value: "DECLINED" },
+];
+const AuditOptions = [
+  { label: "ALL", value: "" },
+  { label: "AUDITED", value: "AUDITED" },
+  { label: "AUDITEDHOLD", value: "AUDITEDHOLD" },
+  { label: "REAUDIT", value: "REAUDIT" },
+  { label: "AUDIT_PENDING", value: "AUDIT_PENDING" },
 ];
 const index = () => {
   const dispatch = useDispatch();
@@ -58,7 +66,7 @@ const index = () => {
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
-  const [selectedOption, setSelectedOption] = useState();
+  const [selectedOption, setSelectedOption] = useState("");
   const [completedStartDate, setCompletedStartDate] = useState("");
   const [completedEndDate, setCompletedEndDate] = useState("");
   const [dueStartDate, setDueStartDate] = useState("");
@@ -71,6 +79,13 @@ const index = () => {
   const [totalElements, setTotalElements] = useState(10);
   const [search, setSearch] = useState("");
   const [userName, setUserName] = useState();
+  const [selectedAuditOption, setSelectedAuditOption] = useState("");
+  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
+  const [aduitCompletedStartDate, setAduitCompletedStartDate] = useState("");
+  const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
+  const [aduitDueStartDate, setAduitDueStartDate] = useState("");
+  const [aduitDueEndDate, setAduitDueEndDate] = useState("");
+  const [sort,setSort]=useState({sortDir:"",sortField:""})
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -84,27 +99,36 @@ const index = () => {
     }
   }, [usersData]);
 
+  
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setUserName(searchParams.get("userId"));
     if (searchParams.get("userId")) {
-      dispatch(
-        getL2IndividualUser(
-          searchParams.get("userId"),
-          pageNo,
-          search,
-          selectedOption,
-          selAllocatedBy,
-          dueStartDate,
-          dueEndDate,
-          completedStartDate,
-          completedEndDate,
-          auditedStartDate,
-          auditedEndDate,
-          allocatedStartDate,
-          allocatedEndDate
-        )
-      );
+      const uId = searchParams.get("userId");
+      const datas = {
+        uId,
+        pageNo,
+        search,
+        selectedOption,
+        selAllocatedBy,
+        dueStartDate,
+        dueEndDate,
+        completedStartDate,
+        completedEndDate,
+        auditedStartDate,
+        auditedEndDate,
+        allocatedStartDate,
+        allocatedEndDate,
+        // auditor values
+        selectedAuditOption,
+        selAuditAllocatedBy,
+        aduitCompletedStartDate,
+        aduitCompletedEndDate,
+        aduitDueStartDate,
+        aduitDueEndDate,
+        sort
+      };
+      dispatch(getL2IndividualUser(datas));
     }
   }, [
     pageNo,
@@ -119,6 +143,13 @@ const index = () => {
     auditedEndDate,
     allocatedStartDate,
     allocatedEndDate,
+    selectedAuditOption,
+    selAuditAllocatedBy,
+    aduitCompletedStartDate,
+    aduitCompletedEndDate,
+    aduitDueStartDate,
+    aduitDueEndDate,
+    sort
   ]);
 
   return (
@@ -148,12 +179,38 @@ const index = () => {
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
                     <div className="tbl-caption  align-items-center">
-                      <HeaderFilters
+                      <AuditHeaderFilters
                         setSearch={setSearch}
                         isSearch={true}
                         searchlabel="Search By Patient Id / Name"
+                        // auditedStatus
+                        selectlabel2="Audited Status"
+                        isSelector2={true}
+                        setSelectedOption2={setSelectedAuditOption}
+                        selectOptions2={AuditOptions}
+                        defaultSelectValue2={"Select Status"}
+                        //audit due date
+                        audipickerlabel1="Audited Due Date"
+                        audidefaultStartDate={""}
+                        audidefaultEndDate={""}
+                        audisetStartDate={setAduitDueStartDate}
+                        audisetEndDate={setAduitDueEndDate}
+                        isAduitDueDate={true}
+                        // audited completed date
+                        audipickerlabe2="Audited Completed Date"
+                        audidefaultStartDate2={""}
+                        audidefaultEndDate2={""}
+                        audisetStartDate2={setAduitCompletedStartDate}
+                        audisetEndDate2={setAduitCompletedEndDate}
+                        isAuditCompleteDate={true}
+                        // allocated by
+                        isAuditAllocatedBy={true}
+                        audiallocatedBylabel="Select Audited AllocatedBy"
+                        auditallocatedByOptions={[]}
+                        audisetSelAllocatedBy={setSelAuditAllocatedBy}
+                        audidefaultAllocatedBy={"All"}
                         // select status
-                        selectlabel="Select Status"
+                        selectlabel="processed Status"
                         isSelector={true}
                         setSelectedOption={setSelectedOption}
                         selectOptions={statusOptions}
@@ -185,7 +242,7 @@ const index = () => {
                         defaultEndDate3={""}
                         setStartDate3={setAllocatedStartDate}
                         setEndDate3={setAllocatedEndDate}
-                        isAnotherPicker2={true}
+                        isAllocatedDate={true}
                         // Auditeddate
                         pickerlabe4="Audited Date"
                         defaultStartDate4={""}
@@ -203,10 +260,10 @@ const index = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {usersData?.loading ? (
+                      {!userListAll?.content? (
                         <SpinnerDots />
                       ) : (
-                        <UserQueue userList={userListAll?.content} />
+                        <UserQueue userList={userListAll?.content} sort={sort} setSort={setSort} />
                       )}
                       <div>
                         <div className="pagination-container">

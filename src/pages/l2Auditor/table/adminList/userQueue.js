@@ -1,17 +1,26 @@
-import React from "react";
-import { Empty, Select, Tooltip, Badge } from "antd";
-import TableStyle from "../../../../components/table/table.module.css";
+import React, { useState } from "react";
+import { Empty, Select, Tooltip, Badge, Popover } from "antd";
 import moment from "moment";
+import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import TableStyle from "../../../../components/table/table.module.css";
 import {
   priorityOptions,
   processstatusBodyTemplate,
 } from "../../../../components/headerFilters/functions";
-import { useRouter } from "next/router";
+import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 
-const UserQueue = ({ userList }) => {
+const UserQueue = ({ userList, setSort }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
+  const [processSort, setProcessSort] = useState("ASC");
+  const [auditAllocatedSort, setAuditAllocatedSort] = useState("ASC");
+  const [audirDateSort, setAuditDateSort] = useState("ASC");
+  const [auditDueSort, setAuditDueSort] = useState("ASC");
   const badgeDisplay = (data) => {
-    if (data?.isAudited) {
+    if (data?.auditedStatus === "AUDITED") {
       return (
         <Badge.Ribbon
           text="Audited"
@@ -19,15 +28,16 @@ const UserQueue = ({ userList }) => {
           placement="start"
         ></Badge.Ribbon>
       );
-    } else if (data.isReAudited) {
+    } else if (data.auditedStatus === "REAUDIT") {
       return (
         <Badge.Ribbon
           text="Re Audit"
           color="#FFBE00"
           placement="start"
+          height={10}
         ></Badge.Ribbon>
       );
-    } else if (data.isAuditHold) {
+    } else if (data.auditedStatus === "AUDITEDHOLD") {
       return (
         <Badge.Ribbon
           text="Audite Hold"
@@ -38,6 +48,13 @@ const UserQueue = ({ userList }) => {
     } else return null;
   };
 
+  const handleTableRowClick = (e, id) => {
+    const targetTd = e.target.closest("td");
+    if (targetTd) {
+      localStorage.setItem("patientId", id);
+      router?.push("details");
+    }
+  };
   const dummyProfileImageUrl =
     "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
   const nullImg =
@@ -47,15 +64,12 @@ const UserQueue = ({ userList }) => {
       <Empty />
     ) : (
       userList?.map((data, index) => (
-        <tr
-          key={index}
-          onClick={() => {
-            localStorage.setItem("patientId", data?.patientId);
-            router?.push("details");
-          }}
-        >
-          <td className={TableStyle.firstTdBorder}>
-            {data?.isAudited || data?.isReAudited || data?.isAuditHold ? (
+        <tr key={index}>
+          <td
+            className={TableStyle.firstTdBorder}
+            onClick={() => handleTableRowClick(data?.patientId)}
+          >
+            {data?.auditedStatus ? (
               <span style={{ position: "relative", left: "0px", top: "10px" }}>
                 {badgeDisplay(data)}
               </span>
@@ -65,24 +79,120 @@ const UserQueue = ({ userList }) => {
                 paddingLeft: "40px",
               }}
             >
-              {data.patientId}
+              {data?.patientId}
             </span>
           </td>
-          <td className={TableStyle.childBorder}>{data.patientName}</td>
-          <td className={TableStyle.childBorder}>
-            {data.allocatedOn
-              ? moment(data.allocatedOn).format("MM-DD-YYYY")
-              : "---"}
+          <td
+            className={TableStyle.childBorder}
+            onClick={() => handleTableRowClick(data?.patientId)}
+          >
+            {data.patientName}
           </td>
-          <td className={TableStyle.childBorder}>
-            {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
+
+          <td
+            className={TableStyle.childBorder}
+            onClick={() => handleTableRowClick(data?.patientId)}
+          >
+            <Popover
+              content={
+                <>
+                  <div>
+                    <span className={TableStyle.subTitle}> Allocated Date</span>
+                    <div>
+                      {data.allocatedOn
+                        ? moment(data.allocatedOn).format("MM-DD-YYYY")
+                        : "---"}
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className={TableStyle.subTitle}> Due Date</span>
+                    <div>
+                      {data.dueDate
+                        ? moment(data.dueDate).format("MM-DD-YYYY")
+                        : "---"}
+                    </div>
+                  </div>
+                  {/* <div>
+                    <span className={TableStyle.subTitle}> Audited Date</span>
+                    <div>
+                      {data.auditedDate
+                        ? moment(data.auditedDate).format("MM-DD-YYYY")
+                        : "---"}
+                    </div>
+                  </div> */}
+                </>
+              }
+            >
+              {data.processedDate
+                ? moment(data.processedDate).format("MM-DD-YYYY")
+                : "---"}
+            </Popover>
           </td>
-          <td className={TableStyle.childBorder}>
-            {data.processedDate
-              ? moment(data.processedDate).format("MM-DD-YYYY")
-              : "---"}
+          {/* Audited details */}
+          <td
+            className={TableStyle.childBorder}
+            onClick={() => handleTableRowClick(data?.patientId)}
+          >
+            <div className={TableStyle.innerAlignments}>
+              {data.auditedDate
+                ? moment(data.auditedAllocatedDate).format("MM-DD-YYYY")
+                : "---"}
+            </div>
           </td>
+          <td
+            className={TableStyle.childBorder}
+            onClick={() => handleTableRowClick(data?.patientId)}
+          >
+            <div className={TableStyle.innerAlignments}>
+              {data.auditedDueDate
+                ? moment(data.auditedDueDate).format("MM-DD-YYYY")
+                : "---"}
+            </div>
+          </td>
+
           <td className={TableStyle.childBorder}>
+            <div className={TableStyle.innerAlignments}>
+              {data.auditedAllocatedBy ? (
+                <Tooltip title={data.auditedAllocatedBy}>
+                  {data.auditedAllocatedBy ? (
+                    <img
+                      src={dummyProfileImageUrl}
+                      alt="User Avatar"
+                      width={30}
+                      height={30}
+                      style={{ borderRadius: "50%", marginRight: "5px" }}
+                    />
+                  ) : (
+                    <img
+                      src={nullImg}
+                      alt="User Avatar"
+                      width={30}
+                      height={30}
+                      style={{ borderRadius: "50%", marginRight: "10px" }}
+                    />
+                  )}
+                  {data.auditedAllocatedBy ? (
+                    <>
+                      {data.auditedAllocatedBy
+                        .split("@")[0]
+                        .charAt(0)
+                        .toUpperCase() +
+                        data.auditedAllocatedBy.split("@")[0].slice(1)}
+                    </>
+                  ) : (
+                    "---"
+                  )}
+                </Tooltip>
+              ) : (
+                "---"
+              )}
+            </div>
+          </td>
+          <td
+            className={TableStyle.childBorder}
+            onClick={() => handleTableRowClick(data?.patientId)}
+          >
             {data.auditedDate
               ? moment(data.auditedDate).format("MM-DD-YYYY")
               : "---"}
@@ -120,6 +230,7 @@ const UserQueue = ({ userList }) => {
               "---"
             )}
           </td>
+
           <td className={TableStyle.childBorder}>
             <Select
               options={priorityOptions}
@@ -129,9 +240,14 @@ const UserQueue = ({ userList }) => {
               defaultValue={data?.priority ? data.priority : "Set Priority"}
               disabled={!data?.priority ? true : false}
               onChange={(value) => {
-                console.log(value);
+                dispatch(
+                  getPriorityChange(
+                    data?.patientId,
+                    dayjs(data?.lastModifiedDate)?.format("YYYY"),
+                    value
+                  )
+                );
               }}
-              style={{ width: "80%" }}
             />
           </td>
 
@@ -142,6 +258,7 @@ const UserQueue = ({ userList }) => {
       ))
     );
   };
+
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -149,13 +266,78 @@ const UserQueue = ({ userList }) => {
           <tr>
             <th style={{ paddingLeft: "60px" }}>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th>ALLOCATED DATE</th>
-            <th>DUE DATE</th>
-            <th>COMPLETED DATE</th>
-            <th>AUDITED DATE</th>
+            <th
+              onClick={() => {
+                setProcessSort(processSort === "ASC" ? "DESC" : "ASC");
+                setSort({
+                  sortDir: processSort,
+                  sortField: "processedDate",
+                });
+              }}
+            >
+              COMPLETED DATE
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {processSort === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+            <th
+              onClick={() => {
+                setAuditAllocatedSort(
+                  auditAllocatedSort === "ASC" ? "DESC" : "ASC"
+                );
+                setSort({
+                  sortDir: auditAllocatedSort,
+                  sortField: "auditedAllocatedDate",
+                });
+              }}
+            >
+              AUDITED ALLOCATED DATE
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {auditAllocatedSort === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+            <th
+              onClick={() => {
+                setAuditDueSort(auditDueSort === "ASC" ? "DESC" : "ASC");
+                setSort({ sortDir: auditDueSort, sortField: "auditedDueDate" });
+              }}
+            >
+              AUDITED DUE DATE
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {auditDueSort === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+            <th>AUDITED ALLOCATED BY</th>
+            <th
+              onClick={() => {
+                setAuditDateSort(audirDateSort === "ASC" ? "DESC" : "ASC");
+                setSort({ sortDir: audirDateSort, sortField: "auditedDate" });
+              }}
+            >
+              AUDITED DATE
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {audirDateSort === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
             <th>ALLOCATED BY</th>
-            <th>PRIORITY</th>
-            <th style={{ paddingLeft: "40px" }}>STATUS</th>
+            <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
+            <th>PROCESSED STATUS</th>
           </tr>
         </thead>
 

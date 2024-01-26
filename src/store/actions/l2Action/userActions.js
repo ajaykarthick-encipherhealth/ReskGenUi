@@ -32,52 +32,16 @@ export const getL2Users = (page, search) => {
   };
 };
 
-export const getL2IndividualUser = (
-  uId,
-  pageNo,
-  search,
-  selectedOption,
-  selAllocatedBy,
-  dueStartDate,
-  dueEndDate,
-  completedStartDate,
-  completedEndDate,
-  auditedStartDate,
-  auditedEndDate,
-  allocatedStartDate,
-  allocatedEndDate,
-  allocatedDateOrder,
-  dueDateOrder,
-  completedDateOrder,
-  auditedDateOrder
-) => {
+export const getL2IndividualUser = (datas) => {
   return (dispatch) => {
-    dispatch({
-      type: INDIVIAULUSER,
-      payload: {
-        loading: true,
-      },
-    });
+    // dispatch({
+    //   type: INDIVIAULUSER,
+    //   payload: {
+    //     loading: true,
+    //   },
+    // });
     try {
-      L2IndividualUser(
-        uId,
-        pageNo,
-        search,
-        selectedOption,
-        selAllocatedBy,
-        dueStartDate,
-        dueEndDate,
-        completedStartDate,
-        completedEndDate,
-        auditedStartDate,
-        auditedEndDate,
-        allocatedStartDate,
-        allocatedEndDate,
-        allocatedDateOrder,
-        dueDateOrder,
-        completedDateOrder,
-        auditedDateOrder
-      ).then((response) => {
+      L2IndividualUser(datas).then((response) => {
         if (response) {
           dispatch({
             type: INDIVIAULUSER,
