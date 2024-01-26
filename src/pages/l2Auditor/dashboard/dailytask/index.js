@@ -28,11 +28,11 @@ const DailyTask = () => {
     },
     {
       color: "#FFB54D",
-      name: "Pending",
+      name: "AuditPending",
     },
     {
       color: "#F4CE14",
-      name: "Hold",
+      name: "AuditHold",
     },
     {
       color: "#C26100",
@@ -40,7 +40,7 @@ const DailyTask = () => {
     },
     {
       color: "#EB5252",
-      name: "Declined",
+      name: "AuditDeclined",
     },
   ];
   const daysOfWeek = [
@@ -156,14 +156,14 @@ const DailyTask = () => {
             },
             {
               value: pending,
-              name: "Pending",
+              name: "AuditPending",
               itemStyle: {
                 color: "#FFB54D",
               },
             },
             {
               value: hold,
-              name: "Hold",
+              name: "AuditHold",
               itemStyle: {
                 color: "#F4CE14",
               },
@@ -177,7 +177,7 @@ const DailyTask = () => {
             },
             {
               value: declined,
-              name: "Declined",
+              name: "AuditDeclined",
               itemStyle: {
                 color: "#EB5252",
               },
@@ -209,7 +209,7 @@ const DailyTask = () => {
           data: [
             {
               value: allocated,
-              name: "Alocated",
+              name: "AuditAlocated",
               itemStyle: {
                 color: "#fff",
               },
@@ -325,15 +325,15 @@ const DailyTask = () => {
                                     {item.name}
                                   </div>
                                   <div className={styles.subText}>
-                                    {item.name === "Pending"
+                                    {item.name === "AuditPending"
                                       ? data.pending
                                       : item.name === "Audited"
                                       ? data?.audited
-                                      : item.name === "Hold"
+                                      : item.name === "AuditHold"
                                       ? data.hold
                                       : item.name === "ReAudited"
                                       ? data?.reAudited
-                                      : item.name === "Declined" &&
+                                      : item.name === "AuditDeclined" &&
                                         data.declined}
                                   </div>
                                 </div>
