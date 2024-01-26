@@ -8,6 +8,7 @@ import {
   mfaValidation,
   enableMFA,
   verifyCode,
+  accuracy,
 } from "../../services/AuthService";
 import { notification } from "antd";
 
@@ -23,6 +24,7 @@ export const SELECTEDROLE = "SELECTEDROLE";
 export const CODER = "CODER";
 export const ENABLEMFA = "ENABLEMFA";
 export const VERIFYCODE = "VERIFYCODE";
+export const ACCURACYSCRORE='ACCURACYSCRORE'
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -104,6 +106,23 @@ export const getValidateCode = (username, code, route, validate) => {
         });
       }
     });
+  };
+};
+
+export const getAccuracy = () => {
+  return (dispatch) => {
+    try {
+      accuracy().then((response) => {
+       if(response){
+        dispatch({
+          type: ACCURACYSCRORE,
+          payload: response,
+        });
+       }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 };
 
@@ -198,3 +217,4 @@ export const getCoderDetails = ({ name, search, selectedOption, router }) => {
     }
   };
 };
+
