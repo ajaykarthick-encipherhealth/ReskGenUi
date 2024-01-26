@@ -12059,6 +12059,17 @@ tbody > tr {
   letter-spacing: 0.78px;
   border-radius: 6px !important;
 }
+.reAudit-text {
+  background-color: #FFD1A3;
+  color: rgb(245, 106, 0);
+  font-family: "Manrope", sans-serif !important;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  border-radius: 6px !important;
+}
 .audited-text {
   background-color: #D4EAED;
   color: rgb(245, 106, 0);
