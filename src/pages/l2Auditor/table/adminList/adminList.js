@@ -93,7 +93,7 @@ const AdminList = ({ userList }) => {
                   <Tooltip title={` Quality : ${90}%`}>
                     <div className="notificationIcon">
                       <div style={{ width: 40, height: 40 }}>
-                        <CircularProgressbar value={90} text={`${90}%`} />
+                        <CircularProgressbar value={Math.round(item?.accuracy)} text={`${Math.round(item?.accuracy)}%`} />
                       </div>
                     </div>
                   </Tooltip>
