@@ -130,7 +130,7 @@ const index = () => {
         )
       );
     }
-  
+
     if (activeTab === "TeamReport") {
       dispatch(
         getTeamReportDetails(
@@ -164,19 +164,22 @@ const index = () => {
     receivedEndDate,
     receivedSearch,
   ]);
-  const TeamReportDetails = useSelector((state) => state.AuditReport?.teamDetails);
+  const TeamReportDetails = useSelector(
+    (state) => state.AuditReport?.teamDetails
+  );
 
-  const ReportPatientDetails = useSelector((state) => state.AuditReport?.details);
-  const SentReportDetails = useSelector((state) => state.AuditReport?.sentDetails);
+  const ReportPatientDetails = useSelector(
+    (state) => state.AuditReport?.details
+  );
+  const SentReportDetails = useSelector(
+    (state) => state.AuditReport?.sentDetails
+  );
   const ReceivedReportDetails = useSelector(
     (state) => state.AuditReport?.receivedDetails
   );
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
-    
   }, [ReportPatientDetails]);
-
-console.log(TeamReportDetails,"test");
 
   const statusOptions = [
     { label: "Completed", value: "COMPLETED" },
@@ -233,7 +236,7 @@ console.log(TeamReportDetails,"test");
   const closeModal = () => {
     setIsModalVisible(false);
     setSelectedRows([]);
-    setSelectAll(false)
+    setSelectAll(false);
   };
 
   const handleDatePickerChange = (date, dateString) => {
@@ -438,10 +441,7 @@ console.log(TeamReportDetails,"test");
                                       setActiveTab("TeamReport");
                                     }}
                                   >
-                                    <Nav.Link
-                                      to="#my-posts"
-                                      eventKey="team"
-                                    >
+                                    <Nav.Link to="#my-posts" eventKey="team">
                                       Team Report
                                     </Nav.Link>
                                   </Nav.Item>
@@ -498,25 +498,24 @@ console.log(TeamReportDetails,"test");
                                       selectAll={selectAll}
                                     />
                                   </Tab.Pane>
-                                  <Tab.Pane
-                                    id="my-posts"
-                                    eventKey="team"
-                                  >
-                                    <TeamReport
-                                      setModal={setModal}
-                                      modal={modal}
-                                      paginationFirst={paginationFirst}
-                                      ReportPatientDetails={
-                                        TeamReportDetails?.response
-                                      }
-                                      onPageChange={onPageChange}
-                                      comments={comments}
-                                      setComments={setComments}
-                                      setSelectedRows={setSelectedRows}
-                                      selectedRows={selectedRows}
-                                      setSelectAll={setSelectAll}
-                                      selectAll={selectAll}
-                                    />
+                                  <Tab.Pane id="my-posts" eventKey="team">
+                                    {TeamReportDetails?.response?.data && (
+                                      <TeamReport
+                                        setModal={setModal}
+                                        modal={modal}
+                                        paginationFirst={paginationFirst}
+                                        ReportPatientDetails={
+                                          TeamReportDetails?.response
+                                        }
+                                        onPageChange={onPageChange}
+                                        comments={comments}
+                                        setComments={setComments}
+                                        setSelectedRows={setSelectedRows}
+                                        selectedRows={selectedRows}
+                                        setSelectAll={setSelectAll}
+                                        selectAll={selectAll}
+                                      />
+                                    )}
                                   </Tab.Pane>
                                   <Tab.Pane
                                     id="my-posts"

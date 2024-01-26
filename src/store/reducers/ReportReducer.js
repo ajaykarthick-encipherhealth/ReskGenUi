@@ -22,7 +22,7 @@ const initialState = {
   reportInfo:null
 };
 
-export const AuditReportReducer = (state = initialState, action) => {
+export const ReportReducer = (state = initialState, action) => {
   if (action.type === REPORT_PATIENTS_DETAILS) {
     return {
       ...state,

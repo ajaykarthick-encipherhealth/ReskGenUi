@@ -13,14 +13,14 @@ import visitStyles from "../../../../styles/visitdata.module.css";
 function TeamReport({
   setModal,
   modal,
-  reportListAll,
   paginationFirst,
+  // reportListAll,
   ReportPatientDetails,
   onPageChange,
   comments,
   setComments,
-  selectedRows,
   setSelectedRows,
+  selectedRows,
   selectAll,
   setSelectAll,
 }) {
@@ -31,7 +31,7 @@ function TeamReport({
 
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll;
+    const updatedRows = selectAll ? [] : ReportPatientDetails;
     setSelectedRows(updatedRows);
   };
 
@@ -227,7 +227,7 @@ function TeamReport({
                 <th>HCC </th>
                 <th>FLAG </th>
                 <th>STATUS</th>
-                <th>
+                {/* <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
                   >
@@ -245,14 +245,14 @@ function TeamReport({
                       checked={selectAll}
                     />
                   </div>
-                </th>
+                </th> */}
               </>
             </tr>
           </thead>
 
           <tbody className={TableStyle.bodytable}>
-            {reportListAll?.data?.length > 0 &&
-              reportListAll?.data?.map((row, index) => (
+            {ReportPatientDetails?.data?.length > 0 &&
+              ReportPatientDetails?.data?.map((row, index) => (
                 <tr
                   key={index}
                   style={{ padding: " 22px !important", textAlign: "center" }}
@@ -324,7 +324,7 @@ function TeamReport({
                         {processstatusBodyTemplate(row)}
                       </td>
 
-                      <td className={TableStyle.lastBorder}>
+                      {/* <td className={TableStyle.lastBorder}>
                         <input
                           type="checkbox"
                           onChange={() => {
@@ -342,7 +342,7 @@ function TeamReport({
                             backgroundColor: "pink",
                           }}
                         />
-                      </td>
+                      </td> */}
                     </>
                   ) : (
                     <>
@@ -399,7 +399,7 @@ function TeamReport({
                       <td className={TableStyle.childBorder}>
                         {processstatusBodyTemplate(row)}{" "}
                       </td>
-                      <td className={TableStyle.lastBorder}>
+                      {/* <td className={TableStyle.lastBorder}>
                         <input
                           type="checkbox"
                           onChange={() => {
@@ -417,7 +417,7 @@ function TeamReport({
                             backgroundColor: "pink",
                           }}
                         />
-                      </td>
+                      </td> */}
                     </>
                   )}
                 </tr>

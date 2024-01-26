@@ -5,17 +5,18 @@ import { AuthReducer, PatientStore } from "./reducers/AuthReducer";
 import todoReducers from "./reducers/Reducers";
 import { DashboardReducer } from "./reducers/DashboradReducer";
 import { PatientsReducer } from "./reducers/PatientsReducer";
-import { AuditReportReducer, ReportReducer } from "./reducers/ReportReducer";
+import { ReportReducer } from "./reducers/ReportReducer";
 import { NotificationReducer } from "./reducers/NotificationReducer";
 //import { reducer as reduxFormReducer } from 'redux-form';
 import { createWrapper } from "next-redux-wrapper";
 import { AdminPatientsReducer } from "./reducers/adminRecucers/fileProcessingReducer";
 import { AdminPatientsListReducer } from "./reducers/adminRecucers/patientsReducers"
 import { AdminUsersReducer } from "./reducers/adminRecucers/usewrsReducer";
-import { DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
+// import { DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
 import { WorkReducers } from "./reducers/l2Reducers/AuditReducer";
 import { L2DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
 import {L2UserReducers} from "./reducers/l2Reducers/usersReducers"
+import { AuditReportReducer } from "./reducers/l2Reducers/AuditReportReducer";
 const middleware = applyMiddleware(thunk);
 
 const composeEnhancers = compose;
@@ -27,7 +28,7 @@ const reducers = combineReducers({
   patientDetails: PatientStore,
   todoReducers,
   workFlow: DashboardReducer,
-  workFlows: DashboardReducers,
+  // workFlows: DashboardReducers,
   report:ReportReducer,
   AuditReport:AuditReportReducer,
   patients:PatientsReducer,
