@@ -285,6 +285,7 @@ const Header = () => {
     const userRoleLocal = localStorage.getItem("userRole");
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
+
     getUserIdDetails(userId);
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
@@ -312,7 +313,7 @@ const Header = () => {
 
     const items = [];
 
-    if (userRole === "admin") {
+    if (localStorage.getItem("roles")?.toLowerCase() === "admin") {
       items.push(
         { key: "l1auditor", label: "L1auditor" },
         { key: "l2auditor", label: "L2auditor" }
@@ -322,7 +323,7 @@ const Header = () => {
       }
     }
 
-    if (userRole === "l2auditor") {
+    if (localStorage.getItem("roles")?.toLowerCase() === "l2auditor") {
       items.push({ key: "l1auditor", label: "L1auditor" });
       if (userRoleLocal === "l1auditor") {
         items.push({ key: "l2auditor", label: "L2auditor" });
