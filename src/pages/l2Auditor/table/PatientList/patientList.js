@@ -196,6 +196,47 @@ function PatientTable({
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.patientName}
           </td>
+          <td className={TableStyle.childBorder}>
+            {data.patientAllocated ?  <Tooltip title={data.patientAllocated }>
+              {/* <Avatar
+              style={{
+                backgroundColor: "#fde3cf",
+                color: "#f56a00",
+                cursor: "pointer",
+              }}
+            >
+              {data.allocatedBy
+                ? data.allocatedBy.slice(0, 2).toUpperCase()
+                : "N"}
+            </Avatar> */}
+              {data.patientAllocated ? (
+                <img
+                  src={dummyProfileImageUrl}
+                  alt="User Avatar"
+                  width={30}
+                  height={30}
+                  style={{ borderRadius: "50%", marginRight: "5px" }}
+                />
+              ) : (
+                <img
+                  src={nullImg}
+                  alt="User Avatar"
+                  width={30}
+                  height={30}
+                  style={{ borderRadius: "50%", marginRight: "10px" }}
+                />
+              )}
+              {data.patientAllocated ? (
+                <>
+                  {data.patientAllocated.split("@")[0].charAt(0).toUpperCase() +
+                    data.patientAllocated.split("@")[0].slice(1)}
+                </>
+              ) : (
+               "---"
+              )}
+            </Tooltip> :"---"}
+           
+          </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.allocatedOn
               ? moment(data.allocatedOn).format("MM-DD-YYYY")
@@ -287,14 +328,15 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th>ALLOCATED DATE</th>
+            <th>L1 AUDITOR</th>
+            <th>AUDIT ALLOCATED DATE</th>
             <th
               onClick={() => {
                 requestSort("dueDate");
                 sortTableByDate("dueDate");
               }}
             >
-              DUE DATE
+             AUDITED DUE DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
                 {sortDueOrder === "asc" ? (
                   <ArrowUpOutlined />
@@ -309,7 +351,7 @@ function PatientTable({
                 sortTableByDate("completeDate");
               }}
             >
-              COMPLETED DATE
+             AUDITED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
                 {sortCompleteOrder === "asc" ? (
                   <ArrowUpOutlined />
@@ -319,9 +361,9 @@ function PatientTable({
               </span>
             </th>
 
-            <th>ALLOCATED BY</th>
+            <th>AUDIT ALLOCATED BY</th>
             <th>PRIORITY</th>
-            <th>STATUS</th>
+            <th>AUDIT STATUS</th>
             {/* <th>Action</th> */}
           </tr>
         </thead>

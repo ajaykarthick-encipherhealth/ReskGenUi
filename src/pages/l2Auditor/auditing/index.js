@@ -22,7 +22,7 @@ const bullets = [
   },
   {
     color: "#E28213",
-    name: "PENDING",
+    name: "AUDIT PENDING",
   },
   {
     color: "#964B00",
@@ -41,8 +41,8 @@ const bullets = [
 const statusOptions = [
   { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
-  { label: "PENDING", value: "PENDING" },
-  { label: "RE AUDIT", value: "REAUDIT"},
+  { label: "PENDING", value: "AUDIT_PENDING" },
+  { label: "RE AUDIT", value: "REAUDIT" },
   { label: "DECLINED", value: "DECLINED" },
   { label: "AUDIT HOLD", value: "AUDITHOLD" },
 ];
@@ -71,6 +71,7 @@ export default function Patient() {
     processStageId: "",
     patientId: "",
   });
+  const [selAllocatedBy, setSelAllocatedBy] = useState("");
 
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
@@ -85,17 +86,14 @@ export default function Patient() {
   const [search, setSearch] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
 
-
-
   const allocatedByOptionsSet = new Set();
-
 
   const createdByOptions = [
     { label: "All", value: "All" },
     ...patinetListAll
       ?.map((item) =>
-        item?.createdBy
-          ? { label: item?.createdBy, value: item?.createdBy }
+        item?.patientAllocated
+          ? { label: item?.patientAllocated, value: item?.patientAllocated }
           : null
       )
       .filter(Boolean),
@@ -114,6 +112,7 @@ export default function Patient() {
         computedStartDate,
         computedEndDate,
         selectedOption,
+        selAllocatedBy,
         search,
         completedStartDate,
         completedEndDate,
@@ -126,6 +125,7 @@ export default function Patient() {
     computedStartDate,
     computedEndDate,
     selectedOption,
+    selAllocatedBy,
     search,
     completedStartDate,
     completedEndDate,
@@ -143,7 +143,7 @@ export default function Patient() {
     if (response) {
       var resultMap = [];
       var result = response?.response?.content;
-      console.log(result,"result");
+      console.log(result, "result");
       setTotalElements(response?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -160,7 +160,8 @@ export default function Patient() {
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
           createdAt: res.createdAt,
-          auditedStatus:res.auditedStatus
+          auditedStatus: res.auditedStatus,
+          patientAllocated: res.patientAllocated,
         });
       });
       var newArray = [];
@@ -170,7 +171,7 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
-console.log(patinetListAll,"patinetListAll");
+  console.log(patinetListAll, "patinetListAll");
   const addPatientFormId = () => {
     setValidated(false);
     setAddPatientId(true);
@@ -185,7 +186,6 @@ console.log(patinetListAll,"patinetListAll");
     setAddPatient(true);
     setIsLoadingBtn(false);
   };
-
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
@@ -204,11 +204,15 @@ console.log(patinetListAll,"patinetListAll");
 
   const processstatusBodyTemplate = (rowData) => {
     switch (rowData.auditedStatus) {
-    
-      case "PENDING":
+      case "AUDIT_PENDING":
         return (
           <div className="patient-status">
-            <span className={`badge Auditprocessing-text`} style={{ color: "#E28213", background:"#FBE7D0 !important" }}>Pending</span>
+            <span
+              className={`badge Auditprocessing-text`}
+              style={{ color: "#E28213", background: "#FBE7D0 !important" }}
+            >
+              Pending
+            </span>
           </div>
         );
 
@@ -221,25 +225,33 @@ console.log(patinetListAll,"patinetListAll");
           </div>
         );
 
-
-      case "AUDIT HOLD":
+      case "AUDITHOLD":
         return (
           <div className="patient-status">
-            <span className={`badge Audithold-text`} style={{ color: "#CE9900" }}>Audit Hold</span>
+            <span
+              className={`badge Audithold-text`}
+              style={{ color: "#CE9900" }}
+            >
+              Audit Hold
+            </span>
           </div>
         );
-        case "RE AUDIT":
-          return (
-            <div className="patient-status">
-              <span className={`badge reAudit-text`} style={{ color: "#964B00" }}>Re Audit</span>
-            </div>
-          );
-          case "AUDITED":
-          return (
-            <div className="patient-status">
-              <span className={`badge audited-text`} style={{ color: "#377880" }}>Audited</span>
-            </div>
-          );
+      case "REAUDIT":
+        return (
+          <div className="patient-status">
+            <span className={`badge reAudit-text`} style={{ color: "#964B00" }}>
+              Re Audit
+            </span>
+          </div>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <span className={`badge audited-text`} style={{ color: "#377880" }}>
+              Audited
+            </span>
+          </div>
+        );
       case null:
         return <div className="patient-status">---</div>;
     }
@@ -258,8 +270,6 @@ console.log(patinetListAll,"patinetListAll");
     );
   };
 
-
-
   const onPageChange = (e) => {
     setIsLoading(true);
     setPaginationFirst(e.first);
@@ -268,8 +278,6 @@ console.log(patinetListAll,"patinetListAll");
     setTableLoading(true);
     getAllList(response?.response);
   };
-
-
 
   return (
     <>
@@ -289,13 +297,13 @@ console.log(patinetListAll,"patinetListAll");
                             isSearch={true}
                             searchlabel="Search By Patient Id / Name"
                             // select status
-                            selectlabel="Select Status"
+                            selectlabel="Select Audited Status"
                             isSelector={true}
                             setSelectedOption={SetSelectedOption}
                             selectOptions={statusOptions}
                             defaultSelectValue1={"Select Status"}
                             // computation date
-                            pickerlabel="Due Date"
+                            pickerlabel="Audit Due Date"
                             defaultStartDate={""}
                             defaultEndDate={""}
                             setStartDate={setComputedStartDate}
@@ -311,12 +319,13 @@ console.log(patinetListAll,"patinetListAll");
                             defaultAllocateTo={"All"}
                             // created by
                             isCreatedBySelector={true}
-                            createdTolabel="Select CreatedTo"
+                            createdTolabel="Select L1 Auditor"
                             createdByOptoons={createdByOptions}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={false}
                             addUserForm={addPatientFormId}
                             bullets={bullets}
+                            isNextRow={true}
                           />
                         </div>
                       </div>
