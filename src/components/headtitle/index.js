@@ -5,6 +5,7 @@ import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { getDateRange } from "../../store/actions/DashboardActions";
+import moment from "moment";
 
 const { RangePicker } = DatePicker;
 
@@ -30,27 +31,11 @@ const HeadTitle = ({
 
   const handleDatePickerChange = (date) => {
     if (date) {
-      const convertedDates =
-        date &&
-        date?.map((date) => {
-          const formattedDate =
-            date &&
-            dayjs(date)
-              .startOf("day")
-              .add(6, "hour")
-              .add(39, "minute")
-              .add(22, "second")
-              .add(786, "millisecond")
-              .toISOString();
-          return formattedDate;
-        });
-
       const dates = {
-        startDate: convertedDates[0],
-        endDate: convertedDates[1],
+        startDate: moment(date[0]).format("YYYY-MM-DD") + "T00:00:00.000Z",
+        endDate: moment.utc(date[1]).format("YYYY-MM-DD") + "T23:59:59.000Z",
       };
       setDates(dates);
-      // dispatch(getDateRange(dates));
     }
   };
 
