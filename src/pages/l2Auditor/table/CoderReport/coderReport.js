@@ -54,18 +54,16 @@ function CoderReport({
   };
 
   const processstatusBodyTemplate = (rowData) => {
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
         return (
           <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
-        );
-
-      case "PENDING":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
+            <span
+              className={`badge Auditprocessing-text`}
+              style={{ color: "#E28213", background: "#FBE7D0 !important" }}
+            >
+              Pending
+            </span>
           </div>
         );
 
@@ -78,30 +76,35 @@ function CoderReport({
           </div>
         );
 
-      case "NOTCOMPUTED":
+      case "AUDITHOLD":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
+            <span
+              className={`badge Audithold-text`}
+              style={{ color: "#CE9900" }}
+            >
+              Audit Hold
+            </span>
           </div>
         );
-      case "COMPUTED":
+      case "REAUDIT":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
+            <span className={`badge reAudit-text`} style={{ color: "#964B00" }}>
+              Re Audit
+            </span>
           </div>
         );
-      case "HOLD":
+      case "AUDITED":
         return (
           <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
+            <span className={`badge audited-text`} style={{ color: "#377880" }}>
+              Audited
+            </span>
           </div>
         );
       case null:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
+        return <div className="patient-status">---</div>;
     }
   };
 
@@ -227,7 +230,7 @@ function CoderReport({
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th>STATUS</th>
+                <th>AUDIT STATUS</th>
                 <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
@@ -258,94 +261,7 @@ function CoderReport({
                   key={index}
                   style={{ padding: " 22px !important", textAlign: "center" }}
                 >
-                  {row?.auditedBy && (
-                    <td className={TableStyle.firstTdBorder}>
-                      <Badge.Ribbon
-                        text="Audited"
-                        color="#58bad7"
-                        placement="start"
-                      ></Badge.Ribbon>
-                    </td>
-                  )}
-                  {row?.auditedBy ? (
-                    <>
-                      <td
-                        style={{
-                          borderTop: "0.2px solid #e1e1e1",
-                          borderBottom: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                      >
-                        {row?.patientId ? row?.patientId : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.patientName ? row?.patientName : "---"}
-                      </td>
-
-                      <td
-                        // onClick={setModal(false)}
-                        className={TableStyle.childBorder}
-                      >
-                        {/* {row?.processedDate} */}
-                        {dateFormate(dayjs, row?.processedDate)}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        <div
-                          disabled={row?.comment ? false : true}
-                          onClick={() => {
-                            if (row?.comment) {
-                              setComments(row?.comment);
-                              setModal(!modal);
-                            }
-                          }}
-                          disbaled={true}
-                        >
-                          {row?.comment
-                            ? SVGICON.comment
-                            : SVGICON.emptyComments}
-                        </div>
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.auditedBy ? row?.auditedBy : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.rafSum ? row?.rafSum : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.validDisease ? row?.validDisease : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.flag ? (
-                          getFlag(row?.flag)
-                        ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
-                        )}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {processstatusBodyTemplate(row)}
-                      </td>
-
-                      <td className={TableStyle.lastBorder}>
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            handleRowCheckboxChange(row);
-                          }}
-                          checked={selectedRows?.data?.some(
-                            (selectedRow) =>
-                              selectedRow.patientId === row.patientId
-                          )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                            backgroundColor: "pink",
-                          }}
-                        />
-                      </td>
-                    </>
-                  ) : (
+               
                     <>
                       <td className={TableStyle.firstTdBorder}></td>
                       <td
@@ -420,7 +336,7 @@ function CoderReport({
                         />
                       </td>
                     </>
-                  )}
+                
                 </tr>
               ))}
           </tbody>

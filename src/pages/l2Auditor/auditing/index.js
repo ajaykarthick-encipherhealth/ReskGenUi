@@ -112,12 +112,12 @@ export default function Patient() {
         computedStartDate,
         computedEndDate,
         selectedOption,
-        selAllocatedBy,
         search,
         completedStartDate,
         completedEndDate,
         patientSortOrder,
-        sortField
+        sortField,
+        selAllocatedBy,
       )
     );
   }, [

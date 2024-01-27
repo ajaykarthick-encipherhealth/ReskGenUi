@@ -26,6 +26,7 @@ import download from "../../../../images/report/download.svg";
 import { debounce } from "../Export";
 import Header from "../../../../jsx/layouts/nav/Header";
 import Footer from "../../../../jsx/layouts/Footer";
+import SpinnerDots from "../../../../components/spinner";
 
 const IndividualReceiverReport = () => {
   const url = useSelector((state) => state.AuditReport.uploadFile);
@@ -137,7 +138,7 @@ const IndividualReceiverReport = () => {
             {/* users */}
             <div className={styles.list}>
               {searchValue !== null && detailsContent?.length === 0 ? (
-                <div style={{ marginTop: "60px" }}>No data Found</div>
+                <div style={{ marginTop: "60px" }}><SpinnerDots/></div>
               ) : (
                 <>
                   {detailsContent
