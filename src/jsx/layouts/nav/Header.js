@@ -32,7 +32,10 @@ import Notification from "../../../components/notification/index";
 import { getFilteredList } from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
-import { getCoderDetails } from "../../../store/actions/AuthActions";
+import {
+  getAccuracy,
+  getCoderDetails,
+} from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
 
 const btnItems = [
@@ -72,6 +75,7 @@ const Header = () => {
   );
 
   const msgReply = useSelector((state) => state.workFlow.chatReply);
+  const accuracy = useSelector((state) => state.auth.accuracy);
 
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;
@@ -324,6 +328,7 @@ const Header = () => {
     }
 
     if (localStorage.getItem("roles")?.toLowerCase() === "l2auditor") {
+      dispatch(getAccuracy());
       items.push({ key: "l1auditor", label: "L1auditor" });
       if (userRoleLocal === "l1auditor") {
         items.push({ key: "l2auditor", label: "L2auditor" });
@@ -331,6 +336,8 @@ const Header = () => {
     }
 
     setDropdownContent(items);
+
+    dispatch(getAccuracy());
   }, []);
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
@@ -349,7 +356,7 @@ const Header = () => {
         })
       );
     }
-  }, [ msgReply,selectedbtn, search, selectedOption]);
+  }, [msgReply, selectedbtn, search, selectedOption]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -415,12 +422,26 @@ const Header = () => {
                           title="CogentAI"
                           subtitle="Chat with CogentAI"
                         />
-                        <Tooltip title={` Quality : ${percentage}%`}>
+                        <Tooltip
+                          title={` Quality : ${
+                            userRole === "l1auditor"
+                              ? percentage
+                              : Math.round(accuracy?.data?.response)
+                          }%`}
+                        >
                           <div className="notificationIcon">
                             <div style={{ width: 40, height: 40 }}>
                               <CircularProgressbar
-                                value={percentage}
-                                text={`${percentage}%`}
+                                value={
+                                  userRole === "l1auditor"
+                                    ? percentage
+                                    : Math.round(accuracy?.data?.response)
+                                }
+                                text={`${
+                                  userRole === "l1auditor"
+                                    ? percentage
+                                    : Math.round(accuracy?.data?.response)
+                                }%`}
                               />
 
                               {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}

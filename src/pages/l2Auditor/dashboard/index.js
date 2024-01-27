@@ -1,32 +1,35 @@
 import React, { useEffect } from "react";
+import { Col, Row } from "antd";
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
+import { useRouter } from "next/router";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
-import { Col, Row } from "antd";
 import WorkFlow from "./workflow";
 import DailyTask from "./dailytask";
 import Accuracy from "./accuracy";
 import Notifications from "./notifications";
 import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
-import { useDispatch, useSelector } from "react-redux";
-import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import Footer from "../../../jsx/layouts/Footer";
 import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
 
 const index = () => {
   const currentDate = dayjs();
-  const last30thDate = currentDate.subtract(31, "day");
-
-  const lastDateWithTime = currentDate.endOf("day").toISOString();
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+  const router = useRouter();
   const dispatch = useDispatch();
+  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+
+  const last30thDate = currentDate?.subtract(31, "day");
+  const lastDateWithTime = currentDate?.endOf("day").toISOString();
 
   const startDate = DateRanges
     ? DateRanges?.startDate
-    : last30thDate.toISOString();
-  const lastDate = DateRanges ? DateRanges?.endDate : lastDateWithTime;
-  const router = useRouter();
+    : moment(last30thDate)?.format("YYYY-MM-DD") + "T00:00:00.000Z";
+
+  const lastDate = DateRanges ? DateRanges?.endDate : moment(lastDateWithTime)?.format("YYYY-MM-DD") + "T23:59:59.000Z";
+
   useEffect(() => {
     dispatch(getWorkFlow(startDate, lastDate, router));
   }, [startDate, lastDate]);
@@ -55,7 +58,7 @@ const index = () => {
           </Row>
           <Row className={styles.RowCon}>
             <Col span={14} className={styles.column2}>
-            <CompletedStatus />
+              <CompletedStatus />
             </Col>
             <Col span={9} offset={1} className={styles.columns}>
               <HoldStatus />

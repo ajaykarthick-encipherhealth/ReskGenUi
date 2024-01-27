@@ -164,3 +164,20 @@ export const mfaValidation = async (username) => {
     console.log(err);
   }
 };
+
+export const accuracy = async () => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/l2dashboard/loggedinuseraccuracy`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};

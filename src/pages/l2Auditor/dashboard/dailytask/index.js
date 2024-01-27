@@ -13,7 +13,7 @@ import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
-import spinSTYles from '../../../../styles/auth.module.css'
+import spinSTYles from "../../../../styles/auth.module.css";
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -62,7 +62,7 @@ const DailyTask = () => {
       const dayIndex = today.getDay();
       days.push({
         day: daysOfWeek[dayIndex],
-        date: dayjs(today).format("MM-DD-YYYY"),
+        date: dayjs(today)?.format("MM-DD-YYYY"),
         dateString: today?.toISOString(),
       });
     }
@@ -75,10 +75,10 @@ const DailyTask = () => {
   }, []);
 
   useEffect(() => {
-    if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData?.data?.response);
+    if (dailyStatusData && selectedDate) {
+      getDays(selectedDate, dailyStatusData);
     }
-  }, [dailyStatusData]);
+  }, [dailyStatusData, selectedDate]);
 
   const showPrevious = () => {
     const lastData = currentDays[0];
@@ -100,7 +100,7 @@ const DailyTask = () => {
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = statusData?.find((status) => {
-        return status?.response?.date === dayInfo?.dateString;
+        return status?.data?.response?.date === dayInfo?.dateString;
       });
       return {
         id: index + 1,
@@ -346,9 +346,7 @@ const DailyTask = () => {
                   ))}
                 </Row>
               ) : (
-                <div
-                className={spinSTYles.spinStyle}
-                >
+                <div className={spinSTYles.spinStyle}>
                   <Spin loading={dailyStatusData?.loading} />
                 </div>
               )}

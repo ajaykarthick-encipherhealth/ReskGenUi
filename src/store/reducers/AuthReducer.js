@@ -8,7 +8,9 @@ import {
   PATIENT_DETAILS,
   SELECTEDROLE,
   CODER,
-  VERIFYCODE
+  VERIFYCODE,
+  ACCURACYSCRORE,
+  
 } from "../actions/AuthActions";
 
 const initialState = {
@@ -25,7 +27,8 @@ const initialState = {
   selectedRole: null,
   // count : false,
   codeDetails: null,
-  qrcode:""
+  qrcode: "",
+  accuracy: "",
 };
 
 const initialStatePatient = {
@@ -51,7 +54,12 @@ export function AuthReducer(state = initialState, action) {
       showLoading: false,
     };
   }
-
+  if (action.type === ACCURACYSCRORE) {
+    return {
+      ...state,
+      accuracy: action.payload,
+    };
+  }
   if (action.type === LOGOUT_ACTION) {
     return {
       ...state,
