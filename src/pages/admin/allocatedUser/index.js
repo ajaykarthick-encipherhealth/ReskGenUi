@@ -293,10 +293,11 @@ export default function Patient() {
   };
   useEffect(() => {
     if (allocateClicked) {
+      setIsLoading(true);
        if(!isPatientList){
         getAllList(pageNo, pageSize, "", "", true, 2);
        }else{
-        getAuditL2List();
+        getL2PatientList(l2selectUser);
        }
       setAllocateClicked(false);
       setSelectedRowsId([]);

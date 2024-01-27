@@ -73,12 +73,12 @@ const L2AllocateModal = ({
         notification.success({
           message: response?.data?.message,
         });
-        setOpen(false);
         setAllocateClicked(true);
         setAllocateDate("");
         setActiveCard("");
         setActiveEmail("");
         setSearch("");
+        setOpen(false);
       }
     }
   };
