@@ -28,7 +28,7 @@ const index = () => {
     ? DateRanges?.startDate
     : moment(last30thDate)?.format("YYYY-MM-DD") + "T00:00:00.000Z";
 
-  const lastDate = DateRanges ? DateRanges?.endDate : lastDateWithTime;
+  const lastDate = DateRanges ? DateRanges?.endDate : moment(lastDateWithTime)?.format("YYYY-MM-DD") + "T23:59:59.000Z";
 
   useEffect(() => {
     dispatch(getWorkFlow(startDate, lastDate, router));

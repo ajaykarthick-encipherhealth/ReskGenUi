@@ -33,7 +33,7 @@ const HeadTitle = ({
     if (date) {
       const dates = {
         startDate: moment(date[0])?.format("YYYY-MM-DD") + "T00:00:00.000Z",
-        endDate: moment.utc(date[1])?.format("YYYY-MM-DD") + "T23:59:59.000Z",
+        endDate: moment(date[1])?.format("YYYY-MM-DD") + "T23:59:59.000Z",
       };
       setDates(dates);
     }
