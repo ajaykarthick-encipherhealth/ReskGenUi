@@ -54,7 +54,7 @@ const statusOptions = [
 const AuditOptions = [
   { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
-  { label: "AUDITEDHOLD", value: "AUDITEDHOLD" },
+  { label: "AUDITHOLD", value: "AUDITHOLD" },
   { label: "REAUDIT", value: "REAUDIT" },
   { label: "AUDIT_PENDING", value: "AUDIT_PENDING" },
 ];
@@ -205,7 +205,7 @@ const index = () => {
                         isAuditCompleteDate={true}
                         // allocated by
                         isAuditAllocatedBy={true}
-                        audiallocatedBylabel="Select Audited AllocatedBy"
+                        audiallocatedBylabel="Audited AllocatedBy"
                         auditallocatedByOptions={[]}
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
                         audidefaultAllocatedBy={"All"}
@@ -232,7 +232,7 @@ const index = () => {
                         defaultAllocateTo={"All"}
                         // allocated by
                         isAllocatedBySelector={true}
-                        allocatedBylabel="Select AllocatedBy"
+                        allocatedBylabel=" AllocatedBy"
                         allocatedByOptoons={[]}
                         setSelAllocatedBy={setSelAllocatedBy}
                         defaultAllocatedBy={"All"}

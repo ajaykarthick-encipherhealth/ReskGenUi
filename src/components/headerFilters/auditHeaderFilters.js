@@ -102,7 +102,7 @@ const AuditHeaderFilters = ({
   return (
     <>
       <div style={{ display: "flex" }}>
-        <div className="row filter-contain" style={{ width: "98%" }}>
+        <div className="row filter-contain" style={{ width: "100%" }}>
           {isSearch && (
             <div className="col-xl-2">
               {" "}
@@ -212,7 +212,7 @@ const AuditHeaderFilters = ({
         </div>
       </div>
       {showFilters && (
-        <div style={{ marginTop: "50px" }}>
+        <div style={{ margin: "50px 0px 0px -4px" }}>
           <div className="row filter-contain">
             {isSelector ? (
               <div className="col-xl-2" style={{ zIndex: "999" }}>

@@ -14,7 +14,7 @@ const Search = ({
 }) => {
   return (
     <div>
-      <label>{searchlabel}</label>
+      <label style={{marginLeft:"8px"}}>{searchlabel}</label>
       <div class="form-group has-search">
         <FontAwesomeIcon
           className="fa fa-search form-control-feedback"

@@ -10,7 +10,7 @@ const Selector = ({
 }) => {
   return (
     <div>
-      <label>{selectlabel}</label>
+      <label style={{marginLeft:"10px"}}>{selectlabel}</label>
       <div class="form-group has-search">
         <Select
           onChange={(value) => {

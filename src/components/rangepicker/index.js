@@ -20,7 +20,7 @@ const DateRangePicker = ({
 }) => {
   return (
     <div>
-      <label>{pickerlabel}</label>
+      <label style={{marginLeft:"10px"}}>{pickerlabel}</label>
       <div>
         <RangePicker
           format={"YYYY-MM-DD"}

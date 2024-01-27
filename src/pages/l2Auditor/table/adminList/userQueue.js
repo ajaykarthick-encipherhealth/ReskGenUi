@@ -67,7 +67,7 @@ const UserQueue = ({ userList, setSort }) => {
         <tr key={index}>
           <td
             className={TableStyle.firstTdBorder}
-            onClick={() => handleTableRowClick(data?.patientId)}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {data?.auditedStatus ? (
               <span style={{ position: "relative", left: "0px", top: "10px" }}>
@@ -84,14 +84,14 @@ const UserQueue = ({ userList, setSort }) => {
           </td>
           <td
             className={TableStyle.childBorder}
-            onClick={() => handleTableRowClick(data?.patientId)}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {data.patientName}
           </td>
 
           <td
             className={TableStyle.childBorder}
-            onClick={() => handleTableRowClick(data?.patientId)}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             <Popover
               content={
@@ -113,14 +113,52 @@ const UserQueue = ({ userList, setSort }) => {
                         : "---"}
                     </div>
                   </div>
-                  {/* <div>
-                    <span className={TableStyle.subTitle}> Audited Date</span>
+                  <div>
+                    <span className={TableStyle.subTitle}> Allocated By</span>
                     <div>
-                      {data.auditedDate
-                        ? moment(data.auditedDate).format("MM-DD-YYYY")
-                        : "---"}
+                      {data.allocatedBy ? (
+                        <>
+                          {data.allocatedBy ? (
+                            <img
+                              src={dummyProfileImageUrl}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "5px",
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={nullImg}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "10px",
+                              }}
+                            />
+                          )}
+                          {data.allocatedBy ? (
+                            <>
+                              {data.allocatedBy
+                                // .split("@")[0]
+                                // .charAt(0)
+                                // .toUpperCase() +
+                                // data.allocatedBy.split("@")[0].slice(1)
+                                }
+                            </>
+                          ) : (
+                            "---"
+                          )}
+                        </>
+                      ) : (
+                        "---"
+                      )}
                     </div>
-                  </div> */}
+                  </div>
                 </>
               }
             >
@@ -132,7 +170,7 @@ const UserQueue = ({ userList, setSort }) => {
           {/* Audited details */}
           <td
             className={TableStyle.childBorder}
-            onClick={() => handleTableRowClick(data?.patientId)}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             <div className={TableStyle.innerAlignments}>
               {data.auditedDate
@@ -142,7 +180,7 @@ const UserQueue = ({ userList, setSort }) => {
           </td>
           <td
             className={TableStyle.childBorder}
-            onClick={() => handleTableRowClick(data?.patientId)}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             <div className={TableStyle.innerAlignments}>
               {data.auditedDueDate
@@ -191,45 +229,13 @@ const UserQueue = ({ userList, setSort }) => {
           </td>
           <td
             className={TableStyle.childBorder}
-            onClick={() => handleTableRowClick(data?.patientId)}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {data.auditedDate
               ? moment(data.auditedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
-            {data.allocatedBy ? (
-              <Tooltip title={data.allocatedBy}>
-                {data.allocatedBy ? (
-                  <img
-                    src={dummyProfileImageUrl}
-                    alt="User Avatar"
-                    width={30}
-                    height={30}
-                    style={{ borderRadius: "50%", marginRight: "5px" }}
-                  />
-                ) : (
-                  <img
-                    src={nullImg}
-                    alt="User Avatar"
-                    width={30}
-                    height={30}
-                    style={{ borderRadius: "50%", marginRight: "10px" }}
-                  />
-                )}
-                {data.allocatedBy ? (
-                  <>
-                    {data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +
-                      data.allocatedBy.split("@")[0].slice(1)}
-                  </>
-                ) : (
-                  "---"
-                )}
-              </Tooltip>
-            ) : (
-              "---"
-            )}
-          </td>
+      
 
           <td className={TableStyle.childBorder}>
             <Select
@@ -251,7 +257,10 @@ const UserQueue = ({ userList, setSort }) => {
             />
           </td>
 
-          <td className={TableStyle.childBorder}>
+          <td
+            className={TableStyle.childBorder}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
+          >
             {processstatusBodyTemplate(data)}
           </td>
         </tr>
@@ -276,7 +285,7 @@ const UserQueue = ({ userList, setSort }) => {
               }}
             >
               COMPLETED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
+              <span style={{cursor: "pointer" }}>
                 {processSort === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
@@ -296,7 +305,7 @@ const UserQueue = ({ userList, setSort }) => {
               }}
             >
               AUDITED ALLOCATED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
+              <span style={{ padding: "5px", cursor: "pointer" }}>
                 {auditAllocatedSort === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
@@ -311,7 +320,7 @@ const UserQueue = ({ userList, setSort }) => {
               }}
             >
               AUDITED DUE DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
+              <span style={{ padding: "5px", cursor: "pointer" }}>
                 {auditDueSort === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
@@ -327,7 +336,7 @@ const UserQueue = ({ userList, setSort }) => {
               }}
             >
               AUDITED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
+              <span style={{ padding: "5px", cursor: "pointer" }}>
                 {audirDateSort === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
@@ -335,7 +344,7 @@ const UserQueue = ({ userList, setSort }) => {
                 )}
               </span>
             </th>
-            <th>ALLOCATED BY</th>
+            {/* <th>ALLOCATED BY</th> */}
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
             <th>PROCESSED STATUS</th>
           </tr>
