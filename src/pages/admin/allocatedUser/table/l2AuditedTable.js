@@ -6,20 +6,28 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
+import axios from "../../../../utility/axiosConfig";
+import ENDPOINTS from "../../../../utility/enpoints";
+import AllocatedAdminList from "../../../../components/table/admin/allocatedAdminList/allocatedAdminList";
+
+
 
 function L2AllocatedAdminList({
-  patinetListAll,
-  selectAllChecked,
-  setSelectAllChecked,
-  setSelectedRowsId,
-  selectedRowsId,
-  selectedChart,
+  l2UserList,
 }) {
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState();
+  const [isPatientList, setIsPatientList] = useState(false);
+  const [l2PatientListAll,setL2PatientListAll] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedChart, setSelectedChart] = useState([]);
+  const [headerCheckValidation, setHeaderCheckValidation] = useState([]);
+  const [patinetListAll, setPatinetListAll] = useState([]);
+
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [selectedRowsId, setSelectedRowsId] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -103,102 +111,83 @@ function L2AllocatedAdminList({
         style={{ height: "35px" }}
         key={index}
         onClick={() => {
-          dispatch(
-            selectedRoWDetails({
-              patientId: data?.patientId,
-              processStageId: data?.processStageId,
-            })
-          );
+          getL2PatientList(data.userName)
         }}
       >
-        <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
-        <td className={TableStyle.childBorder}>{data.patientName}</td>
-        <td className={TableStyle.childBorder}>
-          {data.computedDate
-            ? moment.utc(data.computedDate).format("MM-DD-YYYY")
-            : "---"}
-        </td>
-        <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
-          <input
-            type="checkbox"
-            onChange={() => {
-              handleRowCheckboxChange(data);
-              setSelectedRowsId((prev) => {
-                const currentIds = prev.map((item) => item.id);
-                if (!currentIds.includes(data.patientId)) {
-                  return [
-                    ...prev,
-                    { id: data.patientId, name: data.patientName },
-                  ];
-                } else {
-                  return prev.filter((item) => item.id !== data.patientId);
-                }
-              });
-            }}
-            checked={selectedRowsId.some((item) => item.id === data.patientId)}
-            style={{
-              width: "20px",
-              height: "20px",
-              flexhrink: "0",
-              borderRadius: "4px",
-              backgroundColor: "pink",
-            }}
-          />
-        </td>
+        <td className={TableStyle.firstTdBorder}>{data.name}</td>
+        <td className={TableStyle.childBorder}>{data.userName}</td>
       </tr>
     ));
   };
 
+  const getL2PatientList = async(value)=>{
+      var resoureUrl = `dbservice/l2audit/patients?username=${value}`
+      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+      if (response.data) {
+        var resultMap = [];
+        var result = response?.data?.response;
+        result?.map((res) => {
+          resultMap.push({
+            ...res,
+            patientId: res.patientId,
+            patientName: res.patientName,
+            computedDate: res.computedDate,
+          });
+        });
+        const data = result.map((item) => ({
+          id: item.patientId,
+          name: item.patientName,
+        }));
+        setHeaderCheckValidation(data);
+        if (result.length > 0) {
+          setPatinetListAll(result);
+        } else {
+          setPatinetListAll([]);
+        }
+        setIsPatientList(true)
+        setIsLoading(false);
+    }
+    // dispatch(getL2PatientListAll(value));
+  }
+
+  const getAllCheckList = async(value)=>{
+    var resoureUrl = `dbservice/l2audit/patients?username=${value}`
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response.data) {
+      var resultMap = [];
+        var result = response?.data?.response;
+      const data = result.map((item) => ({
+        id: item.patientId,
+        name: item.patientName,
+      }));
+      setSelectedRowsId(data);
+      setHeaderCheckValidation(data);
+  }
+  // dispatch(getL2PatientListAll(value));
+}
+
+  
   useEffect(() => {
-    setDetailsContent(patinetListAll);
-  }, [patinetListAll]);
+    if (selectAllChecked) {
+      getAllCheckList();
+    } else {
+      setSelectedRowsId([]);
+    }
+  }, [selectAllChecked]);
+  
+
+  useEffect(() => {
+    setDetailsContent(l2UserList);
+  }, [l2UserList]);
 
   return (
     <div className={TableStyle.classContaineer}>
+    {!isPatientList ?
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
-
-            <th
-              onClick={() => {
-                requestSort("lastModifiedDate");
-                sortTableByDate("completeDate");
-              }}
-            >
-              COMPUTED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "asc" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
-            </th>
-
-            {/* <th>STATUS</th> */}
-            {/* <th>Upload</th> */}
-            <th>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <input
-                  type="checkbox"
-                  onClick={() => setSelectAllChecked(!selectAllChecked)}
-                  style={{
-                    paddingTop: "10px",
-                    width: "20px",
-                    height: "20px",
-                    flexhrink: "0",
-                    borderRadius: "4px",
-                    backgroundColor: "pink",
-                  }}
-                  checked={
-                    selectAllChecked &&
-                    selectedRowsId.length == selectedChart.length
-                  }
-                />
-              </div>
-            </th>
+            <th>Name</th>
+            <th>User Name</th>
           </tr>
         </thead>
 
@@ -213,7 +202,18 @@ function L2AllocatedAdminList({
             renderRows()
           )}
         </tbody>
-      </table>
+      </table>:
+       <AllocatedAdminList
+       patinetListAll={patinetListAll}
+       selectAllChecked={selectAllChecked}
+       setSelectAllChecked={
+         setSelectAllChecked
+       }
+       selectedRowsId={selectedRowsId}
+       setSelectedRowsId={setSelectedRowsId}
+       selectedChart={headerCheckValidation}
+     />
+      }
       <div></div>
     </div>
   ); // const updatedRows = selectAll ? [] : reportListAll;
