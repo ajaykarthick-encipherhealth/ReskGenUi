@@ -55,7 +55,7 @@ export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.patients);
-
+  const filteredList = useSelector((state) => state.auth.filterList);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -521,13 +521,7 @@ export default function Patient() {
                             isAllocatedBySelector={true}
                             allocatedBylabel="Select AllocatedBy"
                             allocatedByOptoons={
-                              patinetListAll?.length > 0
-                                ? generateOptionsList(
-                                    patinetListAll,
-                                    "allocatedBy",
-                                    "All"
-                                  )
-                                : []
+                              generateOptionsList(filteredList)
                             }
                             setSelAllocatedBy={setSelAllocatedBy}
                             defaultAllocatedBy={"All"}
@@ -535,13 +529,8 @@ export default function Patient() {
                             isAllocatedToSelector={true}
                             allocatedTolabel="Select AllocatedTo"
                             allocatedToOptoons={
-                              patinetListAll?.length > 0
-                                ? generateOptionsList(
-                                    patinetListAll,
-                                    "patientAllocated",
-                                    "All"
-                                  )
-                                : []
+                              generateOptionsList(filteredList)
+
                             }
                             setSelAllocatedTo={setSelAllocatedTo}
                             defaultCreatedBy={"All"}
@@ -549,13 +538,8 @@ export default function Patient() {
                             isCreatedBySelector={true}
                             createdTolabel="Select CreatedTo"
                             createdByOptoons={
-                              patinetListAll?.length > 0
-                                ? generateOptionsList(
-                                    patinetListAll,
-                                    "createdBy",
-                                    "All"
-                                  )
-                                : []
+                              generateOptionsList(filteredList)
+
                             }
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}

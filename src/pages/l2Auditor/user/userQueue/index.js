@@ -10,13 +10,17 @@ import HeaderFilters from "../../../../components/headerFilters";
 import SpinnerDots from "../../../../components/spinner";
 import Footer from "../../../../jsx/layouts/Footer";
 import UserQueue from "../../table/adminList/userQueue";
-import { generateOptionsList } from "../../../../components/headerFilters/functions";
+import {
+  generateOptionsList,
+  getFilteredOption,
+} from "../../../../components/headerFilters/functions";
 import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
 import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
+import { getFilters } from "../../../../store/actions/AuthActions";
 
 const bullets = [
   {
@@ -63,6 +67,7 @@ const index = () => {
   const router = useRouter();
   const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
+  const filteredList = useSelector((state) => state.auth.filterList);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
@@ -85,7 +90,7 @@ const index = () => {
   const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
   const [aduitDueStartDate, setAduitDueStartDate] = useState("");
   const [aduitDueEndDate, setAduitDueEndDate] = useState("");
-  const [sort,setSort]=useState({sortDir:"",sortField:""})
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -96,10 +101,10 @@ const index = () => {
     if (usersData) {
       setUserListAll(usersData?.data?.response);
       setTotalElements(usersData?.data?.response?.totalElements);
+      // dispatch(getFilters("allocatedBy"))
     }
   }, [usersData]);
 
-  
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setUserName(searchParams.get("userId"));
@@ -126,7 +131,7 @@ const index = () => {
         aduitCompletedEndDate,
         aduitDueStartDate,
         aduitDueEndDate,
-        sort
+        sort,
       };
       dispatch(getL2IndividualUser(datas));
     }
@@ -149,7 +154,7 @@ const index = () => {
     aduitCompletedEndDate,
     aduitDueStartDate,
     aduitDueEndDate,
-    sort
+    sort,
   ]);
 
   return (
@@ -206,7 +211,16 @@ const index = () => {
                         // allocated by
                         isAuditAllocatedBy={true}
                         audiallocatedBylabel="Audited AllocatedBy"
-                        auditallocatedByOptions={[]}
+                        auditallocatedByOptions={
+                          // filteredList?.loading || filteredList === null
+                          //   ? [{ label: "loading", value: "loading" }]
+                          //   : filteredList?.loading === false &&
+                          //     options?.length > 0
+                          //   ? options
+                          //   : []
+                          generateOptionsList(filteredList)
+                          
+                        }
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
                         audidefaultAllocatedBy={"All"}
                         // select status
@@ -233,7 +247,15 @@ const index = () => {
                         // allocated by
                         isAllocatedBySelector={true}
                         allocatedBylabel=" AllocatedBy"
-                        allocatedByOptoons={[]}
+                        allocatedByOptoons={
+                          // filteredList?.loading || filteredList === null
+                          //   ? [{ label: "loading", value: "loading" }]
+                          //   : filteredList?.loading === false &&
+                          //     options?.length > 0
+                          //   ? options
+                          //   : []
+                          generateOptionsList(filteredList)
+                        }
                         setSelAllocatedBy={setSelAllocatedBy}
                         defaultAllocatedBy={"All"}
                         // allocated date
@@ -260,10 +282,14 @@ const index = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {!userListAll?.content? (
+                      {!userListAll?.content ? (
                         <SpinnerDots />
                       ) : (
-                        <UserQueue userList={userListAll?.content} sort={sort} setSort={setSort} />
+                        <UserQueue
+                          userList={userListAll?.content}
+                          sort={sort}
+                          setSort={setSort}
+                        />
                       )}
                       <div>
                         <div className="pagination-container">

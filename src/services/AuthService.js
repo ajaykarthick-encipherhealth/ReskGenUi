@@ -181,3 +181,23 @@ export const accuracy = async () => {
     console.log(err);
   }
 };
+
+export const filters = async (field) => {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("roles");
+  if (role === "ADMIN") {
+    try {
+      const response = await axios.get(
+        `${ENDPOINTS?.apiEndoint}dbservice/patient/filter/field/list?field=${field}&role=${role}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};

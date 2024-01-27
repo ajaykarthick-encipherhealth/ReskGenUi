@@ -3,7 +3,7 @@ import Select from "react-select";
 import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
 import Image from "next/image";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 import styles from "../../pages/physician/report/report.module.css";
 import allocateStyle from "../../pages/admin/allocatedUser/allocate/style.module.css";
 import Export from "../../images/svg/Export";
@@ -14,6 +14,8 @@ import Search from "../search";
 import { handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
+import { getFilters } from "../../store/actions/AuthActions";
+import { useDispatch } from "react-redux";
 
 const { RangePicker } = DatePicker;
 const HeaderFilters = ({
@@ -114,8 +116,9 @@ const HeaderFilters = ({
   isNextRow,
   btnTitle,
   badges,
-  setIsModalVisible
+  setIsModalVisible,
 }) => {
+  const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   return (
     <>
@@ -229,19 +232,21 @@ const HeaderFilters = ({
               <Popover
                 content={
                   <>
-                  <Legends
-                    bullets={bullets}
-                    display="block"
-                    padding="0 0px 10px 0"
-                  />
-                   {badges?.length>0 && badges?.map(data=>(
-                    <div style={{marginBottom:"10px"}}> 
-                       <Image src={data.src} width={20} height={30}/>
-                       <span style={{marginLeft:"5px"}}>{data?.name}</span>
-                    </div>
-                   ))}
+                    <Legends
+                      bullets={bullets}
+                      display="block"
+                      padding="0 0px 10px 0"
+                    />
+                    {badges?.length > 0 &&
+                      badges?.map((data) => (
+                        <div style={{ marginBottom: "10px" }}>
+                          <Image src={data.src} width={20} height={30} />
+                          <span style={{ marginLeft: "5px" }}>
+                            {data?.name}
+                          </span>
+                        </div>
+                      ))}
                   </>
-                 
                 }
                 trigger={["click"]}
                 placement="bottom"
@@ -278,7 +283,9 @@ const HeaderFilters = ({
             <div className="col-xl-6  d-flex justify-content-end">
               <div className="row flr mt-3">
                 <button
-                  onClick={()=>{setIsModalVisible(true)}}
+                  onClick={() => {
+                    setIsModalVisible(true);
+                  }}
                   className={
                     rowsLength?.length === 0 ? styles.csv : styles.export
                   }
@@ -300,7 +307,12 @@ const HeaderFilters = ({
         <div style={{ marginTop: "50px" }}>
           <div className="row filter-contain">
             {isAllocatedBySelector && (
-              <div className="col-xl-2">
+              <div
+                className="col-xl-2"
+                onClick={() => {
+                  dispatch(getFilters("allocatedBy"));
+                }}
+              >
                 <label>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select
@@ -316,7 +328,12 @@ const HeaderFilters = ({
               </div>
             )}
             {isAllocatedToSelector && (
-              <div className="col-xl-2">
+              <div
+                className="col-xl-2"
+                onClick={() => {
+                  dispatch(getFilters("allocatedTo"));
+                }}
+              >
                 <label>{allocatedTolabel}</label>
                 <div class="form-group has-search">
                   <Select
@@ -332,7 +349,12 @@ const HeaderFilters = ({
               </div>
             )}
             {isCreatedBySelector && (
-              <div className="col-xl-2">
+              <div
+                className="col-xl-2"
+                onClick={() => {
+                  dispatch(getFilters("createdBy"));
+                }}
+              >
                 <label>{createdTolabel}</label>
                 <div class="form-group has-search">
                   <Select

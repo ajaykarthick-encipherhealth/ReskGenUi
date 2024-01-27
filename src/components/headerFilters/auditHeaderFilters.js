@@ -11,6 +11,8 @@ import Search from "../search";
 import { handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
+import { getFilters } from "../../store/actions/AuthActions";
+import { useDispatch } from "react-redux";
 
 const { RangePicker } = DatePicker;
 const AuditHeaderFilters = ({
@@ -98,6 +100,7 @@ const AuditHeaderFilters = ({
   isNextRow,
   badges,
 }) => {
+  const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   return (
     <>
@@ -152,7 +155,12 @@ const AuditHeaderFilters = ({
             </div>
           )}
           {isAuditAllocatedBy && (
-            <div className="col-xl-2">
+            <div
+              className="col-xl-2"
+              onClick={() => {
+                dispatch(getFilters("auditAllocatedBy"));
+              }}
+            >
               <label>{audiallocatedBylabel}</label>
               <div class="form-group has-search">
                 <Select
@@ -289,7 +297,12 @@ const AuditHeaderFilters = ({
               </>
             )}
             {isAllocatedBySelector && (
-              <div className="col-xl-2">
+              <div
+                className="col-xl-2"
+                onClick={() => {
+                  dispatch(getFilters("allocatedBy"));
+                }}
+              >
                 <label>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select

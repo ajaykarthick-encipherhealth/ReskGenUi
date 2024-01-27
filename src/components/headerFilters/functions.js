@@ -192,19 +192,19 @@ export const processstatusBodyTemplate = (rowData) => {
   }
 };
 
-export function generateOptionsList(items, key, defaultValue) {
-  const optionsSet = new Set();
-  const options = [
-    { label: "All", value: defaultValue },
-    ...items
-      ?.map((item) => {
-        if (item && item[key] && !optionsSet.has(item[key])) {
-          optionsSet.add(item[key]);
-          return { label: item[key], value: item[key] };
-        }
-        return null;
-      })
-      .filter(Boolean),
-  ];
-  return options;
+export const generateOptionsList=(items)=>{
+  if (items?.loading || items === null) {
+    return [{ label: "Loading...", value: "Loading..." }];
+  } else if (items?.data?.data.response?.length > 0) {
+    const options = [
+      { label: "All", value: "" },
+      ...items.data.data.response.map((item) => ({
+        label: item,
+        value: item
+      }))
+    ].filter(Boolean);
+    return options;
+  } else {
+    return [];
+  }
 }
