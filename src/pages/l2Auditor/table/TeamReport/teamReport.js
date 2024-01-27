@@ -104,7 +104,34 @@ function TeamReport({
         );
     }
   };
-
+  const badgeDisplay = (row) => {
+    if (row?.auditedStatus === "AUDITED") {
+      return (
+        <Badge.Ribbon
+          text="Audited"
+          color="#377880"
+          placement="start"
+        ></Badge.Ribbon>
+      );
+    } else if (row.auditedStatus === "REAUDIT") {
+      return (
+        <Badge.Ribbon
+          text="Re Audit"
+          color="#FFBE00"
+          placement="start"
+          height={10}
+        ></Badge.Ribbon>
+      );
+    } else if (row.auditedStatus === "AUDITEDHOLD") {
+      return (
+        <Badge.Ribbon
+          text="Audite Hold"
+          color="#964B00"
+          placement="start"
+        ></Badge.Ribbon>
+      );
+    } else return null;
+  };
   const getFlag = (data) => {
     switch (data["2023"][0]?.flag) {
       case "PATIENT_NAME_MISSED":
@@ -208,6 +235,14 @@ function TeamReport({
         );
     }
   };
+  const dummyProfileImageUrl =
+    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
+  const praveen01 =
+    "https://contacts.zoho.in/file?ID=60024364507&exp=6000&t=user&fs=original";
+  const varsha01 =
+    "https://media.licdn.com/dms/image/D5603AQFzGkp8SCbhZw/profile-displayphoto-shrink_100_100/0/1679394108609?e=1711584000&v=beta&t=HHHbwaE1R-jaALmVhVDl5eEGOigdkLBbGtl0Mr9EBSc";
+  const nullImg =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   return (
     <div className={TableStyle.classContaineer}>
       {ReportPatientDetails?.data?.length === 0 ? (
@@ -217,16 +252,16 @@ function TeamReport({
           <thead className={TableStyle.classTTotalhead}>
             <tr style={{ textAlign: "center" }}>
               <>
-                <th></th>
                 <th>PATIENT ID</th>
                 <th>PATIENT NAME</th>
+                <th style={{ textAlign: "left" }}>L1 AUDITOR </th>
                 <th>COMPLETE DATE </th>
                 <th>COMMENTS </th>
-                <th>AUDITOR NAME </th>
+                <th style={{ textAlign: "left" }}>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th>STATUS</th>
+                <th>AUDIT STATUS</th>
                 {/* <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
@@ -257,74 +292,191 @@ function TeamReport({
                   key={index}
                   style={{ padding: " 22px !important", textAlign: "center" }}
                 >
-                  {row?.auditedBy && (
+                  <>
                     <td className={TableStyle.firstTdBorder}>
-                      <Badge.Ribbon
-                        text="Audited"
-                        color="#58bad7"
-                        placement="start"
-                      ></Badge.Ribbon>
+                      {row?.auditedStatus ? (
+                        <span
+                          style={{
+                            position: "relative",
+                            left: "0px",
+                            top: "10px",
+                          }}
+                        >
+                          {badgeDisplay(row)}
+                        </span>
+                      ) : null}
+                      <span
+                        style={{
+                          paddingLeft: "40px",
+                        }}
+                      >
+                        {row?.patientId}
+                      </span>
                     </td>
-                  )}
-                  {row?.auditedBy ? (
-                    <>
-                      <td
-                        style={{
-                          borderTop: "0.2px solid #e1e1e1",
-                          borderBottom: "  0.2px solid #e1e1e1",
+
+                    <td className={TableStyle.childBorder}>
+                      {row?.patientName ? row?.patientName : "---"}
+                    </td>
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "left" }}
+                    >
+                      {row.patientAllocated ? (
+                        <Tooltip title={row.patientAllocated}>
+                          {row.patientAllocated ===
+                          "praveen01@encipherhealth.onmicrosoft.com" ? (
+                            <img
+                              src={praveen01}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "5px",
+                              }}
+                            />
+                          ) : row.patientAllocated ===
+                            "ranjith01@encipherhealth.onmicrosoft.com" ? (
+                            <img
+                              src={dummyProfileImageUrl}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "10px",
+                              }}
+                            />
+                          ) : row.patientAllocated ===
+                            "varsha01@encipherhealth.onmicrosoft.com" ? (
+                            <img
+                              src={varsha01}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "10px",
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={nullImg}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "10px",
+                              }}
+                            />
+                          )}
+                          {row.patientAllocated ? (
+                            <>
+                              {row.patientAllocated
+                                .split("@")[0]
+                                .charAt(0)
+                                .toUpperCase() +
+                                row.patientAllocated.split("@")[0].slice(1)}
+                            </>
+                          ) : (
+                            "---"
+                          )}
+                        </Tooltip>
+                      ) : (
+                        "---"
+                      )}
+                    </td>
+
+                    <td className={TableStyle.childBorder}>
+                      {dateFormate(dayjs, row?.processedDate)}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      <div
+                        disabled={row?.comment ? false : true}
+                        onClick={() => {
+                          if (row?.comment) {
+                            setComments(row?.comment);
+                            setModal(!modal);
+                          }
                         }}
-                        className={TableStyle.childBorder}
                       >
-                        {row?.patientId ? row?.patientId : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.patientName ? row?.patientName : "---"}
-                      </td>
+                        {row?.comment ? SVGICON.comment : SVGICON.emptyComments}
+                      </div>
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row.auditedBy ? (
+                        <Tooltip title={row.auditedBy}>
+                          {row.auditedBy ===
+                          "praveen01@encipherhealth.onmicrosoft.com" ? (
+                            <img
+                              src={praveen01}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "5px",
+                              }}
+                            />
+                          ) : row.auditedBy ===
+                            "ranjith01@encipherhealth.onmicrosoft.com" ? (
+                            <img
+                              src={dummyProfileImageUrl}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "10px",
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={nullImg}
+                              alt="User Avatar"
+                              width={30}
+                              height={30}
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "10px",
+                              }}
+                            />
+                          )}
+                          {row.auditedBy ? (
+                            <>
+                              {row.auditedBy
+                                .split("@")[0]
+                                .charAt(0)
+                                .toUpperCase() +
+                                row.auditedBy.split("@")[0].slice(1)}
+                            </>
+                          ) : (
+                            "---"
+                          )}
+                        </Tooltip>
+                      ) : (
+                        "---"
+                      )}
+                    </td>
 
-                      <td
-                        // onClick={setModal(false)}
-                        className={TableStyle.childBorder}
-                      >
-                        {/* {row?.processedDate} */}
-                        {dateFormate(dayjs, row?.processedDate)}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        <div
-                          disabled={row?.comment ? false : true}
-                          onClick={() => {
-                            if (row?.comment) {
-                              setComments(row?.comment);
-                              setModal(!modal);
-                            }
-                          }}
-                          disbaled={true}
-                        >
-                          {row?.comment
-                            ? SVGICON.comment
-                            : SVGICON.emptyComments}
-                        </div>
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.auditedBy ? row?.auditedBy : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.rafSum ? row?.rafSum : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.validDisease ? row?.validDisease : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.flag ? (
-                          getFlag(row?.flag)
-                        ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
-                        )}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {processstatusBodyTemplate(row)}
-                      </td>
-
-                      {/* <td className={TableStyle.lastBorder}>
+                    <td className={TableStyle.childBorder}>
+                      {row?.rafSum ? row?.rafSum : "000"}{" "}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.validDiseaseCount ? row?.validDiseaseCount : "000"}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.flag ? (
+                        getFlag(row?.flag)
+                      ) : (
+                        <div style={{ marginLeft: "-10px" }}>---</div>
+                      )}
+                    </td>
+                    <td className={TableStyle.lastBorder}>
+                      {processstatusBodyTemplate(row)}{" "}
+                    </td>
+                    {/* <td className={TableStyle.lastBorder}>
                         <input
                           type="checkbox"
                           onChange={() => {
@@ -343,83 +495,7 @@ function TeamReport({
                           }}
                         />
                       </td> */}
-                    </>
-                  ) : (
-                    <>
-                      <td className={TableStyle.firstTdBorder}></td>
-                      <td
-                        style={{
-                          borderTop: "0.2px solid #e1e1e1",
-                          borderBottom: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                      >
-                        {row?.patientId ? row?.patientId : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.patientName ? row?.patientName : "---"}
-                      </td>
-
-                      <td className={TableStyle.childBorder}>
-                        {dateFormate(dayjs, row?.processedDate)}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        <div
-                          disabled={row?.comment ? false : true}
-                          onClick={() => {
-                            if (row?.comment) {
-                              setComments(row?.comment);
-                              setModal(!modal);
-                            }
-                          }}
-                        >
-                          {row?.comment
-                            ? SVGICON.comment
-                            : SVGICON.emptyComments}
-                        </div>
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.auditedBy ? row?.auditedBy : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.rafSum ? row?.rafSum : "000"}{" "}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.validDiseaseCount
-                          ? row?.validDiseaseCount
-                          : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.flag ? (
-                          getFlag(row?.flag)
-                        ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
-                        )}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {processstatusBodyTemplate(row)}{" "}
-                      </td>
-                      {/* <td className={TableStyle.lastBorder}>
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            handleRowCheckboxChange(row);
-                          }}
-                          checked={selectedRows?.data?.some(
-                            (selectedRow) =>
-                              selectedRow.patientId === row.patientId
-                          )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                            backgroundColor: "pink",
-                          }}
-                        />
-                      </td> */}
-                    </>
-                  )}
+                  </>
                 </tr>
               ))}
           </tbody>
