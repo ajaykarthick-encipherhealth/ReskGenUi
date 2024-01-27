@@ -51,9 +51,13 @@ export default function Patient() {
   const [headerCheckValidation, setHeaderCheckValidation] = useState([]);
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [pageNo, setPageNo] = useState(0);
+  const [pageNoL2Patient, setPageNoL2Patient] = useState(0);
+  const [pageNoL2User, setPageNoL2User] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
+  const [totalElementsUser, setTotalElementsUser] = useState(10);
+  const [totalElementsPatient, setTotalElementsPatient] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [activeTab, setActiveTab] = useState("L1 Auditor");
@@ -169,8 +173,17 @@ export default function Patient() {
   const onPageChange = (e) => {
     setIsLoading(true);
     setPaginationFirst(e.first);
-    setPageNo(e.page);
+      setPageNo(e.page);
     setPageSize(e.rows);
+    setTableLoading(true);
+  };
+
+  const onPageChangePatient = (e) => {
+    setIsLoading(true);
+    setPaginationFirst(e.first);
+    setPageNoL2Patient(e.page)   
+    setPageSize(e.rows);
+    getL2PatientList(l2selectUser,e.page)
     setTableLoading(true);
   };
 
@@ -184,6 +197,7 @@ export default function Patient() {
     }
   };
   const selectTabClick = (number) => {
+    setPaginationFirst(0);
     setIsLoading(true);
     setActiveTab(number);
     setSelectedRowsId([]);
@@ -192,20 +206,22 @@ export default function Patient() {
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
     if (number == 2) {
-      getAuditL2List();
+      getAuditL2List(pageNoL2User);
     } else {
       setIsPatientList(false);
-      getAllList(pageNo, pageSize, "", "", true, 2);
+      setPageNo(0);
+      getAllList(0, pageSize, "", "", true, 2);
     }
   };
-  const getAuditL2List = async () => {
+  const getAuditL2List = async (pageNo) => {
     var orgId = localStorage.getItem("orgId");
     var tenantid = localStorage.getItem("tenantId");
-    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}`;
+    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
       var result = response?.data?.response;
+      // setTotalElementsUser(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
           ...res,
@@ -213,7 +229,7 @@ export default function Patient() {
           userName: res.userName,
         });
       });
-      if (result.length > 0) {
+      if (result?.length > 0) {
         setL2UserListAll(result);
         setIsLoading(false);
       } else {
@@ -230,7 +246,7 @@ export default function Patient() {
         style={{ height: "35px" }}
         key={index}
         onClick={() => {
-          getL2PatientList(data);
+          getL2PatientList(data,pageNoL2Patient);
         }}
       >
         <td className={TableStyle.firstTdBorder}>{data.name}</td>
@@ -239,18 +255,19 @@ export default function Patient() {
     ));
   };
 
-  const getL2PatientList = async (data) => {
+  const getL2PatientList = async (data,pageNoL2Patient) => {
     setIsLoading(true);
     var dataMap = {
       firstName: data.name,
       userName: data.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${data.userName}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${data.userName}&page=${pageNoL2Patient}&size=${pageSize}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
-      var result = response?.data?.response;
+      var result = response?.data?.response?.content;
+      setTotalElementsPatient(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
           ...res,
@@ -264,7 +281,7 @@ export default function Patient() {
         name: item.patientName,
       }));
       setHeaderCheckValidation(data);
-      if (result.length > 0) {
+      if (result?.length > 0) {
         setL2PatinetListAll(result);
         setIsPatientList(true);
         setIsLoading(false);
@@ -297,7 +314,7 @@ export default function Patient() {
        if(!isPatientList){
         getAllList(pageNo, pageSize, "", "", true, 2);
        }else{
-        getL2PatientList(l2selectUser);
+        getL2PatientList(l2selectUser,pageNoL2Patient);
        }
       setAllocateClicked(false);
       setSelectedRowsId([]);
@@ -482,19 +499,19 @@ export default function Patient() {
                                                 )}
                                               </tbody>
                                             </table>
-                                            {/* <div>
+                                            <div>
                                               <div className="pagination-container">
                                                 <Paginator
                                                   first={paginationFirst}
-                                                  rows={15}
-                                                  totalRecords={totalElements}
+                                                  rows={100}
+                                                  totalRecords={l2UserListAll?.length}
                                                   onPageChange={onPageChange}
                                                 />
                                                 <div className="total-pages">
-                                                  Total count: {totalElements}
+                                                  Total count: {l2UserListAll?.length}
                                                 </div>
                                               </div>
-                                            </div> */}
+                                            </div>
                                           </>
                                         ) : (
                                           <>
@@ -514,6 +531,21 @@ export default function Patient() {
                                                 headerCheckValidation
                                               }
                                             />
+                                            <div>
+                                            <div>
+                                        <div className="pagination-container">
+                                          <Paginator
+                                            first={paginationFirst}
+                                            rows={15}
+                                            totalRecords={totalElementsPatient}
+                                            onPageChange={onPageChangePatient}
+                                          />
+                                          <div className="total-pages">
+                                            Total count: {totalElementsPatient}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      </div>
                                           </>
                                         )}
                                       </div>

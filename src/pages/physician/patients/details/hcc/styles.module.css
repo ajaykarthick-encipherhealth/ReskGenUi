@@ -146,7 +146,7 @@
 }
 .ruleTypeCol{
     color: #ffa500bf;
-    font-size: 12px !important;
+    font-size: 11px !important;
     font-weight: 600;
     letter-spacing: 0.48px;
     border-radius: 6px;
@@ -154,4 +154,6 @@
     display: block;
     text-align: center;
     padding: 0px 5px;
+    margin-top: 5px;
+
 }

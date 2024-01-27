@@ -142,7 +142,16 @@ export default function Patient() {
           processedDate: res.processedDate,
           createdAt: res.createdAt,
           patientAllocated: res.patientAllocated,
-          allocatedBy: res.allocatedBy,
+          allocatedByFirstName: res.allocatedByFirstName,
+          allocatedByLastName: res.allocatedByLastName,
+          auditAllocatedDate: res.auditAllocatedDate,
+          auditedStatus: res.auditedStatus,
+          auditAllocatedByFirstName: res.auditAllocatedByFirstName,
+          auditAllocatedByLastName: res.auditAllocatedByLastName,
+          patientAllocatedFirstName: res.patientAllocatedFirstName,
+          patientAllocatedLastName: res.patientAllocatedLastName,
+
+
         });
       });
       var newArray = [];
@@ -180,58 +189,109 @@ export default function Patient() {
   };
 
   const processstatusBodyTemplate = (rowData) => {
-    const isFinished =
-      parsedData?.length > 0 &&
-      parsedData?.find(
-        (data) =>
-          data?.patientId === rowData?.patientId &&
-          data?.processStageChart === "FINISHED"
-      ) !== undefined;
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return (
+          <div className="patient-status">
+            <span className={`badge processed-text`}>Completed</span>
+          </div>
+        );
 
-    const rowStatus =
-      rowData?.computing === 0 && parsedData?.length === 0
-        ? "Not Computed"
-        : rowData?.computing == 1
-        ? "Processing"
-        : isFinished || rowData?.computing == 2
-        ? "Computed"
-        : "Not Computed";
-    return (
-      <div className="patient-status">
-        <div
-          className={visitStyles.roleStyle}
-          style={{
-            backgroundColor:
-              rowStatus === "Computed"
-                ? "#cceeff "
-                : rowStatus === "Processing"
-                ? "#dfd8f3"
-                : "#F1DEDA",
-            color:
-              rowStatus === "Computed"
-                ? " #285563"
-                : rowStatus === "Processing"
-                ? "#452b90"
-                : "#BA704F",
-          }}
-        >
-          {rowStatus === "Processing" && (
-            <Spin
-              indicator={
-                <LoadingOutlined
-                  style={{
-                    fontSize: 16,
-                  }}
-                  spin
-                />
-              }
-              style={{ color: "#452b90", margin: "0 10px 0 0" }}
-            />
-          )}
-          {rowStatus}
-        </div>
-      </div>
-    );
+      case "PENDING":
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+
+      case "DECLINED":
+        return (
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
+          </div>
+        );
+
+      case "NOTCOMPUTED":
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+      case "COMPUTED":
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+      case "HOLD":
+        return (
+          <div className="patient-status">
+            <span className={`badge hold-text`}>Hold</span>
+          </div>
+        );
+      case null:
+        return (
+          <div className="patient-status">
+            <span className={`badge processing-text`}>Pending</span>
+          </div>
+        );
+    }
+  };
+  const auditstatusBodyTemplate = (rowData) => {
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
+        return (
+          <div className="patient-status">
+            <span
+              className={`badge Auditprocessing-text`}
+              style={{ color: "#E28213", background: "#FBE7D0 !important" }}
+            >
+              Pending
+            </span>
+          </div>
+        );
+
+      case "DECLINED":
+        return (
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
+          </div>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <div className="patient-status">
+            <span
+              className={`badge Audithold-text`}
+              style={{ color: "#CE9900" }}
+            >
+              Audit Hold
+            </span>
+          </div>
+        );
+      case "REAUDIT":
+        return (
+          <div className="patient-status">
+            <span className={`badge reAudit-text`} style={{ color: "#964B00" }}>
+              Re Audit
+            </span>
+          </div>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <span className={`badge audited-text`} style={{ color: "#377880" }}>
+              Audited
+            </span>
+          </div>
+        );
+      case null:
+        return <div className="patient-status">---</div>;
+    }
   };
 
   const actionBodyTemplate = (rowData) => {
@@ -313,6 +373,7 @@ export default function Patient() {
                               patinetListAll={patinetListAll}
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
+                              auditBodyTemplate={auditstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
                             />
