@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../components/buttonSroller";
-import { Buttons } from "../../../physician/workingstatus";
+import { Buttons } from "../../workingstatus";
 import ReactECharts from "echarts-for-react";
 import accuracy from "../../../../images/dashboard/accuracy.png";
 import Image from "next/image";
 import Card from "../../../../components/card/index";
 import styles from "./styles.module.css";
-import spinSTYles from '../../../../styles/auth.module.css'
 import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
+import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import { getAccuracyScore } from "../../../../store/actions/l2Action/DashboardAction";
 import { Empty, Spin } from "antd";
+import spinSTYles from '../../../../styles/auth.module.css'
 
+export const getISOWeekNumber = (date) => {
+  const currentDate = new Date(date);
+  currentDate.setHours(0, 0, 0, 0);
+  currentDate.setDate(currentDate.getDate() + 3 - ((currentDate.getDay() + 6) % 7));
+  const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+  const weekNumber = Math.ceil(((currentDate - startOfYear) / 86400000 + 1) / 7);
+
+  return weekNumber;
+};
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstDayWeek = firstDayOfMonth.getDay();
@@ -53,15 +62,14 @@ const Accuracy = () => {
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const dispatch = useDispatch();
-  const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
-  const numberOfWeeks =
-    accuracyDatas?.data?.response &&
-    Object.keys(accuracyDatas?.data?.response)?.length;
+  const accuracyDatas = useSelector((state) => state?.workFlow?.accuracy);
+  const numberOfWeeks = accuracyDatas?.data?.response && Object.keys(accuracyDatas?.data?.response)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
     (_, index) => `Week ${index + 1}`
   );
+
   const router = useRouter();
   useEffect(() => {
     dispatch(getAccuracyScore(currentBtn, selectedMonth, selectedYear, router));
@@ -98,7 +106,7 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     highlightIndex = currentDate.getDate() - 1;
   } else if (currentBtn === "Weekly") {
-    const currentWeek = getDateWeek(currentDate);
+    const currentWeek = getISOWeekNumber(currentDate);
 
     highlightIndex = currentWeek - 1;
   }
@@ -119,8 +127,8 @@ const Accuracy = () => {
       show: true,
 
       formatter: function (params) {
-        let tooltipContent = "";
-
+        let tooltipContent = '';
+      
         if (Array.isArray(params)) {
           params.forEach((item) => {
             const allocatedValue = Number(item.data).toFixed(2);
@@ -130,9 +138,10 @@ const Accuracy = () => {
           const allocatedValue = Number(params.data).toFixed(2);
           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
         }
-
+      
         return tooltipContent;
       },
+      
     },
     series: [
       {
@@ -154,7 +163,7 @@ const Accuracy = () => {
 
   return (
     <>
-      <HeadTitle header="Accuracy Score" />
+     <HeadTitle header="Accuracy Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -191,13 +200,11 @@ const Accuracy = () => {
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading ? (
-                <div
-                 className={spinSTYles.spinStyle}
-                >
+                <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : (
-                accuracyDatas?.loading===false &&accuracyDatas?.data?.response?
+                accuracyDatas?.loading===false && accuracyDatas?.data?.response?
                 option && (
                   <ReactECharts
                     option={option}

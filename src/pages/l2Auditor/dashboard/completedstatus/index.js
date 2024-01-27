@@ -15,6 +15,9 @@ import { Empty, Spin } from "antd";
 import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 const CompletedStatus = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const completedDatas = useSelector((state) => state?.workFlow?.completed);
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -22,40 +25,22 @@ const CompletedStatus = () => {
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const dispatch = useDispatch();
-  const router = useRouter();
-  useEffect(() => {
-    dispatch(
-      getCOmpletedScore(
-        currentBtn.toUpperCase(),
-        currentDate.getDate(),
-        selectedMonth,
-        selectedYear,
-        router
-      )
-    );
-  }, [currentBtn, selectedMonth, selectedYear]);
 
-  const completedDatas = useSelector((state) => state?.workFlow?.completed);
-  const CompletedSortedData =
-    completedDatas?.data?.response?.completedData?.sort(
-      (a, b) => a._id.month - b._id.month
-    );
-  const ALlocatedSortedData =
-    completedDatas?.data?.response?.allocatedData?.sort(
-      (a, b) => a._id.month - b._id.month
-    );
+  let completedWeeks = new Set();
+  let allocatedWeeks = new Set();
 
-  const allocatedData = CompletedSortedData?.map((item) => item?.count);
-  const completedData = ALlocatedSortedData?.map((item) => item?.count);
+  completedWeeks =
+    completedDatas?.data?.response?.audit &&
+    new Set(Object.keys(completedDatas?.data?.response?.audit).map(Number));
 
-  const completedWeeks = new Set(
-    completedDatas?.data?.response?.completedData?.map((item) => item._id.week)
-  );
-  const allocatedWeeks = new Set(
-    completedDatas?.data?.response?.allocatedData?.map((item) => item._id.week)
-  );
-  const uniqueWeeks = new Set([...completedWeeks, ...allocatedWeeks]);
+  allocatedWeeks =
+    completedDatas?.data?.response?.allocate &&
+    new Set(Object.keys(completedDatas?.data?.response?.allocate).map(Number));
+
+  const uniqueWeeks =
+    completedWeeks && allocatedWeeks
+      ? new Set([...completedWeeks, ...allocatedWeeks])
+      : [];
 
   const weekNames = Array.from(uniqueWeeks)
     .sort((a, b) => a - b)
@@ -77,15 +62,26 @@ const CompletedStatus = () => {
     setSelectedMonth(monthNumber);
   };
 
+  // Inside your component function
   let xAxisData = [];
+
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(currentDate);
   } else if (currentBtn === "Weekly") {
+    console.log(weekNames);
     xAxisData = weekNames;
   }
 
+  const allocatedValues = xAxisData?.map(
+    (day) => completedDatas?.data?.response?.allocate[day] || 0
+  );
+  const auditedValues = xAxisData?.map(
+    (day) => completedDatas?.data?.response?.audit[day] || 0
+  );
+
+  console.log(allocatedValues, auditedValues);
   const option = {
     xAxis: {
       type: "category",
@@ -100,14 +96,14 @@ const CompletedStatus = () => {
       trigger: "axis",
       formatter: function (params) {
         const dataIndex = params[0]?.dataIndex;
-        const allocatedValue = allocatedData[dataIndex];
-        const completedValue = completedData[dataIndex];
-        return `Completed: ${allocatedValue}<br/>Allocated: ${completedValue}`;
+        const allocatedValue = allocatedValues[dataIndex];
+        const auditedValue = auditedValues[dataIndex];
+        return `Audited: ${auditedValue}<br/>Allocated: ${allocatedValue}`;
       },
     },
     series: [
       {
-        data: allocatedData,
+        data: auditedValues,
         type: "line",
         lineStyle: { color: "#4A3AFF" },
         smooth: true,
@@ -120,9 +116,8 @@ const CompletedStatus = () => {
           ]),
         },
       },
-
       {
-        data: completedData,
+        data: allocatedValues,
         type: "line",
         lineStyle: { color: "#FF718B" },
         smooth: true,
@@ -137,10 +132,11 @@ const CompletedStatus = () => {
       },
     ],
   };
+
   const bullets = [
     {
       color: "#4A3AFF",
-      name: "Completed",
+      name: "Audited",
     },
     {
       color: "#FF718B",
@@ -148,6 +144,17 @@ const CompletedStatus = () => {
     },
   ];
 
+  useEffect(() => {
+    dispatch(
+      getCOmpletedScore(
+        currentBtn.toUpperCase(),
+        currentDate.getDate(),
+        selectedMonth,
+        selectedYear,
+        router
+      )
+    );
+  }, [currentBtn, selectedMonth, selectedYear]);
   return (
     <>
       <HeadTitle header="Productivity Status" />
@@ -194,7 +201,7 @@ const CompletedStatus = () => {
             />
           ) : (
             <div className={spinSTYles.spinStyle}>
-              <Empty/>
+              <Empty />
             </div>
           )}
           <div className={styles.bulletContainer}>

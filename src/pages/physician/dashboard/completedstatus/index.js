@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
-import { Buttons } from "../../../physician/workingstatus";
+import { Buttons } from "../../workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
@@ -10,10 +10,10 @@ import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
+import { getCOmpletedScore } from "../../../../store/actions/DashboardActions";
 import { useRouter } from "next/router";
+import spinSTYles from '../../../../styles/auth.module.css'
 import { Empty, Spin } from "antd";
-import spinSTYles from "../../../../styles/auth.module.css";
-import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
 
 const CompletedStatus = () => {
   const [activeButton, setActiveButton] = useState(0);
@@ -38,14 +38,12 @@ const CompletedStatus = () => {
   }, [currentBtn, selectedMonth, selectedYear]);
 
   const completedDatas = useSelector((state) => state?.workFlow?.completed);
-  const CompletedSortedData =
-    completedDatas?.data?.response?.completedData?.sort(
-      (a, b) => a._id.month - b._id.month
-    );
-  const ALlocatedSortedData =
-    completedDatas?.data?.response?.allocatedData?.sort(
-      (a, b) => a._id.month - b._id.month
-    );
+  const CompletedSortedData = completedDatas?.data?.response?.completedData?.sort(
+    (a, b) => a._id.month - b._id.month
+  );
+  const ALlocatedSortedData = completedDatas?.data?.response?.allocatedData?.sort(
+    (a, b) => a._id.month - b._id.month
+  );
 
   const allocatedData = CompletedSortedData?.map((item) => item?.count);
   const completedData = ALlocatedSortedData?.map((item) => item?.count);
@@ -195,7 +193,7 @@ const CompletedStatus = () => {
             />
           ) : (
             <div className={spinSTYles.spinStyle}>
-              <Empty/>
+              <Empty />
             </div>
           )}
           <div className={styles.bulletContainer}>
