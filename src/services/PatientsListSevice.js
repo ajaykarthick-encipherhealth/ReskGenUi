@@ -220,3 +220,60 @@ export const reAuditupdate = async (data) => {
   }
 };
 
+export const auditPending = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/status/auditPending`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+
+export const auditHold = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/status/auditHold`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+
+export const manuallyAddComboCode = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.put(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/combo/manuallyAdded`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
+

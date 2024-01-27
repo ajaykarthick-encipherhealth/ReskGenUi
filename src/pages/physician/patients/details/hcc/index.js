@@ -52,6 +52,7 @@ import {
   submitMeatQuery,
   updateMeatQuery,
   getProviderDetails,
+  manuallyAddComboCode
 } from "../../../../../services/PatientsListSevice";
 const { Option } = Select;
 
@@ -163,6 +164,9 @@ const Hcc = ({ patientHccResult }) => {
     queryComment: "",
     reason: "",
     diagnosisCodeQuery: "",
+    comboCode:"",
+    additionalCode:""
+
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -278,6 +282,7 @@ const Hcc = ({ patientHccResult }) => {
   const [meatQueryResult, setMeatQueryResult] = useState([]);
   const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
   const [providerDetails, setProviderDetails] = useState("");
+  const [isAddComboCode, setIsAddComboCode] = useState(false);
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -1266,6 +1271,7 @@ const Hcc = ({ patientHccResult }) => {
     setIsFileFormShow(false);
     setIsMeatQueryModal(false);
     setMeatQueriedDetailsModal(false);
+    setIsAddComboCode(false);
   };
 
   const handleOpenModal = (value, disDescription, encounterDate) => {
@@ -2844,6 +2850,43 @@ const Hcc = ({ patientHccResult }) => {
     return value;
   };
 
+  const addComboCode =()=>{
+    setIsAddComboCode(true);
+  }
+
+  const handleSubmitComboCode = async (event) => {
+    var dos = dosYearDefalutSelect.label;
+    const form = event.currentTarget;
+    event.preventDefault();
+      if (form.checkValidity() === true) {
+        var updateDataformat = {
+          patientId: localPatientId,
+          dosYear: selectedDosValue,
+          comboCode: inputValue.comboCode,
+          additionalCode: inputValue.additionalCode,
+          description: inputValue.description,
+        };
+        var result = await manuallyAddComboCode(updateDataformat);
+        if (result.status == "SUCCESS") {
+          setIsAddComboCode(false);
+          notification.success({
+            message: result.message,
+            placement: "top",
+            duration: 1,
+          });
+            getPatientDetailsReload(
+              localPatientId,
+              localOrgId,
+              localTenantId,
+              "fileNotLoad"
+            );
+
+        }          
+      }
+
+    setValidated(true);
+  };
+
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>
@@ -3562,7 +3605,7 @@ const Hcc = ({ patientHccResult }) => {
                               <div className="col-xl-1">
                                 <div className="d-flex justify-content-center">
                                   <button
-                                    onClick={() => addValidDiseases()}
+                                    onClick={() => addComboCode()}
                                     className={visitStyles.combo_add_btn}
                                   >
                                     <FontAwesomeIcon
@@ -3586,9 +3629,12 @@ const Hcc = ({ patientHccResult }) => {
                                       className={visitStyles.combo_details_card}
                                     >
                                       <div className="row">
-                                        <div className="col-xl-3">
+                                        <div className="col-xl-3 d-grid">
                                           <span className="font-bold">
                                             {item.diagnosisCodeCombo}
+                                          </span>
+                                          <span className={styles.ruleTypeCol}>
+                                            {item.ruleType}
                                           </span>
                                         </div>
                                         <div className="col-xl-3">
@@ -6121,6 +6167,79 @@ const Hcc = ({ patientHccResult }) => {
               <div>
                 <Button type="submit" className="btn btn-primary btn-sm me-1">
                   {meatQueryUpdate ? "Update" : "Submit"}
+                </Button>
+                <Button
+                  onClick={() => handleCloseModal()}
+                  className="btn btn-danger btn-sm light ms-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </Form>
+          </div>
+        </div>
+      </Offcanvas>
+      <Offcanvas
+        onHide={handleCloseModal}
+        show={isAddComboCode}
+        className="offcanvas-end"
+        placement="end"
+      >
+        <div className="offcanvas-header">
+          <h5 className="modal-title" id="#gridSystemModal">
+            Add Combo Code
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => handleCloseModal()}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="offcanvas-body">
+          <div className="container-fluid">
+            <Form noValidate validated={validated} onSubmit={handleSubmitComboCode}>
+              <div className="row">
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                   Combo Code <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    id="comboCode"
+                    name="comboCode"
+                    onChange={handleChange}
+                  />                  
+                </div>
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>Additional Code</Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="additionalCode"
+                    name="additionalCode"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                    Description <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <textarea
+                    className="form-control"
+                    id="description"
+                    name="description"
+                    onChange={handleChangeSuggested}
+                    rows="5"
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <div>
+                <Button type="submit" className="btn btn-primary btn-sm me-1">
+                  Submit
                 </Button>
                 <Button
                   onClick={() => handleCloseModal()}

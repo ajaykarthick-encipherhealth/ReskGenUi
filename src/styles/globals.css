@@ -13449,3 +13449,114 @@ overflow: scroll;
 .patient-filte-page >.p-paginator> span.p-paginator-pages{
   display: none;
 }
+
+.auditBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #377880 !important;
+  background: #D4EAED !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 140px !important;
+}
+.auditBtnHcc
+  button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+    color: #377880 !important;
+  background: #D4EAED !important;
+}
+
+.auditBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
+  color: #377880 !important;
+  background: #D4EAED !important;
+  border: none !important;
+  box-shadow: none;
+}
+.auditBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
+  height: calc(100% + 1px) !important;
+  color: #377880 !important;
+  background: #D4EAED !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.reauditBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #964B00 !important;
+  background: #FFD1A3 !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 140px !important;
+}
+.reauditBtnHcc
+  button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #3a9b94 !important;
+}
+
+.reauditBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
+    color: #964B00 !important;
+    background: #FFD1A3 !important;
+  border: none !important;
+  box-shadow: none;
+}
+.reauditBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
+  height: calc(100% + 1px) !important;
+  color: #964B00 !important;
+  background: #FFD1A3 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.auditHoldBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #CE9900 !important;
+  background: #FFEBAD !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 140px !important;
+}
+.auditHoldBtnHcc
+  button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+    color: #CE9900 !important;
+    background: #FFEBAD !important;
+}
+
+.auditHoldBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
+    color: #CE9900 !important;
+    background: #FFEBAD !important;
+  border: none !important;
+  box-shadow: none;
+}
+.auditHoldBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
+  height: calc(100% + 1px) !important;
+  background: #FFEBAD !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.auditPendingBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #E28213 !important;
+  background: #FBE7D0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 140px !important;
+}
+.auditPendingBtnHcc
+  button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+    color: #E28213 !important;
+}
+
+.auditPendingBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
+    color: #E28213 !important;
+    background: #FBE7D0 !important;
+  border: none !important;
+  box-shadow: none;
+}
+.auditPendingBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
+  height: calc(100% + 1px) !important;
+  background: #FBE7D0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}

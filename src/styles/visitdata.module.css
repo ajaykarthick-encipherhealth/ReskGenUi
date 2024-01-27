@@ -1458,3 +1458,39 @@
 .ant_select_form{
   width: 100% !important;
 }
+.reaudit_text { 
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  color: #964B00 !important;
+  background: #FFD1A3 !important;
+  border-radius: 6px !important;
+}
+.audit_text {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  color: #377880 !important;
+  background: #D4EAED !important;
+  border-radius: 6px !important;
+}
+.audithold_text {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  color: #CE9900 !important;
+  background: #FFEBAD !important;
+  border-radius: 6px !important;
+}
+.auditpending_text {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  color: #E28213 !important;
+  background: #FBE7D0 !important;
+  border-radius: 6px !important;
+}

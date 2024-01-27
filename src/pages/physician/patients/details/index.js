@@ -41,10 +41,11 @@ import AllocateModal from "../../../admin/allocatedUser/allocate";
 import {
   patientListFilter,
   auditPatientupdate,
-  reAuditupdate
+  reAuditupdate,
+  auditPending,
+  auditHold
 } from "../../../../services/PatientsListSevice";
 import LoadingSpinner from "../../../../components/loadingSpinner";
-
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -142,7 +143,7 @@ const Details = ({}) => {
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
-  const [confirmAuditModal,setConfirmAuditModal] = useState(false)
+  const [confirmAuditModal, setConfirmAuditModal] = useState(false);
 
   const flagPostList = [
     {
@@ -605,9 +606,15 @@ const Details = ({}) => {
         case "pendingFunction":
           handleSubmitHccPending();
           break;
-          case "reAuditFunction":
-           handleSubmitReAudit();
-            break;
+        case "reAuditFunction":
+          handleSubmitReAudit();
+          break;
+        case "auditPendingFunction":
+          handleSubmitAuditPending();
+          break;
+        case "auditHoldFunction":
+          handleSubmitAuditHold();
+          break;
         default:
           null;
       }
@@ -1437,15 +1444,28 @@ const Details = ({}) => {
   const allocatePatient = () => {
     setAllocateModal(true);
   };
-  const auditPatient = (value) => {
-    if(value == "audit"){
-    setConfirmAuditModal(true);
-    }else{
-      setIsValidAction("reAuditFunction");
-      setConfirmNotesModalHold(true);
+  const auditPatient = (number) => {
+    switch (number) {
+      case 1:
+        setConfirmAuditModal(true);
+        break;
+      case 2:
+        setIsValidAction("reAuditFunction");
+        setConfirmNotesModalHold(true);
+        break;
+      case 3:
+        setIsValidAction("auditPendingFunction");
+        setConfirmNotesModalHold(true);
+        break;
+      case 4:
+        setIsValidAction("auditHoldFunction");
+        setConfirmNotesModalHold(true);
+        break;
+      default:
+        null;
     }
   };
-  const updateAudit = async()=>{
+  const updateAudit = async () => {
     var postData = {
       userId: localUserId,
       patientId: localPatientId,
@@ -1470,15 +1490,15 @@ const Details = ({}) => {
     var result = await auditPatientupdate(postData);
     if (result.status == "SUCCESS") {
       getPatientIdDetails(localPatientId);
-      setConfirmAuditModal(false);   
+      setConfirmAuditModal(false);
       notification.success({
         message: result.message,
         placement: "top",
         duration: 1,
       });
     }
-  }
-  const handleSubmitReAudit = async()=>{
+  };
+  const handleSubmitReAudit = async () => {
     var postData = {
       orgId: localOrgId,
       patientId: localPatientId,
@@ -1488,14 +1508,83 @@ const Details = ({}) => {
     var result = await reAuditupdate(postData);
     if (result.status == "SUCCESS") {
       getPatientIdDetails(localPatientId);
-      setConfirmNotesModalHold(false);   
+      setConfirmNotesModalHold(false);
       notification.success({
         message: result.message,
         placement: "top",
         duration: 1,
       });
     }
-  }
+  };
+
+  const handleSubmitAuditPending = async () => {
+    var postData = {
+      orgId: localOrgId,
+      patientId: localPatientId,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    var result = await auditPending(postData);
+    if (result.status == "SUCCESS") {
+      getPatientIdDetails(localPatientId);
+      setConfirmNotesModalHold(false);
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  };
+
+  const handleSubmitAuditHold = async () => {
+    var postData = {
+      orgId: localOrgId,
+      patientId: localPatientId,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    var result = await auditHold(postData);
+    if (result.status == "SUCCESS") {
+      getPatientIdDetails(localPatientId);
+      setConfirmNotesModalHold(false);
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  };
+
+  const renderAuditMenu = (value) => {
+    var value = (
+      <Menu>
+        <>
+          <Menu.Item key="1" onClick={() => auditPatient(1)}>
+            <div className="patient-status">
+              <span className={`badge ${visitStyles.audit_text}`}>AUDIT</span>
+            </div>
+          </Menu.Item>
+          <Menu.Item key="2" onClick={() => auditPatient(2)}>
+            <div className="patient-status">
+              <span className={`badge ${visitStyles.reaudit_text}`}>RE AUDIT</span>
+            </div>
+          </Menu.Item>
+          <Menu.Item key="3" onClick={() => auditPatient(3)}>
+            <div className="patient-status">
+              <span className={`badge ${visitStyles.auditpending_text}`}>AUDIT PENDING</span>
+            </div>
+          </Menu.Item>
+          <Menu.Item key="4" onClick={() => auditPatient(4)}>
+            <div className="patient-status">
+              <span className={`badge ${visitStyles.audithold_text}`}>AUDIT HOLD</span>
+            </div>
+          </Menu.Item>
+        </>
+      </Menu>
+    );
+
+    return value;
+  };
 
   return (
     <>
@@ -1815,39 +1904,28 @@ const Details = ({}) => {
                         ) : userRole == "l2auditor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown.Button
-                                type="primary"
-                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
-                                icon={<DownOutlined />}
-                                overlay={ <Menu>
-                                  {patienIdDetails?.auditedStatus == "REAUDIT" ?
-                                  <Menu.Item key="1" onClick={() => auditPatient("audit")}>
-                                    <div className="patient-status">
-                                      <span className={`badge hold-text`}>AUDIT</span>
-                                    </div>
-                                  </Menu.Item> :
-                                  patienIdDetails?.auditedStatus == "AUDITED" ?
-                                  <Menu.Item key="2" onClick={() => auditPatient("re-audit")}>
-                                    <div className="patient-status">
-                                      <span className={`badge failed-text`}>REAUDIT</span>
-                                    </div>
-                                  </Menu.Item>:
-                                  <>
-                                  <Menu.Item key="1" onClick={() => auditPatient("audit")}>
-                                    <div className="patient-status">
-                                      <span className={`badge hold-text`}>AUDIT</span>
-                                    </div>
-                                  </Menu.Item>
-                                  <Menu.Item key="2" onClick={() => auditPatient("re-audit")}>
-                                  <div className="patient-status">
-                                    <span className={`badge failed-text`}>REAUDIT</span>
-                                  </div>
-                                </Menu.Item>
-                                  </>
-                                  }
-                                  </Menu>}
-                              >
-                                {patienIdDetails?.auditedStatus == "REAUDIT" ? "REAUDIT" : "AUDITED"}
-                              </Dropdown.Button>
+                              type="primary"
+                              className={
+                                patienIdDetails?.auditedStatus == "AUDITHOLD"
+                                  ? `auditHoldBtnHcc`
+                                  :
+                                  patienIdDetails?.auditedStatus == "AUDITPENDING"
+                                  ? `auditPendingBtnHcc`
+                                  :
+                                  patienIdDetails?.auditedStatus == "AUDITED"
+                                  ? `auditBtnHcc`
+                                  : patienIdDetails?.auditedStatus == "REAUDIT"
+                                  ? `reauditBtnHcc`
+                                  :
+                                  `auditBtnHcc`
+                              }
+                              icon={<DownOutlined />}
+                              overlay={renderAuditMenu()}
+                            >
+                              {patienIdDetails?.auditedStatus != null
+                                ? patienIdDetails?.auditedStatus
+                                : "AUDIT"}
+                            </Dropdown.Button>
                           </div>
                         ) : (
                           <div className={`${visitStyles.actionbtnContainer}`}>
@@ -2724,7 +2802,22 @@ const Details = ({}) => {
                                           </div>
                                         </Popover>
                                       </Tooltip>
-                                    ) : null}
+                                    ) : <Tooltip
+                                    title={item.userName}
+                                    placement="bottom"
+                                  >
+                                    <Popover
+                                      placement="bottom"
+                                      content={userDetails}
+                                      onOpenChange={() =>
+                                        renderUserDetails(item.userName)
+                                      }
+                                    >
+                                      <div className="timeline-badge DECLINED">
+                                        {splitUserName(item.userName)}
+                                      </div>
+                                    </Popover>
+                                  </Tooltip>}
                                     <a className="timeline-panel text-muted">
                                       {item.action ==
                                       "MOVED_INVALID_TO_VALID" ? (
@@ -2776,7 +2869,62 @@ const Details = ({}) => {
                                           {item.diagnosisCode} - Moved from
                                           valid to deleted
                                         </span>
-                                      ) : item.action == "COMPLETED" ? (
+                                      ) : item.action == "AUDITED" ? (
+                                        <span
+                                          className={
+                                            visitStyles.timelineheading
+                                          }
+                                        >
+                                          Changed from {""}
+                                          {item.previousProcessedState} to
+                                          AUDITED
+                                        </span>
+                                      )
+                                      : item.action == "REAUDIT" ? (
+                                        <span
+                                          className={
+                                            visitStyles.timelineheading
+                                          }
+                                        >
+                                          Changed from {""}
+                                          {item.previousProcessedState} to
+                                          REAUDIT
+                                        </span>
+                                      )
+                                      : item.action == "AUDITHOLD" ? (
+                                        <span
+                                          className={
+                                            visitStyles.timelineheading
+                                          }
+                                        >
+                                          Changed from {""}
+                                          {item.previousProcessedState} to
+                                          AUDITHOLD
+                                        </span>
+                                      )
+                                      : item.action == "AUDITPENDING" ? (
+                                        <span
+                                          className={
+                                            visitStyles.timelineheading
+                                          }
+                                        >
+                                          Changed from {""}
+                                          {item.previousProcessedState} to
+                                          AUDITPENDING
+                                        </span>
+                                      )
+                                      : item.action == "MEAT_QUERY_STORED" ? (
+                                        <span
+                                          className={
+                                            visitStyles.timelineheading
+                                          }
+                                        >
+                                          Changed from {""}
+                                          {item.previousProcessedState} to
+                                          Meat Query Stored
+                                        </span>
+                                      )
+                                      : item.action == "COMPLETED" ? (
                                         <span
                                           className={
                                             visitStyles.timelineheading
@@ -3086,7 +3234,7 @@ const Details = ({}) => {
                             </>
                           ) : (
                             <div className={visitStyles.userDetailsCard}>
-                               <LoadingSpinner />
+                              <LoadingSpinner />
                             </div>
                           )}
                         </div>
@@ -3344,8 +3492,7 @@ const Details = ({}) => {
             open={true}
             centered
             onOk={updateAudit}
-            onCancel={() =>setConfirmAuditModal(false)
-            }
+            onCancel={() => setConfirmAuditModal(false)}
           ></Modal>
         </div>
       ) : null}
