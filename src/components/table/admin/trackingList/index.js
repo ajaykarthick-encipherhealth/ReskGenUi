@@ -19,6 +19,7 @@ import { useEffect } from "react";
 function TrackingTable({
   patinetListAll,
   statusBodyTemplate,
+  auditBodyTemplate,
   patientDetails,
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("asc");
@@ -95,6 +96,16 @@ function TrackingTable({
     setDetailsContent(patinetListAll)
   }, [patinetListAll])
 
+  const getInitials = (firstName, lastName) => {
+    const firstNameInitial = firstName?.charAt(0) || "";
+    const secondNameInitial = lastName?.charAt(0) || "";
+    return firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase();
+  };
+  const renderUserName = (firstName, lastName) => {
+   const userName =  firstName ? firstName +" "+ lastName : "Praveen"
+   return userName;
+  }
+
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr key={index}>
@@ -105,7 +116,7 @@ function TrackingTable({
           {data.patientName}
         </td>
         <td className={TableStyle.childBorder}  style={{textAlign:"center"}}>
-          <Tooltip title={data.allocatedBy ? data.allocatedBy : "Praveen"}>
+          <Tooltip title={renderUserName(data.allocatedByFirstName, data.allocatedByLastName)}>
             <Avatar
               style={{
                 backgroundColor: "#F3C217 ",
@@ -113,31 +124,13 @@ function TrackingTable({
                 cursor: "pointer",
               }}
             >
-              {data.allocatedBy
-                ? data.allocatedBy.slice(0, 2).toUpperCase()
-                : "P"}
+             {getInitials(data.allocatedByFirstName, data.allocatedByLastName)}
             </Avatar>
-            {/* {data.allocatedBy ? (
-              <img
-                src={dummyProfileImageUrl}
-                alt="User Avatar"
-                width={30}
-                height={30}
-                style={{ borderRadius: "50%" , marginRight:"5px"}}
-              />
-            ) : (
-              <img
-                src={nullImg}
-                alt="User Avatar"
-                width={30}
-                height={30}
-                style={{ borderRadius: "50%", marginRight:"10px"}}
-              />
-            )} */}
           </Tooltip>
         </td>
         <td className={TableStyle.childBorder} style={{textAlign:"left"}}>
-          {data?.patientAllocated ?  <Tooltip title={data.patientAllocated }>
+          {data?.patientAllocatedFirstName ? 
+          <Tooltip title={renderUserName(data.patientAllocatedFirstName, data.patientAllocatedLastName)}>
             <Avatar
               style={{
                 backgroundColor: "#04306f ",
@@ -146,9 +139,7 @@ function TrackingTable({
                 marginRight: "10px",
               }}
             >
-              {data.patientAllocated
-                ? data.patientAllocated?.slice(0, 2).toUpperCase()
-                : null}
+              {getInitials(data.patientAllocatedFirstName, data.patientAllocatedLastName)}
             </Avatar>
             {/* {data.allocatedBy ? (
               <img
@@ -167,14 +158,14 @@ function TrackingTable({
                 style={{ borderRadius: "50%", marginRight:"10px"}}
               />
             )} */}
-            {data.patientAllocated ? (
+            {/* {data.patientAllocated ? (
               <>
                 {data.patientAllocated.split("@")[0].charAt(0).toUpperCase() +
                   data.patientAllocated.split("@")[0].slice(1)}
               </>
             ) : (
               <span style={{textAlign:"center"}}>---</span>
-            )}
+            )} */}
           </Tooltip> : <span style={{textAlign:"center"}}>---</span> }
          
         </td>
@@ -184,7 +175,8 @@ function TrackingTable({
             : "---"}
         </td>
         <td className={TableStyle.childBorder}  style={{textAlign:"center"}}>
-          <Tooltip title={data.auditAllocatedByFirstName ? data.auditAllocatedByFirstName : "Praveen"}>
+        {data?.auditAllocatedByFirstName ? 
+        <Tooltip title={renderUserName(data.auditAllocatedByFirstName, data.auditAllocatedByLastName)}>
             <Avatar
               style={{
                 backgroundColor: "#F3C217 ",
@@ -192,11 +184,9 @@ function TrackingTable({
                 cursor: "pointer",
               }}
             >
-              {data.auditAllocatedByFirstName
-                ? data.auditAllocatedByFirstName.slice(0, 2).toUpperCase()
-                : "P"}
+             {getInitials(data.auditAllocatedByFirstName, data.auditAllocatedByLastName)}
             </Avatar>
-          </Tooltip>
+          </Tooltip>: <span style={{textAlign:"center"}}>---</span> }
         </td>
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}  style={{textAlign:"center"}}>
           {data.auditAllocatedDate ? moment(data.auditAllocatedDate).format("MM-DD-YYYY") : "---"}
@@ -205,7 +195,9 @@ function TrackingTable({
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}  style={{textAlign:"center"}}>
           {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
         </td>
-
+        <td className={TableStyle.lastBorder} onClick={handleTableRowClick} style={{textAlign:"center"}}>
+          {auditBodyTemplate(data)}
+        </td>
         <td className={TableStyle.lastBorder} onClick={handleTableRowClick} style={{textAlign:"center"}}>
           {statusBodyTemplate(data)}
         </td>
@@ -242,7 +234,7 @@ function TrackingTable({
               </span> */}
              
             </th>
-
+            <th style={{textAlign:"center"}}>AUDIT STATUS</th>
             <th style={{textAlign:"center"}}>STATUS</th>
           </tr>
         </thead>
