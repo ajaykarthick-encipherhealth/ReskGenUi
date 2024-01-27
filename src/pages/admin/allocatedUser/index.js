@@ -10,10 +10,11 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { DatePicker, notification } from "antd";
+import { DatePicker, Empty } from "antd";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../styles/visitdata.module.css";
 import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
 import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
@@ -23,11 +24,16 @@ import Addpatients from "../file-processing/Addpatiens";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import allocateStyle from "./allocate/style.module.css";
 import AllocateModal from "./allocate";
+import L2AllocateModal from "./l2allocate";
+import LoadingSpinner from "../../../components/spinner";
+
+
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
-import LoadingSpinner from "../../../jsx/components/spinner/spinner";
 import SpinnerDots from "../../../components/spinner";
 import L2AllocatedAdminList from "./table/l2AuditedTable";
+import TableStyle from "../../../components/table/table.module.css";
+
 const { RangePicker } = DatePicker;
 export default function Patient() {
   const navigate = useRouter();
@@ -35,10 +41,12 @@ export default function Patient() {
   const [isLoading, setIsLoading] = useState(true);
   const [addPatientId, setAddPatientId] = useState(false);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [selectAllCheckedL2, setSelectAllCheckedL2] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [allocateModal, setAllocateModal] = useState(false);
+  const [allocateModalL2, setAllocateModalL2] = useState(false);
   const [selectedChart, setSelectedChart] = useState([]);
   const [headerCheckValidation, setHeaderCheckValidation] = useState([]);
   const [patinetListAll, setPatinetListAll] = useState([]);
@@ -49,6 +57,11 @@ export default function Patient() {
   const [tableLoading, setTableLoading] = useState(true);
   const sideMenu = useSelector((state) => state.sideMenu);
   const [activeTab, setActiveTab] = useState("L1 Auditor");
+  const [l2UserListAll, setL2UserListAll] = useState([]);
+  const [isPatientList, setIsPatientList] = useState(false);
+  const [l2patinetListAll, setL2PatinetListAll] = useState([]);
+  const [l2selectUser, setL2selectUser] = useState(null);
+  const [l2patinetLisSelected, setl2patinetLisSelected] = useState([]);
 
   useEffect(() => {
     if (typeof pageNo == "number") {
@@ -81,11 +94,13 @@ export default function Patient() {
       });
       if (result.length > 0) {
         setPatinetListAll(result);
+        setIsLoading(false);
       } else {
+        setIsLoading(false);
         setPatinetListAll([]);
       }
 
-      setIsLoading(false);
+      // setIsLoading(false);
       setTableLoading(false);
     }
   };
@@ -105,7 +120,11 @@ export default function Patient() {
 
   useEffect(() => {
     if (selectAllChecked) {
-      getAllCheckList();
+      if (isPatientList == true) {
+        getAllCheckListL2();
+      } else {
+        getAllCheckList();
+      }
     } else {
       setSelectedRowsId([]);
     }
@@ -158,14 +177,131 @@ export default function Patient() {
   const handleOpneModal = () => {
     setValidated(false);
     setAddPatientId(false);
-    setAllocateModal(true);
+    if (activeTab == 2) {
+      setAllocateModalL2(true);
+    } else {
+      setAllocateModal(true);
+    }
+  };
+  const selectTabClick = (number) => {
+    setIsLoading(true);
+    setActiveTab(number);
+    setSelectedRowsId([]);
+    setAllocateClicked(false);
+    setSelectedRowsId([]);
+    setSelectAllChecked(false);
+    setSelectAllCheckedL2(false);
+    if (number == 2) {
+      getAuditL2List();
+    } else {
+      setIsPatientList(false);
+      getAllList(pageNo, pageSize, "", "", true, 2);
+    }
+  };
+  const getAuditL2List = async () => {
+    var orgId = localStorage.getItem("orgId");
+    var tenantid = localStorage.getItem("tenantId");
+    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}`;
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response.data) {
+      var resultMap = [];
+      var result = response?.data?.response;
+      result?.map((res) => {
+        resultMap.push({
+          ...res,
+          name: res.name,
+          userName: res.userName,
+        });
+      });
+      if (result.length > 0) {
+        setL2UserListAll(result);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        setL2UserListAll([]);
+      }
+      setTableLoading(false);
+    }
+  };
+
+  const renderRows = () => {
+    return l2UserListAll?.map((data, index) => (
+      <tr
+        style={{ height: "35px" }}
+        key={index}
+        onClick={() => {
+          getL2PatientList(data);
+        }}
+      >
+        <td className={TableStyle.firstTdBorder}>{data.name}</td>
+        <td className={TableStyle.childBorder}>{data.userName}</td>
+      </tr>
+    ));
+  };
+
+  const getL2PatientList = async (data) => {
+    setIsLoading(true);
+    var dataMap = {
+      firstName: data.name,
+      userName: data.userName,
+    };
+    setL2selectUser(dataMap);
+    var resoureUrl = `dbservice/l2audit/patients?username=${data.userName}`;
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response.data) {
+      var resultMap = [];
+      var result = response?.data?.response;
+      result?.map((res) => {
+        resultMap.push({
+          ...res,
+          patientId: res.patientId,
+          patientName: res.patientName,
+          computedDate: res.computedDate,
+        });
+      });
+      const data = result.map((item) => ({
+        id: item.patientId,
+        name: item.patientName,
+      }));
+      setHeaderCheckValidation(data);
+      if (result.length > 0) {
+        setL2PatinetListAll(result);
+        setIsPatientList(true);
+        setIsLoading(false);
+      } else {
+        setL2PatinetListAll([]);
+        setIsLoading(false);
+      }
+    }
+    // dispatch(getL2PatientListAll(value));
+  };
+
+  const getAllCheckListL2 = async (value) => {
+    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}`;
+    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    if (response.data) {
+      var resultMap = [];
+      var result = response?.data?.response;
+      const data = result.map((item) => ({
+        id: item.patientId,
+        name: item.patientName,
+      }));
+      setSelectedRowsId(data);
+      setHeaderCheckValidation(data);
+    }
+    // dispatch(getL2PatientListAll(value));
   };
   useEffect(() => {
     if (allocateClicked) {
-      getAllList(pageNo, pageSize, "", "", true, 2);
+       if(!isPatientList){
+        getAllList(pageNo, pageSize, "", "", true, 2);
+       }else{
+        getAuditL2List();
+       }
       setAllocateClicked(false);
       setSelectedRowsId([]);
       setSelectAllChecked(false);
+      setSelectAllCheckedL2(false);
     }
   }, [allocateClicked]);
   return (
@@ -217,6 +353,19 @@ export default function Patient() {
                             >
                               Allocate
                             </button>
+                            {isPatientList ? (
+                              <Button
+                                onClick={() => setIsPatientList(false)}
+                                className={`ms-2 btn-sm mx-4 ms-2 flr ${allocateStyle.backArrowBtn}`}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faArrowLeft}
+                                  style={{
+                                    color: "rgb(38 50 107)",
+                                  }}
+                                />
+                              </Button>
+                            ) : null}
                           </div>
                         </div>
                       </div>
@@ -225,129 +374,157 @@ export default function Patient() {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                          <div
-                            className="profile-tab"
-                            style={{ marginTop: "20px" }}
-                          >
-                            <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey="validDiseases">
-                                <Nav as="ul" className="nav nav-tabs">
-                                  <Nav.Item
-                                    as="li"
-                                    className="nav-item"
-                                    onClick={() => {
-                                      // setSelectedDates(null);
-                                      setActiveTab("L1 Auditor");
-                                    }}
-                                  >
-                                    <Nav.Link
-                                      to="#my-posts"
-                                      eventKey="validDiseases"
-                                    >
-                                      L1 Auditor Allocation
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                  <Nav.Item
-                                    as="li"
-                                    className="nav-item"
-                                    onClick={() => {
-                                      // setSelectedDates(null);
-                                      setActiveTab("L2 Auditor");
-                                    }}
-                                  >
-                                    <Nav.Link
-                                      to="#my-posts"
-                                      eventKey="team"
-                                    >
-                                      L2 Auditor Allocation
-                                    </Nav.Link>
-                                  </Nav.Item>
-                            
-                            
-                                </Nav>
-                                <Tab.Content>
-                                  <Tab.Pane
-                                    id="my-posts"
+                        <div
+                          className="profile-tab"
+                          style={{ marginTop: "20px" }}
+                        >
+                          <div className="custom-tab-1">
+                            <Tab.Container defaultActiveKey="validDiseases">
+                              <Nav as="ul" className="nav nav-tabs">
+                                <Nav.Item
+                                  as="li"
+                                  className="nav-item"
+                                  onClick={() => {
+                                    selectTabClick(1);
+                                  }}
+                                >
+                                  <Nav.Link
+                                    to="#my-posts"
                                     eventKey="validDiseases"
                                   >
+                                    L1 Auditor Allocation
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item
+                                  as="li"
+                                  className="nav-item"
+                                  onClick={() => {
+                                    selectTabClick(2);
+                                  }}
+                                >
+                                  <Nav.Link to="#my-posts" eventKey="team">
+                                    L2 Auditor Allocation
+                                  </Nav.Link>
+                                </Nav.Item>
+                              </Nav>
+
+                              <Tab.Content>
+                                <Tab.Pane
+                                  id="my-posts"
+                                  eventKey="validDiseases"
+                                >
                                   {isLoading ? (
-                          <SpinnerDots />
-                        ) : (
-                          <>
-                            <AllocatedAdminList
-                              patinetListAll={patinetListAll}
-                              selectAllChecked={selectAllChecked}
-                              setSelectAllChecked={setSelectAllChecked}
-                              selectedRowsId={selectedRowsId}
-                              setSelectedRowsId={setSelectedRowsId}
-                              selectedChart={headerCheckValidation}
-                            />
-                            <div>
-                              <div className="pagination-container">
-                                <Paginator
-                                  first={paginationFirst}
-                                  rows={15}
-                                  totalRecords={totalElements}
-                                  onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  Total count: {totalElements}
-                                </div>
-                              </div>
-                            </div>
+                                    <SpinnerDots />
+                                  ) : (
+                                    <>
+                                      <AllocatedAdminList
+                                        patinetListAll={patinetListAll}
+                                        selectAllChecked={selectAllChecked}
+                                        setSelectAllChecked={
+                                          setSelectAllChecked
+                                        }
+                                        selectedRowsId={selectedRowsId}
+                                        setSelectedRowsId={setSelectedRowsId}
+                                        selectedChart={headerCheckValidation}
+                                      />
+                                      <div>
+                                        <div className="pagination-container">
+                                          <Paginator
+                                            first={paginationFirst}
+                                            rows={15}
+                                            totalRecords={totalElements}
+                                            onPageChange={onPageChange}
+                                          />
+                                          <div className="total-pages">
+                                            Total count: {totalElements}
+                                          </div>
+                                        </div>
+                                      </div>
 
-                            <Footer />
-                          </>
-                        )}
-                                  </Tab.Pane>
-                                  <Tab.Pane
-                                    id="my-posts"
-                                    eventKey="team"
-                                  >
-                                       {isLoading ? (
-                          <SpinnerDots />
-                        ) : (
-                          <>
-                            <L2AllocatedAdminList
-                              patinetListAll={patinetListAll}
-                              selectAllChecked={selectAllChecked}
-                              setSelectAllChecked={setSelectAllChecked}
-                              selectedRowsId={selectedRowsId}
-                              setSelectedRowsId={setSelectedRowsId}
-                              selectedChart={headerCheckValidation}
-                            />
-                            <div>
-                              <div className="pagination-container">
-                                <Paginator
-                                  first={paginationFirst}
-                                  rows={15}
-                                  totalRecords={totalElements}
-                                  onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  Total count: {totalElements}
-                                </div>
-                              </div>
-                            </div>
+                                      <Footer />
+                                    </>
+                                  )}
+                                </Tab.Pane>
+                                <Tab.Pane id="my-posts" eventKey="team">
+                                  {isLoading ? (
+                                    <SpinnerDots />
+                                  ) : (
+                                    <>
+                                      <div
+                                        className={TableStyle.classContaineer}
+                                      >
+                                        {!isPatientList ? (
+                                          <>
+                                            <table
+                                              className={TableStyle.classTable}
+                                            >
+                                              <thead
+                                                className={
+                                                  TableStyle.classThead
+                                                }
+                                              >
+                                                <tr>
+                                                  <th>Name</th>
+                                                  <th>User Name</th>
+                                                </tr>
+                                              </thead>
 
-                            <Footer />
-                          </>
-                        )}
-                                  </Tab.Pane>
-                              
-                                  <Tab.Pane
-                                    id="my-posts"
-                                    eventKey="RafScore"
-                                  ></Tab.Pane>
-                                  <Tab.Pane
-                                    id="my-posts"
-                                    eventKey="file"
-                                  ></Tab.Pane>
-                                </Tab.Content>
-                              </Tab.Container>
-                            </div>
+                                              <tbody>
+                                                {l2UserListAll?.length <= 0 ? (
+                                                  <tr>
+                                                    <td colSpan="9">
+                                                      <Empty />
+                                                    </td>
+                                                  </tr>
+                                                ) : (
+                                                  renderRows()
+                                                )}
+                                              </tbody>
+                                            </table>
+                                            {/* <div>
+                                              <div className="pagination-container">
+                                                <Paginator
+                                                  first={paginationFirst}
+                                                  rows={15}
+                                                  totalRecords={totalElements}
+                                                  onPageChange={onPageChange}
+                                                />
+                                                <div className="total-pages">
+                                                  Total count: {totalElements}
+                                                </div>
+                                              </div>
+                                            </div> */}
+                                          </>
+                                        ) : (
+                                          <>
+                                            <AllocatedAdminList
+                                              patinetListAll={l2patinetListAll}
+                                              selectAllChecked={
+                                                selectAllChecked
+                                              }
+                                              setSelectAllChecked={
+                                                setSelectAllChecked
+                                              }
+                                              selectedRowsId={selectedRowsId}
+                                              setSelectedRowsId={
+                                                setSelectedRowsId
+                                              }
+                                              selectedChart={
+                                                headerCheckValidation
+                                              }
+                                            />
+                                          </>
+                                        )}
+                                      </div>
+
+                                      <Footer />
+                                    </>
+                                  )}
+                                </Tab.Pane>
+                              </Tab.Content>
+                            </Tab.Container>
                           </div>
-                    
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -366,6 +543,17 @@ export default function Patient() {
         setSelectAllChecked={setSelectAllChecked}
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
+      />
+      <L2AllocateModal
+        open={allocateModalL2}
+        setOpen={setAllocateModalL2}
+        selectedRowsId={selectedRowsId}
+        setSelectedRowsId={setSelectedRowsId}
+        setAllocateClicked={setAllocateClicked}
+        setSelectAllChecked={setSelectAllChecked}
+        setSelectedChart={setSelectedChart}
+        selectedChart={selectedChart}
+        selectedUser={l2selectUser}
       />
     </>
   );

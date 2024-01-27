@@ -72,12 +72,3 @@
     height: 200px;
     overflow: scroll;
 }
-.backArrowBtn {
-    height: 32px !important;
-    width: 32px !important;
-    padding: 0 !important;
-    background: #e1edfe !important;
-    border: none;
-    margin-left: 15px !important;
-    margin-top: 8px;
-  }

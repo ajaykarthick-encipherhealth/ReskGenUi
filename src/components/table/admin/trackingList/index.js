@@ -183,6 +183,25 @@ function TrackingTable({
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
             : "---"}
         </td>
+        <td className={TableStyle.childBorder}  style={{textAlign:"center"}}>
+          <Tooltip title={data.auditAllocatedByFirstName ? data.auditAllocatedByFirstName : "Praveen"}>
+            <Avatar
+              style={{
+                backgroundColor: "#F3C217 ",
+                color: "white",
+                cursor: "pointer",
+              }}
+            >
+              {data.auditAllocatedByFirstName
+                ? data.auditAllocatedByFirstName.slice(0, 2).toUpperCase()
+                : "P"}
+            </Avatar>
+          </Tooltip>
+        </td>
+        <td className={TableStyle.childBorder} onClick={handleTableRowClick}  style={{textAlign:"center"}}>
+          {data.auditAllocatedDate ? moment(data.auditAllocatedDate).format("MM-DD-YYYY") : "---"}
+        </td>
+    
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}  style={{textAlign:"center"}}>
           {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
         </td>
@@ -204,6 +223,8 @@ function TrackingTable({
             <th  style={{textAlign:"center"}}>ALLOCATED BY</th>
             <th  style={{textAlign:"left"}}>ALLOCATED TO</th>
             <th  style={{textAlign:"center"}}>ALLOCATED DATE</th>
+            <th  style={{textAlign:"center"}}>AUDIT ALLOCATED BY</th>
+            <th  style={{textAlign:"center"}}>AUDIT ALLOCATED DATE</th>
             <th
              style={{textAlign:"center"}}
               onClick={() => {
