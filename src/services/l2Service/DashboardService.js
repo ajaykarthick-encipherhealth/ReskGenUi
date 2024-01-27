@@ -70,10 +70,10 @@ export const accuracyScore = async (btn, month, year, router) => {
 
 export const CompletedScore = async (btn, date, month, year, router) => {
   const token = localStorage.getItem("token");
-  const url = `year=${year}&month=${month}&date=${date}&range=${btn}`;
+  const url =btn==='DAILY'? `daily?month=${month}&year=${year}`:btn==='WEEKLY'?`weekly?month=${month}&year=${year}`:`monthly?year=${year}`
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}management/dashboard/line/statistics?${url}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/l2dashboard/productivity/status/${url}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
