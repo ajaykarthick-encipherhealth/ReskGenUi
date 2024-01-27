@@ -23,7 +23,6 @@ const L2AllocateModal = ({
   setSelectedChart,
   selectedUser
 }) => {
-  console.log(selectedUser)
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
@@ -63,7 +62,6 @@ const L2AllocateModal = ({
   };
 
   const setAllocate = async () => {
-    console.log(selectedUser)
     var resoureUrl = `dbservice/patient/admin/assignPatients/l2audit`;
     const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
       userId: selectedUser?.userName,
@@ -86,7 +84,6 @@ const L2AllocateModal = ({
   };
 
   const getAllCheckList = async () => {
-    console.log(open)
     if(selectedUser){
     var resoureUrl = `/dbservice/l2audit/statistics?username=${selectedUser?.userName}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
