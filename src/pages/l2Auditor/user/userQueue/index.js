@@ -219,7 +219,6 @@ const index = () => {
                           //   ? options
                           //   : []
                           generateOptionsList(filteredList)
-                          
                         }
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
                         audidefaultAllocatedBy={"All"}
