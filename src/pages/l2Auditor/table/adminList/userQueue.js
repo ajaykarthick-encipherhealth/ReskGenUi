@@ -37,12 +37,13 @@ const UserQueue = ({ userList, setSort }) => {
           height={10}
         ></Badge.Ribbon>
       );
-    } else if (data.auditedStatus === "AUDITEDHOLD") {
+    } else if (data.auditedStatus === "AUDITHOLD") {
       return (
         <Badge.Ribbon
           text="Audite Hold"
           color="#964B00"
           placement="start"
+          style={{fontSize:"9px"}}
         ></Badge.Ribbon>
       );
     } else return null;
@@ -173,8 +174,8 @@ const UserQueue = ({ userList, setSort }) => {
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             <div className={TableStyle.innerAlignments}>
-              {data.auditedDate
-                ? moment(data.auditedAllocatedDate).format("MM-DD-YYYY")
+              {data.auditAllocatedDate
+                ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
                 : "---"}
             </div>
           </td>
@@ -183,17 +184,17 @@ const UserQueue = ({ userList, setSort }) => {
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             <div className={TableStyle.innerAlignments}>
-              {data.auditedDueDate
-                ? moment(data.auditedDueDate).format("MM-DD-YYYY")
+              {data.auditDueDate
+                ? moment(data.auditDueDate).format("MM-DD-YYYY")
                 : "---"}
             </div>
           </td>
 
           <td className={TableStyle.childBorder}>
             <div className={TableStyle.innerAlignments}>
-              {data.auditedAllocatedBy ? (
-                <Tooltip title={data.auditedAllocatedBy}>
-                  {data.auditedAllocatedBy ? (
+              {data.auditAllocatedBy ? (
+                <Tooltip title={data.auditAllocatedBy}>
+                  {data.auditAllocatedBy ? (
                     <img
                       src={dummyProfileImageUrl}
                       alt="User Avatar"
@@ -210,13 +211,13 @@ const UserQueue = ({ userList, setSort }) => {
                       style={{ borderRadius: "50%", marginRight: "10px" }}
                     />
                   )}
-                  {data.auditedAllocatedBy ? (
+                  {data.auditAllocatedBy ? (
                     <>
-                      {data.auditedAllocatedBy
+                      {data.auditAllocatedBy
                         .split("@")[0]
                         .charAt(0)
                         .toUpperCase() +
-                        data.auditedAllocatedBy.split("@")[0].slice(1)}
+                        data.auditAllocatedBy.split("@")[0].slice(1)}
                     </>
                   ) : (
                     "---"
@@ -300,7 +301,7 @@ const UserQueue = ({ userList, setSort }) => {
                 );
                 setSort({
                   sortDir: auditAllocatedSort,
-                  sortField: "auditedAllocatedDate",
+                  sortField: "auditAllocatedDate",
                 });
               }}
             >
@@ -316,7 +317,7 @@ const UserQueue = ({ userList, setSort }) => {
             <th
               onClick={() => {
                 setAuditDueSort(auditDueSort === "ASC" ? "DESC" : "ASC");
-                setSort({ sortDir: auditDueSort, sortField: "auditedDueDate" });
+                setSort({ sortDir: auditDueSort, sortField: "auditDueDate" });
               }}
             >
               AUDITED DUE DATE
