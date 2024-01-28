@@ -5,6 +5,8 @@ import {
   CompletedScore,
   HoldStatus,
   ChatBot,
+  CompletedScoreNew,
+  UserByIndividual
 } from "../../../services/l2Service/DashboardService";
 
 export const WORKFLOWDATA = "WORKFLOWDATA";
@@ -15,6 +17,8 @@ export const COMPLETED = "COMPLETED";
 export const HOLD_STATUS = "HOLD_STATUS";
 export const SELECTED_DAY = "SELECTED_DAY";
 export const CHATBOT = "CHATBOT";
+export const INDIVIDUAL_USER = "INDIVIDUAL_USER";
+
 
 export const getSelectedDay = (day) => ({
   type: SELECTED_DAY,
@@ -152,5 +156,55 @@ export const getChatReply = (msg) => {
         payload: response,
       });
     });
+  };
+};
+
+
+export const getCompletedScoreNew = (btn, date, month, year, router,type,user) => {
+  return (dispatch) => {
+    dispatch({
+      type: COMPLETED,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      CompletedScoreNew(btn, date, month, year, router,type,user).then((response) => {
+        dispatch({
+          type: COMPLETED,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+
+export const getUserByIndividual = (router) => {
+  return (dispatch) => {
+    dispatch({
+      type: INDIVIDUAL_USER,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      UserByIndividual(router).then((response) => {
+        dispatch({
+          type: INDIVIDUAL_USER,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 };

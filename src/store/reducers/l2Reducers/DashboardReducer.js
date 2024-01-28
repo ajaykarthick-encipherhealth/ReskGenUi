@@ -6,7 +6,8 @@ import {
     COMPLETED,
     HOLD_STATUS,
     SELECTED_DAY,
-    CHATBOT
+    CHATBOT,
+    INDIVIDUAL_USER
   } from "../../actions/l2Action/DashboardAction";
   
   const initialState = {
@@ -17,7 +18,8 @@ import {
     completed: null,
     holdStatus: null,
     dayDetails: null,
-    chatReply:null
+    chatReply:null,
+    individualUser:null
   };
   
   export const L2DashboardReducers = (state = initialState, action) => {
@@ -67,6 +69,12 @@ import {
       return {
         ...state,
         chatReply: action.payload,
+      };
+    }
+    if (action.type === INDIVIDUAL_USER) {
+      return {
+        ...state,
+        individualUser: action.payload,
       };
     }
     return state;
