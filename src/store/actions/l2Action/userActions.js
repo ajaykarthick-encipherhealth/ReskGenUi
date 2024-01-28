@@ -5,6 +5,8 @@ import {
 
 export const USERS = "USERS";
 export const INDIVIAULUSER = "INDIVIAULUSER";
+export const CLICK_USER_DETAILS = "CLICK_USER_DETAILS";
+
 
 export const getL2Users = (page, search) => {
   return (dispatch) => {
@@ -52,6 +54,19 @@ export const getL2IndividualUser = (datas) => {
           });
         }
       });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const storeUserValues = (data) => {
+  return (dispatch) => {
+    try {
+        dispatch({
+          type: CLICK_USER_DETAILS,
+          payload: data,
+        });
     } catch (err) {
       console.log(err);
     }

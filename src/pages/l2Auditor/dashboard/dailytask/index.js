@@ -106,13 +106,13 @@ const DailyTask = () => {
         id: index + 1,
         day: dayInfo?.day,
         date: dayInfo?.date,
-        dateString: matchingStatusData?.response?.date,
-        pending: matchingStatusData?.response?.auditPending || 0,
-        hold: matchingStatusData?.response?.auditHold || 0,
-        audited: matchingStatusData?.response?.audited || 0,
-        reAudited: matchingStatusData?.response?.reAudited || 0,
-        allocated: matchingStatusData?.response?.auditAllocated || 0,
-        declined: matchingStatusData?.response?.auditDeclined || 0,
+        dateString: matchingStatusData?.data?.response?.date,
+        pending: matchingStatusData?.data?.response?.auditPending || 0,
+        hold: matchingStatusData?.data?.response?.auditHold || 0,
+        audited: matchingStatusData?.data?.response?.audited || 0,
+        reAudited: matchingStatusData?.data?.response?.reAudited || 0,
+        allocated: matchingStatusData?.data?.response?.auditAllocated || 0,
+        declined: matchingStatusData?.data?.response?.auditDeclined || 0,
       };
     });
     const sorted = processedDays?.sort((a, b) => {

@@ -254,7 +254,7 @@ const Header = () => {
 
   const notificationDrawer = async () => {
     setOpen(true);
-    dispatchValue(getNotificationAlertClear([]));
+    dispatch(getNotificationAlertClear([]));
   };
 
   const items = dropdownContent?.filter(
