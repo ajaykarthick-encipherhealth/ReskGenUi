@@ -181,4 +181,18 @@ export const Buttons = [
     title: "Monthly",
   },
 ];
+export const ButtonsGroup2 = [
+  {
+    id: 1,
+    title: "Daily",
+  },
+  {
+    id: 2,
+    title: "Week",
+  },
+  {
+    id: 3,
+    title: "Month",
+  },
+];
 export default index;

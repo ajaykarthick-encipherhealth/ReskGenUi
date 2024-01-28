@@ -70,7 +70,12 @@ export const accuracyScore = async (btn, month, year, router) => {
 
 export const CompletedScore = async (btn, date, month, year, router) => {
   const token = localStorage.getItem("token");
-  const url =btn==='DAILY'? `daily?month=${month}&year=${year}`:btn==='WEEKLY'?`weekly?month=${month}&year=${year}`:`monthly?year=${year}`
+  const url =
+    btn === "DAILY"
+      ? `daily?month=${month}&year=${year}`
+      : btn === "WEEKLY"
+      ? `weekly?month=${month}&year=${year}`
+      : `monthly?year=${year}`;
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/l2dashboard/productivity/status/${url}`,
@@ -123,5 +128,71 @@ export const ChatBot = async (msg) => {
     return response.data;
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const CompletedScoreNew = async (
+  btn,
+  date,
+  month,
+  year,
+  router,
+  type,
+  user
+) => {
+  const token = localStorage.getItem("token");
+  switch (btn) {
+    case "WEEKLY":
+      btn = "WEEK";
+      break;
+    case "MONTHLY":
+      btn = "MONTH";
+      break;
+    default:
+      null;
+  }
+  var data = {
+    year: year,
+    month: month,
+    date: date,
+    l1AccuracyMemberType: type,
+    l1AccuracyDateType: btn,
+    orgId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+    userIds: user,
+  };
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}management/l2dashboard/l1accuracybydatetype`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+export const UserByIndividual = async (router) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getuserbymanagerid?orgid=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err.response.status === 401) {
+      router.push("/login");
+    }
   }
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
-import { Buttons } from "../../../physician/workingstatus";
+import { Buttons, ButtonsGroup2 } from "../../../physician/workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
@@ -11,31 +11,60 @@ import { monthNames, getDays } from "../accuracy";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import { Empty, Spin } from "antd";
-import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
+import { Empty, Spin, Select } from "antd";
+import {
+  getCOmpletedScore,
+  getCompletedScoreNew,
+  getUserByIndividual,
+} from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 const CompletedStatus = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const completedDatas = useSelector((state) => state?.workFlow?.completed);
+  const individualUserList = useSelector(
+    (state) => state?.l2Dashboard?.individualUser
+  );
+
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
+  const [selectMemberType, setSelectMemberType] = useState("TEAM");
+  const [selectUser, setSelectUser] = useState([]);
+  const [isindividual, setIsindividual] = useState(false);
+
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
 
+  const options = [
+    { value: "TEAM", label: "TEAM" },
+    { value: "INDIVIDUAL", label: "INDIVIDUAL" },
+  ];
+  const optionsUser = [];
+
+  const individualUserRes = individualUserList?.data?.response?.map((res) =>
+    optionsUser.push({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })
+  );
+
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
 
   completedWeeks =
-    completedDatas?.data?.response?.audit &&
-    new Set(Object.keys(completedDatas?.data?.response?.audit).map(Number));
+    completedDatas?.data?.response?.mapAccuracy &&
+    new Set(
+      Object.keys(completedDatas?.data?.response?.mapAccuracy).map(Number)
+    );
 
   allocatedWeeks =
-    completedDatas?.data?.response?.allocate &&
-    new Set(Object.keys(completedDatas?.data?.response?.allocate).map(Number));
+    completedDatas?.data?.response?.mapAccuracy &&
+    new Set(
+      Object.keys(completedDatas?.data?.response?.mapAccuracy).map(Number)
+    );
 
   const uniqueWeeks =
     completedWeeks && allocatedWeeks
@@ -73,11 +102,15 @@ const CompletedStatus = () => {
     xAxisData = weekNames;
   }
 
-  const allocatedValues = xAxisData?.map(
-    (day) => completedDatas?.data?.response?.allocate ? completedDatas?.data?.response?.allocate[day] : 0 || 0
+  const allocatedValues = xAxisData?.map((day, index) =>
+    completedDatas?.data?.response?.allocate
+      ? completedDatas?.data?.response?.allocate[index + 1]
+      : 0 || 0
   );
-  const auditedValues = xAxisData?.map(
-    (day) => completedDatas?.data?.response?.audit ? completedDatas?.data?.response?.audit[day] : 0 || 0
+  const auditedValues = xAxisData?.map((day, index) =>
+    completedDatas?.data?.response?.mapAccuracy
+      ? completedDatas?.data?.response?.mapAccuracy[index + 1]
+      : 0 || 0
   );
 
   const option = {
@@ -94,9 +127,8 @@ const CompletedStatus = () => {
       trigger: "axis",
       formatter: function (params) {
         const dataIndex = params[0]?.dataIndex;
-        const allocatedValue = allocatedValues[dataIndex];
         const auditedValue = auditedValues[dataIndex];
-        return `Audited: ${auditedValue}<br/>Allocated: ${allocatedValue}`;
+        return `Audited: ${auditedValue}`;
       },
     },
     series: [
@@ -114,20 +146,6 @@ const CompletedStatus = () => {
           ]),
         },
       },
-      {
-        data: allocatedValues,
-        type: "line",
-        lineStyle: { color: "#FF718B" },
-        smooth: true,
-        showSymbol: false,
-        areaStyle: {
-          opacity: 0.5,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "#FF718B" },
-            { offset: 1, color: "#F4EBF4" },
-          ]),
-        },
-      },
     ],
   };
 
@@ -136,36 +154,70 @@ const CompletedStatus = () => {
       color: "#4A3AFF",
       name: "Audited",
     },
-    {
-      color: "#FF718B",
-      name: "Allocated",
-    },
   ];
+
+  const memberTypeChanges = (e) => {
+    setSelectMemberType(e);
+    setIsindividual(false);
+    setSelectUser([]);
+    if (e == "INDIVIDUAL") {
+      setIsindividual(true);
+    }
+  };
+
+  const onChangeUser = (e) => {
+    setSelectUser([e]);
+  };
+
+  useEffect(() => {
+    dispatch(getUserByIndividual());
+  }, [selectMemberType]);
 
   useEffect(() => {
     dispatch(
-      getCOmpletedScore(
+      getCompletedScoreNew(
         currentBtn.toUpperCase(),
         currentDate.getDate(),
         selectedMonth,
         selectedYear,
-        router
+        router,
+        selectMemberType,
+        selectUser
       )
     );
-  }, [currentBtn, selectedMonth, selectedYear]);
+  }, [currentBtn, selectedMonth, selectedYear, selectMemberType, selectUser]);
   return (
     <>
       <HeadTitle header="Productivity Status" />
       <div className={styles.card5}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
+            <div className={styles.select}>
+              <Select
+                value={selectMemberType}
+                onChange={(e) => memberTypeChanges(e)}
+                className={`custom_select_type ${styles.custom_select_type}`}
+                options={options}
+                style={{ backgroundColor: "#F3F3FF" }}
+              />
+            </div>
+            {isindividual ? (
+              <div className={styles.select}>
+                <Select
+                placeholder="Select User"
+                  className={`custom_select_user ${styles.custom_select_user}`}
+                  onChange={(e) => onChangeUser(e)}
+                  options={optionsUser}
+                />
+              </div>
+            ) : null}
             <div className={styles.picker}>
               <YearPicker
                 onChange={handleYearChange}
                 type={"year"}
                 bgColor="#F3F3FF"
               />
-              {currentBtn !== "Monthly" && (
+              {currentBtn !== "Month" && (
                 <YearPicker
                   onChange={handleMonthChange}
                   type={"month"}
