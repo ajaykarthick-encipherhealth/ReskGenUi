@@ -4,7 +4,8 @@ import { USERS ,INDIVIAULUSER,CLICK_USER_DETAILS} from "../../actions/l2Action/u
 
   const initialState = {
     data: null,
-    userData:null
+    userData:null,
+    userDetails:null
     
   };
   
@@ -24,7 +25,7 @@ import { USERS ,INDIVIAULUSER,CLICK_USER_DETAILS} from "../../actions/l2Action/u
     if (action.type === CLICK_USER_DETAILS) {
       return {
         ...state,
-        patientsList: action.payload,
+        userDetails: action.payload,
       };
     }
     return state;
