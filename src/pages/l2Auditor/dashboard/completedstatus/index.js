@@ -217,7 +217,7 @@ const CompletedStatus = () => {
                 type={"year"}
                 bgColor="#F3F3FF"
               />
-              {currentBtn !== "Month" && (
+              {currentBtn !== "Monthly" && (
                 <YearPicker
                   onChange={handleMonthChange}
                   type={"month"}
