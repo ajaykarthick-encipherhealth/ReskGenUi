@@ -137,6 +137,37 @@ export const CompletedScoreNew = async (
   month,
   year,
   router,
+) => {
+  const token = localStorage.getItem("token");
+  const url =
+    btn === "DAILY"
+      ? `daily?month=${month}&year=${year}`
+      : btn === "WEEKLY"
+      ? `weekly?month=${month}&year=${year}`
+      : `monthly?year=${year}`;
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/l2dashboard/productivity/status/${url}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router.push("/login");
+    }
+  }
+};
+
+export const accuracyScoreNew = async (
+  btn,
+  date,
+  month,
+  year,
+  router,
   type,
   user
 ) => {
@@ -157,6 +188,8 @@ export const CompletedScoreNew = async (
     date: date,
     l1AccuracyMemberType: type,
     l1AccuracyDateType: btn,
+    "weekStart":11,
+    "weekEnd":13,
     orgId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
     userIds: user,
   };

@@ -10,15 +10,17 @@ import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import { getAccuracyScore } from "../../../../store/actions/l2Action/DashboardAction";
-import { Empty, Spin } from "antd";
+import { getAccuracyScore ,getAccuracyScoreNew,getUserByIndividual} from "../../../../store/actions/l2Action/DashboardAction";
+import { Empty, Spin,Select } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
+import moment from "moment";
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstDayWeek = firstDayOfMonth.getDay();
   const currentDate = date.getDate();
   const startingWeek = Math.ceil((currentDate + firstDayWeek) / 7);
-  return startingWeek;
+  var currentWeek = moment().isoWeek().toString();
+  return currentWeek;
 };
 
 export const getDays = (currentDate) => {
@@ -51,20 +53,72 @@ const Accuracy = () => {
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [selectMemberType, setSelectMemberType] = useState("TEAM");
+  const [selectUser, setSelectUser] = useState([]);
+  const [isindividual, setIsindividual] = useState(false);
   const dispatch = useDispatch();
   const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
+  const individualUserList = useSelector(
+    (state) => state?.l2Dashboard?.individualUser
+  );
   const numberOfWeeks =
-    accuracyDatas?.data?.response &&
-    Object.keys(accuracyDatas?.data?.response)?.length;
+    accuracyDatas?.data?.response?.mapAccuracy &&
+    Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
     (_, index) => `Week ${index + 1}`
   );
   const router = useRouter();
+
+
+  const options = [
+    { value: "TEAM", label: "TEAM" },
+    { value: "INDIVIDUAL", label: "INDIVIDUAL" },
+  ];
+  const optionsUser = [];
+
+  const individualUserRes = individualUserList?.data?.response?.map((res) =>
+    optionsUser.push({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })
+  );
+
+  const memberTypeChanges = (e) => {
+    setSelectMemberType(e);
+    setIsindividual(false);
+    setSelectUser([]);
+    if (e == "INDIVIDUAL") {
+      setIsindividual(true);
+    }
+  };
+
+  const onChangeUser = (e) => {
+    setSelectUser([e]);
+  };
+
+
+  
   useEffect(() => {
-    dispatch(getAccuracyScore(currentBtn, selectedMonth, selectedYear, router));
-  }, [currentBtn, selectedMonth, selectedYear]);
+    dispatch(getUserByIndividual());
+  }, [selectMemberType]);
+
+
+
+  useEffect(() => {
+    dispatch(
+      getAccuracyScoreNew(
+        currentBtn.toUpperCase(),
+        currentDate.getDate(),
+        selectedMonth,
+        selectedYear,
+        router,
+        selectMemberType,
+        selectUser
+      )
+    );
+  }, [currentBtn, selectedMonth, selectedYear,selectMemberType, selectUser]);
 
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);
@@ -103,8 +157,8 @@ const Accuracy = () => {
   }
 
   let data = [];
-  if (currentBtn && accuracyDatas?.data?.response) {
-    data = Object.values(accuracyDatas?.data?.response);
+  if (currentBtn && accuracyDatas?.data?.response?.mapAccuracy) {
+    data = Object.values(accuracyDatas?.data?.response?.mapAccuracy);
   }
   const option = {
     xAxis: {
@@ -157,7 +211,30 @@ const Accuracy = () => {
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
-            <div className={styles.picker}>
+          <div className={`d-flex ${styles.selectContainer}`}>
+          <div className={styles.select}>
+              <Select
+                value={selectMemberType}
+                onChange={(e) => memberTypeChanges(e)}
+                className={`custom_select_type ${styles.custom_select_type}`}
+                options={options}
+                style={{ backgroundColor: "#F3F3FF" }}
+              />
+            </div>
+            {isindividual ? (
+              <div className={styles.select}>
+                <Select
+                showSearch
+                placeholder="Select User"
+                  className={`custom_select_user ${styles.custom_select_user}`}
+                  onChange={(e) => onChangeUser(e)}
+                  options={optionsUser}
+                />
+              </div>
+            ) : null}
+          </div>
+           <div className="d-flex">
+           <div className={styles.picker}>
               <YearPicker
                 onChange={handleYearChange}
                 type={"year"}
@@ -186,6 +263,7 @@ const Accuracy = () => {
                 #E6EEFF"
               />
             </div>
+           </div>
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
@@ -194,7 +272,7 @@ const Accuracy = () => {
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : (
-                accuracyDatas?.loading===false && accuracyDatas?.data?.response?
+                accuracyDatas?.loading===false && accuracyDatas?.data?.response?.mapAccuracy?
                 option && (
                   <ReactECharts
                     option={option}
@@ -226,8 +304,8 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {accuracyDatas?.response
-                    ? `${accuracyDatas?.response[highlightIndex + 1]}%`
+                  {accuracyDatas?.data?.response?.mapAccuracy
+                    ? `${accuracyDatas?.data?.response?.mapAccuracy[highlightIndex + 1]}%`
                     : "0%"}
                 </span>
               </div>
