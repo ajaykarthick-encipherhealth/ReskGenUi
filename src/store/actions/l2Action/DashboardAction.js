@@ -6,7 +6,8 @@ import {
   HoldStatus,
   ChatBot,
   CompletedScoreNew,
-  UserByIndividual
+  UserByIndividual,
+  accuracyScoreNew
 } from "../../../services/l2Service/DashboardService";
 
 export const WORKFLOWDATA = "WORKFLOWDATA";
@@ -160,7 +161,7 @@ export const getChatReply = (msg) => {
 };
 
 
-export const getCompletedScoreNew = (btn, date, month, year, router,type,user) => {
+export const getCompletedScoreNew = (btn, date, month, year, router) => {
   return (dispatch) => {
     dispatch({
       type: COMPLETED,
@@ -169,7 +170,7 @@ export const getCompletedScoreNew = (btn, date, month, year, router,type,user) =
       },
     });
     try {
-      CompletedScoreNew(btn, date, month, year, router,type,user).then((response) => {
+      CompletedScoreNew(btn, date, month, year, router).then((response) => {
         dispatch({
           type: COMPLETED,
           payload: {
@@ -184,6 +185,29 @@ export const getCompletedScoreNew = (btn, date, month, year, router,type,user) =
   };
 };
 
+export const getAccuracyScoreNew = (btn, date, month, year, router,type,user) => {
+  return (dispatch) => {
+    dispatch({
+      type: ACCURACY,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      accuracyScoreNew(btn, date, month, year, router,type,user).then((response) => {
+        dispatch({
+          type: ACCURACY,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
 export const getUserByIndividual = (router) => {
   return (dispatch) => {

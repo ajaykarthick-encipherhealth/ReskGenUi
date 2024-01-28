@@ -31,24 +31,3 @@
 .bulletContainer {
   margin-top: -30px;
 }
-
-.select {
-}
-.custom_select_type {
-  border: none !important;
-  border-radius: 12px;
-  width: 120px;
-  height: 35px;
-  margin-right: 10px;
-  background: #F3F3FF !important;
-  border: none;
-}
-.custom_select_user {
-  border: none !important;
-  border-radius: 12px;
-  width: 200px;
-  height: 35px;
-  margin-right: 10px;
-  background: #F3F3FF !important;
-  border: none;
-}
