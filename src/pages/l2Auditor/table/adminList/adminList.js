@@ -3,15 +3,24 @@ import { Empty, Tooltip } from "antd";
 import { CircularProgressbar } from "react-circular-progressbar";
 import TableStyle from "../../../../components/table/table.module.css";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import {storeUserValues} from "../../../../store/actions/l2Action/userActions";
+
 
 const AdminList = ({ userList }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const gotoUserQueue =(item)=>{
+    dispatch(storeUserValues(item)),
+    router.push(`user/userQueue?userId=${item?.userName}`)
+  }
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>USER ID</th>
+            <th>NAME</th>
             <th>USER NAME</th>
             <th>ALLOCATED</th>
             <th>COMPLETED</th>
@@ -27,7 +36,7 @@ const AdminList = ({ userList }) => {
                 key={index}
                 style={{ height: "35px" }}
                 onClick={() =>
-                  router.push(`user/userQueue?userId=${item?.userName}`)
+                  gotoUserQueue(item)
                 }
               >
                 {/* user id */}
@@ -35,7 +44,21 @@ const AdminList = ({ userList }) => {
                   className={TableStyle.childBorder}
                   style={{ height: "47px !important" }}
                 >
-                  <span>{item?.userId ? item?.userId : "---"}</span>
+                  <img
+                    src={item.profileImageUrl}
+                    alt="User Avatar"
+                    width={35}
+                    height={35}
+                    style={{
+                      borderRadius: "50%",
+                      marginRight: "10px",
+                    }}
+                  />
+                  <span>
+                    {item?.firstName
+                      ? item?.firstName + " " + item.lastName
+                      : "---"}
+                  </span>
                 </td>
                 {/* user name */}
                 <td
@@ -93,7 +116,10 @@ const AdminList = ({ userList }) => {
                   <Tooltip title={` Quality : ${90}%`}>
                     <div className="notificationIcon">
                       <div style={{ width: 40, height: 40 }}>
-                        <CircularProgressbar value={Math.round(item?.accuracy)} text={`${Math.round(item?.accuracy)}%`} />
+                        <CircularProgressbar
+                          value={Math.round(item?.accuracy)}
+                          text={`${Math.round(item?.accuracy)}%`}
+                        />
                       </div>
                     </div>
                   </Tooltip>

@@ -70,18 +70,16 @@ const CompletedStatus = () => {
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(currentDate);
   } else if (currentBtn === "Weekly") {
-    console.log(weekNames);
     xAxisData = weekNames;
   }
 
   const allocatedValues = xAxisData?.map(
-    (day) => completedDatas?.data?.response?.allocate[day] || 0
+    (day) => completedDatas?.data?.response?.allocate ? completedDatas?.data?.response?.allocate[day] : 0 || 0
   );
   const auditedValues = xAxisData?.map(
-    (day) => completedDatas?.data?.response?.audit[day] || 0
+    (day) => completedDatas?.data?.response?.audit ? completedDatas?.data?.response?.audit[day] : 0 || 0
   );
 
-  console.log(allocatedValues, auditedValues);
   const option = {
     xAxis: {
       type: "category",

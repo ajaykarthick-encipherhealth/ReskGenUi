@@ -143,7 +143,6 @@ export default function Patient() {
     if (response) {
       var resultMap = [];
       var result = response?.response?.content;
-      console.log(result, "result");
       setTotalElements(response?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -162,6 +161,9 @@ export default function Patient() {
           createdAt: res.createdAt,
           auditedStatus: res.auditedStatus,
           patientAllocated: res.patientAllocated,
+          auditAllocatedDate: res.auditAllocatedDate,
+          auditDueDate: res.auditDueDate,
+          auditedDate: res.auditedDate,
         });
       });
       var newArray = [];
@@ -211,7 +213,7 @@ export default function Patient() {
               className={`badge Auditprocessing-text`}
               style={{ color: "#E28213", background: "#FBE7D0 !important" }}
             >
-              Pending
+              Audit Pending
             </span>
           </div>
         );

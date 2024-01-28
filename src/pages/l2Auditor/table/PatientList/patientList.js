@@ -238,16 +238,16 @@ function PatientTable({
            
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.allocatedOn
-              ? moment(data.allocatedOn).format("MM-DD-YYYY")
+            {data.auditAllocatedDate
+              ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
+            {data.auditDueDate ? moment(data.auditDueDate).format("MM-DD-YYYY") : "---"}
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.processedDate
-              ? moment(data.processedDate).format("MM-DD-YYYY")
+            {data.auditedDate
+              ? moment(data.auditedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
           <td className={TableStyle.childBorder}>
