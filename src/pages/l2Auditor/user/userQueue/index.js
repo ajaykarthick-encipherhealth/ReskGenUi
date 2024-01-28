@@ -21,6 +21,8 @@ import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActi
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import { getFilters } from "../../../../store/actions/AuthActions";
+import  userStyles  from "./styles.module.css";
+
 
 const bullets = [
   {
@@ -68,6 +70,7 @@ const index = () => {
   const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const filteredList = useSelector((state) => state.auth.filterList);
+  const usersDetails = useSelector((state) => state.l2User?.userDetails);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
@@ -166,7 +169,7 @@ const index = () => {
           <div className="container-fluid">
             <div className="row">
               <div
-                className={"col-xl-12"}
+                className={"col-xl-12 d-flex"}
                 style={{ margin: "30px 0 30px 40px", cursor: "pointer" }}
               >
                 <button
@@ -178,7 +181,20 @@ const index = () => {
                 >
                   <Image src={leftArrow} />
                 </button>
-                <span className={styles.titleBar}>{userName}</span>
+                <div className={userStyles.userNameContainer}>
+                <img
+                    src={usersDetails?.profileImageUrl}
+                    alt="User Avatar"
+                    width={35}
+                    height={35}
+                    style={{
+                      borderRadius: "50%",
+                      marginRight: "10px",
+                    }}
+                  />
+                <span>{usersDetails?.firstName} {usersDetails?.lastName}</span>
+
+                </div>
               </div>
               <div className="col-xl-12">
                 <div className="card-body p-0">
