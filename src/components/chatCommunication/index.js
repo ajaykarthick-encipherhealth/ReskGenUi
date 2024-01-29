@@ -81,7 +81,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   useEffect(() => {
-    var userName = localStorage.getItem("userName");
+    var userName = localStorage.getItem("userId");
     handleUsername(userName);
     if (message && chatAction === "load") {
       scrollToBottom();
