@@ -99,6 +99,8 @@ const AuditHeaderFilters = ({
   bullets,
   isNextRow,
   badges,
+  getFilters,
+  username
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -158,7 +160,7 @@ const AuditHeaderFilters = ({
             <div
               className="col-xl-2"
               onClick={() => {
-                dispatch(getFilters("allocatedBy"));
+                dispatch(getFilters("auditAllocatedBy",username));
               }}
             >
               <label>{audiallocatedBylabel}</label>
@@ -300,7 +302,7 @@ const AuditHeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("patientAllocated"));
+                  dispatch(getFilters("patientAllocated",username));
                 }}
               >
                 <label>{allocatedBylabel}</label>

@@ -85,11 +85,12 @@ const UserList = () => {
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    const role = localStorage.getItem("userRole");
     if (form.checkValidity() === true) {
       formData.tenantId = localTenantId;
-      formData.orgId = localOrgId;
-      formData.role = roleValue;
-      dispatch(getAddUser(formData,));
+      formData.organizationId = localOrgId;
+      formData.role = roleValue ? roleValue : [role.toUpperCase()];
+      dispatch(getAddUser(formData));
     }
     setValidated(true);
   };
@@ -128,7 +129,6 @@ const UserList = () => {
     inputValuePatientId.patientAllocated = localUserId;
     inputValuePatientId.computing = 0;
     inputValuePatientId.allocatedUserId = localUserId;
-
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       const response = await axios.post(

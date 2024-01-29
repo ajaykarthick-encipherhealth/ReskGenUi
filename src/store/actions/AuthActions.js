@@ -220,7 +220,7 @@ export const getCoderDetails = ({ name, search, selectedOption, router }) => {
   };
 };
 
-export const getFilters = (field) => {
+export const getFilters = (field,username) => {
   return (dispatch) => {
     dispatch({
       type: FILTER,
@@ -229,7 +229,7 @@ export const getFilters = (field) => {
       },
     });
     try {
-      filters(field).then((response) => {
+      filters(field,username).then((response) => {
         dispatch({
           type: FILTER,
           payload: {
