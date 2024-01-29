@@ -18,7 +18,7 @@ const UserList = () => {
   const [totalElements, setTotalElements] = useState(15);
   const [pageCount, setPageCount] = useState(0);
 
-  const [search, setSearch] = useState(" ");
+  const [search, setSearch] = useState("");
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
