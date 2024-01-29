@@ -331,7 +331,7 @@ const HeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("allocatedTo"));
+                  dispatch(getFilters("patientAllocated"));
                 }}
               >
                 <label>{allocatedTolabel}</label>

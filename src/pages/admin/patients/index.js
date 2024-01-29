@@ -536,7 +536,7 @@ export default function Patient() {
                             defaultCreatedBy={"All"}
                             // created by
                             isCreatedBySelector={true}
-                            createdTolabel="Select CreatedTo"
+                            createdTolabel="Select CreatedBy"
                             createdByOptoons={
                               generateOptionsList(filteredList)
 
