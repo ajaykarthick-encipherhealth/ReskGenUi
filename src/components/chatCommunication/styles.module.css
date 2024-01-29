@@ -1,0 +1,24 @@
+.chatContainer{
+    margin-bottom: 10px;
+}
+.chatContainer2{
+    border-radius: 20px;
+}
+.messageHeader{
+    height: 50px;
+    background: #f8f9fa;
+}.messageContianer input{
+    height: 35px !important;
+    margin: 5px;
+}
+.chatHeader{
+    height: 50px;
+}
+.chatHeadertext{
+    padding: 12px 20px;
+    display: flex;
+}
+.tabContainer{
+    display: flex;
+    justify-content: space-between;
+}
