@@ -63,7 +63,7 @@ export default function Patient() {
   const [computedEndDate, setComputedEndDate] = useState("");
   const [selectedOption, SetSelectedOption] = useState("");
   const [patientSortOrder, setPatientSortOrder] = useState("ASC");
-  const [sortField, setSortField] = useState(null);
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -105,21 +105,20 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
+    const datas = {
+      pageNo,
+      computedStartDate,
+      computedEndDate,
+      selectedOption,
+      search,
+      completedStartDate,
+      completedEndDate,
+      patientSortOrder,
+      selAllocatedBy,
+      sort,
+    };
 
-    dispatch(
-      getWorkListFilter(
-        pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate,
-        completedEndDate,
-        patientSortOrder,
-        sortField,
-        selAllocatedBy,
-      )
-    );
+    dispatch(getWorkListFilter(datas));
   }, [
     pageNo,
     computedStartDate,
@@ -129,8 +128,8 @@ export default function Patient() {
     search,
     completedStartDate,
     completedEndDate,
-    sortField,
     patientSortOrder,
+    sort,
   ]);
 
   useEffect(() => {
@@ -346,9 +345,8 @@ export default function Patient() {
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
-                              setSortOrder={setPatientSortOrder}
-                              sortOrder={patientSortOrder}
-                              setSortField={setSortField}
+                              sort={sort}
+                              setSort={setSort}
                             />
                             <div>
                               <div className="pagination-container">

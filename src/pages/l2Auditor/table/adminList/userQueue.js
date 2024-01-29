@@ -43,7 +43,7 @@ const UserQueue = ({ userList, setSort }) => {
           text="Audit Hold"
           color="#964B00"
           placement="start"
-          style={{fontSize:"9px"}}
+          style={{fontSize:"10px"}}
         ></Badge.Ribbon>
       );
     } else return null;

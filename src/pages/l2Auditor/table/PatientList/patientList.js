@@ -32,9 +32,12 @@ function PatientTable({
   paginationFirst,
   totalElements,
   onPageChange,
+  setSort,
 }) {
-  const [sortDueOrder, setSortDueOrder] = useState("asc");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
+  const [sortDueOrder, setSortDueOrder] = useState("ASC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
+  const [sortAuditOrder, setSortAuditOrder] = useState("ASC");
+
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
 
   const dispatch = useDispatch();
@@ -183,7 +186,7 @@ function PatientTable({
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
-     <Empty/>
+      <Empty />
     ) : (
       patinetListAll?.map((data, index) => (
         <tr key={index}>
@@ -197,8 +200,9 @@ function PatientTable({
             {data.patientName}
           </td>
           <td className={TableStyle.childBorder}>
-            {data.patientAllocated ?  <Tooltip title={data.patientAllocated }>
-              {/* <Avatar
+            {data.patientAllocated ? (
+              <Tooltip title={data.patientAllocated}>
+                {/* <Avatar
               style={{
                 backgroundColor: "#fde3cf",
                 color: "#f56a00",
@@ -209,33 +213,38 @@ function PatientTable({
                 ? data.allocatedBy.slice(0, 2).toUpperCase()
                 : "N"}
             </Avatar> */}
-              {data.patientAllocated ? (
-                <img
-                  src={dummyProfileImageUrl}
-                  alt="User Avatar"
-                  width={30}
-                  height={30}
-                  style={{ borderRadius: "50%", marginRight: "5px" }}
-                />
-              ) : (
-                <img
-                  src={nullImg}
-                  alt="User Avatar"
-                  width={30}
-                  height={30}
-                  style={{ borderRadius: "50%", marginRight: "10px" }}
-                />
-              )}
-              {data.patientAllocated ? (
-                <>
-                  {data.patientAllocated.split("@")[0].charAt(0).toUpperCase() +
-                    data.patientAllocated.split("@")[0].slice(1)}
-                </>
-              ) : (
-               "---"
-              )}
-            </Tooltip> :"---"}
-           
+                {data.patientAllocated ? (
+                  <img
+                    src={dummyProfileImageUrl}
+                    alt="User Avatar"
+                    width={30}
+                    height={30}
+                    style={{ borderRadius: "50%", marginRight: "5px" }}
+                  />
+                ) : (
+                  <img
+                    src={nullImg}
+                    alt="User Avatar"
+                    width={30}
+                    height={30}
+                    style={{ borderRadius: "50%", marginRight: "10px" }}
+                  />
+                )}
+                {data.patientAllocated ? (
+                  <>
+                    {data.patientAllocated
+                      .split("@")[0]
+                      .charAt(0)
+                      .toUpperCase() +
+                      data.patientAllocated.split("@")[0].slice(1)}
+                  </>
+                ) : (
+                  "---"
+                )}
+              </Tooltip>
+            ) : (
+              "---"
+            )}
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.auditAllocatedDate
@@ -243,16 +252,20 @@ function PatientTable({
               : "---"}
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.auditDueDate ? moment(data.auditDueDate).format("MM-DD-YYYY") : "---"}
+            {data.auditDueDate
+              ? moment(data.auditDueDate).format("MM-DD-YYYY")
+              : "---"}
           </td>
+
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.auditedDate
               ? moment(data.auditedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
           <td className={TableStyle.childBorder}>
-            {data.allocatedBy ?  <Tooltip title={data.allocatedBy }>
-              {/* <Avatar
+            {data.allocatedBy ? (
+              <Tooltip title={data.allocatedBy}>
+                {/* <Avatar
               style={{
                 backgroundColor: "#fde3cf",
                 color: "#f56a00",
@@ -263,33 +276,35 @@ function PatientTable({
                 ? data.allocatedBy.slice(0, 2).toUpperCase()
                 : "N"}
             </Avatar> */}
-              {data.allocatedBy ? (
-                <img
-                  src={dummyProfileImageUrl}
-                  alt="User Avatar"
-                  width={30}
-                  height={30}
-                  style={{ borderRadius: "50%", marginRight: "5px" }}
-                />
-              ) : (
-                <img
-                  src={nullImg}
-                  alt="User Avatar"
-                  width={30}
-                  height={30}
-                  style={{ borderRadius: "50%", marginRight: "10px" }}
-                />
-              )}
-              {data.allocatedBy ? (
-                <>
-                  {data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +
-                    data.allocatedBy.split("@")[0].slice(1)}
-                </>
-              ) : (
-               "---"
-              )}
-            </Tooltip> :"---"}
-           
+                {data.allocatedBy ? (
+                  <img
+                    src={dummyProfileImageUrl}
+                    alt="User Avatar"
+                    width={30}
+                    height={30}
+                    style={{ borderRadius: "50%", marginRight: "5px" }}
+                  />
+                ) : (
+                  <img
+                    src={nullImg}
+                    alt="User Avatar"
+                    width={30}
+                    height={30}
+                    style={{ borderRadius: "50%", marginRight: "10px" }}
+                  />
+                )}
+                {data.allocatedBy ? (
+                  <>
+                    {data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +
+                      data.allocatedBy.split("@")[0].slice(1)}
+                  </>
+                ) : (
+                  "---"
+                )}
+              </Tooltip>
+            ) : (
+              "---"
+            )}
           </td>
           <td className={TableStyle.childBorder}>
             <AntSelect
@@ -329,16 +344,18 @@ function PatientTable({
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th>L1 AUDITOR</th>
-            <th>AUDIT ALLOCATED DATE</th>
             <th
               onClick={() => {
-                requestSort("dueDate");
-                sortTableByDate("dueDate");
+                setSortAuditOrder(sortAuditOrder === "ASC" ? "DESC" : "ASC");
+                setSort({
+                  sortDir: sortAuditOrder,
+                  sortField: "auditAllocatedDate",
+                });
               }}
             >
-             AUDITED DUE DATE
+              AUDIT ALLOCATED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder === "asc" ? (
+                {sortAuditOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -347,13 +364,36 @@ function PatientTable({
             </th>
             <th
               onClick={() => {
-                requestSort("lastModifiedDate");
-                sortTableByDate("completeDate");
+                setSortDueOrder(sortDueOrder === "ASC" ? "DESC" : "ASC");
+                setSort({
+                  sortDir: sortDueOrder,
+                  sortField: "auditDueDate",
+                });
               }}
             >
-             AUDITED DATE
+              AUDITED DUE DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "asc" ? (
+                {sortDueOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+            <th
+              onClick={() => {
+                setSortCompleteOrder(
+                  sortCompleteOrder === "ASC" ? "DESC" : "ASC"
+                );
+                setSort({
+                  sortDir: sortCompleteOrder,
+                  sortField: "auditedDate",
+                });
+              }}
+            >
+              AUDITED DATE
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {sortCompleteOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
