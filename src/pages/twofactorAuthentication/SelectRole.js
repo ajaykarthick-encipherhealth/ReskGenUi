@@ -14,13 +14,11 @@ const SelectRole = () => {
   const [username, setUsername] = useState();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
-  const [role, setRole] = useState([]);
-  const rolesOptions = localStorage.getItem("roles");
+  const [role, setRole] = useState();
+  console.log(role)
 
   const items =
-    rolesOptions?.length > 0
-      ? rolesOptions?.map((info) => ({ value: info, label: info }))
-      : [];
+    role?.length > 0 ? role?.map((info) => ({ value: info, label: info })) : [];
 
   const onSubmitRole = (e) => {
     e.preventDefault();
@@ -51,7 +49,8 @@ const SelectRole = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setUsername(searchParams.get("username"));
-    setRole([localStorage.getItem("roles")]);
+    const rolesArray = JSON.parse(localStorage.getItem("roles"));
+    setRole(rolesArray);
   }, []);
 
   return (

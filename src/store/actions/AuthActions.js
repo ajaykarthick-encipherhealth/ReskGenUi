@@ -141,7 +141,7 @@ export function loginAction(email, router, code) {
         let emailSplit = email?.split("@");
 
         if (response?.data?.status === "SUCCESS") {
-          localStorage.setItem("roles", result?.roles);
+          localStorage.setItem("roles", JSON.stringify(result?.roles));
           localStorage.setItem("token", result.access_token);
           localStorage.setItem("tenantId", result.tenantId);
           localStorage.setItem("userId", result.userEmail);

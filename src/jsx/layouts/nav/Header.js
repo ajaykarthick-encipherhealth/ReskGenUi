@@ -127,6 +127,7 @@ const Header = () => {
         localStorage.removeItem("loginCheck");
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");
+        localStorage.removeItem("roles");
         window.location = "/login";
       }
     });
@@ -257,9 +258,9 @@ const Header = () => {
     dispatch(getNotificationAlertClear([]));
   };
 
-  const items = dropdownContent?.filter(
+  const items =dropdownContent?.length>0? dropdownContent?.filter(
     (info) => info?.key?.toLowerCase() !== userRole?.toLowerCase()
-  );
+  ):[];
 
   const onClick = ({ key }) => {
     localStorage.setItem("userRole", key);
@@ -289,6 +290,7 @@ const Header = () => {
     const userRoleLocal = localStorage.getItem("userRole");
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
+    const rolesArray = JSON.parse(localStorage.getItem("roles"));
 
     getUserIdDetails(userId);
     setUserRole(userRoleLocal);
@@ -315,25 +317,10 @@ const Header = () => {
       setheaderFix(window.scrollY > 50);
     });
 
-    const items = [];
-
-    if (localStorage.getItem("roles")?.toLowerCase() === "admin") {
-      items.push(
-        { key: "l1auditor", label: "L1auditor" },
-        { key: "l2auditor", label: "L2auditor" }
-      );
-      if (userRoleLocal === "l1auditor" || userRoleLocal === "l2auditor") {
-        items.push({ key: "admin", label: "Admin" });
-      }
-    }
-
-    if (localStorage.getItem("roles")?.toLowerCase() === "l2auditor") {
-      dispatch(getAccuracy());
-      items.push({ key: "l1auditor", label: "L1auditor" });
-      if (userRoleLocal === "l1auditor") {
-        items.push({ key: "l2auditor", label: "L2auditor" });
-      }
-    }
+    const items = rolesArray?.map((data) => ({
+      key: data.toLowerCase(),
+      label: data.charAt(0).toUpperCase() + data.slice(1).toLowerCase(),
+    }));
 
     setDropdownContent(items);
 
@@ -477,8 +464,8 @@ const Header = () => {
                             {userName}
                           </span>
 
-                          {userIdDetails != "" ? (
-                            currentRole !== "l1auditor" ? (
+                          { items?.length>0 && userIdDetails != "" ? (
+                            
                               <span className="ms-2 d-flex mt-1">
                                 <Dropdown
                                   menu={{
@@ -498,12 +485,10 @@ const Header = () => {
                                   </span>
                                 </Dropdown>
                               </span>
-                            ) : (
-                              <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
-                                L1auditor
-                              </span>
-                            )
-                          ) : null}
+                          
+                          ) : <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
+                          {currentRole}
+                        </span>}
                         </div>
                       </div>
                     </div>
