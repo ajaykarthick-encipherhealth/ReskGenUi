@@ -141,7 +141,7 @@ export function loginAction(email, router, code) {
         let emailSplit = email?.split("@");
 
         if (response?.data?.status === "SUCCESS") {
-          localStorage.setItem("roles", result?.roles);
+          localStorage.setItem("roles", JSON.stringify(result?.roles));
           localStorage.setItem("token", result.access_token);
           localStorage.setItem("tenantId", result.tenantId);
           localStorage.setItem("userId", result.userEmail);
@@ -220,7 +220,7 @@ export const getCoderDetails = ({ name, search, selectedOption, router }) => {
   };
 };
 
-export const getFilters = (field) => {
+export const getFilters = (field,username) => {
   return (dispatch) => {
     dispatch({
       type: FILTER,
@@ -229,7 +229,7 @@ export const getFilters = (field) => {
       },
     });
     try {
-      filters(field).then((response) => {
+      filters(field,username).then((response) => {
         dispatch({
           type: FILTER,
           payload: {
