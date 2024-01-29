@@ -16,20 +16,22 @@ import Footer from "../../../jsx/layouts/Footer";
 
 const index = () => {
   const currentDate = dayjs();
-  const last30thDate = currentDate.subtract(31, "day");
-
-  const lastDateWithTime = currentDate.endOf("day").toISOString();
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+  const router = useRouter();
   const dispatch = useDispatch();
+  const last30thDate = currentDate.subtract(31, "day");
+  const lastDateWithTime = currentDate.endOf("day");
+  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
 
   const startDate = DateRanges
-    ? DateRanges?.startDate
-    : last30thDate.toISOString();
-  const lastDate = DateRanges ? DateRanges?.endDate : lastDateWithTime;
-  const router = useRouter();
+    ? new Date(DateRanges?.startDate).toISOString()
+    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+  const endDate = DateRanges
+    ? new Date(DateRanges?.endDate).toISOString()
+    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+
   useEffect(() => {
-    dispatch(getWorkFlow(startDate, lastDate, router));
-  }, [startDate, lastDate]);
+    dispatch(getWorkFlow(startDate, endDate, router));
+  }, [startDate, endDate]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>

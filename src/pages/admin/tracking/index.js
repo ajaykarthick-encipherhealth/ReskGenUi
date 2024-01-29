@@ -16,6 +16,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "../../../components/headerFilters";
 import TrackingTable from "../../../components/table/admin/trackingList";
 import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
+import { generateOptionsList } from "../../../components/headerFilters/functions";
 
 const bullets = [
   {
@@ -42,6 +43,7 @@ const statusOptions = [
 export default function Patient() {
   const navigate = useRouter();
   const dispatch = useDispatch();
+  const filteredList = useSelector((state) => state.auth.filterList);
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.tracking);
   const [validated, setValidated] = useState(false);
@@ -352,7 +354,7 @@ export default function Patient() {
                             // allocatedTo
                             isAllocatedToSelector={true}
                             allocatedTolabel="Allocated to"
-                            allocatedToOptoons={allocatedToOptions}
+                            allocatedToOptoons={ generateOptionsList(filteredList)}
                             setSelAllocatedTo={setSelAllocatedTo}
                             defaultAllocateTo="All"
                             bullets={bullets}

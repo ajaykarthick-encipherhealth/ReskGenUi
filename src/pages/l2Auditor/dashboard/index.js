@@ -22,17 +22,18 @@ const index = () => {
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
 
   const last30thDate = currentDate?.subtract(31, "day");
-  const lastDateWithTime = currentDate?.endOf("day").toISOString();
+  const lastDateWithTime = currentDate?.endOf("day")
 
   const startDate = DateRanges
-    ? DateRanges?.startDate
-    : moment(last30thDate)?.format("YYYY-MM-DD") + "T00:00:00.000Z";
-
-  const lastDate = DateRanges ? DateRanges?.endDate : moment(lastDateWithTime)?.format("YYYY-MM-DD") + "T23:59:59.000Z";
+    ? new Date(DateRanges?.startDate).toISOString()
+    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+  const endDate = DateRanges
+    ? new Date(DateRanges?.endDate).toISOString()
+    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
 
   useEffect(() => {
-    dispatch(getWorkFlow(startDate, lastDate, router));
-  }, [startDate, lastDate]);
+    dispatch(getWorkFlow(startDate, endDate, router));
+  }, [startDate, endDate]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
