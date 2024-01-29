@@ -126,8 +126,8 @@ const DailyTask = () => {
     allocated,
     pending,
     hold,
-    audited,
     reAudited,
+    audited,
     declined
   ) => {
     return {
@@ -286,6 +286,7 @@ const DailyTask = () => {
                       <Row>
                         <Col span={12}>
                           <div className={styles.container}>
+                           
                             <ReactECharts
                               option={getChartOption(
                                 data?.allocated,

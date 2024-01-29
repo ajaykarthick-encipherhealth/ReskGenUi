@@ -497,7 +497,7 @@ export default function Patient() {
                             isSearch={true}
                             searchlabel="Search By Patient Id / Name"
                             // select status
-                            selectlabel="Select Status"
+                            selectlabel="Status"
                             isSelector={true}
                             setSelectedOption={SetSelectedOption}
                             selectOptions={statusOptions}
@@ -519,7 +519,7 @@ export default function Patient() {
                             defaultAllocateTo={"All"}
                             // allocated by
                             isAllocatedBySelector={true}
-                            allocatedBylabel="Select AllocatedBy"
+                            allocatedBylabel="Allocated By"
                             allocatedByOptoons={
                               generateOptionsList(filteredList)
                             }
@@ -527,7 +527,7 @@ export default function Patient() {
                             defaultAllocatedBy={"All"}
                             // allocated to
                             isAllocatedToSelector={true}
-                            allocatedTolabel="Select AllocatedTo"
+                            allocatedTolabel="Allocated To"
                             allocatedToOptoons={
                               generateOptionsList(filteredList)
 
@@ -536,7 +536,7 @@ export default function Patient() {
                             defaultCreatedBy={"All"}
                             // created by
                             isCreatedBySelector={true}
-                            createdTolabel="Select CreatedBy"
+                            createdTolabel="Created to"
                             createdByOptoons={
                               generateOptionsList(filteredList)
 

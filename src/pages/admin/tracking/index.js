@@ -48,7 +48,7 @@ export default function Patient() {
   const response = useSelector((state) => state.adminList.tracking);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingBtn, setIsLoadingBtn] = useState(true);
+  const [isLoadingBtn, setIsLoadingBlasttn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
   const [selectedOption, SetSelectedOption] = useState("");
   const [searchTextValue, setSearchTextValue] = useState("");
@@ -334,7 +334,7 @@ export default function Patient() {
                           <HeaderFilters
                             setSearch={setSearchTextValue}
                             isSearch={true}
-                            searchlabel="Search By Username"
+                            searchlabel="Search By Patient Name"
                             // select status
                             selectlabel="Select Status"
                             isSelector={true}
@@ -350,7 +350,7 @@ export default function Patient() {
                             isAnotherPicker={true}
                             setStartDate2={setProcessedStart}
                             setEndDate2={setProcessedEnd}
-                            pickerlabe2="Completed date"
+                            pickerlabe2="Audited date"
                             // allocatedTo
                             isAllocatedToSelector={true}
                             allocatedTolabel="Allocated to"

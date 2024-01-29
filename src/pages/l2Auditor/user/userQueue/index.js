@@ -17,11 +17,12 @@ import {
 import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
+import auditPending from "../../../../images/svg/auditPending.svg";
 import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
-import { getFilters } from "../../../../store/actions/AuthActions";
 import  userStyles  from "./styles.module.css";
+import { getFilters } from "../../../../store/actions/AuthActions";
 
 
 const bullets = [
@@ -43,12 +44,17 @@ const badges = [
   {
     color: "#FFBE00",
     name: "Re Audit",
-    src: reAudit,
+    src:   auditHold,
   },
   {
     color: "#964B00",
     name: "Audit Hold",
-    src: auditHold,
+    src: reAudit,
+  },
+  {
+    color: "#F28585",
+    name: "Audit Pending",
+    src: auditPending,
   },
 ];
 
@@ -228,12 +234,7 @@ const index = () => {
                         isAuditAllocatedBy={true}
                         audiallocatedBylabel="Audited AllocatedBy"
                         auditallocatedByOptions={
-                          // filteredList?.loading || filteredList === null
-                          //   ? [{ label: "loading", value: "loading" }]
-                          //   : filteredList?.loading === false &&
-                          //     options?.length > 0
-                          //   ? options
-                          //   : []
+                        
                           generateOptionsList(filteredList)
                         }
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
@@ -263,12 +264,7 @@ const index = () => {
                         isAllocatedBySelector={true}
                         allocatedBylabel=" AllocatedBy"
                         allocatedByOptoons={
-                          // filteredList?.loading || filteredList === null
-                          //   ? [{ label: "loading", value: "loading" }]
-                          //   : filteredList?.loading === false &&
-                          //     options?.length > 0
-                          //   ? options
-                          //   : []
+                         
                           generateOptionsList(filteredList)
                         }
                         setSelAllocatedBy={setSelAllocatedBy}
@@ -291,6 +287,8 @@ const index = () => {
                         bullets={bullets}
                         isNextRow={true}
                         badges={badges}
+                        getFilters={getFilters}
+                        username={userName}
                       />
                     </div>
                     <div

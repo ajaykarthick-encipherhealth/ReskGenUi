@@ -21,6 +21,10 @@
     height: 400px !important;
     cursor: pointer;
 }
+.listContentLargeL2 {
+    height: 475px !important;
+    cursor: pointer;
+}
 
 .listName {
     color: #000;

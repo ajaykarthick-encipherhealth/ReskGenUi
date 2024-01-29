@@ -46,6 +46,15 @@ const UserQueue = ({ userList, setSort }) => {
           style={{fontSize:"10px"}}
         ></Badge.Ribbon>
       );
+    }else if (data.auditedStatus === "AUDIT_PENDING") {
+      return (
+        <Badge.Ribbon
+          text="Audit Pending"
+          color="#F28585"
+          placement="start"
+          style={{fontSize:"10px"}}
+        ></Badge.Ribbon>
+      );
     } else return null;
   };
 
@@ -66,7 +75,7 @@ const UserQueue = ({ userList, setSort }) => {
     ) : (
       userList?.map((data, index) => (
         <tr key={index}>
-          <td
+          <td 
             className={TableStyle.firstTdBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
@@ -77,7 +86,7 @@ const UserQueue = ({ userList, setSort }) => {
             ) : null}
             <span
               style={{
-                paddingLeft: "40px",
+                paddingLeft: "70px",
               }}
             >
               {data?.patientId}
@@ -274,7 +283,7 @@ const UserQueue = ({ userList, setSort }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th style={{ paddingLeft: "60px" }}>PATIENT ID</th>
+            <th style={{ paddingLeft: "80px" }}>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th
               onClick={() => {

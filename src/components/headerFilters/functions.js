@@ -1,3 +1,4 @@
+import { Avatar } from "antd";
 import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
 // for search
@@ -192,7 +193,7 @@ export const processstatusBodyTemplate = (rowData) => {
   }
 };
 
-export const generateOptionsList=(items)=>{
+export const generateOptionsList = (items) => {
   if (items?.loading || items === null) {
     return [{ label: "Loading...", value: "Loading..." }];
   } else if (items?.data?.data.response?.length > 0) {
@@ -200,11 +201,73 @@ export const generateOptionsList=(items)=>{
       { label: "All", value: "" },
       ...items.data.data.response.map((item) => ({
         label: item,
-        value: item
-      }))
+        value: item,
+      })),
     ].filter(Boolean);
     return options;
   } else {
     return [];
   }
+};
+
+export const getBackgroundColor=(randomNumber)=> {
+  switch (randomNumber) {
+    case 1:
+      return "#F28585";
+    case 2:
+      return "#04306F";
+    case 3:
+      return "#E6A4B4";
+    case 4:
+      return "#607274";
+    case 5:
+      return "#DED0B6";
+    case 6:
+      return "#C3E2C2";
+    default:
+      return "#9BB8CD";
+  }
 }
+
+export const renderUserPrfoile = (firstName, lastName, imageUrl,field) => {
+  const firstNameInitial = firstName?.charAt(0) || "";
+  const secondNameInitial = lastName?.charAt(0) || "";
+  const hash = firstNameInitial.charCodeAt(0) % 6 + 1;
+  const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
+
+  if (!imageUrl) {
+    var profileAvatar = (
+      <Avatar
+        style={{
+          backgroundColor:backgroundColor,
+          color: "white",
+          cursor: "pointer",
+          width: "47px",
+          height: "47px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "18px",
+          fontWeight: 700,
+        }}
+      >
+        {firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase()}
+      </Avatar>
+    );
+    return profileAvatar;
+  } else {
+    var profileAvatar = (
+      <img
+        src={imageUrl}
+        alt="avatar"
+        // className="rounded-4 shadow-4"
+        style={{
+          width: "50px",
+          height: "50px",
+          backgroundColor: getBackgroundColor(),
+        }}
+      />
+    );
+    return profileAvatar;
+  }
+};
