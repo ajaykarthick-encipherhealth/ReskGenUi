@@ -132,6 +132,7 @@ export const L2AuditorMenuList = [
     title: "Report",
     iconStyle: SVGICON.ReportIcon,
     to: "/l2Auditor/report",
+    childRoute: "/l2Auditor/report/individualreport",
   },
 ];
 

@@ -83,7 +83,7 @@ tbody.csvBody tr:nth-child(odd) td {
   border-radius: 8px;
   box-shadow: 0 0px 6px 0 rgba(0, 0, 0, 0.2);
   padding: 0 10px;
-  margin-right: 10px;
+  margin-right: 5px;
   cursor: pointer;
   background-color: #fff;
 }

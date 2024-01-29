@@ -16,6 +16,7 @@ import ExcelDisplay, {
 } from "../../../../components/table/receivedReport/ExcelDisplay";
 import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
 import styles from "../../../../components/table/receivedReport/receivedReport.module.css";
+import reportStyles from '../../../physician/report/report.module.css'
 import search from "../../../../images/report/search.svg";
 import sort from "../../../../images/report/sort.svg";
 import id from "../../../../images/report/id.svg";
@@ -27,15 +28,21 @@ import { debounce } from "../Export";
 import Header from "../../../../jsx/layouts/nav/Header";
 import Footer from "../../../../jsx/layouts/Footer";
 import SpinnerDots from "../../../../components/spinner";
+import leftArrow from '../../../../images/svg/leftArrow.svg'
+import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
+import { useRouter } from "next/router";
 
 const IndividualReceiverReport = () => {
+  const dispatch = useDispatch();
+  const router=useRouter()
   const url = useSelector((state) => state.AuditReport.uploadFile);
   const reportDatas = useSelector((state) => state.AuditReport.receivedDetails);
-  const [sortOrder, setSortOrder] = useState("asc");
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [reportInfo, setReportInfo] = useState();
+  const [sortDir, setSortDir] = useState("");
+  const [sortfield, setSortfield] = useState("ASC");
   const [detailsContent, setDetailsContent] = useState(
     reportDatas?.data?.response?.content
   );
@@ -64,22 +71,10 @@ const IndividualReceiverReport = () => {
   };
 
   const sortTableByDate = () => {
-    const sortedContent = [...detailsContent];
-    if (sortOrder === "asc") {
-      sortedContent.sort((a, b) =>
-        dayjs(a.receiveDate).diff(dayjs(b.receiveDate))
-      );
-      setSortOrder("desc");
-    } else {
-      sortedContent.sort((a, b) =>
-        dayjs(b.receiveDate).diff(dayjs(a.receiveDate))
-      );
-      setSortOrder("asc");
-    }
-    setDetailsContent(sortedContent);
+    setSortDir(sortDir==='ASC'?'DESC':'ASC')
+    setSortfield("receiveDate")
   };
 
-  const dispatch = useDispatch();
 
   const performanceSearch = (value) => {
     setSearchValue(value);
@@ -90,9 +85,9 @@ const IndividualReceiverReport = () => {
   };
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("reportId");
-    dispatch(getReceivedDetails(0, "", "", searchValue));
+    dispatch(getReceivedDetails(0, "", "", searchValue, sortfield, sortDir));
     dispatch(getSelectedReportDetails(id));
-  }, [searchValue]);
+  }, [searchValue, sortfield, sortDir]);
   useEffect(() => {
     if (url) {
       fetchData(url);
@@ -114,6 +109,7 @@ const IndividualReceiverReport = () => {
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
+     
       <div
         className={styles.container}
         style={{ margin: "30px 0px 50px 0px", height: "auto" }}
@@ -121,6 +117,22 @@ const IndividualReceiverReport = () => {
         <div className={styles.cont1}>
           <div>
             <div className={styles.container}>
+            <div
+                className={"col-xl-1 d-flex"}
+                style={{  cursor: "pointer" }}
+              >
+                <button
+                  style={{ width: "40px",height:"30px" }}
+                  className={reportStyles.filterBtn}
+                  onClick={() => {
+                    router?.push("/l2Auditor/report")
+                    dispatch(getActiveTab("ReceivedReport"));
+                  }}
+                >
+                  <Image src={leftArrow} />
+                </button>
+                
+              </div>
               <div className={styles.divContainer}>
                 <InputText
                   type="text"
@@ -138,7 +150,9 @@ const IndividualReceiverReport = () => {
             {/* users */}
             <div className={styles.list}>
               {searchValue !== null && detailsContent?.length === 0 ? (
-                <div style={{ marginTop: "60px" }}><SpinnerDots/></div>
+                <div style={{ marginTop: "60px" }}>
+                  <SpinnerDots />
+                </div>
               ) : (
                 <>
                   {detailsContent
