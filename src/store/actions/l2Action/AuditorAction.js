@@ -65,30 +65,29 @@ import {
   };
   
   export const getWorkListFilter = (
-    pageNo,
-    computedStartDate,
-    computedEndDate,
-    selectedOption,
-    search,
-    completedStartDate,
-    completedEndDate,
-    pageSize = 15,
-    sortfield = "",
-    sortdirection  = ""
+    // pageNo,
+    // computedStartDate,
+    // computedEndDate,
+    // selectedOption,
+    // search,
+    // completedStartDate,
+    // completedEndDate,
+    // pageSize = 15,
+    datas
+ 
   ) => {
     return (dispatch) => {
       try {
         GetWorkListFilters(
-          pageNo,
-          computedStartDate,
-          computedEndDate,
-          selectedOption,
-          search,
-          completedStartDate,
-          completedEndDate,
-          pageSize = 15,
-          sortfield = "",
-          sortdirection =""       
+          // pageNo,
+          // computedStartDate,
+          // computedEndDate,
+          // selectedOption,
+          // search,
+          // completedStartDate,
+          // completedEndDate,
+          // pageSize = 15,
+          datas             
         ).then((response) => {
           dispatch({
             type: WORK_LIST_FILTER,
