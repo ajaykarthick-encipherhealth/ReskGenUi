@@ -22,6 +22,7 @@ import { getPatients } from "../../../store/actions/adminAction/patientsActions"
 import FileUploading from "../file-processing/FileUploading";
 import Addpatients from "../file-processing/Addpatiens";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
+import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
 import AllocateModal from "./allocate";
 import L2AllocateModal from "./l2allocate";
@@ -515,7 +516,7 @@ export default function Patient() {
                                           </>
                                         ) : (
                                           <>
-                                            <AllocatedAdminList
+                                            <AllocatedL2AdminList
                                               patinetListAll={l2patinetListAll}
                                               selectAllChecked={
                                                 selectAllChecked
