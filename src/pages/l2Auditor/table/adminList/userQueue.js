@@ -40,7 +40,7 @@ const UserQueue = ({ userList, setSort }) => {
     } else if (data.auditedStatus === "AUDITHOLD") {
       return (
         <Badge.Ribbon
-          text="Audite Hold"
+          text="Audit Hold"
           color="#964B00"
           placement="start"
           style={{fontSize:"9px"}}

@@ -158,7 +158,7 @@ const AuditHeaderFilters = ({
             <div
               className="col-xl-2"
               onClick={() => {
-                dispatch(getFilters("auditAllocatedBy"));
+                dispatch(getFilters("allocatedBy"));
               }}
             >
               <label>{audiallocatedBylabel}</label>
@@ -300,7 +300,7 @@ const AuditHeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("allocatedBy"));
+                  dispatch(getFilters("patientAllocated"));
                 }}
               >
                 <label>{allocatedBylabel}</label>
