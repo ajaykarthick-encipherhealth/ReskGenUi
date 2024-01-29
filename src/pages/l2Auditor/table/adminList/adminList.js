@@ -45,7 +45,7 @@ const AdminList = ({ userList }) => {
                   style={{ height: "47px !important" }}
                 >
                   <img
-                    src={item.profileImageUrl}
+                    src={item?.profileImageUrl}
                     alt="User Avatar"
                     width={35}
                     height={35}

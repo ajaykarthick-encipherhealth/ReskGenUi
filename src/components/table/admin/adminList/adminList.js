@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Popover, Select, Switch } from "antd";
+import dayjs from 'dayjs';
 import TableStyle from "../../table.module.css";
 import styles from "../../../../styles/auth.module.css";
 import EditButton from "../../../../images/adminUsers/EditButton";
@@ -158,7 +159,7 @@ const AdminList = ({ userList }) => {
                 className={TableStyle.lastBorder}
                 style={{ height: "40px !important" }}
               >
-                <span>{dateFormate(item?.createdDate)}</span>
+                <span>{dateFormate(dayjs,item?.createdDate)}</span>
               </td>
               <td
                 className={TableStyle.childBorder}

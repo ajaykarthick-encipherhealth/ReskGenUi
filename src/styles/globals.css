@@ -12649,7 +12649,7 @@ tbody > tr {
   box-shadow: none !important;
 }
 .ant-ribbon.ant-ribbon-placement-start {
-  width: 57px;
+  width: 74px;
   font-size: 12px;
 }
 .ant-ribbon-wrapper {
@@ -13559,10 +13559,4 @@ overflow: scroll;
   background: #FBE7D0 !important;
   border: none !important;
   box-shadow: none !important;
-}
-.custom_select_type > .ant-select-selector ,.custom_select_user > .ant-select-selector{
-  border-radius: 8px !important;
-  background: #FFF !important;  
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
-  border: none !important;  
 }

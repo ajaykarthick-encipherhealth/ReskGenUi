@@ -52,18 +52,17 @@ export const enableUser = (checked, user, role) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
     var orgId = localStorage.getItem("orgId");
-
+    const checkedVal = checked ? checked : false;
     const data = {
       orgId: orgId,
       tenantId: tenId,
       userId: user?.userId,
-      accountEnabled: checked,
+      accountEnabled: checkedVal,
       userName: user?.userName,
     };
-
+  
     const datas = role ? { ...data, role: role } : data;
-
-    if (user && (checked || role)) {
+    if (checked !== undefined && user !== undefined) {
       try {
         const response = await axios.put(
           `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
