@@ -519,7 +519,7 @@ const Details = ({}) => {
         );
 
         var validDisArray = [];
-        result.validDisease.map((res, index) => {
+        result?.validDisease?.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
@@ -558,7 +558,7 @@ const Details = ({}) => {
     if (response.data) {
       var result = response.data.response;
       var validDisArray = [];
-      result.validDisease.map((res, index) => {
+      result?.validDisease?.map((res, index) => {
         const encounterDatearray = res.encounterDate.split(",");
         validDisArray.push({
           actualDescription: res.actualDescription,
