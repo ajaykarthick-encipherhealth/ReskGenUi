@@ -88,7 +88,7 @@ const UserList = () => {
     const role = localStorage.getItem("userRole");
     if (form.checkValidity() === true) {
       formData.tenantId = localTenantId;
-      formData.orgId = localOrgId;
+      formData.organizationId = localOrgId;
       formData.role = roleValue ? roleValue : [role.toUpperCase()];
       dispatch(getAddUser(formData));
     }
