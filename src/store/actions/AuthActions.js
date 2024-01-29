@@ -148,7 +148,7 @@ export function loginAction(email, router, code) {
           localStorage.setItem("orgId", result.organizationId);
           localStorage.setItem("userName", emailSplit[0]);
           localStorage.setItem("loginCheck", true);
-          router?.push(`/twofactorAuthentication/SelectRole?username=${email}`);
+          // router?.push(`/twofactorAuthentication/SelectRole?username=${email}`);
         }
       })
       .catch((err) => {

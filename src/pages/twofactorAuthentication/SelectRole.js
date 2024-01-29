@@ -15,25 +15,13 @@ const SelectRole = () => {
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [role, setRole] = useState([]);
-  const items = [];
-  const data =
-    role?.length > 0 &&
-    role?.map((info) => {
-      if (info?.toLowerCase() === "admin") {
-        items?.push(
-          { value: "Admin", label: "Admin" },
-          { value: "L2auditor", label: "L2auditor" },
-          { value: "L1auditor", label: "L1auditor" }
-        );
-      } else if (info?.toLowerCase() === "l2auditor") {
-        items?.push(
-          { value: "L2auditor", label: "L2auditor" },
-          { value: "L1auditor", label: "L1auditor" }
-        );
-      } else {
-        items?.push({ value: info, label: info });
-      }
-    });
+  const rolesOptions = localStorage.getItem("roles");
+
+  const items =
+    rolesOptions?.length > 0
+      ? rolesOptions?.map((info) => ({ value: info, label: info }))
+      : [];
+
   const onSubmitRole = (e) => {
     e.preventDefault();
     if (!selectedRole) {
@@ -50,9 +38,9 @@ const SelectRole = () => {
         l1auditor: { userRole: "l1auditor", route: "/physician/dashboard" },
         l2auditor: { userRole: "l2auditor", route: "/l2Auditor/dashboard" },
       };
-    
+
       const selectedRoleInfo = rolesMapping[selectedRole];
-    
+
       if (selectedRoleInfo && !roleError) {
         localStorage.setItem("userRole", selectedRoleInfo.userRole);
         localStorage.setItem("role", selectedRole);
