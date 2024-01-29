@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Swal from "sweetalert2";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -91,6 +91,7 @@ const Header = () => {
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
   const [dropdownContent, setDropdownContent] = useState();
   const [currentRole, setCurrentRole] = useState();
+  const [profileImg, setProfileImg] = useState();
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -138,8 +139,11 @@ const Header = () => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
     );
-    setUserIdDetails(response.data.response);
-    var userId = response.data.response?.id;
+    setUserIdDetails(response?.data?.response);
+    setProfileImg(response?.data?.response?.profileImageUrl);
+    setUserName(response?.data?.response?.firstName);
+    setDropdownContent(response?.data?.response?.role);
+    var userId = response?.data?.response?.id;
     dispatch(getNotificationList(userId));
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userId}?token=${token}`
@@ -258,9 +262,16 @@ const Header = () => {
     dispatch(getNotificationAlertClear([]));
   };
 
-  const items =dropdownContent?.length>0? dropdownContent?.filter(
-    (info) => info?.key?.toLowerCase() !== userRole?.toLowerCase()
-  ):[];
+  const items = dropdownContent
+    ?.map((data) => ({
+      key: data.toLowerCase(),
+      label: data.charAt(0).toUpperCase() + data.slice(1).toLowerCase(),
+    }))
+    .filter(
+      (info) =>
+        info.key.toLowerCase() !== userRole.toLowerCase() &&
+        info.label.toLowerCase() !== userRole.toLowerCase()
+    );
 
   const onClick = ({ key }) => {
     localStorage.setItem("userRole", key);
@@ -286,16 +297,13 @@ const Header = () => {
   };
   useEffect(() => {
     var loginCheck = localStorage.getItem("loginCheck");
-    var userName = localStorage.getItem("userName");
     const userRoleLocal = localStorage.getItem("userRole");
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
-    const rolesArray = JSON.parse(localStorage.getItem("roles"));
 
     getUserIdDetails(userId);
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
-    setUserName(userName);
     setMenuList(getMenuListByRole(userRoleLocal));
 
     if (loginCheck !== "true") {
@@ -316,13 +324,6 @@ const Header = () => {
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
-
-    const items = rolesArray?.map((data) => ({
-      key: data.toLowerCase(),
-      label: data.charAt(0).toUpperCase() + data.slice(1).toLowerCase(),
-    }));
-
-    setDropdownContent(items);
 
     dispatch(getAccuracy());
   }, []);
@@ -454,7 +455,13 @@ const Header = () => {
                           <div>
                             <div className="header-info2 d-flex align-items-center">
                               <div className="header-media">
-                                <Image src={IMAGES.profileImage} />
+                                {profileImg ? (
+                                  <Image src={profileImg} />
+                                ) : (
+                                  <span className={styles.profile}>
+                                    <UserOutlined />
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -464,31 +471,31 @@ const Header = () => {
                             {userName}
                           </span>
 
-                          { items?.length>0 && userIdDetails != "" ? (
-                            
-                              <span className="ms-2 d-flex mt-1">
-                                <Dropdown
-                                  menu={{
-                                    items,
-                                    onClick,
-                                  }}
-                                  trigger={["click"]}
+                          {items?.length > 0 && userIdDetails != "" ? (
+                            <span className="ms-2 d-flex mt-1">
+                              <Dropdown
+                                menu={{
+                                  items,
+                                  onClick,
+                                }}
+                                trigger={["click"]}
+                              >
+                                <span
+                                  className="header-name"
+                                  style={{ marginLeft: "10px" }}
                                 >
-                                  <span
-                                    className="header-name"
-                                    style={{ marginLeft: "10px" }}
-                                  >
-                                    {userRole}
-                                    <DownOutlined
-                                      style={{ margin: "0 0 0 5px" }}
-                                    />
-                                  </span>
-                                </Dropdown>
-                              </span>
-                          
-                          ) : <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
-                          {currentRole}
-                        </span>}
+                                  {userRole}
+                                  <DownOutlined
+                                    style={{ margin: "0 0 0 5px" }}
+                                  />
+                                </span>
+                              </Dropdown>
+                            </span>
+                          ) : (
+                            <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
+                              {currentRole}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>

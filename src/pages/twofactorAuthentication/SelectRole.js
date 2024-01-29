@@ -15,7 +15,6 @@ const SelectRole = () => {
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [role, setRole] = useState();
-  console.log(role)
 
   const items =
     role?.length > 0 ? role?.map((info) => ({ value: info, label: info })) : [];
@@ -116,7 +115,7 @@ const SelectRole = () => {
                       {"BACK"}
                     </button>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-6" >
                     <button type="submit" className={styles.sendBtn}>
                       {"NEXT"}
                     </button>
