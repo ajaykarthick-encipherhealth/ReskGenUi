@@ -204,7 +204,7 @@ function AddPatientListTable({
             </th>
 
             <th style={{ paddingLeft: "55px" }}>STATUS</th>
-            <th>Upload</th>
+            <th>UPLOAD</th>
           </tr>
         </thead>
 
