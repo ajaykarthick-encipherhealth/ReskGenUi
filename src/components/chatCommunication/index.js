@@ -44,6 +44,7 @@ import {
   MDBDropdownItem,
   MDBDropdownMenu,
 } from "mdb-react-ui-kit";
+import moment from "moment";
 
 let stompClient = null;
 let pageSize = 10;
@@ -654,10 +655,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     <>
       <ToastContainer />
       <div className={styles.chatContainer}>
-        <div className={`profile-tab`}>
+        <div className={`chat-tab`}>
           <div className="custom-tab-1 ">
             <Tab.Container defaultActiveKey="1">
-              <div className={styles.tabContainer}>
+              <div className={`tabContainer ${styles.tabContainer} `}>
                 <div className={styles.firstdCard}>
                   <Nav as="ul" className="nav nav-tabs">
                     <Nav.Item as="li" className="nav-item">
@@ -700,12 +701,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                       xl="12"
                       className="mb-4 mb-md-0 p-0"
                     >
-                      <MDBCard style={{ minHeight: "70vh" }}>
+                      <MDBCard style={{ minHeight: "70vh",borderRadius:"0 0 6px 6px" }}>
                         {messagedMembersList && (
-                          <div className="p-1">
+                          <div className="p-2">
                             <MDBInputGroup className="rounded p-0">
                               <input
-                                className="form-control"
+                                className={`form-control ${styles.searchInput}`}
                                 placeholder="Search members"
                                 type="search"
                                 onChange={handleSearchMembers}
@@ -729,6 +730,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                           unreadCount,
                                           lastMessage,
                                           lastMessageTimeStamp,
+                                          lastUpdatedDate
                                         },
                                         index
                                       ) => (
@@ -760,13 +762,18 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                         >
                                           <div className="d-flex justify-content-between">
                                             <div className="d-flex flex-row">
-                                              {
-                                                renderUserPrfoile(
+                                            <div className="d-inline-flex position-relative">
+                                          <MDBBadge className="position-absolute top-0 start-100 translate-middle p-1 bg-success-chat border border-light rounded-circle">
+                                            <span className="visually-hidden">
+                                              New alerts
+                                            </span>
+                                          </MDBBadge>
+                                          { renderUserPrfoile(
                                                   secondaryUserFirstName,
                                                   secondaryUserLastName,
                                                   secondaryUserImageUrl
-                                                )
-                                              }
+                                                )}
+                                        </div>
 
                                               <div className="pt-1 ms-3">
                                                 <p className="fw-bold mb-0">
@@ -774,8 +781,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                   {secondaryUserLastName}
                                                 </p>
                                                 <p className="small text-muted">
-                                                  {lastMessage?.slice(0, 10) +
-                                                    "..."}
+                                                  {lastMessage?.slice(0, 45)}
+                                                  {lastMessage.length > 45 ?
+                                                  "...":null}
                                                 </p>
                                               </div>
                                             </div>
@@ -793,19 +801,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                   <span className="badge bg-danger float-end">
                                                     {unreadCount}
                                                   </span>
-                                                  // <span className="text-muted float-end">
-                                                  //   <MDBIcon fas icon="check" />
-                                                  // </span>
                                                 )}
-                                              <span className="text-muted float-end">
-                                                <FontAwesomeIcon
-                                                  icon={faCircle}
-                                                  style={{
-                                                    color: "#53c44d",
-                                                    marginRight: "0.5rem",
-                                                    fontSize: 10,
-                                                  }}
-                                                />
+                                                <span className="text-muted float-end">
+                                                <p className={styles.timeFromNow}> {moment(lastUpdatedDate).fromNow()}</p>   
                                               </span>
                                             </div>
                                           </div>
@@ -829,9 +827,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                       style={{ backgroundColor: "#fff", minHeight: "70vh" }}
                     >
                       <MDBCol md="12" lg="12" xl="12" className="p-0">
-                        <MDBCard style={{ minHeight: "70vh" }}>
+                        <MDBCard style={{ minHeight: "70vh",borderRadius:"0 0 6px 6px",boxShadow:"none" }}>
                           <div
-                            className="d-flex flex-row border rounded-2 p-1"
+                            className="d-flex flex-row p-1"
                             style={{ background: "rgb(244, 244, 244)" }}
                           >
                             {renderUserPrfoile(
@@ -858,7 +856,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   <FontAwesomeIcon
                                     icon={faCircle}
                                     style={{
-                                      color: "#53c44d",
+                                      color: "#3479FE",
                                       marginRight: "0.5rem",
                                       fontSize: 10,
                                     }}
@@ -937,7 +935,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                             </MDBCardBody>
                           ) : (
                             <MDBCardBody
-                              className="customScroll border rounded-2"
+                              className="customScroll"
                               onScroll={handleChatScroll}
                             >
                               <div>
@@ -949,7 +947,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                       {message?.map((chat, index) => (
                                         <>
                                           {chat.senderName ===
-                                            currentChatMember.sender
+                                            currentChatMember?.sender
                                               ?.secondaryUser && (
                                             <li
                                               className="d-flex flex-row justify-content-start"
@@ -961,7 +959,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                               }
                                             >
                                               <div>
-                                                <p className="small p-2 ms-3 mb-1 text-white bg-secondary-chat bg-gradient bubble-left">
+                                                <p className="small p-2 ms-3 mb-1 text-white bg-secondary-chat bg-gradient-sender bubble-left">
                                                   {chat.fileUrl &&
                                                     chat.fileType.includes(
                                                       "image"
@@ -1015,14 +1013,14 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                             </li>
                                           )}{" "}
                                           {chat.receiverName ===
-                                            currentChatMember.sender
+                                            currentChatMember?.sender
                                               ?.secondaryUser && (
                                             <li
                                               className="d-flex flex-row justify-content-end"
                                               key={index}
                                             >
                                               <div>
-                                                <p className="small p-2 me-3 mb-1 text-white bg-info bg-gradient bubble-right">
+                                                <p className="small p-2 me-3 mb-1 text-white bg-info-sender bg-gradient bubble-right">
                                                   {chat.fileUrl &&
                                                     chat.fileType.includes(
                                                       "image"
@@ -1161,15 +1159,15 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                           )}
                           <form
                             className="border rounded-2"
-                            style={{ background: "rgb(244, 244, 244)" }}
+                            
                           >
-                            <div className="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-1 mb-3 ms-3">
+                          <div className={`text-muted d-flex justify-content-start align-items-center pe-3 ${styles.form_submit_container}`}>
                               <label className="me-3" htmlFor="fileAdd">
                                 <FontAwesomeIcon
                                   icon={faLink}
                                   style={{
                                     size: 10,
-                                    color: "#212529",
+                                    color: "#3479FE",
                                     cursor: "pointer",
                                   }}
                                 />
@@ -1196,7 +1194,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                 type="submit"
                                 style={{
                                   border: "none",
-                                  background: "rgb(244, 244, 244)",
+                                  background: "#fff",
                                 }}
                                 className="ms-3"
                               >
@@ -1204,7 +1202,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   icon={faPaperPlane}
                                   style={{
                                     size: 10,
-                                    color: "#212529",
+                                    color: "#3479FE",
                                     cursor: "pointer",
                                   }}
                                 />
@@ -1218,11 +1216,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="2">
                   {!currentChatMember ? (
-                    <MDBCard style={{ minHeight: "70vh" }}>
+                    <MDBCard style={{ minHeight: "70vh",borderRadius:"0 0 6px 6px" }}>
                       <div className="p-2">
                         <MDBInputGroup className="rounded">
                           <input
-                            className="form-control"
+                            className={`form-control ${styles.searchInput}`}
                             placeholder="Search a new user"
                             type="search"
                             value={userData.searchNewUserMessage}
@@ -1280,9 +1278,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                       style={{ backgroundColor: "#fff", minHeight: "70vh" }}
                     >
                       <MDBCol md="12" lg="12" xl="12" className="p-0">
-                        <MDBCard style={{ minHeight: "70vh" }}>
+                        <MDBCard style={{ minHeight: "70vh",borderRadius:"0 0 6px 6px" }}>
                           <div
-                            className="d-flex flex-row border rounded-2 p-1"
+                            className="d-flex flex-row  p-1"
                             style={{ background: "rgb(244, 244, 244)" }}
                           >
                             {renderUserPrfoile(
@@ -1310,7 +1308,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   <FontAwesomeIcon
                                     icon={faCircle}
                                     style={{
-                                      color: "#53c44d",
+                                      color: "#3479FE",
                                       marginRight: "0.5rem",
                                       fontSize: 10,
                                     }}
@@ -1389,7 +1387,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                             </MDBCardBody>
                           ) : (
                             <MDBCardBody
-                              className="customScroll border rounded-2"
+                              className="customScroll"
                               onScroll={handleChatScroll}
                             >
                               <div>
@@ -1413,7 +1411,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                               }
                                             >
                                               <div>
-                                                <p className="small p-2 ms-3 mb-1 text-white bg-secondary-chat bg-gradient bubble-left">
+                                                <p className="small p-2 ms-3 mb-1 text-white bg-secondary-chat bg-gradient-sender bubble-left">
                                                   {chat.fileUrl &&
                                                     chat.fileType.includes(
                                                       "image"
@@ -1474,7 +1472,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                               key={index}
                                             >
                                               <div>
-                                                <p className="small p-2 me-3 mb-1 text-white bg-info bg-gradient bubble-right">
+                                                <p className="small p-2 me-3 mb-1 text-white bg-info-sender bg-gradient bubble-right">
                                                   {chat.fileUrl &&
                                                     chat.fileType.includes(
                                                       "image"
@@ -1613,15 +1611,14 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                           )}
                           <form
                             className="border rounded-2"
-                            style={{ background: "rgb(244, 244, 244)" }}
                           >
-                            <div className="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-1 mb-3 ms-3">
+                            <div className={`text-muted d-flex justify-content-start align-items-center pe-3 ${styles.form_submit_container}`}>
                               <label className="me-3" htmlFor="fileAdd">
                                 <FontAwesomeIcon
                                   icon={faLink}
                                   style={{
                                     size: 10,
-                                    color: "#212529",
+                                    color: "#3479FE",
                                     cursor: "pointer",
                                   }}
                                 />
@@ -1647,7 +1644,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                 type="submit"
                                 style={{
                                   border: "none",
-                                  background: "rgb(244, 244, 244)",
+                                  background: "#fff",
                                 }}
                                 className="ms-3"
                               >
@@ -1655,7 +1652,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   icon={faPaperPlane}
                                   style={{
                                     size: 10,
-                                    color: "#212529",
+                                    color: "#3479FE",
                                     cursor: "pointer",
                                   }}
                                 />

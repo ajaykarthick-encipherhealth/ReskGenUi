@@ -21,4 +21,17 @@
 .tabContainer{
     display: flex;
     justify-content: space-between;
+    background: #fff;
+    border-radius: 6px 6px 0 0px;
+
+}
+.form_submit_container{
+    margin: 10px;
+}
+.timeFromNow{
+    font-size: 12px !important;
+    font-weight: 600;
+}
+.searchInput{
+    border-radius: 20px !important
 }
