@@ -555,7 +555,7 @@ const Details = ({}) => {
         `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}&year=${year}`
     );
 
-    if (response.data) {
+    if (response?.data) {
       var result = response.data.response;
       var validDisArray = [];
       result?.validDisease?.map((res, index) => {
