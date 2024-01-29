@@ -10,7 +10,7 @@ import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Button } from "react-bootstrap";
-import { Badge, Dropdown, Select, Tooltip, Drawer, Popover } from "antd";
+import { Badge, Dropdown, Select, Tooltip, Drawer, Popover, Avatar } from "antd";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
 import {
@@ -37,6 +37,7 @@ import {
   getCoderDetails,
 } from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
+import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 
 const btnItems = [
   {
@@ -92,6 +93,7 @@ const Header = () => {
   const [dropdownContent, setDropdownContent] = useState();
   const [currentRole, setCurrentRole] = useState();
   const [profileImg, setProfileImg] = useState();
+  const [lastName,setLastName]=useState()
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -142,6 +144,7 @@ const Header = () => {
     setUserIdDetails(response?.data?.response);
     setProfileImg(response?.data?.response?.profileImageUrl);
     setUserName(response?.data?.response?.firstName);
+    setLastName(response?.data?.response?.lastName)
     setDropdownContent(response?.data?.response?.role);
     var userId = response?.data?.response?.id;
     dispatch(getNotificationList(userId));
@@ -346,6 +349,7 @@ const Header = () => {
     }
   }, [msgReply, selectedbtn, search, selectedOption]);
 
+  
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -454,14 +458,9 @@ const Header = () => {
                         >
                           <div>
                             <div className="header-info2 d-flex align-items-center">
-                              <div className="header-media">
-                                {profileImg ? (
-                                  <Image src={profileImg} />
-                                ) : (
-                                  <span className={styles.profile}>
-                                    <UserOutlined />
-                                  </span>
-                                )}
+                              <div className="header-media" style={{marginTop:"-2px"}}>
+                                {renderUserPrfoile(userName,lastName,profileImg,"header")}
+                                
                               </div>
                             </div>
                           </div>
