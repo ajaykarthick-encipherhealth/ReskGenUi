@@ -49,6 +49,7 @@ import {
 import Selector from "../../../components/selector";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
+import logout from "../../../images/svg/logout.svg";
 
 const btnItems = [
   {
@@ -464,38 +465,72 @@ const Header = () => {
                             {SVGICON.dashboardNotification}
                           </Badge>
                         </div>
-                        <div
-                          className="header-media d-flex"
-                          onClick={() => setOpenContent(!openContent)}
-                          // onClick={logoutFunction}
-                        >
+                        <div className="header-media d-flex">
                           <Popover
                             trigger="click"
+                            open={openContent}
                             content={
-                              <div className={styles.popDIv}>
+                              <div className={styles.popDIv} 
+                             >
                                 <div
-                                 
-                                  style={{ marginTop: "-2px",display:"flex" }}
+                                  style={{ marginTop: "-2px", display: "flex" }}
                                 >
                                   <div>
-                                  {renderUserPrfoile(
-                                    userName,
-                                    lastName,
-                                    profileImg,
-                                    "header"
-                                  )}
+                                    {renderUserPrfoile(
+                                      userName,
+                                      lastName,
+                                      profileImg,
+                                      "header",
+                                      "70px",
+                                      "70px"
+                                    )}
+                                    <div
+                                      onClick={() =>{
+                                        setOpenContent(false)
+                                        setOpenUploader(!openUploader)
+                                      }
+                                      }
+                                      className={styles.edit}
+                                    >
+                                     <span>
+                                     <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="14"
+                                        viewBox="0 0 10 10"
+                                        fill="none"
+                                      >
+                                        <path
+                                          fill-rule="evenodd"
+                                          clip-rule="evenodd"
+                                          d="M4.99372 11.8121L11.9937 4.81208L9.18749 2.00586L2.1875 9.00589V11.8121H4.99372ZM9.18749 3.2433L10.7563 4.81208L9.62499 5.94339L8.05623 4.37459L9.18749 3.2433ZM7.43749 4.99331L9.00631 6.56207L4.63128 10.9371H3.0625V9.36831L7.43749 4.99331Z"
+                                          fill="#080341"
+                                        />
+                                      </svg>
+                                     </span>
+                                    </div>
                                   </div>
                                   <div>
-                                  <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
-                                    {userName}
-                                  </span>
-                                  <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
-                                    {currentRole}
-                                  </span>
+                                    <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
+                                      {userName}
+                                    </span>
+                                    <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
+                                      {currentRole}
+                                    </span>
                                   </div>
                                 </div>
-                                
-                                <Divider className={styles.divider}/>
+
+                                <Divider className={styles.divider} />
+                                <div
+                                  className={styles.footerDiv}
+                                  onClick={logoutFunction}
+                                >
+                                  <Image src={logout} />
+                                  <span className={styles.footerCont}>
+                                    {" "}
+                                    Logout
+                                  </span>
+                                </div>
                               </div>
                             }
                           >
@@ -503,13 +538,17 @@ const Header = () => {
                               <div className="header-info2 d-flex align-items-center">
                                 <div
                                   className="header-media"
-                                  style={{ marginTop: "-2px" }}
+                                  style={{ marginTop: "-7px" }}
+                                  onClick={() =>
+                                    setOpenContent(!openContent)
+                                  }
                                 >
                                   {renderUserPrfoile(
                                     userName,
                                     lastName,
                                     profileImg,
-                                    "header"
+                                    "header",
+                                    
                                   )}
                                 </div>
                               </div>

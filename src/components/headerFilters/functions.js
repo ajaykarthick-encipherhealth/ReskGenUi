@@ -227,7 +227,7 @@ export const getBackgroundColor=(randomNumber)=> {
   }
 }
 
-export const renderUserPrfoile = (firstName, lastName, imageUrl,field) => {
+export const renderUserPrfoile = (firstName, lastName, imageUrl,field,width,height) => {
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
   const hash = firstNameInitial.charCodeAt(0) % 6 + 1;
@@ -240,8 +240,8 @@ export const renderUserPrfoile = (firstName, lastName, imageUrl,field) => {
           backgroundColor:backgroundColor,
           color: "white",
           cursor: "pointer",
-          width: "47px",
-          height: "47px",
+          width: width?width:"47px",
+          height: height?height:"47px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -260,8 +260,8 @@ export const renderUserPrfoile = (firstName, lastName, imageUrl,field) => {
         alt="avatar"
         // className="rounded-4 shadow-4"
         style={{
-          width: "50px",
-          height: "50px",
+          width: width?width:"50px",
+          height: height?height:"50px",
           borderRadius:"50%"
         }}
       />
