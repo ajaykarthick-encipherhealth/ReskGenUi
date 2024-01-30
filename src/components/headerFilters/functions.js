@@ -264,7 +264,6 @@ export const renderUserPrfoile = (firstName, lastName, imageUrl,field) => {
         style={{
           width: "50px",
           height: "50px",
-          backgroundColor: getBackgroundColor(),
         }}
       />
     );
