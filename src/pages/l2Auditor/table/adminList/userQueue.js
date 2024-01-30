@@ -9,6 +9,7 @@ import TableStyle from "../../../../components/table/table.module.css";
 import {
   priorityOptions,
   processstatusBodyTemplate,
+  renderUserPrfoile,
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 
@@ -43,16 +44,16 @@ const UserQueue = ({ userList, setSort }) => {
           text="Audit Hold"
           color="#964B00"
           placement="start"
-          style={{fontSize:"10px"}}
+          style={{ fontSize: "10px" }}
         ></Badge.Ribbon>
       );
-    }else if (data.auditedStatus === "AUDIT_PENDING") {
+    } else if (data.auditedStatus === "AUDIT_PENDING") {
       return (
         <Badge.Ribbon
           text="Audit Pending"
           color="#F28585"
           placement="start"
-          style={{fontSize:"10px"}}
+          style={{ fontSize: "10px" }}
         ></Badge.Ribbon>
       );
     } else return null;
@@ -75,7 +76,7 @@ const UserQueue = ({ userList, setSort }) => {
     ) : (
       userList?.map((data, index) => (
         <tr key={index}>
-          <td 
+          <td
             className={TableStyle.firstTdBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
@@ -128,37 +129,20 @@ const UserQueue = ({ userList, setSort }) => {
                     <div>
                       {data.allocatedBy ? (
                         <>
-                          {data.allocatedBy ? (
-                            <img
-                              src={dummyProfileImageUrl}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "5px",
-                              }}
-                            />
-                          ) : (
-                            <img
-                              src={nullImg}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
+                          {renderUserPrfoile(
+                            data?.allocatedByFirstName,
+                            data?.allocatedBylastName,
+                            data?.allocatedByProfileImage
                           )}
                           {data.allocatedBy ? (
                             <>
-                              {data.allocatedBy
+                              {
+                                data.allocatedBy
                                 // .split("@")[0]
                                 // .charAt(0)
                                 // .toUpperCase() +
                                 // data.allocatedBy.split("@")[0].slice(1)
-                                }
+                              }
                             </>
                           ) : (
                             "---"
@@ -203,22 +187,13 @@ const UserQueue = ({ userList, setSort }) => {
             <div className={TableStyle.innerAlignments}>
               {data.auditAllocatedBy ? (
                 <Tooltip title={data.auditAllocatedBy}>
-                  {data.auditAllocatedBy ? (
-                    <img
-                      src={dummyProfileImageUrl}
-                      alt="User Avatar"
-                      width={30}
-                      height={30}
-                      style={{ borderRadius: "50%", marginRight: "5px" }}
-                    />
-                  ) : (
-                    <img
-                      src={nullImg}
-                      alt="User Avatar"
-                      width={30}
-                      height={30}
-                      style={{ borderRadius: "50%", marginRight: "10px" }}
-                    />
+                  {renderUserPrfoile(
+                    data?.auditedAssignedFirstName,
+                    data?.auditedAssignedLastName,
+                    data?.auditedAssignedProfileImage,
+                    null,
+                    "30px",
+                    "30px"
                   )}
                   {data.auditAllocatedBy ? (
                     <>
@@ -241,11 +216,12 @@ const UserQueue = ({ userList, setSort }) => {
             className={TableStyle.childBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-            {data.auditedDate
-              ? moment(data.auditedDate).format("MM-DD-YYYY")
-              : "---"}
+            <Popover content={data.auditedBy && data.auditedBy}>
+              {data.auditedDate
+                ? moment(data.auditedDate).format("MM-DD-YYYY")
+                : "---"}
+            </Popover>
           </td>
-      
 
           <td className={TableStyle.childBorder}>
             <Select
@@ -295,7 +271,7 @@ const UserQueue = ({ userList, setSort }) => {
               }}
             >
               COMPLETED DATE
-              <span style={{cursor: "pointer" }}>
+              <span style={{ cursor: "pointer" }}>
                 {processSort === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
