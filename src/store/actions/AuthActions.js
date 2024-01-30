@@ -150,9 +150,11 @@ export function loginAction(email, router, code) {
           localStorage.setItem("loginCheck", true);
           router?.push(`/twofactorAuthentication/SelectRole?username=${email}`);
         }
+       if(response===null){
         notification.error({
           description:response?.data?.message
         })
+       }
       })
       .catch((err) => {
         console.log(err);
