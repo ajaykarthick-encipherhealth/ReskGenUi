@@ -323,3 +323,15 @@
   border-radius: 5px;
   margin-left: 10px;
 }
+.popDIv{
+  /* border-radius: 8px;
+  background-color: #fff; */
+  width:400px;
+  height:150px;
+
+  /* box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08); */
+
+}
+.divider{
+  padding:0px !important;
+}

@@ -249,7 +249,7 @@ export const getFilters = (field, username) => {
 export const preSendURl = (type) => async (dispatch) => {
   const token = localStorage.getItem("token");
 
-  if ( type) {
+  if (type) {
     try {
       let response = await axios.get(
         `${ENDPOINTS?.apiEndoint}dbservice/user/getuploadurl?filetype=${type}&filelocation=PROFILE_IMAGE`,
@@ -259,13 +259,13 @@ export const preSendURl = (type) => async (dispatch) => {
           },
         }
       );
-     if(response.data){
-      if(response?.data?.response) {
-        dispatch(getUrl( response?.data?.response, type));
-        const url= response?.data?.response?.split("?").shift()
-        dispatch(updateImage(url))
+      if (response.data) {
+        if (response?.data?.response) {
+          dispatch(getUrl(response?.data?.response, type));
+          const url = response?.data?.response?.split("?").shift();
+          dispatch(updateImage(url));
+        }
       }
-     }
     } catch (error) {
       console.log("error", error);
     }
@@ -280,10 +280,9 @@ export const getUrl = (url, extention) => async (dispatch) => {
         method: "PUT",
         headers: {
           "Content-Type": extention,
-          "x-ms-blob-type":"BlockBlob"
+          "x-ms-blob-type": "BlockBlob",
         },
       });
-
     } catch (error) {
       console.log("error", error);
     }
@@ -300,23 +299,24 @@ export const updateImage = (url) => async (dispatch) => {
       },
     });
     try {
-      const response = await fetch(`${ENDPOINTS?.apiEndoint}dbservice/user/profileimage`, {
-        method: "PUT",
-        headers: {
-          Authorization:token
-        },
-        profileImageUrl:url
-      });
+      const response = await axios.put(
+        `${ENDPOINTS?.apiEndoint}dbservice/user/profileimage`,
+        { profileImageUrl: url },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      if (response) {
-        // dispatch({
-        //   type: PROFILE_URL,
-        //   payload: {
-        //     loading: false,
-        //     url: response,
-        //   },
-        // });
-        console.log(response);
+      if (response?.data) {
+        dispatch({
+          type: PROFILE_URL,
+          payload: {
+            loading: false,
+            datas: response?.data?.response,
+          },
+        });
       }
     } catch (error) {
       console.log("error", error);

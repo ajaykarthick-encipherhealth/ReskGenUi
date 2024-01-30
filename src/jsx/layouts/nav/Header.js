@@ -19,6 +19,7 @@ import {
   Popover,
   Avatar,
   Modal,
+  Divider,
 } from "antd";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
@@ -105,6 +106,7 @@ const Header = () => {
   const [profileImg, setProfileImg] = useState();
   const [lastName, setLastName] = useState();
   const [openUploader, setOpenUploader] = useState();
+  const [openContent, setOpenContent] = useState(false);
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -464,25 +466,57 @@ const Header = () => {
                         </div>
                         <div
                           className="header-media d-flex"
-                          onClick={logoutFunction}
+                          onClick={() => setOpenContent(!openContent)}
+                          // onClick={logoutFunction}
                         >
-                          <div>
-                            <div className="header-info2 d-flex align-items-center">
-                              <div
-                                className="header-media"
-                                style={{ marginTop: "-2px" }}
-                              >
-                                {renderUserPrfoile(
-                                  userName,
-                                  lastName,
-                                  profileImg,
-                                  "header"
-                                )}
+                          <Popover
+                            trigger="click"
+                            content={
+                              <div className={styles.popDIv}>
+                                <div
+                                 
+                                  style={{ marginTop: "-2px",display:"flex" }}
+                                >
+                                  <div>
+                                  {renderUserPrfoile(
+                                    userName,
+                                    lastName,
+                                    profileImg,
+                                    "header"
+                                  )}
+                                  </div>
+                                  <div>
+                                  <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
+                                    {userName}
+                                  </span>
+                                  <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
+                                    {currentRole}
+                                  </span>
+                                  </div>
+                                </div>
+                                
+                                <Divider className={styles.divider}/>
+                              </div>
+                            }
+                          >
+                            <div>
+                              <div className="header-info2 d-flex align-items-center">
+                                <div
+                                  className="header-media"
+                                  style={{ marginTop: "-2px" }}
+                                >
+                                  {renderUserPrfoile(
+                                    userName,
+                                    lastName,
+                                    profileImg,
+                                    "header"
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          </Popover>
                         </div>
-                        <div className="mx-15" onClick={()=>setOpenUploader(true)}>
+                        <div className="mx-15">
                           <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
                             {userName}
                           </span>
@@ -534,6 +568,7 @@ const Header = () => {
           <Notification notificationResponse={notificationResponse?.data} />
         ) : null}
       </Drawer>
+
       <Modal
         title="Upload Profile Image"
         open={openUploader}
@@ -541,8 +576,7 @@ const Header = () => {
         onCancel={() => setOpenUploader(false)}
       >
         <div>
-          <ImageUploader setOpenUploader={setOpenUploader}/>
-         
+          <ImageUploader setOpenUploader={setOpenUploader} />
         </div>
       </Modal>
     </div>
