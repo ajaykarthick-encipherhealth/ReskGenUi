@@ -216,7 +216,16 @@ const UserQueue = ({ userList, setSort }) => {
             className={TableStyle.childBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-            <Popover content={data.auditedBy && data.auditedBy}>
+            <Popover
+              content={renderUserPrfoile(
+                data?.firstName,
+                data?.lastName,
+                data?.profileImageUrl,
+                null,
+                "30px",
+                "30px"
+              )}
+            >
               {data.auditedDate
                 ? moment(data.auditedDate).format("MM-DD-YYYY")
                 : "---"}

@@ -157,7 +157,7 @@ const HeaderFilters = ({
                     setSelectedOption2(selectedOption?.value);
                   }}
                   options={selectOptions2}
-                  defaultValue={defaultSelectValue2}
+                  placeholder={defaultSelectValue2?.label}
                   className="custom-react-select"
                   isSearchable={false}
                 />
