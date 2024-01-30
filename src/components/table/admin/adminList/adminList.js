@@ -98,7 +98,7 @@ const AdminList = ({ userList }) => {
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>User Name</th>
+            <th style={{paddingLeft:"20px"}}>User Name</th>
             <th>Email</th>
             <th>Role</th>
             <th>Date Created</th>
