@@ -72,13 +72,14 @@ export const eventStreming = (
 };
 
 function FileProcessingTable({ patinetListAll }) {
+  const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
   );
   const [count, setCount] = useState(0);
   const [parsedData, setParsedData] = useState([]);
   const [activeId, setActiveId] = useState();
-  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const selectedRowTime = useSelector(
     (state) => state.adminPatient.patientsList
@@ -92,13 +93,18 @@ function FileProcessingTable({ patinetListAll }) {
       `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
     );
 
+    setLoading(true);
     const fileStatusEventListener = (event) => {
       const data = JSON.parse(event.data);
-      setParsedData(data);
+      if (data) {
+        setParsedData(data);
+        setLoading(false);
+      }
 
       if (!isFinished && data[0]?.processStageChart === "FINISHED") {
         isFinished = true;
         sse.close();
+        setLoading(false);
       }
     };
 
@@ -106,17 +112,20 @@ function FileProcessingTable({ patinetListAll }) {
       sse.addEventListener("file-status-event", fileStatusEventListener);
     } else {
       sse.close();
+      setLoading(false);
     }
 
     sse.onerror = () => {
       if (!isFinished) {
         sse.close();
+        setLoading(false);
       }
     };
 
     return () => {
       sse.removeEventListener("file-status-event", fileStatusEventListener);
       sse.close();
+      setLoading(false);
     };
   }, []);
 
@@ -513,7 +522,13 @@ function FileProcessingTable({ patinetListAll }) {
         </thead>
 
         <tbody>
-          {parsedData?.length <= 0 ? (
+          {loading ? (
+            <tr>
+              <td colSpan="9">
+                <SpinnerDots />
+              </td>
+            </tr>
+          ) : parsedData?.length <= 0 ? (
             <tr>
               <td colSpan="9">
                 <Empty />

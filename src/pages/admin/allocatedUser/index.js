@@ -27,13 +27,14 @@ import allocateStyle from "./allocate/style.module.css";
 import AllocateModal from "./allocate";
 import L2AllocateModal from "./l2allocate";
 import LoadingSpinner from "../../../components/spinner";
-
-
+import reportStyles from "../../physician/report/report.module.css";
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
 import SpinnerDots from "../../../components/spinner";
 import L2AllocatedAdminList from "./table/l2AuditedTable";
 import TableStyle from "../../../components/table/table.module.css";
+import Image from "next/image";
+import leftArrow from "../../../images/svg/leftArrow.svg";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -174,7 +175,7 @@ export default function Patient() {
   const onPageChange = (e) => {
     setIsLoading(true);
     setPaginationFirst(e.first);
-      setPageNo(e.page);
+    setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
   };
@@ -182,9 +183,9 @@ export default function Patient() {
   const onPageChangePatient = (e) => {
     setIsLoading(true);
     setPaginationFirst(e.first);
-    setPageNoL2Patient(e.page)   
+    setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList(l2selectUser,e.page)
+    getL2PatientList(l2selectUser, e.page);
     setTableLoading(true);
   };
 
@@ -247,7 +248,7 @@ export default function Patient() {
         style={{ height: "35px" }}
         key={index}
         onClick={() => {
-          getL2PatientList(data,pageNoL2Patient);
+          getL2PatientList(data, pageNoL2Patient);
         }}
       >
         <td className={TableStyle.firstTdBorder}>{data.name}</td>
@@ -256,7 +257,7 @@ export default function Patient() {
     ));
   };
 
-  const getL2PatientList = async (data,pageNoL2Patient) => {
+  const getL2PatientList = async (data, pageNoL2Patient) => {
     setIsLoading(true);
     var dataMap = {
       firstName: data.name,
@@ -295,12 +296,12 @@ export default function Patient() {
   };
 
   const getAllCheckListL2 = async (value) => {
-    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
       var result = response?.data?.response;
-      const data = result.map((item) => ({
+      const data = result?.content?.map((item) => ({
         id: item.patientId,
         name: item.patientName,
       }));
@@ -312,11 +313,11 @@ export default function Patient() {
   useEffect(() => {
     if (allocateClicked) {
       setIsLoading(true);
-       if(!isPatientList){
+      if (!isPatientList) {
         getAllList(pageNo, pageSize, "", "", true, 2);
-       }else{
-        getL2PatientList(l2selectUser,pageNoL2Patient);
-       }
+      } else {
+        getL2PatientList(l2selectUser, pageNoL2Patient);
+      }
       setAllocateClicked(false);
       setSelectedRowsId([]);
       setSelectAllChecked(false);
@@ -336,19 +337,34 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-2">
-                            <label>Search by Name or ID</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => getNameSearch(e.target.value)}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
+                          <div className="col-xl-2 d-flex">
+                            <div className={reportStyles.backDiv}>
+                              {isPatientList && (
+                                <button
+                                  style={{ width: "40px", height: "40px" }}
+                                  className={reportStyles.filterBtn}
+                                  onClick={() => setIsPatientList(false)}
+                                >
+                                  <Image src={leftArrow} />
+                                </button>
+                              )}
+                            </div>
+                            <div>
+                              <label>Search by Name or ID</label>
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) =>
+                                    getNameSearch(e.target.value)
+                                  }
+                                  className="form-control new-form-control"
+                                  placeholder="Search"
+                                />
+                              </div>
                             </div>
                           </div>
                           <div className="col-xl-2">
@@ -363,27 +379,17 @@ export default function Patient() {
                               />
                             </div>
                           </div>
-
                           <div className="col-xl-8 mt-4">
-                            <button
-                              onClick={handleOpneModal}
-                              className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
-                              disabled={!selectedRowsId.length > 0}
-                            >
-                              Allocate
-                            </button>
-                            {isPatientList ? (
-                              <Button
-                                onClick={() => setIsPatientList(false)}
-                                className={`ms-2 btn-sm mx-4 ms-2 flr ${allocateStyle.backArrowBtn}`}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faArrowLeft}
-                                  style={{
-                                    color: "rgb(38 50 107)",
-                                  }}
-                                />
-                              </Button>
+                            {isPatientList || activeTab===1 ? (
+                              <>
+                                <button
+                                  onClick={handleOpneModal}
+                                  className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
+                                  disabled={!selectedRowsId.length > 0}
+                                >
+                                  Allocate
+                                </button>
+                              </>
                             ) : null}
                           </div>
                         </div>
@@ -483,8 +489,8 @@ export default function Patient() {
                                                 }
                                               >
                                                 <tr>
-                                                  <th>Name</th>
-                                                  <th>User Name</th>
+                                                  <th>NAME</th>
+                                                  <th>USER NAME</th>
                                                 </tr>
                                               </thead>
 
@@ -505,11 +511,14 @@ export default function Patient() {
                                                 <Paginator
                                                   first={paginationFirst}
                                                   rows={100}
-                                                  totalRecords={l2UserListAll?.length}
+                                                  totalRecords={
+                                                    l2UserListAll?.length
+                                                  }
                                                   onPageChange={onPageChange}
                                                 />
                                                 <div className="total-pages">
-                                                  Total count: {l2UserListAll?.length}
+                                                  Total count:{" "}
+                                                  {l2UserListAll?.length}
                                                 </div>
                                               </div>
                                             </div>
@@ -533,20 +542,25 @@ export default function Patient() {
                                               }
                                             />
                                             <div>
-                                            <div>
-                                        <div className="pagination-container">
-                                          <Paginator
-                                            first={paginationFirst}
-                                            rows={15}
-                                            totalRecords={totalElementsPatient}
-                                            onPageChange={onPageChangePatient}
-                                          />
-                                          <div className="total-pages">
-                                            Total count: {totalElementsPatient}
-                                          </div>
-                                        </div>
-                                      </div>
-                                      </div>
+                                              <div>
+                                                <div className="pagination-container">
+                                                  <Paginator
+                                                    first={paginationFirst}
+                                                    rows={15}
+                                                    totalRecords={
+                                                      totalElementsPatient
+                                                    }
+                                                    onPageChange={
+                                                      onPageChangePatient
+                                                    }
+                                                  />
+                                                  <div className="total-pages">
+                                                    Total count:{" "}
+                                                    {totalElementsPatient}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
                                           </>
                                         )}
                                       </div>
