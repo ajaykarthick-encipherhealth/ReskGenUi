@@ -17,6 +17,7 @@ import ReceivedReport from "../table/receivedReport/receivedReport";
 import CoderReport from "../table/CoderReport/coderReport";
 import Export, { debounce } from "./Export";
 import {
+  getActiveTab,
   getReceivedDetails,
   getReportDetails,
   getSentDetails,
@@ -25,8 +26,31 @@ import {
 import SpinnerDots from "../../../components/spinner";
 import TeamReport from "../table/TeamReport/teamReport";
 
+const statusOptions = [
+  { label: "Completed", value: "COMPLETED" },
+  { label: "Pending", value: "PENDING" },
+  { label: "Declined", value: "DECLINED" },
+  { label: "Hold", value: "HOLD" },
+  { label: "All", value: "ALL" },
+];
 const index = () => {
   const dispatch = useDispatch();
+  const TeamReportDetails = useSelector(
+    (state) => state.AuditReport?.teamDetails
+  );
+
+  const ReportPatientDetails = useSelector(
+    (state) => state.AuditReport?.details
+  );
+  const SentReportDetails = useSelector(
+    (state) => state.AuditReport?.sentDetails
+  );
+  const ReceivedReportDetails = useSelector(
+    (state) => state.AuditReport?.receivedDetails
+  );
+  const ExportResponse = useSelector((state) => state.AuditReport?.exportRes);
+  const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+  const rowsLength = useSelector((state) => state?.report?.row);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("AuditReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -35,11 +59,6 @@ const index = () => {
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-
-  const [tenantId, setTenantId] = useState("");
-  const [localOrgId, setLocalOrgId] = useState("");
-  const [localUserId, setLocalUserId] = useState("");
-
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
@@ -65,10 +84,6 @@ const index = () => {
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
 
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -78,7 +93,9 @@ const index = () => {
   const performanceSearch = (value) => {
     if (activeTab === "SentReport") {
       setSentSearch(value);
-    } else if (activeTab === "ReceivedReport") {
+    } else if (
+      activeTab === "ReceivedReport" 
+    ) {
       setReceivedSearch(value);
     } else {
       setCoderSearch(value);
@@ -94,100 +111,6 @@ const index = () => {
     debouncedSearch(value);
   };
 
-  const ExportResponse = useSelector((state) => state.AuditReport?.exportRes);
-
-  useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
-    setTenantId(tenId);
-    setLocalOrgId(orgId);
-    setLocalUserId(uId);
-    setIsLoading(false);
-
-    if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch));
-    }
-    if (activeTab === "ReceivedReport") {
-      dispatch(
-        getReceivedDetails(
-          receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
-          receivedSearch
-        )
-      );
-    }
-
-    if (activeTab === "AuditReport") {
-      dispatch(
-        getReportDetails(
-          pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt
-        )
-      );
-    }
-
-    if (activeTab === "TeamReport") {
-      dispatch(
-        getTeamReportDetails(
-          pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt
-        )
-      );
-    }
-
-    if (ExportResponse) {
-      setIsModalVisible(false);
-    }
-  }, [
-    pageNo,
-    sentPageNo,
-    receivedPageNo,
-    activeTab,
-    ExportResponse,
-    selectedCoderOpt,
-    coderSearch,
-    coderStartDate,
-    coderEndDate,
-    startDate,
-    endDate,
-    sentSearch,
-    receivedPageNo,
-    receivedStartDate,
-    receivedEndDate,
-    receivedSearch,
-  ]);
-  const TeamReportDetails = useSelector(
-    (state) => state.AuditReport?.teamDetails
-  );
-
-  const ReportPatientDetails = useSelector(
-    (state) => state.AuditReport?.details
-  );
-  const SentReportDetails = useSelector(
-    (state) => state.AuditReport?.sentDetails
-  );
-  const ReceivedReportDetails = useSelector(
-    (state) => state.AuditReport?.receivedDetails
-  );
-  useEffect(() => {
-    setFilteredCoder(ReportPatientDetails?.response);
-  }, [ReportPatientDetails]);
-
-  const statusOptions = [
-    { label: "Completed", value: "COMPLETED" },
-    { label: "Pending", value: "PENDING" },
-    { label: "Declined", value: "DECLINED" },
-    { label: "Hold", value: "HOLD" },
-    { label: "All", value: "ALL" },
-  ];
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
@@ -210,15 +133,9 @@ const index = () => {
   };
 
   const onPageChange = (e) => {
-    // console.log(dates);
-    // console.log(compledtedDate);
-    // console.log(e);
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    // setPageSize(e.rows);
     setTableLoading(true);
-    // getAllList(localUserId, e.page, e.rows);
-    // setPageNo(e?.pageCount);
   };
   const onReceivedPageChange = (e) => {
     setPaginationReceivedFirst(e.first);
@@ -276,7 +193,81 @@ const index = () => {
     setCoderStartDate(formattedDates[0]);
     setCoderEndDate(formattedDates[1]);
   };
-  const rowsLength = useSelector((state) => state?.report?.row);
+
+  const handleTabs=(name)=>{
+    setSelectedDates(null);
+    setActiveTab(name);
+  }
+  useEffect(() => {
+    setIsLoading(false);
+
+    if (activeTab === "SentReport") {
+      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch));
+    }
+    if (
+      activeTab === "ReceivedReport" 
+    ) {
+      dispatch(
+        getReceivedDetails(
+          receivedPageNo,
+          receivedStartDate,
+          receivedEndDate,
+          receivedSearch
+        )
+      );
+    }
+
+    if (activeTab === "AuditReport") {
+      dispatch(
+        getReportDetails(
+          pageNo,
+          coderStartDate,
+          coderEndDate,
+          coderSearch,
+          selectedCoderOpt
+        )
+      );
+    }
+
+    if (activeTab === "TeamReport") {
+      dispatch(
+        getTeamReportDetails(
+          pageNo,
+          coderStartDate,
+          coderEndDate,
+          coderSearch,
+          selectedCoderOpt
+        )
+      );
+    }
+
+    if (ExportResponse) {
+      setIsModalVisible(false);
+    }
+  }, [
+    pageNo,
+    sentPageNo,
+    receivedPageNo,
+    activeTab,
+    ExportResponse,
+    selectedCoderOpt,
+    coderSearch,
+    coderStartDate,
+    coderEndDate,
+    startDate,
+    endDate,
+    sentSearch,
+    receivedPageNo,
+    receivedStartDate,
+    receivedEndDate,
+    receivedSearch,
+    reportActiveTab
+  ]);
+
+  useEffect(() => {
+    setFilteredCoder(ReportPatientDetails?.response);
+  }, [ReportPatientDetails,reportActiveTab]);
+ 
   return (
     <>
       <Header />
@@ -340,7 +331,7 @@ const index = () => {
                                   onChange={
                                     activeTab === "SentReport"
                                       ? handleDatePickerChange
-                                      : activeTab === "ReceivedReport"
+                                      : activeTab === "ReceivedReport" 
                                       ? handleReceivedDatePicker
                                       : handleCoderPicker
                                   }
@@ -416,14 +407,14 @@ const index = () => {
                             style={{ marginTop: "20px" }}
                           >
                             <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey="validDiseases">
+                              <Tab.Container defaultActiveKey={reportActiveTab?'meatCriteria':"validDiseases"}>
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      setSelectedDates(null);
-                                      setActiveTab("AuditReport");
+                                      handleTabs("AuditReport")
+                                     
                                     }}
                                   >
                                     <Nav.Link
@@ -437,8 +428,8 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      setSelectedDates(null);
-                                      setActiveTab("TeamReport");
+                                      handleTabs("TeamReport")
+
                                     }}
                                   >
                                     <Nav.Link to="#my-posts" eventKey="team">
@@ -449,8 +440,8 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      setSelectedDates(null);
-                                      setActiveTab("SentReport");
+                                      handleTabs("SentReport")
+
                                     }}
                                   >
                                     <Nav.Link
@@ -464,8 +455,8 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      setSelectedDates(null);
-                                      setActiveTab("ReceivedReport");
+                                      handleTabs("ReceivedReport")
+
                                     }}
                                   >
                                     <Nav.Link
@@ -615,54 +606,6 @@ const index = () => {
                                     ) : (
                                       <p>Comments not found</p>
                                     )}
-                                    {/* <div className={styles.datas}>
-                                      Visit Data
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Combination codes
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      M.E.A.T criteria
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.heads}>
-                                    <span className={styles.headText}>
-                                      Radiology{" "}
-                                    </span>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Visit Data
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Combination codes
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div> */}
                                   </div>
                                 </div>
                               </div>
