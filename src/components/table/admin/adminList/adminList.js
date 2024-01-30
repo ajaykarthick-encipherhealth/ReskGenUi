@@ -98,8 +98,8 @@ const AdminList = ({ userList }) => {
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th style={{paddingLeft:"20px"}}>User Name</th>
-            <th>Email</th>
+            <th className={TableStyle.rowStyle}>User Name</th>
+            <th className={TableStyle.rowStyle}>Email</th>
             <th>Role</th>
             <th>Date Created</th>
             <th>Action</th>
