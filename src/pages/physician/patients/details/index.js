@@ -520,7 +520,7 @@ const Details = ({}) => {
 
         var validDisArray = [];
         result?.validDisease?.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+          const encounterDatearray = res?.encounterDate?.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
