@@ -73,6 +73,11 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
+  const [allocatedStartDate, setAllocatedStartDate] = useState("");
+  const [allocatedEndDate, setAllocatedEndDate] = useState("");
+  const [auditedStartDate, setAuditedStartDate] = useState("");
+  const [auditedEndDate, setAuditedEnsDate] = useState("");
+  const [selAllocatedBy, setSelAllocatedBy] = useState("");
 
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
 
@@ -94,16 +99,25 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    dispatch(
-      getTrackingList(
-        pageNo,
-        dueDateStart,
+    const datas = {
+      pageNo,
+        dueDateStart ,
         dueDateEnd,
         searchTextValue,
         selectedOption,
         processedStart,
         processedEnd,
-        selAllocatedTo
+        selAllocatedTo,
+        auditedStartDate,
+        auditedEndDate,
+        allocatedStartDate,
+        allocatedEndDate,
+        selAllocatedBy,
+        
+    }
+    dispatch(
+      getTrackingList(
+        datas
       )
     );
   }, [
@@ -115,6 +129,12 @@ export default function Patient() {
     processedEnd,
     selAllocatedTo,
     selectedOption,
+    auditedStartDate,
+    auditedEndDate,
+    allocatedStartDate,
+    allocatedEndDate,
+    selAllocatedBy,
+  
   ]);
 
   useEffect(() => {
@@ -152,8 +172,6 @@ export default function Patient() {
           auditAllocatedByLastName: res.auditAllocatedByLastName,
           patientAllocatedFirstName: res.patientAllocatedFirstName,
           patientAllocatedLastName: res.patientAllocatedLastName,
-
-
         });
       });
       var newArray = [];
@@ -346,17 +364,52 @@ export default function Patient() {
                             setStartDate={setDueDateStart}
                             setEndDate={setDueDateEnd}
                             pickerlabel="Due date"
+                            defaultStartDate={""}
+                            defaultEndDate={""}
                             // completed date
                             isAnotherPicker={true}
                             setStartDate2={setProcessedStart}
                             setEndDate2={setProcessedEnd}
                             pickerlabe2="Audited date"
+                            defaultStartDate2={""}
+                            defaultEndDate2={""}
+                            // Audit allocated date
+                            pickerlabe5="Audit Allocated Date"
+                            defaultStartDate5={""}
+                            defaultEndDate5={""}
+                            setStartDate5={setAllocatedStartDate}
+                            setEndDate5={setAllocatedEndDate}
+                            isAnotherPicker5={true}
+                            // Auditeddate
+                            pickerlabe4="Allocated Date"
+                            defaultStartDate4={""}
+                            defaultEndDate4={""}
+                            setStartDate4={setAuditedStartDate}
+                            setEndDate4={setAuditedEnsDate}
+                            isAnotherPicker4={true}
+                            // Auditeddate
+                            pickerlabe3="Allocated Date"
+                            defaultStartDate3={""}
+                            defaultEndDate3={""}
+                            setStartDate3={setAuditedStartDate}
+                            setEndDate3={setAuditedEnsDate}
+                            isAnotherPicker3={true}
                             // allocatedTo
                             isAllocatedToSelector={true}
                             allocatedTolabel="Allocated to"
-                            allocatedToOptoons={ generateOptionsList(filteredList)}
+                            allocatedToOptoons={generateOptionsList(
+                              filteredList
+                            )}
                             setSelAllocatedTo={setSelAllocatedTo}
                             defaultAllocateTo="All"
+                            // allocated by
+                            isAllocatedBySelector={true}
+                            allocatedBylabel=" AllocatedBy"
+                            allocatedByOptoons={generateOptionsList(
+                              filteredList
+                            )}
+                            setSelAllocatedBy={setSelAllocatedBy}
+                            defaultAllocatedBy={"All"}
                             bullets={bullets}
                             isNextRow={true}
                           />
