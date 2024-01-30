@@ -152,7 +152,9 @@ export default function Patient() {
           auditAllocatedByLastName: res.auditAllocatedByLastName,
           patientAllocatedFirstName: res.patientAllocatedFirstName,
           patientAllocatedLastName: res.patientAllocatedLastName,
-
+          patientAllocatedProfileImage:res.patientAllocatedProfileImage,
+          allocatedByProfileImage:res.allocatedByProfileImage,
+          auditAllocatedByProfileImage:res.auditAllocatedByProfileImage
 
         });
       });

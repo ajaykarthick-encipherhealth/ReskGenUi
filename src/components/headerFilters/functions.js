@@ -304,6 +304,7 @@ export const renderUserPrfoileAvatar = (firstName, lastName, imageUrl,field) => 
         style={{
           width: "30px",
           height: "30px",
+          borderRadius:"50%"
         }}
       />
     );
