@@ -113,7 +113,7 @@ const AdminList = ({ userList }) => {
                   className={TableStyle.lastBorder}
                   style={{ height: "40px !important" }}
                 >
-                  <Tooltip title={` Quality : ${90}%`}>
+                  <Tooltip title={` Quality : ${Math.round(item?.accuracy)}%`}>
                     <div className="notificationIcon">
                       <div style={{ width: 40, height: 40 }}>
                         <CircularProgressbar
