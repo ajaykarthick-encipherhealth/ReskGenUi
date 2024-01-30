@@ -137,11 +137,8 @@ const UserQueue = ({ userList, setSort }) => {
                           {data.allocatedBy ? (
                             <>
                               {
-                                data.allocatedBy
-                                // .split("@")[0]
-                                // .charAt(0)
-                                // .toUpperCase() +
-                                // data.allocatedBy.split("@")[0].slice(1)
+                                data?.allocatedBy
+                                
                               }
                             </>
                           ) : (
@@ -190,7 +187,7 @@ const UserQueue = ({ userList, setSort }) => {
                   {renderUserPrfoile(
                     data?.auditedAssignedFirstName,
                     data?.auditedAssignedLastName,
-                    data?.auditedAssignedProfileImage,
+                    data?.auditAllocatedByProfileImage,
                     null,
                     "30px",
                     "30px"
@@ -216,8 +213,11 @@ const UserQueue = ({ userList, setSort }) => {
             className={TableStyle.childBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
+            
             <Popover
-              content={renderUserPrfoile(
+              content={
+                data.auditedDate &&
+                renderUserPrfoile(
                 data?.firstName,
                 data?.lastName,
                 data?.profileImageUrl,

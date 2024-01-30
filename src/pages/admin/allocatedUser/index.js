@@ -62,7 +62,7 @@ export default function Patient() {
   const [totalElementsPatient, setTotalElementsPatient] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const sideMenu = useSelector((state) => state.sideMenu);
-  const [activeTab, setActiveTab] = useState("L1 Auditor");
+  const [activeTab, setActiveTab] = useState(1);
   const [l2UserListAll, setL2UserListAll] = useState([]);
   const [isPatientList, setIsPatientList] = useState(false);
   const [l2patinetListAll, setL2PatinetListAll] = useState([]);

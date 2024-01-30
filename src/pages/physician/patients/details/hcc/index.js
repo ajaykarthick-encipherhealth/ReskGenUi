@@ -406,9 +406,9 @@ const Hcc = ({ patientHccResult }) => {
         var deleteHccList = [];
 
         if (fileloadCondition != "fileNotLoad") {
-          getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
-          setSelectMeatFileId(patientHccResult.fileId);
-          setPatientFileDTO(result.fileDetailDTO);
+          getPatientPdfFile(result?.fileDetailDTO?.azureBlobPath, tenId);
+          setSelectMeatFileId(patientHccResult?.fileId);
+          setPatientFileDTO(result?.fileDetailDTO);
         }
         // setPatientDocumentResult(result);
 
@@ -436,7 +436,7 @@ const Hcc = ({ patientHccResult }) => {
         var validDisArray = [];
         var validEncounterDateArray = [];
         validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+          const encounterDatearray = res?.encounterDate?.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -451,7 +451,7 @@ const Hcc = ({ patientHccResult }) => {
         });
 
         result?.invalidDisease?.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+          const encounterDatearray = res?.encounterDate?.split(",");
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -466,7 +466,7 @@ const Hcc = ({ patientHccResult }) => {
 
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             deleteHccList.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -488,7 +488,7 @@ const Hcc = ({ patientHccResult }) => {
           // getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -504,7 +504,7 @@ const Hcc = ({ patientHccResult }) => {
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
-              const encounterDatearray = res.encounterDate.split(",");
+              const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
                 capturedSections: [],
@@ -523,7 +523,7 @@ const Hcc = ({ patientHccResult }) => {
           // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -540,7 +540,7 @@ const Hcc = ({ patientHccResult }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -643,11 +643,11 @@ const Hcc = ({ patientHccResult }) => {
           "encounterDateTag8",
         ];
 
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
+        validDiseaseNewRes?.map((res) => {
+          res.capturedSections?.map((res2, index) => {
+            capturedSectionsArr?.push({
               name: res2,
-              diagnosisCode: res.diagnosisCode,
+              diagnosisCode: res?.diagnosisCode,
             });
           });
         });
@@ -660,11 +660,11 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-        suggestListAll.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
+        suggestListAll?.map((res) => {
+          res?.capturedSections?.map((res2, index) => {
+            capturedSectionsArr?.push({
               name: res2,
-              diagnosisCode: res.diagnosisCode,
+              diagnosisCode: res?.diagnosisCode,
             });
           });
         });
@@ -720,44 +720,44 @@ const Hcc = ({ patientHccResult }) => {
         var encounterDateArr = [];
 
         validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.invalidDisease.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.unMatchedDisease?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.unMatchedDisease?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
-        result.suggestRadiology?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.suggestRadiology?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.suggestLab?.map((res) => {
-          const array = res.encounterDate.split(",");
+        result?.suggestLab?.map((res) => {
+          const array = res?.encounterDate.split(",");
           array.map((res2) => {
-            encounterDateArr.push({
+            encounterDateArr?.push({
               name: res2,
             });
           });
@@ -2437,8 +2437,10 @@ const Hcc = ({ patientHccResult }) => {
 
   function removeDuplicates(array) {
     let output = [];
-    for (let item of array) {
-      if (!output.includes(item)) output.push(item);
+    if(array){
+      for (let item of array) {
+        if (!output.includes(item)) output.push(item);
+      }
     }
 
     return output;
@@ -2560,7 +2562,7 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getEncounterDateBackground = (value) => {
-    return value.map((res) => {
+    return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
@@ -4603,9 +4605,9 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
                                         {getCaptureSectionBackgroundFile(
-                                          data.capturedSections,
-                                          data.encounterDate,
-                                          data.actualDescription
+                                          data?.capturedSections,
+                                          data?.encounterDate,
+                                          data?.actualDescription
                                         )}
                                       </div>
                                     </div>
@@ -5051,9 +5053,9 @@ const Hcc = ({ patientHccResult }) => {
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
                                                   {getCaptureSectionBackgroundFile(
-                                                    data.capturedSections,
-                                                    data.encounterDate,
-                                                    data.actualDescription
+                                                    data?.capturedSections,
+                                                    data?.encounterDate,
+                                                    data?.actualDescription
                                                   )}
                                                 </div>
                                               )}
@@ -5208,9 +5210,9 @@ const Hcc = ({ patientHccResult }) => {
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
                                           {getCaptureSectionBackgroundFile(
-                                            data.capturedSections,
-                                            data.encounterDate,
-                                            data.actualDescription
+                                            data?.capturedSections,
+                                            data?.encounterDate,
+                                            data?.actualDescription
                                           )}
                                         </div>
                                       </div>
@@ -5695,9 +5697,9 @@ const Hcc = ({ patientHccResult }) => {
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
                                 {getCaptureSectionBackgroundFile(
-                                  data.capturedSections,
-                                  data.encounterDate,
-                                  data.actualDescription
+                                  data?.capturedSections,
+                                  data?.encounterDate,
+                                  data?.actualDescription
                                 )}
                               </div>
                             </div>
