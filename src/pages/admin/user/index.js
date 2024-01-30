@@ -24,6 +24,7 @@ const options3 = [
   { value: "false", label: "Disabled" },
 ];
 const RoleList = [
+  { value: "", label: "ALL" },
   { value: "ADMIN", label: "Admin" },
   { value: "L1AUDITOR", label: "L1Auditor" },
   { value: "L2AUDITOR", label: "L2Auditor" },
@@ -213,8 +214,10 @@ const UserList = () => {
                         selectOptions2={RoleList}
                         defaultSelectValue2={RoleList[0]}
                         setSelectedOption2={setRole}
+                       
+
                         // computation date
-                        pickerlabel="Select Range"
+                        pickerlabel="Created date Range"
                         selectedDates={selectedDates}
                         setSelectedDates={setSelectedDates}
                         defaultStartDate={""}
