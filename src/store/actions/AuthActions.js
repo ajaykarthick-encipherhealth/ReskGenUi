@@ -12,6 +12,8 @@ import {
   filters,
 } from "../../services/AuthService";
 import { notification } from "antd";
+import ENDPOINTS from "../../utility/enpoints";
+import axios from "axios";
 
 export const SIGNUP_CONFIRMED_ACTION = "[signup action] confirmed signup";
 export const SIGNUP_FAILED_ACTION = "[signup action] failed signup";
@@ -27,6 +29,7 @@ export const ENABLEMFA = "ENABLEMFA";
 export const VERIFYCODE = "VERIFYCODE";
 export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
+export const PROFILE_URL = "PROFILE_URL";
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -220,7 +223,7 @@ export const getCoderDetails = ({ name, search, selectedOption, router }) => {
   };
 };
 
-export const getFilters = (field,username) => {
+export const getFilters = (field, username) => {
   return (dispatch) => {
     dispatch({
       type: FILTER,
@@ -229,7 +232,7 @@ export const getFilters = (field,username) => {
       },
     });
     try {
-      filters(field,username).then((response) => {
+      filters(field, username).then((response) => {
         dispatch({
           type: FILTER,
           payload: {
@@ -242,4 +245,81 @@ export const getFilters = (field,username) => {
       console.log(err);
     }
   };
+};
+export const preSendURl = (type) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+
+  if ( type) {
+    try {
+      let response = await axios.get(
+        `${ENDPOINTS?.apiEndoint}dbservice/user/getuploadurl?filetype=${type}&filelocation=PROFILE_IMAGE`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+     if(response.data){
+      if(response?.data?.response) {
+        dispatch(getUrl( response?.data?.response, type));
+        const url= response?.data?.response?.split("?").shift()
+        dispatch(updateImage(url))
+      }
+     }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+};
+export const getUrl = (url, extention) => async (dispatch) => {
+  const type =
+    extention === "jpg" || extention === "jpeg" ? "image/jpeg" : "image/png";
+  if (url) {
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": extention,
+          "x-ms-blob-type":"BlockBlob"
+        },
+      });
+
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+};
+
+export const updateImage = (url) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  if (url) {
+    dispatch({
+      type: PROFILE_URL,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      const response = await fetch(`${ENDPOINTS?.apiEndoint}dbservice/user/profileimage`, {
+        method: "PUT",
+        headers: {
+          Authorization:token
+        },
+        profileImageUrl:url
+      });
+
+      if (response) {
+        // dispatch({
+        //   type: PROFILE_URL,
+        //   payload: {
+        //     loading: false,
+        //     url: response,
+        //   },
+        // });
+        console.log(response);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
 };

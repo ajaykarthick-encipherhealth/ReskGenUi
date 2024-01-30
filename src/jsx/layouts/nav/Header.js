@@ -10,7 +10,16 @@ import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Button } from "react-bootstrap";
-import { Badge, Dropdown, Select, Tooltip, Drawer, Popover, Avatar } from "antd";
+import {
+  Badge,
+  Dropdown,
+  Select,
+  Tooltip,
+  Drawer,
+  Popover,
+  Avatar,
+  Modal,
+} from "antd";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
 import {
@@ -38,6 +47,7 @@ import {
 } from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
+import ImageUploader from "../../../components/imageUploading/ImageUploader";
 
 const btnItems = [
   {
@@ -93,7 +103,8 @@ const Header = () => {
   const [dropdownContent, setDropdownContent] = useState();
   const [currentRole, setCurrentRole] = useState();
   const [profileImg, setProfileImg] = useState();
-  const [lastName,setLastName]=useState()
+  const [lastName, setLastName] = useState();
+  const [openUploader, setOpenUploader] = useState();
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -144,7 +155,7 @@ const Header = () => {
     setUserIdDetails(response?.data?.response);
     setProfileImg(response?.data?.response?.profileImageUrl);
     setUserName(response?.data?.response?.firstName);
-    setLastName(response?.data?.response?.lastName)
+    setLastName(response?.data?.response?.lastName);
     setDropdownContent(response?.data?.response?.role);
     var userId = response?.data?.response?.id;
     dispatch(getNotificationList(userId));
@@ -349,7 +360,6 @@ const Header = () => {
     }
   }, [msgReply, selectedbtn, search, selectedOption]);
 
-  
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -458,14 +468,21 @@ const Header = () => {
                         >
                           <div>
                             <div className="header-info2 d-flex align-items-center">
-                              <div className="header-media" style={{marginTop:"-2px"}}>
-                                {renderUserPrfoile(userName,lastName,profileImg,"header")}
-                                
+                              <div
+                                className="header-media"
+                                style={{ marginTop: "-2px" }}
+                              >
+                                {renderUserPrfoile(
+                                  userName,
+                                  lastName,
+                                  profileImg,
+                                  "header"
+                                )}
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div className="mx-15">
+                        <div className="mx-15" onClick={()=>setOpenUploader(true)}>
                           <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
                             {userName}
                           </span>
@@ -505,6 +522,7 @@ const Header = () => {
           </div>
         </nav>
       </div>
+
       <Drawer
         title="Notification"
         placement="right"
@@ -516,6 +534,17 @@ const Header = () => {
           <Notification notificationResponse={notificationResponse?.data} />
         ) : null}
       </Drawer>
+      <Modal
+        title="Upload Profile Image"
+        open={openUploader}
+        onOk={() => setOpenUploader(false)}
+        onCancel={() => setOpenUploader(false)}
+      >
+        <div>
+          <ImageUploader setOpenUploader={setOpenUploader}/>
+         
+        </div>
+      </Modal>
     </div>
   );
 };
