@@ -97,13 +97,14 @@ const AdminList = ({ userList }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>Name</th>
-            <th className={TableStyle.rowStyle}>MFA</th>
-            <th className={TableStyle.rowStyle}>Email</th>
-            <th>Role</th>
-            <th>Date Created</th>
-            <th>Action</th>
-            <th></th>
+            <th style={{textAlign:"left", paddingLeft:"72px"}}>Name</th>            
+            <th className={TableStyle.rowStyle} style={{textAlign:"center"}}>Email</th>
+            <th style={{textAlign:"center"}}>Role</th>
+            <th style={{textAlign:"center"}}>Date Created</th>
+            <th className={TableStyle.rowStyle} style={{textAlign:"center"}}>MFA</th>
+            <th style={{textAlign:"center"}}>Action</th>
+            <th style={{textAlign:"center"}}>User Status</th>
+          
           </tr>
         </thead>
         <tbody>
@@ -112,7 +113,7 @@ const AdminList = ({ userList }) => {
               <tr key={index} style={{ height: "35px" }}>
                 <td
                   className={TableStyle.childBorder}
-                  style={{ textAlign: "left" }}
+                  style={{ textAlign: "center" }}
                 >
                   {item.firstName || item.lastName || item?.profileImageUrl ? (
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -135,35 +136,28 @@ const AdminList = ({ userList }) => {
                   )}
                 </td>
 
+              
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
-                >
-                  <span>
-                    {" "}
-                    {item?.mfaEnabled === false ? "Not Enabled" : "Enabled"}
-                  </span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important" , textAlign:"center"}}
                 >
                   <span>{item?.email ? item?.email : "---"}</span>
                 </td>
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important", textAlign:"center" , paddingLeft:"70px"}}
                 >
                   <div
                     style={{
                       margin: "-20px 0px 0px -20px",
                       width: "100%",
+                      textAlign:"center"
                     }}
                   >
                     {item?.role?.length > 0 ? (
                       <Select
                         className={`custom-ant-select ${TableStyle.customAntSelect}`}
-                        style={{ width: "100%", marginTop: "15px" }}
+                        style={{  marginTop: "15px" }}
                         defaultValue={item?.role[0]?.toLowerCase()}
                       >
                         {item?.role?.map((data) => (
@@ -183,15 +177,25 @@ const AdminList = ({ userList }) => {
 
                 <td
                   className={TableStyle.lastBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important",textAlign:"center" }}
                 >
                   <span>{dateFormate(dayjs, item?.createdDate)}</span>
+                </td>
+                <td
+                  className={TableStyle.childBorder}
+                  style={{ height: "40px !important",textAlign:"center" }}
+                >
+                  <span>
+                    {" "}
+                    {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
+                  </span>
                 </td>
                 <td
                   className={TableStyle.childBorder}
                   style={{
                     height: "40px !important",
                     cursor: "pointer",
+                    textAlign:"center"
                   }}
                 >
                   <div>
@@ -212,7 +216,8 @@ const AdminList = ({ userList }) => {
                 </td>
                 <td
                   className={TableStyle.lastBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important",textAlign:"center" }}
+                  
                 >
                   <Switch
                     defaultChecked={item?.accountStatus}
@@ -220,11 +225,12 @@ const AdminList = ({ userList }) => {
                     style={{ color: "red" }}
                   />
                 </td>
+              
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="8">
+              <td colSpan="8" style={{display:"flex", alignItems:"cenetr", justifyContent:'center'}}>
                 <Empty />
               </td>
             </tr>
