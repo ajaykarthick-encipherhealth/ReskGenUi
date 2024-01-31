@@ -71,6 +71,61 @@ export const eventStreming = (
   };
 };
 
+const stageChartMap2 = {
+  FILE_UPLOAD: "File Upload",
+  OCR: "OCR",
+  SECTIONS_FILTER: "Sections Filter",
+  DISEASE_FOUND: "Disease",
+  VALID_DISEASE_SEPARATION: "Valid disease",
+  COMBINATION_CODES_FOUND: "Combination codes",
+  MEAT_FOUND: "Meat",
+  RAF_SCORE_FOUND: "RAF Score",
+  QUERY_CONDITIONS_FOUND: "Query Conditions",
+  FINISHED: "Finished",
+  DISEASE_FOUND_FAILED: "DISEASE_FOUND_FAILED",
+  OCR_FAILED: "OCR_FAILED",
+  SECTIONS_FILTER_FAILED: "SECTIONS_FILTER_FAILED",
+  VALID_DISEASE_SEPARATION_FAILED: "VALID_DISEASE_SEPARATION_FAILED",
+  COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
+  MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
+  RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
+  STORED_FAILED: "STORED_FAILED",
+  QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
+};
+
+const errStages = {
+  DISEASE_FOUND_FAILED: "DISEASE_FOUND_FAILED",
+  OCR_FAILED: "OCR_FAILED",
+  SECTIONS_FILTER_FAILED: "SECTIONS_FILTER_FAILED",
+  VALID_DISEASE_SEPARATION_FAILED: "VALID_DISEASE_SEPARATION_FAILED",
+  COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
+  MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
+  RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
+  STORED_FAILED: "STORED_FAILED",
+  QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
+};
+const stageChartMap = {
+  FILE_UPLOAD: 0,
+  OCR: 1,
+  OCR_FAILED: 1,
+  SECTIONS_FILTER: 2,
+  SECTIONS_FILTER_FAILED: 2,
+  DISEASE_FOUND: 3,
+  DISEASE_FOUND_FAILED: 3,
+  VALID_DISEASE_SEPARATION: 4,
+  VALID_DISEASE_SEPARATION_FAILED: 4,
+  COMBINATION_CODES_FOUND: 5,
+  COMBINATION_CODES_FOUND_FAILED: 5,
+  MEAT_FOUND_FAILED: 6,
+  MEAT_FOUND: 6,
+  RAF_SCORE_FOUND: 7,
+  RAF_SCORE_FOUND_FAILED: 7,
+  STORED: 8,
+  STORED_FAILED: 8,
+  QUERY_CONDITIONS_FOUND: 8,
+  QUERY_CONDITIONS_FOUND_FAILED: 8,
+  FINISHED: 9,
+};
 function FileProcessingTable({ patinetListAll }) {
   const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
@@ -101,7 +156,10 @@ function FileProcessingTable({ patinetListAll }) {
         setLoading(false);
       }
 
-      if (!isFinished && data[0]?.processStageChart === "FINISHED") {
+      if (
+        (!isFinished && data[0]?.processStageChart === "FINISHED") ||
+        errStages[data[0]?.processStageChart]
+      ) {
         isFinished = true;
         sse.close();
         setLoading(false);
@@ -155,29 +213,6 @@ function FileProcessingTable({ patinetListAll }) {
     setStepperVisible(updatedVisibility);
   };
 
-  const stageChartMap2 = {
-    FILE_UPLOAD: "File Upload",
-    OCR: "OCR",
-    OCR_FAILED: "OCR_Failed",
-    SECTIONS_FILTER: "Sections Filter",
-    DISEASE_FOUND: "Disease",
-    VALID_DISEASE_SEPARATION: "Valid disease",
-    COMBINATION_CODES_FOUND: "Combination codes",
-    MEAT_FOUND: "Meat",
-    RAF_SCORE_FOUND: "RAF Score",
-    QUERY_CONDITIONS_FOUND: "Query Conditions",
-    FINISHED: "Finished",
-    DISEASE_FOUND_FAILED: "DISEASE_FOUND_FAILED",
-    OCR_FAILED: "OCR_FAILED",
-    SECTIONS_FILTER_FAILED: "SECTIONS_FILTER_FAILED",
-    VALID_DISEASE_SEPARATION_FAILED: "VALID_DISEASE_SEPARATION_FAILED",
-    COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
-    MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
-    RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
-    STORED_FAILED: "STORED_FAILED",
-    QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
-  };
-
   const renderUploadStatus = (data, index) => {
     let uploadStatus = 0;
 
@@ -229,29 +264,6 @@ function FileProcessingTable({ patinetListAll }) {
         uploadStatus = 0;
         break;
     }
-
-    const stageChartMap = {
-      FILE_UPLOAD: 0,
-      OCR: 1,
-      OCR_FAILED: 1,
-      SECTIONS_FILTER: 2,
-      SECTIONS_FILTER_FAILED: 2,
-      DISEASE_FOUND: 3,
-      DISEASE_FOUND_FAILED: 3,
-      VALID_DISEASE_SEPARATION: 4,
-      VALID_DISEASE_SEPARATION_FAILED: 4,
-      COMBINATION_CODES_FOUND: 5,
-      COMBINATION_CODES_FOUND_FAILED: 5,
-      MEAT_FOUND_FAILED: 6,
-      MEAT_FOUND: 6,
-      RAF_SCORE_FOUND: 7,
-      RAF_SCORE_FOUND_FAILED: 7,
-      STORED: 8,
-      STORED_FAILED: 8,
-      QUERY_CONDITIONS_FOUND: 8,
-      QUERY_CONDITIONS_FOUND_FAILED: 8,
-      FINISHED: 9,
-    };
 
     const currentIndex = stageChartMap[data?.processStageChart];
 
@@ -426,12 +438,25 @@ function FileProcessingTable({ patinetListAll }) {
               <Progress
                 percent={uploadStatus}
                 status="active"
-                style={{ height: "20px", color: "red" }}
+                style={{
+                  height: "20px",
+                }}
+                strokeColor={
+                  stageChartMap2[data?.processStageChart] === "FINISHED"
+                    ? "green"
+                    : errStages[data?.processStageChart]
+                    ? "red"
+                    : "#1677ff"
+                }
               />
             </Tooltip>
           </div>
           <div
-            style={{ display: "flex", justifyContent: "end" }}
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              color: errStages[data?.processStageChart] ? "red" : "#0000",
+            }}
           >{`${uploadStatus}% Complete`}</div>
           {stepperVisible[index] && (
             <>
