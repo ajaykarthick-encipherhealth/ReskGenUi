@@ -99,7 +99,7 @@ const index = () => {
   const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
   const [aduitDueStartDate, setAduitDueStartDate] = useState("");
   const [aduitDueEndDate, setAduitDueEndDate] = useState("");
-  const [sort, setSort] = useState({ sortDir: "ASC", sortField: "" });
+  const [sort, setSort] = useState({ sortDir: "DESC", sortField: "auditDueDate" });
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);

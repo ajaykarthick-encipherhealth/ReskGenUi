@@ -137,7 +137,7 @@ function AllocatedL2AdminList({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th>PATIENT ALLOCATED</th>
+            <th>L1 AUDITOR</th>
             <th
               onClick={() => {
                 sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");

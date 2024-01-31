@@ -19,7 +19,7 @@ const UserQueue = ({ userList, setSort }) => {
   const [processSort, setProcessSort] = useState("ASC");
   const [auditAllocatedSort, setAuditAllocatedSort] = useState("ASC");
   const [audirDateSort, setAuditDateSort] = useState("ASC");
-  const [auditDueSort, setAuditDueSort] = useState("ASC");
+  const [auditDueSort, setAuditDueSort] = useState("DESC");
   const badgeDisplay = (data) => {
     if (data?.auditedStatus === "AUDITED") {
       return (
@@ -180,10 +180,10 @@ const UserQueue = ({ userList, setSort }) => {
             </div>
           </td>
 
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{textAlign:"left"}}>
             <div className={TableStyle.innerAlignments}>
               {data.auditAllocatedBy ? (
-                <Tooltip title={data.auditAllocatedBy}>
+                <Tooltip title={data.auditAllocatedBy}>  
                   {renderUserPrfoile(
                     data?.auditedAssignedFirstName,
                     data?.auditedAssignedLastName,
@@ -282,9 +282,10 @@ const UserQueue = ({ userList, setSort }) => {
               COMPLETED DATE
               <span style={{ cursor: "pointer" }}>
                 {processSort === "ASC" ? (
-                  <ArrowUpOutlined />
+                     <ArrowDownOutlined />
                 ) : (
-                  <ArrowDownOutlined />
+                  <ArrowUpOutlined />
+
                 )}
               </span>
             </th>
@@ -299,12 +300,13 @@ const UserQueue = ({ userList, setSort }) => {
                 });
               }}
             >
-              AUDITED ALLOCATED DATE
+              AUDIT ALLOCATED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
                 {auditAllocatedSort === "ASC" ? (
-                  <ArrowUpOutlined />
+                 <ArrowDownOutlined />
                 ) : (
-                  <ArrowDownOutlined />
+                 
+                  <ArrowUpOutlined />
                 )}
               </span>
             </th>
@@ -314,16 +316,18 @@ const UserQueue = ({ userList, setSort }) => {
                 setSort({ sortDir: auditDueSort, sortField: "auditDueDate" });
               }}
             >
-              AUDITED DUE DATE
+              AUDIT DUE DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
                 {auditDueSort === "ASC" ? (
-                  <ArrowUpOutlined />
+                   <ArrowUpOutlined />
+                  
+                  
                 ) : (
                   <ArrowDownOutlined />
                 )}
               </span>
             </th>
-            <th>AUDITED ALLOCATED BY</th>
+            <th>AUDIT ALLOCATED BY</th>
             <th
               onClick={() => {
                 setAuditDateSort(audirDateSort === "ASC" ? "DESC" : "ASC");
@@ -333,9 +337,10 @@ const UserQueue = ({ userList, setSort }) => {
               AUDITED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
                 {audirDateSort === "ASC" ? (
-                  <ArrowUpOutlined />
+                 <ArrowDownOutlined />
                 ) : (
-                  <ArrowDownOutlined />
+                  
+                  <ArrowUpOutlined />
                 )}
               </span>
             </th>
