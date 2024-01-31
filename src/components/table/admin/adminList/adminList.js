@@ -9,9 +9,7 @@ import {
   dateFormate,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
-
   sortFunction,
-
 } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
@@ -22,7 +20,7 @@ const items = [
   { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
 ];
 const { Option } = Select;
-const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
+const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const dispatch = useDispatch();
   const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
@@ -101,28 +99,29 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-
-            <th style={{textAlign:"left", paddingLeft:"72px"}}>Name</th>            
-            <th className={TableStyle.rowStyle} style={{textAlign:"center"}}>Email</th>
-            <th style={{textAlign:"center"}}>Role</th>
-              <th
-              style={{ cursor: "pointer",textAlign:"center" }}
+            <th style={{ textAlign: "left", paddingLeft: "72px" }}>NAME</th>
+            <th className={TableStyle.rowStyle} style={{ textAlign: "center" }}>
+              EMAIL
+            </th>
+            <th style={{ textAlign: "center", paddingLeft: "33px" }}>ROLE</th>
+            <th
+              style={{ cursor: "pointer", textAlign: "center" }}
               onClick={() => {
                 sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
               }}
             >
-              DATE CREAED{" "}
+              DATE CREATED{" "}
               {sortOrder === "ASC" ? (
                 <ArrowUpOutlined />
               ) : (
                 <ArrowDownOutlined />
               )}
             </th>
-            <th className={TableStyle.rowStyle} style={{textAlign:"center"}}>MFA</th>
-            <th style={{textAlign:"center"}}>Action</th>
-            <th style={{textAlign:"center"}}>User Status</th>
-          
-
+            <th className={TableStyle.rowStyle} style={{ textAlign: "center" }}>
+              MFA
+            </th>
+            <th style={{ textAlign: "center" }}>ACTION</th>
+            <th style={{ textAlign: "center" }}>USER STATUS</th>
           </tr>
         </thead>
         <tbody>
@@ -154,56 +153,56 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
                   )}
                 </td>
 
-              
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "40px !important" , textAlign:"center"}}
+                  style={{ height: "40px !important", textAlign: "center" }}
                 >
                   <span>{item?.email ? item?.email : "---"}</span>
                 </td>
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "40px !important", textAlign:"center" , paddingLeft:"70px"}}
+                  style={{
+                    height: "40px !important",
+                    textAlign: "center",
+                    paddingLeft: "70px",
+                  }}
                 >
                   <div
                     style={{
                       margin: "0px 0px 0px 0px",
                       width: "100%",
-                      textAlign:"center"
+                      textAlign: "center",
                     }}
                   >
-                   
                     {item?.role?.length > 0 ? (
-
-                      <Select
-                        className={`custom-ant-select ${TableStyle.customAntSelect}`}
-                        style={{  marginTop: "15px" }}
-                        defaultValue={item?.role[0]?.toLowerCase()}
-                      >
-                        {item?.role?.map((data) => (
-                          <Option key={data} value={data} disabled={true}>
-                            <span style={{ color: "#000" }}>
-                              {" "}
-                              {data.toLowerCase()}
-                            </span>
-                          </Option>
-                        ))}
-                      </Select>
-
-                       <Popover content={
-                        item?.role?.length>1 &&item?.role?.map((data) => (
-                         
-                           <div style={{ color: "#000" }}>
-                             {" "}
-                             {data.toLowerCase()}
-                           </div>
-                        
-                       ))
-                     }>
- 
-                    {item?.role[0].toLowerCase()}
-                     </Popover>
-
+                      <>
+                        <Select
+                          className={`custom-ant-select ${TableStyle.customAntSelect}`}
+                          defaultValue={item?.role[0]?.toLowerCase()}
+                        >
+                          {item?.role?.map((data) => (
+                            <Option key={data} value={data} disabled={true}>
+                              <span style={{ color: "#000" }}>
+                                {" "}
+                                {data.toLowerCase()}
+                              </span>
+                            </Option>
+                          ))}
+                        </Select>
+                        <Popover
+                          content={
+                            item?.role?.length > 1 &&
+                            item?.role?.map((data) => (
+                              <div style={{ color: "#000" }}>
+                                {" "}
+                                {data.toLowerCase()}
+                              </div>
+                            ))
+                          }
+                        >
+                          {/* {item?.role[0].toLowerCase()} */}
+                        </Popover>
+                      </>
                     ) : (
                       "---"
                     )}
@@ -212,13 +211,13 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
 
                 <td
                   className={TableStyle.lastBorder}
-                  style={{ height: "40px !important",textAlign:"center" }}
+                  style={{ height: "40px !important", textAlign: "center" }}
                 >
                   <span>{dateFormate(dayjs, item?.createdDate)}</span>
                 </td>
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "40px !important",textAlign:"center" }}
+                  style={{ height: "40px !important", textAlign: "center" }}
                 >
                   <span>
                     {" "}
@@ -230,7 +229,7 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
                   style={{
                     height: "40px !important",
                     cursor: "pointer",
-                    textAlign:"center"
+                    textAlign: "center",
                   }}
                 >
                   <div>
@@ -251,8 +250,7 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
                 </td>
                 <td
                   className={TableStyle.lastBorder}
-                  style={{ height: "40px !important",textAlign:"center" }}
-                  
+                  style={{ height: "40px !important", textAlign: "center" }}
                 >
                   <Switch
                     defaultChecked={item?.accountStatus}
@@ -260,12 +258,18 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
                     style={{ color: "red" }}
                   />
                 </td>
-              
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="8" style={{display:"flex", alignItems:"cenetr", justifyContent:'center'}}>
+              <td
+                colSpan="8"
+                style={{
+                  display: "flex",
+                  alignItems: "cenetr",
+                  justifyContent: "center",
+                }}
+              >
                 <Empty />
               </td>
             </tr>
