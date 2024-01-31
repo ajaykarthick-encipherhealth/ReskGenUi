@@ -214,6 +214,8 @@ const index = () => {
                             activeTab={activeTab}
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
                           />
                         </div>
                         <Export

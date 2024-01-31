@@ -2,6 +2,7 @@ import { Avatar } from "antd";
 import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
 import moment from "moment";
+import dayjs from 'dayjs'
 // for search
 export const searchFunction = (
   e,
@@ -29,7 +30,7 @@ export const handleSelector = (option, setSelectedOption) => {
 
 // for rangepicker
 export const handleRnagePicker = (
-  date,
+  dates,
   dateString,
   setStartDate,
   setEndDate,
@@ -40,14 +41,24 @@ export const handleRnagePicker = (
   setCoderStartDate,
   setCoderEndDate
 ) => {
-  const formattedDates = dateString?.map((data, index) => {
+  if (dates === null || (Array.isArray(dates) && dates.length === 0)) {
+    // Handle the case when dates are cleared
+    setSelectedDates(null); // Or any other appropriate action
+    return;
+  }
+
+  const formattedDates = dateString?.length>0 && dateString?.map((data, index) => {
     const formattedDate =
       index === 1
         ? data && `${data}T23:59:59.999Z`
         : data && `${data}T00:00:00.000Z`;
+        
     return formattedDate;
   });
-  // setSelectedDates(date);
+  setSelectedDates([
+    dayjs(dateString[0]),
+    dayjs(dateString[1]),
+  ]);
   if (activeTab === "SentReport") {
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
