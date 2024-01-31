@@ -56,6 +56,7 @@ function AllocatedAdminList({
       >
         <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
         <td className={TableStyle.childBorder}>{data.patientName}</td>
+        
         <td className={TableStyle.childBorder}>
           {data.computedDate
             ? moment.utc(data.computedDate).format("MM-DD-YYYY")

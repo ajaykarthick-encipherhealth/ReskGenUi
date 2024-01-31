@@ -24,6 +24,8 @@ import TableStyle from "../../../components/table/table.module.css";
 import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
+import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
+
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -219,11 +221,20 @@ export default function Patient() {
     if (response.data) {
       var resultMap = [];
       var result = response?.data?.response?.content;
+      setTotalElementsUser(response?.data?.response?.content?.totalElements);
       result?.map((res) => {
         resultMap.push({
           ...res,
           name: res.name,
           userName: res.userName,
+          totalFileAudited: res.totalFileAudited,
+          totalFileAuditAllocated: res.totalFileAuditAllocated,
+          totalFileAuditPending: res.totalFileAuditPending,
+          totalFileAuditHold: res.totalFileAuditHold,
+          totalFileAuditDeclined: res.totalFileAuditDeclined,
+          firstName: res.firstName,
+          lastName: res.lastName,
+          profileImageUrl: res.profileImageUrl,
         });
       });
       if (result?.length > 0) {
@@ -246,8 +257,13 @@ export default function Patient() {
           getL2PatientList(data, pageNoL2Patient, sort);
         }}
       >
-        <td className={TableStyle.firstTdBorder}>
-          {renderUserPrfoile(
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+          {data.firstName || data.lastName || data?.profileImageUrl ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+               {renderUserPrfoile(
             data?.firstName,
             data?.lastName,
             data?.profileImageUrl,
@@ -255,12 +271,31 @@ export default function Patient() {
             "30px",
             "30px"
           )}
-          <span style={{ margin: "10px 0 0 10px" }}>
-            {data?.firstName}
-            {data?.lastName}
-          </span>
+              </span>
+              <span>
+                {data.firstName} {data.lastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
         </td>
-        <td className={TableStyle.childBorder}>{data.userName}</td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAudited ? data.totalFileAudited : "---"}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAuditAllocated ? data.totalFileAuditAllocated : "---"}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAuditHold ? data.totalFileAuditHold : "---"}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
+        </td>
+
       </tr>
     ));
   };
@@ -284,6 +319,9 @@ export default function Patient() {
           patientId: res.patientId,
           patientName: res.patientName,
           computedDate: res.computedDate,
+          patientAllocatedFirstName: res.patientAllocatedFirstName,
+          patientAllocatedLastName: res.patientAllocatedLastName,
+          patientAllocatedProfileImage: res.patientAllocatedProfileImage,
         });
       });
       const data = result.map((item) => ({
@@ -502,7 +540,11 @@ export default function Patient() {
                                               >
                                                 <tr>
                                                   <th>NAME</th>
-                                                  <th>USER NAME</th>
+                                                  <th>AUDIT PROCESSED</th>
+                                                  <th>AUDIT ALLOCATED</th>
+                                                  <th>AUDIT PENDING</th>
+                                                  <th>AUDIT HOLD</th>
+                                                  <th>AUDIT INVALID</th>
                                                 </tr>
                                               </thead>
 
