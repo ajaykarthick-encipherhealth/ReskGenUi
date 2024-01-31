@@ -93,6 +93,8 @@ export default function Patient() {
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
+  const [sortOrder,setSortOrder]=useState("ASC")
+  const[ sort,setSort]=useState({sortDir:"ASC",sortField:""})
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -166,6 +168,13 @@ export default function Patient() {
           lastModifiedDate: res.lastModifiedDate,
           createdDate: res.createdDate,
           createdBy: res.createdBy,
+          allocatedByFirstName: res.allocatedByFirstName,
+          allocatedByLastName: res.allocatedByLastName,
+          allocatedByProfileImage:res.allocatedByProfileImage,
+          createdByFirstName:res.createdByFirstName,
+          createdByLastName:res.createdByLastName,
+          createdByProfileImage:res.createdByProfileImage
+
         });
       });
       var newArray = [];
@@ -536,7 +545,7 @@ export default function Patient() {
                             defaultCreatedBy={"All"}
                             // created by
                             isCreatedBySelector={true}
-                            createdTolabel="Created to"
+                            createdTolabel="Created By"
                             createdByOptoons={
                               generateOptionsList(filteredList)
 
@@ -565,6 +574,8 @@ export default function Patient() {
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
+                              setSortOrder={setSortOrder} 
+                              setSort={setSort}
                             />
                             <div>
                               <div className="pagination-container">
