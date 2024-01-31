@@ -227,7 +227,7 @@ function PatientTable({
             >
               ALLOCATED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortAllocateOrder !== "ASC" ? (
+                {sortAllocateOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -241,7 +241,7 @@ function PatientTable({
             >
               DUE DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder !== "ASC" ? (
+                {sortDueOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -260,7 +260,7 @@ function PatientTable({
             >
               COMPLETED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder !== "ASC" ? (
+                {sortCompleteOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
