@@ -97,7 +97,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const fetchChatHistory = async (username) => {
     try {
       fetch(
-        "http://13.68.177.51:8087/chatservice/api/get/history?receiver=" +
+        "https://hcc.encipherhealth.com/chatservice/chatservice/api/get/history?receiver=" +
           username
       )
         .then((response) => response.json())
@@ -115,7 +115,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const fetchUsers = async () => {
     try {
       const response = await fetch(
-        "http://13.68.177.51:8087/chatservice/api/users"
+        "https://hcc.encipherhealth.com/chatservice/chatservice/api/users"
       );
       const data = await response.json();
 
@@ -130,7 +130,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     }
   };
   const connect = () => {
-    let Sock = new SockJS("http://13.68.177.51:8087/chatservice/ws");
+    let Sock = new SockJS("https://hcc.encipherhealth.com/chatservice/chatservice/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
   };
@@ -425,7 +425,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     try {
       // Fetch messages for the user
       const response = await fetch(
-        `http://13.68.177.51:8087/chatservice/api/messages/private?sender=${sender?.secondaryUser}&receiver=${userData.username}&pageNo=${pageNumber}&pageSize=${pageSize}`
+        `https://hcc.encipherhealth.com/chatservice/chatservice/api/messages/private?sender=${sender?.secondaryUser}&receiver=${userData.username}&pageNo=${pageNumber}&pageSize=${pageSize}`
       );
       const data = await response.json();
 
@@ -456,7 +456,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       }
     });
     if(messageIds.length > 0) {
-      await fetch("http://13.68.177.51:8087/chatservice/api/change/status", {
+      await fetch("https://hcc.encipherhealth.com/chatservice/chatservice/api/change/status", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -508,7 +508,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       try {
         // Perform the necessary API call to add the user to the database
         const response = await fetch(
-          "http://13.68.177.51:8087/chatservice/api/uploadFile",
+          "https://hcc.encipherhealth.com/chatservice/chatservice/api/uploadFile",
           {
             method: "POST",
 
@@ -547,7 +547,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       // Perform the necessary API call to add the user to the database
 
       const response = await fetch(
-        "http://13.68.177.51:8087/chatservice/api/addUser",
+        "https://hcc.encipherhealth.com/chatservice/chatservice/api/addUser",
         {
           method: "POST",
           headers: {
