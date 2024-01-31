@@ -41,8 +41,6 @@ const IndividualReceiverReport = () => {
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [reportInfo, setReportInfo] = useState();
-  const [sortDir, setSortDir] = useState("");
-  const [sortfield, setSortfield] = useState("ASC");
   const [detailsContent, setDetailsContent] = useState(
     reportDatas?.data?.response?.content
   );
@@ -239,8 +237,7 @@ const IndividualReceiverReport = () => {
               {reportInfo?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
-                    exportToExcel;
-                    window.open(url);
+                    window.open(url?.path);
                   }}
                   className={styles.download}
                   disabled={

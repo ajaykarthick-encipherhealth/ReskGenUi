@@ -7,8 +7,13 @@ import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate } from "../../../../components/headerFilters/functions";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import {
+  dateFormate,
+  sortFunction,
+} from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
+import SpinnerDots from "../../../../components/spinner";
 
 function CoderReport({
   setModal,
@@ -23,6 +28,10 @@ function CoderReport({
   setSelectedRows,
   selectAll,
   setSelectAll,
+  sortOrder,
+  setSortOrder,
+  setSort,
+
 }) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -213,135 +222,161 @@ function CoderReport({
   };
   return (
     <div className={TableStyle.classContaineer}>
-      {reportListAll?.data?.length === 0 ? (
-        <Empty />
+      {/* {loading ? (
+        <SpinnerDots />
       ) : (
-        <table className={TableStyle.classTable}>
-          <thead className={TableStyle.classTTotalhead}>
-            <tr style={{ textAlign: "center" }}>
-              <>
-                <th></th>
-                <th>PATIENT ID</th>
-                <th>PATIENT NAME</th>
-
-                <th>COMPLETE DATE </th>
-                <th>COMMENTS </th>
-                <th>AUDITOR NAME </th>
-                <th>RAF SCORE </th>
-                <th>HCC </th>
-                <th>FLAG </th>
-                <th>AUDIT STATUS</th>
-                <th>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-around" }}
-                  >
-                    <input
-                      type="checkbox"
-                      onChange={handleHeaderCheckboxChange}
-                      style={{
-                        paddingTop: "10px",
-                        width: "20px",
-                        height: "20px",
-                        flexhrink: "0",
-                        borderRadius: "4px",
-                        backgroundColor: "pink",
+        <> */}
+          {reportListAll?.data?.length === 0 ? (
+            <Empty />
+          ) : (
+            <table className={TableStyle.classTable}>
+              <thead className={TableStyle.classTTotalhead}>
+                <tr style={{ textAlign: "center" }}>
+                  <>
+                    <th></th>
+                    <th>PATIENT ID</th>
+                    <th>PATIENT NAME</th>
+                    <th
+                    style={{cursor:"pointer"}}
+                      onClick={() => {
+                        sortFunction(
+                          sortOrder,
+                          setSortOrder,
+                          setSort,
+                          "processedDate"
+                        );
                       }}
-                      checked={selectAll}
-                    />
-                  </div>
-                </th>
-              </>
-            </tr>
-          </thead>
-
-          <tbody className={TableStyle.bodytable}>
-            {reportListAll?.data?.length > 0 &&
-              reportListAll?.data?.map((row, index) => (
-                <tr
-                  key={index}
-                  style={{ padding: " 22px !important", textAlign: "center" }}
-                >
-               
-                    <>
-                      <td className={TableStyle.firstTdBorder}></td>
-                      <td
+                    >
+                      COMPLETE DATE{" "}
+                      {sortOrder === "ASC" ? (
+                        <ArrowUpOutlined />
+                      ) : (
+                        <ArrowDownOutlined />
+                      )}{" "}
+                    </th>
+                    <th>COMMENTS </th>
+                    <th>AUDITOR NAME </th>
+                    <th>RAF SCORE </th>
+                    <th>HCC </th>
+                    <th>FLAG </th>
+                    <th>AUDIT STATUS</th>
+                    <th>
+                      <div
                         style={{
-                          borderTop: "0.2px solid #e1e1e1",
-                          borderBottom: "  0.2px solid #e1e1e1",
+                          display: "flex",
+                          justifyContent: "space-around",
                         }}
-                        className={TableStyle.childBorder}
                       >
-                        {row?.patientId ? row?.patientId : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.patientName ? row?.patientName : "---"}
-                      </td>
-
-                      <td className={TableStyle.childBorder}>
-                        {dateFormate(dayjs, row?.processedDate)}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        <div
-                          disabled={row?.comment ? false : true}
-                          onClick={() => {
-                            if (row?.comment) {
-                              setComments(row?.comment);
-                              setModal(!modal);
-                            }
-                          }}
-                        >
-                          {row?.comment
-                            ? SVGICON.comment
-                            : SVGICON.emptyComments}
-                        </div>
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.auditedBy ? row?.auditedBy : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.rafSum ? row?.rafSum : "000"}{" "}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.validDiseaseCount
-                          ? row?.validDiseaseCount
-                          : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.flag ? (
-                          getFlag(row?.flag)
-                        ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
-                        )}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {processstatusBodyTemplate(row)}{" "}
-                      </td>
-                      <td className={TableStyle.lastBorder}>
                         <input
                           type="checkbox"
-                          onChange={() => {
-                            handleRowCheckboxChange(row);
-                          }}
-                          checked={selectedRows?.data?.some(
-                            (selectedRow) =>
-                              selectedRow.patientId === row.patientId
-                          )}
+                          onChange={handleHeaderCheckboxChange}
                           style={{
+                            paddingTop: "10px",
                             width: "20px",
                             height: "20px",
                             flexhrink: "0",
                             borderRadius: "4px",
                             backgroundColor: "pink",
                           }}
+                          checked={selectAll}
                         />
-                      </td>
-                    </>
-                
+                      </div>
+                    </th>
+                  </>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      )}
+              </thead>
+
+              <tbody className={TableStyle.bodytable}>
+                {reportListAll?.data?.length > 0 &&
+                  reportListAll?.data?.map((row, index) => (
+                    <tr
+                      key={index}
+                      style={{
+                        padding: " 22px !important",
+                        textAlign: "center",
+                      }}
+                    >
+                      <>
+                        <td className={TableStyle.firstTdBorder}></td>
+                        <td
+                          style={{
+                            borderTop: "0.2px solid #e1e1e1",
+                            borderBottom: "  0.2px solid #e1e1e1",
+                          }}
+                          className={TableStyle.childBorder}
+                        >
+                          {row?.patientId ? row?.patientId : "---"}
+                        </td>
+                        <td className={TableStyle.childBorder}>
+                          {row?.patientName ? row?.patientName : "---"}
+                        </td>
+
+                        <td className={TableStyle.childBorder}>
+                          {dateFormate(dayjs, row?.processedDate)}
+                        </td>
+                        <td className={TableStyle.childBorder}>
+                          <div
+                            disabled={row?.comment ? false : true}
+                            onClick={() => {
+                              if (row?.comment) {
+                                setComments(row?.comment);
+                                setModal(!modal);
+                              }
+                            }}
+                          >
+                            {row?.comment
+                              ? SVGICON.comment
+                              : SVGICON.emptyComments}
+                          </div>
+                        </td>
+                        <td className={TableStyle.childBorder}>
+                          {row?.auditedBy ? row?.auditedBy : "---"}
+                        </td>
+                        <td className={TableStyle.childBorder}>
+                          {row?.rafSum ? row?.rafSum : "000"}{" "}
+                        </td>
+                        <td className={TableStyle.childBorder}>
+                          {row?.validDiseaseCount
+                            ? row?.validDiseaseCount
+                            : "000"}
+                        </td>
+                        <td className={TableStyle.childBorder}>
+                          {row?.flag ? (
+                            getFlag(row?.flag)
+                          ) : (
+                            <div style={{ marginLeft: "-10px" }}>---</div>
+                          )}
+                        </td>
+                        <td className={TableStyle.childBorder}>
+                          {processstatusBodyTemplate(row)}{" "}
+                        </td>
+                        <td className={TableStyle.lastBorder}>
+                          <input
+                            type="checkbox"
+                            onChange={() => {
+                              handleRowCheckboxChange(row);
+                            }}
+                            checked={selectedRows?.data?.some(
+                              (selectedRow) =>
+                                selectedRow.patientId === row.patientId
+                            )}
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              flexhrink: "0",
+                              borderRadius: "4px",
+                              backgroundColor: "pink",
+                            }}
+                          />
+                        </td>
+                      </>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
+        {/* </>
+      )} */}
       <div className="pagination-container">
         <Paginator
           first={paginationFirst}

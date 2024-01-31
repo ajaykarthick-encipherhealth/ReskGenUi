@@ -46,106 +46,117 @@ function ReceivedReport({
 
   return (
     <div className={TableStyle.classContaineer}>
-      {details?.content?.length===0 ? (
+      {loading ? (
         <SpinnerDots />
       ) : (
         <>
-          <table className={TableStyle.classTable}>
-            <thead className={TableStyle.classTTotalhead}>
-              <tr>
-                <th>REPORT ID</th>
-                <th>REPORT NAME</th>
-                <th>ACCESS TYPE</th>
-                <th>SENDER</th>
-                <th
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    sortFunction(sortOrder, setSortOrder,setSort,"receiveDate");
-                  }}
-                >
-                  DATE{" "}
-                  {sortOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {detailsContent?.length > 0 ? (
-                detailsContent?.map((row, index) => {
-                  const formattedDate = dateFormate(dayjs, row?.sendDate);
-
-                  return (
-                    <tr
-                      key={index}
-                      style={{ height: "40px" }}
-                      onClick={() => handleReceiverReport(row)}
+          {details?.content?.length === 0 ? (
+            <Empty />
+          ) : (
+            <>
+              <table className={TableStyle.classTable}>
+                <thead className={TableStyle.classTTotalhead}>
+                  <tr>
+                    <th>REPORT ID</th>
+                    <th>REPORT NAME</th>
+                    <th>ACCESS TYPE</th>
+                    <th>SENDER</th>
+                    <th
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        sortFunction(
+                          sortOrder,
+                          setSortOrder,
+                          setSort,
+                          "receiveDate"
+                        );
+                      }}
                     >
-                      <td
-                        style={{
-                          borderTop: "0.2px solid #e1e1e1",
-                          borderLeft: "0.2px solid #e1e1e1",
-                          borderBottom: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                      >
-                        {row.reportId}
-                      </td>
-                      <td
-                        style={{
-                          borderTop: "  0.2px solid #e1e1e1",
+                      DATE{" "}
+                      {sortOrder === "ASC" ? (
+                        <ArrowUpOutlined />
+                      ) : (
+                        <ArrowDownOutlined />
+                      )}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailsContent?.length > 0 ? (
+                    detailsContent?.map((row, index) => {
+                      const formattedDate = dateFormate(dayjs, row?.receiveDate);
 
-                          borderBottom: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                      >
-                        {row.reportName}
-                      </td>
-                      <td
-                        style={{
-                          borderTop: "  0.2px solid #e1e1e1",
+                      return (
+                        <tr
+                          key={index}
+                          style={{ height: "40px" }}
+                          onClick={() => handleReceiverReport(row)}
+                        >
+                          <td
+                            style={{
+                              borderTop: "0.2px solid #e1e1e1",
+                              borderLeft: "0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
+                            }}
+                            className={TableStyle.childBorder}
+                          >
+                            {row.reportId}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "  0.2px solid #e1e1e1",
 
-                          borderBottom: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                      >
-                        {row.role}
-                      </td>
-                      <td
-                        style={{
-                          borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
+                            }}
+                            className={TableStyle.childBorder}
+                          >
+                            {row.reportName}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "  0.2px solid #e1e1e1",
 
-                          borderBottom: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                      >
-                        {row.sender}
-                      </td>
-                      <td
-                        style={{
-                          borderTop: "  0.2px solid #e1e1e1",
+                              borderBottom: "  0.2px solid #e1e1e1",
+                            }}
+                            className={TableStyle.childBorder}
+                          >
+                            {row.role}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "  0.2px solid #e1e1e1",
 
-                          borderBottom: "  0.2px solid #e1e1e1",
-                          borderRight: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                      >
-                        {formattedDate}
+                              borderBottom: "  0.2px solid #e1e1e1",
+                            }}
+                            className={TableStyle.childBorder}
+                          >
+                            {row.sender}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "  0.2px solid #e1e1e1",
+
+                              borderBottom: "  0.2px solid #e1e1e1",
+                              borderRight: "  0.2px solid #e1e1e1",
+                            }}
+                            className={TableStyle.childBorder}
+                          >
+                            {formattedDate}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan={5}>
+                        <Empty />
                       </td>
                     </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={5}>
-                    <Empty />
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                  )}
+                </tbody>
+              </table>
+            </>
+          )}
         </>
       )}
       <div className="pagination-container">
