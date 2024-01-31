@@ -83,9 +83,9 @@ const IndividualReceiverReport = () => {
   };
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("reportId");
-    dispatch(getReceivedDetails(0, "", "", searchValue, sortfield, sortDir));
+    dispatch(getReceivedDetails(0, "", "", searchValue,sort));
     dispatch(getSelectedReportDetails(id));
-  }, [searchValue, sortfield, sortDir]);
+  }, [searchValue,sort]);
   useEffect(() => {
     if (url) {
       fetchData(url);
