@@ -13560,3 +13560,196 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
 }
+.custom_select_type > .ant-select-selector ,.custom_select_user > .ant-select-selector{
+  border-radius: 8px !important;
+  background: #FFF !important;  
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  border: none !important;  
+}
+
+
+
+/* START CHAT CSS */
+
+.chat-persons li:hover {
+  background-color: rgb(235, 232, 232);
+  cursor: pointer;
+}
+.search, .searchByMessage {
+  background-color: rgb(244, 244, 244);
+  padding: 16px 11px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  min-height: 1rem !important;
+}
+.chatMembers {
+width: 50%;
+height: 100%;
+overflow-y: auto;
+margin: 5px;
+}
+.searchByMessage {
+min-height: 1rem !important;
+}
+.card-body {
+  padding-top: 0 !important;}
+  .download-link {
+      padding-left: 10px;
+  }
+  .footer{
+      border-top: 1px solid lightgray;
+  }
+
+  .bubble-right {
+      position: relative;
+      border-radius: 5px 0 5px 5px;
+    }
+    
+    .bubble-right:after {
+      content: '';
+      position: absolute;
+      left: 100%;
+      top: 0;
+      border-top: 8px solid #3479FE;
+      border-right: 12px solid transparent;
+    }
+
+    .bubble-left {
+      position: relative;
+      border-radius: 0px 5px 5px 5px;
+    }
+
+    .bubble-left:before {
+      content: '';
+      position: absolute;
+      right: 100%;
+      top: 0;
+      border-top: 8px solid #c3c8d05c;
+      border-left: 12px solid transparent;
+    }
+
+    /* scrollbar.css */
+
+/* Default (light) theme */
+:root {
+--scrollbar-track: transparent;
+--scrollbar-thumb: rgb(155, 155, 155);
+--scrollbar-thumb-hover: grey;
+--scrollbar-width: 3px;
+}
+/* Default (light) theme */
+
+/* Firefox */
+* {
+scrollbar-width: thin; /* none | auto  */
+scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+/* Firefox */
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+width: var(--scrollbar-width); /* vertical scrollbar */
+height: var(--scrollbar-width); /* horizontal scrollbar */
+}
+
+
+*::-webkit-scrollbar:hover {
+width: var(--scrollbar-width); /* vertical scrollbar */
+height: var(--scrollbar-width); /* horizontal scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+background: var(--scrollbar-thumb);
+border-radius: var(--scrollbar-width);
+border: calc(var(--scrollbar-width) / 4) solid var(--page-background);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+background: var(--scrollbar-thumb-hover);
+}
+/* Chrome, Edge, Safari */
+
+.customScroll {
+  height: 0px;
+  overflow-y: hidden;
+}
+.customScroll:hover {
+  overflow-y: auto;
+}
+
+.custom-send {
+  position: relative;
+  width: 100%;
+}
+.custom-send-input {
+  width: 100%;
+  padding-right: 100px !important; 
+  box-sizing: border-box;
+}
+.custom-send-btn {
+  position: absolute;
+  right: 3px; 
+  top: 3px;
+  bottom: 3px;
+  line-height: 1 !important;
+  z-index: 4;
+}
+.bg-secondary-chat{
+  background: #a7aeb9 !important;
+}
+.chat-box {
+  background: #efefef;
+  position: fixed;
+  right: 30px;
+  bottom: -5px;
+  width: 500px;
+  max-height: 75vh;
+  border-radius: 6px;
+  box-shadow: 0px 5px 35px 9px #ccc;
+  margin-bottom: 100px;
+}
+.chat-box-toggle {
+  float:right;
+  margin-right:15px;
+  cursor:pointer;
+}
+.header-progress{
+  margin-right: 10px;
+}
+.bg-gradient-sender{
+  background: #c3c8d05c !important;
+  color: #000 !important;
+}
+.bg-success-chat ,.bg-info-sender{
+  background: #3479FE !important;
+}
+.chatheaderIcon{
+  margin-right: 3px;
+}
+.chat-tab .nav-item .nav-link {
+  font-size: 16px !important;
+  font-weight: 600;
+}
+
+.chat-tab .nav-item .nav-link {
+  font-size: 1rem;
+  margin-right: 1.875rem;
+  transition: all 0.5s ease-in-out;
+  border: none;
+  border-bottom: 0.0125rem solid transparent;
+  color: #000;
+}
+
+
+.chat-tab .nav-item .nav-link.active {
+  border: 0;
+  background: transparent;
+  background: transparent;
+  border-bottom: 2px solid #3479FE;
+  color: #3479FE;
+}
