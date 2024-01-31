@@ -1,6 +1,7 @@
 import { Avatar } from "antd";
 import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
+import moment from "moment";
 // for search
 export const searchFunction = (
   e,
@@ -99,10 +100,9 @@ export const dateFormate = (dayjs, date) => {
 };
 
 //sorting
-export const sortFunction = (sortDir,setSortDir, setSortfield,field) => {
-    setSortDir(sortDir==='ASC'?'DESC':'ASC')
-    setSortfield(field)
-  
+export const sortFunction = (sortDir, setSortDir, setSort, field) => {
+  setSortDir(sortDir === "ASC" ? "DESC" : "ASC");
+  setSort({ sortDir: sortDir, sortField: field });
 };
 export const priorityOptions = [
   {
@@ -208,7 +208,7 @@ export const generateOptionsList = (items) => {
   }
 };
 
-export const getBackgroundColor=(randomNumber)=> {
+export const getBackgroundColor = (randomNumber) => {
   switch (randomNumber) {
     case 1:
       return "#F28585";
@@ -225,23 +225,30 @@ export const getBackgroundColor=(randomNumber)=> {
     default:
       return "#9BB8CD";
   }
-}
+};
 
-export const renderUserPrfoile = (firstName, lastName, imageUrl,field,width,height) => {
+export const renderUserPrfoile = (
+  firstName,
+  lastName,
+  imageUrl,
+  field,
+  width,
+  height
+) => {
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
-  const hash = firstNameInitial.charCodeAt(0) % 6 + 1;
+  const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
   const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
 
   if (!imageUrl) {
     var profileAvatar = (
       <Avatar
         style={{
-          backgroundColor:backgroundColor,
+          backgroundColor: backgroundColor,
           color: "white",
           cursor: "pointer",
-          width: width?width:"47px",
-          height:height?height: "47px",
+          width: width ? width : "47px",
+          height: height ? height : "47px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -260,26 +267,31 @@ export const renderUserPrfoile = (firstName, lastName, imageUrl,field,width,heig
         alt="avatar"
         // className="rounded-4 shadow-4"
         style={{
-          width: width?width:"50px",
-          height:height?height: "50px",
-          borderRadius:"50%"
+          width: width ? width : "50px",
+          height: height ? height : "50px",
+          borderRadius: "50%",
         }}
       />
     );
     return profileAvatar;
   }
 };
-export const renderUserPrfoileAvatar = (firstName, lastName, imageUrl,field) => {
+export const renderUserPrfoileAvatar = (
+  firstName,
+  lastName,
+  imageUrl,
+  field
+) => {
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
-  const hash = firstNameInitial.charCodeAt(0) % 6 + 1;
+  const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
   const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
 
   if (!imageUrl) {
     var profileAvatar = (
       <Avatar
         style={{
-          backgroundColor:backgroundColor,
+          backgroundColor: backgroundColor,
           color: "white",
           cursor: "pointer",
           width: "30px",
@@ -304,10 +316,22 @@ export const renderUserPrfoileAvatar = (firstName, lastName, imageUrl,field) => 
         style={{
           width: "30px",
           height: "30px",
-          borderRadius:"50%"
+          borderRadius: "50%",
         }}
       />
     );
     return profileAvatar;
   }
+};
+
+export const getSelectedDaysCount = (DateRanges) => {
+  const startDate = new Date(
+    moment(DateRanges?.startDate).format("YYYY-MM-DD")
+  );
+  const endDate = new Date(moment(DateRanges?.endDate).format("YYYY-MM-DD"));
+
+  const differenceMs = Math.abs(endDate - startDate);
+
+  const differenceDays = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+  return differenceDays;
 };

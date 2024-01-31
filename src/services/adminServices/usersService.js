@@ -10,12 +10,13 @@ export const UsersList = async ({
   endDate = "",
   status = "",
   role = "",
+  sort
 }) => {
   const token = localStorage.getItem("token");
   const selectedStatus = status === "ALL" ? "" : status;
   try {
     const response = await axios.get(
-      ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}`,
+      ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
