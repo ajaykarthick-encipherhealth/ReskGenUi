@@ -65,7 +65,7 @@ const L2AllocateModal = ({
     var resoureUrl = `dbservice/patient/admin/assignPatients/l2audit`;
     const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
       userId: selectedUser?.userName,
-      dueDate: `${allocateDate + "T23:59:59.999Z"}`,
+      dueDate: `${allocateDate + "T23:00:00.999Z"}`,
       patientIds: selectedRowsId.map((item) => item.id),
     });
     if (response) {

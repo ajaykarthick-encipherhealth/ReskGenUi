@@ -272,8 +272,8 @@ const Header = () => {
     }))
     .filter(
       (info) =>
-        info.key.toLowerCase() !== userRole.toLowerCase() &&
-        info.label.toLowerCase() !== userRole.toLowerCase()
+        info.key.toLowerCase() !== userRole?.toLowerCase() &&
+        info.label.toLowerCase() !== userRole?.toLowerCase()
     );
 
   const onClick = ({ key }) => {

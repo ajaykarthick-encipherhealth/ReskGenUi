@@ -15,10 +15,8 @@ export const PatientsList = async (
 ) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
- 
-  const filteredStatus =
-    status === undefined
-      ? "":status;
+
+  const filteredStatus = status === undefined ? "" : status;
   try {
     const response = await axios.get(
       `  ${
@@ -40,28 +38,38 @@ export const PatientsList = async (
   }
 };
 
-export const TrackingList = async (
-  pageNo,
-  dStart = "",
-  dEnd = "",
-  search = "",
-  status,
-  pStart="",
-  pEnd="",
-  selAllocatedTo,
-  pageSize = 15
-) => {
+export const TrackingList = async (datas) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
+  console.log(datas, "datas");
+  const filteredStatus = datas?.status === undefined ? "" : datas?.status;
+  const filteredDStart =
+    datas?.dueDateStart === undefined ? "" : datas?.dueDateStart;
+  const filteredDEnd = datas?.dueDateEnd === undefined ? "" : datas?.dueDateEnd;
+  const filteredPStart =
+    datas?.processedStart === undefined ? "" : datas?.processedStart;
+  const filteredPEnd =
+    datas?.processedEnd === undefined ? "" : datas?.processedEnd;
+  const filteredSearch =
+    datas?.searchTextValue === undefined ? "" : datas?.searchTextValue;
+  const filteredSAllocated =
+    datas?.allocatedStartDate === undefined ? "" : datas?.allocatedStartDate;
+  const filteredEAllocatedOn =
+    datas?.auditedEndDate === undefined ? "" : datas?.allocatedEndDate;
+  const filteredSAuditedStart =
+    datas?.auditedStartDate === undefined ? "" : datas?.auditedStartDate;
+  const filteredEAuditedEnd =
+    datas?.auditedEndDate === undefined ? "" : datas?.auditedEndDate;
 
-  const filteredStatus =
-  status === undefined
-      ? "": status
   try {
     const response = await axios.get(
-      `  ${ENDPOINTS?.apiEndoint}dbservice/patient/admin/filter?userId=${uId}&page=${pageNo}&size=${pageSize}&computing=${filteredStatus}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${search}&patientAllocated=${
-          selAllocatedTo === "All" ? "" : selAllocatedTo
-        }`,
+      `  ${
+        ENDPOINTS?.apiEndoint
+      }dbservice/patient/admin/filter?userId=${uId}&page=${
+        datas?.pageNo
+      }&size=15&computing=${filteredStatus}&dueDateStart=${filteredDStart}&dueDateEnd=${filteredDEnd}&processedStart=${filteredPStart}&processedEnd=${filteredPEnd}&searchString=${filteredSearch}&patientAllocated=${
+        datas?.selAllocatedTo === "All" ? "" : datas?.selAllocatedTo
+      }&auditedStartDate=${filteredSAllocated}&auditedStartDate=${filteredEAllocatedOn}&allocatedOnStart=${filteredSAuditedStart}&allocatedOnEnd=${filteredEAuditedEnd}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

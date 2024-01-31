@@ -7,10 +7,13 @@ import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
+
 import {
   dateFormate,
   sortFunction,
+  renderUserPrfoileAvatar
 } from "../../../../components/headerFilters/functions";
+
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
@@ -318,75 +321,29 @@ function TeamReport({
                       {row?.patientName ? row?.patientName : "---"}
                     </td>
                     <td
-                      className={TableStyle.childBorder}
-                      style={{ textAlign: "left" }}
-                    >
-                      {row.patientAllocated ? (
-                        <Tooltip title={row.patientAllocated}>
-                          {row.patientAllocated ===
-                          "praveen01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={praveen01}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "5px",
-                              }}
-                            />
-                          ) : row.patientAllocated ===
-                            "ranjith01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={dummyProfileImageUrl}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          ) : row.patientAllocated ===
-                            "varsha01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={varsha01}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          ) : (
-                            <img
-                              src={nullImg}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          )}
-                          {row.patientAllocated ? (
-                            <>
-                              {row.patientAllocated
-                                .split("@")[0]
-                                .charAt(0)
-                                .toUpperCase() +
-                                row.patientAllocated.split("@")[0].slice(1)}
-                            </>
-                          ) : (
-                            "---"
-                          )}
-                        </Tooltip>
-                      ) : (
-                        "---"
-                      )}
-                    </td>
+                  className={TableStyle.childBorder}
+                  style={{ textAlign: "center" }}
+                >
+                  {row.patientAllocatedFirstName || row.patientAllocatedLastName || row?.patientAllocatedProfileImage ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          row.patientAllocatedFirstName,
+                          row.patientAllocatedLastName,
+                          row?.patientAllocatedProfileImage,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {row.patientAllocatedFirstName} {row.patientAllocatedLastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
+                </td>
 
                     <td className={TableStyle.childBorder}>
                       {dateFormate(dayjs, row?.processedDate)}
