@@ -44,6 +44,8 @@ const IndividualReceiverReport = () => {
   const [detailsContent, setDetailsContent] = useState(
     reportDatas?.data?.response?.content
   );
+  const[sortDir,setSortDir]=useState("ASC")
+  const[sortfield,setSortfield]=useState("")
 
   const fetchData = async (url) => {
     try {
@@ -83,9 +85,9 @@ const IndividualReceiverReport = () => {
   };
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("reportId");
-    dispatch(getReceivedDetails(0, "", "", searchValue,sort));
+    dispatch(getReceivedDetails(0, "", "", searchValue, sortfield, sortDir));
     dispatch(getSelectedReportDetails(id));
-  }, [searchValue,sort]);
+  }, [searchValue, sortfield, sortDir]);
   useEffect(() => {
     if (url) {
       fetchData(url);
