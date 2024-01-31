@@ -39,7 +39,7 @@ const HeadTitle = ({
     }
   };
 
-  const last30thDate = currentDate.subtract(31, "day");
+  const last30thDate = currentDate.subtract(30, "day");
   const lastDateWithTime = currentDate.endOf("day").toISOString();
 
   return (
@@ -108,7 +108,7 @@ const HeadTitle = ({
             suffixIcon={false}
             className={styles.datepicker}
           />
-          <span
+          <div
             style={{
               cursor: "pointer",
               position: "relative",
@@ -125,8 +125,10 @@ const HeadTitle = ({
               setSelectedDates([]);
             }}
           >
-            <Button>Clear</Button>
-          </span>
+            <Button disabled={selectedDates?.length === 0 ? true : false}>
+              Clear
+            </Button>
+          </div>
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
       </Modal>
