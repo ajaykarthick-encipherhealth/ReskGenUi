@@ -120,6 +120,7 @@ const Details = ({}) => {
   const [actionItems, setActionItems] = useState([]);
   const [actionItems2, setActionItems2] = useState([]);
   const [actionItems3, setActionItems3] = useState([]);
+  const [adminActionItems, setAdminActionItems] = useState([]);
   const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
   const [userDetails, setUserDetails] = useState("");
   const [currentTime, setCurrentTime] = useState("");
@@ -144,6 +145,7 @@ const Details = ({}) => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
+  const [allocateClicked, setAllocateClicked] = useState(false);
 
   const flagPostList = [
     {
@@ -486,10 +488,32 @@ const Details = ({}) => {
         </Menu.Item>
       </Menu>
     );
+    const menu4 = (
+      <Menu>
+          <Menu.Item key="4" onClick={() => {allocatePatient()}}>
+            <div className="patient-status">
+              <span className={`badge processed-text`}>ALLOCATE</span>
+            </div>
+          </Menu.Item>
+        <Menu.Item key="5" onClick={() => handleActionClick("ADD RADIOLOGY")}>
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>
+              + ADD RADIOLOGY
+            </span>
+          </div>
+        </Menu.Item>
+        <Menu.Item key="6" onClick={() => handleActionClick("ADD LAB")}>
+          <div className="patient-status">
+            <span className={`badge processing-text`}>+ ADD LAB</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
 
     setActionItems(menu);
     setActionItems2(menu2);
     setActionItems3(menu3);
+    setAdminActionItems(menu4)
   };
 
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
@@ -1888,7 +1912,7 @@ const Details = ({}) => {
                       <div className="col-xl-1 col-sm-12">
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
-                            <div
+                            {/* <div
                               className="patient-status"
                               onClick={() => {
                                 allocatePatient();
@@ -1899,7 +1923,15 @@ const Details = ({}) => {
                               >
                                 ALLOCATE
                               </span>
-                            </div>
+                            </div> */}
+                            <Dropdown.Button
+                                type="primary"
+                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                                icon={<DownOutlined />}
+                                overlay={adminActionItems}
+                              >
+                                ALLOCATE
+                              </Dropdown.Button>
                           </div>
                         ) : userRole == "l2auditor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
@@ -3501,6 +3533,7 @@ const Details = ({}) => {
         open={allocateModal}
         setOpen={setAllocateModal}
         selectedRowsId={selectedRowsId}
+        setAllocateClicked={setAllocateClicked}
         setSelectedRowsId={setSelectedRowsId}
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
