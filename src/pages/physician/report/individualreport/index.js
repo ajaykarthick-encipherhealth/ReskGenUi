@@ -93,6 +93,7 @@ const IndividualReceiverReport = () => {
       fetchData(url);
     }
   }, [url]);
+
   useEffect(() => {
     if (reportDatas?.data) {
       setDetailsContent(reportDatas?.data?.response?.content);
@@ -239,8 +240,7 @@ const IndividualReceiverReport = () => {
               {reportInfo?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
-                    exportToExcel;
-                    window.open(url);
+                    window.open(url?.path);
                   }}
                   className={styles.download}
                   disabled={
