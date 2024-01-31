@@ -4493,9 +4493,7 @@ const Hcc = ({ patientHccResult }) => {
                                       </div>
 
                                       {data.defaultPosition == "VALID" ? (
-                                        <span
-                                          className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
-                                        ></span>
+                                       null
                                       ) : data.defaultPosition == "INVALID" ? (
                                         <span
                                           className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
