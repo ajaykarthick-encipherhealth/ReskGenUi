@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import axios from "../../../utility/axiosConfig";
@@ -7,35 +6,26 @@ import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { DatePicker, Empty } from "antd";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import visitStyles from "../../../styles/visitdata.module.css";
-import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
-import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
-import { getPatients } from "../../../store/actions/adminAction/patientsActions";
-import FileUploading from "../file-processing/FileUploading";
-import Addpatients from "../file-processing/Addpatiens";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
 import AllocateModal from "./allocate";
 import L2AllocateModal from "./l2allocate";
-import LoadingSpinner from "../../../components/spinner";
 import reportStyles from "../../physician/report/report.module.css";
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
 import SpinnerDots from "../../../components/spinner";
-import L2AllocatedAdminList from "./table/l2AuditedTable";
 import TableStyle from "../../../components/table/table.module.css";
 import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
+import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
+
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -59,7 +49,6 @@ export default function Patient() {
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
-  const [totalElementsUser, setTotalElementsUser] = useState(10);
   const [totalElementsPatient, setTotalElementsPatient] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -68,13 +57,13 @@ export default function Patient() {
   const [isPatientList, setIsPatientList] = useState(false);
   const [l2patinetListAll, setL2PatinetListAll] = useState([]);
   const [l2selectUser, setL2selectUser] = useState(null);
-  const [l2patinetLisSelected, setl2patinetLisSelected] = useState([]);
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
   useEffect(() => {
-    if (typeof pageNo == "number") {
-      getAllList(pageNo, pageSize, "", "", true, 2);
+    if (typeof pageNo == "number" && activeTab === 1) {
+      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     }
-  }, [pageNo, pageSize]);
+  }, [pageNo, pageSize, sort, activeTab]);
 
   const getAllList = async (
     pageNo = 0,
@@ -83,9 +72,11 @@ export default function Patient() {
     endDate = "",
     allocate = true,
     status = 2,
-    search = ""
+    search = "",
+    sort
   ) => {
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=uavis01@encipherhealth.onmicrosoft.com&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}`;
+    const uId = localStorage.getItem("userId");
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -111,8 +102,9 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
-  const getAllCheckList = async () => {
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${totalElements}&userId=uavis01@encipherhealth.onmicrosoft.com&computationStart=&computationEnd=&isAllocation=true&status=2`;
+  const getAllCheckList = async (sort) => {
+    const uId = localStorage.getItem("userId");
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${totalElements}&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var result = response?.data?.response?.content;
@@ -128,18 +120,18 @@ export default function Patient() {
   useEffect(() => {
     if (selectAllChecked) {
       if (isPatientList == true) {
-        getAllCheckListL2();
+        getAllCheckListL2(sort);
       } else {
-        getAllCheckList();
+        getAllCheckList(sort);
       }
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked]);
+  }, [selectAllChecked, sort, isPatientList]);
 
   const handleReceivedDatePicker = (date, dateString) => {
     if (dateString[0] == "") {
-      getAllList(pageNo, pageSize, "", "", true, 2);
+      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     } else if (dateString.length > 1) {
       const formattedDates = dateString?.map((date, index) => {
         const formattedDate =
@@ -155,7 +147,9 @@ export default function Patient() {
           formattedDates[0],
           formattedDates[1],
           true,
-          2
+          2,
+          "",
+          sort
         );
       }
     }
@@ -169,7 +163,8 @@ export default function Patient() {
       dateRange ? dateRange[1] : "",
       true,
       2,
-      search
+      search,
+      sort
     );
   };
 
@@ -186,7 +181,7 @@ export default function Patient() {
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList(l2selectUser, e.page);
+    getL2PatientList(l2selectUser, e.page, sort);
     setTableLoading(true);
   };
 
@@ -194,8 +189,10 @@ export default function Patient() {
     setValidated(false);
     setAddPatientId(false);
     if (activeTab == 2) {
+      setSort({ sortDir: "", sortField: "" });
       setAllocateModalL2(true);
     } else {
+      setSort({ sortDir: "", sortField: "" });
       setAllocateModal(true);
     }
   };
@@ -213,7 +210,7 @@ export default function Patient() {
     } else {
       setIsPatientList(false);
       setPageNo(0);
-      getAllList(0, pageSize, "", "", true, 2);
+      getAllList(0, pageSize, "", "", true, 2, "", sort);
     }
   };
   const getAuditL2List = async (pageNo) => {
@@ -257,7 +254,7 @@ export default function Patient() {
         style={{ height: "35px" }}
         key={index}
         onClick={() => {
-          getL2PatientList(data, pageNoL2Patient);
+          getL2PatientList(data, pageNoL2Patient, sort);
         }}
       >
         <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
@@ -266,12 +263,14 @@ export default function Patient() {
               {" "}
               <span style={{ marginRight: "10px" }}>
                 {" "}
-                {renderUserPrfoileAvatar(
-                  data.firstName,
-                  data.lastName,
-                  data?.profileImageUrl,
-                  "header"
-                )}
+               {renderUserPrfoile(
+            data?.firstName,
+            data?.lastName,
+            data?.profileImageUrl,
+            null,
+            "30px",
+            "30px"
+          )}
               </span>
               <span>
                 {data.firstName} {data.lastName}
@@ -296,18 +295,19 @@ export default function Patient() {
         <td className={TableStyle.childBorder}>
           {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
         </td>
+
       </tr>
     ));
   };
 
-  const getL2PatientList = async (data, pageNoL2Patient) => {
+  const getL2PatientList = async (data, pageNoL2Patient, sort) => {
     setIsLoading(true);
     var dataMap = {
-      firstName: data.name,
-      userName: data.userName,
+      firstName: data?.name,
+      userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${data.userName}&page=${pageNoL2Patient}&size=${pageSize}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir?sort?.sortDir:"DESC"}&sortfield=${sort?.sortField?sort?.sortField:"dueDate"}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -338,11 +338,10 @@ export default function Patient() {
         setIsLoading(false);
       }
     }
-    // dispatch(getL2PatientListAll(value));
   };
 
-  const getAllCheckListL2 = async (value) => {
-    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}`;
+  const getAllCheckListL2 = async (sort) => {
+    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -354,22 +353,22 @@ export default function Patient() {
       setSelectedRowsId(data);
       setHeaderCheckValidation(data);
     }
-    // dispatch(getL2PatientListAll(value));
   };
   useEffect(() => {
-    if (allocateClicked) {
-      setIsLoading(true);
-      if (!isPatientList) {
-        getAllList(pageNo, pageSize, "", "", true, 2);
-      } else {
-        getL2PatientList(l2selectUser, pageNoL2Patient);
-      }
-      setAllocateClicked(false);
-      setSelectedRowsId([]);
-      setSelectAllChecked(false);
-      setSelectAllCheckedL2(false);
+    setIsLoading(true);
+    if (!isPatientList) {
+      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
+      setIsLoading(false);
+    } else {
+      getL2PatientList(l2selectUser, pageNoL2Patient, sort);
+      setIsLoading(false);
     }
-  }, [allocateClicked]);
+    setAllocateClicked(false);
+    setSelectedRowsId([]);
+    setSelectAllChecked(false);
+    setSelectAllCheckedL2(false);
+  }, [isPatientList, pageNoL2Patient, sort]);
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -456,6 +455,8 @@ export default function Patient() {
                                   as="li"
                                   className="nav-item"
                                   onClick={() => {
+                                    setSort({ sortDir: "", sortField: "" });
+
                                     selectTabClick(1);
                                   }}
                                 >
@@ -470,6 +471,8 @@ export default function Patient() {
                                   as="li"
                                   className="nav-item"
                                   onClick={() => {
+                                    setSort({ sortDir: "", sortField: "" });
+
                                     selectTabClick(2);
                                   }}
                                 >
@@ -497,6 +500,7 @@ export default function Patient() {
                                         selectedRowsId={selectedRowsId}
                                         setSelectedRowsId={setSelectedRowsId}
                                         selectedChart={headerCheckValidation}
+                                        setSort={setSort}
                                       />
                                       <div>
                                         <div className="pagination-container">
@@ -590,6 +594,7 @@ export default function Patient() {
                                               selectedChart={
                                                 headerCheckValidation
                                               }
+                                              setSort={setSort}
                                             />
                                             <div>
                                               <div>

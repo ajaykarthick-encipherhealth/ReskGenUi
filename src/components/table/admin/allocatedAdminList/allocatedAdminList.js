@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
+import { sortFunction } from "../../../headerFilters/functions";
 
 function AllocatedAdminList({
   patinetListAll,
@@ -15,19 +16,11 @@ function AllocatedAdminList({
   setSelectedRowsId,
   selectedRowsId,
   selectedChart,
+  setSort,
 }) {
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [sortDueOrder, setSortDueOrder] = useState("asc");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
-  const [detailsContent, setDetailsContent] = useState();
-
   const dispatch = useDispatch();
-  const navigate = useRouter();
-
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: null,
-  });
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
 
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
@@ -47,58 +40,8 @@ function AllocatedAdminList({
     setSelectedRows(updatedRows);
   };
 
-  const requestSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data.computing === 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed. Please wait.",
-      });
-    }
-  };
-
-  const sortTableByDate = (value) => {
-    const sortedContent = [...detailsContent];
-    if (value === "dueDate") {
-      if (sortDueOrder === "asc") {
-        sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
-        setSortDueOrder("desc");
-      } else {
-        sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
-        setSortDueOrder("asc");
-      }
-    }
-    if (value === "completeDate") {
-      if (sortCompleteOrder === "asc") {
-        sortedContent.sort((a, b) =>
-          dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate))
-        );
-        setSortCompleteOrder("desc");
-      } else {
-        sortedContent.sort((a, b) =>
-          dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate))
-        );
-        setSortCompleteOrder("asc");
-      }
-    }
-    setDetailsContent(sortedContent);
-  };
-
   const renderRows = () => {
-    return detailsContent?.map((data, index) => (
+    return patinetListAll?.map((data, index) => (
       <tr
         style={{ height: "35px" }}
         key={index}
@@ -150,10 +93,6 @@ function AllocatedAdminList({
     ));
   };
 
-  useEffect(() => {
-    setDetailsContent(patinetListAll);
-  }, [patinetListAll]);
-
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -164,22 +103,23 @@ function AllocatedAdminList({
 
             <th
               onClick={() => {
-                requestSort("lastModifiedDate");
-                sortTableByDate("completeDate");
+                sortFunction(
+                  sortCompleteOrder,
+                  setSortCompleteOrder,
+                  setSort,
+                  "computedDate"
+                );
               }}
             >
               COMPUTED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "asc" ? (
+                {sortCompleteOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
               </span>
             </th>
-
-            {/* <th>STATUS</th> */}
-            {/* <th>Upload</th> */}
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <input
@@ -204,7 +144,7 @@ function AllocatedAdminList({
         </thead>
 
         <tbody>
-          {detailsContent?.length <= 0 ? (
+          {patinetListAll?.length <= 0 ? (
             <tr>
               <td colSpan="9">
                 <Empty />
@@ -217,8 +157,7 @@ function AllocatedAdminList({
       </table>
       <div></div>
     </div>
-  ); // const updatedRows = selectAll ? [] : reportListAll;
-  // setSelectedRows(updatedRows);;
+  );
 }
 
 export default AllocatedAdminList;

@@ -131,7 +131,7 @@ const UserQueue = ({ userList, setSort }) => {
                         <>
                           {renderUserPrfoile(
                             data?.allocatedByFirstName,
-                            data?.allocatedBylastName,
+                            data?.allocatedByLastName,
                             data?.allocatedByProfileImage
                           )}
                           {data.allocatedBy ? (
