@@ -75,6 +75,8 @@ export default function Patient() {
   const [defaultEndDate, setDefaultEndDate] = useState(
     dayjs(dayDateFormated).format("MM-DD-YYYY")
   );
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+
 
   useEffect(() => {
     setDefaultStartDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
@@ -95,9 +97,10 @@ export default function Patient() {
       dueDateStart,
       dueDateEnd,
       processedStart,
-      processedEnd
+      processedEnd,
+      sort
     );
-  }, [filteratedDashboardData]);
+  }, [filteratedDashboardData,sort]);
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -119,6 +122,9 @@ export default function Patient() {
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
           createdAt: res.createdAt,
+          allocatedByFirstName:res.allocatedByFirstName,
+          allocatedByLastName:res.allocatedByLastName,
+          allocatedByProfileImage:res.allocatedByProfileImage
         });
       });
       var newArray = [];
@@ -138,9 +144,9 @@ export default function Patient() {
     pStart,
     pEnd
   ) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     var uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}`;
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}&sortField=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
     dispatch(getpatientsListFilter(resoureUrl));
   };
 
@@ -430,6 +436,8 @@ const onPageChange = (e) => {
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
+                              sort={sort}
+                              setSort={setSort}
                             />
                             <div>
                               <div className="pagination-container">

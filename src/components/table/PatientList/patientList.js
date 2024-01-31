@@ -24,7 +24,11 @@ import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { Paginator } from "primereact/paginator";
 import SpinnerDots from "../../spinner";
-import { priorityOptions } from "../../headerFilters/functions";
+import {
+  priorityOptions,
+  sortFunction,
+  renderUserPrfoile,
+} from "../../headerFilters/functions";
 
 const { Option } = AntSelect;
 
@@ -36,14 +40,15 @@ function PatientTable({
   paginationFirst,
   totalElements,
   onPageChange,
+  setSort,
 }) {
-  const [sortDueOrder, setSortDueOrder] = useState("asc");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
+  const [sortDueOrder, setSortDueOrder] = useState("ASC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
+  const [sortAllocateOrder, setSortAllocateOrder] = useState("ASC");
 
   const dispatch = useDispatch();
   const navigate = useRouter();
-
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -115,39 +120,13 @@ function PatientTable({
     <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
   );
 
-  const sortTableByDate = (value) => {
-    const sortedContent = [...detailsContent];
-    if (value === "dueDate") {
-      if (sortDueOrder === "asc") {
-        sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
-        setSortDueOrder("desc");
-      } else {
-        sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
-        setSortDueOrder("asc");
-      }
-    }
-    if (value === "completeDate") {
-      if (sortCompleteOrder === "asc") {
-        sortedContent.sort((a, b) =>
-          dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate))
-        );
-        setSortCompleteOrder("desc");
-      } else {
-        sortedContent.sort((a, b) =>
-          dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate))
-        );
-        setSortCompleteOrder("asc");
-      }
-    }
-    setDetailsContent(sortedContent);
-  };
   const dummyProfileImageUrl =
     "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
   const nullImg =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
-     <Empty/>
+      <Empty />
     ) : (
       patinetListAll?.map((data, index) => (
         <tr key={index}>
@@ -174,45 +153,31 @@ function PatientTable({
               : "---"}
           </td>
           <td className={TableStyle.childBorder}>
-            {data.allocatedBy ?  <Tooltip title={data.allocatedBy }>
-              {/* <Avatar
-              style={{
-                backgroundColor: "#fde3cf",
-                color: "#f56a00",
-                cursor: "pointer",
-              }}
-            >
-              {data.allocatedBy
-                ? data.allocatedBy.slice(0, 2).toUpperCase()
-                : "N"}
-            </Avatar> */}
-              {data.allocatedBy ? (
-                <img
-                  src={dummyProfileImageUrl}
-                  alt="User Avatar"
-                  width={30}
-                  height={30}
-                  style={{ borderRadius: "50%", marginRight: "5px" }}
-                />
-              ) : (
-                <img
-                  src={nullImg}
-                  alt="User Avatar"
-                  width={30}
-                  height={30}
-                  style={{ borderRadius: "50%", marginRight: "10px" }}
-                />
-              )}
+            <div>
               {data.allocatedBy ? (
                 <>
-                  {data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +
-                    data.allocatedBy.split("@")[0].slice(1)}
+                  {renderUserPrfoile(
+                    data?.allocatedByFirstName,
+                    data?.allocatedBylastName,
+                    data?.allocatedByProfileImage,
+                    null,
+                    "30px",
+                    "30px"
+                  )}
+                  {data.allocatedBy ? (
+                    <>
+                      {data?.allocatedByFirstName +
+                        " " +
+                        data?.allocatedByLastName}
+                    </>
+                  ) : (
+                    "---"
+                  )}
                 </>
               ) : (
-               "---"
+                "---"
               )}
-            </Tooltip> :"---"}
-           
+            </div>
           </td>
           <td className={TableStyle.childBorder}>
             <AntSelect
@@ -239,7 +204,6 @@ function PatientTable({
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {statusBodyTemplate(data)}
           </td>
-          {/* <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td> */}
         </tr>
       ))
     );
@@ -251,16 +215,19 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th>ALLOCATED DATE</th>
             <th
               onClick={() => {
-                requestSort("dueDate");
-                sortTableByDate("dueDate");
+                sortFunction(
+                  sortAllocateOrder,
+                  setSortAllocateOrder,
+                  setSort,
+                  "allocatedOn"
+                );
               }}
             >
-              DUE DATE
+              ALLOCATED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder === "asc" ? (
+                {sortAllocateOrder !== "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -269,13 +236,31 @@ function PatientTable({
             </th>
             <th
               onClick={() => {
-                requestSort("lastModifiedDate");
-                sortTableByDate("completeDate");
+                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
+              }}
+            >
+              DUE DATE
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {sortDueOrder !== "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+            <th
+              onClick={() => {
+                sortFunction(
+                  sortCompleteOrder,
+                  setSortCompleteOrder,
+                  setSort,
+                  "processedDate"
+                );
               }}
             >
               COMPLETED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "asc" ? (
+                {sortCompleteOrder !== "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -286,7 +271,6 @@ function PatientTable({
             <th>ALLOCATED BY</th>
             <th>PRIORITY</th>
             <th>STATUS</th>
-            {/* <th>Action</th> */}
           </tr>
         </thead>
 
