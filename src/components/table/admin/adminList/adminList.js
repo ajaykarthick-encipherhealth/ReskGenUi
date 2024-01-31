@@ -8,6 +8,7 @@ import EditButton from "../../../../images/adminUsers/EditButton";
 import {
   dateFormate,
   renderUserPrfoile,
+  renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 
@@ -96,9 +97,8 @@ const AdminList = ({ userList }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th className={TableStyle.rowStyle}>User Name</th>
+            <th>Name</th>
+            <th className={TableStyle.rowStyle}>MFA</th>
             <th className={TableStyle.rowStyle}>Email</th>
             <th>Role</th>
             <th>Date Created</th>
@@ -112,33 +112,37 @@ const AdminList = ({ userList }) => {
               <tr key={index} style={{ height: "35px" }}>
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "47px !important" }}
+                  style={{ textAlign: "left" }}
                 >
-                  <div style={{ display: "flex" }}>
-                    {renderUserPrfoile(
-                      item?.firstName,
-                      item?.lastBorder,
-                      item?.profileImageUrl,
-                      null,
-                      "30px",
-                      "30px"
-                    )}
-                    <span style={{ margin: "5px 0 0 5px" }}>
-                      {item?.firstName ? item?.firstName : "---"}
-                    </span>
-                  </div>
+                  {item.firstName || item.lastName || item?.profileImageUrl ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          item.firstName,
+                          item.lastName,
+                          item?.profileImageUrl,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {item.firstName} {item.lastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
                 </td>
+
                 <td
                   className={TableStyle.childBorder}
                   style={{ height: "40px !important" }}
                 >
-                  <span>{item?.lastName ? item?.lastName : "---"}</span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
-                >
-                  <span>{item?.userName ? item?.userName : "---"}</span>
+                  <span>
+                    {" "}
+                    {item?.mfaEnabled === false ? "Not Enabled" : "Enabled"}
+                  </span>
                 </td>
                 <td
                   className={TableStyle.childBorder}
