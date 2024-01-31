@@ -15,10 +15,28 @@ import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
 const WorkFlow = () => {
+  const currentDate = dayjs();
   const worlFlowData = useSelector((state) => state?.workFlow?.data);
+  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
+
+  const last30thDate = currentDate?.subtract(31, "day");
+  const lastDateWithTime = currentDate?.endOf("day");
+
+  const startDate = DateRanges
+    ? new Date(DateRanges?.startDate).toISOString()
+    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+  const endDate = DateRanges
+    ? new Date(DateRanges?.endDate).toISOString()
+    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+
+  const dates = {
+    startDate,
+    endDate,
+  };
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
@@ -60,7 +78,11 @@ const WorkFlow = () => {
   return (
     <div className={styles.card1}>
       <HeadTitle
-        header="Last 30 days work flow "
+        header={`Last ${
+          DateRanges?.startDate
+            ? getSelectedDaysCount(DateRanges)
+            : getSelectedDaysCount(dates) - 2
+        } days work flow `}
         icon={calender}
         handleOpen={handleOpen}
         openPicker={openPicker}
@@ -96,7 +118,7 @@ const WorkFlow = () => {
           </Row>
         ) : (
           <div className={spinSTYles.spinStyle}>
-            <Empty/>
+            <Empty />
           </div>
         )}
       </Card>
