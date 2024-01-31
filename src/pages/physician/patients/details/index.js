@@ -1912,18 +1912,6 @@ const Details = ({}) => {
                       <div className="col-xl-1 col-sm-12">
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
-                            {/* <div
-                              className="patient-status"
-                              onClick={() => {
-                                allocatePatient();
-                              }}
-                            >
-                              <span
-                                className={`badge processed-text cr-pointer`}
-                              >
-                                ALLOCATE
-                              </span>
-                            </div> */}
                             <Dropdown.Button
                                 type="primary"
                                 className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
