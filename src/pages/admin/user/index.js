@@ -78,7 +78,7 @@ const UserList = () => {
 
   const handleChange = async (e) => {
     const key = e.target.name;
-    const value = e.target.value;
+    const value = e.target.value;mfaEnabled
     setFormData({ ...formData, [key]: value });
     if (key == "role") {
       setRoleValue([value]);

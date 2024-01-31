@@ -8,7 +8,10 @@ import EditButton from "../../../../images/adminUsers/EditButton";
 import {
   dateFormate,
   renderUserPrfoile,
+  renderUserPrfoileAvatar,
+
   sortFunction,
+
 } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
@@ -98,13 +101,12 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>FIRST NAME</th>
-            <th>LAST NAME</th>
-            <th className={TableStyle.rowStyle}>USER NAME</th>
-            <th className={TableStyle.rowStyle}>EMAIL</th>
-            <th>ROLE</th>
-            <th
-              style={{ cursor: "pointer" }}
+
+            <th style={{textAlign:"left", paddingLeft:"72px"}}>Name</th>            
+            <th className={TableStyle.rowStyle} style={{textAlign:"center"}}>Email</th>
+            <th style={{textAlign:"center"}}>Role</th>
+              <th
+              style={{ cursor: "pointer",textAlign:"center" }}
               onClick={() => {
                 sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
               }}
@@ -116,9 +118,11 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
                 <ArrowDownOutlined />
               )}
             </th>
-            {/* <th>Date Created</th> */}
-            <th>ACTION</th>
-            <th></th>
+            <th className={TableStyle.rowStyle} style={{textAlign:"center"}}>MFA</th>
+            <th style={{textAlign:"center"}}>Action</th>
+            <th style={{textAlign:"center"}}>User Status</th>
+          
+
           </tr>
         </thead>
         <tbody>
@@ -127,52 +131,65 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
               <tr key={index} style={{ height: "35px" }}>
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "47px !important" }}
+                  style={{ textAlign: "center" }}
                 >
-                  <div style={{ display: "flex" }}>
-                    {renderUserPrfoile(
-                      item?.firstName,
-                      item?.lastBorder,
-                      item?.profileImageUrl,
-                      null,
-                      "30px",
-                      "30px"
-                    )}
-                    <span style={{ margin: "5px 0 0 5px" }}>
-                      {item?.firstName ? item?.firstName : "---"}
-                    </span>
-                  </div>
+                  {item.firstName || item.lastName || item?.profileImageUrl ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          item.firstName,
+                          item.lastName,
+                          item?.profileImageUrl,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {item.firstName} {item.lastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
                 </td>
+
+              
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
-                >
-                  <span>{item?.lastName ? item?.lastName : "---"}</span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
-                >
-                  <span>{item?.userName ? item?.userName : "---"}</span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important" , textAlign:"center"}}
                 >
                   <span>{item?.email ? item?.email : "---"}</span>
                 </td>
                 <td
                   className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important", textAlign:"center" , paddingLeft:"70px"}}
                 >
                   <div
                     style={{
                       margin: "0px 0px 0px 0px",
                       width: "100%",
+                      textAlign:"center"
                     }}
                   >
                    
                     {item?.role?.length > 0 ? (
+
+                      <Select
+                        className={`custom-ant-select ${TableStyle.customAntSelect}`}
+                        style={{  marginTop: "15px" }}
+                        defaultValue={item?.role[0]?.toLowerCase()}
+                      >
+                        {item?.role?.map((data) => (
+                          <Option key={data} value={data} disabled={true}>
+                            <span style={{ color: "#000" }}>
+                              {" "}
+                              {data.toLowerCase()}
+                            </span>
+                          </Option>
+                        ))}
+                      </Select>
+
                        <Popover content={
                         item?.role?.length>1 &&item?.role?.map((data) => (
                          
@@ -186,6 +203,7 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
  
                     {item?.role[0].toLowerCase()}
                      </Popover>
+
                     ) : (
                       "---"
                     )}
@@ -194,15 +212,25 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
 
                 <td
                   className={TableStyle.lastBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important",textAlign:"center" }}
                 >
                   <span>{dateFormate(dayjs, item?.createdDate)}</span>
+                </td>
+                <td
+                  className={TableStyle.childBorder}
+                  style={{ height: "40px !important",textAlign:"center" }}
+                >
+                  <span>
+                    {" "}
+                    {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
+                  </span>
                 </td>
                 <td
                   className={TableStyle.childBorder}
                   style={{
                     height: "40px !important",
                     cursor: "pointer",
+                    textAlign:"center"
                   }}
                 >
                   <div>
@@ -223,7 +251,8 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
                 </td>
                 <td
                   className={TableStyle.lastBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important",textAlign:"center" }}
+                  
                 >
                   <Switch
                     defaultChecked={item?.accountStatus}
@@ -231,11 +260,12 @@ const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
                     style={{ color: "red" }}
                   />
                 </td>
+              
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="8">
+              <td colSpan="8" style={{display:"flex", alignItems:"cenetr", justifyContent:'center'}}>
                 <Empty />
               </td>
             </tr>
