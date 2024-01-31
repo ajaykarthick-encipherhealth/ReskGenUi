@@ -10,6 +10,7 @@ import {
   priorityOptions,
   processstatusBodyTemplate,
   renderUserPrfoile,
+  renderUserPrfoileAvatar,
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 
@@ -180,35 +181,30 @@ const UserQueue = ({ userList, setSort }) => {
             </div>
           </td>
 
-          <td className={TableStyle.childBorder} style={{textAlign:"left"}}>
-            <div className={TableStyle.innerAlignments}>
-              {data.auditAllocatedBy ? (
-                <Tooltip title={data.auditAllocatedBy}>  
-                  {renderUserPrfoile(
-                    data?.auditedAssignedFirstName,
-                    data?.auditedAssignedLastName,
-                    data?.auditAllocatedByProfileImage,
-                    null,
-                    "30px",
-                    "30px"
-                  )}
-                  {data.auditAllocatedBy ? (
-                    <>
-                      {data.auditAllocatedBy
-                        .split("@")[0]
-                        .charAt(0)
-                        .toUpperCase() +
-                        data.auditAllocatedBy.split("@")[0].slice(1)}
-                    </>
+          <td
+                  className={TableStyle.childBorder}
+                  style={{ textAlign: "center" }}
+                >
+                  {data.auditAllocatedByFirstName || data.auditAllocatedByLastName || data?.auditAllocatedByProfileImage ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          data.auditAllocatedByFirstName,
+                          data.auditAllocatedByLastName,
+                          data?.auditAllocatedByProfileImage,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {data.auditAllocatedByFirstName} {data.auditAllocatedByLastName}
+                      </span>
+                    </div>
                   ) : (
-                    "---"
+                    <div style={{ textAlign: "center" }}>---</div>
                   )}
-                </Tooltip>
-              ) : (
-                "---"
-              )}
-            </div>
-          </td>
+                </td>
           <td
             className={TableStyle.childBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
