@@ -35,6 +35,7 @@ import L2AllocatedAdminList from "./table/l2AuditedTable";
 import TableStyle from "../../../components/table/table.module.css";
 import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
+import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -222,13 +223,21 @@ export default function Patient() {
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
-      var result = response?.data?.response;
-      // setTotalElementsUser(response?.data?.response?.totalElements);
+      var result = response?.data?.response?.content;
+      setTotalElementsUser(response?.data?.response?.content?.totalElements);
       result?.map((res) => {
         resultMap.push({
           ...res,
           name: res.name,
           userName: res.userName,
+          totalFileAudited: res.totalFileAudited,
+          totalFileAuditAllocated: res.totalFileAuditAllocated,
+          totalFileAuditPending: res.totalFileAuditPending,
+          totalFileAuditHold: res.totalFileAuditHold,
+          totalFileAuditDeclined: res.totalFileAuditDeclined,
+          firstName: res.firstName,
+          lastName: res.lastName,
+          profileImageUrl: res.profileImageUrl,
         });
       });
       if (result?.length > 0) {
@@ -251,8 +260,42 @@ export default function Patient() {
           getL2PatientList(data, pageNoL2Patient);
         }}
       >
-        <td className={TableStyle.firstTdBorder}>{data.name}</td>
-        <td className={TableStyle.childBorder}>{data.userName}</td>
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+          {data.firstName || data.lastName || data?.profileImageUrl ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.firstName,
+                  data.lastName,
+                  data?.profileImageUrl,
+                  "header"
+                )}
+              </span>
+              <span>
+                {data.firstName} {data.lastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAudited ? data.totalFileAudited : "---"}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAuditAllocated ? data.totalFileAuditAllocated : "---"}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAuditHold ? data.totalFileAuditHold : "---"}
+        </td>
+        <td className={TableStyle.childBorder}>
+          {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
+        </td>
       </tr>
     ));
   };
@@ -276,6 +319,9 @@ export default function Patient() {
           patientId: res.patientId,
           patientName: res.patientName,
           computedDate: res.computedDate,
+          patientAllocatedFirstName: res.patientAllocatedFirstName,
+          patientAllocatedLastName: res.patientAllocatedLastName,
+          patientAllocatedProfileImage: res.patientAllocatedProfileImage,
         });
       });
       const data = result.map((item) => ({
@@ -380,7 +426,7 @@ export default function Patient() {
                             </div>
                           </div>
                           <div className="col-xl-8 mt-4">
-                            {isPatientList || activeTab===1 ? (
+                            {isPatientList || activeTab === 1 ? (
                               <>
                                 <button
                                   onClick={handleOpneModal}
@@ -490,7 +536,11 @@ export default function Patient() {
                                               >
                                                 <tr>
                                                   <th>NAME</th>
-                                                  <th>USER NAME</th>
+                                                  <th>AUDIT PROCESSED</th>
+                                                  <th>AUDIT ALLOCATED</th>
+                                                  <th>AUDIT PENDING</th>
+                                                  <th>AUDIT HOLD</th>
+                                                  <th>AUDIT INVALID</th>
                                                 </tr>
                                               </thead>
 

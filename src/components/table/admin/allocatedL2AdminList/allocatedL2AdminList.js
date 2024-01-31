@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
-import { processstatusBodyTemplate } from "../../../headerFilters/functions";
+import { processstatusBodyTemplate, renderUserPrfoileAvatar } from "../../../headerFilters/functions";
 
 function AllocatedL2AdminList({
   patinetListAll,
@@ -114,8 +114,30 @@ function AllocatedL2AdminList({
       >
         <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
         <td className={TableStyle.childBorder}>{data.patientName}</td>
-        <td className={TableStyle.childBorder}>{data.patientAllocated}</td>
-        <td className={TableStyle.childBorder}>
+        <td
+                  className={TableStyle.childBorder}
+                  style={{ textAlign: "center" }}
+                >
+                  {data.patientAllocatedFirstName || data.patientAllocatedLastName || data?.patientAllocatedProfileImage ? (
+                    <div style={{ display: "flex", aligndatas: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          data.patientAllocatedFirstName,
+                          data.patientAllocatedLastName,
+                          data?.patientAllocatedProfileImage,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
+                </td>        <td className={TableStyle.childBorder}>
               {data.dueDate
             ? moment.utc(data.dueDate).format("MM-DD-YYYY")
             : "---"}</td>
