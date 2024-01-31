@@ -21,7 +21,7 @@ function ReceivedReport({
   loading,
   sortOrder,
   setSortOrder,
-  setSortField,
+  setSort,
 }) {
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
@@ -46,7 +46,7 @@ function ReceivedReport({
 
   return (
     <div className={TableStyle.classContaineer}>
-      {loading ? (
+      {details?.content?.length===0 ? (
         <SpinnerDots />
       ) : (
         <>
@@ -60,8 +60,7 @@ function ReceivedReport({
                 <th
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    setSortField("sendDate");
-                    sortFunction(sortOrder, setSortOrder);
+                    sortFunction(sortOrder, setSortOrder,setSort,"receiveDate");
                   }}
                 >
                   DATE{" "}

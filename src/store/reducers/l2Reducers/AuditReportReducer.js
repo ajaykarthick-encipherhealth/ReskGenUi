@@ -9,7 +9,9 @@ import {
   FILEDETAILS,
   REPORT,
   TEAM_REPORT,
+  ACTIVETAB
 } from "../../actions/l2Action/AuditReportAction";
+
 
 const initialState = {
   details: null,
@@ -22,6 +24,7 @@ const initialState = {
   getReport: null,
   uploadFile: null,
   reportInfo: null,
+  activetab:null
 };
 
 export const AuditReportReducer = (state = initialState, action) => {
@@ -38,6 +41,12 @@ export const AuditReportReducer = (state = initialState, action) => {
     };
   }
 
+  if(action.type===ACTIVETAB){
+    return {
+      ...state,
+      activetab: action.payload,
+    };
+  }
   if (action.type === SELECTEDROW) {
     return {
       ...state,

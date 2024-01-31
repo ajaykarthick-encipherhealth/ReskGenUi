@@ -21,7 +21,12 @@ import {
   export const FILEPATH = "FILEPATH";
   export const FILEDETAILS = "FILEDETAILS";
   export const REPORT = "REPORT";
+  export const ACTIVETAB='ACTIVETAB'
   
+  export const getActiveTab=(val)=>({
+    type:ACTIVETAB,
+    payload:val
+  });
   export const selectedRow = (val) => ({
     type: SELECTEDROW,
     payload: val,

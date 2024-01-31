@@ -21,11 +21,12 @@ const AdminList = ({ userList }) => {
         <thead className={TableStyle.classThead}>
           <tr>
             <th>NAME</th>
-            <th>USER NAME</th>
+           
             <th>ALLOCATED</th>
             <th>COMPLETED</th>
             <th>PENDING</th>
             <th>HOLD</th>
+            <th>INVALID</th>
             <th>QUALITY</th>
           </tr>
         </thead>
@@ -61,12 +62,7 @@ const AdminList = ({ userList }) => {
                   </span>
                 </td>
                 {/* user name */}
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important" }}
-                >
-                  <span>{item?.userName ? item?.userName : "---"}</span>
-                </td>
+           
                 {/* allocated */}
                 <td
                   className={TableStyle.childBorder}
@@ -98,6 +94,7 @@ const AdminList = ({ userList }) => {
                     {item?.totalFilePending ? item?.totalFilePending : "---"}
                   </span>
                 </td>
+
                 {/* hold */}
                 <td
                   className={TableStyle.lastBorder}
@@ -107,13 +104,22 @@ const AdminList = ({ userList }) => {
                     {item?.totalFileHold ? item?.totalFileHold : "---"}
                   </span>
                 </td>
+                {/* invalid */}
+                <td
+                  className={TableStyle.childBorder}
+                  style={{ height: "40px !important" }}
+                >
+                  <span>
+                    {item?.totalFileDeclined ? item?.totalFileDeclined : "---"}
+                  </span>
+                </td>
 
                 {/* quality */}
                 <td
                   className={TableStyle.lastBorder}
                   style={{ height: "40px !important" }}
                 >
-                  <Tooltip title={` Quality : ${90}%`}>
+                  <Tooltip title={` Quality : ${Math.round(item?.accuracy)}%`}>
                     <div className="notificationIcon">
                       <div style={{ width: 40, height: 40 }}>
                         <CircularProgressbar

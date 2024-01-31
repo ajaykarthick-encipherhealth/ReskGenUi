@@ -17,14 +17,17 @@ export const getUsers = ({
   endDate,
   status,
   role,
+  sort
 }) => {
   return (dispatch) => {
-    dispatch({
-      type: LIST,
-      payload: { loading: true },
-    });
+    // dispatch({
+    //   type: LIST,
+    //   payload: { loading: true },
+    // });
     try {
-      UsersList({pageNumber, pageCount, search, startDate, endDate, status, role }).then(
+
+      UsersList({ pageCount, search, startDate, endDate, status, role,sort }).then(
+
         (response) => {
           if (response) {
             dispatch({

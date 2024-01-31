@@ -1,11 +1,11 @@
 import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
 
-export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="") => {
+export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="",sort) => {
   const token = localStorage.getItem("token");
 
   const searchValue = filter === "ALL" ? "" : filter
- const url=`dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}`
+ const url=`dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`
 
   try {
     const response = await axios.get(
@@ -21,10 +21,10 @@ export const patientDetails = async (pagenum,startDate="",endDate="",search,filt
     console.log(err);
   }
 };
-export const SentReport = async (pagenum,startDate="",endDate="",search) => {
+export const SentReport = async (pagenum,startDate="",endDate="",search,sort) => {
   const token = localStorage.getItem("token");
  
-  const url= `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}`
+  const url= `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
@@ -40,9 +40,9 @@ export const SentReport = async (pagenum,startDate="",endDate="",search) => {
     console.log(err);
   }
 };
-export const ReceivedReport = async (pagenum,startDate="",endDate="",search,sortfield,sortdirection) => {
+export const ReceivedReport = async (pagenum,startDate="",endDate="",search,sort) => {
   const token = localStorage.getItem("token");
-  const url= `dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sortfield}&sortdirection=${sortdirection}`
+  const url= `dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
