@@ -266,14 +266,13 @@ export default function Patient() {
   };
 
   const getL2PatientList = async (data, pageNoL2Patient, sort) => {
-    console.log("l2");
     setIsLoading(true);
     var dataMap = {
       firstName: data?.name,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir?sort?.sortDir:"DESC"}&sortfield=${sort?.sortField?sort?.sortField:"dueDate"}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
