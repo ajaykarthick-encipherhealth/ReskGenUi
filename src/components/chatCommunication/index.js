@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { over } from "stompjs";
+import { v4 as uuidv4 } from 'uuid';
 import TimeAgo from "react-timeago";
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
@@ -52,6 +53,9 @@ let pageSize = 10;
 const ChatCommunication = ({ openMsg, offMsg }) => {
   const messagesEndRef = useRef(null);
   const messagesTopRef = useRef(null);
+  const messagesRef = useRef(null);
+  const activeSecondaryUserRef = useRef(null);
+  const searchedInMembersListRef = useRef(null);
   const [pageNo, setPageNo] = useState(0);
   const [chatAction, setChatAction] = useState("");
   const [message, setMessages] = useState([]);
@@ -93,13 +97,14 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const fetchChatHistory = async (username) => {
     try {
       fetch(
-        "http://13.68.177.51:8087/chatservice/api/get/history?receiver=" +
+        "https://cogent.encipherhealth.com/chatservice/api/get/history?receiver=" +
           username
       )
         .then((response) => response.json())
         .then((data) => {
           setMessagedMembersList(data);
           setSearchedInMembersList(data);
+          searchedInMembersListRef.current = data;
         });
     } catch (error) {
       console.error("Error fetching chat history:", error);
@@ -110,7 +115,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   const fetchUsers = async () => {
     try {
       const response = await fetch(
-        "http://13.68.177.51:8087/chatservice/api/users"
+        "https://cogent.encipherhealth.com/chatservice/api/users"
       );
       const data = await response.json();
 
@@ -125,7 +130,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     }
   };
   const connect = () => {
-    let Sock = new SockJS("http://13.68.177.51:8087/chatservice/ws");
+    let Sock = new SockJS("https://cogent.encipherhealth.com/chatservice/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
   };
@@ -170,19 +175,18 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     return formattedTime;
   };
 
-  const onPrivateMessage = useCallback(
-    (payload) => {
-      const payloadData = JSON.parse(payload.body);
-      let memberList = [...searchedInMembersList];
+  const onPrivateMessage =(payload) => {
+      let payloadData = JSON.parse(payload.body);
+      let memberList = [...searchedInMembersListRef.current];
       let updatedChatCountIndex = null;
-      const activeChat = localStorage.getItem("activeChat");
+      const activeChat = activeSecondaryUserRef.current;
       let result = _.find(memberList, function (obj) {
         if (obj.secondaryUser === payloadData.senderName) {
           return true;
         }
       });
       if (result) {
-        searchedInMembersList.map((member, index) => {
+        searchedInMembersListRef.current.map((member, index) => {
           if (
             payloadData.senderName === member.secondaryUser &&
             activeChat === member.secondaryUser
@@ -225,24 +229,28 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       }
 
       setSearchedInMembersList(() => [...memberList]);
+      searchedInMembersListRef.current = [...memberList];
+      if(payloadData.senderName === activeChat) {
+        handleResetReadHistory([payloadData], {primaryUser: userData.username , secondaryUser:activeChat})
+      }
       setMessages((temp) => [...temp, payloadData]);
-    },
-    [searchedInMembersList]
-  );
+      messagesRef.current = [...message, payloadData]
+    };
 
   const onUpdatedUsersHistory = (payload) => {
     const payloadData = JSON.parse(payload.body);
-    const updatedMessage = [...message];
+    const updatedMessage = [...messagesRef.current]
     if (payloadData.topicName === "read-messages-status") {
       payloadData.readMessageIDs.map((id) => {
-        message.map((msg, index) => {
-          if (msg.id === id) {
-            updatedMessage[index].messageStatus = "READ";
+        messagesRef.current.map((msg, index) => {
+          if(msg.id === id) {
+            updatedMessage[index].messageStatus = 'READ'
           }
-        });
-      });
-      setMessages(updatedMessage);
-    }
+        })
+      })
+      
+      setMessages(() => updatedMessage);
+    } 
   };
 
   const onError = (err) => {
@@ -311,13 +319,14 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           receiverName: currentChatMember.sender.secondaryUser,
           message: userData.message,
           messageStatus: "DELIVERED",
-
+          id: uuidv4(),
           date: getCurrentTimestamp(),
           status: "MESSAGE",
         };
       }
 
       stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
+      messagesRef.current = [...message, chatMessage];
       setMessages([...message, chatMessage]);
       setFileModal(false);
 
@@ -350,6 +359,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
             currentChatMember.sender,
             ...searchedInMembersList,
           ]);
+          searchedInMembersListRef.current = [currentChatMember.sender, ...searchedInMembersList];
         } else {
           const data = [...searchedInMembersList];
           data.splice(
@@ -362,9 +372,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           );
           data.unshift(currentChatMember.sender);
           setSearchedInMembersList(data);
+          searchedInMembersListRef.current = data;
         }
       } else if (searchedInMembersList.length === 0) {
         setSearchedInMembersList([currentChatMember.sender]);
+        searchedInMembersListRef.current = [currentChatMember.sender]
       }
     } else {
       connect();
@@ -372,6 +384,14 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       setFileModal(false);
     }
   };
+
+  useEffect(() => {
+    if(chatAction === "load") {
+      scrollToBottom()
+    } else if(chatAction === "add") {
+      scrollToTop()
+    }
+  }, [chatAction, message])
 
   const handleSearchUser = (e) => {
     setUserData({ ...userData, searchNewUserMessage: e.target.value });
@@ -397,7 +417,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       alert("Username should not be empty");
       return;
     }
-    localStorage.setItem("activeChat", "");
+    activeSecondaryUserRef.current = "";
     fetchUsers();
     // Check if the entered username exists in the messagedMembersList
   };
@@ -405,7 +425,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     try {
       // Fetch messages for the user
       const response = await fetch(
-        `http://13.68.177.51:8087/chatservice/api/messages/private?sender=${sender?.secondaryUser}&receiver=${userData.username}&pageNo=${pageNumber}&pageSize=${pageSize}`
+        `https://cogent.encipherhealth.com/chatservice/api/messages/private?sender=${sender?.secondaryUser}&receiver=${userData.username}&pageNo=${pageNumber}&pageSize=${pageSize}`
       );
       const data = await response.json();
 
@@ -414,9 +434,13 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       setIsLastPage(data.last);
       setChatAction(status);
       if (status === "load") {
+        messagesRef.current = privateMessages;
         setMessages(privateMessages);
+        // scrollToBottom()
       } else {
+        messagesRef.current = [...privateMessages, ...message]
         setMessages([...privateMessages, ...message]);
+        // scrollToTop()
       }
       handleResetReadHistory(privateMessages, sender);
       setLoading(false);
@@ -431,30 +455,35 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         messageIds.push(msg.id);
       }
     });
-    await fetch("http://13.68.177.51:8087/chatservice/api/change/status", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        messageIds: messageIds,
-        messageStatus: "READ",
-        primaryUser: sender.primaryUser,
-        secondaryUser: sender.secondaryUser,
-      }),
-    });
+    if(messageIds.length > 0) {
+      await fetch("https://cogent.encipherhealth.com/chatservice/api/change/status", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messageIds: messageIds,
+          messageStatus: "READ",
+          primaryUser: sender.primaryUser,
+          secondaryUser: sender.secondaryUser,
+        }),
+      });
+    }
+    
   };
   const handleUpdateUrl = (activeMember) => {
-    localStorage.setItem("activeChat", activeMember);
+    activeSecondaryUserRef.current = activeMember;
   };
   const onTabChange = (name, index, sender) => {
-    scrollToBottom();
+    // scrollToBottom();
+    
     setPageNo(0);
     setCurrentChatMember({ sender, isNewMember: false });
     handleUpdateUrl(sender?.secondaryUser);
     const data = [...searchedInMembersList];
     data[index].unreadCount = 0;
     setSearchedInMembersList((temp) => [...data]);
+    searchedInMembersListRef.current = [...data]
 
     handleGetChatHistory(sender, "load", 0);
   };
@@ -479,7 +508,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       try {
         // Perform the necessary API call to add the user to the database
         const response = await fetch(
-          "http://13.68.177.51:8087/chatservice/api/uploadFile",
+          "https://cogent.encipherhealth.com/chatservice/api/uploadFile",
           {
             method: "POST",
 
@@ -518,7 +547,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       // Perform the necessary API call to add the user to the database
 
       const response = await fetch(
-        "http://13.68.177.51:8087/chatservice/api/addUser",
+        "https://cogent.encipherhealth.com/chatservice/api/addUser",
         {
           method: "POST",
           headers: {
@@ -542,8 +571,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         regexp.test(member.secondaryUser)
       );
       setSearchedInMembersList(filteredMember);
+      searchedInMembersListRef.current = filteredMember;
     } else {
       setSearchedInMembersList(messagedMembersList);
+      searchedInMembersListRef.current = messagedMembersList;
     }
 
     console.log("searchedInMembersList", searchedInMembersList);
@@ -579,6 +610,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       onTabChange(newUser.userName, index, isAlreadyMember[0]);
     }
     setPageNo(0);
+    messagesRef.current = []
     setMessages([]);
     setUserData({
       ...userData,
@@ -590,14 +622,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     if (e.target.scrollTop === 0 && !isLastPage) {
       setLoading(true);
       setPageNo(pageNo + 1);
+      handleGetChatHistory(currentChatMember.sender, "add", pageNo + 1);
     }
   };
-  useEffect(() => {
-    // Fetch the list of users
-    if (pageNo > 0 && currentChatMember.sender) {
-      handleGetChatHistory(currentChatMember.sender, "add", pageNo);
-    }
-  }, [pageNo]);
 
   const handleFileModalClose = () => {
     setFileModal(false);
