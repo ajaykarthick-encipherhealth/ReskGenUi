@@ -67,13 +67,12 @@ export default function Patient() {
   const [isPatientList, setIsPatientList] = useState(false);
   const [l2patinetListAll, setL2PatinetListAll] = useState([]);
   const [l2selectUser, setL2selectUser] = useState(null);
-  const [l2patinetLisSelected, setl2patinetLisSelected] = useState([]);
-
+  const [sort,setSort]=useState({sortDir:"ASC",sortField:""})
   useEffect(() => {
     if (typeof pageNo == "number") {
-      getAllList(pageNo, pageSize, "", "", true, 2);
+      getAllList(pageNo, pageSize, "", "", true, 2,"",sort);
     }
-  }, [pageNo, pageSize]);
+  }, [pageNo, pageSize,sort]);
 
   const getAllList = async (
     pageNo = 0,
@@ -82,9 +81,11 @@ export default function Patient() {
     endDate = "",
     allocate = true,
     status = 2,
-    search = ""
+    search = "",
+    sort
   ) => {
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=uavis01@encipherhealth.onmicrosoft.com&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}`;
+    const uId=localStorage.getItem("userId")
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -110,8 +111,8 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
-  const getAllCheckList = async () => {
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${totalElements}&userId=uavis01@encipherhealth.onmicrosoft.com&computationStart=&computationEnd=&isAllocation=true&status=2`;
+  const getAllCheckList = async (sort) => {
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${totalElements}&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var result = response?.data?.response?.content;
@@ -129,16 +130,16 @@ export default function Patient() {
       if (isPatientList == true) {
         getAllCheckListL2();
       } else {
-        getAllCheckList();
+        getAllCheckList(sort);
       }
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked]);
+  }, [selectAllChecked,sort]);
 
   const handleReceivedDatePicker = (date, dateString) => {
     if (dateString[0] == "") {
-      getAllList(pageNo, pageSize, "", "", true, 2);
+      getAllList(pageNo, pageSize, "", "", true, 2,"",sort);
     } else if (dateString.length > 1) {
       const formattedDates = dateString?.map((date, index) => {
         const formattedDate =
@@ -154,7 +155,9 @@ export default function Patient() {
           formattedDates[0],
           formattedDates[1],
           true,
-          2
+          2,
+          "",
+          sort
         );
       }
     }
@@ -168,7 +171,8 @@ export default function Patient() {
       dateRange ? dateRange[1] : "",
       true,
       2,
-      search
+      search,
+      sort
     );
   };
 
@@ -192,6 +196,7 @@ export default function Patient() {
   const handleOpneModal = () => {
     setValidated(false);
     setAddPatientId(false);
+    setSort({sortDir:"ASC",sortField:""})
     if (activeTab == 2) {
       setAllocateModalL2(true);
     } else {
@@ -212,7 +217,7 @@ export default function Patient() {
     } else {
       setIsPatientList(false);
       setPageNo(0);
-      getAllList(0, pageSize, "", "", true, 2);
+      getAllList(0, pageSize, "", "", true, 2,"",sort);
     }
   };
   const getAuditL2List = async (pageNo) => {
@@ -296,7 +301,7 @@ export default function Patient() {
   };
 
   const getAllCheckListL2 = async (value) => {
-    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -314,7 +319,7 @@ export default function Patient() {
     if (allocateClicked) {
       setIsLoading(true);
       if (!isPatientList) {
-        getAllList(pageNo, pageSize, "", "", true, 2);
+        getAllList(pageNo, pageSize, "", "", true, 2,"",sort);
       } else {
         getL2PatientList(l2selectUser, pageNoL2Patient);
       }
@@ -323,7 +328,7 @@ export default function Patient() {
       setSelectAllChecked(false);
       setSelectAllCheckedL2(false);
     }
-  }, [allocateClicked]);
+  }, [allocateClicked,sort]);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -451,6 +456,7 @@ export default function Patient() {
                                         selectedRowsId={selectedRowsId}
                                         setSelectedRowsId={setSelectedRowsId}
                                         selectedChart={headerCheckValidation}
+                                        setSort={setSort}
                                       />
                                       <div>
                                         <div className="pagination-container">
