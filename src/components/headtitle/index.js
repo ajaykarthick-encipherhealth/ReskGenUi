@@ -20,6 +20,7 @@ const HeadTitle = ({
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
   const [dateValues, setDates] = useState();
+  const [isDisabled,setIsDisabled]=useState(true)
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
   useEffect(() => {
@@ -83,9 +84,11 @@ const HeadTitle = ({
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);
+          setIsDisabled(true)
         }}
         onCancel={() => {
           setOpenPicker(false);
+          setIsDisabled(true)
         }}
       >
         <div className={styles.modalDetails}>
@@ -102,6 +105,7 @@ const HeadTitle = ({
             open={openPicker}
             value={selectedDates}
             onChange={(dates, dateStrings) => {
+              setIsDisabled(false)
               setSelectedDates(dates);
               handleDatePickerChange(dateStrings);
             }}
@@ -125,7 +129,9 @@ const HeadTitle = ({
               setSelectedDates([]);
             }}
           >
-            <Button disabled={selectedDates?.length === 0 ? true : false}>
+            <Button 
+            disabled={isDisabled? true : false}
+            >
               Clear
             </Button>
           </div>
