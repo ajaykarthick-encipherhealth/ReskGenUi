@@ -214,6 +214,7 @@ function PatientTable({
             </Tooltip> :"---"}
            
           </td>
+      
           <td className={TableStyle.childBorder}>
             <AntSelect
               options={priorityOptions}
