@@ -26,6 +26,7 @@ import leftArrow from "../../../images/svg/leftArrow.svg";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 
+
 const { RangePicker } = DatePicker;
 export default function Patient() {
   const navigate = useRouter();
@@ -220,7 +221,7 @@ export default function Patient() {
     if (response.data) {
       var resultMap = [];
       var result = response?.data?.response?.content;
-      // setTotalElementsUser(response?.data?.response?.content?.totalElements);
+      setTotalElementsUser(response?.data?.response?.content?.totalElements);
       result?.map((res) => {
         resultMap.push({
           ...res,
@@ -246,13 +247,13 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
+
   const renderRows = () => {
     return l2UserListAll?.map((data, index) => (
       <tr
         style={{ height: "35px" }}
         key={index}
         onClick={() => {
-          setIsPatientList(true);
           getL2PatientList(data, pageNoL2Patient, sort);
         }}
       >
@@ -262,14 +263,14 @@ export default function Patient() {
               {" "}
               <span style={{ marginRight: "10px" }}>
                 {" "}
-                {renderUserPrfoile(
-                  data?.firstName,
-                  data?.lastName,
-                  data?.profileImageUrl,
-                  null,
-                  "30px",
-                  "30px"
-                )}
+               {renderUserPrfoile(
+            data?.firstName,
+            data?.lastName,
+            data?.profileImageUrl,
+            null,
+            "30px",
+            "30px"
+          )}
               </span>
               <span>
                 {data.firstName} {data.lastName}
@@ -294,6 +295,7 @@ export default function Patient() {
         <td className={TableStyle.childBorder}>
           {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
         </td>
+
       </tr>
     ));
   };
@@ -305,11 +307,7 @@ export default function Patient() {
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${
-      data?.userName
-    }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : "DESC"
-    }&sortfield=${sort?.sortField ? sort?.sortField : "dueDate"}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir?sort?.sortDir:"DESC"}&sortfield=${sort?.sortField?sort?.sortField:"dueDate"}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -340,7 +338,6 @@ export default function Patient() {
         setIsLoading(false);
       }
     }
-    setIsLoading(false);
   };
 
   const getAllCheckListL2 = async (sort) => {
@@ -582,30 +579,23 @@ export default function Patient() {
                                           </>
                                         ) : (
                                           <>
-                                            {isLoading ? (
-                                              <SpinnerDots />
-                                            ) : (
-                                              <AllocatedL2AdminList
-                                                patinetListAll={
-                                                  l2patinetListAll
-                                                }
-                                                selectAllChecked={
-                                                  selectAllChecked
-                                                }
-                                                setSelectAllChecked={
-                                                  setSelectAllChecked
-                                                }
-                                                selectedRowsId={selectedRowsId}
-                                                setSelectedRowsId={
-                                                  setSelectedRowsId
-                                                }
-                                                selectedChart={
-                                                  headerCheckValidation
-                                                }
-                                                setSort={setSort}
-                                                isLoading={isLoading}
-                                              />
-                                            )}
+                                            <AllocatedL2AdminList
+                                              patinetListAll={l2patinetListAll}
+                                              selectAllChecked={
+                                                selectAllChecked
+                                              }
+                                              setSelectAllChecked={
+                                                setSelectAllChecked
+                                              }
+                                              selectedRowsId={selectedRowsId}
+                                              setSelectedRowsId={
+                                                setSelectedRowsId
+                                              }
+                                              selectedChart={
+                                                headerCheckValidation
+                                              }
+                                              setSort={setSort}
+                                            />
                                             <div>
                                               <div>
                                                 <div className="pagination-container">

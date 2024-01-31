@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../../store/actions/ReportActions";
 import { Empty } from "antd";
 import Footer from "../../../../jsx/layouts/Footer";
-import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
+import { dateFormate } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
 
 function ReceivedReport({
@@ -19,10 +19,8 @@ function ReceivedReport({
   receivedEndDate,
   paginationFirst,
   loading,
-  sortOrder,
-  setSortOrder,
-  setSort,
 }) {
+  const [sortOrder, setSortOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
   const dispatch = useDispatch();
@@ -30,7 +28,17 @@ function ReceivedReport({
     setDetailsContent(details?.content);
   }, [details]);
 
-
+  const sortTableByDate = () => {
+    const sortedContent = [...detailsContent];
+    if (sortOrder === "asc") {
+      sortedContent.sort((a, b) => dayjs(a.sendDate).diff(dayjs(b.sendDate)));
+      setSortOrder("desc");
+    } else {
+      sortedContent.sort((a, b) => dayjs(b.sendDate).diff(dayjs(a.sendDate)));
+      setSortOrder("asc");
+    }
+    setDetailsContent(sortedContent);
+  };
 
   const router = useRouter();
   const handleReceiverReport = (row) => {
@@ -62,17 +70,9 @@ function ReceivedReport({
                   <th>REPORT NAME</th>
                   <th>ACCESS TYPE</th>
                   <th>SENDER</th>
-                  <th style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    sortFunction(
-                      sortOrder,
-                      setSortOrder,
-                      setSort,
-                      "receiveDate"
-                    );
-                  }}>
+                  <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
                     DATE{" "}
-                    {sortOrder === "ASC" ? (
+                    {sortOrder === "asc" ? (
                       <ArrowUpOutlined />
                     ) : (
                       <ArrowDownOutlined />
@@ -82,7 +82,7 @@ function ReceivedReport({
               </thead>
               <tbody>
                 {detailsContent?.map((row, index) => {
-                  const formattedDate = dateFormate(dayjs, row?.receiveDate);
+                  const formattedDate = dateFormate(dayjs, row?.sendDate);
 
                   return (
                     <tr
