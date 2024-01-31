@@ -42,12 +42,11 @@ import {
     startDate,
     endDate,
     search,
-    filter,
-    sort
+    filter
   ) => {
     return (dispatch) => {
       try {
-        patientDetails(pagenum, startDate, endDate, search, filter,sort).then(
+        patientDetails(pagenum, startDate, endDate, search, filter).then(
           (response) => {
             if (response) {
               dispatch({
@@ -68,12 +67,11 @@ import {
     startDate,
     endDate,
     search,
-    filter,
-    sort
+    filter
   ) => {
     return (dispatch) => {
       try {
-        TeamReport(pagenum, startDate, endDate, search, filter,sort).then(
+        TeamReport(pagenum, startDate, endDate, search, filter).then(
           (response) => {
             if (response) {
               dispatch({
@@ -123,7 +121,7 @@ import {
     };
   };
   
-  export const getSentDetails = (pagenum, startDate, endDate, search,sort) => {
+  export const getSentDetails = (pagenum, startDate, endDate, search) => {
     return (dispatch) => {
       dispatch({
         type: SENT_REPORT,
@@ -132,7 +130,7 @@ import {
         },
       });
       try {
-        AuditSentReport(pagenum, startDate, endDate, search,sort).then((response) => {
+        AuditSentReport(pagenum, startDate, endDate, search).then((response) => {
           if (response) {
             dispatch({
               type: SENT_REPORT,
@@ -148,7 +146,7 @@ import {
       }
     };
   };
-  export const getReceivedDetails = (pagenum, startDate, endDate, search,sort) => {
+  export const getReceivedDetails = (pagenum, startDate, endDate, search,sortfield,sortdirection) => {
     return (dispatch) => {
       dispatch({
         type: RECEIVED_REPORT,
@@ -157,7 +155,7 @@ import {
         },
       });
       try {
-        AuditReceivedReport(pagenum, startDate, endDate, search,sort).then((response) => {
+        AuditReceivedReport(pagenum, startDate, endDate, search,sortfield,sortdirection).then((response) => {
           if (response) {
             dispatch({
               type: RECEIVED_REPORT,

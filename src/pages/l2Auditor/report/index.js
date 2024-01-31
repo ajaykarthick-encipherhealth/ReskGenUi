@@ -83,12 +83,6 @@ const index = () => {
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
-  const [receivedSortOrder, setReceivedSortOrder] = useState("ASC");
-  const [sentSortOrder, setSentSortOrder] = useState("ASC");
-  const [teamSortOrder, setTeamSortOrder] = useState("ASC");
-  const [auditSortOrder, setAuditSortOrder] = useState("ASC");
-  const [sort, setSort] = useState({sortDir:"",sortField:""});
-
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -208,7 +202,7 @@ const index = () => {
     setIsLoading(false);
 
     if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch,sort));
+      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch));
     }
     if (
       activeTab === "ReceivedReport" 
@@ -218,8 +212,7 @@ const index = () => {
           receivedPageNo,
           receivedStartDate,
           receivedEndDate,
-          receivedSearch,
-          sort
+          receivedSearch
         )
       );
     }
@@ -231,8 +224,7 @@ const index = () => {
           coderStartDate,
           coderEndDate,
           coderSearch,
-          selectedCoderOpt,
-          sort
+          selectedCoderOpt
         )
       );
     }
@@ -244,8 +236,7 @@ const index = () => {
           coderStartDate,
           coderEndDate,
           coderSearch,
-          selectedCoderOpt,
-          sort
+          selectedCoderOpt
         )
       );
     }
@@ -270,8 +261,7 @@ const index = () => {
     receivedStartDate,
     receivedEndDate,
     receivedSearch,
-    reportActiveTab,
-    sort
+    reportActiveTab
   ]);
 
   useEffect(() => {
@@ -497,10 +487,6 @@ const index = () => {
                                       selectedRows={selectedRows}
                                       setSelectAll={setSelectAll}
                                       selectAll={selectAll}
-                                      setSort={setSort}
-                                      setSortOrder={setAuditSortOrder}
-                                      sortOrder={auditSortOrder}
-                                      
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="team">
@@ -519,9 +505,6 @@ const index = () => {
                                         selectedRows={selectedRows}
                                         setSelectAll={setSelectAll}
                                         selectAll={selectAll}
-                                        setSort={setSort}
-                                        setSortOrder={setTeamSortOrder}
-                                        sortOrder={teamSortOrder}
                                       />
                                     )}
                                   </Tab.Pane>
@@ -540,9 +523,6 @@ const index = () => {
                                       }
                                       onSentPageChange={onSentPageChange}
                                       loading={SentReportDetails?.loading}
-                                      setSortOrder={setSentSortOrder}
-                                      sortOrder={sentSortOrder}
-                                      setSort={setSort}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -563,9 +543,6 @@ const index = () => {
                                         receivedStartDate={receivedStartDate}
                                         receivedEndDate={receivedEndDate}
                                         loading={ReceivedReportDetails?.loading}
-                                        setSort={setSort}
-                                        setSortOrder={setReceivedSortOrder}
-                                        sortOrder={receivedSortOrder}
                                       />
                                     )}
                                   </Tab.Pane>

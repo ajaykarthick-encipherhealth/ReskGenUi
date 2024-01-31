@@ -41,11 +41,11 @@ const IndividualReceiverReport = () => {
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [reportInfo, setReportInfo] = useState();
+  const [sortDir, setSortDir] = useState("");
+  const [sortfield, setSortfield] = useState("ASC");
   const [detailsContent, setDetailsContent] = useState(
     reportDatas?.data?.response?.content
   );
-  const[sortDir,setSortDir]=useState("ASC")
-  const[sortfield,setSortfield]=useState("")
 
   const fetchData = async (url) => {
     try {
@@ -239,7 +239,8 @@ const IndividualReceiverReport = () => {
               {reportInfo?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
-                    window.open(url?.path);
+                    exportToExcel;
+                    window.open(url);
                   }}
                   className={styles.download}
                   disabled={

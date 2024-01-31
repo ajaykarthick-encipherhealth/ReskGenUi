@@ -7,15 +7,8 @@ import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-
-import {
-  dateFormate,
-  sortFunction,
-  renderUserPrfoileAvatar
-} from "../../../../components/headerFilters/functions";
-
+import { dateFormate, renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 function TeamReport({
   setModal,
@@ -30,14 +23,35 @@ function TeamReport({
   selectedRows,
   selectAll,
   setSelectAll,
-  sortOrder,
-  setSortOrder,
-  setSort,
 }) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
+
+  const handleHeaderCheckboxChange = () => {
+    setSelectAll(!selectAll);
+    const updatedRows = selectAll ? [] : ReportPatientDetails;
+    setSelectedRows(updatedRows);
+  };
+
+  const handleRowCheckboxChange = (row) => {
+    const isSelected = selectedRows.some(
+      (selectedRow) => selectedRow.patientId === row.patientId
+    );
+
+    let updatedRows;
+
+    if (isSelected) {
+      updatedRows = selectedRows.filter(
+        (selectedRow) => selectedRow.patientId !== row.patientId
+      );
+    } else {
+      updatedRows = [...selectedRows, row];
+    }
+
+    setSelectedRows(updatedRows);
+  };
 
   const processstatusBodyTemplate = (rowData) => {
     switch (rowData.processedStatus) {
@@ -241,24 +255,7 @@ function TeamReport({
                 <th>PATIENT ID</th>
                 <th>PATIENT NAME</th>
                 <th style={{ textAlign: "left" }}>L1 AUDITOR </th>
-                <th
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    sortFunction(
-                      sortOrder,
-                      setSortOrder,
-                      setSort,
-                      "processedDate"
-                    );
-                  }}
-                >
-                  COMPLETE DATE
-                  {sortOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </th>
+                <th>COMPLETE DATE </th>
                 <th>COMMENTS </th>
                 <th style={{ textAlign: "left" }}>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
