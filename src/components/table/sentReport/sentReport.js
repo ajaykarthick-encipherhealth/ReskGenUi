@@ -5,13 +5,17 @@ import { Empty, Modal, Popover } from "antd";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import SpinnerDots from "../../spinner";
-import { dateFormate } from "../../headerFilters/functions";
+import { dateFormate, sortFunction } from "../../headerFilters/functions";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 function SentReportTable({
   details,
   onSentPageChange,
   paginationFirst,
   loading,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
@@ -69,7 +73,19 @@ function SentReportTable({
                 <th>REPORT NAME</th>
                 {/* <th>SENDER</th> */}
                 <th>USER LIST</th>
-                <th>DATE</th>
+                <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(sortOrder, setSortOrder,setSort,"sendDate");
+                  }}
+                >
+                  DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
               </tr>
             </thead>
 

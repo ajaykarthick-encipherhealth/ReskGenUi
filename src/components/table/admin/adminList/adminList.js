@@ -8,8 +8,10 @@ import EditButton from "../../../../images/adminUsers/EditButton";
 import {
   dateFormate,
   renderUserPrfoile,
+  sortFunction,
 } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
@@ -17,7 +19,7 @@ const items = [
   { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
 ];
 const { Option } = Select;
-const AdminList = ({ userList }) => {
+const AdminList = ({ userList,sortOrder, setSortOrder, setSort }) => {
   const dispatch = useDispatch();
   const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
@@ -96,13 +98,26 @@ const AdminList = ({ userList }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th className={TableStyle.rowStyle}>User Name</th>
-            <th className={TableStyle.rowStyle}>Email</th>
-            <th>Role</th>
-            <th>Date Created</th>
-            <th>Action</th>
+            <th>FIRST NAME</th>
+            <th>LAST NAME</th>
+            <th className={TableStyle.rowStyle}>USER NAME</th>
+            <th className={TableStyle.rowStyle}>EMAIL</th>
+            <th>ROLE</th>
+            <th
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
+              }}
+            >
+              DATE CREAED{" "}
+              {sortOrder === "ASC" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
+            </th>
+            {/* <th>Date Created</th> */}
+            <th>ACTION</th>
             <th></th>
           </tr>
         </thead>
@@ -152,25 +167,25 @@ const AdminList = ({ userList }) => {
                 >
                   <div
                     style={{
-                      margin: "-20px 0px 0px -20px",
+                      margin: "0px 0px 0px 0px",
                       width: "100%",
                     }}
                   >
+                   
                     {item?.role?.length > 0 ? (
-                      <Select
-                        className={`custom-ant-select ${TableStyle.customAntSelect}`}
-                        style={{ width: "100%", marginTop: "15px" }}
-                        defaultValue={item?.role[0]?.toLowerCase()}
-                      >
-                        {item?.role?.map((data) => (
-                          <Option key={data} value={data} disabled={true}>
-                            <span style={{ color: "#000" }}>
-                              {" "}
-                              {data.toLowerCase()}
-                            </span>
-                          </Option>
-                        ))}
-                      </Select>
+                       <Popover content={
+                        item?.role?.length>1 &&item?.role?.map((data) => (
+                         
+                           <div style={{ color: "#000" }}>
+                             {" "}
+                             {data.toLowerCase()}
+                           </div>
+                        
+                       ))
+                     }>
+ 
+                    {item?.role[0].toLowerCase()}
+                     </Popover>
                     ) : (
                       "---"
                     )}

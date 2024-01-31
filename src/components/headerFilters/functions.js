@@ -99,9 +99,10 @@ export const dateFormate = (dayjs, date) => {
 };
 
 //sorting
-export const sortFunction = (sortDir,setSortDir, setSortfield,field) => {
+export const sortFunction = (sortDir,setSortDir, setSort,field) => {
     setSortDir(sortDir==='ASC'?'DESC':'ASC')
-    setSortfield(field)
+    setSort({ sortDir: sortDir, sortField: field});
+
   
 };
 export const priorityOptions = [

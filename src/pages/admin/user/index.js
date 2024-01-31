@@ -45,6 +45,8 @@ const UserList = () => {
   const [roleValue, setRoleValue] = useState("");
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [totalElements, setTotalElements] = useState(10);
+  const [sortOrder,setSortOrder]=useState("ASC")
+  const[ sort,setSort]=useState({sortDir:"ASC",sortField:""})
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -155,7 +157,7 @@ const UserList = () => {
         setIsLoadingBtn(false);
       }
       // setAddPatientId(false);
-      getAllList(localUserId, pageNo, pageSize);
+      getAllList(localUserId, pageNo, pageSize,);
     }
 
     setValidated(true);
@@ -185,8 +187,8 @@ const UserList = () => {
     setLocalTenantId(tenId);
     setLocalUserId(uId);
     setLocalOrgId(orgId);
-    dispatch(getUsers({ pageCount, search, startDate, endDate, status, role }));
-  }, [pageCount, search, startDate, endDate, status, role]);
+    dispatch(getUsers({ pageCount, search, startDate, endDate, status, role,sort }));
+  }, [pageCount, search, startDate, endDate, status, role,sort]);
 
   return (
     <>
@@ -208,11 +210,11 @@ const UserList = () => {
                         isSelector={true}
                         setSelectedOption={setSelectedStatus}
                         selectOptions={options3}
-                        defaultSelectValue1={options3[0]}
+                        defaultSelectValue1={""}
                         //  selecte Role
                         selectlabel2="Select Role"
                         selectOptions2={RoleList}
-                        defaultSelectValue2={RoleList[0]}
+                        defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                        
 
@@ -241,6 +243,9 @@ const UserList = () => {
                           userList={userListAll?.data?.response?.content}
                           switchHandler={switchHandler}
                           setPageCount={setPageCount}
+                          sortOrder={sortOrder} 
+                          setSortOrder={setSortOrder} 
+                          setSort={setSort}
                         />
                       )}
                       <div>

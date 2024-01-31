@@ -99,7 +99,7 @@ const index = () => {
   const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
   const [aduitDueStartDate, setAduitDueStartDate] = useState("");
   const [aduitDueEndDate, setAduitDueEndDate] = useState("");
-  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [sort, setSort] = useState({ sortDir: "ASC", sortField: "" });
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -238,7 +238,7 @@ const index = () => {
                           generateOptionsList(filteredList)
                         }
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
-                        audidefaultAllocatedBy={"All"}
+                        // audidefaultAllocatedBy={""}
                         // select status
                         selectlabel="processed Status"
                         isSelector={true}
@@ -259,7 +259,7 @@ const index = () => {
                         setStartDate2={setCompletedStartDate}
                         setEndDate2={setCompletedEndDate}
                         isAnotherPicker={true}
-                        defaultAllocateTo={"All"}
+                        // defaultAllocateTo={""}
                         // allocated by
                         isAllocatedBySelector={true}
                         allocatedBylabel=" AllocatedBy"
@@ -268,7 +268,7 @@ const index = () => {
                           generateOptionsList(filteredList)
                         }
                         setSelAllocatedBy={setSelAllocatedBy}
-                        defaultAllocatedBy={"All"}
+                        // defaultAllocatedBy={"All"}
                         // allocated date
                         pickerlabe3="Allocated Date"
                         defaultStartDate3={""}
