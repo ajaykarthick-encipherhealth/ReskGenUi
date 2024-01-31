@@ -12,6 +12,7 @@ import {
   sortFunction,
   renderUserPrfoileAvatar
 } from "../../../headerFilters/functions";
+import SpinnerDots from "../../../spinner";
 
 
 function AllocatedL2AdminList({
@@ -22,6 +23,7 @@ function AllocatedL2AdminList({
   selectedRowsId,
   selectedChart,
   setSort,
+  isLoading
 }) {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
@@ -132,6 +134,7 @@ function AllocatedL2AdminList({
 
   return (
     <div className={TableStyle.classContaineer}>
+      {isLoading?<SpinnerDots/>:
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
@@ -210,6 +213,7 @@ function AllocatedL2AdminList({
           )}
         </tbody>
       </table>
+}
       <div></div>
     </div>
   ); // const updatedRows = selectAll ? [] : reportListAll;

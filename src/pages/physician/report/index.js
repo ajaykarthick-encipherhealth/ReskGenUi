@@ -73,7 +73,7 @@ const index = () => {
   const [receivedSortOrder, setReceivedSortOrder] = useState("ASC");
   const [sentSortOrder, setSentSortOrder] = useState("ASC");
   const [coderSortOrder, setCoderSortOrder] = useState("ASC");
-  const [sort, setSort] = useState({sortDir:"ASC",sortField:""});
+  const [sort, setSort] = useState({sortDir:"",sortField:""});
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
