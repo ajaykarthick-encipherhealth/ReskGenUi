@@ -21,6 +21,7 @@ import { getPriorityChange } from "../../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { Paginator } from "primereact/paginator";
+import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 
 const { Option } = AntSelect;
 
@@ -199,53 +200,30 @@ function PatientTable({
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.patientName}
           </td>
-          <td className={TableStyle.childBorder}>
-            {data.patientAllocated ? (
-              <Tooltip title={data.patientAllocated}>
-                {/* <Avatar
-              style={{
-                backgroundColor: "#fde3cf",
-                color: "#f56a00",
-                cursor: "pointer",
-              }}
-            >
-              {data.allocatedBy
-                ? data.allocatedBy.slice(0, 2).toUpperCase()
-                : "N"}
-            </Avatar> */}
-                {data.patientAllocated ? (
-                  <img
-                    src={dummyProfileImageUrl}
-                    alt="User Avatar"
-                    width={30}
-                    height={30}
-                    style={{ borderRadius: "50%", marginRight: "5px" }}
-                  />
-                ) : (
-                  <img
-                    src={nullImg}
-                    alt="User Avatar"
-                    width={30}
-                    height={30}
-                    style={{ borderRadius: "50%", marginRight: "10px" }}
-                  />
-                )}
-                {data.patientAllocated ? (
-                  <>
-                    {data.patientAllocated
-                      .split("@")[0]
-                      .charAt(0)
-                      .toUpperCase() +
-                      data.patientAllocated.split("@")[0].slice(1)}
-                  </>
-                ) : (
-                  "---"
-                )}
-              </Tooltip>
-            ) : (
-              "---"
-            )}
-          </td>
+          <td
+                  className={TableStyle.childBorder}
+                  style={{ textAlign: "center" }}
+                >
+                  {data.patientAllocatedFirstName || data.patientAllocatedLastName || data?.patientAllocatedProfileImage ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          data.patientAllocatedFirstName,
+                          data.patientAllocatedLastName,
+                          data?.patientAllocatedProfileImage,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
+                </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.auditAllocatedDate
               ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
@@ -262,50 +240,30 @@ function PatientTable({
               ? moment(data.auditedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
-            {data.allocatedBy ? (
-              <Tooltip title={data.allocatedBy}>
-                {/* <Avatar
-              style={{
-                backgroundColor: "#fde3cf",
-                color: "#f56a00",
-                cursor: "pointer",
-              }}
-            >
-              {data.allocatedBy
-                ? data.allocatedBy.slice(0, 2).toUpperCase()
-                : "N"}
-            </Avatar> */}
-                {data.allocatedBy ? (
-                  <img
-                    src={dummyProfileImageUrl}
-                    alt="User Avatar"
-                    width={30}
-                    height={30}
-                    style={{ borderRadius: "50%", marginRight: "5px" }}
-                  />
-                ) : (
-                  <img
-                    src={nullImg}
-                    alt="User Avatar"
-                    width={30}
-                    height={30}
-                    style={{ borderRadius: "50%", marginRight: "10px" }}
-                  />
-                )}
-                {data.allocatedBy ? (
-                  <>
-                    {data.allocatedBy.split("@")[0].charAt(0).toUpperCase() +
-                      data.allocatedBy.split("@")[0].slice(1)}
-                  </>
-                ) : (
-                  "---"
-                )}
-              </Tooltip>
-            ) : (
-              "---"
-            )}
-          </td>
+          <td
+                  className={TableStyle.childBorder}
+                  style={{ textAlign: "center" }}
+                >
+                  {data.auditAllocatedByFirstName || data.auditAllocatedByLastName || data?.auditAllocatedByProfileImage ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          data.auditAllocatedByFirstName,
+                          data.auditAllocatedByLastName,
+                          data?.auditAllocatedByProfileImage,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {data.auditAllocatedByFirstName} {data.auditAllocatedByLastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
+                </td>
           <td className={TableStyle.childBorder}>
             <AntSelect
               options={priorityOptions}
