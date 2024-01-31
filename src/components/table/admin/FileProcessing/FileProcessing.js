@@ -455,7 +455,11 @@ function FileProcessingTable({ patinetListAll }) {
             style={{
               display: "flex",
               justifyContent: "end",
-              color: errStages[data?.processStageChart] ? "red" : "#0000",
+              color: errStages[data?.processStageChart]
+                ? "red"
+                : stageChartMap2[data?.processStageChart] === "FINISHED"
+                ? "green"
+                : "#0000",
             }}
           >{`${uploadStatus}% Complete`}</div>
           {stepperVisible[index] && (
