@@ -18,9 +18,7 @@ import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { useSelector } from "react-redux";
-import moment from "moment";
 import dayjs from "dayjs";
-import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
 const WorkFlow = () => {
   const currentDate = dayjs();
@@ -33,15 +31,10 @@ const WorkFlow = () => {
 
   const startDate = DateRanges
     ? new Date(DateRanges?.startDate).toISOString()
-    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+    : last30thDate.toISOString().split("T")[0];
   const endDate = DateRanges
     ? new Date(DateRanges?.endDate).toISOString()
-    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
-
-  const dates = {
-    startDate,
-    endDate,
-  };
+    : lastDateWithTime.toISOString().split("T")[0];
 
   const handleOpen = () => {
     setOpenPicker(!openPicker);
@@ -101,9 +94,11 @@ const WorkFlow = () => {
     <div className={styles.card1}>
       <HeadTitle
         header={
-          DateRanges?.startDate
-            ? ` ${getSelectedDaysCount(DateRanges)} days work flow`
-            : `Last ${getSelectedDaysCount(dates) - 2} days work flow`
+          !DateRanges || DateRanges?.clear
+            ? `Last 30 days work flow`
+            : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
+                .subtract(1, "day")
+                .format("MM-DD-YYYY")}`
         }
         icon={calender}
         handleOpen={handleOpen}

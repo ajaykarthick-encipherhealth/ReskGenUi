@@ -16,7 +16,7 @@ import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
-import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
+import dayjs from "dayjs";
 
 const WorkFlow = () => {
   const currentDate = dayjs();
@@ -34,10 +34,7 @@ const WorkFlow = () => {
     ? new Date(DateRanges?.endDate).toISOString()
     : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
 
-  const dates = {
-    startDate,
-    endDate,
-  };
+
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
@@ -80,9 +77,11 @@ const WorkFlow = () => {
     <div className={styles.card1}>
       <HeadTitle
         header={
-          DateRanges?.startDate
-            ? ` ${getSelectedDaysCount(DateRanges)} days work flow`
-            : `Last ${getSelectedDaysCount(dates) - 2} days work flow`
+          !DateRanges || DateRanges?.clear
+            ? `Last 30 days work flow`
+            : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
+                .subtract(1, "day")
+                .format("MM-DD-YYYY")}`
         }
         icon={calender}
         handleOpen={handleOpen}

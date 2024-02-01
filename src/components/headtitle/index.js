@@ -84,11 +84,11 @@ const HeadTitle = ({
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);
-          setIsDisabled(true)
+          setIsDisabled(false)
         }}
         onCancel={() => {
           setOpenPicker(false);
-          setIsDisabled(true)
+          setIsDisabled(false)
         }}
       >
         <div className={styles.modalDetails}>
@@ -123,9 +123,10 @@ const HeadTitle = ({
               const dates = {
                 startDate: last30thDate.toISOString(),
                 endDate: lastDateWithTime,
+                clear:true
               };
               dispatch(getDateRange(dates));
-              // setOpenPicker(false);
+              setOpenPicker(false);
               setSelectedDates([]);
             }}
           >
