@@ -7,11 +7,12 @@ export const PatientsList = async (
   computationEnd = "",
   status,
   search = "",
-  completedStartDate,
-  completedEndDate,
+  createdStartDate,
+  createdEndDate,
   selAllocatedTo,
   selAllocatedBy,
-  selCreatedBy
+  selCreatedBy,
+  sort
 ) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
@@ -21,11 +22,11 @@ export const PatientsList = async (
     const response = await axios.get(
       `  ${
         ENDPOINTS?.apiEndoint
-      }dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&completedStartDate=${completedStartDate}&completedEndDate=${completedEndDate}&patientCreatedBy=${
+      }dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&createdStartDate=${createdStartDate}&createdEndDate=${createdEndDate}&patientCreatedBy=${
         selAllocatedBy === "All" ? "" : selAllocatedBy
       }&patientAllocatedTo=${
         selAllocatedTo === "All" ? "" : selAllocatedTo
-      }&patientAllocatedBy=${selCreatedBy === "All" ? "" : selCreatedBy}`,
+      }&patientAllocatedBy=${selCreatedBy === "All" ? "" : selCreatedBy}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -93,8 +93,8 @@ export default function Patient() {
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
-  const [sortOrder,setSortOrder]=useState("ASC")
-  const[ sort,setSort]=useState({sortDir:"ASC",sortField:""})
+  const [computedSortOrder, setComputedSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -116,7 +116,8 @@ export default function Patient() {
         completedEndDate,
         selAllocatedTo,
         selAllocatedBy,
-        selCreatedBy
+        selCreatedBy,
+        sort
       )
     );
   }, [
@@ -130,6 +131,7 @@ export default function Patient() {
     selAllocatedTo,
     selAllocatedBy,
     selCreatedBy,
+    sort
   ]);
 
   useEffect(() => {
@@ -170,11 +172,10 @@ export default function Patient() {
           createdBy: res.createdBy,
           allocatedByFirstName: res.allocatedByFirstName,
           allocatedByLastName: res.allocatedByLastName,
-          allocatedByProfileImage:res.allocatedByProfileImage,
-          createdByFirstName:res.createdByFirstName,
-          createdByLastName:res.createdByLastName,
-          createdByProfileImage:res.createdByProfileImage
-
+          allocatedByProfileImage: res.allocatedByProfileImage,
+          createdByFirstName: res.createdByFirstName,
+          createdByLastName: res.createdByLastName,
+          createdByProfileImage: res.createdByProfileImage,
         });
       });
       var newArray = [];
@@ -528,28 +529,12 @@ export default function Patient() {
                             defaultAllocateTo={"All"}
                             // allocated by
                             isAllocatedBySelector={true}
-                            allocatedBylabel="Allocated By"
-                            allocatedByOptoons={
-                              generateOptionsList(filteredList)
-                            }
+                            allocatedBylabel="Created By"
+                            allocatedByOptoons={generateOptionsList(
+                              filteredList
+                            )}
                             setSelAllocatedBy={setSelAllocatedBy}
                             defaultAllocatedBy={"All"}
-                            // allocated to
-                            isAllocatedToSelector={true}
-                            allocatedTolabel="Allocated To"
-                            allocatedToOptoons={
-                              generateOptionsList(filteredList)
-
-                            }
-                            setSelAllocatedTo={setSelAllocatedTo}
-                            defaultCreatedBy={"All"}
-                            // created by
-                            isCreatedBySelector={true}
-                            createdTolabel="Created By"
-                            createdByOptoons={
-                              generateOptionsList(filteredList)
-
-                            }
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}
                             addUserForm={addPatientFormId}
@@ -574,7 +559,8 @@ export default function Patient() {
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
-                              setSortOrder={setSortOrder} 
+                              setSortOrder={setComputedSortOrder}
+                              sortOrder={computedSortOrder}
                               setSort={setSort}
                             />
                             <div>
