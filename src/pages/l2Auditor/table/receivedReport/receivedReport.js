@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../../store/actions/ReportActions";
 import { Empty } from "antd";
 import Footer from "../../../../jsx/layouts/Footer";
-import { dateFormate } from "../../../../components/headerFilters/functions";
+import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
 
 function ReceivedReport({
@@ -19,8 +19,11 @@ function ReceivedReport({
   receivedEndDate,
   paginationFirst,
   loading,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
-  const [sortOrder, setSortOrder] = useState("asc");
+
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
   const dispatch = useDispatch();
@@ -70,14 +73,24 @@ function ReceivedReport({
                   <th>REPORT NAME</th>
                   <th>ACCESS TYPE</th>
                   <th>SENDER</th>
-                  <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
-                    DATE{" "}
-                    {sortOrder === "asc" ? (
-                      <ArrowUpOutlined />
-                    ) : (
-                      <ArrowDownOutlined />
-                    )}
-                  </th>
+                  <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "processedDate"
+                    );
+                  }}
+                >
+                   DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 </tr>
               </thead>
               <tbody>

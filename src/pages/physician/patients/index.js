@@ -243,7 +243,7 @@ const onPageChange = (e) => {
       let convertStartDate =
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
       let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
       setDueDateStart(convertStartDate);
       setDueDateEnd(convertEndDate);
       getFilteApi(
@@ -277,7 +277,7 @@ const onPageChange = (e) => {
       let convertStartDate =
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
       let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
       setProcessedStart(convertStartDate);
       setProcessedEnd(convertEndDate);
       getFilteApi(

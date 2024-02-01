@@ -28,6 +28,7 @@ import {
   priorityOptions,
   sortFunction,
   renderUserPrfoile,
+  renderUserPrfoileAvatar,
 } from "../../headerFilters/functions";
 
 const { Option } = AntSelect;
@@ -152,33 +153,31 @@ function PatientTable({
               ? moment(data.processedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
-            <div>
-              {data.allocatedBy ? (
-                <>
-                  {renderUserPrfoile(
-                    data?.allocatedByFirstName,
-                    data?.allocatedBylastName,
-                    data?.allocatedByProfileImage,
-                    null,
-                    "30px",
-                    "30px"
-                  )}
-                  {data.allocatedBy ? (
-                    <>
-                      {data?.allocatedByFirstName +
-                        " " +
-                        data?.allocatedByLastName}
-                    </>
+         
+          <td
+                  className={TableStyle.childBorder}
+                  style={{ textAlign: "center" }}
+                >
+                  {data.allocatedByFirstName || data.allocatedBylastName || data?.allocatedByProfileImage ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          data.allocatedByFirstName,
+                          data.allocatedBylastName,
+                          data?.allocatedByProfileImage,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {data.allocatedByFirstName} {data.allocatedBylastName}
+                      </span>
+                    </div>
                   ) : (
-                    "---"
+                    <div style={{ textAlign: "center" }}>---</div>
                   )}
-                </>
-              ) : (
-                "---"
-              )}
-            </div>
-          </td>
+                </td>
       
           <td className={TableStyle.childBorder}>
             <AntSelect
