@@ -557,7 +557,7 @@ function FileProcessingTable({ patinetListAll }) {
                 <SpinnerDots />
               </td>
             </tr>
-          ) : parsedData?.length <= 0 ? (
+          ) : parsedData?.length === 0 ? (
             <tr>
               <td colSpan="9">
                 <Empty />
