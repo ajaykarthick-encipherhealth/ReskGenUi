@@ -7,8 +7,10 @@ import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate } from "../../../../components/headerFilters/functions";
+import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+
 
 function CoderReport({
   setModal,
@@ -23,6 +25,9 @@ function CoderReport({
   setSelectedRows,
   selectAll,
   setSelectAll,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -223,8 +228,24 @@ function CoderReport({
                 <th></th>
                 <th>PATIENT ID</th>
                 <th>PATIENT NAME</th>
-
-                <th>COMPLETE DATE </th>
+                <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "processedDate"
+                    );
+                  }}
+                >
+                  COMPLETE DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 <th>COMMENTS </th>
                 <th>AUDITOR NAME </th>
                 <th>RAF SCORE </th>

@@ -4,14 +4,19 @@ import { Paginator } from "primereact/paginator";
 import { Empty, Modal, Popover } from "antd";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate } from "../../../../components/headerFilters/functions";
+import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+
 
 function SentReportTable({
   details,
   onSentPageChange,
   paginationFirst,
   loading,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
@@ -72,7 +77,24 @@ function SentReportTable({
                   <th>REPORT NAME</th>
                   {/* <th>SENDER</th> */}
                   <th>USER LIST</th>
-                  <th>DATE</th>
+                  <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "processedDate"
+                    );
+                  }}
+                >
+                   DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 </tr>
               </thead>
 
