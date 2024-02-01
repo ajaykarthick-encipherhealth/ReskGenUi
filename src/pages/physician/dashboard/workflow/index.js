@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 import Image from "next/image";
 import completed from "../../../../images/dashboard/completed.png";
 import calender from "../../../../images/dashboard/calender.png";
@@ -79,11 +79,11 @@ const WorkFlow = () => {
   return (
     <div className={styles.card1}>
       <HeadTitle
-        header={`Last ${
+        header={
           DateRanges?.startDate
-            ? getSelectedDaysCount(DateRanges)
-            : getSelectedDaysCount(dates) - 2
-        } days work flow `}
+            ? ` ${getSelectedDaysCount(DateRanges)} days work flow`
+            : `Last ${getSelectedDaysCount(dates) - 2} days work flow`
+        }
         icon={calender}
         handleOpen={handleOpen}
         openPicker={openPicker}

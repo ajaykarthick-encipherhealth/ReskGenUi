@@ -29,26 +29,22 @@ function CoderReport({
   setSort,
 }) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(selectedRow(selectedRows));
-  }, [selectedRows]);
 
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll;
+    const updatedRows = selectAll ? [] : reportListAll?.data;
     setSelectedRows(updatedRows);
   };
 
   const handleRowCheckboxChange = (row) => {
-    const isSelected = selectedRows.some(
-      (selectedRow) => selectedRow.patientId === row.patientId
+    const isSelected = selectedRows?.some(
+      (selectedRow) => selectedRow.patientId === row?.patientId
     );
-
     let updatedRows;
 
     if (isSelected) {
-      updatedRows = selectedRows.filter(
-        (selectedRow) => selectedRow.patientId !== row.patientId
+      updatedRows = selectedRows?.filter(
+        (selectedRow) => selectedRow.patientId !== row?.patientId
       );
     } else {
       updatedRows = [...selectedRows, row];
@@ -212,6 +208,11 @@ function CoderReport({
         );
     }
   };
+
+  useEffect(() => {
+    dispatch(selectedRow(selectedRows));
+  }, [selectedRows]);
+
   return (
     <div className={TableStyle.classContaineer}>
       {reportListAll?.data?.length === 0 ? (
@@ -222,7 +223,7 @@ function CoderReport({
             <tr style={{ textAlign: "center" }}>
               <>
                 <th></th>
-                <th style={{paddingLeft:"40px"}}>PATIENT ID</th>
+                <th style={{ paddingLeft: "40px" }}>PATIENT ID</th>
                 <th>PATIENT NAME</th>
                 <th
                   style={{ cursor: "pointer" }}
@@ -293,7 +294,7 @@ function CoderReport({
                         style={{
                           borderTop: "0.2px solid #e1e1e1",
                           borderBottom: "  0.2px solid #e1e1e1",
-                          paddingLeft:"60px"
+                          paddingLeft: "60px",
                         }}
                         className={TableStyle.childBorder}
                       >
@@ -352,7 +353,7 @@ function CoderReport({
                           onChange={() => {
                             handleRowCheckboxChange(row);
                           }}
-                          checked={selectedRows?.data?.some(
+                          checked={selectedRows?.some(
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
@@ -372,7 +373,7 @@ function CoderReport({
                         style={{
                           borderTop: "0.2px solid #e1e1e1",
                           borderBottom: "  0.2px solid #e1e1e1",
-                          paddingLeft:"60px"
+                          paddingLeft: "60px",
                         }}
                         className={TableStyle.childBorder}
                       >
@@ -427,7 +428,7 @@ function CoderReport({
                           onChange={() => {
                             handleRowCheckboxChange(row);
                           }}
-                          checked={selectedRows?.data?.some(
+                          checked={selectedRows?.some(
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
