@@ -27,10 +27,8 @@ export const getDateWeek = (date) => {
   return currentWeek;
 };
 
-export const getDays = (currentDate) => {
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-  const totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+export const getDays = (dataLength) => {
+  const totalDaysInMonth =  dataLength
   return Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
 };
 
@@ -139,7 +137,8 @@ const Accuracy = () => {
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
-    xAxisData = getDays(currentDate);
+    xAxisData = getDays(accuracyDatas?.data?.response?.mapAccuracy &&
+      Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length);
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
