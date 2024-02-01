@@ -225,7 +225,7 @@ export const getCoderDetails = ({ name, search, selectedOption, router }) => {
   };
 };
 
-export const getFilters = (field,username) => {
+export const getFilters = (field,username,pageQueue) => {
   return (dispatch) => {
     dispatch({
       type: FILTER,
@@ -234,7 +234,7 @@ export const getFilters = (field,username) => {
       },
     });
     try {
-      filters(field,username).then((response) => {
+      filters(field,username,pageQueue).then((response) => {
         dispatch({
           type: FILTER,
           payload: {

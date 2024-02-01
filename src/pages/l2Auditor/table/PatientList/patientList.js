@@ -1,48 +1,29 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../../../../components/table/table.module.css";
-import {
-  faSort,
-  faSortUp,
-  faSortDown,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Avatar,
-  Tooltip,
-  notification,
-  Select as AntSelect,
-  Empty,
-} from "antd";
+import { notification, Select as AntSelect, Empty } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { getPriorityChange } from "../../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { Paginator } from "primereact/paginator";
-import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
-
-const { Option } = AntSelect;
+import {
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../../../components/headerFilters/functions";
 
 function PatientTable({
   patinetListAll,
-  actionBodyTemplate,
   statusBodyTemplate,
   patientDetails,
-  paginationFirst,
-  totalElements,
-  onPageChange,
   setSort,
 }) {
-  const [sortDueOrder, setSortDueOrder] = useState("ASC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
-  const [sortAuditOrder, setSortAuditOrder] = useState("ASC");
-
-  const [detailsContent, setDetailsContent] = useState(patinetListAll);
-
   const dispatch = useDispatch();
   const navigate = useRouter();
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
+  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
 
   const priorityOptions = [
     {
@@ -85,46 +66,12 @@ function PatientTable({
     },
   ];
 
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: null,
-  });
-  const [hoveredAvatar, setHoveredAvatar] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState({
-    id: "meat-01",
-    value: "HIGH",
-  });
-
   const handlePriorityChange = (patientId, selectedValue) => {
     setSelectedPriority((prev) => ({
       ...prev,
       id: patientId,
       value: selectedValue,
     }));
-  };
-
-  const handleAvatarHover = (data) => {
-    setHoveredAvatar(data);
-  };
-
-  const handleAvatarClick = (data) => {
-    gotoPatientDetails(data);
-  };
-
-  const requestSort = (key) => {
-    console.log(key);
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const getClassNamesFor = (name) => {
-    if (!sortConfig) {
-      return;
-    }
-    return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
   const gotoPatientDetails = (data) => {
@@ -151,40 +98,6 @@ function PatientTable({
     }
   };
 
-  const TickMark = () => (
-    <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
-  );
-
-  const sortTableByDate = (value) => {
-    const sortedContent = [...detailsContent];
-    if (value === "dueDate") {
-      if (sortDueOrder === "asc") {
-        sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
-        setSortDueOrder("desc");
-      } else {
-        sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
-        setSortDueOrder("asc");
-      }
-    }
-    if (value === "completeDate") {
-      if (sortCompleteOrder === "asc") {
-        sortedContent.sort((a, b) =>
-          dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate))
-        );
-        setSortCompleteOrder("desc");
-      } else {
-        sortedContent.sort((a, b) =>
-          dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate))
-        );
-        setSortCompleteOrder("asc");
-      }
-    }
-    setDetailsContent(sortedContent);
-  };
-  const dummyProfileImageUrl =
-    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
-  const nullImg =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <Empty />
@@ -201,29 +114,32 @@ function PatientTable({
             {data.patientName}
           </td>
           <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {data.patientAllocatedFirstName || data.patientAllocatedLastName || data?.patientAllocatedProfileImage ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
-                        {" "}
-                        {renderUserPrfoileAvatar(
-                          data.patientAllocatedFirstName,
-                          data.patientAllocatedLastName,
-                          data?.patientAllocatedProfileImage,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
+            {data.patientAllocatedFirstName ||
+            data.patientAllocatedLastName ||
+            data?.patientAllocatedProfileImage ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {" "}
+                <span style={{ marginRight: "10px" }}>
+                  {" "}
+                  {renderUserPrfoileAvatar(
+                    data.patientAllocatedFirstName,
+                    data.patientAllocatedLastName,
+                    data?.patientAllocatedProfileImage,
+                    "header"
                   )}
-                </td>
+                </span>
+                <span>
+                  {data.patientAllocatedFirstName}{" "}
+                  {data.patientAllocatedLastName}
+                </span>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
+          </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.auditAllocatedDate
               ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
@@ -241,29 +157,32 @@ function PatientTable({
               : "---"}
           </td>
           <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {data.auditAllocatedByFirstName || data.auditAllocatedByLastName || data?.auditAllocatedByProfileImage ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
-                        {" "}
-                        {renderUserPrfoileAvatar(
-                          data.auditAllocatedByFirstName,
-                          data.auditAllocatedByLastName,
-                          data?.auditAllocatedByProfileImage,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {data.auditAllocatedByFirstName} {data.auditAllocatedByLastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
+            {data.auditAllocatedByFirstName ||
+            data.auditAllocatedByLastName ||
+            data?.auditAllocatedByProfileImage ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {" "}
+                <span style={{ marginRight: "10px" }}>
+                  {" "}
+                  {renderUserPrfoileAvatar(
+                    data.auditAllocatedByFirstName,
+                    data.auditAllocatedByLastName,
+                    data?.auditAllocatedByProfileImage,
+                    "header"
                   )}
-                </td>
+                </span>
+                <span>
+                  {data.auditAllocatedByFirstName}{" "}
+                  {data.auditAllocatedByLastName}
+                </span>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
+          </td>
           <td className={TableStyle.childBorder}>
             <AntSelect
               options={priorityOptions}
@@ -304,11 +223,12 @@ function PatientTable({
             <th>L1 AUDITOR</th>
             <th
               onClick={() => {
-                setSortAuditOrder(sortAuditOrder === "ASC" ? "DESC" : "ASC");
-                setSort({
-                  sortDir: sortAuditOrder,
-                  sortField: "auditAllocatedDate",
-                });
+                sortFunction(
+                  sortAuditOrder,
+                  setSortAuditOrder,
+                  setSort,
+                  "auditAllocatedDate"
+                );
               }}
             >
               AUDIT ALLOCATED DATE
@@ -322,11 +242,12 @@ function PatientTable({
             </th>
             <th
               onClick={() => {
-                setSortDueOrder(sortDueOrder === "ASC" ? "DESC" : "ASC");
-                setSort({
-                  sortDir: sortDueOrder,
-                  sortField: "auditDueDate",
-                });
+                sortFunction(
+                  sortDueOrder,
+                  setSortDueOrder,
+                  setSort,
+                  "auditDueDate"
+                );
               }}
             >
               AUDITED DUE DATE
@@ -340,13 +261,12 @@ function PatientTable({
             </th>
             <th
               onClick={() => {
-                setSortCompleteOrder(
-                  sortCompleteOrder === "ASC" ? "DESC" : "ASC"
+                sortFunction(
+                  sortCompleteOrder,
+                  setSortCompleteOrder,
+                  setSort,
+                  "auditedDate"
                 );
-                setSort({
-                  sortDir: sortCompleteOrder,
-                  sortField: "auditedDate",
-                });
               }}
             >
               AUDITED DATE

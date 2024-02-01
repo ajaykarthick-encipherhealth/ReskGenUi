@@ -126,6 +126,7 @@ const HeaderFilters = ({
   btnTitle,
   badges,
   setIsModalVisible,
+  optionKey
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -362,7 +363,7 @@ const HeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("createdBy"));
+                  dispatch(getFilters(optionKey?optionKey:"createdBy",null,"audited queue"));
                 }}
               >
                 <label>{createdTolabel}</label>
