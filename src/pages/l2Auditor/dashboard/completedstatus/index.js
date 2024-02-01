@@ -68,7 +68,10 @@ const CompletedStatus = () => {
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
-    xAxisData = getDays(currentDate);
+    xAxisData = getDays(
+      completedDatas?.data?.response?.audit &&
+        Object.keys(completedDatas?.data?.response?.audit)?.length
+    );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }

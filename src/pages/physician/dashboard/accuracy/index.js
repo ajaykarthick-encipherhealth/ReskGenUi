@@ -12,14 +12,18 @@ import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Spin } from "antd";
-import spinSTYles from '../../../../styles/auth.module.css'
+import spinSTYles from "../../../../styles/auth.module.css";
 
 export const getISOWeekNumber = (date) => {
   const currentDate = new Date(date);
   currentDate.setHours(0, 0, 0, 0);
-  currentDate.setDate(currentDate.getDate() + 3 - ((currentDate.getDay() + 6) % 7));
+  currentDate.setDate(
+    currentDate.getDate() + 3 - ((currentDate.getDay() + 6) % 7)
+  );
   const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
-  const weekNumber = Math.ceil(((currentDate - startOfYear) / 86400000 + 1) / 7);
+  const weekNumber = Math.ceil(
+    ((currentDate - startOfYear) / 86400000 + 1) / 7
+  );
 
   return weekNumber;
 };
@@ -31,11 +35,13 @@ export const getDateWeek = (date) => {
   return startingWeek;
 };
 
-export const getDays = (currentDate) => {
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-  const totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  return Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
+export const getDays = (datasLength) => {
+  const totalDaysInMonth = datasLength;
+  if (datasLength) {
+    return Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
+  } else {
+    return [];
+  }
 };
 
 export const monthNames = [
@@ -63,7 +69,9 @@ const Accuracy = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const dispatch = useDispatch();
   const accuracyDatas = useSelector((state) => state?.workFlow?.accuracy);
-  const numberOfWeeks = accuracyDatas?.data?.response && Object.keys(accuracyDatas?.data?.response)?.length;
+  const numberOfWeeks =
+    accuracyDatas?.data?.response &&
+    Object.keys(accuracyDatas?.data?.response)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -95,7 +103,10 @@ const Accuracy = () => {
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
-    xAxisData = getDays(currentDate);
+    xAxisData = getDays(
+      accuracyDatas?.data?.response &&
+        Object.keys(accuracyDatas?.data?.response)?.length
+    );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
@@ -106,8 +117,7 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     highlightIndex = currentDate.getDate() - 1;
   } else if (currentBtn === "Weekly") {
-    const currentWeek = getISOWeekNumber(currentDate);
-
+    const currentWeek = getDateWeek(currentDate);
     highlightIndex = currentWeek - 1;
   }
 
@@ -127,8 +137,8 @@ const Accuracy = () => {
       show: true,
 
       formatter: function (params) {
-        let tooltipContent = '';
-      
+        let tooltipContent = "";
+
         if (Array.isArray(params)) {
           params.forEach((item) => {
             const allocatedValue = Number(item.data).toFixed(2);
@@ -138,10 +148,9 @@ const Accuracy = () => {
           const allocatedValue = Number(params.data).toFixed(2);
           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
         }
-      
+
         return tooltipContent;
       },
-      
     },
     series: [
       {
@@ -163,7 +172,7 @@ const Accuracy = () => {
 
   return (
     <>
-     <HeadTitle header="Accuracy Score" />
+      <HeadTitle header="Accuracy Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -203,8 +212,8 @@ const Accuracy = () => {
                 <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
-              ) : (
-                accuracyDatas?.loading===false && accuracyDatas?.data?.response?
+              ) : accuracyDatas?.loading === false &&
+                accuracyDatas?.data?.response ? (
                 option && (
                   <ReactECharts
                     option={option}
@@ -215,11 +224,11 @@ const Accuracy = () => {
                       overflowX: "hidden",
                     }}
                   />
-                ):<div
-                className={spinSTYles.spinStyle}
-               >
-                <Empty/>
-               </div>
+                )
+              ) : (
+                <div className={spinSTYles.spinStyle}>
+                  <Empty />
+                </div>
               )}
             </div>
             <div className={styles.accuracy}>
