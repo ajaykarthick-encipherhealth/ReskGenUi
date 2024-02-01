@@ -91,12 +91,12 @@ export const getUsersList = (id, search) => {
 
 export const getSentDetails = (pagenum, startDate, endDate, search,sort) => {
   return (dispatch) => {
-    // dispatch({
-    //   type: SENT_REPORT,
-    //   payload: {
-    //     loading: true,
-    //   },
-    // });
+    dispatch({
+      type: SENT_REPORT,
+      payload: {
+        loading: true,
+      },
+    });
     try {
       SentReport(pagenum, startDate, endDate, search,sort).then((response) => {
         if (response) {
@@ -116,12 +116,12 @@ export const getSentDetails = (pagenum, startDate, endDate, search,sort) => {
 };
 export const getReceivedDetails = (pagenum, startDate, endDate, search,sort) => {
   return (dispatch) => {
-    // dispatch({
-    //   type: RECEIVED_REPORT,
-    //   payload: {
-    //     loading: true,
-    //   },
-    // });
+    dispatch({
+      type: RECEIVED_REPORT,
+      payload: {
+        loading: true,
+      },
+    });
     try {
       ReceivedReport(pagenum, startDate, endDate, search,sort).then((response) => {
         if (response) {
