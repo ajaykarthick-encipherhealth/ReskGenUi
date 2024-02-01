@@ -70,10 +70,10 @@ const index = () => {
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
-  const [receivedSortOrder, setReceivedSortOrder] = useState("ASC");
-  const [sentSortOrder, setSentSortOrder] = useState("ASC");
-  const [coderSortOrder, setCoderSortOrder] = useState("ASC");
-  const [sort, setSort] = useState({ sortDir: "ASC", sortField: "" });
+  const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
+  const [sentSortOrder, setSentSortOrder] = useState("DESC");
+  const [coderSortOrder, setCoderSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
