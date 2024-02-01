@@ -269,8 +269,8 @@ function PatientTable({
             </th>
 
             <th>ALLOCATED BY</th>
-            <th>PRIORITY</th>
-            <th>STATUS</th>
+            <th style={{paddingLeft:"35px"}}>PRIORITY</th>
+            <th style={{paddingLeft:"65px"}}>STATUS</th>
           </tr>
         </thead>
 

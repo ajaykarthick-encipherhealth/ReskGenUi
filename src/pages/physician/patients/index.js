@@ -146,7 +146,7 @@ export default function Patient() {
   ) => {
     // setIsLoading(true);
     var uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}&sortField=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
     dispatch(getpatientsListFilter(resoureUrl));
   };
 
@@ -415,6 +415,12 @@ const onPageChange = (e) => {
                                 <span className={visitStyles.declined}></span>
                                 <span className={visitStyles.flagCodes}>
                                   Declined
+                                </span>
+                              </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.declined} style={{background:'#87d0f5'}}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Computed
                                 </span>
                               </div>
                             </div>
