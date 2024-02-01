@@ -17,9 +17,9 @@ import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAct
 const UserQueue = ({ userList, setSort }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [processSort, setProcessSort] = useState("ASC");
-  const [auditAllocatedSort, setAuditAllocatedSort] = useState("ASC");
-  const [audirDateSort, setAuditDateSort] = useState("ASC");
+  const [processSort, setProcessSort] = useState("DESC");
+  const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
+  const [audirDateSort, setAuditDateSort] = useState("DESC");
   const [auditDueSort, setAuditDueSort] = useState("DESC");
   const badgeDisplay = (data) => {
     if (data?.auditedStatus === "AUDITED") {
@@ -135,16 +135,7 @@ const UserQueue = ({ userList, setSort }) => {
                             data?.allocatedByLastName,
                             data?.allocatedByProfileImage
                           )}
-                          {data.allocatedBy ? (
-                            <>
-                              {
-                                data?.allocatedBy
-                                
-                              }
-                            </>
-                          ) : (
-                            "---"
-                          )}
+                          {data.allocatedBy ? <>{data?.allocatedBy}</> : "---"}
                         </>
                       ) : (
                         "---"
@@ -182,45 +173,48 @@ const UserQueue = ({ userList, setSort }) => {
           </td>
 
           <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {data.auditAllocatedByFirstName || data.auditAllocatedByLastName || data?.auditAllocatedByProfileImage ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
-                        {" "}
-                        {renderUserPrfoileAvatar(
-                          data.auditAllocatedByFirstName,
-                          data.auditAllocatedByLastName,
-                          data?.auditAllocatedByProfileImage,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {data.auditAllocatedByFirstName} {data.auditAllocatedByLastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
+            {data.auditAllocatedByFirstName ||
+            data.auditAllocatedByLastName ||
+            data?.auditAllocatedByProfileImage ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {" "}
+                <span style={{ marginRight: "10px" }}>
+                  {" "}
+                  {renderUserPrfoileAvatar(
+                    data.auditAllocatedByFirstName,
+                    data.auditAllocatedByLastName,
+                    data?.auditAllocatedByProfileImage,
+                    "header"
                   )}
-                </td>
+                </span>
+                <span>
+                  {data.auditAllocatedByFirstName}{" "}
+                  {data.auditAllocatedByLastName}
+                </span>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
+          </td>
           <td
             className={TableStyle.childBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-            
             <Popover
               content={
                 data.auditedDate &&
                 renderUserPrfoile(
-                data?.firstName,
-                data?.lastName,
-                data?.profileImageUrl,
-                null,
-                "30px",
-                "30px"
-              )}
+                  data?.firstName,
+                  data?.lastName,
+                  data?.profileImageUrl,
+                  null,
+                  "30px",
+                  "30px"
+                )
+              }
             >
               {data.auditedDate
                 ? moment(data.auditedDate).format("MM-DD-YYYY")
@@ -278,10 +272,9 @@ const UserQueue = ({ userList, setSort }) => {
               COMPLETED DATE
               <span style={{ cursor: "pointer" }}>
                 {processSort === "ASC" ? (
-                     <ArrowDownOutlined />
+                  <ArrowDownOutlined />
                 ) : (
                   <ArrowUpOutlined />
-
                 )}
               </span>
             </th>
@@ -299,9 +292,8 @@ const UserQueue = ({ userList, setSort }) => {
               AUDIT ALLOCATED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
                 {auditAllocatedSort === "ASC" ? (
-                 <ArrowDownOutlined />
+                  <ArrowDownOutlined />
                 ) : (
-                 
                   <ArrowUpOutlined />
                 )}
               </span>
@@ -315,9 +307,7 @@ const UserQueue = ({ userList, setSort }) => {
               AUDIT DUE DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
                 {auditDueSort === "ASC" ? (
-                   <ArrowUpOutlined />
-                  
-                  
+                  <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
@@ -333,9 +323,8 @@ const UserQueue = ({ userList, setSort }) => {
               AUDITED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
                 {audirDateSort === "ASC" ? (
-                 <ArrowDownOutlined />
+                  <ArrowDownOutlined />
                 ) : (
-                  
                   <ArrowUpOutlined />
                 )}
               </span>
