@@ -13,6 +13,7 @@ import {
 } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import SpinnerDots from "../../../spinner";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
@@ -96,167 +97,179 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   return (
     <div className={TableStyle.classContaineer}>
-      <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
-          <tr>
-            <th style={{ textAlign: "left", paddingLeft: "72px" }}>NAME</th>
-            <th className={TableStyle.rowStyle} style={{ textAlign: "center" }}>
-              EMAIL
-            </th>
-            <th style={{ textAlign: "center", paddingLeft: "33px" }}>ROLE</th>
-            <th
-              style={{ cursor: "pointer", textAlign: "center" }}
-              onClick={() => {
-                sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
-              }}
-            >
-              DATE CREATED{" "}
-              {sortOrder === "ASC" ? (
-                <ArrowUpOutlined />
-              ) : (
-                <ArrowDownOutlined />
-              )}
-            </th>
-            <th className={TableStyle.rowStyle} style={{ textAlign: "center" }}>
-              MFA
-            </th>
-            <th style={{ textAlign: "center" }}>ACTION</th>
-            <th style={{ textAlign: "center" }}>USER STATUS</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userList?.length > 0 ? (
-            userList?.map((item, index) => (
-              <tr key={index} style={{ height: "35px" }}>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {item.firstName || item.lastName || item?.profileImageUrl ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
+      {!userList ? (
+        <SpinnerDots />
+      ) : (
+        <table className={TableStyle.classTable}>
+          <thead className={TableStyle.classThead}>
+            <tr>
+              <th style={{ textAlign: "left", paddingLeft: "72px" }}>NAME</th>
+              <th
+                className={TableStyle.rowStyle}
+                style={{ textAlign: "center" }}
+              >
+                EMAIL
+              </th>
+              <th style={{ textAlign: "center", paddingLeft: "33px" }}>ROLE</th>
+              <th
+                style={{ cursor: "pointer", textAlign: "center" }}
+                onClick={() => {
+                  sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
+                }}
+              >
+                DATE CREATED{" "}
+                {sortOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+              <th
+                className={TableStyle.rowStyle}
+                style={{ textAlign: "center" }}
+              >
+                MFA
+              </th>
+              <th style={{ textAlign: "center" }}>ACTION</th>
+              <th style={{ textAlign: "center" }}>USER STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userList?.length > 0 ? (
+              userList?.map((item, index) => (
+                <tr key={index} style={{ height: "35px" }}>
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{ textAlign: "center" }}
+                  >
+                    {item.firstName ||
+                    item.lastName ||
+                    item?.profileImageUrl ? (
+                      <div style={{ display: "flex", alignItems: "center" }}>
                         {" "}
-                        {renderUserPrfoileAvatar(
-                          item.firstName,
-                          item.lastName,
-                          item?.profileImageUrl,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {item.firstName} {item.lastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
-                  )}
-                </td>
+                        <span style={{ marginRight: "10px" }}>
+                          {" "}
+                          {renderUserPrfoileAvatar(
+                            item.firstName,
+                            item.lastName,
+                            item?.profileImageUrl,
+                            "header"
+                          )}
+                        </span>
+                        <span>
+                          {item.firstName} {item.lastName}
+                        </span>
+                      </div>
+                    ) : (
+                      <div style={{ textAlign: "center" }}>---</div>
+                    )}
+                  </td>
 
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important", textAlign: "center" }}
-                >
-                  <span>{item?.email ? item?.email : "---"}</span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{
-                    height: "40px !important",
-                    textAlign: "center",
-                    paddingLeft: "70px",
-                  }}
-                >
-                  <div
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{ height: "40px !important", textAlign: "center" }}
+                  >
+                    <span>{item?.email ? item?.email : "---"}</span>
+                  </td>
+                  <td
+                    className={TableStyle.childBorder}
                     style={{
-                      margin: "0px 0px 0px 0px",
-                      width: "100%",
+                      height: "40px !important",
+                      textAlign: "center",
+                      paddingLeft: "70px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        margin: "0px 0px 0px 0px",
+                        width: "100%",
+                        textAlign: "center",
+                      }}
+                    >
+                      {item?.role?.length > 0 ? (
+                        <>
+                          <Popover
+                            trigger="hover"
+                            content={
+                              item?.role?.length > 1 &&
+                              item?.role?.map((data) => (
+                                <div style={{ color: "#000" }}>
+                                  {" "}
+                                  {data.toLowerCase()}
+                                </div>
+                              ))
+                            }
+                          >
+                            {item?.role[0].toLowerCase()}
+                          </Popover>
+                        </>
+                      ) : (
+                        "---"
+                      )}
+                    </div>
+                  </td>
+
+                  <td
+                    className={TableStyle.lastBorder}
+                    style={{ height: "40px !important", textAlign: "center" }}
+                  >
+                    <span>{dateFormate(dayjs, item?.createdDate)}</span>
+                  </td>
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{ height: "40px !important", textAlign: "center" }}
+                  >
+                    <span>
+                      {" "}
+                      {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
+                    </span>
+                  </td>
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{
+                      height: "40px !important",
+                      cursor: "pointer",
                       textAlign: "center",
                     }}
                   >
-                    {item?.role?.length > 0 ? (
-                      <>
-                        <Popover
-                          trigger="hover"
-                          content={
-                            item?.role?.length > 1 &&
-                            item?.role?.map((data) => (
-                              <div style={{ color: "#000" }}>
-                                {" "}
-                                {data.toLowerCase()}
-                              </div>
-                            ))
-                          }
-                        >
-                          {item?.role[0].toLowerCase()}
-                        </Popover>
-                      </>
-                    ) : (
-                      "---"
-                    )}
-                  </div>
-                </td>
-
-                <td
-                  className={TableStyle.lastBorder}
-                  style={{ height: "40px !important", textAlign: "center" }}
-                >
-                  <span>{dateFormate(dayjs, item?.createdDate)}</span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important", textAlign: "center" }}
-                >
-                  <span>
-                    {" "}
-                    {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
-                  </span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{
-                    height: "40px !important",
-                    cursor: "pointer",
-                    textAlign: "center",
-                  }}
-                >
-                  <div>
-                    <Popover
-                      content={() => getContent(item)}
-                      title="Change Role"
-                      trigger="click"
-                    >
-                      <div
-                        onClick={() => {
-                          setRowData(item);
-                        }}
+                    <div>
+                      <Popover
+                        content={() => getContent(item)}
+                        title="Change Role"
+                        trigger="click"
                       >
-                        <EditButton />
-                      </div>
-                    </Popover>
-                  </div>
-                </td>
-                <td
-                  className={TableStyle.lastBorder}
-                  style={{ height: "40px !important", textAlign: "center" }}
-                >
-                  <Switch
-                    defaultChecked={item?.accountStatus}
-                    onChange={(checked) => onChange(item, checked)}
-                    style={{ color: "red" }}
-                  />
+                        <div
+                          onClick={() => {
+                            setRowData(item);
+                          }}
+                        >
+                          <EditButton />
+                        </div>
+                      </Popover>
+                    </div>
+                  </td>
+                  <td
+                    className={TableStyle.lastBorder}
+                    style={{ height: "40px !important", textAlign: "center" }}
+                  >
+                    <Switch
+                      defaultChecked={item?.accountStatus}
+                      onChange={(checked) => onChange(item, checked)}
+                      style={{ color: "red" }}
+                    />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8">
+                  <Empty />
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="8">
-                <Empty />
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

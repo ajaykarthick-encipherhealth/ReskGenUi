@@ -45,8 +45,8 @@ const UserList = () => {
   const [roleValue, setRoleValue] = useState("");
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [totalElements, setTotalElements] = useState(10);
-  const [sortOrder,setSortOrder]=useState("ASC")
-  const[ sort,setSort]=useState({sortDir:"ASC",sortField:""})
+  const [sortOrder,setSortOrder]=useState("DESC")
+  const[ sort,setSort]=useState({sortDir:"",sortField:""})
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -236,9 +236,7 @@ const UserList = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {userListAll?.loading ? (
-                        <SpinnerDots />
-                      ) : (
+                     
                         <AdminList
                           userList={userListAll?.data?.response?.content}
                           switchHandler={switchHandler}
@@ -247,7 +245,7 @@ const UserList = () => {
                           setSortOrder={setSortOrder} 
                           setSort={setSort}
                         />
-                      )}
+                     
                       <div>
                         <div className="pagination-container">
                           <Paginator
