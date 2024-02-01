@@ -2,7 +2,7 @@ import { Avatar } from "antd";
 import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
 import moment from "moment";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 // for search
 export const searchFunction = (
   e,
@@ -42,28 +42,39 @@ export const handleRnagePicker = (
   setCoderEndDate
 ) => {
   if (dates === null || (Array.isArray(dates) && dates.length === 0)) {
-    setSelectedDates(null); 
-    setCoderStartDate();
-    setCoderEndDate();
-    setStartDate();
-    setEndDate();
-    setReceivedStartDate();
-    setReceivedEndDate();
+    if (setSelectedDates) {
+      setSelectedDates(null);
+    }
+    if (activeTab === "SentReport") {
+      setStartDate("");
+      setEndDate("");
+    } else if (activeTab === "ReceivedReport") {
+      setReceivedStartDate("");
+      setReceivedEndDate("");
+    } else if (activeTab === "CoderReport") {
+      setCoderStartDate("");
+      setCoderEndDate("");
+    } else {
+      setStartDate("");
+      setEndDate("");
+    }
+
     return;
   }
 
-  const formattedDates = dateString?.length>0 && dateString?.map((data, index) => {
-    const formattedDate =
-      index === 1
-        ? data && `${data}T23:59:59.999Z`
-        : data && `${data}T00:00:00.000Z`;
-        
-    return formattedDate;
-  });
-  setSelectedDates([
-    dayjs(dateString[0]),
-    dayjs(dateString[1]),
-  ]);
+  const formattedDates =
+    dateString?.length > 0 &&
+    dateString?.map((data, index) => {
+      const formattedDate =
+        index === 1
+          ? data && `${data}T23:59:59.999Z`
+          : data && `${data}T00:00:00.000Z`;
+
+      return formattedDate;
+    });
+  if (setSelectedDates) {
+    setSelectedDates([dayjs(dateString[0]), dayjs(dateString[1])]);
+  }
   if (activeTab === "SentReport") {
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
@@ -220,8 +231,12 @@ export const generateOptionsList = (items) => {
     const options = [
       { label: "All", value: "" },
       ...items.data.data.response.map((item) => ({
-        label: item,
-        value: item,
+        label: (
+          <span>
+            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+          </span>
+        ),
+        value: item?.userName,
       })),
     ].filter(Boolean);
     return options;
