@@ -214,7 +214,7 @@ export const processstatusBodyTemplate = (rowData) => {
 };
 
 export const generateOptionsList = (items) => {
-  if (items?.loading || items === null) {
+  if (items?.loading && items?.length ===0 || items === null) {
     return [{ label: "Loading...", value: "Loading..." }];
   } else if (items?.data?.data.response?.length > 0) {
     const options = [

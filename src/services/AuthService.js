@@ -202,3 +202,19 @@ export const filters = async (field,username,pageQueue) => {
     }
   }
 
+  export const currentUser=async(userId)=>{
+    const token = localStorage.getItem("token");
+      try {
+        const response = await axios.get(
+          `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return response;
+      } catch (err) {
+        console.log(err);
+      }
+  }

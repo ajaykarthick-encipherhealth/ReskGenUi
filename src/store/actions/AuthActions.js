@@ -10,6 +10,7 @@ import {
   verifyCode,
   accuracy,
   filters,
+  currentUser,
 } from "../../services/AuthService";
 import { notification } from "antd";
 
@@ -27,6 +28,7 @@ export const ENABLEMFA = "ENABLEMFA";
 export const VERIFYCODE = "VERIFYCODE";
 export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
+export const CURRENT_USER='CURRENT_USER'
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -248,3 +250,21 @@ export const getFilters = (field,username,pageQueue) => {
     }
   };
 };
+
+export const getCurrentUser = (userId) => {
+  return (dispatch) => {
+    try {
+      currentUser(userId).then((response) => {
+        dispatch({
+          type: CURRENT_USER,
+          payload:  response,
+          
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+

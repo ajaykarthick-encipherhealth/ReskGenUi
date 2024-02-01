@@ -21,9 +21,11 @@ import auditPending from "../../../../images/svg/auditPending.svg";
 import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
-import  userStyles  from "./styles.module.css";
-import { getFilters } from "../../../../store/actions/AuthActions";
-
+import userStyles from "./styles.module.css";
+import {
+  getCurrentUser,
+  getFilters,
+} from "../../../../store/actions/AuthActions";
 
 const bullets = [
   {
@@ -44,7 +46,7 @@ const badges = [
   {
     color: "#FFBE00",
     name: "Re Audit",
-    src:   auditHold,
+    src: auditHold,
   },
   {
     color: "#964B00",
@@ -76,7 +78,7 @@ const index = () => {
   const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const filteredList = useSelector((state) => state.auth.filterList);
-  const usersDetails = useSelector((state) => state.l2User?.userDetails);
+  const currentUser = useSelector((state) => state.auth.currentUserInfo);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
@@ -99,7 +101,10 @@ const index = () => {
   const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
   const [aduitDueStartDate, setAduitDueStartDate] = useState("");
   const [aduitDueEndDate, setAduitDueEndDate] = useState("");
-  const [sort, setSort] = useState({ sortDir: "DESC", sortField: "auditDueDate" });
+  const [sort, setSort] = useState({
+    sortDir: "DESC",
+    sortField: "auditDueDate",
+  });
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -143,6 +148,7 @@ const index = () => {
         sort,
       };
       dispatch(getL2IndividualUser(datas));
+      dispatch(getCurrentUser(uId));
     }
   }, [
     pageNo,
@@ -188,8 +194,8 @@ const index = () => {
                   <Image src={leftArrow} />
                 </button>
                 <div className={userStyles.userNameContainer}>
-                <img
-                    src={usersDetails?.profileImageUrl}
+                  <img
+                    src={currentUser?.data?.response?.profileImageUrl}
                     alt="User Avatar"
                     width={35}
                     height={35}
@@ -198,8 +204,10 @@ const index = () => {
                       marginRight: "10px",
                     }}
                   />
-                <span>{usersDetails?.firstName} {usersDetails?.lastName}</span>
-
+                  <span>
+                    {currentUser?.data?.response?.firstName}{" "}
+                    {currentUser?.data?.response?.lastName}
+                  </span>
                 </div>
               </div>
               <div className="col-xl-12">
@@ -233,10 +241,9 @@ const index = () => {
                         // allocated by
                         isAuditAllocatedBy={true}
                         audiallocatedBylabel="Audited AllocatedBy"
-                        auditallocatedByOptions={
-                        
-                          generateOptionsList(filteredList)
-                        }
+                        auditallocatedByOptions={generateOptionsList(
+                          filteredList
+                        )}
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
                         // audidefaultAllocatedBy={""}
                         // select status
@@ -263,10 +270,7 @@ const index = () => {
                         // allocated by
                         isAllocatedBySelector={true}
                         allocatedBylabel=" AllocatedBy"
-                        allocatedByOptoons={
-                         
-                          generateOptionsList(filteredList)
-                        }
+                        allocatedByOptoons={generateOptionsList(filteredList)}
                         setSelAllocatedBy={setSelAllocatedBy}
                         // defaultAllocatedBy={"All"}
                         // allocated date
