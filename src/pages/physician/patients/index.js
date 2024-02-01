@@ -417,6 +417,12 @@ const onPageChange = (e) => {
                                   Declined
                                 </span>
                               </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.declined} style={{background:'#87d0f5'}}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Computed
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
