@@ -100,6 +100,7 @@ const AuditHeaderFilters = ({
   isNextRow,
   badges,
   username
+
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -134,7 +135,6 @@ const AuditHeaderFilters = ({
           {isAduitDueDate && (
             <div className="col-xl-2">
               <DateRangePicker
-                selectedDates={""}
                 pickerlabel={audipickerlabel1}
                 defaultStartDate={audidefaultStartDate}
                 defaultEndDate={audidefaultEndDate}
@@ -146,7 +146,6 @@ const AuditHeaderFilters = ({
           {isAuditCompleteDate && (
             <div className="col-xl-2">
               <DateRangePicker
-                selectedDates={""}
                 pickerlabel={audipickerlabe2}
                 defaultStartDate={audidefaultStartDate2}
                 defaultEndDate={audidefaultEndDate2}
@@ -160,7 +159,7 @@ const AuditHeaderFilters = ({
               className="col-xl-2"
               style={{zIndex:"999"}}
               onClick={() => {
-                dispatch(getFilters("auditAllocatedBy",username));
+                dispatch(getFilters("auditAllocatedBy", username));
               }}
             >
               <label>{audiallocatedBylabel}</label>
@@ -239,7 +238,6 @@ const AuditHeaderFilters = ({
             {isRangePicker && (
               <div className="col-xl-2">
                 <DateRangePicker
-                  selectedDates={selectedDates}
                   pickerlabel={pickerlabel}
                   defaultStartDate={defaultStartDate}
                   defaultEndDate={defaultEndDate}
