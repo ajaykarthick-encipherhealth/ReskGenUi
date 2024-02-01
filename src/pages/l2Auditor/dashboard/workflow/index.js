@@ -42,7 +42,7 @@ const WorkFlow = () => {
     startDate,
     endDate,
   };
- 
+
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
@@ -100,11 +100,11 @@ const WorkFlow = () => {
   return (
     <div className={styles.card1}>
       <HeadTitle
-        header={`Last ${
+        header={
           DateRanges?.startDate
-            ? getSelectedDaysCount(DateRanges)
-            : getSelectedDaysCount(dates) - 2
-        } days work flow `}
+            ? ` ${getSelectedDaysCount(DateRanges)} days work flow`
+            : `Last ${getSelectedDaysCount(dates) - 2} days work flow`
+        }
         icon={calender}
         handleOpen={handleOpen}
         openPicker={openPicker}
