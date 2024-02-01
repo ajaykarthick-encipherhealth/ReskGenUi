@@ -128,13 +128,14 @@
     width: 74px;
     height: 32px;
 }
-.meat_queryfooterBtn{
+
+.meat_queryfooterBtn {
     text-align: center;
     margin-top: 20px;
 
 }
 
-.queryTextarea{
+.queryTextarea {
     height: 100px !important;
     width: 98% !important;
     color: #000;
@@ -144,7 +145,8 @@
     border-radius: 17.75rem;
     border-radius: 8px !important;
 }
-.ruleTypeCol{
+
+.ruleTypeCol {
     color: #ffa500bf;
     font-size: 11px !important;
     font-weight: 600;
@@ -156,4 +158,21 @@
     padding: 0px 5px;
     margin-top: 5px;
 
+}
+
+.mostSpecificTag {
+    background: #0000ff52;
+    color: #1616f6  !important;
+    font-size: 11px !important;
+    font-weight: 500;
+    border-radius: 30px !important;
+    margin: 4px 3px 0px 5px;
+    text-align: center !important;
+    height: 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: capitalize;
+    padding: 5px 12px;
+    border: 0.0625rem solid transparent;
 }

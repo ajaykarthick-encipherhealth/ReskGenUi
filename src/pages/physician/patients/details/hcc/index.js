@@ -431,11 +431,11 @@ const Hcc = ({ patientHccResult }) => {
         var unMacthResList = [];
 
         validDis = result.validDisease;
-        validDiseaseNewRes = result.validDisease;
+        validDiseaseNewRes = result?.validDisease;
         // invalidDiseaseNewRes =validDisArray;
         var validDisArray = [];
         var validEncounterDateArray = [];
-        validDiseaseNewRes.map((res, index) => {
+        validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
@@ -447,6 +447,8 @@ const Hcc = ({ patientHccResult }) => {
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
             providerName: res.provider,
+            dbDescription: res.dbDescription,
+            isMostSpecific:res.isMostSpecific
           });
         });
 
@@ -3040,7 +3042,9 @@ const Hcc = ({ patientHccResult }) => {
                                               title=""
                                               trigger="hover"
                                             >
-                                              - {data.actualDescription}
+                                              {data?.isMostSpecific != true ? 
+                                              <>
+                                              - {data.actualDescription} </> : <> - {data.dbDescription}</> }
                                             </Popover>
                                           </span>
                                         </div>
@@ -3168,9 +3172,15 @@ const Hcc = ({ patientHccResult }) => {
                                             data.encounterDate,
                                             data.actualDescription,
                                             null,
-                                            data.diagnosisCode
+                                            data.diagnosisCode,
                                           )}
                                         </div>
+                                        {data.isMostSpecific == true ?
+                                        <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                                          <span className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}>
+                                          IsMostSpecific
+                                            </span>
+                                        </div>:null}
                                       </div>
                                     </div>
                                   </li>
@@ -4487,7 +4497,9 @@ const Hcc = ({ patientHccResult }) => {
                                             title=""
                                             trigger="hover"
                                           >
-                                            - {data.actualDescription}
+                                            {data?.isMostSpecific != true ? 
+                                              <>
+                                              - {data.actualDescription} </> : <> - {data.dbDescription}</> }
                                           </Popover>
                                         </span>
                                       </div>
@@ -4608,6 +4620,12 @@ const Hcc = ({ patientHccResult }) => {
                                           data?.actualDescription
                                         )}
                                       </div>
+                                      {data?.isMostSpecific == true ?
+                                        <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                                          <span className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}>
+                                          IsMostSpecific
+                                            </span>
+                                        </div>:null}
                                     </div>
                                   </div>
                                 </li>
