@@ -99,7 +99,6 @@ const AuditHeaderFilters = ({
   bullets,
   isNextRow,
   badges,
-  getFilters,
   username
 }) => {
   const dispatch = useDispatch();

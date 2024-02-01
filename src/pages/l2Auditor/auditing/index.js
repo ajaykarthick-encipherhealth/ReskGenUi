@@ -118,6 +118,7 @@ export default function Patient() {
       patientSortOrder,
       selAllocatedBy,
       sort,
+      selCreatedBy
     };
 
     dispatch(getWorkListFilter(datas));
@@ -132,6 +133,7 @@ export default function Patient() {
     completedEndDate,
     patientSortOrder,
     sort,
+    selCreatedBy
   ]);
 
   useEffect(() => {
