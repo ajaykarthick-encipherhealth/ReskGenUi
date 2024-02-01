@@ -46,7 +46,7 @@ function ReceivedReport({
 
   return (
     <div className={TableStyle.classContaineer}>
-      {loading && detailsContent?.length === 0 ? (
+      {!detailsContent? (
         <SpinnerDots />
       ) : (
         <table className={TableStyle.classTable}>
@@ -57,7 +57,7 @@ function ReceivedReport({
               <th>ACCESS TYPE</th>
               <th>SENDER</th>
               <th
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", paddingLeft:"15px"}}
                 onClick={() => {
                   sortFunction(sortOrder, setSortOrder, setSort, "receiveDate");
                 }}

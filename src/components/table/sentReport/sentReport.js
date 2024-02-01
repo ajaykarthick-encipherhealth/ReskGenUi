@@ -62,7 +62,7 @@ function SentReportTable({
   );
   return (
     <div className={TableStyle.classContaineer}>
-      {loading && details?.data?.length === 0 ? (
+      {!details?.data ? (
         <SpinnerDots />
       ) : (
         <>
@@ -73,7 +73,7 @@ function SentReportTable({
                 <th>REPORT NAME</th>
                 <th>USER LIST</th>
                 <th
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer" ,paddingLeft:"15px"}}
                   onClick={() => {
                     sortFunction(sortOrder, setSortOrder, setSort, "sendDate");
                   }}

@@ -124,7 +124,7 @@ export const dateFormate = (dayjs, date) => {
 //sorting
 export const sortFunction = (sortDir, setSortDir, setSort, field) => {
   setSortDir(sortDir === "ASC" ? "DESC" : "ASC");
-  setSort({ sortDir: sortDir, sortField: field });
+  setSort({ sortDir: sortDir === "ASC" ? "DESC" : "ASC", sortField: field });
 };
 export const priorityOptions = [
   {
