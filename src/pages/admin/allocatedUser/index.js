@@ -58,6 +58,7 @@ export default function Patient() {
   const [l2patinetListAll, setL2PatinetListAll] = useState([]);
   const [l2selectUser, setL2selectUser] = useState(null);
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [totalElementsUser,setTotalElementsUser] =useState(0);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -189,10 +190,10 @@ export default function Patient() {
     setValidated(false);
     setAddPatientId(false);
     if (activeTab == 2) {
-      setSort({ sortDir: "", sortField: "" });
+      // setSort({ sortDir: "", sortField: "" });
       setAllocateModalL2(true);
     } else {
-      setSort({ sortDir: "", sortField: "" });
+      // setSort({ sortDir: "", sortField: "" });
       setAllocateModal(true);
     }
   };
@@ -329,7 +330,7 @@ export default function Patient() {
         name: item.patientName,
       }));
       setHeaderCheckValidation(data);
-      if (result?.length > 0) {
+      if (result) {
         setL2PatinetListAll(result);
         setIsPatientList(true);
         setIsLoading(false);

@@ -262,14 +262,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             ))
           ) : (
             <tr>
-              <td
-                colSpan="8"
-                style={{
-                  display: "flex",
-                  alignItems: "cenetr",
-                  justifyContent: "center",
-                }}
-              >
+              <td colSpan="8">
                 <Empty />
               </td>
             </tr>
