@@ -73,7 +73,7 @@ const index = () => {
   const [receivedSortOrder, setReceivedSortOrder] = useState("ASC");
   const [sentSortOrder, setSentSortOrder] = useState("ASC");
   const [coderSortOrder, setCoderSortOrder] = useState("ASC");
-  const [sort, setSort] = useState({sortDir:"ASC",sortField:""});
+  const [sort, setSort] = useState({ sortDir: "ASC", sortField: "" });
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -118,7 +118,9 @@ const index = () => {
   useEffect(() => {
     setIsLoading(false);
     if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch,sort));
+      dispatch(
+        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
+      );
     }
     if (activeTab === "ReceivedReport") {
       dispatch(
@@ -353,6 +355,7 @@ const index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
+                                        
                                       />
                                     )}
                                   </Tab.Pane>

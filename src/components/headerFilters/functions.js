@@ -42,8 +42,13 @@ export const handleRnagePicker = (
   setCoderEndDate
 ) => {
   if (dates === null || (Array.isArray(dates) && dates.length === 0)) {
-    // Handle the case when dates are cleared
-    setSelectedDates(null); // Or any other appropriate action
+    setSelectedDates(null); 
+    setCoderStartDate();
+    setCoderEndDate();
+    setStartDate();
+    setEndDate();
+    setReceivedStartDate();
+    setReceivedEndDate();
     return;
   }
 
