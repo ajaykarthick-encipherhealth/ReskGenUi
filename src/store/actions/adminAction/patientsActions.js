@@ -12,11 +12,12 @@ export const getPatients = (
   computationEnd,
   status,
   search,
-  completedStartDate,
-  completedEndDate,
+  createdStartDate,
+  createdEndDate,
   selAllocatedTo,
   selAllocatedBy,
-  selCreatedBy
+  selCreatedBy,
+  sort
 ) => {
   return (dispatch) => {
     try {
@@ -26,11 +27,12 @@ export const getPatients = (
         computationEnd,
         status,
         search,
-        completedStartDate,
-        completedEndDate,
+        createdStartDate,
+  createdEndDate,
         selAllocatedTo,
         selAllocatedBy,
-        selCreatedBy
+        selCreatedBy,
+        sort
       ).then((response) => {
         if (response) {
           dispatch({
