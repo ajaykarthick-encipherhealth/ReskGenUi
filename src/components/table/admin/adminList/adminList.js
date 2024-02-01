@@ -176,20 +176,8 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   >
                     {item?.role?.length > 0 ? (
                       <>
-                        <Select
-                          className={`custom-ant-select ${TableStyle.customAntSelect}`}
-                          defaultValue={item?.role[0]?.toLowerCase()}
-                        >
-                          {item?.role?.map((data) => (
-                            <Option key={data} value={data} disabled={true}>
-                              <span style={{ color: "#000" }}>
-                                {" "}
-                                {data.toLowerCase()}
-                              </span>
-                            </Option>
-                          ))}
-                        </Select>
                         <Popover
+                          trigger="hover"
                           content={
                             item?.role?.length > 1 &&
                             item?.role?.map((data) => (
@@ -200,7 +188,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                             ))
                           }
                         >
-                          {/* {item?.role[0].toLowerCase()} */}
+                          {item?.role[0].toLowerCase()}
                         </Popover>
                       </>
                     ) : (
@@ -262,14 +250,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             ))
           ) : (
             <tr>
-              <td
-                colSpan="8"
-                style={{
-                  display: "flex",
-                  alignItems: "cenetr",
-                  justifyContent: "center",
-                }}
-              >
+              <td colSpan="8">
                 <Empty />
               </td>
             </tr>
