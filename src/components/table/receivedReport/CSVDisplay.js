@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./receivedReport.module.css";
+import { Empty } from "antd";
 
 const CSVDisplay = ({ tableData,fileUrl, extention ,loading}) => {
   const [tableHead, setTableHead] = useState([]);
@@ -26,7 +27,7 @@ const CSVDisplay = ({ tableData,fileUrl, extention ,loading}) => {
       ))
     ) : (
       <tr>
-        <td style={{ textAlign: "center" }}>No datas Found</td>
+        <td style={{ textAlign: "center" }}><Empty/></td>
       </tr>
     );
   };
