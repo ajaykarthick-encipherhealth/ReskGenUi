@@ -283,6 +283,7 @@ export const getUrl = (url, extention) => async (dispatch) => {
           "x-ms-blob-type": "BlockBlob",
         },
       });
+      return response;
     } catch (error) {
       console.log("error", error);
     }
