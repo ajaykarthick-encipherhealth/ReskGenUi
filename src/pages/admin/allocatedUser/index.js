@@ -368,7 +368,7 @@ export default function Patient() {
     setSelectedRowsId([]);
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
-  }, [isPatientList, pageNoL2Patient, sort]);
+  }, [isPatientList, pageNoL2Patient, sort,allocateClicked]);
 
   return (
     <>
