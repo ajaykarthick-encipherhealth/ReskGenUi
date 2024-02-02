@@ -80,7 +80,7 @@ const IndividualReceiverReport = () => {
     setReceivedSort(receivedSort === "ASC" ? "DESC" : "ASC");
     setSort({
       sortDir: receivedSort === "ASC" ? "DESC" : "ASC",
-      sortField: "receivedDate",
+      sortField: "receiveDate",
     });
   };
 
