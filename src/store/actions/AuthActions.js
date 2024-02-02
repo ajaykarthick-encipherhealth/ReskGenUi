@@ -28,7 +28,7 @@ export const ENABLEMFA = "ENABLEMFA";
 export const VERIFYCODE = "VERIFYCODE";
 export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
-export const CURRENT_USER='CURRENT_USER'
+export const CURRENT_USER = "CURRENT_USER";
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -64,15 +64,21 @@ export function Logout(navigate) {
 }
 
 export const getMFAValidation = (username, route, password) => {
-  localStorage.setItem("password", password);
-  return (dispatch) => {
+  return () => {
     mfaValidation(username, route).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response?.data?.response) {
-        route?.push(
-          `/twofactorAuthentication/Authentication?mfa=${mfa}&skipEntry=${skip}&username=${username}`
-        );
+        const encodedParams = btoa(JSON.stringify({
+          mfa: mfa,
+          skipEntry: skip,
+          username: username,
+          password: password
+        }));
+        route?.push({
+          pathname: `/twofactorAuthentication/Authentication`,
+          search: `params=${encodedParams}`
+        });
       }
     });
   };
@@ -90,13 +96,12 @@ export const getQrCode = (username, route) => {
     });
   };
 };
-export const getValidateCode = (username, code, route, validate) => {
-  const password = localStorage.getItem("password");
+export const getValidateCode = (username, code, route, validate,password) => {
   return (dispatch) => {
     verifyCode(username, code, route).then((response) => {
       if (response?.data?.response) {
         if (validate && password) {
-          dispatch(loginAction(username, route, code));
+          dispatch(loginAction(username, route, code,password));
         } else {
           notification.success({
             message: "Code verified successfully",
@@ -134,8 +139,7 @@ export function LogInRoute(navigate) {
   navigate("/dashboard");
 }
 
-export function loginAction(email, router, code) {
-  const password = localStorage.getItem("password");
+export function loginAction(email, router, code,password) {
   return (dispatch) => {
     login(email, password, code)
       .then((response) => {
@@ -152,11 +156,11 @@ export function loginAction(email, router, code) {
           localStorage.setItem("loginCheck", true);
           router?.push(`/twofactorAuthentication/SelectRole?username=${email}`);
         }
-       if(response.data?.response ===null){
-        notification.error({
-          description:response?.data?.message
-        })
-       }
+        if (response.data?.response === null) {
+          notification.error({
+            description: response?.data?.message,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -227,7 +231,7 @@ export const getCoderDetails = ({ name, search, selectedOption, router }) => {
   };
 };
 
-export const getFilters = (field,username,pageQueue) => {
+export const getFilters = (field, username, pageQueue) => {
   return (dispatch) => {
     dispatch({
       type: FILTER,
@@ -236,7 +240,7 @@ export const getFilters = (field,username,pageQueue) => {
       },
     });
     try {
-      filters(field,username,pageQueue).then((response) => {
+      filters(field, username, pageQueue).then((response) => {
         dispatch({
           type: FILTER,
           payload: {
@@ -257,8 +261,7 @@ export const getCurrentUser = (userId) => {
       currentUser(userId).then((response) => {
         dispatch({
           type: CURRENT_USER,
-          payload:  response,
-          
+          payload: response,
         });
       });
     } catch (err) {
@@ -266,5 +269,3 @@ export const getCurrentUser = (userId) => {
     }
   };
 };
-
-
