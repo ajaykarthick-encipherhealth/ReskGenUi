@@ -225,13 +225,17 @@ export const processstatusBodyTemplate = (rowData) => {
 };
 
 export const generateOptionsList = (items) => {
-  if (items?.loading && items?.length ===0 || items === null) {
+  if ((items?.loading && items?.length === 0) || items === null) {
     return [{ label: "Loading...", value: "Loading..." }];
   } else if (items?.data?.data.response?.length > 0) {
     const options = [
       { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
-        label: (<span>{item?.firstName}&nbsp;&nbsp;{item?.lastName}</span>),
+        label: (
+          <span>
+            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+          </span>
+        ),
         value: item?.userName,
       })),
     ].filter(Boolean);
@@ -367,4 +371,12 @@ export const getSelectedDaysCount = (DateRanges) => {
 
   const differenceDays = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
   return differenceDays;
+};
+
+export const disableFutureDate = (current) => {
+  return current && current.isAfter(moment());
+};
+
+export const disablePastDate = (current) => {
+  return current && current.isBefore(moment().subtract(1, "day"));
 };

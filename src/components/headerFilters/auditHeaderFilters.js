@@ -8,7 +8,7 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
-import { handleRnagePicker2 } from "./functions";
+import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
@@ -99,8 +99,7 @@ const AuditHeaderFilters = ({
   bullets,
   isNextRow,
   badges,
-  username
-
+  username,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -140,6 +139,7 @@ const AuditHeaderFilters = ({
                 defaultEndDate={audidefaultEndDate}
                 setStartDate={audisetStartDate}
                 setEndDate={audisetEndDate}
+                disabled="pastDate"
               />
             </div>
           )}
@@ -151,13 +151,17 @@ const AuditHeaderFilters = ({
                 defaultEndDate={audidefaultEndDate2}
                 setStartDate={audisetStartDate2}
                 setEndDate={audisetEndDate2}
+                disabled="futureDate"
+                disabledDate={(current) => {
+                  disableFutureDate(current);
+                }}
               />
             </div>
           )}
           {isAuditAllocatedBy && (
             <div
               className="col-xl-2"
-              style={{zIndex:"999"}}
+              style={{ zIndex: "999" }}
               onClick={() => {
                 dispatch(getFilters("auditAllocatedBy", username));
               }}
@@ -243,6 +247,7 @@ const AuditHeaderFilters = ({
                   defaultEndDate={defaultEndDate}
                   setStartDate={setStartDate}
                   setEndDate={setEndDate}
+                  disabled="pastDate"
                 />
               </div>
             )}
@@ -271,6 +276,7 @@ const AuditHeaderFilters = ({
                             ]
                           : []
                       }
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>
@@ -291,6 +297,7 @@ const AuditHeaderFilters = ({
                           setEndDate3,
                         });
                       }}
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>
@@ -300,7 +307,7 @@ const AuditHeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("allocatedBy",username));
+                  dispatch(getFilters("allocatedBy", username));
                 }}
               >
                 <label>{allocatedBylabel}</label>
