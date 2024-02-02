@@ -23,7 +23,7 @@ import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
 import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
-import { renderUserPrfoile } from "../../../components/headerFilters/functions";
+import { disableFutureDate, renderUserPrfoile } from "../../../components/headerFilters/functions";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 
 
@@ -422,6 +422,9 @@ export default function Patient() {
                                   setDateRange(dateStrings);
                                   handleReceivedDatePicker(dates, dateStrings);
                                 }}
+                                disabledDate={(current) => 
+                                  disableFutureDate(current)
+                                }
                               />
                             </div>
                           </div>

@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import Router from "next/router";
+import { disablePastDate } from "../../../../components/headerFilters/functions";
 
 const AllocateModal = ({
   open,
@@ -200,7 +201,9 @@ const AllocateModal = ({
                             } else {
                               setAllocateDate("");
                             }
+                        
                           }}
+                          disabledDate={(current) => disablePastDate(current)}
                           // value={moment(allocateDate, 'YYYY-MM-DD')}
                         />
                       </div>

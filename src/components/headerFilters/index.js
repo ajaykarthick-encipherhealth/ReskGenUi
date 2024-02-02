@@ -11,7 +11,7 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
-import { handleRnagePicker2 } from "./functions";
+import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
@@ -51,6 +51,7 @@ const HeaderFilters = ({
   setStartDate,
   setEndDate,
   isRangePicker,
+  disabled,
   // for report
   setReceivedStartDate,
   setReceivedEndDate,
@@ -126,7 +127,8 @@ const HeaderFilters = ({
   btnTitle,
   badges,
   setIsModalVisible,
-  optionKey
+  optionKey,
+  disable
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -189,6 +191,7 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
+                disabled= {disable !="Yes" && true}
                 
               />
             </div>
@@ -217,6 +220,9 @@ const HeaderFilters = ({
                             dayjs(defaultEndDate2, "YYYY-MM-DD"),
                           ]
                         : []
+                    }
+                    disabledDate={(current) => 
+                      disableFutureDate(current)
                     }
                   />
                 </div>
@@ -415,6 +421,9 @@ const HeaderFilters = ({
                           setEndDate4,
                         })
                       }
+                      disabledDate={(current) => 
+                        disableFutureDate(current)
+                      }
                     />
                   </div>
                 </div>
@@ -434,6 +443,9 @@ const HeaderFilters = ({
                           setStartDate5,
                           setEndDate5,
                         })
+                      }
+                      disabledDate={(current) => 
+                        disableFutureDate(current)
                       }
                     />
                   </div>

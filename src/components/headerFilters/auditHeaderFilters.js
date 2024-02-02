@@ -139,7 +139,7 @@ const AuditHeaderFilters = ({
                 defaultEndDate={audidefaultEndDate}
                 setStartDate={audisetStartDate}
                 setEndDate={audisetEndDate}
-                disabled="pastDate"
+                disabled={true}
               />
             </div>
           )}
@@ -151,10 +151,8 @@ const AuditHeaderFilters = ({
                 defaultEndDate={audidefaultEndDate2}
                 setStartDate={audisetStartDate2}
                 setEndDate={audisetEndDate2}
-                disabled="futureDate"
-                disabledDate={(current) => {
-                  disableFutureDate(current);
-                }}
+              
+                
               />
             </div>
           )}
@@ -247,7 +245,8 @@ const AuditHeaderFilters = ({
                   defaultEndDate={defaultEndDate}
                   setStartDate={setStartDate}
                   setEndDate={setEndDate}
-                  disabled="pastDate"
+                  // disabled="pastDate"
+                  disabled={true}
                 />
               </div>
             )}

@@ -218,6 +218,7 @@ const index = () => {
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
                             setSelectedDates={setSelectedDates}
+                            disable="Yes"
                           />
                         </div>
                         <Export
@@ -355,7 +356,6 @@ const index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
-                                        
                                       />
                                     )}
                                   </Tab.Pane>

@@ -19,7 +19,7 @@ import PatientTable from "../../../components/table/PatientList/patientList";
 import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
-import { processstatusBodyTemplate } from "../../../components/headerFilters/functions";
+import { disableFutureDate, processstatusBodyTemplate } from "../../../components/headerFilters/functions";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -366,6 +366,7 @@ const onPageChange = (e) => {
                                       ]
                                     : []
                                 }
+                               
                               />
                             </div>
                           </div>
@@ -380,6 +381,9 @@ const onPageChange = (e) => {
                                     dateStrings
                                   );
                                 }}
+                                disabledDate={(current) => 
+                                  disableFutureDate(current)
+                                }
                               />
                             </div>
                           </div>

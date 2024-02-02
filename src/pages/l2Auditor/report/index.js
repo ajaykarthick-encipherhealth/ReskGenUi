@@ -25,6 +25,7 @@ import {
 } from "../../../store/actions/l2Action/AuditReportAction";
 import SpinnerDots from "../../../components/spinner";
 import TeamReport from "../table/TeamReport/teamReport";
+import { disableFutureDate } from "../../../components/headerFilters/functions";
 
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
@@ -342,6 +343,9 @@ const index = () => {
                                       ? handleReceivedDatePicker
                                       : handleCoderPicker
                                   }
+                                  disabledDate={(current) => 
+                                    disableFutureDate(current)
+                                  } 
                                 />
                               </div>
                             </div>

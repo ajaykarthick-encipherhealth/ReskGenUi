@@ -219,7 +219,7 @@ const UserList = () => {
                        
 
                         // computation date
-                        pickerlabel="Created date Range"
+                        pickerlabel="Created date "
                         selectedDates={selectedDates}
                         setSelectedDates={setSelectedDates}
                         defaultStartDate={""}
@@ -230,6 +230,7 @@ const UserList = () => {
                         addUser={true}
                         addUserForm={addUserForm}
                         btnTitle="Add User"
+                        disable ="Yes"
                       />
                     </div>
                     <div
