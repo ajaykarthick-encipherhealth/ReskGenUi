@@ -128,14 +128,21 @@ const UserQueue = ({ userList, setSort }) => {
                   <div>
                     <span className={TableStyle.subTitle}> Allocated By</span>
                     <div>
-                      {data.allocatedBy ? (
+                      {data?.allocatedBy ? (
                         <>
                           {renderUserPrfoile(
                             data?.allocatedByFirstName,
                             data?.allocatedByLastName,
                             data?.allocatedByProfileImage
                           )}
-                          {data.allocatedBy ? <>{data?.allocatedBy}</> : "---"}
+                          {data.allocatedBy ? (
+                            <>
+                              &nbsp;{data?.auditAllocatedByFirstName}
+                              &nbsp;&nbsp;{data?.auditAllocatedByLastName}
+                            </>
+                          ) : (
+                            "---"
+                          )}
                         </>
                       ) : (
                         "---"
@@ -205,19 +212,33 @@ const UserQueue = ({ userList, setSort }) => {
           >
             <Popover
               content={
-                data.auditedDate &&
-                renderUserPrfoile(
-                  data?.firstName,
-                  data?.lastName,
-                  data?.profileImageUrl,
-                  null,
-                  "30px",
-                  "30px"
+                data?.auditedDate &&
+                (data?.auditedByFirstName ||
+                  data?.auditedByLastName ||
+                  data?.auditedByProfileImage) && (
+                  <>
+                    {renderUserPrfoile(
+                      data?.auditedByFirstName,
+                      data?.auditedByLastName,
+                      data?.auditedByProfileImage,
+                      null,
+                      "30px",
+                      "30px"
+                    )}
+                    {data.auditedDate ? (
+                      <>
+                        &nbsp;{data?.auditedByFirstName}&nbsp;&nbsp;
+                        {data?.auditedByLastName}
+                      </>
+                    ) : (
+                      "---"
+                    )}
+                  </>
                 )
               }
             >
-              {data.auditedDate
-                ? moment(data.auditedDate).format("MM-DD-YYYY")
+              {data?.auditedDate
+                ? moment(data?.auditedDate).format("MM-DD-YYYY")
                 : "---"}
             </Popover>
           </td>
