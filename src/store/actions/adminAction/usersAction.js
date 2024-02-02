@@ -10,7 +10,6 @@ export const CREATE = "CREATE";
 export const ENABLE = "ENABLE";
 
 export const getUsers = ({
-  pageNumber,
   pageCount,
   search,
   startDate,
