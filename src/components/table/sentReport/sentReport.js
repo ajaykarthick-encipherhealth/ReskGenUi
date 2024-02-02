@@ -121,10 +121,11 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          width:"25%"
                         }}
                         className={TableStyle.childBorder}
                       >
-                        <Popover content={popCOntent}>
+                        <Popover content={popCOntent} style={{position:"relative",left:"-330px"}}>
                           <div
                             onMouseOver={() =>
                               displayReceivedUsers(row.receivedUsers)
@@ -132,7 +133,7 @@ function SentReportTable({
                           >
                             {row?.receivedUsers?.slice(0, 2)?.map((data) => (
                               <ul>
-                                <li style={{ marginBottom: "5px" }}>
+                                <li style={{ marginBottom: "5px"}}>
                                   {data.user}
                                 </li>
                               </ul>

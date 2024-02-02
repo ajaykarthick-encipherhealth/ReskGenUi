@@ -130,6 +130,7 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          width:"25%"
                         }}
                         className={TableStyle.childBorder}
                       >
