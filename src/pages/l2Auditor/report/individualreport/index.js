@@ -16,9 +16,9 @@ import ExcelDisplay, {
 } from "../../../../components/table/receivedReport/ExcelDisplay";
 import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
 import styles from "../../../../components/table/receivedReport/receivedReport.module.css";
-import reportStyles from '../../../physician/report/report.module.css'
+import reportStyles from "../../../physician/report/report.module.css";
 import search from "../../../../images/report/search.svg";
-import sort from "../../../../images/report/sort.svg";
+import sortImg from "../../../../images/report/sort.svg";
 import id from "../../../../images/report/id.svg";
 import file from "../../../../images/report/file.svg";
 import calender from "../../../../images/report/calender.svg";
@@ -28,32 +28,35 @@ import { debounce } from "../Export";
 import Header from "../../../../jsx/layouts/nav/Header";
 import Footer from "../../../../jsx/layouts/Footer";
 import SpinnerDots from "../../../../components/spinner";
-import leftArrow from '../../../../images/svg/leftArrow.svg'
+import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
 
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();
-  const router=useRouter()
+  const router = useRouter();
   const url = useSelector((state) => state.AuditReport.uploadFile);
   const reportDatas = useSelector((state) => state.AuditReport.receivedDetails);
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [reportInfo, setReportInfo] = useState();
-  const [sortDir, setSortDir] = useState("");
-  const [sortfield, setSortfield] = useState("ASC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [receivedSort, setReceivedSort] = useState("DESC");
   const [detailsContent, setDetailsContent] = useState(
     reportDatas?.data?.response?.content
   );
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async (url) => {
+    setLoading(true);
     try {
       const response = await fetch(url?.path);
       if (url?.extention === "csv") {
         const text = await response.text();
         const jsonArray = await csvToJson().fromString(text);
         setCSVTableData(jsonArray);
+        setLoading(false);
       }
       if (url?.extention === "xlsx") {
         const arrayBuffer = await response.arrayBuffer();
@@ -64,17 +67,22 @@ const IndividualReceiverReport = () => {
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         setTableData(jsonData);
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
+
       console.error("Error fetching CSV data:", error);
     }
   };
 
   const sortTableByDate = () => {
-    setSortDir(sortDir==='ASC'?'DESC':'ASC')
-    setSortfield("receiveDate")
+    setReceivedSort(receivedSort === "ASC" ? "DESC" : "ASC");
+    setSort({
+      sortDir: receivedSort === "ASC" ? "DESC" : "ASC",
+      sortField: "receiveDate",
+    });
   };
-
 
   const performanceSearch = (value) => {
     setSearchValue(value);
@@ -85,14 +93,15 @@ const IndividualReceiverReport = () => {
   };
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("reportId");
-    dispatch(getReceivedDetails(0, "", "", searchValue, sortfield, sortDir));
+    dispatch(getReceivedDetails(0, "", "", searchValue, sort));
     dispatch(getSelectedReportDetails(id));
-  }, [searchValue, sortfield, sortDir]);
+  }, [searchValue, sort]);
   useEffect(() => {
     if (url) {
       fetchData(url);
     }
   }, [url]);
+
   useEffect(() => {
     if (reportDatas?.data) {
       setDetailsContent(reportDatas?.data?.response?.content);
@@ -109,7 +118,7 @@ const IndividualReceiverReport = () => {
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-     
+
       <div
         className={styles.container}
         style={{ margin: "30px 0px 50px 0px", height: "auto" }}
@@ -117,21 +126,18 @@ const IndividualReceiverReport = () => {
         <div className={styles.cont1}>
           <div>
             <div className={styles.container}>
-            <div
-                className={"col-xl-1 d-flex"}
-                style={{  cursor: "pointer" }}
-              >
+              <div className={"col-xl-1 d-flex"} style={{ cursor: "pointer" }}>
                 <button
-                  style={{ width: "40px",height:"30px" }}
+                  style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    router?.push("/l2Auditor/report")
+                    router?.push("/l2Auditor/report");
                     dispatch(getActiveTab("ReceivedReport"));
+                    setLoading(true)
                   }}
                 >
                   <Image src={leftArrow} />
                 </button>
-                
               </div>
               <div className={styles.divContainer}>
                 <InputText
@@ -143,7 +149,7 @@ const IndividualReceiverReport = () => {
                 <Image src={search} alt="noimg" style={{ marginTop: "5px" }} />
               </div>
               <div className={styles.sort} onClick={sortTableByDate}>
-                <Image src={sort} alt="noimg" style={{ marginTop: "5px" }} />
+                <Image src={sortImg} alt="noimg" style={{ marginTop: "5px" }} />
               </div>
             </div>
 
@@ -239,8 +245,7 @@ const IndividualReceiverReport = () => {
               {reportInfo?.role === "DOWNLOAD" ? (
                 <Button
                   onClick={() => {
-                    exportToExcel;
-                    window.open(url);
+                    window.open(url?.path);
                   }}
                   className={styles.download}
                   disabled={
@@ -284,12 +289,14 @@ const IndividualReceiverReport = () => {
                   tableData={csvTableData}
                   fileUrl={url?.path}
                   extention={url?.extention}
+                  loading={loading}
                 />
               ) : (
                 <ExcelDisplay
                   tableData={tableData}
                   fileUrl={url?.path}
                   extention={url?.extention}
+                  loading={loading}
                 />
               )}
             </div>

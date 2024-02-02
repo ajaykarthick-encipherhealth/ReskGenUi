@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./receivedReport.module.css";
 import dayjs from "dayjs";
 import Spreadsheet, { CellBase, Matrix } from "react-spreadsheet";
+import { Empty } from "antd";
 
 const ExcelDisplay = ({ tableData,loading }) => {
   const [data, setData] = useState();
@@ -33,13 +34,15 @@ const ExcelDisplay = ({ tableData,loading }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {data?.length ===0 || loading?<div
+{      console.log(data,"data")}
+     
+      {data?.length ===0 || loading ? <div
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
           }}
-        >Loading...</div>:<>
+        > <Empty/></div>:<>
      
       {Array.isArray(data) && data?.length > 0 && !allEmpty ? (
         data?.length > 0 &&
@@ -52,7 +55,7 @@ const ExcelDisplay = ({ tableData,loading }) => {
             alignItems: "center",
           }}
         >
-          {"No data Found"}
+         Loading...
         </div>
       )}
        </>}

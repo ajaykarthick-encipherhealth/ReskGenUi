@@ -141,7 +141,7 @@ const Export = ({
       (data) => data?.userName === value[0]
     );
     setSelectedList(filteredData?.map((item) => item?.userName));
-    setSelectedUser((prevUsers) => [{ ...prevUsers, user: filteredData }]);
+    setSelectedUser((prevUsers) => [{ ...prevUsers, user: filteredData,role:null }]);
     setOpen(false);
   };
 
