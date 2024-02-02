@@ -52,11 +52,7 @@ const DateRangePicker = ({
                 ]
               : []
           }
-          disabledDate={(current) =>
-            disabled === "pastDate"
-              ? disablePastDate(current)
-              : disableFutureDate(current)
-          }
+          disabledDate={(current) => !disabled&& disableFutureDate(current)}
         />
       </div>
     </div>

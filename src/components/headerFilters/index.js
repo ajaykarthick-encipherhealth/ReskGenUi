@@ -127,7 +127,8 @@ const HeaderFilters = ({
   btnTitle,
   badges,
   setIsModalVisible,
-  optionKey
+  optionKey,
+  disable
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -190,7 +191,7 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
-                // disabled={disabled}
+                disabled= {disable !="Yes" && true}
                 
               />
             </div>

@@ -366,9 +366,7 @@ const onPageChange = (e) => {
                                       ]
                                     : []
                                 }
-                                disabledDate={(current) => 
-                                  disableFutureDate(current)
-                                }
+                               
                               />
                             </div>
                           </div>

@@ -131,7 +131,7 @@ export default function Patient() {
     selAllocatedTo,
     selAllocatedBy,
     selCreatedBy,
-    sort
+    sort,
   ]);
 
   useEffect(() => {
@@ -519,6 +519,7 @@ export default function Patient() {
                             setStartDate={setComputedStartDate}
                             setEndDate={setComputedEndDate}
                             isRangePicker={true}
+                            disable="Yes"
                             // created date
                             pickerlabe2="Created Date"
                             defaultStartDate2={""}
