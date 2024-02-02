@@ -372,6 +372,7 @@ export default function Patient() {
                             pickerlabel="Due date"
                             defaultStartDate={""}
                             defaultEndDate={""}
+                            disabled="pastDate"
                             // completed date
                             isAnotherPicker={true}
                             setStartDate2={setProcessedStart}

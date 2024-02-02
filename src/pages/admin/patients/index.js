@@ -519,7 +519,7 @@ export default function Patient() {
                             setStartDate={setComputedStartDate}
                             setEndDate={setComputedEndDate}
                             isRangePicker={true}
-                            // completed date
+                            // created date
                             pickerlabe2="Created Date"
                             defaultStartDate2={""}
                             defaultEndDate2={""}
