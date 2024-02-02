@@ -18,6 +18,8 @@ import {
   faCalendarAlt,
   faIdCardClip,
   faClock,
+  faAngleDoubleRight,
+  faAngleDoubleLeft
 } from "@fortawesome/free-solid-svg-icons";
 import { Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
@@ -2045,7 +2047,13 @@ const Details = ({}) => {
                                     className={`${visitStyles.sideNavArrow}`}
                                   >
                                     <span className="line">
-                                      {SVGICON.navSideIcon}
+                                    <FontAwesomeIcon
+                                className="fa fa-search form-control-feedback"
+                                icon={isSideNavShow ? faAngleDoubleLeft : faAngleDoubleRight}
+                                style={{
+                                  fontSize:"16px"
+                                }}
+                              />
                                     </span>
                                   </div>
                                 </div>
