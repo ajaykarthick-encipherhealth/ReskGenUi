@@ -52,7 +52,7 @@ import {
   submitMeatQuery,
   updateMeatQuery,
   getProviderDetails,
-  manuallyAddComboCode
+  manuallyAddComboCode,
 } from "../../../../../services/PatientsListSevice";
 const { Option } = Select;
 
@@ -164,9 +164,8 @@ const Hcc = ({ patientHccResult }) => {
     queryComment: "",
     reason: "",
     diagnosisCodeQuery: "",
-    comboCode:"",
-    additionalCode:""
-
+    comboCode: "",
+    additionalCode: "",
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -448,7 +447,7 @@ const Hcc = ({ patientHccResult }) => {
             defaultPosition: res.defaultPosition,
             providerName: res.provider,
             dbDescription: res.dbDescription,
-            isMostSpecific:res.isMostSpecific
+            isMostSpecific: res.isMostSpecific,
           });
         });
 
@@ -536,6 +535,19 @@ const Hcc = ({ patientHccResult }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
             });
+          });
+        }
+
+        if (result?.insulinDisease) {
+          suggestListAll.push({
+            actualDescription: result?.insulinDisease?.description,
+            capturedSections: [result?.insulinDisease?.section],
+            diagnosisCode: result?.insulinDisease?.code,
+            encounterDate: null,
+            encounterDateSplit: [result?.insulinDisease?.dos],
+            getPlace: "Insulin",
+            isHccValid: true,
+            defaultPosition: null,
           });
         }
 
@@ -2439,7 +2451,7 @@ const Hcc = ({ patientHccResult }) => {
 
   function removeDuplicates(array) {
     let output = [];
-    if(array){
+    if (array) {
       for (let item of array) {
         if (!output.includes(item)) output.push(item);
       }
@@ -2787,8 +2799,9 @@ const Hcc = ({ patientHccResult }) => {
       var opationArray = [];
       var pageNumbervalue = result.response[key];
       for (var key2 in pageNumbervalue) {
+        var keyValue = key2 == "first" ? "Start - " : "End - "
         opationArray.push({
-          label: key2 + " page - " + pageNumbervalue[key2],
+          label: keyValue +" "+ pageNumbervalue[key2],
           value: pageNumbervalue[key2],
         });
       }
@@ -2854,39 +2867,38 @@ const Hcc = ({ patientHccResult }) => {
     return value;
   };
 
-  const addComboCode =()=>{
+  const addComboCode = () => {
     setIsAddComboCode(true);
-  }
+  };
 
   const handleSubmitComboCode = async (event) => {
     var dos = dosYearDefalutSelect.label;
     const form = event.currentTarget;
     event.preventDefault();
-      if (form.checkValidity() === true) {
-        var updateDataformat = {
-          patientId: localPatientId,
-          dosYear: selectedDosValue,
-          comboCode: inputValue.comboCode,
-          additionalCode: inputValue.additionalCode,
-          description: inputValue.description,
-        };
-        var result = await manuallyAddComboCode(updateDataformat);
-        if (result.status == "SUCCESS") {
-          setIsAddComboCode(false);
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-            getPatientDetailsReload(
-              localPatientId,
-              localOrgId,
-              localTenantId,
-              "fileNotLoad"
-            );
-
-        }          
+    if (form.checkValidity() === true) {
+      var updateDataformat = {
+        patientId: localPatientId,
+        dosYear: selectedDosValue,
+        comboCode: inputValue.comboCode,
+        additionalCode: inputValue.additionalCode,
+        description: inputValue.description,
+      };
+      var result = await manuallyAddComboCode(updateDataformat);
+      if (result.status == "SUCCESS") {
+        setIsAddComboCode(false);
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1,
+        });
+        getPatientDetailsReload(
+          localPatientId,
+          localOrgId,
+          localTenantId,
+          "fileNotLoad"
+        );
       }
+    }
 
     setValidated(true);
   };
@@ -3042,9 +3054,11 @@ const Hcc = ({ patientHccResult }) => {
                                               title=""
                                               trigger="hover"
                                             >
-                                              {data?.isMostSpecific != true ? 
-                                              <>
-                                              - {data.actualDescription} </> : <> - {data.dbDescription}</> }
+                                              {data?.isMostSpecific != true ? (
+                                                <>- {data.actualDescription} </>
+                                              ) : (
+                                                <> - {data.dbDescription}</>
+                                              )}
                                             </Popover>
                                           </span>
                                         </div>
@@ -3172,15 +3186,20 @@ const Hcc = ({ patientHccResult }) => {
                                             data.encounterDate,
                                             data.actualDescription,
                                             null,
-                                            data.diagnosisCode,
+                                            data.diagnosisCode
                                           )}
                                         </div>
-                                        {data.isMostSpecific == true ?
-                                        <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                                          <span className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}>
-                                          IsMostSpecific
+                                        {data.isMostSpecific == true ? (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            <span
+                                              className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}
+                                            >
+                                              IsMostSpecific
                                             </span>
-                                        </div>:null}
+                                          </div>
+                                        ) : null}
                                       </div>
                                     </div>
                                   </li>
@@ -3407,6 +3426,14 @@ const Hcc = ({ patientHccResult }) => {
                                                       Radiology - Combo Codes
                                                     </span>
                                                   </Tooltip>
+                                                ) : data.getPlace ==
+                                                  "Insulin" ? (
+                                                  <span
+                                                    className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                    bg={`  mt-2 bg-bg-eight `}
+                                                  >
+                                                    Insulin Disease
+                                                  </span>
                                                 ) : null}
                                               </div>
                                               <div
@@ -4497,16 +4524,18 @@ const Hcc = ({ patientHccResult }) => {
                                             title=""
                                             trigger="hover"
                                           >
-                                            {data?.isMostSpecific != true ? 
-                                              <>
-                                              - {data.actualDescription} </> : <> - {data.dbDescription}</> }
+                                            {data?.isMostSpecific != true ? (
+                                              <>- {data.actualDescription} </>
+                                            ) : (
+                                              <> - {data.dbDescription}</>
+                                            )}
                                           </Popover>
                                         </span>
                                       </div>
 
-                                      {data.defaultPosition == "VALID" ? (
-                                       null
-                                      ) : data.defaultPosition == "INVALID" ? (
+                                      {data.defaultPosition ==
+                                      "VALID" ? null : data.defaultPosition ==
+                                        "INVALID" ? (
                                         <span
                                           className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
                                         ></span>
@@ -4620,12 +4649,17 @@ const Hcc = ({ patientHccResult }) => {
                                           data?.actualDescription
                                         )}
                                       </div>
-                                      {data?.isMostSpecific == true ?
-                                        <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                                          <span className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}>
-                                          IsMostSpecific
-                                            </span>
-                                        </div>:null}
+                                      {data?.isMostSpecific == true ? (
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          <span
+                                            className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}
+                                          >
+                                            IsMostSpecific
+                                          </span>
+                                        </div>
+                                      ) : null}
                                     </div>
                                   </div>
                                 </li>
@@ -6217,11 +6251,15 @@ const Hcc = ({ patientHccResult }) => {
         </div>
         <div className="offcanvas-body">
           <div className="container-fluid">
-            <Form noValidate validated={validated} onSubmit={handleSubmitComboCode}>
+            <Form
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmitComboCode}
+            >
               <div className="row">
                 <div className="col-xl-12 mb-3">
                   <Form.Label>
-                   Combo Code <span className="text-danger">*</span>{" "}
+                    Combo Code <span className="text-danger">*</span>{" "}
                   </Form.Label>
                   <Form.Control
                     required
@@ -6229,7 +6267,7 @@ const Hcc = ({ patientHccResult }) => {
                     id="comboCode"
                     name="comboCode"
                     onChange={handleChange}
-                  />                  
+                  />
                 </div>
                 <div className="col-xl-12 mb-3">
                   <Form.Label>Additional Code</Form.Label>
