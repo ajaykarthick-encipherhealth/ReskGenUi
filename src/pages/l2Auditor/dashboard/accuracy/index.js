@@ -24,7 +24,7 @@ export const getDateWeek = (date) => {
   const currentDate = date.getDate();
   const startingWeek = Math.ceil((currentDate + firstDayWeek) / 7);
   var currentWeek = moment().isoWeek().toString();
-  return currentWeek;
+  return startingWeek;
 };
 
 export const getDays = (dataLength) => {
