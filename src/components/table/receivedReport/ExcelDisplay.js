@@ -3,7 +3,7 @@ import styles from "./receivedReport.module.css";
 import dayjs from "dayjs";
 import Spreadsheet, { CellBase, Matrix } from "react-spreadsheet";
 
-const ExcelDisplay = ({ tableData }) => {
+const ExcelDisplay = ({ tableData,loading }) => {
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -33,6 +33,14 @@ const ExcelDisplay = ({ tableData }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
+      {data?.length ===0 || loading?<div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >Loading...</div>:<>
+     
       {Array.isArray(data) && data?.length > 0 && !allEmpty ? (
         data?.length > 0 &&
         !allEmpty && <Spreadsheet data={data} onChange={setData} />
@@ -47,6 +55,7 @@ const ExcelDisplay = ({ tableData }) => {
           {"No data Found"}
         </div>
       )}
+       </>}
     </div>
   );
 };

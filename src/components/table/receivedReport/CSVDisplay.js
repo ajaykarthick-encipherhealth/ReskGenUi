@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./receivedReport.module.css";
 
-const CSVDisplay = ({ tableData,fileUrl, extention }) => {
+const CSVDisplay = ({ tableData,fileUrl, extention ,loading}) => {
   const [tableHead, setTableHead] = useState([]);
   useEffect(() => {
     if (Array.isArray(tableData) && tableData.length > 0) {
@@ -32,7 +32,7 @@ const CSVDisplay = ({ tableData,fileUrl, extention }) => {
   };
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {!fileUrl && !extention ? (
+      {!fileUrl && !extention && loading ? (
         <div
           style={{
             display: "flex",
