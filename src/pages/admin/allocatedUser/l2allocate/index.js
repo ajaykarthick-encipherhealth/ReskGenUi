@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import Router from "next/router";
-import { disableFutureDate } from "../../../../components/headerFilters/functions";
+import { disableFutureDate, disablePastDate } from "../../../../components/headerFilters/functions";
 
 const L2AllocateModal = ({
   open,
@@ -166,7 +166,7 @@ const L2AllocateModal = ({
                       }
                     }}
                     disabledDate={(current) => 
-                      disableFutureDate(current)
+                      disablePastDate(current)
                     }
                     // value={moment(allocateDate, 'YYYY-MM-DD')}
                   />
