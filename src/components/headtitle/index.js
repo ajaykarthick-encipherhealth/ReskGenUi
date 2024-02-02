@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { getDateRange } from "../../store/actions/DashboardActions";
 import moment from "moment";
+import { disableFutureDate } from "../headerFilters/functions";
 
 const { RangePicker } = DatePicker;
 
@@ -20,7 +21,7 @@ const HeadTitle = ({
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
   const [dateValues, setDates] = useState();
-  const [isDisabled,setIsDisabled]=useState(true)
+  const [isDisabled, setIsDisabled] = useState(true);
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
   useEffect(() => {
@@ -84,11 +85,11 @@ const HeadTitle = ({
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);
-          setIsDisabled(false)
+          setIsDisabled(false);
         }}
         onCancel={() => {
           setOpenPicker(false);
-          setIsDisabled(false)
+          setIsDisabled(false);
         }}
       >
         <div className={styles.modalDetails}>
@@ -105,12 +106,13 @@ const HeadTitle = ({
             open={openPicker}
             value={selectedDates}
             onChange={(dates, dateStrings) => {
-              setIsDisabled(false)
+              setIsDisabled(false);
               setSelectedDates(dates);
               handleDatePickerChange(dateStrings);
             }}
             suffixIcon={false}
             className={styles.datepicker}
+            disabledDate={(current) => disableFutureDate(current)}
           />
           <div
             style={{
@@ -123,18 +125,14 @@ const HeadTitle = ({
               const dates = {
                 startDate: last30thDate.toISOString(),
                 endDate: lastDateWithTime,
-                clear:true
+                clear: true,
               };
               dispatch(getDateRange(dates));
               setOpenPicker(false);
               setSelectedDates([]);
             }}
           >
-            <Button 
-            disabled={isDisabled? true : false}
-            >
-              Clear
-            </Button>
+            <Button disabled={isDisabled ? true : false}>Clear</Button>
           </div>
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
