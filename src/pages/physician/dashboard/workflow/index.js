@@ -16,7 +16,6 @@ import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
-import dayjs from "dayjs";
 
 const WorkFlow = () => {
   const currentDate = dayjs();
