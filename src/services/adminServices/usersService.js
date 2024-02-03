@@ -57,7 +57,7 @@ export const enableUser = (checked, user, role, setPopoverVisible, field) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
     var orgId = localStorage.getItem("orgId");
-    const checkedVal = checked ? checked : false;
+    const checkedVal = checked ==="yes" ? true : false;
     const data = {
       orgId: orgId,
       tenantId: tenId,
@@ -67,10 +67,11 @@ export const enableUser = (checked, user, role, setPopoverVisible, field) => {
 
     const datas = role
       ? { ...data, role: role }
-      : checkedVal
+      : checked
       ? { ...data, accountEnabled: checkedVal }
       : data;
-    if ((field || checked !== undefined) && user !== undefined) {
+
+    if((field && role && user !== undefined )||(checked !== undefined && checked !==null && user !== undefined)){
       try {
         const response = await axios.put(
           `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
@@ -91,7 +92,9 @@ export const enableUser = (checked, user, role, setPopoverVisible, field) => {
             description: response?.data?.message,
           });
           dispatch(getUsers(0));
-          setPopoverVisible(true);
+          if (setPopoverVisible) {
+            setPopoverVisible(true);
+          }
         }
       } catch (err) {
         console.log(err);

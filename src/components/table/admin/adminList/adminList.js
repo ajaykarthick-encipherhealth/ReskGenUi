@@ -35,7 +35,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const [popoverVisible, setPopoverVisible] = useState(true);
   const onChange = (item, checked) => {
     setRowData(item);
-    setChecked(checked);
+    setChecked(checked?"yes":"no");
   };
 
   const handleRows = (value) => {
@@ -89,7 +89,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             onClick={() => {
               if (selectedRoles?.length > 0) {
                 dispatch(
-                  enableUser(checkedd, rowData, selectedRoles, setPopoverVisible,"addrole")
+                  enableUser(null, rowData, selectedRoles, setPopoverVisible,"addrole")
                 );
                 setPopoverVisible(false);
               }
@@ -249,6 +249,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                         >
                           <div
                             onClick={() => {
+                              setChecked()
                               setRowData(item);
                               setPopoverVisible(true);
                             }}
@@ -274,7 +275,9 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   >
                     <Switch
                       defaultChecked={item?.accountStatus}
-                      onChange={(checked) => onChange(item, checked)}
+                      onChange={(checked) => {
+                        onChange(item, checked)
+                        setPopoverVisible(true)}}
                       style={{ color: "red" }}
                     />
                   </td>
