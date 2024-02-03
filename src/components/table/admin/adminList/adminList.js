@@ -248,8 +248,6 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                           content={() => getContent(item)}
                           title="Change Role"
                           trigger="click"
-                          // visible={!false}
-                          // onVisibleChange={() => setPopoverVisible(!popoverVisible)}
                         >
                           <div
                             onClick={() => {
