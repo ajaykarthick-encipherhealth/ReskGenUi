@@ -21,13 +21,14 @@ const items = [
   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
   { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
 ];
-const { Option } = Select;
+
 const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const dispatch = useDispatch();
   const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
+  const [open, setOpen] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(true);
   const onChange = (item, checked) => {
     setRowData(item);
@@ -37,6 +38,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const handleRows = (value) => {
     const updatedValue = Array.isArray(value) ? value : [value];
     setSelectedRoles(updatedValue);
+    setOpen(false);
   };
   const getContent = (data) => {
     return (
@@ -69,6 +71,8 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             options={items}
             placeholder={!data?.role[0] && "Select Role"}
             defaultValue={isMultiple ? data.role : data?.role}
+            open={open}
+            onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
         </div>
         <div
@@ -197,20 +201,11 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                             content={
                               item?.role?.length > 1 &&
                               item?.role?.map((data) => (
-                                <div style={{ color: "#000" }}>
-                                  {" "}
-                                  {capitalizeFirstLetter(data)}
-                                </div>
+                                <div> {capitalizeFirstLetter(data)}</div>
                               ))
                             }
                           >
-                            <span
-                              style={{
-                                color: item?.role?.length === 1 && "#A4A4A4",
-                              }}
-                            >
-                              {capitalizeFirstLetter(item?.role[0])}
-                            </span>
+                            <span>{capitalizeFirstLetter(item?.role[0])}</span>
                           </Popover>
                         </>
                       ) : (
