@@ -11,6 +11,7 @@ import {
   processstatusBodyTemplate,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
+  sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 
@@ -67,10 +68,7 @@ const UserQueue = ({ userList, setSort }) => {
       router?.push("details");
     }
   };
-  const dummyProfileImageUrl =
-    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
-  const nullImg =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
+
   const renderRows = () => {
     return userList?.length === 0 ? (
       <Empty />
@@ -283,16 +281,17 @@ const UserQueue = ({ userList, setSort }) => {
             <th>PATIENT NAME</th>
             <th
               onClick={() => {
-                setProcessSort(processSort === "ASC" ? "DESC" : "ASC");
-                setSort({
-                  sortDir: processSort,
-                  sortField: "processedDate",
-                });
+                sortFunction(
+                  processSort,
+                  setProcessSort,
+                  setSort,
+                  "processedDate"
+                );
               }}
             >
               COMPLETED DATE
               <span style={{ cursor: "pointer" }}>
-                {processSort === "ASC" ? (
+                {processSort === "DESC" ? (
                   <ArrowDownOutlined />
                 ) : (
                   <ArrowUpOutlined />
@@ -301,18 +300,17 @@ const UserQueue = ({ userList, setSort }) => {
             </th>
             <th
               onClick={() => {
-                setAuditAllocatedSort(
-                  auditAllocatedSort === "ASC" ? "DESC" : "ASC"
+                sortFunction(
+                  auditAllocatedSort,
+                  setAuditAllocatedSort,
+                  setSort,
+                  "auditAllocatedDate"
                 );
-                setSort({
-                  sortDir: auditAllocatedSort,
-                  sortField: "auditAllocatedDate",
-                });
               }}
             >
               AUDIT ALLOCATED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {auditAllocatedSort === "ASC" ? (
+                {auditAllocatedSort === "DESC" ? (
                   <ArrowDownOutlined />
                 ) : (
                   <ArrowUpOutlined />
@@ -321,8 +319,12 @@ const UserQueue = ({ userList, setSort }) => {
             </th>
             <th
               onClick={() => {
-                setAuditDueSort(auditDueSort === "ASC" ? "DESC" : "ASC");
-                setSort({ sortDir: auditDueSort, sortField: "auditDueDate" });
+                sortFunction(
+                  auditDueSort,
+                  setAuditDueSort,
+                  setSort,
+                  "auditDueDate"
+                );
               }}
             >
               AUDIT DUE DATE
@@ -337,13 +339,17 @@ const UserQueue = ({ userList, setSort }) => {
             <th>AUDIT ALLOCATED BY</th>
             <th
               onClick={() => {
-                setAuditDateSort(audirDateSort === "ASC" ? "DESC" : "ASC");
-                setSort({ sortDir: audirDateSort, sortField: "auditedDate" });
+                sortFunction(
+                  audirDateSort,
+                  setAuditDateSort,
+                  setSort,
+                  "auditedDate"
+                );
               }}
             >
               AUDITED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {audirDateSort === "ASC" ? (
+                {audirDateSort === "DESC" ? (
                   <ArrowDownOutlined />
                 ) : (
                   <ArrowUpOutlined />
