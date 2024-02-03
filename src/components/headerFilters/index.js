@@ -1,4 +1,4 @@
- import React, { useState } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
@@ -11,7 +11,7 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
-import { handleRnagePicker2 } from "./functions";
+import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
@@ -51,6 +51,7 @@ const HeaderFilters = ({
   setStartDate,
   setEndDate,
   isRangePicker,
+  disabled,
   // for report
   setReceivedStartDate,
   setReceivedEndDate,
@@ -65,7 +66,6 @@ const HeaderFilters = ({
   defaultStartDate2,
   defaultEndDate2,
   isAnotherPicker,
-
 
   // if has allocated date picker
   pickerlabe3,
@@ -126,6 +126,9 @@ const HeaderFilters = ({
   btnTitle,
   badges,
   setIsModalVisible,
+  optionKey,
+  disable,
+  tracking
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -147,7 +150,7 @@ const HeaderFilters = ({
             </div>
           )}
           {isSelector ? (
-            <div className="col-xl-2" style={{ zIndex: "999" }}>
+            <div className="col-xl-2">
               {" "}
               <Selector
                 selectlabel={selectlabel}
@@ -159,7 +162,7 @@ const HeaderFilters = ({
           ) : null}
           {selectOptions2 && (
             <div className="col-xl-2">
-              <label>{selectlabel2}</label>
+              <label>{selectlabel2}</label>                                                                                                                 
               <div class="form-group has-search">
                 <Select
                   onChange={(selectedOption) => {
@@ -188,7 +191,7 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
-                
+                disabled={disable != "Yes" && true}
               />
             </div>
           )}
@@ -217,6 +220,7 @@ const HeaderFilters = ({
                           ]
                         : []
                     }
+                    disabledDate={(current) => disableFutureDate(current)}
                   />
                 </div>
               </div>
@@ -340,6 +344,7 @@ const HeaderFilters = ({
             {isAllocatedToSelector && (
               <div
                 className="col-xl-2"
+                style={{zIndex:tracking&&"2"}}
                 onClick={() => {
                   dispatch(getFilters("patientAllocated"));
                 }}
@@ -362,7 +367,13 @@ const HeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("createdBy"));
+                  dispatch(
+                    getFilters(
+                      optionKey ? optionKey : "createdBy",
+                      null,
+                      "audited queue"
+                    )
+                  );
                 }}
               >
                 <label>{createdTolabel}</label>
@@ -414,12 +425,13 @@ const HeaderFilters = ({
                           setEndDate4,
                         })
                       }
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>
               </>
             )}
-             {isAnotherPicker5 && (
+            {isAnotherPicker5 && (
               <>
                 <div className="col-xl-2">
                   <label>{pickerlabe5}</label>
@@ -434,6 +446,7 @@ const HeaderFilters = ({
                           setEndDate5,
                         })
                       }
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>

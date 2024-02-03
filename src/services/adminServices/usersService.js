@@ -16,7 +16,7 @@ export const UsersList = async ({
   const selectedStatus = status === "ALL" ? "" : status;
   try {
     const response = await axios.get(
-      ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`,
+      ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}&sortdirection=${sort?.sortDir?sort?.sortDir:""}&sortfield=${sort?.sortField?sort?.sortField:''}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ export const AddUser = async (data) => {
   }
 };
 
-export const enableUser = (checked, user, role) => {
+export const enableUser = (checked, user, role,setPopoverVisible) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
@@ -84,6 +84,7 @@ export const enableUser = (checked, user, role) => {
             description: response?.data?.message,
           });
           dispatch(getUsers(0));
+          setPopoverVisible(true)
         }
       } catch (err) {
         console.log(err);

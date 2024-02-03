@@ -7,8 +7,10 @@ import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate, renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
+import { dateFormate, renderUserPrfoileAvatar, sortFunction } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+
 
 function TeamReport({
   setModal,
@@ -23,6 +25,9 @@ function TeamReport({
   selectedRows,
   selectAll,
   setSelectAll,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -255,7 +260,24 @@ function TeamReport({
                 <th>PATIENT ID</th>
                 <th>PATIENT NAME</th>
                 <th style={{ textAlign: "left" }}>L1 AUDITOR </th>
-                <th>COMPLETE DATE </th>
+                <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "processedDate"
+                    );
+                  }}
+                >
+                  COMPLETE DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 <th>COMMENTS </th>
                 <th style={{ textAlign: "left" }}>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
@@ -358,61 +380,30 @@ function TeamReport({
                         {row?.comment ? SVGICON.comment : SVGICON.emptyComments}
                       </div>
                     </td>
-                    <td className={TableStyle.childBorder}>
-                      {row.auditedBy ? (
-                        <Tooltip title={row.auditedBy}>
-                          {row.auditedBy ===
-                          "praveen01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={praveen01}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "5px",
-                              }}
-                            />
-                          ) : row.auditedBy ===
-                            "ranjith01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={dummyProfileImageUrl}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          ) : (
-                            <img
-                              src={nullImg}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          )}
-                          {row.auditedBy ? (
-                            <>
-                              {row.auditedBy
-                                .split("@")[0]
-                                .charAt(0)
-                                .toUpperCase() +
-                                row.auditedBy.split("@")[0].slice(1)}
-                            </>
-                          ) : (
-                            "---"
-                          )}
-                        </Tooltip>
-                      ) : (
-                        "---"
-                      )}
-                    </td>
+                    <td
+                  className={TableStyle.childBorder}
+                  style={{ textAlign: "center" }}
+                >
+                  {row.auditedByFirstName || row.auditedByLastName || row?.auditedByProfileImage ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          row.auditedByFirstName,
+                          row.auditedByLastName,
+                          row?.auditedByProfileImage,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {row.auditedByFirstName} {row.auditedByLastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
+                </td>
 
                     <td className={TableStyle.childBorder}>
                       {row?.rafSum ? row?.rafSum : "000"}{" "}

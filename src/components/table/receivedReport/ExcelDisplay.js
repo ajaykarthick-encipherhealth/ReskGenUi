@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import styles from "./receivedReport.module.css";
-import dayjs from "dayjs";
-import Spreadsheet, { CellBase, Matrix } from "react-spreadsheet";
+import Spreadsheet from "react-spreadsheet";
+import { Empty } from "antd";
 
-const ExcelDisplay = ({ tableData }) => {
+const ExcelDisplay = ({ tableData, loading }) => {
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -33,10 +32,7 @@ const ExcelDisplay = ({ tableData }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {Array.isArray(data) && data?.length > 0 && !allEmpty ? (
-        data?.length > 0 &&
-        !allEmpty && <Spreadsheet data={data} onChange={setData} />
-      ) : (
+      {loading ? (
         <div
           style={{
             display: "flex",
@@ -44,8 +40,26 @@ const ExcelDisplay = ({ tableData }) => {
             alignItems: "center",
           }}
         >
-          {"No data Found"}
+          Loading...
         </div>
+      ) : (
+        <>
+          {Array.isArray(data) && data?.length > 0 && !allEmpty ? (
+            data?.length > 0 &&
+            !allEmpty && <Spreadsheet data={data} onChange={setData} />
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {" "}
+              <Empty />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

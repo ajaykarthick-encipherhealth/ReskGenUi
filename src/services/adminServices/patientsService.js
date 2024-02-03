@@ -7,11 +7,12 @@ export const PatientsList = async (
   computationEnd = "",
   status,
   search = "",
-  completedStartDate,
-  completedEndDate,
+  createdStartDate,
+  createdEndDate,
   selAllocatedTo,
   selAllocatedBy,
-  selCreatedBy
+  selCreatedBy,
+  sort
 ) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
@@ -21,11 +22,13 @@ export const PatientsList = async (
     const response = await axios.get(
       `  ${
         ENDPOINTS?.apiEndoint
-      }dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&completedStartDate=${completedStartDate}&completedEndDate=${completedEndDate}&patientCreatedBy=${
+      }dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&createdStartDate=${createdStartDate}&createdEndDate=${createdEndDate}&patientCreatedBy=${
         selAllocatedBy === "All" ? "" : selAllocatedBy
       }&patientAllocatedTo=${
         selAllocatedTo === "All" ? "" : selAllocatedTo
-      }&patientAllocatedBy=${selCreatedBy === "All" ? "" : selCreatedBy}`,
+      }&patientAllocatedBy=${
+        selCreatedBy === "All" ? "" : selCreatedBy
+      }&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -41,8 +44,8 @@ export const PatientsList = async (
 export const TrackingList = async (datas) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
-  console.log(datas, "datas");
-  const filteredStatus = datas?.status === undefined ? "" : datas?.status;
+
+  const filteredStatus = datas?.selectedOption === undefined ? "" : datas?.selectedOption;
   const filteredDStart =
     datas?.dueDateStart === undefined ? "" : datas?.dueDateStart;
   const filteredDEnd = datas?.dueDateEnd === undefined ? "" : datas?.dueDateEnd;
@@ -67,9 +70,9 @@ export const TrackingList = async (datas) => {
         ENDPOINTS?.apiEndoint
       }dbservice/patient/admin/filter?userId=${uId}&page=${
         datas?.pageNo
-      }&size=15&computing=${filteredStatus}&dueDateStart=${filteredDStart}&dueDateEnd=${filteredDEnd}&processedStart=${filteredPStart}&processedEnd=${filteredPEnd}&searchString=${filteredSearch}&patientAllocated=${
+      }&size=15&processedStatus=${filteredStatus}&dueDateStart=${filteredDStart}&dueDateEnd=${filteredDEnd}&auditedStartDate=${filteredPStart}&auditedEndDate=${filteredPEnd}&searchString=${filteredSearch}&patientAllocated=${
         datas?.selAllocatedTo === "All" ? "" : datas?.selAllocatedTo
-      }&auditedStartDate=${filteredSAllocated}&auditedStartDate=${filteredEAllocatedOn}&allocatedOnStart=${filteredSAuditedStart}&allocatedOnEnd=${filteredEAuditedEnd}`,
+      }&auditAllocatedStart=${filteredSAllocated}&auditAllocatedEnd=${filteredEAllocatedOn}&allocatedOnStart=${filteredSAuditedStart}&allocatedOnEnd=${filteredEAuditedEnd}&allocatedBy=${datas?.selAllocatedBy}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

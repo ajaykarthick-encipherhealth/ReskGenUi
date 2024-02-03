@@ -18,6 +18,8 @@ import {
   faCalendarAlt,
   faIdCardClip,
   faClock,
+  faAngleDoubleRight,
+  faAngleDoubleLeft
 } from "@fortawesome/free-solid-svg-icons";
 import { Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
@@ -269,7 +271,7 @@ const Details = ({}) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
   const onPageChange = async (e) => {
@@ -285,7 +287,7 @@ const Details = ({}) => {
       processedEnd,
       e.page
     );
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
 
@@ -306,7 +308,7 @@ const Details = ({}) => {
       "",
       0
     );
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
   const handleShowCard = () => {
@@ -1011,7 +1013,7 @@ const Details = ({}) => {
         "",
         0
       );
-      setPatientList(result.response.content);
+      setPatientList(result?.response?.content);
       setTotalElements(result?.response?.totalElements);
       setFilterDataLoading(false);
     }
@@ -1084,7 +1086,7 @@ const Details = ({}) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
 
@@ -1315,7 +1317,7 @@ const Details = ({}) => {
       processedEnd,
       pageNo
     );
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
 
@@ -1336,7 +1338,7 @@ const Details = ({}) => {
       convertEndDate,
       pageNo
     );
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
 
@@ -2045,7 +2047,13 @@ const Details = ({}) => {
                                     className={`${visitStyles.sideNavArrow}`}
                                   >
                                     <span className="line">
-                                      {SVGICON.navSideIcon}
+                                    <FontAwesomeIcon
+                                className="fa fa-search form-control-feedback"
+                                icon={isSideNavShow ? faAngleDoubleLeft : faAngleDoubleRight}
+                                style={{
+                                  fontSize:"16px"
+                                }}
+                              />
                                     </span>
                                   </div>
                                 </div>
@@ -3140,7 +3148,10 @@ const Details = ({}) => {
                                     height={30}
                                     width={30}
                                     color="#A20404"
-                                    onClick={() => closeFilterIcons(false)}
+                                    onClick={() => {closeFilterIcons(false);
+                                      setOpenPicker(false);
+                                      setOpenPicker2(false)
+                                    }}
                                   />
                                 ) : (
                                   SVGICON.filter
@@ -3161,6 +3172,7 @@ const Details = ({}) => {
                                       className={visitStyles.circleCard}
                                       onClick={() => {
                                         setOpenPicker(!openPicker);
+                                        setOpenPicker2(false)
                                       }}
                                     >
                                       {SVGICON.dateIcon}
@@ -3174,6 +3186,7 @@ const Details = ({}) => {
                                       className={visitStyles.circleCard}
                                       onClick={() => {
                                         setOpenPicker2(!openPicker2);
+                                        setOpenPicker(false)
                                       }}
                                     >
                                       {SVGICON.dateIcon}

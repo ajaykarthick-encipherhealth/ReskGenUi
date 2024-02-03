@@ -62,7 +62,7 @@ function SentReportTable({
   );
   return (
     <div className={TableStyle.classContaineer}>
-      {loading ? (
+      {!details?.data ? (
         <SpinnerDots />
       ) : (
         <>
@@ -71,12 +71,11 @@ function SentReportTable({
               <tr>
                 <th>REPORT ID</th>
                 <th>REPORT NAME</th>
-                {/* <th>SENDER</th> */}
                 <th>USER LIST</th>
                 <th
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer" ,paddingLeft:"15px"}}
                   onClick={() => {
-                    sortFunction(sortOrder, setSortOrder,setSort,"sendDate");
+                    sortFunction(sortOrder, setSortOrder, setSort, "sendDate");
                   }}
                 >
                   DATE{" "}
@@ -122,10 +121,11 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          width:"25%"
                         }}
                         className={TableStyle.childBorder}
                       >
-                        <Popover content={popCOntent}>
+                        <Popover content={popCOntent} style={{position:"relative",left:"-330px"}}>
                           <div
                             onMouseOver={() =>
                               displayReceivedUsers(row.receivedUsers)
@@ -133,7 +133,7 @@ function SentReportTable({
                           >
                             {row?.receivedUsers?.slice(0, 2)?.map((data) => (
                               <ul>
-                                <li style={{ marginBottom: "5px" }}>
+                                <li style={{ marginBottom: "5px"}}>
                                   {data.user}
                                 </li>
                               </ul>

@@ -23,7 +23,7 @@ import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
 import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
-import { renderUserPrfoile } from "../../../components/headerFilters/functions";
+import { disableFutureDate, renderUserPrfoile } from "../../../components/headerFilters/functions";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 
 
@@ -59,6 +59,7 @@ export default function Patient() {
   const [l2selectUser, setL2selectUser] = useState(null);
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [totalElementsUser,setTotalElementsUser] =useState(0);
+  const [searchString,setSearchString] =useState("");
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -79,7 +80,7 @@ export default function Patient() {
     const uId = localStorage.getItem("userId");
     var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
+    if (response?.data) {
       var resultMap = [];
       var result = response?.data?.response?.content;
       setTotalElements(response?.data?.response?.totalElements);
@@ -91,15 +92,13 @@ export default function Patient() {
           computedDate: res.computedDate,
         });
       });
-      if (result.length > 0) {
+      if (result?.length > 0) {
         setPatinetListAll(result);
         setIsLoading(false);
       } else {
-        setIsLoading(false);
         setPatinetListAll([]);
       }
 
-      // setIsLoading(false);
       setTableLoading(false);
     }
   };
@@ -157,6 +156,8 @@ export default function Patient() {
   };
 
   const getNameSearch = (search) => {
+    setSearchString(search)
+    if(activeTab == 1){
     getAllList(
       pageNo,
       pageSize,
@@ -167,6 +168,13 @@ export default function Patient() {
       search,
       sort
     );
+    }else{
+      if(!isPatientList){
+      getAuditL2List(pageNo,search)
+      }else{
+        getL2PatientList(l2selectUser, pageNoL2Patient, sort,search);
+      }
+    }
   };
 
   const onPageChange = (e) => {
@@ -182,7 +190,7 @@ export default function Patient() {
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList(l2selectUser, e.page, sort);
+    getL2PatientList(l2selectUser, e.page, sort,"");
     setTableLoading(true);
   };
 
@@ -198,6 +206,7 @@ export default function Patient() {
     }
   };
   const selectTabClick = (number) => {
+    setSearchString("");
     setPaginationFirst(0);
     setIsLoading(true);
     setActiveTab(number);
@@ -207,17 +216,17 @@ export default function Patient() {
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
     if (number == 2) {
-      getAuditL2List(pageNoL2User);
+      getAuditL2List(pageNoL2User,"");
     } else {
       setIsPatientList(false);
       setPageNo(0);
       getAllList(0, pageSize, "", "", true, 2, "", sort);
     }
   };
-  const getAuditL2List = async (pageNo) => {
+  const getAuditL2List = async (pageNo,searchString) => {
     var orgId = localStorage.getItem("orgId");
     var tenantid = localStorage.getItem("tenantId");
-    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}`;
+    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -240,22 +249,24 @@ export default function Patient() {
       });
       if (result?.length > 0) {
         setL2UserListAll(result);
-        setIsLoading(false);
+       
       } else {
-        setIsLoading(false);
+       
         setL2UserListAll([]);
       }
+      setIsLoading(false);
       setTableLoading(false);
     }
   };
 
   const renderRows = () => {
-    return l2UserListAll?.map((data, index) => (
+    return !tableLoading && l2UserListAll?.length>0?
+    l2UserListAll?.map((data, index) => (
       <tr
         style={{ height: "35px" }}
         key={index}
         onClick={() => {
-          getL2PatientList(data, pageNoL2Patient, sort);
+          getL2PatientList(data, pageNoL2Patient, sort,"");
         }}
       >
         <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
@@ -298,17 +309,19 @@ export default function Patient() {
         </td>
 
       </tr>
-    ));
+    )):<tr>
+      <td colSpan="9"><Empty/></td>
+    </tr>;
   };
 
-  const getL2PatientList = async (data, pageNoL2Patient, sort) => {
+  const getL2PatientList = async (data, pageNoL2Patient, sort,searchString) => {
     setIsLoading(true);
     var dataMap = {
       firstName: data?.name,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir?sort?.sortDir:"DESC"}&sortfield=${sort?.sortField?sort?.sortField:"dueDate"}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir?sort?.sortDir:"DESC"}&sortfield=${sort?.sortField?sort?.sortField:"dueDate"}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -330,14 +343,14 @@ export default function Patient() {
         name: item.patientName,
       }));
       setHeaderCheckValidation(data);
-      if (result?.length > 0) {
+      if (result) {
         setL2PatinetListAll(result);
         setIsPatientList(true);
-        setIsLoading(false);
       } else {
         setL2PatinetListAll([]);
-        setIsLoading(false);
+       
       }
+      setIsLoading(false);
     }
   };
 
@@ -359,16 +372,16 @@ export default function Patient() {
     setIsLoading(true);
     if (!isPatientList) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
-      setIsLoading(false);
     } else {
-      getL2PatientList(l2selectUser, pageNoL2Patient, sort);
+      getL2PatientList(l2selectUser, pageNoL2Patient, sort,"");
       setIsLoading(false);
     }
     setAllocateClicked(false);
     setSelectedRowsId([]);
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
-  }, [isPatientList, pageNoL2Patient, sort]);
+    setIsLoading(false);
+  }, [isPatientList, pageNoL2Patient, sort,allocateClicked]);
 
   return (
     <>
@@ -407,12 +420,14 @@ export default function Patient() {
                                   onChange={(e) =>
                                     getNameSearch(e.target.value)
                                   }
+                                  value={searchString}
                                   className="form-control new-form-control"
                                   placeholder="Search"
                                 />
                               </div>
                             </div>
                           </div>
+                          {!isPatientList && activeTab == 1 ?
                           <div className="col-xl-2">
                             <label>Computed Date</label>
                             <div>
@@ -422,9 +437,12 @@ export default function Patient() {
                                   setDateRange(dateStrings);
                                   handleReceivedDatePicker(dates, dateStrings);
                                 }}
+                                disabledDate={(current) => 
+                                  disableFutureDate(current)
+                                }
                               />
                             </div>
-                          </div>
+                          </div>:<div className="col-xl-2"></div>}
                           <div className="col-xl-8 mt-4">
                             {isPatientList || activeTab === 1 ? (
                               <>
@@ -488,7 +506,7 @@ export default function Patient() {
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {isLoading ? (
+                                  {patinetListAll?.length===0 && tableLoading  ? (
                                     <SpinnerDots />
                                   ) : (
                                     <>
@@ -502,6 +520,7 @@ export default function Patient() {
                                         setSelectedRowsId={setSelectedRowsId}
                                         selectedChart={headerCheckValidation}
                                         setSort={setSort}
+                                        loading={isLoading}
                                       />
                                       <div>
                                         <div className="pagination-container">
@@ -521,8 +540,9 @@ export default function Patient() {
                                     </>
                                   )}
                                 </Tab.Pane>
+             
                                 <Tab.Pane id="my-posts" eventKey="team">
-                                  {isLoading ? (
+                                  {l2patinetListAll?.length===0 && tableLoading||isLoading ? (
                                     <SpinnerDots />
                                   ) : (
                                     <>
@@ -550,15 +570,9 @@ export default function Patient() {
                                               </thead>
 
                                               <tbody>
-                                                {l2UserListAll?.length <= 0 ? (
-                                                  <tr>
-                                                    <td colSpan="9">
-                                                      <Empty />
-                                                    </td>
-                                                  </tr>
-                                                ) : (
+                                                {
                                                   renderRows()
-                                                )}
+                                                }
                                               </tbody>
                                             </table>
                                             <div>

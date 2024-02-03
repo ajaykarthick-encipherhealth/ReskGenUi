@@ -19,7 +19,7 @@ import PatientTable from "../../../components/table/PatientList/patientList";
 import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
-import { processstatusBodyTemplate } from "../../../components/headerFilters/functions";
+import { disableFutureDate, processstatusBodyTemplate } from "../../../components/headerFilters/functions";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -146,7 +146,7 @@ export default function Patient() {
   ) => {
     // setIsLoading(true);
     var uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}&sortField=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
     dispatch(getpatientsListFilter(resoureUrl));
   };
 
@@ -243,7 +243,7 @@ const onPageChange = (e) => {
       let convertStartDate =
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
       let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
       setDueDateStart(convertStartDate);
       setDueDateEnd(convertEndDate);
       getFilteApi(
@@ -277,7 +277,7 @@ const onPageChange = (e) => {
       let convertStartDate =
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
       let convertEndDate =
-        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
       setProcessedStart(convertStartDate);
       setProcessedEnd(convertEndDate);
       getFilteApi(
@@ -366,6 +366,7 @@ const onPageChange = (e) => {
                                       ]
                                     : []
                                 }
+                               
                               />
                             </div>
                           </div>
@@ -380,6 +381,9 @@ const onPageChange = (e) => {
                                     dateStrings
                                   );
                                 }}
+                                disabledDate={(current) => 
+                                  disableFutureDate(current)
+                                }
                               />
                             </div>
                           </div>
@@ -415,6 +419,12 @@ const onPageChange = (e) => {
                                 <span className={visitStyles.declined}></span>
                                 <span className={visitStyles.flagCodes}>
                                   Declined
+                                </span>
+                              </div>
+                              <div className={visitStyles.flags}>
+                                <span className={visitStyles.declined} style={{background:'#87d0f5'}}></span>
+                                <span className={visitStyles.flagCodes}>
+                                  Computed
                                 </span>
                               </div>
                             </div>

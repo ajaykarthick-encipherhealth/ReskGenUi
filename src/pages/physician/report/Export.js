@@ -122,20 +122,26 @@ const Export = ({
     dispatch(getUsersList(orgId, search));
   }, [search]);
   const dispatch = useDispatch();
-
   const options = usersList?.response
     ?.map(
       (data) =>
-        data.userName !== currentUser && {
-          label: data.userName,
-          value: data.userName,
+        data?.userName !== currentUser && {
+          label: (
+            <span>
+              {data?.firstName}&nbsp;&nbsp;{data?.lastName}
+            </span>
+          ),
+          value: data?.userName,
         }
     )
     .filter(Boolean);
 
   const handleSelectedOption = (value) => {
-    setSelectedList(value);
-    setSelectedUser((prevUsers) => [{ ...prevUsers, user: value }]);
+    const filteredData = usersList?.response?.filter(
+      (data) => data?.userName === value[0]
+    );
+    setSelectedList(filteredData?.map((item) => item?.userName));
+    setSelectedUser((prevUsers) => [{ ...prevUsers, user: filteredData,role:null }]);
     setOpen(false);
   };
 
@@ -153,7 +159,9 @@ const Export = ({
   const filteredOptions =
     userList &&
     options?.filter((option) => {
-      return !userList?.some((data) => data?.user?.includes(option?.label));
+      return !userList?.some((data) =>
+        data?.user?.some((info) => info?.userName?.includes(option?.value))
+      );
     });
 
   const debouncedSearch = debounce((value) => {
@@ -166,11 +174,12 @@ const Export = ({
   const onFinish = (values) => {
     const patientIds = rowsLength?.data?.map((item) => item?.patientId);
     const userAndAccess = userList?.reduce((result, { user, role }) => {
-      result[user] = role;
+      result[user.map((info) => info?.userName)] = role;
       return result;
     }, {});
+
     const fields = checkall?.reduce((acc, data) => {
-      acc[data.title] = data?.checked;
+      acc[data?.title] = data?.checked;
       return acc;
     }, {});
     const data = {
@@ -195,9 +204,14 @@ const Export = ({
     }, 500);
   };
 
-  const deleteUser = (user) => {
-    setUsersList(userList?.filter((item) => item.user != user));
+  const deleteUser = (userInfo) => {
+    setUsersList((prevUserList) =>
+      prevUserList?.filter(
+        (user) => user?.user[0]?.userId !== userInfo?.user[0]?.userId
+      )
+    );
   };
+
   return (
     <Modal
       title="Export "
@@ -326,7 +340,6 @@ const Export = ({
                   className={styles.selectDiv}
                   value={selectedList}
                   open={open}
-                  // disabled={selectedList?.length >= 1}
                   onDropdownVisibleChange={(visible) => setOpen(visible)}
                 >
                   {filteredOptions?.map((data) => (
@@ -378,11 +391,14 @@ const Export = ({
               {userList?.map((item, index) => (
                 <div className={styles.userName}>
                   <div key={index} className={styles.userRoleContainer}>
-                    {item.user}
+                    {item?.user?.map(
+                      (info) => `${info?.firstName}  ${info?.lastName}`
+                    )}
                   </div>
                   <div key={index} className={styles.userRoleContainer}>
                     {item.role}
                   </div>
+
                   <div
                     style={{ cursor: "pointer" }}
                     onClick={() => deleteUser(item.user)}

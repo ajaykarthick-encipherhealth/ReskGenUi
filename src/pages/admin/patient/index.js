@@ -167,9 +167,10 @@ export default function Patient() {
   };
 
   const handleSubmit = async (event) => {
-    console.log(inputValue);
     const form = event.currentTarget;
-    console.log(form);
+    const userId=localStorage.getItem("userId")
+    const tenantId=localStorage.getItem("tenantId")
+    const ordId=localStorage.getItem("orgId")
     event.preventDefault();
     if (form.checkValidity() === true) {
       setIsLoading(true);
@@ -179,9 +180,9 @@ export default function Patient() {
       formData.append("file", selectFile);
       formData.append("dos", inputValue.year);
       formData.append("patientName", inputValue.name);
-      formData.append("orgid", "abc");
-      formData.append("tenantid", "b4d34e42-79a6-478e-b3af-12ce7311fa09");
-      formData.append("userid", "logesh");
+      formData.append("orgid",ordId);
+      formData.append("tenantid",tenantId);
+      formData.append("userid", userId);
       formData.append("patientId",inputValue.patientId);
       const headers = {
         headers: {
@@ -197,7 +198,6 @@ export default function Patient() {
         headers
       );
       if (response?.status == 200) {
-        console.log(response.data);
         setAddPatient(false);
         setIsLoading(false);
       } else {

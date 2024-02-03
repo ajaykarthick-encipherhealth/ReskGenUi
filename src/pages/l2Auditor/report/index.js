@@ -25,6 +25,7 @@ import {
 } from "../../../store/actions/l2Action/AuditReportAction";
 import SpinnerDots from "../../../components/spinner";
 import TeamReport from "../table/TeamReport/teamReport";
+import { disableFutureDate } from "../../../components/headerFilters/functions";
 
 const statusOptions = [
   { label: "Completed", value: "COMPLETED" },
@@ -83,6 +84,11 @@ const index = () => {
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
+  const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
+  const [sentSortOrder, setSentSortOrder] = useState("DESC");
+  const [coderSortOrder, setCoderSortOrder] = useState("DESC");
+  const [teamSortOrder, setTeamSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -93,9 +99,7 @@ const index = () => {
   const performanceSearch = (value) => {
     if (activeTab === "SentReport") {
       setSentSearch(value);
-    } else if (
-      activeTab === "ReceivedReport" 
-    ) {
+    } else if (activeTab === "ReceivedReport") {
       setReceivedSearch(value);
     } else {
       setCoderSearch(value);
@@ -194,25 +198,26 @@ const index = () => {
     setCoderEndDate(formattedDates[1]);
   };
 
-  const handleTabs=(name)=>{
+  const handleTabs = (name) => {
     setSelectedDates(null);
     setActiveTab(name);
-  }
+  };
   useEffect(() => {
     setIsLoading(false);
 
     if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch));
+      dispatch(
+        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
+      );
     }
-    if (
-      activeTab === "ReceivedReport" 
-    ) {
+    if (activeTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
           receivedStartDate,
           receivedEndDate,
-          receivedSearch
+          receivedSearch,
+          sort
         )
       );
     }
@@ -224,7 +229,8 @@ const index = () => {
           coderStartDate,
           coderEndDate,
           coderSearch,
-          selectedCoderOpt
+          selectedCoderOpt,
+          sort
         )
       );
     }
@@ -236,7 +242,8 @@ const index = () => {
           coderStartDate,
           coderEndDate,
           coderSearch,
-          selectedCoderOpt
+          selectedCoderOpt,
+          sort
         )
       );
     }
@@ -261,13 +268,14 @@ const index = () => {
     receivedStartDate,
     receivedEndDate,
     receivedSearch,
-    reportActiveTab
+    reportActiveTab,
+    sort
   ]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
-  }, [ReportPatientDetails,reportActiveTab]);
- 
+  }, [ReportPatientDetails, reportActiveTab]);
+
   return (
     <>
       <Header />
@@ -285,7 +293,7 @@ const index = () => {
                         <div className="tbl-caption  align-items-center">
                           <div className="row filter-contain">
                             <div className="col-xl-2">
-                              <label>Search by Name</label>
+                              <label>Search by Name / ID</label>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon
                                   className="fa fa-search form-control-feedback"
@@ -331,10 +339,13 @@ const index = () => {
                                   onChange={
                                     activeTab === "SentReport"
                                       ? handleDatePickerChange
-                                      : activeTab === "ReceivedReport" 
+                                      : activeTab === "ReceivedReport"
                                       ? handleReceivedDatePicker
                                       : handleCoderPicker
                                   }
+                                  disabledDate={(current) => 
+                                    disableFutureDate(current)
+                                  } 
                                 />
                               </div>
                             </div>
@@ -407,14 +418,19 @@ const index = () => {
                             style={{ marginTop: "20px" }}
                           >
                             <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey={reportActiveTab?'meatCriteria':"validDiseases"}>
+                              <Tab.Container
+                                defaultActiveKey={
+                                  reportActiveTab
+                                    ? "meatCriteria"
+                                    : "validDiseases"
+                                }
+                              >
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      handleTabs("AuditReport")
-                                     
+                                      handleTabs("AuditReport");
                                     }}
                                   >
                                     <Nav.Link
@@ -428,8 +444,7 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      handleTabs("TeamReport")
-
+                                      handleTabs("TeamReport");
                                     }}
                                   >
                                     <Nav.Link to="#my-posts" eventKey="team">
@@ -440,8 +455,7 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      handleTabs("SentReport")
-
+                                      handleTabs("SentReport");
                                     }}
                                   >
                                     <Nav.Link
@@ -455,8 +469,7 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      handleTabs("ReceivedReport")
-
+                                      handleTabs("ReceivedReport");
                                     }}
                                   >
                                     <Nav.Link
@@ -487,6 +500,9 @@ const index = () => {
                                       selectedRows={selectedRows}
                                       setSelectAll={setSelectAll}
                                       selectAll={selectAll}
+                                      setSortOrder={setCoderSortOrder}
+                                      sortOrder={coderSortOrder}
+                                      setSort={setSort}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="team">
@@ -505,6 +521,9 @@ const index = () => {
                                         selectedRows={selectedRows}
                                         setSelectAll={setSelectAll}
                                         selectAll={selectAll}
+                                        setSortOrder={setTeamSortOrder}
+                                        sortOrder={teamSortOrder}
+                                        setSort={setSort}
                                       />
                                     )}
                                   </Tab.Pane>
@@ -523,6 +542,9 @@ const index = () => {
                                       }
                                       onSentPageChange={onSentPageChange}
                                       loading={SentReportDetails?.loading}
+                                      setSortOrder={setSentSortOrder}
+                                      sortOrder={sentSortOrder}
+                                      setSort={setSort}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -543,6 +565,9 @@ const index = () => {
                                         receivedStartDate={receivedStartDate}
                                         receivedEndDate={receivedEndDate}
                                         loading={ReceivedReportDetails?.loading}
+                                        setSortOrder={setReceivedSortOrder}
+                                        sortOrder={receivedSortOrder}
+                                        setSort={setSort}
                                       />
                                     )}
                                   </Tab.Pane>

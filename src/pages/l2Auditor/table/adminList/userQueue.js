@@ -11,15 +11,16 @@ import {
   processstatusBodyTemplate,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
+  sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 
 const UserQueue = ({ userList, setSort }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [processSort, setProcessSort] = useState("ASC");
-  const [auditAllocatedSort, setAuditAllocatedSort] = useState("ASC");
-  const [audirDateSort, setAuditDateSort] = useState("ASC");
+  const [processSort, setProcessSort] = useState("DESC");
+  const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
+  const [audirDateSort, setAuditDateSort] = useState("DESC");
   const [auditDueSort, setAuditDueSort] = useState("DESC");
   const badgeDisplay = (data) => {
     if (data?.auditedStatus === "AUDITED") {
@@ -67,10 +68,7 @@ const UserQueue = ({ userList, setSort }) => {
       router?.push("details");
     }
   };
-  const dummyProfileImageUrl =
-    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
-  const nullImg =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
+
   const renderRows = () => {
     return userList?.length === 0 ? (
       <Empty />
@@ -128,7 +126,7 @@ const UserQueue = ({ userList, setSort }) => {
                   <div>
                     <span className={TableStyle.subTitle}> Allocated By</span>
                     <div>
-                      {data.allocatedBy ? (
+                      {data?.allocatedBy ? (
                         <>
                           {renderUserPrfoile(
                             data?.allocatedByFirstName,
@@ -137,10 +135,8 @@ const UserQueue = ({ userList, setSort }) => {
                           )}
                           {data.allocatedBy ? (
                             <>
-                              {
-                                data?.allocatedBy
-                                
-                              }
+                              &nbsp;{data?.allocatedByFirstName}
+                              &nbsp;&nbsp;{data?.allocatedByLastName}
                             </>
                           ) : (
                             "---"
@@ -182,48 +178,65 @@ const UserQueue = ({ userList, setSort }) => {
           </td>
 
           <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {data.auditAllocatedByFirstName || data.auditAllocatedByLastName || data?.auditAllocatedByProfileImage ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
-                        {" "}
-                        {renderUserPrfoileAvatar(
-                          data.auditAllocatedByFirstName,
-                          data.auditAllocatedByLastName,
-                          data?.auditAllocatedByProfileImage,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {data.auditAllocatedByFirstName} {data.auditAllocatedByLastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
+            {data.auditAllocatedByFirstName ||
+            data.auditAllocatedByLastName ||
+            data?.auditAllocatedByProfileImage ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {" "}
+                <span style={{ marginRight: "10px" }}>
+                  {" "}
+                  {renderUserPrfoileAvatar(
+                    data.auditAllocatedByFirstName,
+                    data.auditAllocatedByLastName,
+                    data?.auditAllocatedByProfileImage,
+                    "header"
                   )}
-                </td>
+                </span>
+                <span>
+                  {data.auditAllocatedByFirstName}{" "}
+                  {data.auditAllocatedByLastName}
+                </span>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
+          </td>
           <td
             className={TableStyle.childBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-            
             <Popover
               content={
-                data.auditedDate &&
-                renderUserPrfoile(
-                data?.firstName,
-                data?.lastName,
-                data?.profileImageUrl,
-                null,
-                "30px",
-                "30px"
-              )}
+                data?.auditedDate &&
+                (data?.auditedByFirstName ||
+                  data?.auditedByLastName ||
+                  data?.auditedByProfileImage) && (
+                  <>
+                    {renderUserPrfoile(
+                      data?.auditedByFirstName,
+                      data?.auditedByLastName,
+                      data?.auditedByProfileImage,
+                      null,
+                      "30px",
+                      "30px"
+                    )}
+                    {data.auditedDate ? (
+                      <>
+                        &nbsp;{data?.auditedByFirstName}&nbsp;&nbsp;
+                        {data?.auditedByLastName}
+                      </>
+                    ) : (
+                      "---"
+                    )}
+                  </>
+                )
+              }
             >
-              {data.auditedDate
-                ? moment(data.auditedDate).format("MM-DD-YYYY")
+              {data?.auditedDate
+                ? moment(data?.auditedDate).format("MM-DD-YYYY")
                 : "---"}
             </Popover>
           </td>
@@ -268,56 +281,56 @@ const UserQueue = ({ userList, setSort }) => {
             <th>PATIENT NAME</th>
             <th
               onClick={() => {
-                setProcessSort(processSort === "ASC" ? "DESC" : "ASC");
-                setSort({
-                  sortDir: processSort,
-                  sortField: "processedDate",
-                });
+                sortFunction(
+                  processSort,
+                  setProcessSort,
+                  setSort,
+                  "processedDate"
+                );
               }}
             >
               COMPLETED DATE
               <span style={{ cursor: "pointer" }}>
-                {processSort === "ASC" ? (
-                     <ArrowDownOutlined />
+                {processSort === "DESC" ? (
+                  <ArrowDownOutlined />
                 ) : (
                   <ArrowUpOutlined />
-
                 )}
               </span>
             </th>
             <th
               onClick={() => {
-                setAuditAllocatedSort(
-                  auditAllocatedSort === "ASC" ? "DESC" : "ASC"
+                sortFunction(
+                  auditAllocatedSort,
+                  setAuditAllocatedSort,
+                  setSort,
+                  "auditAllocatedDate"
                 );
-                setSort({
-                  sortDir: auditAllocatedSort,
-                  sortField: "auditAllocatedDate",
-                });
               }}
             >
               AUDIT ALLOCATED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {auditAllocatedSort === "ASC" ? (
-                 <ArrowDownOutlined />
+                {auditAllocatedSort === "DESC" ? (
+                  <ArrowDownOutlined />
                 ) : (
-                 
                   <ArrowUpOutlined />
                 )}
               </span>
             </th>
             <th
               onClick={() => {
-                setAuditDueSort(auditDueSort === "ASC" ? "DESC" : "ASC");
-                setSort({ sortDir: auditDueSort, sortField: "auditDueDate" });
+                sortFunction(
+                  auditDueSort,
+                  setAuditDueSort,
+                  setSort,
+                  "auditDueDate"
+                );
               }}
             >
               AUDIT DUE DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
                 {auditDueSort === "ASC" ? (
-                   <ArrowUpOutlined />
-                  
-                  
+                  <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
@@ -326,16 +339,19 @@ const UserQueue = ({ userList, setSort }) => {
             <th>AUDIT ALLOCATED BY</th>
             <th
               onClick={() => {
-                setAuditDateSort(audirDateSort === "ASC" ? "DESC" : "ASC");
-                setSort({ sortDir: audirDateSort, sortField: "auditedDate" });
+                sortFunction(
+                  audirDateSort,
+                  setAuditDateSort,
+                  setSort,
+                  "auditedDate"
+                );
               }}
             >
               AUDITED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {audirDateSort === "ASC" ? (
-                 <ArrowDownOutlined />
+                {audirDateSort === "DESC" ? (
+                  <ArrowDownOutlined />
                 ) : (
-                  
                   <ArrowUpOutlined />
                 )}
               </span>

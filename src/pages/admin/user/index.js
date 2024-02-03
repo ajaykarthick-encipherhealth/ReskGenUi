@@ -14,6 +14,9 @@ import {
   getAddUser,
   getUsers,
 } from "../../../store/actions/adminAction/usersAction";
+import {
+  AddUser
+} from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
 import SpinnerDots from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
@@ -25,9 +28,9 @@ const options3 = [
 ];
 const RoleList = [
   { value: "", label: "ALL" },
-  { value: "ADMIN", label: "Admin" },
-  { value: "L1AUDITOR", label: "L1Auditor" },
-  { value: "L2AUDITOR", label: "L2Auditor" },
+  { value: "ADMIN", label: "ADMIN" },
+  { value: "L1AUDITOR", label: "L1AUDITOR" },
+  { value: "L2AUDITOR", label: "L2AUDITOR" },
 ];
 
 const UserList = () => {
@@ -45,8 +48,10 @@ const UserList = () => {
   const [roleValue, setRoleValue] = useState("");
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [totalElements, setTotalElements] = useState(10);
-  const [sortOrder,setSortOrder]=useState("ASC")
-  const[ sort,setSort]=useState({sortDir:"ASC",sortField:""})
+  const [sortOrder,setSortOrder]=useState("DESC")
+  const[ sort,setSort]=useState({sortDir:"",sortField:""})
+  const[ useAdd,setUseAdd]=useState(false)
+
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -78,14 +83,14 @@ const UserList = () => {
 
   const handleChange = async (e) => {
     const key = e.target.name;
-    const value = e.target.value;mfaEnabled
+    const value = e.target.value;
     setFormData({ ...formData, [key]: value });
     if (key == "role") {
       setRoleValue([value]);
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
     const role = localStorage.getItem("userRole");
@@ -93,7 +98,21 @@ const UserList = () => {
       formData.tenantId = localTenantId;
       formData.organizationId = localOrgId;
       formData.role = roleValue ? roleValue : [role.toUpperCase()];
-      dispatch(getAddUser(formData));
+      var response = await AddUser(formData);      
+      if (response?.data?.status === "SUCCESS") {
+        setAddUser(false);
+        setUseAdd(true);
+        setIsLoadingBtn(false);
+        notification.success({
+          message: response?.data?.message,
+          duration: 1,
+        });
+      } else {
+        notification.warning({
+          message: response?.data?.message,
+          duration: 1,
+        });
+      }
     }
     setValidated(true);
   };
@@ -187,8 +206,9 @@ const UserList = () => {
     setLocalTenantId(tenId);
     setLocalUserId(uId);
     setLocalOrgId(orgId);
+    setUseAdd(false);
     dispatch(getUsers({ pageCount, search, startDate, endDate, status, role,sort }));
-  }, [pageCount, search, startDate, endDate, status, role,sort]);
+  }, [pageCount, search, startDate, endDate, status, role,sort,useAdd]);
 
   return (
     <>
@@ -236,9 +256,7 @@ const UserList = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {userListAll?.loading ? (
-                        <SpinnerDots />
-                      ) : (
+                     
                         <AdminList
                           userList={userListAll?.data?.response?.content}
                           switchHandler={switchHandler}
@@ -247,7 +265,7 @@ const UserList = () => {
                           setSortOrder={setSortOrder} 
                           setSort={setSort}
                         />
-                      )}
+                     
                       <div>
                         <div className="pagination-container">
                           <Paginator

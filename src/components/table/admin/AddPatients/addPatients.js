@@ -14,10 +14,13 @@ function AddPatientListTable({
   actionBodyTemplate,
   statusBodyTemplate,
   patientDetails,
-  sortOrder, setSortOrder, setSort
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
-  const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
+
 
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -178,31 +181,35 @@ function AddPatientListTable({
             <th>PATIENT NAME</th>
           
             <th style={{ textAlign: "left" }}>CREATED BY</th>
-         
-            <th
-              style={{ cursor: "pointer", textAlign: "center" }}
-              onClick={() => {
-                sortFunction(sortOrder, setSortOrder, setSort, "computedDate");
-              }}
-            >
-           COMPUTED DATE{" "}
-              {sortOrder === "ASC" ? (
-                <ArrowUpOutlined />
-              ) : (
-                <ArrowDownOutlined />
-              )}
-            </th>
+          
             
-            <th
-              style={{ textAlign: "center" }}
+                <th
+                  style={{ cursor: "pointer" ,paddingLeft:"15px",textAlign:"center"}}
+                  onClick={() => {
+                    sortFunction(sortOrder, setSortOrder, setSort, "computedDate");
+                  }}
+                >
+                  COMPUTED DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
+                <th
               onClick={() => {
-                requestSort("lastModifiedDate");
-                sortTableByDate();
+                sortFunction(
+                  sortCompleteOrder,
+                  setSortCompleteOrder,
+                  setSort,
+                  "createdDate"
+                );
               }}
+              style={{textAlign:"center"}}
             >
-              CREATED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder === "asc" ? (
+                CREATED DATE
+              <span style={{ padding: "10px", cursor: "pointer", textAlign:"center", paddingLeft:"15px" }}>
+                {sortCompleteOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />

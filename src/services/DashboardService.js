@@ -98,7 +98,7 @@ export const HoldStatus = async (router) => {
     );
     return response.data;
   } catch (err) {
-    if (err.response.status === 401) {
+    if (err.response?.status === 401) {
       router.push("/login");
     }
   }

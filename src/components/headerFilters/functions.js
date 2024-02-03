@@ -2,7 +2,7 @@ import { Avatar } from "antd";
 import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
 import moment from "moment";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 // for search
 export const searchFunction = (
   e,
@@ -42,23 +42,39 @@ export const handleRnagePicker = (
   setCoderEndDate
 ) => {
   if (dates === null || (Array.isArray(dates) && dates.length === 0)) {
-    // Handle the case when dates are cleared
-    setSelectedDates(null); // Or any other appropriate action
+    if (setSelectedDates) {
+      setSelectedDates(null);
+    }
+    if (activeTab === "SentReport") {
+      setStartDate("");
+      setEndDate("");
+    } else if (activeTab === "ReceivedReport") {
+      setReceivedStartDate("");
+      setReceivedEndDate("");
+    } else if (activeTab === "CoderReport") {
+      setCoderStartDate("");
+      setCoderEndDate("");
+    } else {
+      setStartDate("");
+      setEndDate("");
+    }
+
     return;
   }
 
-  const formattedDates = dateString?.length>0 && dateString?.map((data, index) => {
-    const formattedDate =
-      index === 1
-        ? data && `${data}T23:59:59.999Z`
-        : data && `${data}T00:00:00.000Z`;
-        
-    return formattedDate;
-  });
-  setSelectedDates([
-    dayjs(dateString[0]),
-    dayjs(dateString[1]),
-  ]);
+  const formattedDates =
+    dateString?.length > 0 &&
+    dateString?.map((data, index) => {
+      const formattedDate =
+        index === 1
+          ? data && `${data}T23:59:59.999Z`
+          : data && `${data}T00:00:00.000Z`;
+
+      return formattedDate;
+    });
+  if (setSelectedDates) {
+    setSelectedDates([dayjs(dateString[0]), dayjs(dateString[1])]);
+  }
   if (activeTab === "SentReport") {
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
@@ -119,7 +135,7 @@ export const dateFormate = (dayjs, date) => {
 //sorting
 export const sortFunction = (sortDir, setSortDir, setSort, field) => {
   setSortDir(sortDir === "ASC" ? "DESC" : "ASC");
-  setSort({ sortDir: sortDir, sortField: field });
+  setSort({ sortDir: sortDir === "ASC" ? "DESC" : "ASC", sortField: field });
 };
 export const priorityOptions = [
   {
@@ -209,14 +225,18 @@ export const processstatusBodyTemplate = (rowData) => {
 };
 
 export const generateOptionsList = (items) => {
-  if (items?.loading || items === null) {
+  if ((items?.loading && items?.length === 0) || items === null) {
     return [{ label: "Loading...", value: "Loading..." }];
   } else if (items?.data?.data.response?.length > 0) {
     const options = [
       { label: "All", value: "" },
-      ...items.data.data.response.map((item) => ({
-        label: item,
-        value: item,
+      ...items?.data?.data?.response?.map((item) => ({
+        label: (
+          <span>
+            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+          </span>
+        ),
+        value: item?.userName,
       })),
     ].filter(Boolean);
     return options;
@@ -352,3 +372,16 @@ export const getSelectedDaysCount = (DateRanges) => {
   const differenceDays = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
   return differenceDays;
 };
+
+export const disableFutureDate = (current) => {
+  return current && current.isAfter(moment());
+};
+
+export const disablePastDate = (current) => {
+  return current && current.isBefore(moment().subtract(1, "day"));
+};
+
+export const capitalizeFirstLetter=(string)=> {
+  const formattedString=string?.toLowerCase()
+  return formattedString?.charAt(0).toUpperCase() + formattedString.slice(1);
+}

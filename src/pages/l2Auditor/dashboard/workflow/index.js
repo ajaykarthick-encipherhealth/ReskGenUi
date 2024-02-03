@@ -17,10 +17,14 @@ import auditHold from "../../.../../../../images/dashboard/auditHold.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import spinSTYles from "../../../../styles/auth.module.css";
+import pendingIcon from "../../.../../../../images/dashboard/pendingIcon.png";
+import declineIcon from "../../.../../../../images/dashboard/declineIcon.png";
+import reAuditIcon from "../../.../../../../images/dashboard/reAuditIcon.png";
+import auditHoldIcon from "../../.../../../../images/dashboard/auditHoldIcon.png";
+import auditedIcon from "../../.../../../../images/dashboard/auditedHold.png";
+
 import { useSelector } from "react-redux";
-import moment from "moment";
 import dayjs from "dayjs";
-import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
 const WorkFlow = () => {
   const currentDate = dayjs();
@@ -33,16 +37,11 @@ const WorkFlow = () => {
 
   const startDate = DateRanges
     ? new Date(DateRanges?.startDate).toISOString()
-    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+    : last30thDate.toISOString().split("T")[0];
   const endDate = DateRanges
     ? new Date(DateRanges?.endDate).toISOString()
-    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+    : lastDateWithTime.toISOString().split("T")[0];
 
-  const dates = {
-    startDate,
-    endDate,
-  };
- 
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
@@ -57,7 +56,7 @@ const WorkFlow = () => {
     },
     {
       id: 2,
-      icon: pending,
+      icon: auditedIcon,
       title: "Audited",
       charts: worlFlowData?.data?.response?.audited,
       days: "Last 30 days",
@@ -65,7 +64,7 @@ const WorkFlow = () => {
     },
     {
       id: 3,
-      icon: hold,
+      icon: reAuditIcon,
       title: "Re Audit",
       charts: worlFlowData?.data?.response?.reAudited,
       days: "Last 30 days",
@@ -73,7 +72,7 @@ const WorkFlow = () => {
     },
     {
       id: 4,
-      icon: completed,
+      icon: auditHoldIcon,
       title: "Audit Hold",
       charts: worlFlowData?.data?.response?.auditHold,
       days: "Last 30 days",
@@ -81,7 +80,7 @@ const WorkFlow = () => {
     },
     {
       id: 5,
-      icon: allocated,
+      icon: pendingIcon,
       title: "Pending",
       charts: worlFlowData?.data?.response?.auditPending,
       days: "Last 30 days",
@@ -89,7 +88,7 @@ const WorkFlow = () => {
     },
     {
       id: 6,
-      icon: allocated,
+      icon: declineIcon,
       title: "Declined",
       charts: worlFlowData?.data?.response?.auditDecliend,
       days: "Last 30 days",
@@ -100,11 +99,13 @@ const WorkFlow = () => {
   return (
     <div className={styles.card1}>
       <HeadTitle
-        header={`Last ${
-          DateRanges?.startDate
-            ? getSelectedDaysCount(DateRanges)
-            : getSelectedDaysCount(dates) - 2
-        } days work flow `}
+        header={
+          !DateRanges || DateRanges?.clear
+            ? `Last 30 days work flow`
+            : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
+                .subtract(1, "day")
+                .format("MM-DD-YYYY")}`
+        }
         icon={calender}
         handleOpen={handleOpen}
         openPicker={openPicker}

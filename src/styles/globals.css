@@ -13602,7 +13602,6 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
 }
-
 .custom_select_type>.ant-select-selector,
 .custom_select_user>.ant-select-selector {
   border-radius: 8px !important;
@@ -13826,4 +13825,10 @@ overflow: scroll;
   background: transparent;
   border-bottom: 2px solid #3479FE;
   color: #3479FE;
+.rcw-picker-btn img{
+  padding: 10px;
+}
+.rcw-send img{
+  margin-top: -22px;
+  margin-left: 10px;
 }

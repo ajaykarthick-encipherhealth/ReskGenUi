@@ -1,6 +1,10 @@
 import { DatePicker } from "antd";
 import React from "react";
-import { handleRnagePicker } from "../headerFilters/functions";
+import {
+  disableFutureDate,
+  disablePastDate,
+  handleRnagePicker,
+} from "../headerFilters/functions";
 import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
@@ -17,6 +21,7 @@ const DateRangePicker = ({
   setReceivedEndDate,
   setCoderStartDate,
   setCoderEndDate,
+  disabled,
 }) => {
   return (
     <div>
@@ -47,6 +52,7 @@ const DateRangePicker = ({
                 ]
               : []
           }
+          disabledDate={(current) => !disabled&& disableFutureDate(current)}
         />
       </div>
     </div>

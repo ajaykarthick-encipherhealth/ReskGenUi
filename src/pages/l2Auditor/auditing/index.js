@@ -14,6 +14,7 @@ import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getWorkListFilter } from "../../../store/actions/l2Action/AuditorAction";
+import { generateOptionsList } from "../../../components/headerFilters/functions";
 
 const bullets = [
   {
@@ -52,6 +53,7 @@ export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.AuditWork.workListFilter);
+  const filteredList = useSelector((state) => state.auth.filterList);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
@@ -116,6 +118,7 @@ export default function Patient() {
       patientSortOrder,
       selAllocatedBy,
       sort,
+      selCreatedBy
     };
 
     dispatch(getWorkListFilter(datas));
@@ -130,6 +133,7 @@ export default function Patient() {
     completedEndDate,
     patientSortOrder,
     sort,
+    selCreatedBy
   ]);
 
   useEffect(() => {
@@ -327,8 +331,11 @@ export default function Patient() {
                             defaultAllocateTo={"All"}
                             // created by
                             isCreatedBySelector={true}
-                            createdTolabel="Select L1 Auditor"
-                            createdByOptoons={createdByOptions}
+                            createdTolabel="L1 Auditor"
+                            optionKey="patientAllocated"
+                            createdByOptoons={
+                              generateOptionsList(filteredList)
+                            }
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={false}
                             addUserForm={addPatientFormId}

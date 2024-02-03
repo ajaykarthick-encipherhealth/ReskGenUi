@@ -6,6 +6,7 @@ import TableStyle from "../../table.module.css";
 import styles from "../../../../styles/auth.module.css";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import {
+  capitalizeFirstLetter,
   dateFormate,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
@@ -13,20 +14,25 @@ import {
 } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import SpinnerDots from "../../../spinner";
+import { useSelector } from "react-redux";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
   { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
 ];
-const { Option } = Select;
+
 const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
+  const usersData = useSelector((state) => state.adminUsers.usersData);
+
   const dispatch = useDispatch();
   const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [popoverVisible, setPopoverVisible] = useState(true);
   const onChange = (item, checked) => {
     setRowData(item);
     setChecked(checked);
@@ -35,6 +41,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const handleRows = (value) => {
     const updatedValue = Array.isArray(value) ? value : [value];
     setSelectedRoles(updatedValue);
+    setOpen(false);
   };
   const getContent = (data) => {
     return (
@@ -66,7 +73,9 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             onChange={handleRows}
             options={items}
             placeholder={!data?.role[0] && "Select Role"}
-            defaultValue={isMultiple ? [data?.role[0]] : data?.role[0]}
+            defaultValue={isMultiple ? data.role : data?.role}
+            open={open}
+            onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
         </div>
         <div
@@ -79,7 +88,10 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             className={styles.sendBtn}
             onClick={() => {
               if (selectedRoles?.length > 0) {
-                dispatch(enableUser(checkedd, rowData, selectedRoles));
+                dispatch(
+                  enableUser(true, rowData, selectedRoles, setPopoverVisible)
+                );
+                setPopoverVisible(false);
               }
             }}
           >
@@ -96,186 +108,188 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   return (
     <div className={TableStyle.classContaineer}>
-      <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
-          <tr>
-            <th style={{ textAlign: "left", paddingLeft: "72px" }}>NAME</th>
-            <th className={TableStyle.rowStyle} style={{ textAlign: "center" }}>
-              EMAIL
-            </th>
-            <th style={{ textAlign: "center", paddingLeft: "33px" }}>ROLE</th>
-            <th
-              style={{ cursor: "pointer", textAlign: "center" }}
-              onClick={() => {
-                sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
-              }}
-            >
-              DATE CREATED{" "}
-              {sortOrder === "ASC" ? (
-                <ArrowUpOutlined />
-              ) : (
-                <ArrowDownOutlined />
-              )}
-            </th>
-            <th className={TableStyle.rowStyle} style={{ textAlign: "center" }}>
-              MFA
-            </th>
-            <th style={{ textAlign: "center" }}>ACTION</th>
-            <th style={{ textAlign: "center" }}>USER STATUS</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userList?.length > 0 ? (
-            userList?.map((item, index) => (
-              <tr key={index} style={{ height: "35px" }}>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {item.firstName || item.lastName || item?.profileImageUrl ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
+      {usersData?.loading ? (
+        <SpinnerDots />
+      ) : (
+        <table className={TableStyle.classTable}>
+          <thead className={TableStyle.classThead}>
+            <tr>
+              <th style={{ textAlign: "left", paddingLeft: "72px" }}>NAME</th>
+              <th
+                className={TableStyle.rowStyle}
+                style={{ textAlign: "center" }}
+              >
+                EMAIL
+              </th>
+              <th style={{ textAlign: "center", paddingLeft: "33px" }}>ROLE</th>
+              <th
+                style={{ cursor: "pointer", textAlign: "center" }}
+                onClick={() => {
+                  sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
+                }}
+              >
+                DATE CREATED{" "}
+                {sortOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+              <th
+                className={TableStyle.rowStyle}
+                style={{ textAlign: "center" }}
+              >
+                MFA
+              </th>
+              <th style={{ textAlign: "center" }}>ACTION</th>
+              <th style={{ textAlign: "center" }}>USER STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usersData?.data?.response?.content?.length > 0 ? (
+              usersData?.data?.response?.content?.map((item, index) => (
+                <tr key={index} style={{ height: "35px" }}>
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{ textAlign: "center" }}
+                  >
+                    {item.firstName ||
+                    item.lastName ||
+                    item?.profileImageUrl ? (
+                      <div style={{ display: "flex", alignItems: "center" }}>
                         {" "}
-                        {renderUserPrfoileAvatar(
-                          item.firstName,
-                          item.lastName,
-                          item?.profileImageUrl,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {item.firstName} {item.lastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
-                  )}
-                </td>
+                        <span style={{ marginRight: "10px" }}>
+                          {" "}
+                          {renderUserPrfoileAvatar(
+                            item.firstName,
+                            item.lastName,
+                            item?.profileImageUrl,
+                            "header"
+                          )}
+                        </span>
+                        <span>
+                          {item.firstName} {item.lastName}
+                        </span>
+                      </div>
+                    ) : (
+                      <div style={{ textAlign: "center" }}>---</div>
+                    )}
+                  </td>
 
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important", textAlign: "center" }}
-                >
-                  <span>{item?.email ? item?.email : "---"}</span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{
-                    height: "40px !important",
-                    textAlign: "center",
-                    paddingLeft: "70px",
-                  }}
-                >
-                  <div
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{ height: "40px !important", textAlign: "center" }}
+                  >
+                    <span>{item?.email ? item?.email : "---"}</span>
+                  </td>
+                  <td
+                    className={TableStyle.childBorder}
                     style={{
-                      margin: "0px 0px 0px 0px",
-                      width: "100%",
+                      height: "40px !important",
+                      textAlign: "center",
+                      paddingLeft: "70px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        margin: "0px 0px 0px 0px",
+                        width: "100%",
+                        textAlign: "center",
+                      }}
+                    >
+                      {item?.role?.length > 0 ? (
+                        <>
+                          <Popover
+                            trigger="hover"
+                            content={
+                              item?.role?.length > 1 &&
+                              item?.role?.map((data) => (
+                                <div> {capitalizeFirstLetter(data)}</div>
+                              ))
+                            }
+                          >
+                            <span>{capitalizeFirstLetter(item?.role[0])}</span>
+                          </Popover>
+                        </>
+                      ) : (
+                        "---"
+                      )}
+                    </div>
+                  </td>
+
+                  <td
+                    className={TableStyle.lastBorder}
+                    style={{ height: "40px !important", textAlign: "center" }}
+                  >
+                    <span>{dateFormate(dayjs, item?.createdDate)}</span>
+                  </td>
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{ height: "40px !important", textAlign: "center" }}
+                  >
+                    <span>
+                      {" "}
+                      {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
+                    </span>
+                  </td>
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{
+                      height: "40px !important",
+                      cursor: "pointer",
                       textAlign: "center",
                     }}
                   >
-                    {item?.role?.length > 0 ? (
-                      <>
-                        <Select
-                          className={`custom-ant-select ${TableStyle.customAntSelect}`}
-                          defaultValue={item?.role[0]?.toLowerCase()}
-                        >
-                          {item?.role?.map((data) => (
-                            <Option key={data} value={data} disabled={true}>
-                              <span style={{ color: "#000" }}>
-                                {" "}
-                                {data.toLowerCase()}
-                              </span>
-                            </Option>
-                          ))}
-                        </Select>
+                    <div>
+                      {popoverVisible ? (
                         <Popover
-                          content={
-                            item?.role?.length > 1 &&
-                            item?.role?.map((data) => (
-                              <div style={{ color: "#000" }}>
-                                {" "}
-                                {data.toLowerCase()}
-                              </div>
-                            ))
-                          }
+                          content={() => getContent(item)}
+                          title="Change Role"
+                          trigger="click"
                         >
-                          {/* {item?.role[0].toLowerCase()} */}
+                          <div
+                            onClick={() => {
+                              setRowData(item);
+                              setPopoverVisible(true);
+                            }}
+                          >
+                            <EditButton />
+                          </div>
                         </Popover>
-                      </>
-                    ) : (
-                      "---"
-                    )}
-                  </div>
-                </td>
-
-                <td
-                  className={TableStyle.lastBorder}
-                  style={{ height: "40px !important", textAlign: "center" }}
-                >
-                  <span>{dateFormate(dayjs, item?.createdDate)}</span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ height: "40px !important", textAlign: "center" }}
-                >
-                  <span>
-                    {" "}
-                    {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
-                  </span>
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{
-                    height: "40px !important",
-                    cursor: "pointer",
-                    textAlign: "center",
-                  }}
-                >
-                  <div>
-                    <Popover
-                      content={() => getContent(item)}
-                      title="Change Role"
-                      trigger="click"
-                    >
-                      <div
-                        onClick={() => {
-                          setRowData(item);
-                        }}
-                      >
-                        <EditButton />
-                      </div>
-                    </Popover>
-                  </div>
-                </td>
-                <td
-                  className={TableStyle.lastBorder}
-                  style={{ height: "40px !important", textAlign: "center" }}
-                >
-                  <Switch
-                    defaultChecked={item?.accountStatus}
-                    onChange={(checked) => onChange(item, checked)}
-                    style={{ color: "red" }}
-                  />
+                      ) : (
+                        <div
+                          onClick={() => {
+                            setRowData(item);
+                            setPopoverVisible(true);
+                          }}
+                        >
+                          <EditButton />
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td
+                    className={TableStyle.lastBorder}
+                    style={{ height: "40px !important", textAlign: "center" }}
+                  >
+                    <Switch
+                      defaultChecked={item?.accountStatus}
+                      onChange={(checked) => onChange(item, checked)}
+                      style={{ color: "red" }}
+                    />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8">
+                  <Empty />
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td
-                colSpan="8"
-                style={{
-                  display: "flex",
-                  alignItems: "cenetr",
-                  justifyContent: "center",
-                }}
-              >
-                <Empty />
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
