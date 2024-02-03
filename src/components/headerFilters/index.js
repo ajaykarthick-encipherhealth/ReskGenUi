@@ -1,4 +1,4 @@
- import React, { useState } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
@@ -67,7 +67,6 @@ const HeaderFilters = ({
   defaultEndDate2,
   isAnotherPicker,
 
-
   // if has allocated date picker
   pickerlabe3,
   defaultStartDate3,
@@ -128,7 +127,7 @@ const HeaderFilters = ({
   badges,
   setIsModalVisible,
   optionKey,
-  disable
+  disable,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -150,7 +149,7 @@ const HeaderFilters = ({
             </div>
           )}
           {isSelector ? (
-            <div className="col-xl-2" style={{ zIndex: "99" }}>
+            <div className="col-xl-2">
               {" "}
               <Selector
                 selectlabel={selectlabel}
@@ -162,7 +161,7 @@ const HeaderFilters = ({
           ) : null}
           {selectOptions2 && (
             <div className="col-xl-2">
-              <label>{selectlabel2}</label>
+              <label>{selectlabel2}</label>                                                                                                                 
               <div class="form-group has-search">
                 <Select
                   onChange={(selectedOption) => {
@@ -191,8 +190,7 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
-                disabled= {disable !="Yes" && true}
-                
+                disabled={disable != "Yes" && true}
               />
             </div>
           )}
@@ -221,9 +219,7 @@ const HeaderFilters = ({
                           ]
                         : []
                     }
-                    disabledDate={(current) => 
-                      disableFutureDate(current)
-                    }
+                    disabledDate={(current) => disableFutureDate(current)}
                   />
                 </div>
               </div>
@@ -369,7 +365,13 @@ const HeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters(optionKey?optionKey:"createdBy",null,"audited queue"));
+                  dispatch(
+                    getFilters(
+                      optionKey ? optionKey : "createdBy",
+                      null,
+                      "audited queue"
+                    )
+                  );
                 }}
               >
                 <label>{createdTolabel}</label>
@@ -421,15 +423,13 @@ const HeaderFilters = ({
                           setEndDate4,
                         })
                       }
-                      disabledDate={(current) => 
-                        disableFutureDate(current)
-                      }
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>
               </>
             )}
-             {isAnotherPicker5 && (
+            {isAnotherPicker5 && (
               <>
                 <div className="col-xl-2">
                   <label>{pickerlabe5}</label>
@@ -444,9 +444,7 @@ const HeaderFilters = ({
                           setEndDate5,
                         })
                       }
-                      disabledDate={(current) => 
-                        disableFutureDate(current)
-                      }
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>

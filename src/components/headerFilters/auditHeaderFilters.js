@@ -121,7 +121,7 @@ const AuditHeaderFilters = ({
             </div>
           )}
           {isSelector2 ? (
-            <div className="col-xl-2" style={{ zIndex: "999" }}>
+            <div className="col-xl-2">
               {" "}
               <Selector
                 selectlabel={selectlabel2}
@@ -151,15 +151,12 @@ const AuditHeaderFilters = ({
                 defaultEndDate={audidefaultEndDate2}
                 setStartDate={audisetStartDate2}
                 setEndDate={audisetEndDate2}
-              
-                
               />
             </div>
           )}
           {isAuditAllocatedBy && (
             <div
               className="col-xl-2"
-              style={{ zIndex: "999" }}
               onClick={() => {
                 dispatch(getFilters("auditAllocatedBy", username));
               }}
@@ -226,7 +223,7 @@ const AuditHeaderFilters = ({
         <div style={{ margin: "50px 0px 0px -4px" }}>
           <div className="row filter-contain">
             {isSelector ? (
-              <div className="col-xl-2" style={{ zIndex: "999" }}>
+              <div className="col-xl-2" >
                 {" "}
                 <Selector
                   selectlabel={selectlabel}

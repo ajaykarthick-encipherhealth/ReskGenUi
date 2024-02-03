@@ -380,3 +380,8 @@ export const disableFutureDate = (current) => {
 export const disablePastDate = (current) => {
   return current && current.isBefore(moment().subtract(1, "day"));
 };
+
+export const capitalizeFirstLetter=(string)=> {
+  const formattedString=string?.toLowerCase()
+  return formattedString?.charAt(0).toUpperCase() + formattedString.slice(1);
+}
