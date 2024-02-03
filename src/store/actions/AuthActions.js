@@ -137,7 +137,7 @@ export function loginAction(email, router, code) {
   return (dispatch) => {
     login(email, password, code)
       .then((response) => {
-        var result = response.data.response;
+        var result = response?.data?.response;
         let emailSplit = email?.split("@");
 
         if (response?.data?.status === "SUCCESS") {
@@ -150,6 +150,11 @@ export function loginAction(email, router, code) {
           localStorage.setItem("loginCheck", true);
           router?.push(`/twofactorAuthentication/SelectRole?username=${email}`);
         }
+       if(response.data?.response ===null){
+        notification.error({
+          description:response?.data?.message
+        })
+       }
       })
       .catch((err) => {
         console.log(err);

@@ -50,7 +50,7 @@ function ReceivedReport({
     };
     dispatch(selectedReport(info));
     router?.push(
-      `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`
+      `/l2Auditor/report/individualreport?reportId=${info?.reportUser?.reportId}`
     );
   };
 

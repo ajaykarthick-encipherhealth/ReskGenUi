@@ -16,12 +16,33 @@ import auditedbg from "../../.../../../../images/dashboard/auditedbg.png";
 import auditHold from "../../.../../../../images/dashboard/auditHold.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
-import spinSTYles from '../../../../styles/auth.module.css'
+import spinSTYles from "../../../../styles/auth.module.css";
 import { useSelector } from "react-redux";
+import moment from "moment";
+import dayjs from "dayjs";
+import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
 const WorkFlow = () => {
+  const currentDate = dayjs();
   const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
+  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
+
+  const last30thDate = currentDate?.subtract(31, "day");
+  const lastDateWithTime = currentDate?.endOf("day");
+
+  const startDate = DateRanges
+    ? new Date(DateRanges?.startDate).toISOString()
+    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+  const endDate = DateRanges
+    ? new Date(DateRanges?.endDate).toISOString()
+    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+
+  const dates = {
+    startDate,
+    endDate,
+  };
+ 
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
@@ -79,7 +100,11 @@ const WorkFlow = () => {
   return (
     <div className={styles.card1}>
       <HeadTitle
-        header="Last 30 days work flow "
+        header={`Last ${
+          DateRanges?.startDate
+            ? getSelectedDaysCount(DateRanges)
+            : getSelectedDaysCount(dates) - 2
+        } days work flow `}
         icon={calender}
         handleOpen={handleOpen}
         openPicker={openPicker}
@@ -87,35 +112,35 @@ const WorkFlow = () => {
       />
       <Card borderRadius="28px">
         {worlFlowData?.loading ? (
-         <div className={spinSTYles.spinStyle}>
-           <Spin loading={worlFlowData?.loading} />
-         </div>
+          <div className={spinSTYles.spinStyle}>
+            <Spin loading={worlFlowData?.loading} />
+          </div>
+        ) : worlFlowData?.data?.response ? (
+          <Row className={styles.carddiv}>
+            {card1Data?.map((data) => (
+              <Col
+                span={10}
+                style={{
+                  backgroundImage: `url(${data?.bg.src})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                }}
+                className={styles.colData}
+              >
+                <div className={styles.header}>
+                  <Image src={data?.icon} className={styles.Img} />
+                  <div className={styles.heading}>{data.title}</div>
+                </div>
+                <div className={styles.charts}>{`${
+                  data?.charts ? data?.charts : "0"
+                }  Charts`}</div>
+                <div className={styles.days}>{data.days}</div>
+              </Col>
+            ))}
+          </Row>
         ) : (
-          worlFlowData?.data?.response ? (
-            <Row className={styles.carddiv}>
-              {card1Data?.map((data) => (
-                <Col
-                  span={10}
-                  style={{
-                    backgroundImage: `url(${data?.bg.src})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                  }}
-                  className={styles.colData}
-                >
-                  <div className={styles.header}>
-                    <Image src={data?.icon} className={styles.Img} />
-                    <div className={styles.heading}>{data.title}</div>
-                  </div>
-                  <div className={styles.charts}>{`${
-                    data?.charts ? data?.charts : "0"
-                  }  Charts`}</div>
-                  <div className={styles.days}>{data.days}</div>
-                </Col>
-              ))}
-            </Row>
-          ):<div className={spinSTYles.spinStyle}>
-            <Empty/>
+          <div className={spinSTYles.spinStyle}>
+            <Empty />
           </div>
         )}
       </Card>

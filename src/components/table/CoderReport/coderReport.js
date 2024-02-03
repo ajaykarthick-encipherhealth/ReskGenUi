@@ -7,8 +7,9 @@ import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate } from "../../headerFilters/functions";
+import { dateFormate, sortFunction } from "../../headerFilters/functions";
 import visitStyles from "../../../styles/visitdata.module.css";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 function CoderReport({
   setModal,
@@ -23,6 +24,9 @@ function CoderReport({
   setSelectedRows,
   selectAll,
   setSelectAll,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -218,10 +222,26 @@ function CoderReport({
             <tr style={{ textAlign: "center" }}>
               <>
                 <th></th>
-                <th>PATIENT ID</th>
+                <th style={{paddingLeft:"40px"}}>PATIENT ID</th>
                 <th>PATIENT NAME</th>
-
-                <th>COMPLETE DATE </th>
+                <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "processedDate"
+                    );
+                  }}
+                >
+                  COMPLETE DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 <th>COMMENTS </th>
                 <th>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
@@ -252,7 +272,7 @@ function CoderReport({
           </thead>
 
           <tbody className={TableStyle.bodytable}>
-            {reportListAll?.data?.length > 0?
+            {reportListAll?.data?.length > 0 ? (
               reportListAll?.data?.map((row, index) => (
                 <tr
                   key={index}
@@ -273,6 +293,7 @@ function CoderReport({
                         style={{
                           borderTop: "0.2px solid #e1e1e1",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          paddingLeft:"60px"
                         }}
                         className={TableStyle.childBorder}
                       >
@@ -351,6 +372,7 @@ function CoderReport({
                         style={{
                           borderTop: "0.2px solid #e1e1e1",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          paddingLeft:"60px"
                         }}
                         className={TableStyle.childBorder}
                       >
@@ -422,12 +444,14 @@ function CoderReport({
                     </>
                   )}
                 </tr>
-              )):
+              ))
+            ) : (
               <tr>
-              <td colSpan={11}>
-                <Empty />
-              </td>
-            </tr>}
+                <td colSpan={11}>
+                  <Empty />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}

@@ -20,6 +20,7 @@ const HeadTitle = ({
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
   const [dateValues, setDates] = useState();
+  const [isDisabled,setIsDisabled]=useState(true)
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
   useEffect(() => {
@@ -39,7 +40,7 @@ const HeadTitle = ({
     }
   };
 
-  const last30thDate = currentDate.subtract(31, "day");
+  const last30thDate = currentDate.subtract(30, "day");
   const lastDateWithTime = currentDate.endOf("day").toISOString();
 
   return (
@@ -83,9 +84,11 @@ const HeadTitle = ({
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);
+          setIsDisabled(true)
         }}
         onCancel={() => {
           setOpenPicker(false);
+          setIsDisabled(true)
         }}
       >
         <div className={styles.modalDetails}>
@@ -102,13 +105,14 @@ const HeadTitle = ({
             open={openPicker}
             value={selectedDates}
             onChange={(dates, dateStrings) => {
+              setIsDisabled(false)
               setSelectedDates(dates);
               handleDatePickerChange(dateStrings);
             }}
             suffixIcon={false}
             className={styles.datepicker}
           />
-          <span
+          <div
             style={{
               cursor: "pointer",
               position: "relative",
@@ -125,8 +129,12 @@ const HeadTitle = ({
               setSelectedDates([]);
             }}
           >
-            <Button>Clear</Button>
-          </span>
+            <Button 
+            disabled={isDisabled? true : false}
+            >
+              Clear
+            </Button>
+          </div>
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
       </Modal>

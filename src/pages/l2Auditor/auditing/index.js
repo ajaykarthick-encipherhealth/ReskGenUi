@@ -163,6 +163,13 @@ export default function Patient() {
           auditAllocatedDate: res.auditAllocatedDate,
           auditDueDate: res.auditDueDate,
           auditedDate: res.auditedDate,
+          patientAllocatedFirstName: res.patientAllocatedFirstName,
+          patientAllocatedLastName:res.patientAllocatedLastName,
+          patientAllocatedProfileImage:res.patientAllocatedProfileImage,
+          auditAllocatedByFirstName:res.auditAllocatedByFirstName,
+          auditAllocatedByLastName:res.auditAllocatedByLastName,
+          auditAllocatedByProfileImage:res.auditAllocatedByProfileImage
+
         });
       });
       var newArray = [];

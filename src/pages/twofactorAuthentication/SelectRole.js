@@ -39,9 +39,9 @@ const SelectRole = () => {
       const selectedRoleInfo = rolesMapping[selectedRole];
 
       if (selectedRoleInfo && !roleError) {
-        localStorage.setItem("userRole", selectedRoleInfo.userRole);
+        localStorage.setItem("userRole", selectedRoleInfo?.userRole);
         localStorage.setItem("role", selectedRole);
-        router?.push(selectedRoleInfo.route);
+        router?.push(selectedRoleInfo?.route);
       }
     }
   };

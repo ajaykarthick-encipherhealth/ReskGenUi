@@ -25,15 +25,23 @@ import HeaderFilters from "../../../components/headerFilters";
 
 const { RangePicker } = DatePicker;
 const statusOptions = [
+  { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
-  { label: "All", value: "ALL" },
 ];
 
 const index = () => {
   const dispatch = useDispatch();
+  const ExportResponse = useSelector((state) => state.report?.exportRes);
+  const ReportPatientDetails = useSelector((state) => state.report?.details);
+  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
+  const ReceivedReportDetails = useSelector(
+    (state) => state.report?.receivedDetails
+  );
+  const rowsLength = useSelector((state) => state?.report?.row);
+  const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("CoderReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -63,39 +71,54 @@ const index = () => {
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
   const [receivedSortOrder, setReceivedSortOrder] = useState("ASC");
-  const [sortField, setSortField] = useState(null);
+  const [sentSortOrder, setSentSortOrder] = useState("ASC");
+  const [coderSortOrder, setCoderSortOrder] = useState("ASC");
+  const [sort, setSort] = useState({sortDir:"ASC",sortField:""});
 
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  const ReceivedOptions = [];
+  ReceivedReportDetails?.data?.response?.content?.map((item) => {
+    return ReceivedOptions?.push({ label: item.sender, value: item.sender });
+  });
+  const SentOptions = [];
+  const uniqueRoles = new Set();
+
+  SentReportDetails?.data?.response?.data?.forEach((data) => {
+    data?.receivedUsers?.forEach((item) => {
+      const role = item.role;
+      if (!uniqueRoles.has(role)) {
+        SentOptions.push({ label: role, value: role });
+        uniqueRoles.add(role);
+      }
+    });
   });
 
-  const performanceSearch = (value) => {
-    if (activeTab === "SentReport") {
-      setSentSearch(value);
-    } else if (activeTab === "ReceivedReport") {
-      setReceivedSearch(value);
-    } else {
-      setCoderSearch(value);
-    }
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPageNo(e.page);
   };
-  const debouncedSearch = debounce(performanceSearch, 500);
-
-  const filterChangePatientId = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientId"].value = value;
-    setFilters(_filters);
-    debouncedSearch(value);
+  const onReceivedPageChange = (e) => {
+    setPaginationReceivedFirst(e.first);
+    setReceivedPageNo(e.page);
+  };
+  const onSentPageChange = (e) => {
+    setPaginationSentFirst(e.first);
+    setSentPageNo(e.page);
   };
 
-  const ExportResponse = useSelector((state) => state.report?.exportRes);
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setSelectedRows([]);
+    setSelectAll(false);
+  };
 
+  const handleTabs = (name) => {
+    setSelectedDates(null);
+    setActiveTab(name);
+  };
   useEffect(() => {
     setIsLoading(false);
     if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch));
+      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch,sort));
     }
     if (activeTab === "ReceivedReport") {
       dispatch(
@@ -104,8 +127,7 @@ const index = () => {
           receivedStartDate,
           receivedEndDate,
           receivedSearch,
-          sortField,
-          receivedSortOrder
+          sort
         )
       );
     }
@@ -117,7 +139,8 @@ const index = () => {
           coderStartDate,
           coderEndDate,
           coderSearch,
-          selectedCoderOpt
+          selectedCoderOpt,
+          sort
         )
       );
     }
@@ -142,100 +165,13 @@ const index = () => {
     receivedEndDate,
     receivedSearch,
     receivedSortOrder,
-    sortField,
+    sort,
   ]);
 
-  const ReportPatientDetails = useSelector((state) => state.report?.details);
-  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
-  const ReceivedReportDetails = useSelector(
-    (state) => state.report?.receivedDetails
-  );
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
 
-  const ReceivedOptions = [];
-  ReceivedReportDetails?.data?.response?.content?.map((item) => {
-    return ReceivedOptions?.push({ label: item.sender, value: item.sender });
-  });
-  const SentOptions = [];
-  const uniqueRoles = new Set();
-
-  SentReportDetails?.data?.response?.data?.forEach((data) => {
-    data?.receivedUsers?.forEach((item) => {
-      const role = item.role;
-      if (!uniqueRoles.has(role)) {
-        SentOptions.push({ label: role, value: role });
-        uniqueRoles.add(role);
-      }
-    });
-  });
-  const dosOnChange = (selectedOption) => {
-    const selectedValue = selectedOption.value;
-    setSelectedCoderOpt(selectedValue);
-  };
-
-  const onPageChange = (e) => {
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-  };
-  const onReceivedPageChange = (e) => {
-    setPaginationReceivedFirst(e.first);
-    setReceivedPageNo(e.page);
-  };
-  const onSentPageChange = (e) => {
-    setPaginationSentFirst(e.first);
-    setSentPageNo(e.page);
-  };
-
-  const handleExport = () => {
-    setIsModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setIsModalVisible(false);
-    setSelectedRows([]);
-    setSelectAll(false);
-  };
-
-  const handleDatePickerChange = (date, dateString) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date && `${date}T23:59:59.999Z`
-          : date && `${date}T00:00:00.000Z`;
-      return formattedDate;
-    });
-    setStartDate(formattedDates[0]);
-    setEndDate(formattedDates[1]);
-    setSelectedDates(date);
-  };
-
-  const handleReceivedDatePicker = (date, dateString) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date && `${date}T23:59:59.999Z`
-          : date && `${date}T00:00:00.000Z`;
-      return formattedDate;
-    });
-    setReceivedStartDate(formattedDates[0]);
-    setReceivedEndDate(formattedDates[1]);
-    setSelectedDates(date);
-  };
-  const handleCoderPicker = (date, dateString) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date && `${date}T23:59:59.999Z`
-          : date && `${date}T00:00:00.000Z`;
-      return formattedDate;
-    });
-    setSelectedDates(date);
-    setCoderStartDate(formattedDates[0]);
-    setCoderEndDate(formattedDates[1]);
-  };
-  const rowsLength = useSelector((state) => state?.report?.row);
   return (
     <>
       <Header />
@@ -278,6 +214,8 @@ const index = () => {
                             activeTab={activeTab}
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
                           />
                         </div>
                         <Export
@@ -298,14 +236,19 @@ const index = () => {
                             style={{ marginTop: "20px" }}
                           >
                             <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey="validDiseases">
+                              <Tab.Container
+                                defaultActiveKey={
+                                  reportActiveTab
+                                    ? "meatCriteria"
+                                    : "validDiseases"
+                                }
+                              >
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      setSelectedDates(null);
-                                      setActiveTab("CoderReport");
+                                      handleTabs("CoderReport");
                                     }}
                                   >
                                     <Nav.Link
@@ -319,8 +262,7 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      setSelectedDates(null);
-                                      setActiveTab("SentReport");
+                                      handleTabs("SentReport");
                                     }}
                                   >
                                     <Nav.Link
@@ -334,8 +276,7 @@ const index = () => {
                                     as="li"
                                     className="nav-item"
                                     onClick={() => {
-                                      setSelectedDates(null);
-                                      setActiveTab("ReceivedReport");
+                                      handleTabs("ReceivedReport");
                                     }}
                                   >
                                     <Nav.Link
@@ -366,6 +307,9 @@ const index = () => {
                                       selectedRows={selectedRows}
                                       setSelectAll={setSelectAll}
                                       selectAll={selectAll}
+                                      setSortOrder={setCoderSortOrder}
+                                      sortOrder={coderSortOrder}
+                                      setSort={setSort}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -383,6 +327,9 @@ const index = () => {
                                       }
                                       onSentPageChange={onSentPageChange}
                                       loading={SentReportDetails?.loading}
+                                      setSortOrder={setSentSortOrder}
+                                      sortOrder={sentSortOrder}
+                                      setSort={setSort}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -405,7 +352,7 @@ const index = () => {
                                         loading={ReceivedReportDetails?.loading}
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
-                                        setSortField={setSortField}
+                                        setSort={setSort}
                                       />
                                     )}
                                   </Tab.Pane>
