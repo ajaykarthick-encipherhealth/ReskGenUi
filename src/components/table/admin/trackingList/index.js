@@ -238,8 +238,8 @@ function TrackingTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th style={{ textAlign: "center" }}>ALLOCATED BY</th>
-            <th style={{ textAlign: "left" }}>ALLOCATED TO</th>
+            <th style={{ textAlign: "left",paddingLeft:"20px" }}>ALLOCATED BY</th>
+            <th style={{ textAlign: "left",paddingLeft:"20px" }}>ALLOCATED TO</th>
             <th style={{ textAlign: "center" }}>ALLOCATED DATE</th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED DATE</th>

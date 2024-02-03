@@ -13560,3 +13560,10 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
 }
+.rcw-picker-btn img{
+  padding: 10px;
+}
+.rcw-send img{
+  margin-top: -22px;
+  margin-left: 10px;
+}

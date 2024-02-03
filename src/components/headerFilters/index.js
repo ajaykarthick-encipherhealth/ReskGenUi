@@ -150,7 +150,7 @@ const HeaderFilters = ({
             </div>
           )}
           {isSelector ? (
-            <div className="col-xl-2" style={{ zIndex: "999" }}>
+            <div className="col-xl-2" style={{ zIndex: "99" }}>
               {" "}
               <Selector
                 selectlabel={selectlabel}

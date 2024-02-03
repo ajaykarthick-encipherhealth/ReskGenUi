@@ -14,6 +14,7 @@ import {
 import { enableUser } from "../../../../services/adminServices/usersService";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
+import { useSelector } from "react-redux";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
@@ -22,6 +23,8 @@ const items = [
 ];
 const { Option } = Select;
 const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
+  const usersData = useSelector((state) => state.adminUsers.usersData);
+
   const dispatch = useDispatch();
   const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
@@ -97,7 +100,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   return (
     <div className={TableStyle.classContaineer}>
-      {!userList ? (
+      {usersData?.loading ? (
         <SpinnerDots />
       ) : (
         <table className={TableStyle.classTable}>
@@ -135,8 +138,8 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             </tr>
           </thead>
           <tbody>
-            {userList?.length > 0 ? (
-              userList?.map((item, index) => (
+            {usersData?.data?.response?.content?.length > 0 ? (
+              usersData?.data?.response?.content?.map((item, index) => (
                 <tr key={index} style={{ height: "35px" }}>
                   <td
                     className={TableStyle.childBorder}
@@ -200,7 +203,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                               ))
                             }
                           >
-                            {item?.role[0].toLowerCase()}
+                            {item?.role[0]}
                           </Popover>
                         </>
                       ) : (

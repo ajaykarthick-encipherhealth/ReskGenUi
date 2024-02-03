@@ -413,6 +413,7 @@ export default function Patient() {
                               </div>
                             </div>
                           </div>
+                          {isPatientList || activeTab === 1 ?
                           <div className="col-xl-2">
                             <label>Computed Date</label>
                             <div>
@@ -427,7 +428,7 @@ export default function Patient() {
                                 }
                               />
                             </div>
-                          </div>
+                          </div>:null}
                           <div className="col-xl-8 mt-4">
                             {isPatientList || activeTab === 1 ? (
                               <>

@@ -1310,11 +1310,12 @@
   border-radius: 10px;
 }
 .patientDetailsHead {
-  height: 65vh;
+  height: 70vh;
   margin-right: 0px;
+  overflow: scroll;
 }
 .patientDetailsHead:hover {
-  height: 65vh;
+  height: 70vh;
   overflow-y: scroll;
   margin-right: 0px;
 }
