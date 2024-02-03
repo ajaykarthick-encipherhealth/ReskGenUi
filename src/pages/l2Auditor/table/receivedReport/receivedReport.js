@@ -80,7 +80,7 @@ function ReceivedReport({
                       sortOrder,
                       setSortOrder,
                       setSort,
-                      "processedDate"
+                      "receiveDate"
                     );
                   }}
                 >

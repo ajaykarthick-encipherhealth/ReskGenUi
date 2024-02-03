@@ -84,7 +84,7 @@ function SentReportTable({
                       sortOrder,
                       setSortOrder,
                       setSort,
-                      "processedDate"
+                      "sendDate"
                     );
                   }}
                 >
