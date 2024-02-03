@@ -39,7 +39,6 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
     setSelectedRoles(updatedValue);
   };
   const getContent = (data) => {
-    console.log(selectedRoles)
     return (
       <div style={{ height: "250px" }}>
         <div style={{ height: "200px" }}>
@@ -69,7 +68,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             onChange={handleRows}
             options={items}
             placeholder={!data?.role[0] && "Select Role"}
-            defaultValue={isMultiple ? [data?.role[0]] : data?.role[0]}
+            defaultValue={isMultiple ? data.role : data?.role}
           />
         </div>
         <div
@@ -82,8 +81,10 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             className={styles.sendBtn}
             onClick={() => {
               if (selectedRoles?.length > 0) {
-                dispatch(enableUser(true, rowData, selectedRoles,setPopoverVisible));
-                setPopoverVisible(false)
+                dispatch(
+                  enableUser(true, rowData, selectedRoles, setPopoverVisible)
+                );
+                setPopoverVisible(false);
               }
             }}
           >
@@ -203,7 +204,13 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                               ))
                             }
                           >
-                            <span style={{color:item?.role?.length ===1 && "#A4A4A4"}}>{capitalizeFirstLetter(item?.role[0])}</span>
+                            <span
+                              style={{
+                                color: item?.role?.length === 1 && "#A4A4A4",
+                              }}
+                            >
+                              {capitalizeFirstLetter(item?.role[0])}
+                            </span>
                           </Popover>
                         </>
                       ) : (
@@ -236,30 +243,33 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     }}
                   >
                     <div>
-                      {popoverVisible?
-                      <Popover
-                        content={() => getContent(item)}
-                        title="Change Role"
-                        trigger="click"
-                        // visible={!false}
-                        // onVisibleChange={() => setPopoverVisible(!popoverVisible)}
-                      >
+                      {popoverVisible ? (
+                        <Popover
+                          content={() => getContent(item)}
+                          title="Change Role"
+                          trigger="click"
+                          // visible={!false}
+                          // onVisibleChange={() => setPopoverVisible(!popoverVisible)}
+                        >
+                          <div
+                            onClick={() => {
+                              setRowData(item);
+                              setPopoverVisible(true);
+                            }}
+                          >
+                            <EditButton />
+                          </div>
+                        </Popover>
+                      ) : (
                         <div
                           onClick={() => {
                             setRowData(item);
-                            setPopoverVisible(true)
+                            setPopoverVisible(true);
                           }}
                         >
                           <EditButton />
                         </div>
-                      </Popover>: <div
-                          onClick={() => {
-                            setRowData(item);
-                            setPopoverVisible(true)
-                          }}
-                        >
-                          <EditButton />
-                        </div>}
+                      )}
                     </div>
                   </td>
                   <td
