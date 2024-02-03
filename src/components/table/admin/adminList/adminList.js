@@ -22,7 +22,7 @@ const items = [
   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
   { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
 ];
-const { Option } = Select;
+
 const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const usersData = useSelector((state) => state.adminUsers.usersData);
 
@@ -31,7 +31,8 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [popoverVisible, setPopoverVisible] = useState(true);
   const onChange = (item, checked) => {
     setRowData(item);
     setChecked(checked);
@@ -40,6 +41,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const handleRows = (value) => {
     const updatedValue = Array.isArray(value) ? value : [value];
     setSelectedRoles(updatedValue);
+    setOpen(false);
   };
   const getContent = (data) => {
     return (
@@ -71,7 +73,9 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             onChange={handleRows}
             options={items}
             placeholder={!data?.role[0] && "Select Role"}
-            defaultValue={isMultiple ? [data?.role[0]] : data?.role[0]}
+            defaultValue={isMultiple ? data.role : data?.role}
+            open={open}
+            onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
         </div>
         <div
@@ -84,7 +88,10 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             className={styles.sendBtn}
             onClick={() => {
               if (selectedRoles?.length > 0) {
-                dispatch(enableUser(checkedd, rowData, selectedRoles));
+                dispatch(
+                  enableUser(true, rowData, selectedRoles, setPopoverVisible)
+                );
+                setPopoverVisible(false);
               }
             }}
           >
@@ -197,14 +204,11 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                             content={
                               item?.role?.length > 1 &&
                               item?.role?.map((data) => (
-                                <div style={{ color: "#000" }}>
-                                  {" "}
-                                  {capitalizeFirstLetter(data)}
-                                </div>
+                                <div> {capitalizeFirstLetter(data)}</div>
                               ))
                             }
                           >
-                            <span style={{color:item?.role?.length ===1 && "#A4A4A4"}}>{capitalizeFirstLetter(item?.role[0])}</span>
+                            <span>{capitalizeFirstLetter(item?.role[0])}</span>
                           </Popover>
                         </>
                       ) : (
@@ -237,19 +241,31 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     }}
                   >
                     <div>
-                      <Popover
-                        content={() => getContent(item)}
-                        title="Change Role"
-                        trigger="click"
-                      >
+                      {popoverVisible ? (
+                        <Popover
+                          content={() => getContent(item)}
+                          title="Change Role"
+                          trigger="click"
+                        >
+                          <div
+                            onClick={() => {
+                              setRowData(item);
+                              setPopoverVisible(true);
+                            }}
+                          >
+                            <EditButton />
+                          </div>
+                        </Popover>
+                      ) : (
                         <div
                           onClick={() => {
                             setRowData(item);
+                            setPopoverVisible(true);
                           }}
                         >
                           <EditButton />
                         </div>
-                      </Popover>
+                      )}
                     </div>
                   </td>
                   <td

@@ -128,6 +128,7 @@ const HeaderFilters = ({
   setIsModalVisible,
   optionKey,
   disable,
+  tracking
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -343,6 +344,7 @@ const HeaderFilters = ({
             {isAllocatedToSelector && (
               <div
                 className="col-xl-2"
+                style={{zIndex:tracking&&"2"}}
                 onClick={() => {
                   dispatch(getFilters("patientAllocated"));
                 }}
