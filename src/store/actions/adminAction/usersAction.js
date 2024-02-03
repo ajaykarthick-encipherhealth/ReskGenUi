@@ -19,10 +19,10 @@ export const getUsers = ({
   sort
 }) => {
   return (dispatch) => {
-    // dispatch({
-    //   type: LIST,
-    //   payload: { loading: true },
-    // });
+    dispatch({
+      type: LIST,
+      payload: { loading: true },
+    });
     try {
 
       UsersList({ pageCount, search, startDate, endDate, status, role,sort }).then(

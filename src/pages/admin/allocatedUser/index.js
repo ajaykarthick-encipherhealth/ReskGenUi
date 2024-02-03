@@ -59,6 +59,7 @@ export default function Patient() {
   const [l2selectUser, setL2selectUser] = useState(null);
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [totalElementsUser,setTotalElementsUser] =useState(0);
+  const [searchString,setSearchString] =useState("");
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
@@ -155,6 +156,8 @@ export default function Patient() {
   };
 
   const getNameSearch = (search) => {
+    setSearchString(search)
+    if(activeTab == 1){
     getAllList(
       pageNo,
       pageSize,
@@ -165,6 +168,13 @@ export default function Patient() {
       search,
       sort
     );
+    }else{
+      if(!isPatientList){
+      getAuditL2List(pageNo,search)
+      }else{
+        getL2PatientList(l2selectUser, pageNoL2Patient, sort,search);
+      }
+    }
   };
 
   const onPageChange = (e) => {
@@ -180,7 +190,7 @@ export default function Patient() {
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList(l2selectUser, e.page, sort);
+    getL2PatientList(l2selectUser, e.page, sort,"");
     setTableLoading(true);
   };
 
@@ -196,6 +206,7 @@ export default function Patient() {
     }
   };
   const selectTabClick = (number) => {
+    setSearchString("");
     setPaginationFirst(0);
     setIsLoading(true);
     setActiveTab(number);
@@ -205,18 +216,17 @@ export default function Patient() {
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
     if (number == 2) {
-      getAuditL2List(pageNoL2User);
+      getAuditL2List(pageNoL2User,"");
     } else {
       setIsPatientList(false);
       setPageNo(0);
       getAllList(0, pageSize, "", "", true, 2, "", sort);
     }
   };
-  const getAuditL2List = async (pageNo) => {
-    setIsLoading(true)
+  const getAuditL2List = async (pageNo,searchString) => {
     var orgId = localStorage.getItem("orgId");
     var tenantid = localStorage.getItem("tenantId");
-    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}`;
+    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -256,7 +266,7 @@ export default function Patient() {
         style={{ height: "35px" }}
         key={index}
         onClick={() => {
-          getL2PatientList(data, pageNoL2Patient, sort);
+          getL2PatientList(data, pageNoL2Patient, sort,"");
         }}
       >
         <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
@@ -304,14 +314,14 @@ export default function Patient() {
     </tr>;
   };
 
-  const getL2PatientList = async (data, pageNoL2Patient, sort) => {
+  const getL2PatientList = async (data, pageNoL2Patient, sort,searchString) => {
     setIsLoading(true);
     var dataMap = {
       firstName: data?.name,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir?sort?.sortDir:"DESC"}&sortfield=${sort?.sortField?sort?.sortField:"dueDate"}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir?sort?.sortDir:"DESC"}&sortfield=${sort?.sortField?sort?.sortField:"dueDate"}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -363,7 +373,8 @@ export default function Patient() {
     if (!isPatientList) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     } else {
-      getL2PatientList(l2selectUser, pageNoL2Patient, sort);
+      getL2PatientList(l2selectUser, pageNoL2Patient, sort,"");
+      setIsLoading(false);
     }
     setAllocateClicked(false);
     setSelectedRowsId([]);
@@ -409,12 +420,14 @@ export default function Patient() {
                                   onChange={(e) =>
                                     getNameSearch(e.target.value)
                                   }
+                                  value={searchString}
                                   className="form-control new-form-control"
                                   placeholder="Search"
                                 />
                               </div>
                             </div>
                           </div>
+                          {!isPatientList && activeTab == 1 ?
                           <div className="col-xl-2">
                             <label>Computed Date</label>
                             <div>
@@ -429,7 +442,7 @@ export default function Patient() {
                                 }
                               />
                             </div>
-                          </div>
+                          </div>:<div className="col-xl-2"></div>}
                           <div className="col-xl-8 mt-4">
                             {isPatientList || activeTab === 1 ? (
                               <>

@@ -28,9 +28,9 @@ const options3 = [
 ];
 const RoleList = [
   { value: "", label: "ALL" },
-  { value: "ADMIN", label: "Admin" },
-  { value: "L1AUDITOR", label: "L1Auditor" },
-  { value: "L2AUDITOR", label: "L2Auditor" },
+  { value: "ADMIN", label: "ADMIN" },
+  { value: "L1AUDITOR", label: "L1AUDITOR" },
+  { value: "L2AUDITOR", label: "L2AUDITOR" },
 ];
 
 const UserList = () => {
@@ -239,7 +239,7 @@ const UserList = () => {
                        
 
                         // computation date
-                        pickerlabel="Created date "
+                        pickerlabel="Created date Range"
                         selectedDates={selectedDates}
                         setSelectedDates={setSelectedDates}
                         defaultStartDate={""}
@@ -250,7 +250,6 @@ const UserList = () => {
                         addUser={true}
                         addUserForm={addUserForm}
                         btnTitle="Add User"
-                        disable ="Yes"
                       />
                     </div>
                     <div
