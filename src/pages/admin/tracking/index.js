@@ -35,9 +35,12 @@ const bullets = [
 
 const statusOptions = [
   { label: "ALL", value: "" },
-  { label: "PROCESSING", value: "1", status: 1 },
-  { label: "COMPUTED", value: "2", status: 2 },
-  { label: "NOT COMPUTED", value: "0", status: 0 },
+  { label: "COMPLETED", value: "COMPLETED", status: 2 },
+  { label: "PENDING", value: "PENDING", status: 0 },
+  { label: "DECLINED", value: "DECLINED", status: 0 },
+  { label: "HOLD", value: "HOLD", status: 0 },
+
+
 ];
 
 export default function Patient() {
@@ -315,6 +318,22 @@ export default function Patient() {
             </span>
           </div>
         );
+        case "AUDITED":
+          return (
+            <div className="patient-status">
+              <span className={`badge audited-text`} style={{ color: "#377880" }}>
+                Audited
+              </span>
+            </div>
+          );  
+          case "NOT_AUDIT":
+            return (
+              <div className="patient-status">
+                <span className={`badge audited-text`} style={{ color: "red" ,background:"#fcc" }}>
+                 Not Audited
+                </span>
+              </div>
+            ); 
       case null:
         return <div className="patient-status">---</div>;
     }
@@ -393,14 +412,8 @@ export default function Patient() {
                             defaultEndDate4={""}
                             setStartDate4={setAuditedStartDate}
                             setEndDate4={setAuditedEnsDate}
-                            isAnotherPicker4={true}
-                            // Auditeddate
-                            pickerlabe3="Allocated Date"
-                            defaultStartDate3={""}
-                            defaultEndDate3={""}
-                            setStartDate3={setAuditedStartDate}
-                            setEndDate3={setAuditedEnsDate}
                             isAnotherPicker3={true}
+                         
                             // allocatedTo
                             isAllocatedToSelector={true}
                             allocatedTolabel="Allocated to"

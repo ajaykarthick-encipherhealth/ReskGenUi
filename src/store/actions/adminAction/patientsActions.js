@@ -28,7 +28,7 @@ export const getPatients = (
         status,
         search,
         createdStartDate,
-  createdEndDate,
+        createdEndDate,
         selAllocatedTo,
         selAllocatedBy,
         selCreatedBy,
@@ -47,28 +47,10 @@ export const getPatients = (
   };
 };
 
-export const getTrackingList = (
-  pageNo,
-  dStart ,
-  dEnd ,
-  search,
-  status,
-  pStart,
-  pEnd,
-  selAllocatedTo
-) => {
+export const getTrackingList = (datas) => {
   return (dispatch) => {
     try {
-      TrackingList(
-        pageNo,
-        dStart ,
-        dEnd ,
-        search,
-        status,
-        pStart,
-        pEnd,
-        selAllocatedTo
-      ).then((response) => {
+      TrackingList(datas).then((response) => {
         if (response) {
           dispatch({
             type: TRACKING,
