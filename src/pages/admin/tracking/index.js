@@ -408,7 +408,8 @@ export default function Patient() {
                               filteredList
                             )}
                             setSelAllocatedTo={setSelAllocatedTo}
-                            defaultAllocateTo="All"
+                            // defaultAllocateTo="All"
+                            tracking={true}
                             // allocated by
                             isAllocatedBySelector={true}
                             allocatedBylabel=" AllocatedBy"
@@ -416,7 +417,7 @@ export default function Patient() {
                               filteredList
                             )}
                             setSelAllocatedBy={setSelAllocatedBy}
-                            defaultAllocatedBy={"All"}
+                            // defaultAllocatedBy={"All"}
                             bullets={bullets}
                             isNextRow={true}
                           />

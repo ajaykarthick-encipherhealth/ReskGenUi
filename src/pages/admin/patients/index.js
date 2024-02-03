@@ -527,7 +527,7 @@ export default function Patient() {
                             setStartDate2={setCompletedStartDate}
                             setEndDate2={setCompletedEndDate}
                             isAnotherPicker={true}
-                            defaultAllocateTo={"All"}
+                            // defaultAllocateTo={"All"}
                             // allocated by
                             isAllocatedBySelector={true}
                             allocatedBylabel="Created By"
@@ -535,7 +535,7 @@ export default function Patient() {
                               filteredList
                             )}
                             setSelAllocatedBy={setSelAllocatedBy}
-                            defaultAllocatedBy={"All"}
+                            // defaultAllocatedBy={"All"}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}
                             addUserForm={addPatientFormId}

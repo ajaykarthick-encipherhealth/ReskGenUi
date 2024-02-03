@@ -28,7 +28,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const [rowData, setRowData] = useState();
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
-
+  const [popoverVisible, setPopoverVisible] = useState(true);
   const onChange = (item, checked) => {
     setRowData(item);
     setChecked(checked);
@@ -39,6 +39,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
     setSelectedRoles(updatedValue);
   };
   const getContent = (data) => {
+    console.log(selectedRoles)
     return (
       <div style={{ height: "250px" }}>
         <div style={{ height: "200px" }}>
@@ -81,7 +82,8 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             className={styles.sendBtn}
             onClick={() => {
               if (selectedRoles?.length > 0) {
-                dispatch(enableUser(checkedd, rowData, selectedRoles));
+                dispatch(enableUser(true, rowData, selectedRoles,setPopoverVisible));
+                setPopoverVisible(false)
               }
             }}
           >
@@ -234,19 +236,30 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     }}
                   >
                     <div>
+                      {popoverVisible?
                       <Popover
                         content={() => getContent(item)}
                         title="Change Role"
                         trigger="click"
+                        // visible={!false}
+                        // onVisibleChange={() => setPopoverVisible(!popoverVisible)}
                       >
                         <div
                           onClick={() => {
                             setRowData(item);
+                            setPopoverVisible(true)
                           }}
                         >
                           <EditButton />
                         </div>
-                      </Popover>
+                      </Popover>: <div
+                          onClick={() => {
+                            setRowData(item);
+                            setPopoverVisible(true)
+                          }}
+                        >
+                          <EditButton />
+                        </div>}
                     </div>
                   </td>
                   <td
