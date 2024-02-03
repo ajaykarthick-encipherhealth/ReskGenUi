@@ -17,6 +17,7 @@ function AllocatedAdminList({
   selectedRowsId,
   selectedChart,
   setSort,
+  loading
 }) {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
@@ -41,56 +42,65 @@ function AllocatedAdminList({
   };
 
   const renderRows = () => {
-    return patinetListAll?.map((data, index) => (
-      <tr
-        style={{ height: "35px" }}
-        key={index}
-        onClick={() => {
-          dispatch(
-            selectedRoWDetails({
-              patientId: data?.patientId,
-              processStageId: data?.processStageId,
-            })
-          );
-        }}
-      >
-        <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
-        <td className={TableStyle.childBorder}>{data.patientName}</td>
-        
-        <td className={TableStyle.childBorder}>
-          {data.computedDate
-            ? moment.utc(data.computedDate).format("MM-DD-YYYY")
-            : "---"}
-        </td>
-        <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
-          <input
-            type="checkbox"
-            onChange={() => {
-              handleRowCheckboxChange(data);
-              setSelectedRowsId((prev) => {
-                const currentIds = prev.map((item) => item.id);
-                if (!currentIds.includes(data.patientId)) {
-                  return [
-                    ...prev,
-                    { id: data.patientId, name: data.patientName },
-                  ];
-                } else {
-                  return prev.filter((item) => item.id !== data.patientId);
-                }
-              });
-            }}
-            checked={selectedRowsId.some((item) => item.id === data.patientId)}
-            style={{
-              width: "20px",
-              height: "20px",
-              flexhrink: "0",
-              borderRadius: "4px",
-              backgroundColor: "pink",
-            }}
-          />
-        </td>
-      </tr>
-    ));
+    return (
+      patinetListAll?.length>0 ?
+      patinetListAll?.map((data, index) => (
+        <tr
+          style={{ height: "35px" }}
+          key={index}
+          onClick={() => {
+            dispatch(
+              selectedRoWDetails({
+                patientId: data?.patientId,
+                processStageId: data?.processStageId,
+              })
+            );
+          }}
+        >
+          <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
+          <td className={TableStyle.childBorder}>{data.patientName}</td>
+          
+          <td className={TableStyle.childBorder}>
+            {data.computedDate
+              ? moment.utc(data.computedDate).format("MM-DD-YYYY")
+              : "---"}
+          </td>
+          <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
+            <input
+              type="checkbox"
+              onChange={() => {
+                handleRowCheckboxChange(data);
+                setSelectedRowsId((prev) => {
+                  const currentIds = prev.map((item) => item.id);
+                  if (!currentIds.includes(data.patientId)) {
+                    return [
+                      ...prev,
+                      { id: data.patientId, name: data.patientName },
+                    ];
+                  } else {
+                    return prev.filter((item) => item.id !== data.patientId);
+                  }
+                });
+              }}
+              checked={selectedRowsId.some((item) => item.id === data.patientId)}
+              style={{
+                width: "20px",
+                height: "20px",
+                flexhrink: "0",
+                borderRadius: "4px",
+                backgroundColor: "pink",
+              }}
+            />
+          </td>
+        </tr>
+      )):
+      <tr>
+      <td colSpan={4}>
+        <Empty />
+      </td>
+    </tr>
+    )
+   
   };
 
   return (
@@ -144,15 +154,9 @@ function AllocatedAdminList({
         </thead>
 
         <tbody>
-          {patinetListAll?.length <= 0 ? (
-            <tr>
-              <td colSpan="9">
-                <Empty />
-              </td>
-            </tr>
-          ) : (
+          {
             renderRows()
-          )}
+          }
         </tbody>
       </table>
       <div></div>

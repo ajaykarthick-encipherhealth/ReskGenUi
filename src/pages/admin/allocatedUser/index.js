@@ -79,7 +79,7 @@ export default function Patient() {
     const uId = localStorage.getItem("userId");
     var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
+    if (response?.data) {
       var resultMap = [];
       var result = response?.data?.response?.content;
       setTotalElements(response?.data?.response?.totalElements);
@@ -91,15 +91,13 @@ export default function Patient() {
           computedDate: res.computedDate,
         });
       });
-      if (result.length > 0) {
+      if (result?.length > 0) {
         setPatinetListAll(result);
         setIsLoading(false);
       } else {
-        setIsLoading(false);
         setPatinetListAll([]);
       }
 
-      // setIsLoading(false);
       setTableLoading(false);
     }
   };
@@ -215,6 +213,7 @@ export default function Patient() {
     }
   };
   const getAuditL2List = async (pageNo) => {
+    setIsLoading(true)
     var orgId = localStorage.getItem("orgId");
     var tenantid = localStorage.getItem("tenantId");
     var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}`;
@@ -240,17 +239,19 @@ export default function Patient() {
       });
       if (result?.length > 0) {
         setL2UserListAll(result);
-        setIsLoading(false);
+       
       } else {
-        setIsLoading(false);
+       
         setL2UserListAll([]);
       }
+      setIsLoading(false);
       setTableLoading(false);
     }
   };
 
   const renderRows = () => {
-    return l2UserListAll?.map((data, index) => (
+    return !tableLoading && l2UserListAll?.length>0?
+    l2UserListAll?.map((data, index) => (
       <tr
         style={{ height: "35px" }}
         key={index}
@@ -298,7 +299,9 @@ export default function Patient() {
         </td>
 
       </tr>
-    ));
+    )):<tr>
+      <td colSpan="9"><Empty/></td>
+    </tr>;
   };
 
   const getL2PatientList = async (data, pageNoL2Patient, sort) => {
@@ -333,11 +336,11 @@ export default function Patient() {
       if (result) {
         setL2PatinetListAll(result);
         setIsPatientList(true);
-        setIsLoading(false);
       } else {
         setL2PatinetListAll([]);
-        setIsLoading(false);
+       
       }
+      setIsLoading(false);
     }
   };
 
@@ -359,15 +362,14 @@ export default function Patient() {
     setIsLoading(true);
     if (!isPatientList) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
-      setIsLoading(false);
     } else {
       getL2PatientList(l2selectUser, pageNoL2Patient, sort);
-      setIsLoading(false);
     }
     setAllocateClicked(false);
     setSelectedRowsId([]);
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
+    setIsLoading(false);
   }, [isPatientList, pageNoL2Patient, sort,allocateClicked]);
 
   return (
@@ -491,7 +493,7 @@ export default function Patient() {
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {isLoading ? (
+                                  {patinetListAll?.length===0 && tableLoading  ? (
                                     <SpinnerDots />
                                   ) : (
                                     <>
@@ -505,6 +507,7 @@ export default function Patient() {
                                         setSelectedRowsId={setSelectedRowsId}
                                         selectedChart={headerCheckValidation}
                                         setSort={setSort}
+                                        loading={isLoading}
                                       />
                                       <div>
                                         <div className="pagination-container">
@@ -524,8 +527,9 @@ export default function Patient() {
                                     </>
                                   )}
                                 </Tab.Pane>
+                                {console.log(tableLoading,isLoading)}
                                 <Tab.Pane id="my-posts" eventKey="team">
-                                  {isLoading ? (
+                                  {l2patinetListAll?.length===0 && tableLoading||isLoading ? (
                                     <SpinnerDots />
                                   ) : (
                                     <>
@@ -553,15 +557,9 @@ export default function Patient() {
                                               </thead>
 
                                               <tbody>
-                                                {l2UserListAll?.length <= 0 ? (
-                                                  <tr>
-                                                    <td colSpan="9">
-                                                      <Empty />
-                                                    </td>
-                                                  </tr>
-                                                ) : (
+                                                {
                                                   renderRows()
-                                                )}
+                                                }
                                               </tbody>
                                             </table>
                                             <div>
