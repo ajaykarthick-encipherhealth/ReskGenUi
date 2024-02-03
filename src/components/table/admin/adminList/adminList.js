@@ -6,6 +6,7 @@ import TableStyle from "../../table.module.css";
 import styles from "../../../../styles/auth.module.css";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import {
+  capitalizeFirstLetter,
   dateFormate,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
@@ -195,12 +196,12 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                               item?.role?.map((data) => (
                                 <div style={{ color: "#000" }}>
                                   {" "}
-                                  {data.toLowerCase()}
+                                  {capitalizeFirstLetter(data)}
                                 </div>
                               ))
                             }
                           >
-                            {item?.role[0].toLowerCase()}
+                            <span style={{color:item?.role?.length ===1 && "#A4A4A4"}}>{capitalizeFirstLetter(item?.role[0])}</span>
                           </Popover>
                         </>
                       ) : (
