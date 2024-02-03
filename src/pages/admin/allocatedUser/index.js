@@ -527,7 +527,7 @@ export default function Patient() {
                                     </>
                                   )}
                                 </Tab.Pane>
-                                {console.log(tableLoading,isLoading)}
+             
                                 <Tab.Pane id="my-posts" eventKey="team">
                                   {l2patinetListAll?.length===0 && tableLoading||isLoading ? (
                                     <SpinnerDots />
