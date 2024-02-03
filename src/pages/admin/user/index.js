@@ -24,6 +24,7 @@ const options3 = [
   { value: "false", label: "Disabled" },
 ];
 const RoleList = [
+  { value: "", label: "ALL" },
   { value: "ADMIN", label: "Admin" },
   { value: "L1AUDITOR", label: "L1Auditor" },
   { value: "L2AUDITOR", label: "L2Auditor" },
@@ -44,6 +45,8 @@ const UserList = () => {
   const [roleValue, setRoleValue] = useState("");
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [totalElements, setTotalElements] = useState(10);
+  const [sortOrder,setSortOrder]=useState("ASC")
+  const[ sort,setSort]=useState({sortDir:"ASC",sortField:""})
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -75,7 +78,7 @@ const UserList = () => {
 
   const handleChange = async (e) => {
     const key = e.target.name;
-    const value = e.target.value;
+    const value = e.target.value;mfaEnabled
     setFormData({ ...formData, [key]: value });
     if (key == "role") {
       setRoleValue([value]);
@@ -154,7 +157,7 @@ const UserList = () => {
         setIsLoadingBtn(false);
       }
       // setAddPatientId(false);
-      getAllList(localUserId, pageNo, pageSize);
+      getAllList(localUserId, pageNo, pageSize,);
     }
 
     setValidated(true);
@@ -184,8 +187,8 @@ const UserList = () => {
     setLocalTenantId(tenId);
     setLocalUserId(uId);
     setLocalOrgId(orgId);
-    dispatch(getUsers({ pageCount, search, startDate, endDate, status, role }));
-  }, [pageCount, search, startDate, endDate, status, role]);
+    dispatch(getUsers({ pageCount, search, startDate, endDate, status, role,sort }));
+  }, [pageCount, search, startDate, endDate, status, role,sort]);
 
   return (
     <>
@@ -207,14 +210,16 @@ const UserList = () => {
                         isSelector={true}
                         setSelectedOption={setSelectedStatus}
                         selectOptions={options3}
-                        defaultSelectValue1={options3[0]}
+                        defaultSelectValue1={""}
                         //  selecte Role
                         selectlabel2="Select Role"
                         selectOptions2={RoleList}
-                        defaultSelectValue2={RoleList[0]}
+                        defaultSelectValue2={""}
                         setSelectedOption2={setRole}
+                       
+
                         // computation date
-                        pickerlabel="Select Range"
+                        pickerlabel="Created date Range"
                         selectedDates={selectedDates}
                         setSelectedDates={setSelectedDates}
                         defaultStartDate={""}
@@ -238,6 +243,9 @@ const UserList = () => {
                           userList={userListAll?.data?.response?.content}
                           switchHandler={switchHandler}
                           setPageCount={setPageCount}
+                          sortOrder={sortOrder} 
+                          setSortOrder={setSortOrder} 
+                          setSort={setSort}
                         />
                       )}
                       <div>

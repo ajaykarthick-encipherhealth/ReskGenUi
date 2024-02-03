@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
@@ -66,6 +66,7 @@ const HeaderFilters = ({
   defaultEndDate2,
   isAnotherPicker,
 
+
   // if has allocated date picker
   pickerlabe3,
   defaultStartDate3,
@@ -81,6 +82,14 @@ const HeaderFilters = ({
   defaultStartDate4,
   defaultEndDate4,
   isAnotherPicker3,
+
+  // if has audited allocated date oicker
+  pickerlabe5,
+  setStartDate5,
+  setEndDate5,
+  defaultStartDate5,
+  defaultEndDate5,
+  isAnotherPicker5,
 
   // conditions to display extra components
   addUser,
@@ -157,7 +166,7 @@ const HeaderFilters = ({
                     setSelectedOption2(selectedOption?.value);
                   }}
                   options={selectOptions2}
-                  defaultValue={defaultSelectValue2}
+                  placeholder={defaultSelectValue2?.label}
                   className="custom-react-select"
                   isSearchable={false}
                 />
@@ -179,6 +188,7 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
+                
               />
             </div>
           )}
@@ -402,6 +412,26 @@ const HeaderFilters = ({
                           dateString,
                           setStartDate4,
                           setEndDate4,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+             {isAnotherPicker5 && (
+              <>
+                <div className="col-xl-2">
+                  <label>{pickerlabe5}</label>
+                  <div>
+                    <RangePicker
+                      format="YYYY-MM-DD"
+                      onChange={(date, dateString) =>
+                        handleRnagePicker2({
+                          date,
+                          dateString,
+                          setStartDate5,
+                          setEndDate5,
                         })
                       }
                     />

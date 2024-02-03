@@ -73,11 +73,15 @@ const CompletedStatus = () => {
     xAxisData = weekNames;
   }
 
-  const allocatedValues = xAxisData?.map(
-    (day,index) => completedDatas?.data?.response?.allocate ? completedDatas?.data?.response?.allocate[index + 1] : 0 || 0
+  const allocatedValues = xAxisData?.map((day, index) =>
+    completedDatas?.data?.response?.allocate
+      ? completedDatas?.data?.response?.allocate[index + 1]
+      : 0 || 0
   );
-  const auditedValues = xAxisData?.map(
-    (day,index) => completedDatas?.data?.response?.audit ? completedDatas?.data?.response?.audit[index + 1] : 0 || 0
+  const auditedValues = xAxisData?.map((day, index) =>
+    completedDatas?.data?.response?.audit
+      ? completedDatas?.data?.response?.audit[index + 1]
+      : 0 || 0
   );
 
   const option = {
@@ -193,18 +197,20 @@ const CompletedStatus = () => {
             </div>
           ) : completedDatas?.loading === false &&
             completedDatas?.data?.response ? (
-            <ReactECharts
-              option={option}
-              style={{ width: "100%", height: "300px", marginTop: "-15px" }}
-            />
+            <>
+              <ReactECharts
+                option={option}
+                style={{ width: "100%", height: "300px", marginTop: "-15px" }}
+              />
+              <div className={styles.bulletContainer}>
+                <Legends bullets={bullets} />
+              </div>
+            </>
           ) : (
             <div className={spinSTYles.spinStyle}>
               <Empty />
             </div>
           )}
-          <div className={styles.bulletContainer}>
-            <Legends bullets={bullets} />
-          </div>
         </Card>
       </div>
     </>
