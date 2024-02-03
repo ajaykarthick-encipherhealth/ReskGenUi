@@ -448,8 +448,22 @@ const Hcc = ({ patientHccResult }) => {
             providerName: res.provider,
             dbDescription: res.dbDescription,
             isMostSpecific: res.isMostSpecific,
+            getPlace: "Hcc",
           });
         });
+
+        if (result?.insulinDisease) {
+          validDisArray.push({
+            actualDescription: result?.insulinDisease?.description,
+            capturedSections: [result?.insulinDisease?.section],
+            diagnosisCode: result?.insulinDisease?.code,
+            encounterDate: null,
+            encounterDateSplit: [result?.insulinDisease?.dos],
+            getPlace: "Insulin",
+            isHccValid: true,
+            defaultPosition: null,
+          });
+        }
 
         result?.invalidDisease?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
@@ -535,19 +549,6 @@ const Hcc = ({ patientHccResult }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
             });
-          });
-        }
-
-        if (result?.insulinDisease) {
-          suggestListAll.push({
-            actualDescription: result?.insulinDisease?.description,
-            capturedSections: [result?.insulinDisease?.section],
-            diagnosisCode: result?.insulinDisease?.code,
-            encounterDate: null,
-            encounterDateSplit: [result?.insulinDisease?.dos],
-            getPlace: "Insulin",
-            isHccValid: true,
-            defaultPosition: null,
           });
         }
 
@@ -3162,6 +3163,15 @@ const Hcc = ({ patientHccResult }) => {
                                             data.encounterDateSplit
                                           )}
                                         </div>
+                                        {data.getPlace ==
+                                                  "Insulin" ? (
+                                                  <span
+                                                    className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                    bg={`  mt-2 bg-bg-eight `}
+                                                  >
+                                                    Insulin Disease
+                                                  </span>
+                                                ) :null}
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         ></div>
@@ -3426,14 +3436,6 @@ const Hcc = ({ patientHccResult }) => {
                                                       Radiology - Combo Codes
                                                     </span>
                                                   </Tooltip>
-                                                ) : data.getPlace ==
-                                                  "Insulin" ? (
-                                                  <span
-                                                    className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                                    bg={`  mt-2 bg-bg-eight `}
-                                                  >
-                                                    Insulin Disease
-                                                  </span>
                                                 ) : null}
                                               </div>
                                               <div
