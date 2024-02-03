@@ -48,7 +48,7 @@ export const AddUser = async (data) => {
   }
 };
 
-export const enableUser = (checked, user, role,setPopoverVisible) => {
+export const enableUser = (checked, user, role,setPopoverVisible,field) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
@@ -63,7 +63,7 @@ export const enableUser = (checked, user, role,setPopoverVisible) => {
     };
   
     const datas = role ? { ...data, role: role } : data;
-    if (checked !== undefined && user !== undefined) {
+    if ((field ||checked !== undefined) && user !== undefined) {
       try {
         const response = await axios.put(
           `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,

@@ -89,7 +89,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             onClick={() => {
               if (selectedRoles?.length > 0) {
                 dispatch(
-                  enableUser(true, rowData, selectedRoles, setPopoverVisible)
+                  enableUser(checkedd, rowData, selectedRoles, setPopoverVisible,"addrole")
                 );
                 setPopoverVisible(false);
               }
