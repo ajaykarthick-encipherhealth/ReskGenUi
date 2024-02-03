@@ -1,15 +1,11 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { over } from "stompjs";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import TimeAgo from "react-timeago";
-import ListGroup from "react-bootstrap/ListGroup";
-import Form from "react-bootstrap/Form";
 import _ from "lodash";
 import SockJS from "sockjs-client";
 import { ToastContainer, toast } from "react-toastify";
 import { Badge, Avatar } from "antd";
-
-import Header from "../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
 import { MDBIcon } from "mdbreact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,33 +18,27 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { WechatOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Tab, Nav } from "react-bootstrap";
-
 import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBCardBody,
-  MDBBtn,
   MDBTypography,
   MDBBadge,
-  MDBCardHeader,
   MDBInputGroup,
   MDBTooltip,
-  MDBNavbar,
-  MDBNavbarNav,
-  MDBNavbarItem,
-  MDBNavbarLink,
-  MDBNavbarBrand,
-  MDBDropdown,
-  MDBDropdownToggle,
-  MDBDropdownItem,
-  MDBDropdownMenu,
 } from "mdb-react-ui-kit";
 import moment from "moment";
 
 let stompClient = null;
 let pageSize = 10;
+
+import {
+  getChatHistory,
+  getUsers,
+  getHandleChatHistory,
+  getHandleResetReadHistory,
+  handleFilePost,
+  addUser,
+} from "../../services/ChatService";
+import ENDPOINTS from "../../utility/enpoints";
+import { number } from "prop-types";
 
 const ChatCommunication = ({ openMsg, offMsg }) => {
   const messagesEndRef = useRef(null);
@@ -95,50 +85,32 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     }
   }, [message, chatAction]);
   const fetchChatHistory = async (username) => {
-    try {
-      fetch(
-        "https://cogent.encipherhealth.com/chatservice/api/get/history?receiver=" +
-          username
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setMessagedMembersList(data);
-          setSearchedInMembersList(data);
-          searchedInMembersListRef.current = data;
-        });
-    } catch (error) {
-      console.error("Error fetching chat history:", error);
-    }
+    var result = await getChatHistory(username);
+    setMessagedMembersList(result);
+    setSearchedInMembersList(result);
+    searchedInMembersListRef.current = result;
   };
-
 
   const fetchUsers = async () => {
-    try {
-      const response = await fetch(
-        "https://cogent.encipherhealth.com/chatservice/api/users"
-      );
-      const data = await response.json();
-
-      const temp = [];
-      data.forEach((item) => {
-        temp.push(item);
-      });
-      setUsers(temp);
-      setSearchedUsers(temp);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
+    var data = await getUsers();
+    const temp = [];
+    data?.forEach((item) => {
+      temp.push(item);
+    });
+    setUsers(temp);
+    setSearchedUsers(temp);
   };
   const connect = () => {
-    let Sock = new SockJS("https://cogent.encipherhealth.com/chatservice/ws");
+    const token = localStorage.getItem("token");
+    let Sock = new SockJS(
+      `https://hcc.encipherhealth.com/chatservice/chatservice/ws?token=${token}`
+    );
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
   };
 
   const onConnected = () => {
     setUserData({ ...userData, connected: true });
-    // localStorage.setItem('userData', JSON.stringify({ ...userData, "connected": true }));
-
     stompClient.subscribe(
       "/user/" + userData.username + "/private",
       onPrivateMessage
@@ -147,16 +119,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       "/user/" + userData.username + "/topic",
       onUpdatedUsersHistory
     );
-    // userJoin();
   };
-
-  // const userJoin = () => {
-  //     var chatMessage = {
-  //         senderName: userData.username,
-  //         status: "JOIN"
-  //     };
-  //     stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
-  // }
 
   const getCurrentTimestamp = () => {
     const now = new Date();
@@ -175,82 +138,85 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     return formattedTime;
   };
 
-  const onPrivateMessage =(payload) => {
-      let payloadData = JSON.parse(payload.body);
-      let memberList = [...searchedInMembersListRef.current];
-      let updatedChatCountIndex = null;
-      const activeChat = activeSecondaryUserRef.current;
-      let result = _.find(memberList, function (obj) {
-        if (obj.secondaryUser === payloadData.senderName) {
-          return true;
+  const onPrivateMessage = (payload) => {
+    let payloadData = JSON.parse(payload.body);
+    let memberList = [...searchedInMembersListRef.current];
+    let updatedChatCountIndex = null;
+    const activeChat = activeSecondaryUserRef.current;
+    let result = _.find(memberList, function (obj) {
+      if (obj.secondaryUser === payloadData.senderName) {
+        return true;
+      }
+    });
+    if (result) {
+      searchedInMembersListRef.current.map((member, index) => {
+        if (
+          payloadData.senderName === member.secondaryUser &&
+          activeChat === member.secondaryUser
+        ) {
+          updatedChatCountIndex = index;
+          memberList[index].unreadCount = 0;
+          memberList[index].lastMessage = payloadData.message;
+          memberList[index].lastUpdatedDate = payloadData.timeStamp;
+        } else if (
+          payloadData.senderName === member.secondaryUser &&
+          activeChat !== member.secondaryUser
+        ) {
+          updatedChatCountIndex = index;
+          memberList[index].unreadCount = memberList[index].unreadCount + 1;
+          memberList[index].lastMessage = payloadData.message;
+          memberList[index].lastUpdatedDate = payloadData.timeStamp;
+        } else {
+          memberList[index].unreadCount = memberList[index].unreadCount;
         }
       });
-      if (result) {
-        searchedInMembersListRef.current.map((member, index) => {
-          if (
-            payloadData.senderName === member.secondaryUser &&
-            activeChat === member.secondaryUser
-          ) {
-            updatedChatCountIndex = index;
-            memberList[index].unreadCount = 0;
-            memberList[index].lastMessage = payloadData.message;
-            memberList[index].lastUpdatedDate = payloadData.timeStamp;
-          } else if (
-            payloadData.senderName === member.secondaryUser &&
-            activeChat !== member.secondaryUser
-          ) {
-            updatedChatCountIndex = index;
-            memberList[index].unreadCount = memberList[index].unreadCount + 1;
-            memberList[index].lastMessage = payloadData.message;
-            memberList[index].lastUpdatedDate = payloadData.timeStamp;
-          } else {
-            memberList[index].unreadCount = memberList[index].unreadCount;
-          }
-        });
-        const chat = memberList[updatedChatCountIndex];
-        memberList.splice(updatedChatCountIndex, 1);
-        memberList.unshift(chat);
-      } else {
-        const newUser = _.filter(users, (o) => {
-          return o.userName === payloadData.senderName;
-        });
-        const newChat = {
-          id: payloadData.id,
-          lastMessage: payloadData.message,
-          lastUpdatedDate: payloadData.timeStamp,
-          primaryUser: payloadData.receiverName,
-          secondaryUser: payloadData.senderName,
-          secondaryUserFirstName: newUser.firstName,
-          secondaryUserLastName: newUser.lastName,
-          sentby: payloadData.senderName,
-          unreadCount: 1,
-        };
-        memberList.unshift({ ...newChat });
-      }
+      const chat = memberList[updatedChatCountIndex];
+      memberList.splice(updatedChatCountIndex, 1);
+      memberList.unshift(chat);
+    } else {
+      const newUser = _.filter(users, (o) => {
+        return o.userName === payloadData.senderName;
+      });
+      const newChat = {
+        id: payloadData.id,
+        lastMessage: payloadData.message,
+        lastUpdatedDate: payloadData.timeStamp,
+        primaryUser: payloadData.receiverName,
+        secondaryUser: payloadData.senderName,
+        secondaryUserFirstName: newUser.firstName,
+        secondaryUserLastName: newUser.lastName,
+        sentby: payloadData.senderName,
+        unreadCount: 1,
+      };
+      memberList.unshift({ ...newChat });
+    }
 
-      setSearchedInMembersList(() => [...memberList]);
-      searchedInMembersListRef.current = [...memberList];
-      if(payloadData.senderName === activeChat) {
-        handleResetReadHistory([payloadData], {primaryUser: userData.username , secondaryUser:activeChat})
-      }
-      setMessages((temp) => [...temp, payloadData]);
-      messagesRef.current = [...message, payloadData]
-    };
+    setSearchedInMembersList(() => [...memberList]);
+    searchedInMembersListRef.current = [...memberList];
+    if (payloadData.senderName === activeChat) {
+      handleResetReadHistory([payloadData], {
+        primaryUser: userData.username,
+        secondaryUser: activeChat,
+      });
+    }
+    setMessages((temp) => [...temp, payloadData]);
+    messagesRef.current = [...message, payloadData];
+  };
 
   const onUpdatedUsersHistory = (payload) => {
     const payloadData = JSON.parse(payload.body);
-    const updatedMessage = [...messagesRef.current]
+    const updatedMessage = [...messagesRef.current];
     if (payloadData.topicName === "read-messages-status") {
       payloadData.readMessageIDs.map((id) => {
         messagesRef.current.map((msg, index) => {
-          if(msg.id === id) {
-            updatedMessage[index].messageStatus = 'READ'
+          if (msg.id === id) {
+            updatedMessage[index].messageStatus = "READ";
           }
-        })
-      })
-      
+        });
+      });
+
       setMessages(() => updatedMessage);
-    } 
+    }
   };
 
   const onError = (err) => {
@@ -359,7 +325,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
             currentChatMember.sender,
             ...searchedInMembersList,
           ]);
-          searchedInMembersListRef.current = [currentChatMember.sender, ...searchedInMembersList];
+          searchedInMembersListRef.current = [
+            currentChatMember.sender,
+            ...searchedInMembersList,
+          ];
         } else {
           const data = [...searchedInMembersList];
           data.splice(
@@ -376,7 +345,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         }
       } else if (searchedInMembersList.length === 0) {
         setSearchedInMembersList([currentChatMember.sender]);
-        searchedInMembersListRef.current = [currentChatMember.sender]
+        searchedInMembersListRef.current = [currentChatMember.sender];
       }
     } else {
       connect();
@@ -386,12 +355,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   useEffect(() => {
-    if(chatAction === "load") {
-      scrollToBottom()
-    } else if(chatAction === "add") {
-      scrollToTop()
+    if (chatAction === "load") {
+      scrollToBottom();
+    } else if (chatAction === "add") {
+      scrollToTop();
     }
-  }, [chatAction, message])
+  }, [chatAction, message]);
 
   const handleSearchUser = (e) => {
     setUserData({ ...userData, searchNewUserMessage: e.target.value });
@@ -422,31 +391,24 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     // Check if the entered username exists in the messagedMembersList
   };
   const handleGetChatHistory = async (sender, status, pageNumber) => {
-    try {
-      // Fetch messages for the user
-      const response = await fetch(
-        `https://cogent.encipherhealth.com/chatservice/api/messages/private?sender=${sender?.secondaryUser}&receiver=${userData.username}&pageNo=${pageNumber}&pageSize=${pageSize}`
-      );
-      const data = await response.json();
-
-      // Separate messages into public and private chats
-      const privateMessages = data.content.reverse();
-      setIsLastPage(data.last);
-      setChatAction(status);
-      if (status === "load") {
-        messagesRef.current = privateMessages;
-        setMessages(privateMessages);
-        // scrollToBottom()
-      } else {
-        messagesRef.current = [...privateMessages, ...message]
-        setMessages([...privateMessages, ...message]);
-        // scrollToTop()
-      }
-      handleResetReadHistory(privateMessages, sender);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching user messages:", error);
+    const data = await getHandleChatHistory(
+      sender?.secondaryUser,
+      userData.username,
+      pageNumber,
+      pageSize
+    );
+    const privateMessages = data?.content?.reverse();
+    setIsLastPage(data?.last);
+    setChatAction(status);
+    if (status === "load") {
+      messagesRef.current = privateMessages;
+      setMessages(privateMessages);
+    } else {
+      messagesRef.current = [...privateMessages, ...message];
+      setMessages([...privateMessages, ...message]);
     }
+    handleResetReadHistory(privateMessages, sender);
+    setLoading(false);
   };
   const handleResetReadHistory = async (privateMessages, sender) => {
     const messageIds = [];
@@ -455,36 +417,27 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         messageIds.push(msg.id);
       }
     });
-    if(messageIds.length > 0) {
-      await fetch("https://cogent.encipherhealth.com/chatservice/api/change/status", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messageIds: messageIds,
-          messageStatus: "READ",
-          primaryUser: sender.primaryUser,
-          secondaryUser: sender.secondaryUser,
-        }),
-      });
+    if (messageIds.length > 0) {
+      var dataBody = {
+        messageIds: messageIds,
+        messageStatus: "READ",
+        primaryUser: sender.primaryUser,
+        secondaryUser: sender.secondaryUser,
+      };
+      const result = await getHandleResetReadHistory(dataBody);
     }
-    
   };
   const handleUpdateUrl = (activeMember) => {
     activeSecondaryUserRef.current = activeMember;
   };
   const onTabChange = (name, index, sender) => {
-    // scrollToBottom();
-    
     setPageNo(0);
     setCurrentChatMember({ sender, isNewMember: false });
     handleUpdateUrl(sender?.secondaryUser);
     const data = [...searchedInMembersList];
     data[index].unreadCount = 0;
     setSearchedInMembersList((temp) => [...data]);
-    searchedInMembersListRef.current = [...data]
-
+    searchedInMembersListRef.current = [...data];
     handleGetChatHistory(sender, "load", 0);
   };
   const handleFile = async (e) => {
@@ -505,63 +458,22 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     } else {
       let formData = new FormData();
       formData.append("file", file);
-      try {
-        // Perform the necessary API call to add the user to the database
-        const response = await fetch(
-          "https://cogent.encipherhealth.com/chatservice/api/uploadFile",
-          {
-            method: "POST",
-
-            body: formData,
-          }
-        );
-
-        // Handle the response if needed
-        const result = await response.clone().json();
-
-        setUserData({
-          ...userData,
-          fileUrl: result.response.fileUploadedUrl,
-          fileName: file.name,
-          fileType: file.type,
-          message: userData.message,
-        });
-        setFileModal(true);
-      } catch (error) {
-        // throw new Error("Error adding user to the database:", error);
-        toast.error("Error occured when adding file", {
-          position: "bottom-right",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      }
+      var result = await handleFilePost(formData);
+      setUserData({
+        ...userData,
+        fileUrl: result?.response?.fileUploadedUrl,
+        fileName: file?.name,
+        fileType: file?.type,
+        message: userData?.message,
+      });
+      setFileModal(true);
     }
   };
   const addUserToDatabase = async (username) => {
-    try {
-      // Perform the necessary API call to add the user to the database
-
-      const response = await fetch(
-        "https://cogent.encipherhealth.com/chatservice/api/addUser",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name: username }),
-        }
-      );
-
-      // Handle the response if needed
-      const result = await response.json();
-    } catch (error) {
-      throw new Error("Error adding user to the database:", error);
-    }
+    var dataBoday = {
+      name: username,
+    };
+    var result = await addUser(dataBoday);
   };
 
   const handleSearchMembers = (e) => {
@@ -576,8 +488,6 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       setSearchedInMembersList(messagedMembersList);
       searchedInMembersListRef.current = messagedMembersList;
     }
-
-    console.log("searchedInMembersList", searchedInMembersList);
   };
 
   const handleCreateNewChat = (newUser) => {
@@ -588,7 +498,6 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       : [];
     if (isAlreadyMember.length === 0) {
       handleGetChatHistory({ senderName: newUser.userName }, "load", 0);
-
       setCurrentChatMember({
         index: null,
         isNewMember: true,
@@ -601,6 +510,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           unreadCount: 0,
           lastMessageTimeStamp: "",
           lastMessage: "",
+          secondaryUserImageUrl: newUser.profileImageUrl,
         },
       });
     } else {
@@ -610,7 +520,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       onTabChange(newUser.userName, index, isAlreadyMember[0]);
     }
     setPageNo(0);
-    messagesRef.current = []
+    messagesRef.current = [];
     setMessages([]);
     setUserData({
       ...userData,
@@ -638,7 +548,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     }
   };
 
-  const renderUserPrfoile = (firstName, lastName, imageUrl) => {
+  const renderUserPrfoile = (
+    firstName,
+    lastName,
+    imageUrl,
+    currentChatMember
+  ) => {
     const firstNameInitial = firstName?.charAt(0) || "";
     const secondNameInitial = lastName?.charAt(0) || "";
     if (!imageUrl) {
@@ -666,7 +581,6 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         <img
           src={imageUrl}
           alt="avatar"
-          // className="d-flex align-self-center me-3 shadow-1-strong"
           className="rounded-4 shadow-4"
           style={{
             width: "50px",
@@ -678,6 +592,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     }
   };
 
+  const tabOnClick =(number)=>{
+   if(number == 1){
+    fetchChatHistory(userData?.username);
+   }
+  }
+
   return (
     <>
       <ToastContainer />
@@ -688,12 +608,16 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
               <div className={`tabContainer ${styles.tabContainer} `}>
                 <div className={styles.firstdCard}>
                   <Nav as="ul" className="nav nav-tabs">
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item as="li" className="nav-item"   onClick={() => {
+                      tabOnClick(1);
+                    }}>
                       <Nav.Link to="#my-posts" eventKey="1">
                         Recent
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item as="li" className="nav-item"  onClick={() => {
+                      tabOnClick(1);
+                    }}>
                       <Nav.Link to="#my-posts" eventKey="2">
                         Team Members
                       </Nav.Link>
@@ -722,13 +646,14 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
               <Tab.Content>
                 <Tab.Pane id="my-posts" eventKey="1">
                   {!currentChatMember ? (
-                    <MDBCol
-                      md="12"
-                      lg="12"
-                      xl="12"
-                      className="mb-4 mb-md-0 p-0"
+                    <div className="mb-4 mb-md-0 p-0"
                     >
-                      <MDBCard style={{ minHeight: "70vh",borderRadius:"0 0 6px 6px" }}>
+                      <div className="card"
+                        style={{
+                          minHeight: "70vh",
+                          borderRadius: "0 0 6px 6px",
+                        }}
+                      >
                         {messagedMembersList && (
                           <div className="p-2">
                             <MDBInputGroup className="rounded p-0">
@@ -741,7 +666,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                             </MDBInputGroup>
                           </div>
                         )}
-                        <MDBCardBody className="m-0 p-1 customScroll">
+                        <div className="card-body m-0 p-1 customScroll">
                           {messagedMembersList ? (
                             <MDBTypography listUnStyled className="mb-0">
                               {searchedInMembersList &&
@@ -757,7 +682,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                           unreadCount,
                                           lastMessage,
                                           lastMessageTimeStamp,
-                                          lastUpdatedDate
+                                          lastUpdatedDate,
                                         },
                                         index
                                       ) => (
@@ -789,18 +714,18 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                         >
                                           <div className="d-flex justify-content-between">
                                             <div className="d-flex flex-row">
-                                            <div className="d-inline-flex position-relative">
-                                          <MDBBadge className="position-absolute top-0 start-100 translate-middle p-1 bg-success-chat border border-light rounded-circle">
-                                            <span className="visually-hidden">
-                                              New alerts
-                                            </span>
-                                          </MDBBadge>
-                                          { renderUserPrfoile(
+                                              <div className="d-inline-flex position-relative">
+                                                <MDBBadge className="position-absolute top-0 start-100 translate-middle p-1 bg-success-chat border border-light rounded-circle">
+                                                  <span className="visually-hidden">
+                                                    New alerts
+                                                  </span>
+                                                </MDBBadge>
+                                                {renderUserPrfoile(
                                                   secondaryUserFirstName,
                                                   secondaryUserLastName,
                                                   secondaryUserImageUrl
                                                 )}
-                                        </div>
+                                              </div>
 
                                               <div className="pt-1 ms-3">
                                                 <p className="fw-bold mb-0">
@@ -809,8 +734,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                 </p>
                                                 <p className="small text-muted">
                                                   {lastMessage?.slice(0, 45)}
-                                                  {lastMessage.length > 45 ?
-                                                  "...":null}
+                                                  {lastMessage.length > 45
+                                                    ? "..."
+                                                    : null}
                                                 </p>
                                               </div>
                                             </div>
@@ -829,8 +755,15 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                     {unreadCount}
                                                   </span>
                                                 )}
-                                                <span className="text-muted float-end">
-                                                <p className={styles.timeFromNow}> {moment(lastUpdatedDate).fromNow()}</p>   
+                                              <span className="text-muted float-end">
+                                                <p
+                                                  className={styles.timeFromNow}
+                                                >
+                                                  {" "}
+                                                  {moment(
+                                                    lastUpdatedDate
+                                                  ).fromNow()}
+                                                </p>
                                               </span>
                                             </div>
                                           </div>
@@ -845,16 +778,22 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                               No Chats
                             </MDBTypography>
                           )}
-                        </MDBCardBody>
-                      </MDBCard>
-                    </MDBCol>
+                        </div>
+                      </div>
+                    </div>
                   ) : (
                     <div
                       className={styles.chatContainer2}
                       style={{ backgroundColor: "#fff", minHeight: "70vh" }}
                     >
-                      <MDBCol md="12" lg="12" xl="12" className="p-0">
-                        <MDBCard style={{ minHeight: "70vh",borderRadius:"0 0 6px 6px",boxShadow:"none" }}>
+                      <div  className="p-0">
+                      <div className="card"
+                          style={{
+                            minHeight: "70vh",
+                            borderRadius: "0 0 6px 6px",
+                            boxShadow: "none",
+                          }}
+                        >
                           <div
                             className="d-flex flex-row p-1"
                             style={{ background: "rgb(244, 244, 244)" }}
@@ -862,7 +801,8 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                             {renderUserPrfoile(
                               currentChatMember?.sender?.secondaryUserFirstName,
                               currentChatMember?.sender?.secondaryUserLastName,
-                              currentChatMember?.sender?.secondaryUserImageUrl
+                              currentChatMember?.sender?.secondaryUserImageUrl,
+                              currentChatMember
                             )}
                             <div
                               className="ms-3 pt-2 float-start"
@@ -905,7 +845,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                           </div>
 
                           {fileModal ? (
-                            <MDBCardBody className="customScroll border rounded-2">
+                            <div className="card-body customScroll border rounded-2">
                               <div className="mt-2 p-2 text-center">
                                 <p className="fw-bold mb-0">Attachment</p>
                                 <div className="pt-2">
@@ -959,10 +899,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   )}
                                 </div>
                               </div>
-                            </MDBCardBody>
+                            </div>
                           ) : (
-                            <MDBCardBody
-                              className="customScroll"
+                            <div
+                              className="card-body customScroll"
                               onScroll={handleChatScroll}
                             >
                               <div>
@@ -1182,13 +1122,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   </MDBTypography>
                                 </div>
                               </div>
-                            </MDBCardBody>
+                            </div>
                           )}
-                          <form
-                            className="border rounded-2"
-                            
-                          >
-                          <div className={`text-muted d-flex justify-content-start align-items-center pe-3 ${styles.form_submit_container}`}>
+                          <form className="border rounded-2">
+                            <div
+                              className={`text-muted d-flex justify-content-start align-items-center pe-3 ${styles.form_submit_container}`}
+                            >
                               <label className="me-3" htmlFor="fileAdd">
                                 <FontAwesomeIcon
                                   icon={faLink}
@@ -1236,14 +1175,16 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                               </button>
                             </div>
                           </form>
-                        </MDBCard>
-                      </MDBCol>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="2">
                   {!currentChatMember ? (
-                    <MDBCard style={{ minHeight: "70vh",borderRadius:"0 0 6px 6px" }}>
+                    <div className="card"
+                      style={{ minHeight: "70vh", borderRadius: "0 0 6px 6px" }}
+                    >
                       <div className="p-2">
                         <MDBInputGroup className="rounded">
                           <input
@@ -1255,7 +1196,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                           />
                         </MDBInputGroup>
                       </div>
-                      <MDBCardBody className="m-0 p-1 customScroll">
+                      <div className="card-body m-0 p-1 customScroll">
                         {searchedUsers && (
                           <MDBTypography listUnStyled className="mb-0">
                             <ul className="chat-persons">
@@ -1297,15 +1238,20 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                             </ul>
                           </MDBTypography>
                         )}
-                      </MDBCardBody>
-                    </MDBCard>
+                      </div>
+                    </div>
                   ) : (
                     <div
                       className={styles.chatContainer2}
                       style={{ backgroundColor: "#fff", minHeight: "70vh" }}
                     >
-                      <MDBCol md="12" lg="12" xl="12" className="p-0">
-                        <MDBCard style={{ minHeight: "70vh",borderRadius:"0 0 6px 6px" }}>
+                      <div  className="p-0">
+                        <div className="card"
+                          style={{
+                            minHeight: "70vh",
+                            borderRadius: "0 0 6px 6px",
+                          }}
+                        >
                           <div
                             className="d-flex flex-row  p-1"
                             style={{ background: "rgb(244, 244, 244)" }}
@@ -1357,7 +1303,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                           </div>
 
                           {fileModal ? (
-                            <MDBCardBody className="customScroll border rounded-2">
+                            <div className="customScroll card-body border rounded-2">
                               <div className="mt-2 p-2 text-center">
                                 <p className="fw-bold mb-0">Attachment</p>
                                 <div className="pt-2">
@@ -1411,10 +1357,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   )}
                                 </div>
                               </div>
-                            </MDBCardBody>
+                            </div>
                           ) : (
-                            <MDBCardBody
-                              className="customScroll"
+                            <div
+                              className="card-body customScroll"
                               onScroll={handleChatScroll}
                             >
                               <div>
@@ -1634,12 +1580,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   </MDBTypography>
                                 </div>
                               </div>
-                            </MDBCardBody>
+                            </div>
                           )}
-                          <form
-                            className="border rounded-2"
-                          >
-                            <div className={`text-muted d-flex justify-content-start align-items-center pe-3 ${styles.form_submit_container}`}>
+                          <form className="border rounded-2">
+                            <div
+                              className={`text-muted d-flex justify-content-start align-items-center pe-3 ${styles.form_submit_container}`}
+                            >
                               <label className="me-3" htmlFor="fileAdd">
                                 <FontAwesomeIcon
                                   icon={faLink}
@@ -1686,8 +1632,8 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                               </button>
                             </div>
                           </form>
-                        </MDBCard>
-                      </MDBCol>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </Tab.Pane>
