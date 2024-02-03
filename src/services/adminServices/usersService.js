@@ -10,13 +10,17 @@ export const UsersList = async ({
   endDate = "",
   status = "",
   role = "",
-  sort
+  sort,
 }) => {
   const token = localStorage.getItem("token");
   const selectedStatus = status === "ALL" ? "" : status;
   try {
     const response = await axios.get(
-      ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}&sortdirection=${sort?.sortDir?sort?.sortDir:""}&sortfield=${sort?.sortField?sort?.sortField:''}`,
+      ` ${
+        ENDPOINTS?.apiEndoint
+      }dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}&sortdirection=${
+        sort?.sortDir ? sort?.sortDir : ""
+      }&sortfield=${sort?.sortField ? sort?.sortField : ""}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -48,7 +52,7 @@ export const AddUser = async (data) => {
   }
 };
 
-export const enableUser = (checked, user, role,setPopoverVisible,field) => {
+export const enableUser = (checked, user, role, setPopoverVisible, field) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
@@ -58,12 +62,15 @@ export const enableUser = (checked, user, role,setPopoverVisible,field) => {
       orgId: orgId,
       tenantId: tenId,
       userId: user?.userId,
-      accountEnabled: checkedVal,
       userName: user?.userName,
     };
-  
-    const datas = role ? { ...data, role: role } : data;
-    if ((field ||checked !== undefined) && user !== undefined) {
+
+    const datas = role
+      ? { ...data, role: role }
+      : checkedVal
+      ? { ...data, accountEnabled: checkedVal }
+      : data;
+    if ((field || checked !== undefined) && user !== undefined) {
       try {
         const response = await axios.put(
           `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
@@ -84,7 +91,7 @@ export const enableUser = (checked, user, role,setPopoverVisible,field) => {
             description: response?.data?.message,
           });
           dispatch(getUsers(0));
-          setPopoverVisible(true)
+          setPopoverVisible(true);
         }
       } catch (err) {
         console.log(err);
