@@ -35,3 +35,18 @@
 .searchInput{
     border-radius: 20px !important
 }
+.unreadCount{
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    padding: 0;
+    font-weight: 600;
+    background: #3479fe !important;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

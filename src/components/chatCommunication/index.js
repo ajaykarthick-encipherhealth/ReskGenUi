@@ -5,9 +5,8 @@ import TimeAgo from "react-timeago";
 import _ from "lodash";
 import SockJS from "sockjs-client";
 import { ToastContainer, toast } from "react-toastify";
-import { Badge, Avatar } from "antd";
+import { Badge, Avatar, Tooltip } from "antd";
 import styles from "./styles.module.css";
-import { MDBIcon } from "mdbreact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleUser,
@@ -15,15 +14,14 @@ import {
   faLink,
   faCircle,
   faTimesCircle,
+  faCheckDouble,
+  faCheck,
+  faFileText,
+  faCircleDown,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import { WechatOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Tab, Nav } from "react-bootstrap";
-import {
-  MDBTypography,
-  MDBBadge,
-  MDBInputGroup,
-  MDBTooltip,
-} from "mdb-react-ui-kit";
 import moment from "moment";
 
 let stompClient = null;
@@ -37,8 +35,6 @@ import {
   handleFilePost,
   addUser,
 } from "../../services/ChatService";
-import ENDPOINTS from "../../utility/enpoints";
-import { number } from "prop-types";
 
 const ChatCommunication = ({ openMsg, offMsg }) => {
   const messagesEndRef = useRef(null);
@@ -592,11 +588,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     }
   };
 
-  const tabOnClick =(number)=>{
-   if(number == 1){
-    fetchChatHistory(userData?.username);
-   }
-  }
+  const tabOnClick = (number) => {
+    if (number == 1) {
+      fetchChatHistory(userData?.username);
+    }
+  };
 
   return (
     <>
@@ -608,16 +604,24 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
               <div className={`tabContainer ${styles.tabContainer} `}>
                 <div className={styles.firstdCard}>
                   <Nav as="ul" className="nav nav-tabs">
-                    <Nav.Item as="li" className="nav-item"   onClick={() => {
-                      tabOnClick(1);
-                    }}>
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        tabOnClick(1);
+                      }}
+                    >
                       <Nav.Link to="#my-posts" eventKey="1">
                         Recent
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item"  onClick={() => {
-                      tabOnClick(1);
-                    }}>
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        tabOnClick(1);
+                      }}
+                    >
                       <Nav.Link to="#my-posts" eventKey="2">
                         Team Members
                       </Nav.Link>
@@ -646,9 +650,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
               <Tab.Content>
                 <Tab.Pane id="my-posts" eventKey="1">
                   {!currentChatMember ? (
-                    <div className="mb-4 mb-md-0 p-0"
-                    >
-                      <div className="card"
+                    <div className="mb-4 mb-md-0 p-0">
+                      <div
+                        className="card"
                         style={{
                           minHeight: "70vh",
                           borderRadius: "0 0 6px 6px",
@@ -656,19 +660,19 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                       >
                         {messagedMembersList && (
                           <div className="p-2">
-                            <MDBInputGroup className="rounded p-0">
+                            <div className="rounded p-0">
                               <input
                                 className={`form-control ${styles.searchInput}`}
                                 placeholder="Search members"
                                 type="search"
                                 onChange={handleSearchMembers}
                               />
-                            </MDBInputGroup>
+                            </div>
                           </div>
                         )}
                         <div className="card-body m-0 p-1 customScroll">
                           {messagedMembersList ? (
-                            <MDBTypography listUnStyled className="mb-0">
+                            <div listUnStyled className="mb-0">
                               {searchedInMembersList &&
                                 searchedInMembersList.length > 0 && (
                                   <ul className="chat-persons">
@@ -715,11 +719,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                           <div className="d-flex justify-content-between">
                                             <div className="d-flex flex-row">
                                               <div className="d-inline-flex position-relative">
-                                                <MDBBadge className="position-absolute top-0 start-100 translate-middle p-1 bg-success-chat border border-light rounded-circle">
+                                                <Badge className="position-absolute top-0 start-100 translate-middle p-1 bg-success-chat border border-light rounded-circle">
                                                   <span className="visually-hidden">
                                                     New alerts
                                                   </span>
-                                                </MDBBadge>
+                                                </Badge>
                                                 {renderUserPrfoile(
                                                   secondaryUserFirstName,
                                                   secondaryUserLastName,
@@ -751,9 +755,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                 currentChatMember?.sender
                                                   ?.secondaryUser !==
                                                   secondaryUser && (
-                                                  <span className="badge bg-danger float-end">
+                                                  <Badge className={`className="badge bg-danger float-end ${styles.unreadCount}`}>
                                                     {unreadCount}
-                                                  </span>
+                                                  </Badge>
                                                 )}
                                               <span className="text-muted float-end">
                                                 <p
@@ -772,11 +776,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                     )}
                                   </ul>
                                 )}
-                            </MDBTypography>
+                            </div>
                           ) : (
-                            <MDBTypography listUnStyled className="mb-0">
+                            <div listUnStyled className="mb-0">
                               No Chats
-                            </MDBTypography>
+                            </div>
                           )}
                         </div>
                       </div>
@@ -786,8 +790,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                       className={styles.chatContainer2}
                       style={{ backgroundColor: "#fff", minHeight: "70vh" }}
                     >
-                      <div  className="p-0">
-                      <div className="card"
+                      <div className="p-0">
+                        <div
+                          className="card"
                           style={{
                             minHeight: "70vh",
                             borderRadius: "0 0 6px 6px",
@@ -851,20 +856,20 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                 <div className="pt-2">
                                   {!imgExtensions.exec(userData.fileName) ? (
                                     <>
-                                      <MDBIcon
+                                      <FontAwesomeIcon
                                         className="mt-3"
                                         fas
                                         size="10x"
-                                        icon="file-lines"
+                                        icon={faFileText}
                                         style={{ color: "grey" }}
                                       />
                                       <p className="mt-4">
                                         {userData.fileName}{" "}
-                                        <MDBIcon
+                                        <FontAwesomeIcon
                                           className="align-self-center mt-1"
                                           fas
                                           size="lg"
-                                          icon="trash-arrow-up"
+                                          icon={faTrash}
                                           style={{
                                             color: "#212529",
                                             cursor: "pointer",
@@ -883,11 +888,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                       />
                                       <p>
                                         {userData.fileName}{" "}
-                                        <MDBIcon
+                                        <FontAwesomeIcon
                                           className="align-self-center mt-1"
                                           fas
                                           size="lg"
-                                          icon="trash-arrow-up"
+                                          icon={faTrash}
                                           style={{
                                             color: "#212529",
                                             cursor: "pointer",
@@ -907,7 +912,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                             >
                               <div>
                                 <div>
-                                  <MDBTypography listUnStyled>
+                                  <div listUnStyled>
                                     <ul>
                                       {loading && <span>Loading</span>}
                                       <div ref={messagesTopRef} />
@@ -944,10 +949,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                     !chat.fileType.includes(
                                                       "image"
                                                     ) && (
-                                                      <MDBIcon
+                                                      <FontAwesomeIcon
                                                         fas
                                                         size="5x"
-                                                        icon="file-lines"
+                                                        icon={faFileText}
                                                         style={{
                                                           color: "#212529",
                                                         }}
@@ -960,10 +965,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                         className="download-link"
                                                         href={chat.fileUrl}
                                                       >
-                                                        <MDBIcon
+                                                        <FontAwesomeIcon
                                                           fas
                                                           size="lg"
-                                                          icon="circle-down"
+                                                          icon={faCircleDown}
                                                           style={{
                                                             color: "#212529",
                                                           }}
@@ -1005,14 +1010,16 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                     !chat.fileType.includes(
                                                       "image"
                                                     ) && (
-                                                      <MDBIcon
-                                                        fas
-                                                        size="5x"
-                                                        icon="file-lines"
-                                                        style={{
-                                                          color: "#212529",
-                                                        }}
-                                                      />
+                                                      
+ <FontAwesomeIcon
+ icon={
+  faFileText
+ }
+ style={{
+  color: "#212529",
+ }}
+/>
+                                                     
                                                     )}
                                                   <p className="mb-0">
                                                     {chat.message}
@@ -1021,14 +1028,15 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                         className="download-link"
                                                         href={chat.fileUrl}
                                                       >
-                                                        <MDBIcon
-                                                          fas
-                                                          size="lg"
-                                                          icon="circle-down"
-                                                          style={{
-                                                            color: "#212529",
-                                                          }}
-                                                        />
+                                                         <FontAwesomeIcon
+ icon={
+  faCircleDown
+ }
+ style={{
+  color: "#212529",
+ }}
+/>
+                                                      
                                                       </a>
                                                     )}
                                                     {chat.senderName ===
@@ -1036,24 +1044,21 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                       chat.messageStatus ===
                                                         "DELIVERED" && (
                                                         <span className="text-muted float-end">
-                                                          <MDBTooltip
-                                                            tag="a"
-                                                            wrapperProps={{
-                                                              href: "#",
-                                                            }}
+                                                          <Tooltip
+                                                            placement="bottom"
                                                             title="Sent"
                                                           >
-                                                            <MDBIcon
-                                                              fas
-                                                              icon="check"
-                                                              size="xs"
+                                                           <FontAwesomeIcon
+                                                              icon={
+                                                                faCheck
+                                                              }
                                                               style={{
                                                                 color: "black",
                                                                 marginLeft:
                                                                   "1rem",
                                                               }}
                                                             />
-                                                          </MDBTooltip>
+                                                          </Tooltip>
                                                         </span>
                                                       )}
                                                     {chat.senderName ===
@@ -1061,24 +1066,21 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                       chat.messageStatus ===
                                                         "READ" && (
                                                         <span className="text-muted float-end">
-                                                          <MDBTooltip
-                                                            tag="a"
-                                                            wrapperProps={{
-                                                              href: "#",
-                                                            }}
+                                                          <Tooltip
+                                                            placement="bottom"
                                                             title="Read"
                                                           >
-                                                            <MDBIcon
-                                                              fas
-                                                              icon="check-double"
-                                                              size="xs"
+                                                            <FontAwesomeIcon
+                                                              icon={
+                                                                faCheckDouble
+                                                              }
                                                               style={{
                                                                 color: "white",
                                                                 marginLeft:
                                                                   "1rem",
                                                               }}
                                                             />
-                                                          </MDBTooltip>
+                                                          </Tooltip>
                                                         </span>
                                                       )}
                                                     {chat.senderName ===
@@ -1086,24 +1088,21 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                       chat.messageStatus ===
                                                         "UNREAD" && (
                                                         <span className="text-muted float-end">
-                                                          <MDBTooltip
-                                                            tag="a"
-                                                            wrapperProps={{
-                                                              href: "#",
-                                                            }}
+                                                          <Tooltip
+                                                            placement="bottom"
                                                             title="Unread"
                                                           >
-                                                            <MDBIcon
-                                                              fas
-                                                              icon="check"
-                                                              size="xs"
+                                                            <FontAwesomeIcon
+                                                              icon={
+                                                                faCheck
+                                                              }
                                                               style={{
                                                                 color: "white",
                                                                 marginLeft:
                                                                   "1rem",
                                                               }}
                                                             />
-                                                          </MDBTooltip>
+                                                          </Tooltip>
                                                         </span>
                                                       )}
                                                   </p>
@@ -1119,7 +1118,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                     </ul>
 
                                     <div ref={messagesEndRef} />
-                                  </MDBTypography>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1182,11 +1181,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="2">
                   {!currentChatMember ? (
-                    <div className="card"
+                    <div
+                      className="card"
                       style={{ minHeight: "70vh", borderRadius: "0 0 6px 6px" }}
                     >
                       <div className="p-2">
-                        <MDBInputGroup className="rounded">
+                        <div className="rounded">
                           <input
                             className={`form-control ${styles.searchInput}`}
                             placeholder="Search a new user"
@@ -1194,11 +1194,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                             value={userData.searchNewUserMessage}
                             onChange={handleSearchUser}
                           />
-                        </MDBInputGroup>
+                        </div>
                       </div>
                       <div className="card-body m-0 p-1 customScroll">
                         {searchedUsers && (
-                          <MDBTypography listUnStyled className="mb-0">
+                          <div listUnStyled className="mb-0">
                             <ul className="chat-persons">
                               {searchedUsers?.map((user, index) => (
                                 <li className="p-2" key={index}>
@@ -1211,11 +1211,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                     <div className="d-flex flex-row">
                                       {
                                         <div className="d-inline-flex position-relative">
-                                          <MDBBadge className="position-absolute top-0 start-100 translate-middle p-1 bg-success-chat border border-light rounded-circle">
+                                          <Badge className="position-absolute top-0 start-100 translate-middle p-1 bg-success-chat border border-light rounded-circle">
                                             <span className="visually-hidden">
                                               New alerts
                                             </span>
-                                          </MDBBadge>
+                                          </Badge>
                                           {renderUserPrfoile(
                                             user.firstName,
                                             user.lastName,
@@ -1236,7 +1236,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                 </li>
                               ))}
                             </ul>
-                          </MDBTypography>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -1245,8 +1245,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                       className={styles.chatContainer2}
                       style={{ backgroundColor: "#fff", minHeight: "70vh" }}
                     >
-                      <div  className="p-0">
-                        <div className="card"
+                      <div className="p-0">
+                        <div
+                          className="card"
                           style={{
                             minHeight: "70vh",
                             borderRadius: "0 0 6px 6px",
@@ -1309,20 +1310,19 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                 <div className="pt-2">
                                   {!imgExtensions.exec(userData.fileName) ? (
                                     <>
-                                      <MDBIcon
-                                        className="mt-3"
-                                        fas
-                                        size="10x"
-                                        icon="file-lines"
-                                        style={{ color: "grey" }}
-                                      />
+                                      <FontAwesomeIcon
+ icon={
+  faFileText
+ }
+  style={{ color: "grey" }}
+/>
                                       <p className="mt-4">
                                         {userData.fileName}{" "}
-                                        <MDBIcon
+                                        <FontAwesomeIcon
                                           className="align-self-center mt-1"
                                           fas
                                           size="lg"
-                                          icon="trash-arrow-up"
+                                          icon={faTrash}
                                           style={{
                                             color: "#212529",
                                             cursor: "pointer",
@@ -1341,11 +1341,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                       />
                                       <p>
                                         {userData.fileName}{" "}
-                                        <MDBIcon
+                                        <FontAwesomeIcon
                                           className="align-self-center mt-1"
                                           fas
                                           size="lg"
-                                          icon="trash-arrow-up"
+                                          icon={faTrash}
                                           style={{
                                             color: "#212529",
                                             cursor: "pointer",
@@ -1365,7 +1365,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                             >
                               <div>
                                 <div>
-                                  <MDBTypography listUnStyled>
+                                  <div listUnStyled>
                                     <ul>
                                       {loading && <span>Loading</span>}
                                       <div ref={messagesTopRef} />
@@ -1402,10 +1402,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                     !chat.fileType.includes(
                                                       "image"
                                                     ) && (
-                                                      <MDBIcon
+                                                      <FontAwesomeIcon
                                                         fas
                                                         size="5x"
-                                                        icon="file-lines"
+                                                        icon={faFileText}
                                                         style={{
                                                           color: "#212529",
                                                         }}
@@ -1418,10 +1418,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                         className="download-link"
                                                         href={chat.fileUrl}
                                                       >
-                                                        <MDBIcon
+                                                        <FontAwesomeIcon
                                                           fas
                                                           size="lg"
-                                                          icon="circle-down"
+                                                          icon={faCircleDown}
                                                           style={{
                                                             color: "#212529",
                                                           }}
@@ -1463,10 +1463,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                     !chat.fileType.includes(
                                                       "image"
                                                     ) && (
-                                                      <MDBIcon
+                                                      <FontAwesomeIcon
                                                         fas
                                                         size="5x"
-                                                        icon="file-lines"
+                                                        icon={faFileText}
                                                         style={{
                                                           color: "#212529",
                                                         }}
@@ -1479,10 +1479,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                         className="download-link"
                                                         href={chat.fileUrl}
                                                       >
-                                                        <MDBIcon
+                                                        <FontAwesomeIcon
                                                           fas
                                                           size="lg"
-                                                          icon="circle-down"
+                                                          icon={faCircleDown}
                                                           style={{
                                                             color: "#212529",
                                                           }}
@@ -1494,24 +1494,21 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                       chat.messageStatus ===
                                                         "DELIVERED" && (
                                                         <span className="text-muted float-end">
-                                                          <MDBTooltip
-                                                            tag="a"
-                                                            wrapperProps={{
-                                                              href: "#",
-                                                            }}
+                                                          <Tooltip
+                                                            placement="bottom"
                                                             title="Sent"
                                                           >
-                                                            <MDBIcon
-                                                              fas
-                                                              icon="check"
-                                                              size="xs"
+                                                           <FontAwesomeIcon
+                                                              icon={
+                                                                faCheck
+                                                              }
                                                               style={{
-                                                                color: "black",
+                                                                color: "white",
                                                                 marginLeft:
                                                                   "1rem",
                                                               }}
                                                             />
-                                                          </MDBTooltip>
+                                                          </Tooltip>
                                                         </span>
                                                       )}
                                                     {chat.senderName ===
@@ -1519,24 +1516,21 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                       chat.messageStatus ===
                                                         "READ" && (
                                                         <span className="text-muted float-end">
-                                                          <MDBTooltip
-                                                            tag="a"
-                                                            wrapperProps={{
-                                                              href: "#",
-                                                            }}
+                                                          <Tooltip
+                                                            placement="bottom"
                                                             title="Read"
                                                           >
-                                                            <MDBIcon
-                                                              fas
-                                                              icon="check-double"
-                                                              size="xs"
+                                                           <FontAwesomeIcon
+                                                              icon={
+                                                                faCheckDouble
+                                                              }
                                                               style={{
                                                                 color: "white",
                                                                 marginLeft:
                                                                   "1rem",
                                                               }}
                                                             />
-                                                          </MDBTooltip>
+                                                          </Tooltip>
                                                         </span>
                                                       )}
                                                     {chat.senderName ===
@@ -1544,24 +1538,21 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                       chat.messageStatus ===
                                                         "UNREAD" && (
                                                         <span className="text-muted float-end">
-                                                          <MDBTooltip
-                                                            tag="a"
-                                                            wrapperProps={{
-                                                              href: "#",
-                                                            }}
+                                                          <Tooltip
+                                                            placement="bottom"
                                                             title="Unread"
                                                           >
-                                                            <MDBIcon
-                                                              fas
-                                                              icon="check"
-                                                              size="xs"
+                                                            <FontAwesomeIcon
+                                                              icon={
+                                                                faCheck
+                                                              }
                                                               style={{
                                                                 color: "white",
                                                                 marginLeft:
                                                                   "1rem",
                                                               }}
                                                             />
-                                                          </MDBTooltip>
+                                                          </Tooltip>
                                                         </span>
                                                       )}
                                                   </p>
@@ -1577,7 +1568,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                     </ul>
 
                                     <div ref={messagesEndRef} />
-                                  </MDBTypography>
+                                  </div>
                                 </div>
                               </div>
                             </div>
