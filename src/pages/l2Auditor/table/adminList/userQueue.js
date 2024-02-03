@@ -137,8 +137,8 @@ const UserQueue = ({ userList, setSort }) => {
                           )}
                           {data.allocatedBy ? (
                             <>
-                              &nbsp;{data?.auditAllocatedByFirstName}
-                              &nbsp;&nbsp;{data?.auditAllocatedByLastName}
+                              &nbsp;{data?.allocatedByFirstName}
+                              &nbsp;&nbsp;{data?.allocatedByLastName}
                             </>
                           ) : (
                             "---"
