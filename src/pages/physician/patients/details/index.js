@@ -615,6 +615,8 @@ const Details = ({}) => {
     setIsModalComments(false);
     setFlagContainerActive("");
     setConfirmCompleteModal(false);
+    setOpenPicker(false);
+    setOpenPicker2(false);
   };
 
   const handleSubmitValidNotes = async (event) => {
@@ -1307,6 +1309,7 @@ const Details = ({}) => {
       moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
     setDueDateStart(convertStartDate);
     setDueDateEnd(convertEndDate);
+    setOpenPicker(false);
     var result = await patientListFilter(
       localUserId,
       processedStatus,
@@ -1328,6 +1331,7 @@ const Details = ({}) => {
       moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
     setProcessedStart(convertStartDate);
     setProcessedEnd(convertEndDate);
+    setOpenPicker2(false);
     var result = await patientListFilter(
       localUserId,
       processedStatus,
