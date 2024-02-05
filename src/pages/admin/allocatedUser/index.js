@@ -315,7 +315,6 @@ export default function Patient() {
   };
 
   const getL2PatientList = async (data, pageNoL2Patient, sort,searchString) => {
-    console.log(data )
     setIsLoading(true);
     var dataMap = {
       firstName: data?.firstName,

@@ -24,7 +24,6 @@ const L2AllocateModal = ({
   setSelectedChart,
   selectedUser,
 }) => {
-  console.log(selectedUser)
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
