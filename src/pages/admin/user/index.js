@@ -5,6 +5,7 @@ import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { notification } from "antd";
 import Form from "react-bootstrap/Form";
+import styles from '../../../styles/auth.module.css'
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import AdminList from "../../../components/table/admin/adminList/adminList";
@@ -14,12 +15,13 @@ import {
   getAddUser,
   getUsers,
 } from "../../../store/actions/adminAction/usersAction";
-import {
-  AddUser
-} from "../../../services/adminServices/usersService";
+import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
 import SpinnerDots from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { handleTogglePasswordVisibility } from "../../../components/headerFilters/functions";
 
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -48,10 +50,9 @@ const UserList = () => {
   const [roleValue, setRoleValue] = useState("");
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [totalElements, setTotalElements] = useState(10);
-  const [sortOrder,setSortOrder]=useState("DESC")
-  const[ sort,setSort]=useState({sortDir:"",sortField:""})
-  const[ useAdd,setUseAdd]=useState(false)
-
+  const [sortOrder, setSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [useAdd, setUseAdd] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -70,6 +71,7 @@ const UserList = () => {
   const [selectedDates, setSelectedDates] = useState();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
@@ -98,7 +100,7 @@ const UserList = () => {
       formData.tenantId = localTenantId;
       formData.organizationId = localOrgId;
       formData.role = roleValue ? roleValue : [role.toUpperCase()];
-      var response = await AddUser(formData);      
+      var response = await AddUser(formData);
       if (response?.data?.status === "SUCCESS") {
         setAddUser(false);
         setUseAdd(true);
@@ -176,7 +178,7 @@ const UserList = () => {
         setIsLoadingBtn(false);
       }
       // setAddPatientId(false);
-      getAllList(localUserId, pageNo, pageSize,);
+      getAllList(localUserId, pageNo, pageSize);
     }
 
     setValidated(true);
@@ -207,9 +209,12 @@ const UserList = () => {
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
-    dispatch(getUsers({ pageCount, search, startDate, endDate, status, role,sort }));
-  }, [pageCount, search, startDate, endDate, status, role,sort,useAdd]);
+    dispatch(
+      getUsers({ pageCount, search, startDate, endDate, status, role, sort })
+    );
+  }, [pageCount, search, startDate, endDate, status, role, sort, useAdd]);
 
+  console.log(typeof(formData.password))
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -236,8 +241,6 @@ const UserList = () => {
                         selectOptions2={RoleList}
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
-                       
-
                         // computation date
                         pickerlabel="Created date Range"
                         selectedDates={selectedDates}
@@ -256,16 +259,15 @@ const UserList = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                     
-                        <AdminList
-                          userList={userListAll?.data?.response?.content}
-                          switchHandler={switchHandler}
-                          setPageCount={setPageCount}
-                          sortOrder={sortOrder} 
-                          setSortOrder={setSortOrder} 
-                          setSort={setSort}
-                        />
-                     
+                      <AdminList
+                        userList={userListAll?.data?.response?.content}
+                        switchHandler={switchHandler}
+                        setPageCount={setPageCount}
+                        sortOrder={sortOrder}
+                        setSortOrder={setSortOrder}
+                        setSort={setSort}
+                      />
+
                       <div>
                         <div className="pagination-container">
                           <Paginator
@@ -446,6 +448,37 @@ const UserList = () => {
                       <option value="L1AUDITOR">L1AUDITOR</option>
                       <option value="L2AUDITOR">L2AUDITOR</option>
                     </Form.Control>
+                  </div>
+
+                  <div  className="col-xl-6 mb-3">
+                    <Form.Label>
+                      Password <span className="text-danger">*</span>{" "}
+                    </Form.Label>
+
+                    <div className={styles.passCOntainer}>
+                      <div style={{width:"95%"}}>
+                      <Form.Control
+                        name="password"
+                        required
+                        type={showPassword ?"text":"password"}
+                        value={formData?.password?formData?.password:null}
+                        onChange={handleChange}
+                        className={styles.passField}
+                      />
+                      </div>
+                      <div className={styles.passwordBox2}>
+                        <span>
+                          <FontAwesomeIcon
+                            onClick={()=>{handleTogglePasswordVisibility(showPassword,setShowPassword)}}
+                            icon={showPassword ? faEye : faEyeSlash}
+                          />
+                        </span>
+                      </div>
+                    </div>
+                    <small id="emailHelp" class="form-text text-muted">
+                      Please enter an numeric, number with both lowercase and
+                      uppercase characters.
+                    </small>
                   </div>
                   <div className="col-xl-6 mb-3">
                     <Form.Label>

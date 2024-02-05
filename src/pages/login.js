@@ -8,6 +8,7 @@ import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
 import { getMFAValidation } from "../store/actions/AuthActions";
+import { handleTogglePasswordVisibility } from "../components/headerFilters/functions";
 
 export default function Login() {
   const router = useRouter();
@@ -81,9 +82,7 @@ export default function Login() {
     dispatch(getMFAValidation(email, router, password));
   };
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -139,7 +138,7 @@ export default function Login() {
                     <div className="input-group-append">
                       <span className={styles.passwordBox}>
                         <FontAwesomeIcon
-                          onClick={handleTogglePasswordVisibility}
+                          onClick={()=>handleTogglePasswordVisibility(showPassword,setShowPassword)}
                           icon={showPassword ? faEye : faEyeSlash}
                         />
                       </span>

@@ -385,3 +385,7 @@ export const capitalizeFirstLetter=(string)=> {
   const formattedString=string?.toLowerCase()
   return formattedString?.charAt(0).toUpperCase() + formattedString.slice(1);
 }
+
+export const handleTogglePasswordVisibility = (showPassword,setShowPassword) => {
+  setShowPassword(!showPassword);
+};
