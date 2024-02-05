@@ -92,7 +92,7 @@ function AllocatedL2AdminList({
             ? moment.utc(data.processedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-        <td className={TableStyle.childBorder}>
+        <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
           {processstatusBodyTemplate(data)}
         </td>
         <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
@@ -179,7 +179,7 @@ function AllocatedL2AdminList({
               </span>
             </th>
 
-            <th>STATUS</th>
+            <th style={{textAlign:"center"}}>STATUS</th>
             {/* <th>Upload</th> */}
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
