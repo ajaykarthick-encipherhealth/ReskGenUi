@@ -19,7 +19,10 @@ import PatientTable from "../../../components/table/PatientList/patientList";
 import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
-import { disableFutureDate, processstatusBodyTemplate } from "../../../components/headerFilters/functions";
+import {
+  disableFutureDate,
+  processstatusBodyTemplate,
+} from "../../../components/headerFilters/functions";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -46,13 +49,19 @@ export default function Patient() {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const dueStartDate = filteratedDashboardData?.date
-    ? filteratedDashboardData?.date
-    : filteratedDashboardData?.dayDate
-    ? filteratedDashboardData?.dayDate
+
+  const dueStartDate = filteratedDashboardData?.dayDate
+    ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
+      "T00:00:00.000Z"
     : "";
+
+  const dueEndDate = filteratedDashboardData?.dayDate
+    ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
+      "T23:59:59.000Z"
+    : "";
+
   const [dueDateStart, setDueDateStart] = useState(dueStartDate);
-  const [dueDateEnd, setDueDateEnd] = useState(dueStartDate);
+  const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
   const [processedStart, setProcessedStart] = useState("");
   const [processedEnd, setProcessedEnd] = useState("");
   const [statusSelectedValue, setStausSelectedValue] = useState(
@@ -70,17 +79,19 @@ export default function Patient() {
     ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
     : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
   const [defaultStartDate, setDefaultStartDate] = useState(
-    dayjs(dayDateFormated).format("MM-DD-YYYY")
+    dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
   );
   const [defaultEndDate, setDefaultEndDate] = useState(
-    dayjs(dayDateFormated).format("MM-DD-YYYY")
+    dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
   );
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
-
   useEffect(() => {
-    setDefaultStartDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
-    setDefaultEndDate(dayjs(dayDateFormated).format("MM-DD-YYYY"));
+    setDefaultStartDate(
+      dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
+    );
+    setDefaultEndDate(dayjs(dayDateFormated).format("MM-DD-YYYY")) +
+      "T23:59:59.000Z";
   }, [dayDateFormated]);
 
   useEffect(() => {
@@ -100,7 +111,7 @@ export default function Patient() {
       processedEnd,
       sort
     );
-  }, [filteratedDashboardData,sort]);
+  }, [filteratedDashboardData, sort]);
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -122,9 +133,9 @@ export default function Patient() {
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
           createdAt: res.createdAt,
-          allocatedByFirstName:res.allocatedByFirstName,
-          allocatedByLastName:res.allocatedByLastName,
-          allocatedByProfileImage:res.allocatedByProfileImage
+          allocatedByFirstName: res.allocatedByFirstName,
+          allocatedByLastName: res.allocatedByLastName,
+          allocatedByProfileImage: res.allocatedByProfileImage,
         });
       });
       var newArray = [];
@@ -193,25 +204,22 @@ export default function Patient() {
     );
   };
 
-const onPageChange = (e) => {
-  setIsLoading(true);
-  setPaginationFirst(e.first);
-  setPageNo(e.page);
-  setPageSize(e.rows);
-  setTableLoading(true);
-  console.log(e,"test");
-  getFilteApi(
-    e.page,
-  15,
-    statusSelectedValue,
-    dueDateStart,
-    dueDateEnd,
-    processedStart,
-    processedEnd,
-   
-  );
-};
-
+  const onPageChange = (e) => {
+    setIsLoading(true);
+    setPaginationFirst(e.first);
+    setPageNo(e.page);
+    setPageSize(e.rows);
+    setTableLoading(true);
+    getFilteApi(
+      e.page,
+      15,
+      statusSelectedValue,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd
+    );
+  };
 
   const statusOptions = [
     { label: "ALL", value: "ALL" },
@@ -234,8 +242,7 @@ const onPageChange = (e) => {
       dueDateStart,
       dueDateEnd,
       processedStart,
-      processedEnd,
-      
+      processedEnd
     );
   };
   const handleDatePickerChange = (dateString) => {
@@ -253,8 +260,7 @@ const onPageChange = (e) => {
         convertStartDate,
         convertEndDate,
         processedStart,
-        processedEnd,
-      
+        processedEnd
       );
     } else {
       setDueDateStart("");
@@ -266,8 +272,7 @@ const onPageChange = (e) => {
         "",
         "",
         processedStart,
-        processedEnd,
-       
+        processedEnd
       );
     }
   };
@@ -283,11 +288,11 @@ const onPageChange = (e) => {
       getFilteApi(
         0,
         pageSize,
-        statusSelectedValue,     
+        statusSelectedValue,
         dueDateStart,
         dueDateEnd,
         convertStartDate,
-        convertEndDate,
+        convertEndDate
       );
     } else {
       setProcessedStart("");
@@ -299,7 +304,7 @@ const onPageChange = (e) => {
         dueDateStart,
         dueDateEnd,
         "",
-        "",
+        ""
       );
     }
   };
@@ -366,7 +371,6 @@ const onPageChange = (e) => {
                                       ]
                                     : []
                                 }
-                               
                               />
                             </div>
                           </div>
@@ -381,7 +385,7 @@ const onPageChange = (e) => {
                                     dateStrings
                                   );
                                 }}
-                                disabledDate={(current) => 
+                                disabledDate={(current) =>
                                   disableFutureDate(current)
                                 }
                               />
@@ -422,7 +426,10 @@ const onPageChange = (e) => {
                                 </span>
                               </div>
                               <div className={visitStyles.flags}>
-                                <span className={visitStyles.declined} style={{background:'#87d0f5'}}></span>
+                                <span
+                                  className={visitStyles.declined}
+                                  style={{ background: "#87d0f5" }}
+                                ></span>
                                 <span className={visitStyles.flagCodes}>
                                   Computed
                                 </span>
