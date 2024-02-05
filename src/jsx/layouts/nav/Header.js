@@ -10,7 +10,15 @@ import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Button } from "react-bootstrap";
-import { Badge, Dropdown, Select, Tooltip, Drawer, Popover, Avatar } from "antd";
+import {
+  Badge,
+  Dropdown,
+  Select,
+  Tooltip,
+  Drawer,
+  Popover,
+  Avatar,
+} from "antd";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
 import {
@@ -95,7 +103,7 @@ const Header = () => {
   const [currentRole, setCurrentRole] = useState();
   const [isChat, setIsChat] = useState(false);
   const [profileImg, setProfileImg] = useState();
-  const [lastName,setLastName]=useState()
+  const [lastName, setLastName] = useState();
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -146,7 +154,7 @@ const Header = () => {
     setUserIdDetails(response?.data?.response);
     setProfileImg(response?.data?.response?.profileImageUrl);
     setUserName(response?.data?.response?.firstName);
-    setLastName(response?.data?.response?.lastName)
+    setLastName(response?.data?.response?.lastName);
     setDropdownContent(response?.data?.response?.role);
     var userId = response?.data?.response?.id;
     dispatch(getNotificationList(userId));
@@ -170,14 +178,8 @@ const Header = () => {
   const percentage = 95;
   const PopContent = (
     <div className={styles.innerPop}>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <div style={{ width: "70%" }}>
+      <div className={styles.codesContainer}>
+        <div style={{ width: "70%"}}>
           {btnItems?.map((data) => (
             <button
               onClick={() => {
@@ -193,7 +195,7 @@ const Header = () => {
             </button>
           ))}
         </div>
-        <div style={{ width: "30%", marginTop: "-25px" }}>
+        <div style={{width:"30%", margin: "-25px 30px 0 0" }}>
           {selectedbtn === "HCC" && (
             <Selector
               selectlabel={""}
@@ -204,29 +206,24 @@ const Header = () => {
           )}
         </div>
       </div>
-      <div
-        style={{
-          width: "80%",
-          margin: "10px 50px",
-        }}
-      >
-        <Search
-          searchlabel={""}
-          setSearch={setSearch}
-          style={{ border: "1px solid red" }}
-        />
+      <div className={styles.codesContainer}>
+        <div
+         className={styles.codesContainer2}
+        >
+          <Search searchlabel={""} setSearch={setSearch} />
+        </div>
       </div>
       <div className={styles.displayDiv}>
         {codDetails?.response
           ? codDetails?.response?.map((data) => (
               <div className={styles.hoverDiv}>
                 {data?.diagnosisCode} &nbsp;
-                {data?.description}
+                {data?.description}&nbsp;
                 {selectedbtn === "HCC" && (
                   <>
                     {getStatus(data) === "CMS" && (
                       <span className={styles.cmsStatus}>
-                        {getStatus(data)}
+                        {getStatus(data)} 
                       </span>
                     )}
                     {getStatus(data) === "RX" && (
@@ -234,7 +231,7 @@ const Header = () => {
                     )}
                     {getStatus(data) === "CMS RX" && (
                       <>
-                        <span className={styles.cmsStatus}>CMS</span>
+                        <span className={styles.cmsStatus}  style={{marginRight:"5px"}}>CMS</span>
                         <span className={styles.rxStatus}>RX</span>
                       </>
                     )}
@@ -333,10 +330,10 @@ const Header = () => {
     dispatch(getAccuracy());
   }, []);
 
-  const gotoChat=()=>{
+  const gotoChat = () => {
     setOpenMsg(true);
     // window.open("/chat",'_blank');
-  }
+  };
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
 
@@ -356,7 +353,6 @@ const Header = () => {
     }
   }, [msgReply, selectedbtn, search, selectedOption]);
 
-  
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -451,7 +447,7 @@ const Header = () => {
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
                         >
-                           <Image src={IMAGES.chatIcons} alt=""/>
+                          <Image src={IMAGES.chatIcons} alt="" />
                         </div>
 
                         <div
@@ -471,9 +467,16 @@ const Header = () => {
                         >
                           <div>
                             <div className="header-info2 d-flex align-items-center">
-                              <div className="header-media" style={{marginTop:"-2px"}}>
-                                {renderUserPrfoile(userName,lastName,profileImg,"header")}
-                                
+                              <div
+                                className="header-media"
+                                style={{ marginTop: "-2px" }}
+                              >
+                                {renderUserPrfoile(
+                                  userName,
+                                  lastName,
+                                  profileImg,
+                                  "header"
+                                )}
                               </div>
                             </div>
                           </div>
@@ -528,12 +531,12 @@ const Header = () => {
         {!openMsg ? (
           <Notification notificationResponse={notificationResponse?.data} />
         ) : null}
-      </Drawer>      
-          {openMsg ?
-          <div className="chat-box ">
+      </Drawer>
+      {openMsg ? (
+        <div className="chat-box ">
           <ChatCommunication openMsg={openMsg} offMsg={setOpenMsg} />
-
-          </div>:null}
+        </div>
+      ) : null}
     </div>
   );
 };
