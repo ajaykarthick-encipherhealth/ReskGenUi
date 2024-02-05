@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Spin } from "antd";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
+import { LoadingOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import { sortFunction } from "../../../headerFilters/functions";
@@ -17,11 +16,11 @@ function AllocatedAdminList({
   selectedRowsId,
   selectedChart,
   setSort,
-  loading
+  loading,
 }) {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
@@ -42,8 +41,7 @@ function AllocatedAdminList({
   };
 
   const renderRows = () => {
-    return (
-      patinetListAll?.length>0 ?
+    return patinetListAll?.length > 0 ? (
       patinetListAll?.map((data, index) => (
         <tr
           style={{ height: "35px" }}
@@ -59,48 +57,58 @@ function AllocatedAdminList({
         >
           <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
           <td className={TableStyle.childBorder}>{data.patientName}</td>
-          
+
           <td className={TableStyle.childBorder}>
             {data.computedDate
               ? moment.utc(data.computedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
           <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
-            <input
-              type="checkbox"
-              onChange={() => {
-                handleRowCheckboxChange(data);
-                setSelectedRowsId((prev) => {
-                  const currentIds = prev.map((item) => item.id);
-                  if (!currentIds.includes(data.patientId)) {
-                    return [
-                      ...prev,
-                      { id: data.patientId, name: data.patientName },
-                    ];
-                  } else {
-                    return prev.filter((item) => item.id !== data.patientId);
-                  }
-                });
-              }}
-              checked={selectedRowsId.some((item) => item.id === data.patientId)}
-              style={{
-                width: "20px",
-                height: "20px",
-                flexhrink: "0",
-                borderRadius: "4px",
-                backgroundColor: "pink",
-              }}
-            />
+            {loading ? (
+              <Spin
+                loading={loading}
+                indicator={<LoadingOutlined spin />}
+                style={{ color: "#1677ff" }}
+              />
+            ) : (
+              <input
+                type="checkbox"
+                onChange={() => {
+                  handleRowCheckboxChange(data);
+                  setSelectedRowsId((prev) => {
+                    const currentIds = prev.map((item) => item.id);
+                    if (!currentIds.includes(data.patientId)) {
+                      return [
+                        ...prev,
+                        { id: data.patientId, name: data.patientName },
+                      ];
+                    } else {
+                      return prev.filter((item) => item.id !== data.patientId);
+                    }
+                  });
+                }}
+                checked={selectedRowsId?.some(
+                  (item) => item.id === data.patientId
+                )}
+                style={{
+                  width: "20px",
+                  height: "20px",
+                  flexhrink: "0",
+                  borderRadius: "4px",
+                  backgroundColor: "pink",
+                }}
+              />
+            )}
           </td>
         </tr>
-      )):
+      ))
+    ) : (
       <tr>
-      <td colSpan={4}>
-        <Empty />
-      </td>
-    </tr>
-    )
-   
+        <td colSpan={4}>
+          <Empty />
+        </td>
+      </tr>
+    );
   };
 
   return (
@@ -153,11 +161,7 @@ function AllocatedAdminList({
           </tr>
         </thead>
 
-        <tbody>
-          {
-            renderRows()
-          }
-        </tbody>
+        <tbody>{renderRows()}</tbody>
       </table>
       <div></div>
     </div>

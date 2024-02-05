@@ -135,9 +135,10 @@ function FileProcessingTable({ patinetListAll }) {
   const [parsedData, setParsedData] = useState([]);
   const [activeId, setActiveId] = useState();
   const [loading, setLoading] = useState(false);
+  const [toggle, setToggle] = useState(patinetListAll);
 
   const selectedRowTime = useSelector(
-    (state) => state.adminPatient.patientsList
+    (state) => state?.adminPatient?.patientsList
   );
 
   useEffect(() => {
@@ -205,11 +206,15 @@ function FileProcessingTable({ patinetListAll }) {
   }, [parsedData, activeId]);
 
   const handleToggleStepper = (index, data) => {
-    setActiveId(data.patientId);
+    setToggle((prevToggle) => ({
+      ...prevToggle,
+      [data?.patientId]: !prevToggle[data.patientId],
+    }));
+    setActiveId(data?.patientId);
 
-    const updatedVisibility = stepperVisible?.map((value, i) =>
-      i === index ? !value : false
-    );
+    const updatedVisibility =
+      stepperVisible?.length > 0 &&
+      stepperVisible?.map((value, i) => (i === index ? !value : false));
     setStepperVisible(updatedVisibility);
   };
 
@@ -442,7 +447,7 @@ function FileProcessingTable({ patinetListAll }) {
                   height: "20px",
                 }}
                 strokeColor={
-                  stageChartMap2[data?.processStageChart] === "FINISHED"
+                  stageChartMap2[data?.processStageChart] === "Finished"
                     ? "green"
                     : errStages[data?.processStageChart]
                     ? "red"
@@ -462,7 +467,7 @@ function FileProcessingTable({ patinetListAll }) {
                 : "#0000",
             }}
           >{`${uploadStatus}% Complete`}</div>
-          {stepperVisible[index] && (
+          {toggle[data?.patientId] && (
             <>
               <div
                 style={{
@@ -474,25 +479,27 @@ function FileProcessingTable({ patinetListAll }) {
                   justifyContent: "space-around",
                 }}
               >
-                {mappedSteps?.map((step, index) => (
-                  <div key={index} style={{ width: "10%" }}>
-                    {selectedRowTime?.find(
-                      (item) => item?.processStageChart === step.info
-                    ) ? (
-                      <span>
-                        {new Date(
-                          selectedRowTime.find(
-                            (item) => item?.processStageChart === step.info
-                          ).createdDate
-                        )
-                          .toISOString()
-                          .substr(11, 8)}
-                      </span>
-                    ) : (
-                      "---"
-                    )}
-                  </div>
-                ))}
+                {mappedSteps?.length > 0 &&
+                  mappedSteps?.map((step, index) => {
+                    const findData = selectedRowTime?.find(
+                      (item) => item?.processStageChart === step?.info
+                    );
+                    return (
+                      <div key={index} style={{ width: "10%" }}>
+                        {selectedRowTime?.length > 0 && findData ? (
+                          <span>
+                            {findData?.createdDate
+                              ? new Date(findData?.createdDate)
+                                  ?.toISOString()
+                                  .substr(11, 8)
+                              : "---"}
+                          </span>
+                        ) : (
+                          "---"
+                        )}
+                      </div>
+                    );
+                  })}
               </div>
 
               <div
@@ -515,7 +522,7 @@ function FileProcessingTable({ patinetListAll }) {
         </div>
         <div style={{ width: "2%", marginTop: "6px" }}>
           <div onClick={() => handleToggleStepper(index, data)}>
-            {stepperVisible[index] ? (
+            {toggle[data?.patientId] ? (
               <UpOutlined style={{ width: "40px", height: "20px" }} />
             ) : (
               <DownOutlined style={{ width: "40px", height: "20px" }} />
@@ -541,34 +548,39 @@ function FileProcessingTable({ patinetListAll }) {
   };
   return (
     <div className={TableStyle.classContaineer}>
-      <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
-          <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
-            <th>UPLOAD STATUS</th>
-          </tr>
-        </thead>
+      {loading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <SpinnerDots />
+        </div>
+      ) : (
+        <table className={TableStyle.classTable}>
+          <thead className={TableStyle.classThead}>
+            <tr>
+              <th>PATIENT ID</th>
+              <th>PATIENT NAME</th>
+              <th>UPLOAD STATUS</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan="9">
-                <SpinnerDots />
-              </td>
-            </tr>
-          ) : parsedData?.length === 0 ? (
-            <tr>
-              <td colSpan="9">
-                <Empty />
-              </td>
-            </tr>
-          ) : (
-            renderRows()
-          )}
-        </tbody>
-      </table>
-      <div></div>
+          <tbody>
+            {parsedData?.length === 0 ? (
+              <tr>
+                <td colSpan="9">
+                  <Empty />
+                </td>
+              </tr>
+            ) : (
+              renderRows()
+            )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

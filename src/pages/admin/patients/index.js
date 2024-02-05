@@ -274,7 +274,8 @@ export default function Patient() {
               completedEndDate,
               selAllocatedTo,
               selAllocatedBy,
-              selCreatedBy
+              selCreatedBy,
+              sort
             )
           );
           setAddPatientId(false);
@@ -416,7 +417,8 @@ export default function Patient() {
           completedEndDate,
           selAllocatedTo,
           selAllocatedBy,
-          selCreatedBy
+          selCreatedBy,
+          sort
         )
       );
       eventStreming(
@@ -434,7 +436,8 @@ export default function Patient() {
         completedEndDate,
         selAllocatedTo,
         selAllocatedBy,
-        selCreatedBy
+        selCreatedBy,
+        sort
       );
       setAddPatient(false);
       setAddPatient(false);

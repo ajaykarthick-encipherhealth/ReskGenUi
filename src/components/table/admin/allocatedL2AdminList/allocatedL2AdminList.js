@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Spin } from "antd";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
+import { LoadingOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import {
   processstatusBodyTemplate,
   sortFunction,
-  renderUserPrfoileAvatar
+  renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
-
 
 function AllocatedL2AdminList({
   patinetListAll,
@@ -22,11 +20,12 @@ function AllocatedL2AdminList({
   selectedRowsId,
   selectedChart,
   setSort,
+  loading,
 }) {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [sortDueOrder, setSortDueOrder] = useState("ASC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
@@ -62,34 +61,32 @@ function AllocatedL2AdminList({
       >
         <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
         <td className={TableStyle.childBorder}>{data.patientName}</td>
-        <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {data.patientAllocatedFirstName || data.patientAllocatedLastName || data?.patientAllocatedProfileImage ? (
-                    <div style={{ display: "flex", aligndatas: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
-                        {" "}
-                        {renderUserPrfoileAvatar(
-                          data.patientAllocatedFirstName,
-                          data.patientAllocatedLastName,
-                          data?.patientAllocatedProfileImage,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
-                  )}
-                </td>        <td className={TableStyle.childBorder}>
-              {data.dueDate
-            ? moment.utc(data.dueDate).format("MM-DD-YYYY")
-            : "---"}</td>
-
+        <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
+          {data.patientAllocatedFirstName ||
+          data.patientAllocatedLastName ||
+          data?.patientAllocatedProfileImage ? (
+            <div style={{ display: "flex", aligndatas: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.patientAllocatedFirstName,
+                  data.patientAllocatedLastName,
+                  data?.patientAllocatedProfileImage,
+                  "header"
+                )}
+              </span>
+              <span>
+                {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
+        </td>{" "}
+        <td className={TableStyle.childBorder}>
+          {data.dueDate ? moment.utc(data.dueDate).format("MM-DD-YYYY") : "---"}
+        </td>
         <td className={TableStyle.childBorder}>
           {data.processedDate
             ? moment.utc(data.processedDate).format("MM-DD-YYYY")
@@ -98,33 +95,42 @@ function AllocatedL2AdminList({
         <td className={TableStyle.childBorder}>
           {processstatusBodyTemplate(data)}
         </td>
-
         <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
-          <input
-            type="checkbox"
-            onChange={() => {
-              handleRowCheckboxChange(data);
-              setSelectedRowsId((prev) => {
-                const currentIds = prev.map((item) => item.id);
-                if (!currentIds.includes(data.patientId)) {
-                  return [
-                    ...prev,
-                    { id: data.patientId, name: data.patientName },
-                  ];
-                } else {
-                  return prev.filter((item) => item.id !== data.patientId);
-                }
-              });
-            }}
-            checked={selectedRowsId.some((item) => item.id === data.patientId)}
-            style={{
-              width: "20px",
-              height: "20px",
-              flexhrink: "0",
-              borderRadius: "4px",
-              backgroundColor: "pink",
-            }}
-          />
+          {loading ? (
+            <Spin
+              loading={loading}
+              indicator={<LoadingOutlined spin />}
+              style={{ color: "#1677ff" }}
+            />
+          ) : (
+            <input
+              type="checkbox"
+              onChange={() => {
+                handleRowCheckboxChange(data);
+                setSelectedRowsId((prev) => {
+                  const currentIds = prev.map((item) => item.id);
+                  if (!currentIds.includes(data.patientId)) {
+                    return [
+                      ...prev,
+                      { id: data.patientId, name: data.patientName },
+                    ];
+                  } else {
+                    return prev.filter((item) => item.id !== data.patientId);
+                  }
+                });
+              }}
+              checked={selectedRowsId.some(
+                (item) => item.id === data.patientId
+              )}
+              style={{
+                width: "20px",
+                height: "20px",
+                flexhrink: "0",
+                borderRadius: "4px",
+                backgroundColor: "pink",
+              }}
+            />
+          )}
         </td>
       </tr>
     ));
