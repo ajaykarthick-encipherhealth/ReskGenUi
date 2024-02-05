@@ -331,7 +331,8 @@ export default function Patient() {
     setTableLoading(true);
     setIsLoading(true);
     var dataMap = {
-      firstName: data?.name,
+      firstName: data?.firstName,
+      lastName:data?.lastName,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);

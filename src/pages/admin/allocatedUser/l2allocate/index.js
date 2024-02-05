@@ -86,7 +86,7 @@ const L2AllocateModal = ({
 
   const getAllCheckList = async () => {
     if (selectedUser) {
-      var resoureUrl = `/dbservice/l2audit/statistics?username=${selectedUser?.userName}`;
+      var resoureUrl = `dbservice/l2audit/statistics?username=${selectedUser?.userName}`;
       const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
       if (response.data) {
         var result = response?.data?.response;
@@ -133,14 +133,14 @@ const L2AllocateModal = ({
                 style={{ backgroundColor: "#04306F" }}
               >
                 {selectedUser?.firstName ? (
-                  getInitials(selectedUser?.firstName)
+                  getInitials(selectedUser?.firstName,selectedUser?.lastName)
                 ) : (
                   <FontAwesomeIcon className="fa fa-search" icon={faUser} />
                 )}
               </Avatar>
               <div className="p-3">
                 <p className={`${modalStyle.listName} mb-1`}>
-                  {selectedUser?.firstName}
+                  {selectedUser?.firstName}  {selectedUser?.lastName}
                 </p>
               </div>
             </div>
@@ -180,11 +180,11 @@ const L2AllocateModal = ({
                       viewBox="0 0 8 8"
                       fill="none"
                     >
-                      <circle cx="4" cy="4" r="4" fill="#3276CD" />
+                      <circle cx="4" cy="4" r="4" fill="#64B4BE" />
                     </svg>
-                    <span className="p-2">Allocated</span>
+                    <span className="p-2">Audited</span>
                   </div>
-                  <span>{chart.allocated ? chart.allocated : 0}</span>
+                  <span>{chart.audited ? chart.audited : 0}</span>
                 </div>
                 <div className="d-flex my-3">
                   <div>
@@ -195,11 +195,11 @@ const L2AllocateModal = ({
                       viewBox="0 0 8 8"
                       fill="none"
                     >
-                      <circle cx="4" cy="4" r="4" fill="#00BC13" />
+                      <circle cx="4" cy="4" r="4" fill="#FFB54D" />
                     </svg>
-                    <span className="p-2">Completed</span>
+                    <span className="p-2">AuditPending</span>
                   </div>
-                  <span>{chart.completed ? chart.completed : 0}</span>
+                  <span>{chart.auditPending ? chart.auditPending : 0}</span>
                 </div>
                 <div className="d-flex my-3">
                   <div>
@@ -210,11 +210,11 @@ const L2AllocateModal = ({
                       viewBox="0 0 8 8"
                       fill="none"
                     >
-                      <circle cx="4" cy="4" r="4" fill="#EA8715" />
+                      <circle cx="4" cy="4" r="4" fill="#F4CE14" />
                     </svg>
-                    <span className="p-2">Pending</span>
+                    <span className="p-2">AuditHold</span>
                   </div>
-                  <span>{chart.pending ? chart.pending : 0}</span>
+                  <span>{chart.auditHold ? chart.auditHold : 0}</span>
                 </div>
                 <div className="d-flex my-3">
                   <div>
@@ -225,11 +225,11 @@ const L2AllocateModal = ({
                       viewBox="0 0 8 8"
                       fill="none"
                     >
-                      <circle cx="4" cy="4" r="4" fill="#BCA7FB" />
+                      <circle cx="4" cy="4" r="4" fill="#C26100" />
                     </svg>
-                    <span className="p-2">Hold</span>
+                    <span className="p-2">ReAudited</span>
                   </div>
-                  <span>{chart.hold ? chart.hold : 0}</span>
+                  <span>{chart.reAudited ? chart.reAudited : 0}</span>
                 </div>
                 <div className="d-flex my-3">
                   <div>
@@ -242,7 +242,7 @@ const L2AllocateModal = ({
                     >
                       <circle cx="4" cy="4" r="4" fill="#EB5252" />
                     </svg>
-                    <span className="p-2">Decline</span>
+                    <span className="p-2">AuditDeclined</span>
                   </div>
                   <span>{chart.declined ? chart.declined : 0}</span>
                 </div>
