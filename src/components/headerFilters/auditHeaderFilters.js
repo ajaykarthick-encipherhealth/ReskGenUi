@@ -305,6 +305,7 @@ const AuditHeaderFilters = ({
                 onClick={() => {
                   dispatch(getFilters("allocatedBy", username));
                 }}
+                style={{zIndex:"2"}}
               >
                 <label>{allocatedBylabel}</label>
                 <div class="form-group has-search">
