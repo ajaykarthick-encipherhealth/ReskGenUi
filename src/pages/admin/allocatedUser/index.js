@@ -23,9 +23,11 @@ import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
 import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
-import { disableFutureDate, renderUserPrfoile } from "../../../components/headerFilters/functions";
+import {
+  disableFutureDate,
+  renderUserPrfoile,
+} from "../../../components/headerFilters/functions";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
-
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -58,9 +60,9 @@ export default function Patient() {
   const [l2patinetListAll, setL2PatinetListAll] = useState([]);
   const [l2selectUser, setL2selectUser] = useState(null);
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [totalElementsUser,setTotalElementsUser] =useState(0);
-  const [searchString,setSearchString] =useState("");
-
+  const [totalElementsUser, setTotalElementsUser] = useState(0);
+  const [searchString, setSearchString] = useState("");
+  const [checkedLoading, setCheckedLoading] = useState(false);
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
@@ -103,6 +105,7 @@ export default function Patient() {
     }
   };
   const getAllCheckList = async (sort) => {
+    setIsLoading(true);
     const uId = localStorage.getItem("userId");
     var resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${totalElements}&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
@@ -114,6 +117,7 @@ export default function Patient() {
       }));
       setSelectedRowsId(data);
       setHeaderCheckValidation(data);
+      setIsLoading(false);
     }
   };
 
@@ -156,23 +160,23 @@ export default function Patient() {
   };
 
   const getNameSearch = (search) => {
-    setSearchString(search)
-    if(activeTab == 1){
-    getAllList(
-      pageNo,
-      pageSize,
-      dateRange ? dateRange[0] : "",
-      dateRange ? dateRange[1] : "",
-      true,
-      2,
-      search,
-      sort
-    );
-    }else{
-      if(!isPatientList){
-      getAuditL2List(pageNo,search)
-      }else{
-        getL2PatientList(l2selectUser, pageNoL2Patient, sort,search);
+    setSearchString(search);
+    if (activeTab == 1) {
+      getAllList(
+        pageNo,
+        pageSize,
+        dateRange ? dateRange[0] : "",
+        dateRange ? dateRange[1] : "",
+        true,
+        2,
+        search,
+        sort
+      );
+    } else {
+      if (!isPatientList) {
+        getAuditL2List(pageNo, search);
+      } else {
+        getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
       }
     }
   };
@@ -190,7 +194,7 @@ export default function Patient() {
     setPaginationFirst(e.first);
     setPageNoL2Patient(e.page);
     setPageSize(e.rows);
-    getL2PatientList(l2selectUser, e.page, sort,"");
+    getL2PatientList(l2selectUser, e.page, sort, "");
     setTableLoading(true);
   };
 
@@ -216,14 +220,14 @@ export default function Patient() {
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
     if (number == 2) {
-      getAuditL2List(pageNoL2User,"");
+      getAuditL2List(pageNoL2User, "");
     } else {
       setIsPatientList(false);
       setPageNo(0);
       getAllList(0, pageSize, "", "", true, 2, "", sort);
     }
   };
-  const getAuditL2List = async (pageNo,searchString) => {
+  const getAuditL2List = async (pageNo, searchString) => {
     var orgId = localStorage.getItem("orgId");
     var tenantid = localStorage.getItem("tenantId");
     var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
@@ -249,9 +253,7 @@ export default function Patient() {
       });
       if (result?.length > 0) {
         setL2UserListAll(result);
-       
       } else {
-       
         setL2UserListAll([]);
       }
       setIsLoading(false);
@@ -260,68 +262,86 @@ export default function Patient() {
   };
 
   const renderRows = () => {
-    return !tableLoading && l2UserListAll?.length>0?
-    l2UserListAll?.map((data, index) => (
-      <tr
-        style={{ height: "35px" }}
-        key={index}
-        onClick={() => {
-          getL2PatientList(data, pageNoL2Patient, sort,"");
-        }}
-      >
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
-          {data.firstName || data.lastName || data?.profileImageUrl ? (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {" "}
-              <span style={{ marginRight: "10px" }}>
+    return !tableLoading && l2UserListAll?.length > 0 ? (
+      l2UserListAll?.map((data, index) => (
+        <tr
+          style={{ height: "35px" }}
+          key={index}
+          onClick={() => {
+            getL2PatientList(data, pageNoL2Patient, sort, "");
+          }}
+        >
+          <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+            {data.firstName || data.lastName || data?.profileImageUrl ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
                 {" "}
-               {renderUserPrfoile(
-            data?.firstName,
-            data?.lastName,
-            data?.profileImageUrl,
-            null,
-            "30px",
-            "30px"
-          )}
-              </span>
-              <span>
-                {data.firstName} {data.lastName}
-              </span>
-            </div>
-          ) : (
-            <div style={{ textAlign: "center" }}>---</div>
-          )}
+                <span style={{ marginRight: "10px" }}>
+                  {" "}
+                  {renderUserPrfoile(
+                    data?.firstName,
+                    data?.lastName,
+                    data?.profileImageUrl,
+                    null,
+                    "30px",
+                    "30px"
+                  )}
+                </span>
+                <span>
+                  {data.firstName} {data.lastName}
+                </span>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
+          </td>
+          <td className={TableStyle.childBorder}>
+            {data.totalFileAudited ? data.totalFileAudited : "---"}
+          </td>
+          <td className={TableStyle.childBorder}>
+            {data.totalFileAuditAllocated
+              ? data.totalFileAuditAllocated
+              : "---"}
+          </td>
+          <td className={TableStyle.childBorder}>
+            {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
+          </td>
+          <td className={TableStyle.childBorder}>
+            {data.totalFileAuditHold ? data.totalFileAuditHold : "---"}
+          </td>
+          <td className={TableStyle.childBorder}>
+            {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="9">
+          <Empty />
         </td>
-        <td className={TableStyle.childBorder}>
-          {data.totalFileAudited ? data.totalFileAudited : "---"}
-        </td>
-        <td className={TableStyle.childBorder}>
-          {data.totalFileAuditAllocated ? data.totalFileAuditAllocated : "---"}
-        </td>
-        <td className={TableStyle.childBorder}>
-          {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
-        </td>
-        <td className={TableStyle.childBorder}>
-          {data.totalFileAuditHold ? data.totalFileAuditHold : "---"}
-        </td>
-        <td className={TableStyle.childBorder}>
-          {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
-        </td>
-
       </tr>
-    )):<tr>
-      <td colSpan="9"><Empty/></td>
-    </tr>;
+    );
   };
 
-  const getL2PatientList = async (data, pageNoL2Patient, sort,searchString) => {
+  const getL2PatientList = async (
+    data,
+    pageNoL2Patient,
+    sort,
+    searchString
+  ) => {
+    setTableLoading(true);
     setIsLoading(true);
     var dataMap = {
       firstName: data?.name,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${data?.userName}&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${sort?.sortDir?sort?.sortDir:"DESC"}&sortfield=${sort?.sortField?sort?.sortField:"dueDate"}&searchstring=${searchString}`;
+    var resoureUrl = `dbservice/l2audit/patients?username=${
+      data?.userName
+    }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : "DESC"
+    }&sortfield=${
+      sort?.sortField ? sort?.sortField : "dueDate"
+    }&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -348,13 +368,14 @@ export default function Patient() {
         setIsPatientList(true);
       } else {
         setL2PatinetListAll([]);
-       
       }
+      setTableLoading(false);
       setIsLoading(false);
     }
   };
 
   const getAllCheckListL2 = async (sort) => {
+    setCheckedLoading(true);
     var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
@@ -367,13 +388,14 @@ export default function Patient() {
       setSelectedRowsId(data);
       setHeaderCheckValidation(data);
     }
+    setCheckedLoading(false);
   };
   useEffect(() => {
     setIsLoading(true);
     if (!isPatientList) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     } else {
-      getL2PatientList(l2selectUser, pageNoL2Patient, sort,"");
+      getL2PatientList(l2selectUser, pageNoL2Patient, sort, "");
       setIsLoading(false);
     }
     setAllocateClicked(false);
@@ -381,7 +403,7 @@ export default function Patient() {
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
     setIsLoading(false);
-  }, [isPatientList, pageNoL2Patient, sort,allocateClicked]);
+  }, [isPatientList, pageNoL2Patient, sort, allocateClicked]);
 
   return (
     <>
@@ -427,22 +449,28 @@ export default function Patient() {
                               </div>
                             </div>
                           </div>
-                          {!isPatientList && activeTab == 1 ?
-                          <div className="col-xl-2">
-                            <label>Computed Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  setDateRange(dateStrings);
-                                  handleReceivedDatePicker(dates, dateStrings);
-                                }}
-                                disabledDate={(current) => 
-                                  disableFutureDate(current)
-                                }
-                              />
+                          {!isPatientList && activeTab == 1 ? (
+                            <div className="col-xl-2">
+                              <label>Computed Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    setDateRange(dateStrings);
+                                    handleReceivedDatePicker(
+                                      dates,
+                                      dateStrings
+                                    );
+                                  }}
+                                  disabledDate={(current) =>
+                                    disableFutureDate(current)
+                                  }
+                                />
+                              </div>
                             </div>
-                          </div>:<div className="col-xl-2"></div>}
+                          ) : (
+                            <div className="col-xl-2"></div>
+                          )}
                           <div className="col-xl-8 mt-4">
                             {isPatientList || activeTab === 1 ? (
                               <>
@@ -495,7 +523,13 @@ export default function Patient() {
                                     selectTabClick(2);
                                   }}
                                 >
-                                  <Nav.Link to="#my-posts" eventKey="team">
+                                  <Nav.Link
+                                    to="#my-posts"
+                                    eventKey="team"
+                                    onClick={() => {
+                                      setTableLoading(true);
+                                    }}
+                                  >
                                     L2 Auditor Allocation
                                   </Nav.Link>
                                 </Nav.Item>
@@ -506,7 +540,8 @@ export default function Patient() {
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {patinetListAll?.length===0 && tableLoading  ? (
+                                  {patinetListAll?.length === 0 &&
+                                  tableLoading ? (
                                     <SpinnerDots />
                                   ) : (
                                     <>
@@ -540,9 +575,9 @@ export default function Patient() {
                                     </>
                                   )}
                                 </Tab.Pane>
-             
+
                                 <Tab.Pane id="my-posts" eventKey="team">
-                                  {l2patinetListAll?.length===0 && tableLoading||isLoading ? (
+                                  {tableLoading ? (
                                     <SpinnerDots />
                                   ) : (
                                     <>
@@ -569,11 +604,7 @@ export default function Patient() {
                                                 </tr>
                                               </thead>
 
-                                              <tbody>
-                                                {
-                                                  renderRows()
-                                                }
-                                              </tbody>
+                                              <tbody>{renderRows()}</tbody>
                                             </table>
                                             <div>
                                               <div className="pagination-container">
@@ -610,6 +641,7 @@ export default function Patient() {
                                                 headerCheckValidation
                                               }
                                               setSort={setSort}
+                                              loading={checkedLoading}
                                             />
                                             <div>
                                               <div>
