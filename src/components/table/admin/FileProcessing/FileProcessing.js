@@ -135,7 +135,7 @@ function FileProcessingTable({ patinetListAll }) {
   const [parsedData, setParsedData] = useState([]);
   const [activeId, setActiveId] = useState();
   const [loading, setLoading] = useState(false);
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(patinetListAll);
 
   const selectedRowTime = useSelector(
     (state) => state?.adminPatient?.patientsList
@@ -206,13 +206,15 @@ function FileProcessingTable({ patinetListAll }) {
   }, [parsedData, activeId]);
 
   const handleToggleStepper = (index, data) => {
-    setToggle(!toggle);
+    setToggle((prevToggle) => ({
+      ...prevToggle,
+      [data?.patientId]: !prevToggle[data.patientId],
+    }));
     setActiveId(data?.patientId);
 
     const updatedVisibility =
       stepperVisible?.length > 0 &&
       stepperVisible?.map((value, i) => (i === index ? !value : false));
-    console.log(updatedVisibility);
     setStepperVisible(updatedVisibility);
   };
 
@@ -445,7 +447,7 @@ function FileProcessingTable({ patinetListAll }) {
                   height: "20px",
                 }}
                 strokeColor={
-                  stageChartMap2[data?.processStageChart] === "FINISHED"
+                  stageChartMap2[data?.processStageChart] === "Finished"
                     ? "green"
                     : errStages[data?.processStageChart]
                     ? "red"
@@ -465,7 +467,7 @@ function FileProcessingTable({ patinetListAll }) {
                 : "#0000",
             }}
           >{`${uploadStatus}% Complete`}</div>
-          {toggle && (
+          {toggle[data?.patientId] && (
             <>
               <div
                 style={{
@@ -520,7 +522,7 @@ function FileProcessingTable({ patinetListAll }) {
         </div>
         <div style={{ width: "2%", marginTop: "6px" }}>
           <div onClick={() => handleToggleStepper(index, data)}>
-            {toggle ? (
+            {toggle[data?.patientId] ? (
               <UpOutlined style={{ width: "40px", height: "20px" }} />
             ) : (
               <DownOutlined style={{ width: "40px", height: "20px" }} />

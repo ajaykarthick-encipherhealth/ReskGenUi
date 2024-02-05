@@ -28,7 +28,7 @@ export const PatientsList = async (
         selAllocatedTo === "All" ? "" : selAllocatedTo
       }&patientAllocatedBy=${
         selCreatedBy === "All" ? "" : selCreatedBy
-      }&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`,
+      }&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
