@@ -161,7 +161,7 @@ const AuditHeaderFilters = ({
                 dispatch(getFilters("auditAllocatedBy", username));
               }}
             >
-              <label>{audiallocatedBylabel}</label>
+              <label className={styles.label}>{audiallocatedBylabel}</label>
               <div class="form-group has-search">
                 <Select
                   onChange={(selectedOption) => {
@@ -223,7 +223,7 @@ const AuditHeaderFilters = ({
         <div style={{ margin: "50px 0px 0px -4px" }}>
           <div className="row filter-contain">
             {isSelector ? (
-              <div className="col-xl-2" >
+              <div className="col-xl-2">
                 {" "}
                 <Selector
                   selectlabel={selectlabel}
@@ -251,7 +251,7 @@ const AuditHeaderFilters = ({
             {isAnotherPicker && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe2}</label>
+                  <label className={styles.label}>{pickerlabe2}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -281,7 +281,7 @@ const AuditHeaderFilters = ({
             {isAllocatedDate && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe3}</label>
+                  <label className={styles.label}>{pickerlabe3}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -306,7 +306,7 @@ const AuditHeaderFilters = ({
                   dispatch(getFilters("allocatedBy", username));
                 }}
               >
-                <label>{allocatedBylabel}</label>
+                <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {

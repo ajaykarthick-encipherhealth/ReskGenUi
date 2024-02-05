@@ -128,14 +128,14 @@ const HeaderFilters = ({
   setIsModalVisible,
   optionKey,
   disable,
-  tracking
+  tracking,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   return (
     <>
       <div style={{ display: "flex" }}>
-        <div className="row filter-contain" style={{ width: "98%" }}>
+        <div className="row filter-contain" style={{ width: "100%" }}>
           {isSearch && (
             <div className="col-xl-2">
               {" "}
@@ -162,7 +162,7 @@ const HeaderFilters = ({
           ) : null}
           {selectOptions2 && (
             <div className="col-xl-2">
-              <label>{selectlabel2}</label>                                                                                                                 
+              <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
                   onChange={(selectedOption) => {
@@ -199,7 +199,7 @@ const HeaderFilters = ({
           {isAnotherPicker && (
             <>
               <div className="col-xl-2">
-                <label>{pickerlabe2}</label>
+                <label className={styles.label}>{pickerlabe2}</label>
                 <div>
                   <RangePicker
                     format="YYYY-MM-DD"
@@ -327,7 +327,7 @@ const HeaderFilters = ({
                   dispatch(getFilters("allocatedBy"));
                 }}
               >
-                <label>{allocatedBylabel}</label>
+                <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -344,12 +344,12 @@ const HeaderFilters = ({
             {isAllocatedToSelector && (
               <div
                 className="col-xl-2"
-                style={{zIndex:tracking&&"2"}}
+                style={{ zIndex: tracking && "2" }}
                 onClick={() => {
                   dispatch(getFilters("patientAllocated"));
                 }}
               >
-                <label>{allocatedTolabel}</label>
+                <label className={styles.label}>{allocatedTolabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -376,7 +376,7 @@ const HeaderFilters = ({
                   );
                 }}
               >
-                <label>{createdTolabel}</label>
+                <label className={styles.label}>{createdTolabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -393,7 +393,7 @@ const HeaderFilters = ({
             {isAnotherPicker2 && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe3}</label>
+                  <label className={styles.label}>{pickerlabe3}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -413,7 +413,7 @@ const HeaderFilters = ({
             {isAnotherPicker3 && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe4}</label>
+                  <label className={styles.label}>{pickerlabe4}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -434,7 +434,7 @@ const HeaderFilters = ({
             {isAnotherPicker5 && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe5}</label>
+                  <label className={styles.label}>{pickerlabe5}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
