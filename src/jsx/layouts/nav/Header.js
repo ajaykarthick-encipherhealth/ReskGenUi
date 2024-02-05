@@ -37,6 +37,7 @@ import {
   getCoderDetails,
 } from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
+import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 
 const btnItems = [
@@ -92,6 +93,7 @@ const Header = () => {
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
   const [dropdownContent, setDropdownContent] = useState();
   const [currentRole, setCurrentRole] = useState();
+  const [isChat, setIsChat] = useState(false);
   const [profileImg, setProfileImg] = useState();
   const [lastName,setLastName]=useState()
 
@@ -330,6 +332,11 @@ const Header = () => {
 
     dispatch(getAccuracy());
   }, []);
+
+  const gotoChat=()=>{
+    setOpenMsg(true);
+    // window.open("/chat",'_blank');
+  }
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
 
@@ -421,7 +428,7 @@ const Header = () => {
                               : Math.round(accuracy?.data?.response)
                           }%`}
                         >
-                          <div className="notificationIcon">
+                          <div className="header-progress">
                             <div style={{ width: 40, height: 40 }}>
                               <CircularProgressbar
                                 value={
@@ -440,6 +447,12 @@ const Header = () => {
                             </div>
                           </div>
                         </Tooltip>
+                        <div
+                          className="chatheaderIcon"
+                          onClick={() => gotoChat()}
+                        >
+                           <Image src={IMAGES.chatIcons} alt=""/>
+                        </div>
 
                         <div
                           className="notificationIcon"
@@ -515,7 +528,12 @@ const Header = () => {
         {!openMsg ? (
           <Notification notificationResponse={notificationResponse?.data} />
         ) : null}
-      </Drawer>
+      </Drawer>      
+          {openMsg ?
+          <div className="chat-box ">
+          <ChatCommunication openMsg={openMsg} offMsg={setOpenMsg} />
+
+          </div>:null}
     </div>
   );
 };

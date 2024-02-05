@@ -13,6 +13,8 @@ export const IMAGES = {
   visitDataLabreport: require("../../images/visitdata/labreport.png"),
   loginPageLogo: require("../../images/logo/new_logo_1.png"),
   loginPageLogo2: require("../../images/logo/new_logo_2.png"),
+  chatIcons: require("../../images/chat/chatIcon.png"),
+
 };
 export const SVGICON = {
   MainLogo: (
