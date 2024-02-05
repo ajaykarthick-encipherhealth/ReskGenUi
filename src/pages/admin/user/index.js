@@ -5,7 +5,7 @@ import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { notification } from "antd";
 import Form from "react-bootstrap/Form";
-import styles from '../../../styles/auth.module.css'
+import styles from "../../../styles/auth.module.css";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import AdminList from "../../../components/table/admin/adminList/adminList";
@@ -21,7 +21,11 @@ import SpinnerDots from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { handleTogglePasswordVisibility } from "../../../components/headerFilters/functions";
+import {
+  getValidatePassword,
+  handleTogglePasswordVisibility,
+  validateConfirmPassword,
+} from "../../../components/headerFilters/functions";
 
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -62,6 +66,7 @@ const UserList = () => {
     role: "",
     userName: "",
     mobileNumber: "",
+    confirmPassword: "",
   });
   const [pageCount, setPageCount] = useState(0);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -71,17 +76,19 @@ const UserList = () => {
   const [selectedDates, setSelectedDates] = useState();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(true);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(true);
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
     patientName: "",
   });
-
+  let errorsObj = { email: "", password: "" ,confirmPass:""};
+  const [errors, setErrors] = useState(errorsObj);
   const addUserForm = () => {
     setValidated(false);
     setAddUser(true);
   };
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -96,7 +103,22 @@ const UserList = () => {
     const form = event.currentTarget;
     event.preventDefault();
     const role = localStorage.getItem("userRole");
-    if (form.checkValidity() === true) {
+    const passValidation = getValidatePassword(
+      formData?.password,
+      setErrors,
+      setIsLoading
+    );
+    const isConfirmPasswordValid = validateConfirmPassword(
+      formData.password,
+      formData.confirmPassword,
+      setErrors,
+      setIsLoading
+    );
+    if (
+      form.checkValidity() === true &&
+      passValidation &&
+      isConfirmPasswordValid
+    ) {
       formData.tenantId = localTenantId;
       formData.organizationId = localOrgId;
       formData.role = roleValue ? roleValue : [role.toUpperCase()];
@@ -104,38 +126,16 @@ const UserList = () => {
       if (response?.data?.status === "SUCCESS") {
         setAddUser(false);
         setUseAdd(true);
+        setErrors({
+          email: "",
+          password: "",
+          confirmPass:""
+        });
         setIsLoadingBtn(false);
-        notification.success({
-          message: response?.data?.message,
-          duration: 1,
-        });
-      } else {
-        notification.warning({
-          message: response?.data?.message,
-          duration: 1,
-        });
       }
     }
     setValidated(true);
   };
-
-  // const roleUpdate = async (data) => {
-  //   setIsLoading(true);
-  //   const response = await axios.post(ENDPOINTS.apiEndoint + `patient`, data);
-  //   if (response?.status == 200) {
-  //     setAddUser(false);
-  //     getAllList(tenId, orgId, pageDataCount, pageLimitCount, "");
-  //   } else {
-  //   }
-  // };
-
-  // const roleChange = async (e) => {
-  //   console.log(e.value);
-  //   var data = {};
-  //   data.role = e.value;
-  //   console.log(data);
-  //   // roleUpdate(data);
-  // };
 
   const switchHandler = (event, id) => {
     const isChecked = event;
@@ -214,7 +214,6 @@ const UserList = () => {
     );
   }, [pageCount, search, startDate, endDate, status, role, sort, useAdd]);
 
-  console.log(typeof(formData.password))
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -450,61 +449,82 @@ const UserList = () => {
                     </Form.Control>
                   </div>
 
-                  <div  className="col-xl-6 mb-3">
+                  <div className="col-xl-6 mb-3">
                     <Form.Label>
                       Password <span className="text-danger">*</span>{" "}
                     </Form.Label>
 
                     <div className={styles.passCOntainer}>
-                      <div style={{width:"95%"}}>
-                      <Form.Control
-                        name="password"
-                        required
-                        type={showPassword ?"text":"password"}
-                        value={formData?.password?formData?.password:null}
-                        onChange={handleChange}
-                        className={styles.passField}
-                      />
+                      <div style={{ width: "95%" }}>
+                        <Form.Control
+                          name="password"
+                          required
+                          type={showPassword ? "text" : "password"}
+                          value={formData?.password ? formData?.password : null}
+                          onChange={handleChange}
+                          className={styles.passField}
+                        />
                       </div>
                       <div className={styles.passwordBox2}>
                         <span>
                           <FontAwesomeIcon
-                            onClick={()=>{handleTogglePasswordVisibility(showPassword,setShowPassword)}}
+                            onClick={() => {
+                              handleTogglePasswordVisibility(
+                                showPassword,
+                                setShowPassword
+                              );
+                            }}
                             icon={showPassword ? faEye : faEyeSlash}
                           />
                         </span>
                       </div>
                     </div>
-                    <small id="emailHelp" class="form-text text-muted">
-                      Please enter an numeric, number with both lowercase and
-                      uppercase characters.
-                    </small>
+
+                    {errors?.password ? (
+                      <div className="text-danger fs-12">
+                        {errors?.password}
+                      </div>
+                    ) : (
+                      <small id="emailHelp" class="form-text text-muted">
+                        Please enter an numeric, number with both lowercase and
+                        uppercase characters.
+                      </small>
+                    )}
                   </div>
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      Password <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="password"
-                      required
-                      type="text"
-                      onChange={handleChange}
-                    />
-                    <small id="emailHelp" class="form-text text-muted">
-                      Please enter an numeric, number with both lowercase and
-                      uppercase characters.
-                    </small>
-                  </div>
+
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
                       Confirm Password <span className="text-danger">*</span>{" "}
                     </Form.Label>
-                    <Form.Control
-                      name="password"
-                      required
-                      type="text"
-                      onChange={handleChange}
-                    />
+                    <div className={styles.passCOntainer}>
+                      <div style={{ width: "95%" }}>
+                        <Form.Control
+                          name="confirmPassword"
+                          required
+                          type={showConfirmPassword ? "text" : "password"}
+                          onChange={handleChange}
+                          className={styles.passField}
+                        />
+                      </div>
+                      <div className={styles.passwordBox2}>
+                        <span>
+                          <FontAwesomeIcon
+                            onClick={() => {
+                              handleTogglePasswordVisibility(
+                                showConfirmPassword,
+                                setShowConfirmPassword
+                              );
+                            }}
+                            icon={showPassword ? faEye : faEyeSlash}
+                          />
+                        </span>
+                      </div>
+                    </div>
+                    {errors?.confirmPass && (
+                      <div className="text-danger fs-12">
+                        {errors?.confirmPass}
+                      </div>
+                    ) }
                   </div>
                 </div>
                 <div>
