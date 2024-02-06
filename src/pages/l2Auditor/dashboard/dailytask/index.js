@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
+import moment from "moment";
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
@@ -63,7 +64,7 @@ const DailyTask = () => {
       days.push({
         day: daysOfWeek[dayIndex],
         date: dayjs(today)?.format("MM-DD-YYYY"),
-        dateString: today?.toISOString(),
+        dateString: moment(today)?.format("YYYY-MM-DD") + "T23:59:59Z",
       });
     }
 
@@ -88,7 +89,7 @@ const DailyTask = () => {
         id: currentDays?.length + 1,
         day: dayjs(date).format("dddd"),
         date: date?.format("MM-DD-YYYY"),
-        dateString: date?.toISOString(),
+        dateString: dayjs(date)?.format("YYYY-MM-DD") + "T23:59:59Z",
       },
     ];
     setSelectedDate((prev) => [...prev, ...datas]);
@@ -286,7 +287,6 @@ const DailyTask = () => {
                       <Row>
                         <Col span={12}>
                           <div className={styles.container}>
-                           
                             <ReactECharts
                               option={getChartOption(
                                 data?.allocated,
