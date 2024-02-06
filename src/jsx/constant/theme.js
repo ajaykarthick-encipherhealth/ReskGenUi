@@ -11,7 +11,7 @@ export const IMAGES = {
   visitDataNonHcc: require("../../images/visitdata/nonhcc.png"),
   visitDataRadioloy: require("../../images/visitdata/radiology.png"),
   visitDataLabreport: require("../../images/visitdata/labreport.png"),
-  loginPageLogo: require("../../images/logo/new_logo_1.png"),
+  loginPageLogo: require("../../images/logo/CogentAI logo.png"),
   loginPageLogo2: require("../../images/logo/new_logo_2.png"),
   chatIcons: require("../../images/chat/chatIcon.png"),
 
