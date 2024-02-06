@@ -131,3 +131,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Ignore src directory inside utils specifically for enpoints.js
+src/utility/*/enpoints.js/src/
