@@ -377,7 +377,7 @@ export default function Patient() {
                           <HeaderFilters
                             setSearch={setSearchTextValue}
                             isSearch={true}
-                            searchlabel="Search By Patient Name"
+                            searchlabel="Search By Patient Name / Id"
                             // select status
                             selectlabel="Select Status"
                             isSelector={true}
@@ -425,7 +425,7 @@ export default function Patient() {
                             tracking={true}
                             // allocated by
                             isAllocatedBySelector={true}
-                            allocatedBylabel=" AllocatedBy"
+                            allocatedBylabel=" Allocated By"
                             allocatedByOptoons={generateOptionsList(
                               filteredList
                             )}
