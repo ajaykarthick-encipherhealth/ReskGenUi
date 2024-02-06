@@ -16,6 +16,7 @@ import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
 const WorkFlow = () => {
   const currentDate = dayjs();
@@ -43,7 +44,7 @@ const WorkFlow = () => {
       icon: allocated,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.allocated,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear?getSelectedDaysCount(DateRanges): 30} days`,
       bg: allocatedbg,
     },
     {
@@ -51,7 +52,7 @@ const WorkFlow = () => {
       icon: pending,
       title: "Pending",
       charts: worlFlowData?.data?.response?.pending,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear?getSelectedDaysCount(DateRanges): 30} days`,
       bg: pendingbg,
     },
     {
@@ -59,7 +60,7 @@ const WorkFlow = () => {
       icon: hold,
       title: "Hold",
       charts: worlFlowData?.data?.response?.hold,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear?getSelectedDaysCount(DateRanges): 30} days`,
       bg: holdbg,
     },
     {
@@ -67,7 +68,7 @@ const WorkFlow = () => {
       icon: completed,
       title: "Completed",
       charts: worlFlowData?.data?.response?.completed,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear?getSelectedDaysCount(DateRanges): 30} days`,
       bg: completedbg,
     },
   ];

@@ -72,7 +72,7 @@ function ReceivedReport({
                   <th>REPORT ID</th>
                   <th>REPORT NAME</th>
                   <th>ACCESS TYPE</th>
-                  <th>SENDER</th>
+                  <th  style={{textAlign:"center"}}>SENDER</th>
                   <th
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -138,6 +138,7 @@ function ReceivedReport({
                           borderTop: "  0.2px solid #e1e1e1",
 
                           borderBottom: "  0.2px solid #e1e1e1",
+                          textAlign:"center"
                         }}
                         className={TableStyle.childBorder}
                       >
