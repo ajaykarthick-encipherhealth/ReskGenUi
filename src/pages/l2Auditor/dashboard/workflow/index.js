@@ -25,6 +25,7 @@ import auditedIcon from "../../.../../../../images/dashboard/Audit.png";
 
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
+import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
 const WorkFlow = () => {
   const currentDate = dayjs();
@@ -51,7 +52,7 @@ const WorkFlow = () => {
       icon: allocated,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.auditAllocated,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
       bg: allocatedbg,
     },
     {
@@ -59,7 +60,7 @@ const WorkFlow = () => {
       icon: auditedIcon,
       title: "Audited",
       charts: worlFlowData?.data?.response?.audited,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
       bg: auditedbg,
     },
     {
@@ -67,7 +68,7 @@ const WorkFlow = () => {
       icon: reAuditIcon,
       title: "Re Audit",
       charts: worlFlowData?.data?.response?.reAudited,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
       bg: reAuditbg,
     },
     {
@@ -75,7 +76,7 @@ const WorkFlow = () => {
       icon: auditHoldIcon,
       title: "Audit Hold",
       charts: worlFlowData?.data?.response?.auditHold,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
       bg: auditHold,
     },
     {
@@ -83,7 +84,7 @@ const WorkFlow = () => {
       icon: pendingIcon,
       title: "Pending",
       charts: worlFlowData?.data?.response?.auditPending,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear? getSelectedDaysCount(DateRanges) : 30} days`,
       bg: pendingbg,
     },
     {
@@ -91,7 +92,7 @@ const WorkFlow = () => {
       icon: declineIcon,
       title: "Declined",
       charts: worlFlowData?.data?.response?.auditDecliend,
-      days: "Last 30 days",
+      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
       bg: auditDecliendbg,
     },
   ];
