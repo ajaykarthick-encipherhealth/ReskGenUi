@@ -263,6 +263,7 @@ const UserQueue = ({ userList, setSort }) => {
 
           <td
             className={TableStyle.childBorder}
+            style={{textAlign:"center"}}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {processstatusBodyTemplate(data)}
@@ -358,7 +359,7 @@ const UserQueue = ({ userList, setSort }) => {
             </th>
             {/* <th>ALLOCATED BY</th> */}
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
-            <th>PROCESSED STATUS</th>
+            <th style={{textAlign:"center"}}>PROCESSED STATUS</th>
           </tr>
         </thead>
 

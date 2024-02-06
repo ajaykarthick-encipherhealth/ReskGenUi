@@ -221,7 +221,7 @@ export default function Patient() {
           <div className="patient-status">
             <span
               className={`badge Auditprocessing-text`}
-              style={{ color: "#E28213", background: "#FBE7D0 !important" }}
+              style={{ color: "#E28213", background: "#FBE7D0 !important", fontSize:"9px !important" }}
             >
               Audit Pending
             </span>
