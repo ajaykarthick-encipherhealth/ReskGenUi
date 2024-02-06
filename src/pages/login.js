@@ -8,6 +8,7 @@ import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
 import { getMFAValidation } from "../store/actions/AuthActions";
+import { getValidatePassword, handleTogglePasswordVisibility } from "../components/headerFilters/functions";
 
 export default function Login() {
   const router = useRouter();
@@ -18,39 +19,6 @@ export default function Login() {
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const getValidatePassword = (password) => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-
-    if (password.length < 8) {
-      setErrors({
-        email: "",
-        password: "Password should be greater than 8 characters",
-      });
-      setIsLoading(false);
-      return false;
-    }
-    if (password.length > 14) {
-      setErrors({
-        email: "",
-        password: "Password should be less than 14 characters",
-      });
-      setIsLoading(false);
-      return false;
-    }
-    if (!passwordRegex.test(password)) {
-      setErrors({
-        email: "",
-        password:
-          "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character",
-      });
-      setIsLoading(false);
-      return false;
-    }
-
-    return true;
-  };
 
   const validateEmail = (email) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -69,7 +37,7 @@ export default function Login() {
   const onLogin = async (e) => {
     e.preventDefault();
     const emailValidation = validateEmail(email);
-    const passValidation = getValidatePassword(password);
+    const passValidation = getValidatePassword(password,setErrors,setIsLoading);
     if (!passValidation || !emailValidation) {
       return;
     }
@@ -81,9 +49,7 @@ export default function Login() {
     dispatch(getMFAValidation(email, router, password));
   };
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -139,7 +105,7 @@ export default function Login() {
                     <div className="input-group-append">
                       <span className={styles.passwordBox}>
                         <FontAwesomeIcon
-                          onClick={handleTogglePasswordVisibility}
+                          onClick={()=>handleTogglePasswordVisibility(showPassword,setShowPassword)}
                           icon={showPassword ? faEye : faEyeSlash}
                         />
                       </span>

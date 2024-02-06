@@ -33,7 +33,7 @@ export const UsersList = async ({
   }
 };
 
-export const AddUser = async (data) => {
+export const AddUser = async (data, setErrors) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
@@ -46,8 +46,36 @@ export const AddUser = async (data) => {
         },
       }
     );
-    return response;
+    if (response) {
+      if (response?.data?.status === "SUCCESS") {
+        setErrors({
+          email: "",
+          password: "",
+          confirmPass: "",
+        });
+        notification.success({
+          message: response?.data?.message,
+          duration: 1,
+        });
+      } else {
+        setErrors({
+          email: "",
+          password: "",
+          confirmPass: "",
+        });
+        notification.warning({
+          message: response?.data?.message,
+          duration: 1,
+        });
+      }
+      return response;
+    }
   } catch (err) {
+    setErrors({
+      email: "",
+      password: "",
+      confirmPass: "",
+    });
     notification.error({ description: err?.response?.data?.message });
   }
 };
@@ -57,7 +85,7 @@ export const enableUser = (checked, user, role, setPopoverVisible, field) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
     var orgId = localStorage.getItem("orgId");
-    const checkedVal = checked ==="yes" ? true : false;
+    const checkedVal = checked === "yes" ? true : false;
     const data = {
       orgId: orgId,
       tenantId: tenId,
@@ -71,7 +99,10 @@ export const enableUser = (checked, user, role, setPopoverVisible, field) => {
       ? { ...data, accountEnabled: checkedVal }
       : data;
 
-    if((field && role && user !== undefined )||(checked !== undefined && checked !==null && user !== undefined)){
+    if (
+      (field && role && user !== undefined) ||
+      (checked !== undefined && checked !== null && user !== undefined)
+    ) {
       try {
         const response = await axios.put(
           `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
