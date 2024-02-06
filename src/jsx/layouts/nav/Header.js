@@ -179,7 +179,7 @@ const Header = () => {
   const PopContent = (
     <div className={styles.innerPop}>
       <div className={styles.codesContainer}>
-        <div style={{ width: "70%"}}>
+        <div style={{ width: "70%" }}>
           {btnItems?.map((data) => (
             <button
               onClick={() => {
@@ -195,7 +195,7 @@ const Header = () => {
             </button>
           ))}
         </div>
-        <div style={{width:"30%", margin: "-25px 30px 0 0" }}>
+        <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
           {selectedbtn === "HCC" && (
             <Selector
               selectlabel={""}
@@ -207,9 +207,7 @@ const Header = () => {
         </div>
       </div>
       <div className={styles.codesContainer}>
-        <div
-         className={styles.codesContainer2}
-        >
+        <div className={styles.codesContainer2}>
           <Search searchlabel={""} setSearch={setSearch} />
         </div>
       </div>
@@ -223,7 +221,7 @@ const Header = () => {
                   <>
                     {getStatus(data) === "CMS" && (
                       <span className={styles.cmsStatus}>
-                        {getStatus(data)} 
+                        {getStatus(data)}
                       </span>
                     )}
                     {getStatus(data) === "RX" && (
@@ -231,7 +229,12 @@ const Header = () => {
                     )}
                     {getStatus(data) === "CMS RX" && (
                       <>
-                        <span className={styles.cmsStatus}  style={{marginRight:"5px"}}>CMS</span>
+                        <span
+                          className={styles.cmsStatus}
+                          style={{ marginRight: "5px" }}
+                        >
+                          CMS
+                        </span>
                         <span className={styles.rxStatus}>RX</span>
                       </>
                     )}
@@ -250,14 +253,6 @@ const Header = () => {
       ssr: false,
     }
   );
-
-  const handleNewUserMessage = (newMessage) => {
-    dispatch(getChatReply(newMessage));
-  };
-
-  const handleQuickButtonClicked = (data) => {
-    console.log(data);
-  };
 
   const notificationDrawer = async () => {
     setOpen(true);
@@ -337,10 +332,6 @@ const Header = () => {
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
 
-    if (typeof window !== "undefined") {
-      const { addResponseMessage } = require("react-chat-widget");
-      addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
-    }
     if (selectedbtn && userRoleLocal !== "admin") {
       dispatch(
         getCoderDetails({
@@ -405,18 +396,16 @@ const Header = () => {
                             trigger={"click"}
                           >
                             <Button className={styles.codeBtn}>
-                              <CodeIcon /> Codes
+                             <div style={{margin:" -7px 0 0 -25px"}}>
+                             <CodeIcon  /></div>
+                             <div style={{margin:" -6px 0 0 -7px"}}>
+                          
+                             Codes
+                             </div>
                             </Button>
                           </Popover>
                         )}
-                        <TerminalComponent
-                          handleNewUserMessage={handleNewUserMessage}
-                          handleQuickButtonClicked={handleQuickButtonClicked}
-                          showBadge={false}
-                          emojis={true}
-                          title="CogentAI"
-                          subtitle="Chat with CogentAI"
-                        />
+
                         <Tooltip
                           title={` Quality : ${
                             userRole === "l1auditor"
@@ -464,8 +453,9 @@ const Header = () => {
                         <div
                           className="header-media d-flex"
                           onClick={logoutFunction}
+                          style={{marginLeft:"-20px"}}
                         >
-                          <div>
+                         
                             <div className="header-info2 d-flex align-items-center">
                               <div
                                 className="header-media"
@@ -479,7 +469,7 @@ const Header = () => {
                                 )}
                               </div>
                             </div>
-                          </div>
+                         
                         </div>
                         <div className="mx-15">
                           <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
