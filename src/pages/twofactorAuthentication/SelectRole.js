@@ -15,6 +15,7 @@ const SelectRole = () => {
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [role, setRole] = useState();
+  const [decodedParams, setDecodedParams] = useState();
 
   const items =
     role?.length > 0 ? role?.map((info) => ({ value: info, label: info })) : [];
@@ -48,6 +49,22 @@ const SelectRole = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setUsername(searchParams.get("username"));
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const encodedParams = urlParams.get("params");
+    const decodedParams = JSON.parse(atob(encodedParams));
+    const { mfa, skipEntry, username, password } = decodedParams;
+    const skipParam = decodedParams?.skipEntry;
+    const encodeParams = btoa(
+      JSON.stringify({
+        mfa: mfa,
+        skipEntry: skipParam,
+        username: username,
+        password: password,
+      })
+    );
+    setDecodedParams(encodeParams);
+
     const rolesArray = JSON.parse(localStorage.getItem("roles"));
     setRole(rolesArray);
   }, []);
@@ -107,15 +124,17 @@ const SelectRole = () => {
                       className={styles.backBtn}
                       onClick={() => {
                         setRoleError(false);
-                        router?.push(
-                          `/twofactorAuthentication/Authentication?mfa=true&username=${username}`
-                        );
+
+                        router?.push({
+                          pathname: `/twofactorAuthentication/Authentication`,
+                          search: `params=${decodedParams}`,
+                        });
                       }}
                     >
                       {"BACK"}
                     </button>
                   </div>
-                  <div className="col-lg-6" >
+                  <div className="col-lg-6">
                     <button type="submit" className={styles.sendBtn}>
                       {"NEXT"}
                     </button>

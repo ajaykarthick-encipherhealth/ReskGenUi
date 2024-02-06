@@ -139,7 +139,7 @@ export function LogInRoute(navigate) {
   navigate("/dashboard");
 }
 
-export function loginAction(email, router, code,password) {
+export function loginAction(email, router, code,password,mfa,skip) {
   return (dispatch) => {
     login(email, password, code)
       .then((response) => {
@@ -154,7 +154,17 @@ export function loginAction(email, router, code,password) {
           localStorage.setItem("orgId", result.organizationId);
           localStorage.setItem("userName", emailSplit[0]);
           localStorage.setItem("loginCheck", true);
-          router?.push(`/twofactorAuthentication/SelectRole?username=${email}`);
+          const encodedParams = btoa(JSON.stringify({
+            mfa: mfa,
+            skipEntry: skip,
+            username: email,
+            password: password
+          }));
+          router?.push({
+            pathname: `/twofactorAuthentication/SelectRole`,
+            search: `params=${encodedParams}`
+          });
+          // router?.push(`/twofactorAuthentication/SelectRole?username=${email}&params=${decodedParams}`);
         }
         if (response.data?.response === null) {
           notification.error({

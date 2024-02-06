@@ -23,6 +23,7 @@ const index = () => {
   const [skip, setSkip] = useState();
   const [code, setCode] = useState([]);
   const [password, setPassword] = useState();
+  const [decodedParams, setDecodedParams] = useState();
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
@@ -155,7 +156,14 @@ const index = () => {
                   className={styles.sendBtn}
                   onClick={() => {
                     dispatch(
-                      loginAction(username, router, code?.join(""), password)
+                      loginAction(
+                        username,
+                        router,
+                        code?.join(""),
+                        password,
+                        enableMFA,
+                        skip
+                      )
                     );
                   }}
                 >
