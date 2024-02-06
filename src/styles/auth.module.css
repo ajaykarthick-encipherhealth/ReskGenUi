@@ -163,7 +163,9 @@ background-color: red !important;
 }
 .contentMainDIv {
   height: 100vh;
-  background-color: #fff;
+  background-image: url("../images/login/back_3.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .mfaMainDiv {
@@ -208,7 +210,7 @@ background-color: red !important;
 .verifyDiv {
   width: 100%;
   height: 200px;
-  background-color: #fff;
+  /* background-color: #fff; */
   position: absolute;
 }
 .btnDiv {
