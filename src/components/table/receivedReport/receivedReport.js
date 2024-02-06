@@ -173,7 +173,6 @@ function ReceivedReport({
           receivedEndDate={receivedEndDate}
         />
       </Modal> */}
-      <Footer />
     </div>
   );
 }

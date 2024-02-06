@@ -303,7 +303,6 @@ const IndividualReceiverReport = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

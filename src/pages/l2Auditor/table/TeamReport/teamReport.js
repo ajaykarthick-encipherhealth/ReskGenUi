@@ -457,7 +457,6 @@ function TeamReport({
           Total count: {ReportPatientDetails?.totalElements}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

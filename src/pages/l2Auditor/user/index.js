@@ -86,7 +86,6 @@ const UserList = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

@@ -470,7 +470,6 @@ function CoderReport({
           Total count: {ReportPatientDetails?.totalElements}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

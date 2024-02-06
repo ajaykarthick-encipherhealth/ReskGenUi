@@ -66,7 +66,7 @@ const index = () => {
             </Col>
           </Row>
           <Row className={styles.lastRow}>
-            <Footer />
+          
           </Row>
         </div>
       </div>

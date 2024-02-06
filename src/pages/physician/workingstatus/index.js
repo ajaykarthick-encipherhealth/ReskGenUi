@@ -134,7 +134,6 @@ const index = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     </div>
   );
