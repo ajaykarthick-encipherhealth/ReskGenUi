@@ -33,7 +33,7 @@ export const UsersList = async ({
   }
 };
 
-export const AddUser = async (data) => {
+export const AddUser = async (data, setErrors) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
@@ -48,11 +48,21 @@ export const AddUser = async (data) => {
     );
     if (response) {
       if (response?.data?.status === "SUCCESS") {
+        setErrors({
+          email: "",
+          password: "",
+          confirmPass: "",
+        });
         notification.success({
           message: response?.data?.message,
           duration: 1,
         });
       } else {
+        setErrors({
+          email: "",
+          password: "",
+          confirmPass: "",
+        });
         notification.warning({
           message: response?.data?.message,
           duration: 1,
@@ -61,6 +71,11 @@ export const AddUser = async (data) => {
       return response;
     }
   } catch (err) {
+    setErrors({
+      email: "",
+      password: "",
+      confirmPass: "",
+    });
     notification.error({ description: err?.response?.data?.message });
   }
 };

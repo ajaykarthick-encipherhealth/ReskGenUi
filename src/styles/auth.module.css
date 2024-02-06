@@ -13,8 +13,18 @@
 .passField {
   border: none !important;
   box-shadow: none !important;
-  background: none !important;
+  background-color: #ffff !important;
+
 }
+
+/* .passField:active,
+.passField:target,
+.passField:focus-within,
+.passField:focus,
+.passField:focus-visible,
+.passField:visited{
+background-color: red !important;
+} */
 .passwordBox2 {
   width: 5%;
   color: gray;

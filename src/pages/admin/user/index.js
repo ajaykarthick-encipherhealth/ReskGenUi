@@ -82,7 +82,7 @@ const UserList = () => {
     patientId: "",
     patientName: "",
   });
-  let errorsObj = { email: "", password: "" ,confirmPass:""};
+  let errorsObj = { email: "", password: "", confirmPass: "" };
   const [errors, setErrors] = useState(errorsObj);
   const addUserForm = () => {
     setValidated(false);
@@ -122,18 +122,19 @@ const UserList = () => {
       formData.tenantId = localTenantId;
       formData.organizationId = localOrgId;
       formData.role = roleValue ? roleValue : [role.toUpperCase()];
-      var response = await AddUser(formData);
+      var response = await AddUser(formData, setErrors);
       if (response?.data?.status === "SUCCESS") {
         setAddUser(false);
         setUseAdd(true);
         setErrors({
           email: "",
           password: "",
-          confirmPass:""
+          confirmPass: "",
         });
         setIsLoadingBtn(false);
       }
     }
+
     setValidated(true);
   };
 
@@ -455,7 +456,7 @@ const UserList = () => {
                     </Form.Label>
 
                     <div className={styles.passCOntainer}>
-                      <div style={{ width: "95%" }}>
+                      <div style={{ width: "100%" }}>
                         <Form.Control
                           name="password"
                           required
@@ -524,7 +525,7 @@ const UserList = () => {
                       <div className="text-danger fs-12">
                         {errors?.confirmPass}
                       </div>
-                    ) }
+                    )}
                   </div>
                 </div>
                 <div>
