@@ -129,6 +129,7 @@ const HeaderFilters = ({
   optionKey,
   disable,
   tracking,
+  selectorField
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -324,7 +325,7 @@ const HeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("allocatedBy"));
+                  dispatch(getFilters(selectorField?selectorField:"allocatedBy"));
                 }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>

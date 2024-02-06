@@ -237,6 +237,7 @@ export const getFilters = (field, username, pageQueue) => {
       type: FILTER,
       payload: {
         loading: true,
+        data:null
       },
     });
     try {

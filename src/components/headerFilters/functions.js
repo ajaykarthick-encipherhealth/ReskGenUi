@@ -225,23 +225,27 @@ export const processstatusBodyTemplate = (rowData) => {
 };
 
 export const generateOptionsList = (items) => {
-  if ((items?.loading && items?.length === 0) || items === null) {
+  if (items?.loading || items === null || items?.data === null) {
     return [{ label: "Loading...", value: "Loading..." }];
-  } else if (items?.data?.data.response?.length > 0) {
-    const options = [
-      { label: "All", value: "" },
-      ...items?.data?.data?.response?.map((item) => ({
-        label: (
-          <span>
-            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
-          </span>
-        ),
-        value: item?.userName,
-      })),
-    ].filter(Boolean);
-    return options;
   } else {
-    return [];
+    if (
+      items?.data !== null &&
+      !items?.loading &&
+      items?.data?.data.response?.length > 0
+    ) {
+      const options = [
+        { label: "All", value: "" },
+        ...items?.data?.data?.response?.map((item) => ({
+          label: (
+            <span>
+              {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+            </span>
+          ),
+          value: item?.userName,
+        })),
+      ].filter(Boolean);
+      return options;
+    }
   }
 };
 
@@ -381,16 +385,19 @@ export const disablePastDate = (current) => {
   return current && current.isBefore(moment().subtract(1, "day"));
 };
 
-export const capitalizeFirstLetter=(string)=> {
-  const formattedString=string?.toLowerCase()
+export const capitalizeFirstLetter = (string) => {
+  const formattedString = string?.toLowerCase();
   return formattedString?.charAt(0).toUpperCase() + formattedString.slice(1);
-}
+};
 
-export const handleTogglePasswordVisibility = (showPassword,setShowPassword) => {
+export const handleTogglePasswordVisibility = (
+  showPassword,
+  setShowPassword
+) => {
   setShowPassword(!showPassword);
 };
 
-export const getValidatePassword = (password,setErrors,setIsLoading) => {
+export const getValidatePassword = (password, setErrors, setIsLoading) => {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
@@ -423,7 +430,12 @@ export const getValidatePassword = (password,setErrors,setIsLoading) => {
   return true;
 };
 
-export const validateConfirmPassword = (password, confirmPassword, setErrors, setIsLoading) => {
+export const validateConfirmPassword = (
+  password,
+  confirmPassword,
+  setErrors,
+  setIsLoading
+) => {
   if (password !== confirmPassword) {
     setErrors({
       email: "",
