@@ -396,7 +396,12 @@ const Header = () => {
                             trigger={"click"}
                           >
                             <Button className={styles.codeBtn}>
-                              <CodeIcon /> Codes
+                             <div style={{margin:" -7px 0 0 -25px"}}>
+                             <CodeIcon  /></div>
+                             <div style={{margin:" -6px 0 0 -7px"}}>
+                          
+                             Codes
+                             </div>
                             </Button>
                           </Popover>
                         )}
