@@ -538,6 +538,7 @@ export default function Patient() {
                               filteredList
                             )}
                             setSelAllocatedBy={setSelAllocatedBy}
+                            selectorField="CreatedBy"
                             // defaultAllocatedBy={"All"}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}
