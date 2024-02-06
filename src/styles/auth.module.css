@@ -54,7 +54,9 @@ background-color: red !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
+  background-image: url("../images/login/back_3.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .innerdiv {
   width: 60%;
