@@ -177,7 +177,6 @@ function SentReportTable({
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

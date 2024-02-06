@@ -466,7 +466,7 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-                            <Footer />
+                          
                           </>
                         )}
                       </div>

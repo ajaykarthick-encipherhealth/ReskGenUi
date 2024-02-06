@@ -544,7 +544,7 @@ const UserList = () => {
           </div>
         </Offcanvas>
       </div>
-      <Footer />
+ 
     </>
   );
 };

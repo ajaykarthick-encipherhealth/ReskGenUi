@@ -332,7 +332,7 @@ export default function Patient() {
     setIsLoading(true);
     var dataMap = {
       firstName: data?.firstName,
-      lastName:data?.lastName,
+      lastName: data?.lastName,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
@@ -571,8 +571,6 @@ export default function Patient() {
                                           </div>
                                         </div>
                                       </div>
-
-                                      <Footer />
                                     </>
                                   )}
                                 </Tab.Pane>
@@ -667,8 +665,6 @@ export default function Patient() {
                                           </>
                                         )}
                                       </div>
-
-                                      <Footer />
                                     </>
                                   )}
                                 </Tab.Pane>
