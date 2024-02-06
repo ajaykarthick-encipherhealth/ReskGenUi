@@ -53,11 +53,11 @@ export default function Login() {
   return (
     <div className="page-wraper">
       <div className="login-account">
-        <div className="row h-100">
+        <div className={`row h-100 ${styles.loginContainer}`}>
           <div className="col-lg-6 align-self-start">
             <div
               className="account-info-area"
-              style={{ backgroundImage: "url(" + LoginBack + ")" }}
+              style={{ backgroundImage: "url(" + {LoginBack} + ")" }}
             >
               <div className="login-content">
                 <p className="sub-title"></p>
@@ -80,7 +80,7 @@ export default function Login() {
                   <label className="mb-1 text-dark">Email</label>
                   <input
                     type="email"
-                    className="form-control form-control-lg"
+                    className="form-control"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -95,7 +95,7 @@ export default function Login() {
                   <div>
                     <input
                       type={showPassword ? "text" : "password"}
-                      className="form-control form-control-lg"
+                      className="form-control"
                       value={password}
                       onChange={(e) => {
                         localStorage.setItem("password", e.target.value);
@@ -103,7 +103,7 @@ export default function Login() {
                       }}
                     />
                     <div className="input-group-append">
-                      <span className={styles.passwordBox}>
+                      <span className={styles.loginpasswordBox}>
                         <FontAwesomeIcon
                           onClick={()=>handleTogglePasswordVisibility(showPassword,setShowPassword)}
                           icon={showPassword ? faEye : faEyeSlash}

@@ -222,3 +222,22 @@ background-color: red !important;
   font-size: 16px;
   font-weight: 500;
 }
+
+.loginContainer{
+  width: 80%;
+  /* background: linear-gradient(90deg, hsla(180, 33%, 88%, 1) 0%, hsla(310, 76%, 82%, 1) 50%, hsla(256, 83%, 72%, 1) 100%); */
+  border-radius: 10px;
+}
+
+.loginpasswordBox{
+  width: 5%;
+  color: gray;
+  display: flex;
+  justify-content: end;
+  align-items: flex-end;
+  position: relative;
+  top: -29px;
+  left: 370px;
+  right: 0px;
+  cursor: pointer;
+}
