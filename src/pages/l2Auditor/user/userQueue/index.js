@@ -70,7 +70,7 @@ const AuditOptions = [
   { label: "AUDITED", value: "AUDITED" },
   { label: "AUDITHOLD", value: "AUDITHOLD" },
   { label: "REAUDIT", value: "REAUDIT" },
-  { label: "AUDIT_PENDING", value: "AUDIT_PENDING" },
+  { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
 ];
 const index = () => {
   const dispatch = useDispatch();
@@ -182,7 +182,7 @@ const index = () => {
             <div className="row">
               <div
                 className={"col-xl-12 d-flex"}
-                style={{ margin: "30px 0 30px 40px", cursor: "pointer" }}
+                style={{ margin: "0px 0 8px 0px", cursor: "pointer" }}
               >
                 <button
                   style={{ width: "40px" }}
