@@ -71,7 +71,7 @@ function SentReportTable({
               <tr>
                 <th>REPORT ID</th>
                 <th>REPORT NAME</th>
-                <th>USER LIST</th>
+                <th style={{paddingLeft:"100px"}}>USER LIST</th>
                 <th
                   style={{ cursor: "pointer" ,paddingLeft:"15px"}}
                   onClick={() => {

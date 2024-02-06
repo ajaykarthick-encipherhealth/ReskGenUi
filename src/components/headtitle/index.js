@@ -73,7 +73,7 @@ const HeadTitle = ({
       </div>
       {anchorTag && (
         <span className={styles.anchor} onClick={handleOpen}>
-          view all
+          View All
         </span>
       )}
       <Modal

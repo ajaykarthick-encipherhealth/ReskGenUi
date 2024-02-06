@@ -1631,7 +1631,7 @@ const Details = ({}) => {
                 <div className="row patient-file-container">
                   <div className="col-xl-12">
                     <div className="row">
-                      <div className="col-xl-1 col-sm-12">
+                      <div className="col-xl-1 col-sm-12" style={{zIndex:"999"}}>
                         <Button
                           onClick={backToPatientData}
                           className={`ms-2 ${visitStyles.backArrowBtn}`}
