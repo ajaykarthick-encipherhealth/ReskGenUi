@@ -8511,7 +8511,12 @@ button:focus {
 .login-account {
   padding: 40px;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  background-color: #fff;
+  /* background: linear-gradient(90deg, hsla(180, 33%, 88%, 1) 0%, hsla(310, 76%, 82%, 1) 50%, hsla(256, 83%, 72%, 1) 100%); */
+  display: flex;
+  justify-content: center;
+  background-image: url("../images/login/back_3.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 @media only screen and (max-width: 35.9375rem) {
@@ -8733,9 +8738,11 @@ button:focus {
 }
 
 .login-account .login-form {
-  padding: 0 50px;
-  max-width: 600px;
+  padding: 30px 40px;
+  max-width: 480px;
   margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
 }
 
 @media only screen and (max-width: 87.5rem) {
