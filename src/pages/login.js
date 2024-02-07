@@ -8,25 +8,35 @@ import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
 import { getMFAValidation } from "../store/actions/AuthActions";
-import { getValidatePassword, handleTogglePasswordVisibility } from "../components/headerFilters/functions";
+import {
+  getValidatePassword,
+  handleTogglePasswordVisibility,
+} from "../components/headerFilters/functions";
 
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
+  const [enteredEmail, setEmail] = useState();
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const validateEmail = (email) => {
+  const validateEmail = (enteredEmail) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
-    if (!emailRegex.test(email)) {
+    if (enteredEmail?.length === 0) {
+      setErrors({
+        email: "Please enter the email",
+      });
+
+      setIsLoading(false);
+      return false;
+    }
+    if (enteredEmail?.length > 0 && !emailRegex.test(enteredEmail)) {
       setErrors({
         email: "Invalid email",
-        password: "",
       });
       setIsLoading(false);
       return false;
@@ -36,19 +46,23 @@ export default function Login() {
   };
   const onLogin = async (e) => {
     e.preventDefault();
-    const emailValidation = validateEmail(email);
-    const passValidation = getValidatePassword(password,setErrors,setIsLoading);
-    if (!passValidation || !emailValidation) {
+    const emailValidation = validateEmail(enteredEmail);
+    const passValidation = getValidatePassword(
+      password,
+      setErrors,
+      setIsLoading
+    );
+    if (emailValidation && passValidation) {
+      setIsLoading(true);
+      setErrors({
+        email: "",
+        password: "",
+      });
+      dispatch(getMFAValidation(enteredEmail, router, password));
+    } else {
       return;
     }
-    setIsLoading(true);
-    setErrors({
-      email: "",
-      password: "",
-    });
-    dispatch(getMFAValidation(email, router, password));
   };
-
 
   return (
     <div className="page-wraper">
@@ -57,7 +71,7 @@ export default function Login() {
           <div className="col-lg-6 align-self-start">
             <div
               className="account-info-area"
-              style={{ backgroundImage: "url(" + {LoginBack} + ")" }}
+              style={{ backgroundImage: "url(" + { LoginBack } + ")" }}
             >
               <div className="login-content">
                 <p className="sub-title"></p>
@@ -81,7 +95,7 @@ export default function Login() {
                   <input
                     type="email"
                     className="form-control"
-                    value={email}
+                    value={enteredEmail}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   {errors?.email && (
@@ -98,14 +112,18 @@ export default function Login() {
                       className="form-control"
                       value={password}
                       onChange={(e) => {
-                        localStorage.setItem("password", e.target.value);
                         setPassword(e.target.value);
                       }}
                     />
                     <div className="input-group-append">
                       <span className={styles.loginpasswordBox}>
                         <FontAwesomeIcon
-                          onClick={()=>handleTogglePasswordVisibility(showPassword,setShowPassword)}
+                          onClick={() =>
+                            handleTogglePasswordVisibility(
+                              showPassword,
+                              setShowPassword
+                            )
+                          }
                           icon={showPassword ? faEye : faEyeSlash}
                         />
                       </span>
