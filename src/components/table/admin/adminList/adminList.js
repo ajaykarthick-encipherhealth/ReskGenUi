@@ -114,7 +114,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   return (
     <div className={TableStyle.classContaineer}>
-      {usersData?.loading ? (
+      {!usersData || usersData?.loading ? (
         <SpinnerDots />
       ) : (
         <table className={TableStyle.classTable}>
@@ -147,7 +147,8 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             </tr>
           </thead>
           <tbody>
-            {usersData?.data?.response?.content?.length > 0 ? (
+            {!usersData?.loading &&
+            usersData?.data?.response?.content?.length > 0 ? (
               usersData?.data?.response?.content?.map((item, index) => (
                 <tr key={index} style={{ height: "35px" }}>
                   <td
@@ -285,7 +286,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="8">
+                <td colSpan={7}>
                   <Empty />
                 </td>
               </tr>
