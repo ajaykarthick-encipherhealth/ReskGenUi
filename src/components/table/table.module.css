@@ -8,9 +8,8 @@
 .classThead > tr > th {
   color: #fff !important;
 }
-.classTTotalhead{
+.classTTotalhead {
   color: #fff !important;
-
 }
 
 .classTable {
@@ -96,41 +95,34 @@
   /* border-right: 0.2px solid #e1e1e1; */
 }
 .classTable tbody tr td {
-    font-size: 13px;
-    font-weight: 400;
-    padding: 2px 15px;
-    color: #000 !important;
-    
-
+  font-size: 13px;
+  font-weight: 400;
+  padding: 2px 15px;
+  color: #000 !important;
 }
-.classTable tbody tr  {
+.classTable tbody tr {
   text-align: left;
   margin-left: 20px;
-  
-
 }
-.classTable thead tr  {
+.classTable thead tr {
   text-align: left;
   margin-left: 20px;
-  
-
 }
-.classTable tbody tr:hover  {
-
-    cursor: pointer;
-    /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 
+.classTable tbody tr:hover {
+  cursor: pointer;
+  /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 
     0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15); */
-    border-radius: 10px 10px 10px 10px !important;
-    /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 20px 7px -19px #8298b7, 0 1px 3px 1px rgba(60,64,67,.15); */
+  border-radius: 10px 10px 10px 10px !important;
+  /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 20px 7px -19px #8298b7, 0 1px 3px 1px rgba(60,64,67,.15); */
   background-color: #ffff !important;
 }
-.highFlag path{
+.highFlag path {
   fill: #cf940a;
 }
-.lowFlag path{
+.lowFlag path {
   fill: #87909e;
 }
-.normalFlag path{
+.normalFlag path {
   fill: #4466ff;
 }
 .custom-ant-select {
@@ -139,25 +131,41 @@
 
 /* Style for the dropdown selector */
 
-
-.customAntSelect > div{
+.customAntSelect > div {
   border: none !important;
   background-color: transparent !important;
 }
 
-.customAntSelect > span{
+.customAntSelect > span {
   display: none !important;
 }
-.subTitle{
-  font-weight:700;
-  font-size:16px;
+.subTitle {
+  font-weight: 700;
+  font-size: 16px;
 }
 
-.innerAlignments{
-  width:100px;
-  text-align:center;
+.innerAlignments {
+  width: 100px;
+  text-align: center;
 }
 
-.rowStyle{
- padding-left: 20px !important;
+.rowStyle {
+  padding-left: 20px !important;
+}
+.rowStyle2 {
+  padding-left: 50px !important;
+}
+.rowStyle3 {
+  padding-left: 80px !important;
+}
+.rowEmailStyle {
+  width: 300px !important;
+  padding-left: 50px !important;
+}
+.rowAudited {
+  width: 350px;
+  text-align: center;
+}
+.rowAlignment{
+  text-align: center;
 }
