@@ -123,8 +123,8 @@ const SelectRole = () => {
                     <button
                       className={styles.backBtn}
                       onClick={() => {
+                        setSelectedRole(null)
                         setRoleError(false);
-
                         router?.push({
                           pathname: `/twofactorAuthentication/Authentication`,
                           search: `params=${decodedParams}`,
