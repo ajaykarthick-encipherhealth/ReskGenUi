@@ -75,7 +75,7 @@ export default function Login() {
                 <span>Login</span>
               </h6>
 
-              <form onSubmit={onLogin}>
+              <form onSubmit={onLogin} autoComplete="off">
                 <div className="mb-4">
                   <label className="mb-1 text-dark">Email</label>
                   <input
