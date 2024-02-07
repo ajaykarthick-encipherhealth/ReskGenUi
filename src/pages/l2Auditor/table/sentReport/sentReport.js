@@ -78,6 +78,7 @@ function SentReportTable({
                   {/* <th>SENDER</th> */}
                   <th style={{paddingLeft:"100px"}}>USER LIST</th>
                   <th
+                  className={TableStyle.rowStyle}
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     sortFunction(

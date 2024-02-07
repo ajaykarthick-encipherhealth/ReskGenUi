@@ -268,7 +268,7 @@ function PatientTable({
               </span>
             </th>
 
-            <th>ALLOCATED BY</th>
+            <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
             <th style={{paddingLeft:"35px"}}>PRIORITY</th>
             <th style={{paddingLeft:"65px"}}>STATUS</th>
           </tr>

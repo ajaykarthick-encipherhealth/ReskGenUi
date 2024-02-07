@@ -401,9 +401,15 @@ export const getValidatePassword = (password, setErrors, setIsLoading) => {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
+  if (password.length === 0) {
+    setErrors({
+      password: "Please enter the password",
+    });
+    setIsLoading(false);
+    return false;
+  }
   if (password.length < 8) {
     setErrors({
-      email: "",
       password: "Password should be greater than 8 characters",
     });
     setIsLoading(false);
@@ -411,15 +417,13 @@ export const getValidatePassword = (password, setErrors, setIsLoading) => {
   }
   if (password.length > 14) {
     setErrors({
-      email: "",
       password: "Password should be less than 14 characters",
     });
     setIsLoading(false);
     return false;
   }
-  if (!passwordRegex.test(password)) {
+  if (password.length > 0 && !passwordRegex.test(password)) {
     setErrors({
-      email: "",
       password:
         "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character",
     });

@@ -186,3 +186,21 @@
   position: relative;
   left: -30px;
 }
+.rowStyle2 {
+  padding-left: 50px !important;
+}
+.rowStyle3 {
+  padding-left: 80px !important;
+}
+.rowEmailStyle {
+  width: 300px !important;
+  padding-left: 50px !important;
+}
+.rowAudited {
+  width: 350px;
+  text-align: center;
+}
+.rowAlignment{
+  text-align: center;
+}
+
