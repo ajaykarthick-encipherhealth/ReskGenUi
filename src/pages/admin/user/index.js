@@ -69,8 +69,7 @@ const UserList = () => {
     mobileNumber: "",
     confirmPassword: "",
   });
-  
-  console.log(formData,"test");
+
   const [pageCount, setPageCount] = useState(0);
   const [addPatientId, setAddPatientId] = useState(false);
   const [search, setSearch] = useState("");
@@ -555,7 +554,7 @@ const UserList = () => {
                   </div>
                 </div>
                 <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1" >
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
                     Submit
                   </Button>
                   <Button
