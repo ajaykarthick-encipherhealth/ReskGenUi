@@ -13850,3 +13850,7 @@ overflow: scroll;
   margin-top: -22px;
   margin-left: 10px;
 }
+.css-b62m3t-container {
+  border: 1px solid #e6e6e6;
+  border-radius: 5px !important;
+}
