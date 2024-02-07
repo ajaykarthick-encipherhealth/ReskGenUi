@@ -218,3 +218,26 @@ export const filters = async (field,username,pageQueue) => {
         console.log(err);
       }
   }
+
+  export const checkDeviceLogin = async (email) => {
+    try {
+      const response = await axios.post(
+        `${ENDPOINTS?.apiEndoint}securityservice/auth/enablemfa?userName=${email}`
+      );
+      return response;
+    } catch (Err) {
+      console.log(Err);
+    }
+  };
+
+  
+  export const logoutAllDevice = async (email) => {
+    try {
+      const response = await axios.post(
+        `${ENDPOINTS?.apiEndoint}securityservice/auth/enablemfa?userName=${email}`
+      );
+      return response;
+    } catch (Err) {
+      console.log(Err);
+    }
+  };
