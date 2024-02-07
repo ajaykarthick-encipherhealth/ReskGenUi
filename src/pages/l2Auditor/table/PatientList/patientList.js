@@ -280,8 +280,8 @@ function PatientTable({
             </th>
 
             <th>AUDIT ALLOCATED BY</th>
-            <th>PRIORITY</th>
-            <th>AUDIT STATUS</th>
+            <th className={TableStyle.rowStyle2}>PRIORITY</th>
+            <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
             {/* <th>Action</th> */}
           </tr>
         </thead>
