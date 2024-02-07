@@ -207,16 +207,17 @@ function FileProcessingTable({ patinetListAll }) {
 
   const handleToggleStepper = (index, data) => {
     setToggle((prevToggle) => ({
-      ...prevToggle,
+      ...Object.fromEntries(Object.keys(prevToggle).map(key => [key, false])), // Close all other items
       [data?.patientId]: !prevToggle[data.patientId],
     }));
     setActiveId(data?.patientId);
-
+  
     const updatedVisibility =
       stepperVisible?.length > 0 &&
       stepperVisible?.map((value, i) => (i === index ? !value : false));
     setStepperVisible(updatedVisibility);
   };
+  
 
   const renderUploadStatus = (data, index) => {
     let uploadStatus = 0;
@@ -470,14 +471,7 @@ function FileProcessingTable({ patinetListAll }) {
           {toggle[data?.patientId] && (
             <>
               <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  margin: "20px 0px 0px 10px",
-                  gap: "10px",
-                  flexWrap: "wrap",
-                  justifyContent: "space-around",
-                }}
+               className={TableStyle.fileprocessing}
               >
                 {mappedSteps?.length > 0 &&
                   mappedSteps?.map((step, index) => {
@@ -485,7 +479,7 @@ function FileProcessingTable({ patinetListAll }) {
                       (item) => item?.processStageChart === step?.info
                     );
                     return (
-                      <div key={index} style={{ width: "10%" }}>
+                      <div key={index} className={TableStyle.innerProcessingDiv}>
                         {selectedRowTime?.length > 0 && findData ? (
                           <span>
                             {findData?.createdDate
