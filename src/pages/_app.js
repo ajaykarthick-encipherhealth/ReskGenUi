@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const currentPath = window.location.pathname;
     if (
-      currentPath === "/login" ||
+      currentPath === "/" ||currentPath === "/login" ||
       currentPath?.includes("/twofactorAuthentication/")
     ) {
       setShowTerminal(false);

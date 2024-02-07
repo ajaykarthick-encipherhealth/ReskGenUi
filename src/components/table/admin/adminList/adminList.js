@@ -122,7 +122,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             <tr>
               <th className={TableStyle.rowEmailStyle}>NAME</th>
               <th className={TableStyle.rowEmailStyle}>EMAIL</th>
-              <th style={{ textAlign: "center", width: "200px" }}>ROLE</th>
+              <th style={{ textAlign: "center", width: "170px" }}>ROLE</th>
               <th
                 style={{ cursor: "pointer", textAlign: "center" }}
                 onClick={() => {
@@ -177,30 +177,18 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       <div style={{ textAlign: "center" }}>---</div>
                     )}
                   </td>
-
                   <td
                     className={TableStyle.childBorder}
-                    style={{ height: "40px !important" }}
+                    
                   >
                     <span>{item?.email ? item?.email : "---"}</span>
                   </td>
-                  <td
-                    className={TableStyle.childBorder}
-                    style={{
-                      height: "40px !important",
-                      textAlign: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        margin: "0px 0px 0px 0px",
-                        width: "100%",
-                      }}
-                    >
+                  <td className={TableStyle.childBorder}>
+                    <div className={TableStyle.rowStyle2}>
                       {item?.role?.length > 0 ? (
                         <>
                           <Popover
-                            trigger="hover"
+                            trigger="hover" 
                             content={
                               item?.role?.length > 1 &&
                               item?.role?.map((data) => (
