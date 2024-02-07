@@ -180,7 +180,7 @@ function AddPatientListTable({
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
           
-            <th style={{ textAlign: "left" }}>CREATED BY</th>
+            <th className={TableStyle.rowStyle}>CREATED BY</th>
           
             
                 <th
