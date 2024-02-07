@@ -11,6 +11,7 @@ import axios from "../../../utility/axiosConfig";
 import AdminList from "../../../components/table/admin/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
+import Select from "react-select";
 import {
   getAddUser,
   getUsers,
@@ -366,14 +367,26 @@ const UserList = () => {
             <button
               type="button"
               className="btn-close"
-              onClick={() => setAddUser(false)}
+              onClick={() => {
+                setAddUser(false);
+                setErrors({
+                  email: "",
+                  password: "",
+                  confirmPass: "",
+                });
+              }}
             >
               <i className="fa-solid fa-xmark"></i>
             </button>
           </div>
           <div className="offcanvas-body">
             <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
+              <Form
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmit}
+                autoComplete="off"
+              >
                 <div className="row">
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
@@ -436,16 +449,21 @@ const UserList = () => {
                     <Form.Label>
                       Role <span className="text-danger">*</span>{" "}
                     </Form.Label>
-                    <Form.Control
+                    <Select
+                      styles={{ border: "1px solid #e6e6e6 !important" }}
                       name="role"
-                      as="select"
+                      options={[
+                        { value: "ADMIN", label: "ADMIN" },
+                        { value: "L1AUDITOR", label: "L1AUDITOR" },
+                        { value: "L2AUDITOR", label: "L2AUDITOR" },
+                      ]}
+                      onChange={(selectedOption) =>
+                        handleChange({
+                          target: { name: "role", value: selectedOption.value },
+                        })
+                      }
                       required
-                      onChange={handleChange}
-                    >
-                      <option value="ADMIN">ADMIN</option>
-                      <option value="L1AUDITOR">L1AUDITOR</option>
-                      <option value="L2AUDITOR">L2AUDITOR</option>
-                    </Form.Control>
+                    />
                   </div>
 
                   <div className="col-xl-6 mb-3">
@@ -453,7 +471,10 @@ const UserList = () => {
                       Password <span className="text-danger">*</span>{" "}
                     </Form.Label>
 
-                    <div className={styles.passCOntainer}>
+                    <div
+                      className={styles.passCOntainer}
+                      style={{ border: errors?.password && "1px solid red" }}
+                    >
                       <div style={{ width: "100%" }}>
                         <Form.Control
                           name="password"
@@ -495,7 +516,10 @@ const UserList = () => {
                     <Form.Label>
                       Confirm Password <span className="text-danger">*</span>{" "}
                     </Form.Label>
-                    <div className={styles.passCOntainer}>
+                    <div
+                      className={styles.passCOntainer}
+                      style={{ border: errors?.password && "1px solid red" }}
+                    >
                       <div style={{ width: "95%" }}>
                         <Form.Control
                           name="confirmPassword"
@@ -531,7 +555,14 @@ const UserList = () => {
                     Submit
                   </Button>
                   <Button
-                    onClick={() => setAddUser(false)}
+                    onClick={() => {
+                      setAddUser(false);
+                      setErrors({
+                        email: "",
+                        password: "",
+                        confirmPass: "",
+                      });
+                    }}
                     className="btn btn-danger btn-sm light ms-1"
                   >
                     Cancel
