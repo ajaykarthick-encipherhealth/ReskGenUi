@@ -475,7 +475,7 @@ const Header = () => {
                               <div className={styles.popDIv} 
                              >
                                 <div
-                                  style={{ marginTop: "-2px", display: "flex" }}
+                                  style={{ margin: "20px 0px 0 30px", display: "flex" }}
                                 >
                                   <div style={{width:"80px"}}>
                                     {renderUserPrfoile(
@@ -499,7 +499,7 @@ const Header = () => {
                                      </span>
                                     </div>
                                   </div>
-                                  <div>
+                                  <div style={{margin:"10px 0 0 5px"}}>
                                     <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
                                       {userName}
                                     </span>

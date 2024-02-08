@@ -23,7 +23,7 @@ const ImageUploader = ({ setOpenUploader }) => {
   
   return (
     <div className={styles.videoflex}>
-      <label className={styles.fileHeader}>
+      <label className={styles.videoflex}>
         <input
           className="input"
           type="file"
