@@ -20,16 +20,47 @@ import { generateOptionsList } from "../../../components/headerFilters/functions
 
 const bullets = [
   {
-    color: "#34ace8",
-    name: "Computed",
+    title: "Audited Status",
+    option: [
+      {
+        color: "#452b90",
+        name: "Pending",
+      },
+      {
+        color: "red",
+        name: "Declined",
+      },
+      {
+        color: "#3a9b94",
+        name: "Completed",
+      },
+      { color: "#d8c11b", name: "Hold" },
+    ],
   },
   {
-    color: "#452b90",
-    name: "Processing",
-  },
-  {
-    color: "#be3144",
-    name: "Not Computed",
+    title: "Processed Status",
+    option: [
+      {
+        color: "rgb(55, 120, 128)",
+        name: "Audited",
+      },
+      {
+        color: "red",
+        name: "Not Audited",
+      },
+      {
+        color: "rgb(226, 130, 19)",
+        name: "Pending",
+      },
+      {
+        color:'rgb(206, 153, 0)',
+        name:"Audit Hold"
+      },
+      {
+        color:"rgb(150, 75, 0)",
+        name:"Re Audit"
+      }
+    ],
   },
 ];
 
@@ -39,8 +70,6 @@ const statusOptions = [
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
   { label: "HOLD", value: "HOLD", status: 0 },
-
-
 ];
 
 export default function Patient() {
@@ -104,25 +133,20 @@ export default function Patient() {
     setLocalUserId(uId);
     const datas = {
       pageNo,
-        dueDateStart ,
-        dueDateEnd,
-        searchTextValue,
-        selectedOption,
-        processedStart,
-        processedEnd,
-        selAllocatedTo,
-        auditedStartDate,
-        auditedEndDate,
-        allocatedStartDate,
-        allocatedEndDate,
-        selAllocatedBy,
-        
-    }
-    dispatch(
-      getTrackingList(
-        datas
-      )
-    );
+      dueDateStart,
+      dueDateEnd,
+      searchTextValue,
+      selectedOption,
+      processedStart,
+      processedEnd,
+      selAllocatedTo,
+      auditedStartDate,
+      auditedEndDate,
+      allocatedStartDate,
+      allocatedEndDate,
+      selAllocatedBy,
+    };
+    dispatch(getTrackingList(datas));
   }, [
     pageNo,
     dueDateStart,
@@ -137,7 +161,6 @@ export default function Patient() {
     allocatedStartDate,
     allocatedEndDate,
     selAllocatedBy,
-  
   ]);
 
   useEffect(() => {
@@ -176,11 +199,9 @@ export default function Patient() {
           patientAllocatedFirstName: res.patientAllocatedFirstName,
           patientAllocatedLastName: res.patientAllocatedLastName,
 
-          patientAllocatedProfileImage:res.patientAllocatedProfileImage,
-          allocatedByProfileImage:res.allocatedByProfileImage,
-          auditAllocatedByProfileImage:res.auditAllocatedByProfileImage
-
-
+          patientAllocatedProfileImage: res.patientAllocatedProfileImage,
+          allocatedByProfileImage: res.allocatedByProfileImage,
+          auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
         });
       });
       var newArray = [];
@@ -318,22 +339,25 @@ export default function Patient() {
             </span>
           </div>
         );
-        case "AUDITED":
-          return (
-            <div className="patient-status">
-              <span className={`badge audited-text`} style={{ color: "#377880" }}>
-                Audited
-              </span>
-            </div>
-          );  
-          case "NOT_AUDIT":
-            return (
-              <div className="patient-status">
-                <span className={`badge audited-text`} style={{ color: "red" ,background:"#fcc" }}>
-                 Not Audited
-                </span>
-              </div>
-            ); 
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <span className={`badge audited-text`} style={{ color: "#377880" }}>
+              Audited
+            </span>
+          </div>
+        );
+      case "NOT_AUDIT":
+        return (
+          <div className="patient-status">
+            <span
+              className={`badge audited-text`}
+              style={{ color: "red", background: "#fcc" }}
+            >
+              Not Audited
+            </span>
+          </div>
+        );
       case null:
         return <div className="patient-status">---</div>;
     }
@@ -413,7 +437,6 @@ export default function Patient() {
                             setStartDate4={setAuditedStartDate}
                             setEndDate4={setAuditedEnsDate}
                             isAnotherPicker3={true}
-                         
                             // allocatedTo
                             isAllocatedToSelector={true}
                             allocatedTolabel="Allocated to"
@@ -466,7 +489,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-                          
                           </>
                         )}
                       </div>
