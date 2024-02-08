@@ -260,7 +260,7 @@ function TrackingTable({
               </span> */}
             </th>
             <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
-            <th style={{ textAlign: "center" }}>STATUS</th>
+            <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
           </tr>
         </thead>
 
