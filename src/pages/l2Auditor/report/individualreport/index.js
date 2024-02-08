@@ -126,7 +126,7 @@ const IndividualReceiverReport = () => {
         <div className={styles.cont1}>
           <div>
             <div className={styles.container}>
-              <div className={"col-xl-1 d-flex"} style={{ cursor: "pointer" }}>
+              <div className={"col-xl-1 d-flex"} style={{ cursor: "pointer",zIndex:"999" }}>
                 <button
                   style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
