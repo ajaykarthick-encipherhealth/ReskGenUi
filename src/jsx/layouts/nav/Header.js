@@ -50,6 +50,7 @@ import Selector from "../../../components/selector";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
+import editImg from '../../../images/svg/edit.svg'
 
 const btnItems = [
   {
@@ -130,6 +131,7 @@ const Header = () => {
   };
 
   const logoutFunction = () => {
+    setOpenContent(false)
     Swal.fire({
       title: "Warning!",
       text: "Do you want Logout!",
@@ -475,7 +477,7 @@ const Header = () => {
                                 <div
                                   style={{ marginTop: "-2px", display: "flex" }}
                                 >
-                                  <div>
+                                  <div style={{width:"80px"}}>
                                     {renderUserPrfoile(
                                       userName,
                                       lastName,
@@ -493,20 +495,7 @@ const Header = () => {
                                       className={styles.edit}
                                     >
                                      <span>
-                                     <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="14"
-                                        height="14"
-                                        viewBox="0 0 10 10"
-                                        fill="none"
-                                      >
-                                        <path
-                                          fill-rule="evenodd"
-                                          clip-rule="evenodd"
-                                          d="M4.99372 11.8121L11.9937 4.81208L9.18749 2.00586L2.1875 9.00589V11.8121H4.99372ZM9.18749 3.2433L10.7563 4.81208L9.62499 5.94339L8.05623 4.37459L9.18749 3.2433ZM7.43749 4.99331L9.00631 6.56207L4.63128 10.9371H3.0625V9.36831L7.43749 4.99331Z"
-                                          fill="#080341"
-                                        />
-                                      </svg>
+                                       <Image src={editImg} alt="noimg"/>
                                      </span>
                                     </div>
                                   </div>
