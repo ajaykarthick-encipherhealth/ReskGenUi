@@ -11,6 +11,7 @@ const FileUploading = ({
   handleChange,
   isLoadingBtn,
   onChangeFile,
+  errors,
 }) => {
   return (
     <Offcanvas
@@ -89,6 +90,9 @@ const FileUploading = ({
                   onChange={(e) => handleChange(e)}
                 />
               </div>
+              {errors?.year && (
+                <div className="text-danger fs-12">{errors?.year}</div>
+              )}
             </div>
 
             <div>
