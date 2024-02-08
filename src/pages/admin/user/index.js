@@ -18,8 +18,6 @@ import {
 } from "../../../store/actions/adminAction/usersAction";
 import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
-import SpinnerDots from "../../../components/spinner";
-import Footer from "../../../jsx/layouts/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -40,6 +38,16 @@ const RoleList = [
   { value: "L2AUDITOR", label: "L2AUDITOR" },
 ];
 
+const intialValues = {
+  firstName: "",
+  lastName: "",
+  emailId: "",
+  password: "",
+  role: "",
+  userName: "",
+  mobileNumber: "",
+  confirmPassword: "",
+};
 const UserList = () => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
@@ -58,18 +66,7 @@ const UserList = () => {
   const [sortOrder, setSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [useAdd, setUseAdd] = useState(false);
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    emailId: "",
-    password: "",
-    role: "",
-    userName: "",
-    mobileNumber: "",
-    confirmPassword: "",
-  });
-
+  const [formData, setFormData] = useState(intialValues);
   const [pageCount, setPageCount] = useState(0);
   const [addPatientId, setAddPatientId] = useState(false);
   const [search, setSearch] = useState("");
@@ -86,11 +83,11 @@ const UserList = () => {
   });
   let errorsObj = { email: "", password: "", confirmPass: "" };
   const [errors, setErrors] = useState(errorsObj);
+  const [isLoading, setIsLoading] = useState(false);
   const addUserForm = () => {
     setValidated(false);
     setAddUser(true);
   };
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -315,6 +312,7 @@ const UserList = () => {
                 noValidate
                 validated={validated}
                 onSubmit={handleSubmitPatientId}
+                autoComplete="off"
               >
                 <div className="row">
                   <div className="col-xl-12 mb-3">
@@ -434,7 +432,6 @@ const UserList = () => {
                         type="text"
                         onChange={handleChange}
                       />
-                      {/* <span className="input-group-text">@encipherhealth.com</span> */}
                     </div>
                   </div>
                   <div className="col-xl-6 mb-3">

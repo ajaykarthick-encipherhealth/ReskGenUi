@@ -396,12 +396,12 @@ const Header = () => {
                             trigger={"click"}
                           >
                             <Button className={styles.codeBtn}>
-                             <div style={{margin:" -7px 0 0 -25px"}}>
-                             <CodeIcon  /></div>
-                             <div style={{margin:" -6px 0 0 -7px"}}>
-                          
-                             Codes
-                             </div>
+                              <div style={{ margin: " -7px 0 0 -25px" }}>
+                                <CodeIcon />
+                              </div>
+                              <div style={{ margin: " -6px 0 0 -7px" }}>
+                                Codes
+                              </div>
                             </Button>
                           </Popover>
                         )}
@@ -444,7 +444,7 @@ const Header = () => {
                           onClick={() => notificationDrawer()}
                         >
                           <Badge
-                            count={notificationAlertData.length}
+                            count={notificationAlertData?.length}
                             color="#3479fe"
                           >
                             {SVGICON.dashboardNotification}
@@ -453,23 +453,21 @@ const Header = () => {
                         <div
                           className="header-media d-flex"
                           onClick={logoutFunction}
-                          style={{marginLeft:"-20px"}}
+                          style={{ marginLeft: "-10px" }}
                         >
-                         
-                            <div className="header-info2 d-flex align-items-center">
-                              <div
-                                className="header-media"
-                                style={{ marginTop: "-2px" }}
-                              >
-                                {renderUserPrfoile(
-                                  userName,
-                                  lastName,
-                                  profileImg,
-                                  "header"
-                                )}
-                              </div>
+                          <div className="header-info2 d-flex align-items-center">
+                            <div
+                              className="header-media"
+                              style={{ marginTop: "-2px" }}
+                            >
+                              {renderUserPrfoile(
+                                userName,
+                                lastName,
+                                profileImg,
+                                "header"
+                              )}
                             </div>
-                         
+                          </div>
                         </div>
                         <div className="mx-15">
                           <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
