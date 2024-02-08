@@ -61,7 +61,6 @@ const DailyTask = () => {
         date: dayjs(today).format("MM-DD-YYYY"),
         dateString: today?.toISOString(),
       });
-     console.log(today?.toISOString(),"date");
     }
 
     setSelectedDate(days);
