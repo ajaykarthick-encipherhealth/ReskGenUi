@@ -55,6 +55,7 @@ tbody.csvBody tr:nth-child(odd) td {
   top: 50px;
   margin: 30px 10px;
   justify-content: space-between;
+  z-index:999;
   /* padding:20px; */
 }
 
