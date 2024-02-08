@@ -246,7 +246,7 @@ export const getFilters = (field, username) => {
     }
   };
 };
-export const preSendURl = (type) => async (dispatch) => {
+export const preSendURl = (type, file) => async (dispatch) => {
   const token = localStorage.getItem("token");
 
   if (type) {
@@ -261,9 +261,9 @@ export const preSendURl = (type) => async (dispatch) => {
       );
       if (response.data) {
         if (response?.data?.response) {
-          dispatch(getUrl(response?.data?.response, type));
-          const url = response?.data?.response?.split("?").shift();
-          dispatch(updateImage(url));
+          dispatch(getUrl(response?.data?.response, type, file));
+          // const url = response?.data?.response?.split("?").shift();
+          // dispatch(updateImage(url));
         }
       }
     } catch (error) {
@@ -271,18 +271,22 @@ export const preSendURl = (type) => async (dispatch) => {
     }
   }
 };
-export const getUrl = (url, extention) => async (dispatch) => {
+export const getUrl = (url, extention, file) => async (dispatch) => {
   const type =
     extention === "jpg" || extention === "jpeg" ? "image/jpeg" : "image/png";
-  if (url) {
+  if (url && file) {
     try {
+      const formData = new FormData();
+      formData?.append("file", file);
       const response = await fetch(url, {
         method: "PUT",
+        body: formData,
         headers: {
-          "Content-Type": extention,
           "x-ms-blob-type": "BlockBlob",
+          "Content-Type": "image/png",
         },
       });
+
       return response;
     } catch (error) {
       console.log("error", error);
