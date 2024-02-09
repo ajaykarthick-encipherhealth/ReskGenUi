@@ -262,8 +262,8 @@ export const preSendURl = (type, file) => async (dispatch) => {
       if (response.data) {
         if (response?.data?.response) {
           dispatch(getUrl(response?.data?.response, type, file));
-          // const url = response?.data?.response?.split("?").shift();
-          // dispatch(updateImage(url));
+          const url = response?.data?.response?.split("?").shift();
+          dispatch(updateImage(url));
         }
       }
     } catch (error) {
@@ -276,15 +276,14 @@ export const getUrl = (url, extention, file) => async (dispatch) => {
     extention === "jpg" || extention === "jpeg" ? "image/jpeg" : "image/png";
   if (url && file) {
     try {
-      const formData = new FormData();
-      formData?.append("file", file);
+      const headers = new Headers();
+      headers.append("x-ms-blob-type", "BlockBlob");
+      headers.append("Content-Type", "image/png");
+
       const response = await fetch(url, {
         method: "PUT",
-        body: formData,
-        headers: {
-          "x-ms-blob-type": "BlockBlob",
-          "Content-Type": "image/png",
-        },
+        body: file,
+        headers: headers,
       });
 
       return response;

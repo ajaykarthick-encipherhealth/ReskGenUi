@@ -9,6 +9,8 @@ const ImageUploader = ({ setOpenUploader }) => {
 
   const handleChange = (event) => {
     const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
     const type = file?.name?.split(".").pop();
     if (file) {
       const reader = new FileReader();
