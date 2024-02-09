@@ -9,20 +9,13 @@ const ImageUploader = ({ setOpenUploader }) => {
 
   const handleChange = (event) => {
     const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
     const type = file?.name?.split(".").pop();
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const binaryData = reader.result;
-        dispatch(preSendURl(type, binaryData));
-      };
-      reader.readAsBinaryString(file);
+      dispatch(preSendURl(type, file));
+      setOpenUploader(false);
     }
-    setOpenUploader(false);
   };
-  
+
   return (
     <div className={styles.videoflex}>
       <label className={styles.videoflex}>

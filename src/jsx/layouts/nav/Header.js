@@ -45,6 +45,7 @@ import Search from "../../../components/search";
 import {
   getAccuracy,
   getCoderDetails,
+  getCurrentUser,
 } from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
@@ -90,6 +91,7 @@ const Header = () => {
 
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const accuracy = useSelector((state) => state.auth.accuracy);
+  const currentUserInfo = useSelector((state) => state.auth.userInfo);
 
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;
@@ -152,17 +154,14 @@ const Header = () => {
     });
   };
 
-  const getUserIdDetails = async (userId) => {
+  const getUserIdDetails = async (currentUserInfo) => {
     const token = localStorage.getItem("token");
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
-    );
-    setUserIdDetails(response?.data?.response);
-    setProfileImg(response?.data?.response?.profileImageUrl);
-    setUserName(response?.data?.response?.firstName);
-    setLastName(response?.data?.response?.lastName);
-    setDropdownContent(response?.data?.response?.role);
-    var userId = response?.data?.response?.id;
+    setUserIdDetails(currentUserInfo?.data?.response);
+    setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
+    setUserName(currentUserInfo?.data?.response?.firstName);
+    setLastName(currentUserInfo?.data?.response?.lastName);
+    setDropdownContent(currentUserInfo?.data?.response?.role);
+    var userId = currentUserInfo?.data?.response?.id;
     dispatch(getNotificationList(userId));
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userId}?token=${token}`
@@ -181,6 +180,7 @@ const Header = () => {
       sse.close();
     };
   };
+  
   const percentage = 95;
   const PopContent = (
     <div className={styles.innerPop}>
@@ -320,7 +320,7 @@ const Header = () => {
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
 
-    getUserIdDetails(userId);
+    dispatch(getCurrentUser(userId))
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
     setMenuList(getMenuListByRole(userRoleLocal));
@@ -363,7 +363,10 @@ const Header = () => {
         })
       );
     }
-  }, [msgReply, selectedbtn, search, selectedOption]);
+    if(currentUserInfo){
+      getUserIdDetails(currentUserInfo)
+    }
+  }, [msgReply, selectedbtn, search, selectedOption,currentUserInfo]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>

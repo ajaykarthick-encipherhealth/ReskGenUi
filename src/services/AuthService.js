@@ -4,6 +4,18 @@ import { loginConfirmedAction, Logout } from "../store/actions/AuthActions";
 import axiosApi from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 
+export function CurrentUser() {
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  return axios.get(
+    `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
 export function signUp(email, password) {
   //axios call
   const postData = {
@@ -182,23 +194,21 @@ export const accuracy = async () => {
   }
 };
 
-export const filters = async (field,username) => {
+export const filters = async (field, username) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("userRole");
-  const userRole=role.toUpperCase()
-  const url=username?`dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`:`dbservice/patient/filter/field/list?field=${field}&role=${userRole}`
-    try {
-      const response = await axios.get(
-        `${ENDPOINTS?.apiEndoint}${url}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response;
-    } catch (err) {
-      console.log(err);
-    }
+  const userRole = role.toUpperCase();
+  const url = username
+    ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
+    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}`;
+  try {
+    const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (err) {
+    console.log(err);
   }
-
+};

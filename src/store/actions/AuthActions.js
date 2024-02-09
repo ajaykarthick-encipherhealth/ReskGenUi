@@ -10,6 +10,7 @@ import {
   verifyCode,
   accuracy,
   filters,
+  CurrentUser,
 } from "../../services/AuthService";
 import { notification } from "antd";
 import ENDPOINTS from "../../utility/enpoints";
@@ -30,6 +31,7 @@ export const VERIFYCODE = "VERIFYCODE";
 export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
 export const PROFILE_URL = "PROFILE_URL";
+export const CURRENTUSER = "CURRENTUSER";
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -246,6 +248,20 @@ export const getFilters = (field, username) => {
     }
   };
 };
+export const getCurrentUser = (userId) => {
+  return (dispatch) => {
+    try {
+      CurrentUser(userId).then((response) => {
+        dispatch({
+          type: CURRENTUSER,
+          payload: response,
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 export const preSendURl = (type, file) => async (dispatch) => {
   const token = localStorage.getItem("token");
 
@@ -261,9 +277,9 @@ export const preSendURl = (type, file) => async (dispatch) => {
       );
       if (response.data) {
         if (response?.data?.response) {
+         
           dispatch(getUrl(response?.data?.response, type, file));
-          const url = response?.data?.response?.split("?").shift();
-          dispatch(updateImage(url));
+         
         }
       }
     } catch (error) {
@@ -278,7 +294,8 @@ export const getUrl = (url, extention, file) => async (dispatch) => {
     try {
       const headers = new Headers();
       headers.append("x-ms-blob-type", "BlockBlob");
-      headers.append("Content-Type", "image/png");
+      headers.append("Content-Type", type);
+      headers.append("Content-Length", file?.size);
 
       const response = await fetch(url, {
         method: "PUT",
@@ -286,7 +303,9 @@ export const getUrl = (url, extention, file) => async (dispatch) => {
         headers: headers,
       });
 
-      return response;
+      if(response.status===201){
+         dispatch(updateImage(url))
+      }
     } catch (error) {
       console.log("error", error);
     }
@@ -295,17 +314,12 @@ export const getUrl = (url, extention, file) => async (dispatch) => {
 
 export const updateImage = (url) => async (dispatch) => {
   const token = localStorage.getItem("token");
+  const splitUrl = url?.split("?").shift();
   if (url) {
-    dispatch({
-      type: PROFILE_URL,
-      payload: {
-        loading: true,
-      },
-    });
     try {
       const response = await axios.put(
         `${ENDPOINTS?.apiEndoint}dbservice/user/profileimage`,
-        { profileImageUrl: url },
+        { profileImageUrl: splitUrl },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -314,13 +328,7 @@ export const updateImage = (url) => async (dispatch) => {
       );
 
       if (response?.data) {
-        dispatch({
-          type: PROFILE_URL,
-          payload: {
-            loading: false,
-            datas: response?.data?.response,
-          },
-        });
+        dispatch(getCurrentUser());
       }
     } catch (error) {
       console.log("error", error);

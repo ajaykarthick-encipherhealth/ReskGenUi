@@ -12,6 +12,7 @@ import {
   ACCURACYSCRORE,
   FILTER,
   PROFILE_URL,
+  CURRENTUSER
 } from "../actions/AuthActions";
 
 const initialState = {
@@ -32,6 +33,7 @@ const initialState = {
   accuracy: "",
   filterList: null,
   url: null,
+  userInfo:null
 };
 
 const initialStatePatient = {
@@ -125,6 +127,12 @@ export function AuthReducer(state = initialState, action) {
       ...state,
       url: action.payload,
     };
+  }
+  if(action.type===CURRENTUSER){
+    return{
+      ...state,
+      userInfo:action.payload
+    }
   }
   return state;
   // if (action.type === NAVTOGGLE) {
