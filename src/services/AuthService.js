@@ -220,24 +220,38 @@ export const filters = async (field,username,pageQueue) => {
   }
 
   export const checkDeviceLogin = async (email) => {
+    const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        `${ENDPOINTS?.apiEndoint}securityservice/auth/enablemfa?userName=${email}`
+        `${ENDPOINTS?.apiEndoint}securityservice/gateway/login`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }       
       );
       return response;
-    } catch (Err) {
-      console.log(Err);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   
   export const logoutAllDevice = async (email) => {
+    const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        `${ENDPOINTS?.apiEndoint}securityservice/auth/enablemfa?userName=${email}`
+        `${ENDPOINTS?.apiEndoint}securityservice/gateway/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }       
       );
       return response;
-    } catch (Err) {
-      console.log(Err);
+    } catch (err) {
+      console.log(err);
     }
   };

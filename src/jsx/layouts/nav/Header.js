@@ -47,6 +47,8 @@ import {
 import Selector from "../../../components/selector";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
+import {logoutAllDevice } from "../../../services/AuthService";
+
 
 const btnItems = [
   {
@@ -125,7 +127,7 @@ const Header = () => {
     setOpenMsg(false);
   };
 
-  const logoutFunction = () => {
+  const logoutFunction = async () => {
     Swal.fire({
       title: "Warning!",
       text: "Do you want Logout!",
@@ -134,8 +136,9 @@ const Header = () => {
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       closeOnConfirm: false,
-    }).then((result) => {
+    }).then( async (result) => {
       if (result.isConfirmed) {
+        await logoutAllDevice();
         localStorage.clear();
         localStorage.removeItem("loginCheck");
         localStorage.removeItem("userRole");
