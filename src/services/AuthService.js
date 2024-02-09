@@ -4,8 +4,7 @@ import { loginConfirmedAction, Logout } from "../store/actions/AuthActions";
 import axiosApi from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 
-export function CurrentUser() {
-  const userId = localStorage.getItem("userId");
+export function CurrentUser(userId) {
   const token = localStorage.getItem("token");
   return axios.get(
     `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
