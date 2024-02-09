@@ -237,7 +237,7 @@ const UserList = () => {
                         defaultSelectValue1={""}
                         //  selecte Role
                         selectlabel2="Select Role"
-                        selectOptions2={RoleList}
+                        selectOptions2={[]}
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                         // computation date
@@ -459,6 +459,8 @@ const UserList = () => {
                         { value: "ADMIN", label: "ADMIN" },
                         { value: "L1AUDITOR", label: "L1AUDITOR" },
                         { value: "L2AUDITOR", label: "L2AUDITOR" },
+                        { value: "ADMIN_TECHNICAL_SUPPORT", label: "ADMIN TECHNICAL SUPPORT" },
+                        { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
                       ]}
                       onChange={(selectedOption) =>
                         handleChange({
