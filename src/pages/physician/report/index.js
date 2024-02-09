@@ -25,11 +25,11 @@ import HeaderFilters from "../../../components/headerFilters";
 
 const { RangePicker } = DatePicker;
 const statusOptions = [
+  { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
-  { label: "All", value: "ALL" },
 ];
 
 const index = () => {
@@ -70,8 +70,10 @@ const index = () => {
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
-  const [receivedSortOrder, setReceivedSortOrder] = useState("ASC");
-  const [sortField, setSortField] = useState(null);
+  const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
+  const [sentSortOrder, setSentSortOrder] = useState("DESC");
+  const [coderSortOrder, setCoderSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -116,7 +118,9 @@ const index = () => {
   useEffect(() => {
     setIsLoading(false);
     if (activeTab === "SentReport") {
-      dispatch(getSentDetails(sentPageNo, startDate, endDate, sentSearch));
+      dispatch(
+        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
+      );
     }
     if (activeTab === "ReceivedReport") {
       dispatch(
@@ -125,8 +129,7 @@ const index = () => {
           receivedStartDate,
           receivedEndDate,
           receivedSearch,
-          sortField,
-          receivedSortOrder
+          sort
         )
       );
     }
@@ -138,7 +141,8 @@ const index = () => {
           coderStartDate,
           coderEndDate,
           coderSearch,
-          selectedCoderOpt
+          selectedCoderOpt,
+          sort
         )
       );
     }
@@ -163,7 +167,7 @@ const index = () => {
     receivedEndDate,
     receivedSearch,
     receivedSortOrder,
-    sortField,
+    sort,
   ]);
 
   useEffect(() => {
@@ -212,6 +216,9 @@ const index = () => {
                             activeTab={activeTab}
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
+                            disable="Yes"
                           />
                         </div>
                         <Export
@@ -303,6 +310,9 @@ const index = () => {
                                       selectedRows={selectedRows}
                                       setSelectAll={setSelectAll}
                                       selectAll={selectAll}
+                                      setSortOrder={setCoderSortOrder}
+                                      sortOrder={coderSortOrder}
+                                      setSort={setSort}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -320,6 +330,9 @@ const index = () => {
                                       }
                                       onSentPageChange={onSentPageChange}
                                       loading={SentReportDetails?.loading}
+                                      setSortOrder={setSentSortOrder}
+                                      sortOrder={sentSortOrder}
+                                      setSort={setSort}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -342,7 +355,7 @@ const index = () => {
                                         loading={ReceivedReportDetails?.loading}
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
-                                        setSortField={setSortField}
+                                        setSort={setSort}
                                       />
                                     )}
                                   </Tab.Pane>

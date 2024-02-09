@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Spin } from "antd";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
+import { LoadingOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
-import { processstatusBodyTemplate } from "../../../headerFilters/functions";
+import {
+  processstatusBodyTemplate,
+  sortFunction,
+  renderUserPrfoileAvatar,
+} from "../../../headerFilters/functions";
 
 function AllocatedL2AdminList({
   patinetListAll,
@@ -16,19 +19,13 @@ function AllocatedL2AdminList({
   setSelectedRowsId,
   selectedRowsId,
   selectedChart,
+  setSort,
+  loading,
 }) {
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [sortDueOrder, setSortDueOrder] = useState("asc");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
-  const [detailsContent, setDetailsContent] = useState();
-
   const dispatch = useDispatch();
-  const navigate = useRouter();
-
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: null,
-  });
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
@@ -48,58 +45,8 @@ function AllocatedL2AdminList({
     setSelectedRows(updatedRows);
   };
 
-  const requestSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data.computing === 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed. Please wait.",
-      });
-    }
-  };
-
-  const sortTableByDate = (value) => {
-    const sortedContent = [...detailsContent];
-    if (value === "dueDate") {
-      if (sortDueOrder === "asc") {
-        sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
-        setSortDueOrder("desc");
-      } else {
-        sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
-        setSortDueOrder("asc");
-      }
-    }
-    if (value === "completeDate") {
-      if (sortCompleteOrder === "asc") {
-        sortedContent.sort((a, b) =>
-          dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate))
-        );
-        setSortCompleteOrder("desc");
-      } else {
-        sortedContent.sort((a, b) =>
-          dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate))
-        );
-        setSortCompleteOrder("asc");
-      }
-    }
-    setDetailsContent(sortedContent);
-  };
-
   const renderRows = () => {
-    return detailsContent?.map((data, index) => (
+    return patinetListAll?.map((data, index) => (
       <tr
         style={{ height: "35px" }}
         key={index}
@@ -114,52 +61,80 @@ function AllocatedL2AdminList({
       >
         <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
         <td className={TableStyle.childBorder}>{data.patientName}</td>
-        <td className={TableStyle.childBorder}>{data.patientAllocated}</td>
+        <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
+          {data.patientAllocatedFirstName ||
+          data.patientAllocatedLastName ||
+          data?.patientAllocatedProfileImage ? (
+            <div style={{ display: "flex", aligndatas: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.patientAllocatedFirstName,
+                  data.patientAllocatedLastName,
+                  data?.patientAllocatedProfileImage,
+                  "header"
+                )}
+              </span>
+              <span>
+                {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
+        </td>{" "}
         <td className={TableStyle.childBorder}>
-              {data.dueDate
-            ? moment.utc(data.dueDate).format("MM-DD-YYYY")
-            : "---"}</td>
+          {data.dueDate ? moment.utc(data.dueDate).format("MM-DD-YYYY") : "---"}
+        </td>
         <td className={TableStyle.childBorder}>
           {data.processedDate
             ? moment.utc(data.processedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-        <td className={TableStyle.childBorder}>{processstatusBodyTemplate(data)}</td>
-
+        <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+          {processstatusBodyTemplate(data)}
+        </td>
         <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
-          <input
-            type="checkbox"
-            onChange={() => {
-              handleRowCheckboxChange(data);
-              setSelectedRowsId((prev) => {
-                const currentIds = prev.map((item) => item.id);
-                if (!currentIds.includes(data.patientId)) {
-                  return [
-                    ...prev,
-                    { id: data.patientId, name: data.patientName },
-                  ];
-                } else {
-                  return prev.filter((item) => item.id !== data.patientId);
-                }
-              });
-            }}
-            checked={selectedRowsId.some((item) => item.id === data.patientId)}
-            style={{
-              width: "20px",
-              height: "20px",
-              flexhrink: "0",
-              borderRadius: "4px",
-              backgroundColor: "pink",
-            }}
-          />
+          {loading ? (
+            <Spin
+              loading={loading}
+              indicator={<LoadingOutlined spin />}
+              style={{ color: "#1677ff" }}
+            />
+          ) : (
+            <input
+              type="checkbox"
+              onChange={() => {
+                handleRowCheckboxChange(data);
+                setSelectedRowsId((prev) => {
+                  const currentIds = prev.map((item) => item.id);
+                  if (!currentIds.includes(data.patientId)) {
+                    return [
+                      ...prev,
+                      { id: data.patientId, name: data.patientName },
+                    ];
+                  } else {
+                    return prev.filter((item) => item.id !== data.patientId);
+                  }
+                });
+              }}
+              checked={selectedRowsId.some(
+                (item) => item.id === data.patientId
+              )}
+              style={{
+                width: "20px",
+                height: "20px",
+                flexhrink: "0",
+                borderRadius: "4px",
+                backgroundColor: "pink",
+              }}
+            />
+          )}
         </td>
       </tr>
     ));
   };
-
-  useEffect(() => {
-    setDetailsContent(patinetListAll);
-  }, [patinetListAll]);
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -168,16 +143,15 @@ function AllocatedL2AdminList({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th>PATIENT ALLOCATED</th>
+            <th>L1 AUDITOR</th>
             <th
               onClick={() => {
-                requestSort("dueDate");
-                sortTableByDate("dueDate");
+                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
               }}
             >
               DUE DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "asc" ? (
+                {sortDueOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -187,13 +161,17 @@ function AllocatedL2AdminList({
 
             <th
               onClick={() => {
-                requestSort("processedDate");
-                sortTableByDate("completeDate");
+                sortFunction(
+                  sortCompleteOrder,
+                  setSortCompleteOrder,
+                  setSort,
+                  "processedDate"
+                );
               }}
             >
               COMPLETED DATE
               <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortCompleteOrder === "asc" ? (
+                {sortCompleteOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
@@ -201,7 +179,7 @@ function AllocatedL2AdminList({
               </span>
             </th>
 
-            <th>STATUS</th>
+            <th style={{textAlign:"center"}}>STATUS</th>
             {/* <th>Upload</th> */}
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -227,7 +205,7 @@ function AllocatedL2AdminList({
         </thead>
 
         <tbody>
-          {detailsContent?.length <= 0 ? (
+          {patinetListAll?.length <= 0 ? (
             <tr>
               <td colSpan="9">
                 <Empty />

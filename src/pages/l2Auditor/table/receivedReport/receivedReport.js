@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../../store/actions/ReportActions";
 import { Empty } from "antd";
 import Footer from "../../../../jsx/layouts/Footer";
-import { dateFormate } from "../../../../components/headerFilters/functions";
+import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
 
 function ReceivedReport({
@@ -19,8 +19,11 @@ function ReceivedReport({
   receivedEndDate,
   paginationFirst,
   loading,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
-  const [sortOrder, setSortOrder] = useState("asc");
+
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
   const dispatch = useDispatch();
@@ -69,15 +72,26 @@ function ReceivedReport({
                   <th>REPORT ID</th>
                   <th>REPORT NAME</th>
                   <th>ACCESS TYPE</th>
-                  <th>SENDER</th>
-                  <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
-                    DATE{" "}
-                    {sortOrder === "asc" ? (
-                      <ArrowUpOutlined />
-                    ) : (
-                      <ArrowDownOutlined />
-                    )}
-                  </th>
+                  <th  style={{textAlign:"center"}}>SENDER</th>
+                  <th
+                  className={TableStyle.rowStyle}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "receiveDate"
+                    );
+                  }}
+                >
+                   DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 </tr>
               </thead>
               <tbody>
@@ -125,6 +139,7 @@ function ReceivedReport({
                           borderTop: "  0.2px solid #e1e1e1",
 
                           borderBottom: "  0.2px solid #e1e1e1",
+                          textAlign:"center"
                         }}
                         className={TableStyle.childBorder}
                       >
@@ -175,7 +190,7 @@ function ReceivedReport({
           receivedEndDate={receivedEndDate}
         />
       </Modal> */}
-      <Footer />
+   
     </div>
   );
 }

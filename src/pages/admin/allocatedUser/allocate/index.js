@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import Router from "next/router";
+import { disablePastDate } from "../../../../components/headerFilters/functions";
 
 const AllocateModal = ({
   open,
@@ -43,7 +44,7 @@ const AllocateModal = ({
   };
 
   const getUserList = async (search) => {
-    var resoureUrl = `dbservice/user/getUsersByOrgIdAndTenantId?orgid=daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5&searchString=${search}`;
+    var resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5&searchString=${search}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var result = response?.data?.response;
@@ -200,7 +201,9 @@ const AllocateModal = ({
                             } else {
                               setAllocateDate("");
                             }
+                        
                           }}
+                          disabledDate={(current) => disablePastDate(current)}
                           // value={moment(allocateDate, 'YYYY-MM-DD')}
                         />
                       </div>

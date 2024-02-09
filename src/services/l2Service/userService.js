@@ -27,10 +27,10 @@ export const L2IndividualUser = async (datas) => {
       : datas?.completedStartDate && datas?.completedEndDate
       ? "COMPLETED"
       : datas?.selectedOption;
-      
+
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/filter?page=${datas?.pageNo}&size=15&userId=${datas?.uId}&isAllocation=false&processedStatus=${filteredStatus}&auditedStatus=${datas?.selectedAuditOption}&searchString=${datas?.search}&completedStartDate=${datas?.completedStartDate}&completedEndDate=${datas?.completedEndDate}&auditCompletedStartDate=${datas?.aduitCompletedStartDate}&auditCompletedEndDate=${datas?.aduitCompletedEndDate}&dueDateStart=${datas?.dueStartDate}&dueDateEnd=${datas?.dueEndDate}&auditDueDateStart=${datas?.aduitDueStartDate}&auditDueDateEnd=${datas?.aduitDueEndDate}&allocatedBy=${datas?.selAllocatedBy}&auditAllocatedBy=${datas?.selAuditAllocatedBy}&auditDueDateStart=${datas?.auditedStartDate}&auditDueDateEnd=${datas?.auditedEndDate}&allocatedStartDate=${datas?.allocatedStartDate}&allocatedEndDate=${datas?.allocatedEndDate}&sortfield=${datas?.sort?.sortField}&sortdirection=${datas?.sort?.sortDir}
+      `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/filter?page=${datas?.pageNo}&size=15&userId=${datas?.uId}&isAllocation=false&processedStatus=${filteredStatus}&auditedStatus=${datas?.selectedAuditOption}&searchString=${datas?.search}&processedStart=${datas?.completedStartDate}&processedEnd=${datas?.completedEndDate}&auditedDateStart=${datas?.aduitCompletedStartDate}&auditedDateEnd=${datas?.aduitCompletedEndDate}&dueDateStart=${datas?.dueStartDate}&dueDateEnd=${datas?.dueEndDate}&auditDueDateStart=${datas?.aduitDueStartDate}&auditDueDateEnd=${datas?.aduitDueEndDate}&allocatedBy=${datas?.selAllocatedBy}&auditAllocatedBy=${datas?.selAuditAllocatedBy}&auditDueDateStart=${datas?.auditedStartDate}&auditDueDateEnd=${datas?.auditedEndDate}&allocatedOnStart=${datas?.allocatedStartDate}&allocatedOnEnd=${datas?.allocatedEndDate}&sortfield=${datas?.sort?.sortField}&sortdirection=${datas?.sort?.sortDir}
      `,
       {
         headers: {

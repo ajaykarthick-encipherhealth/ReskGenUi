@@ -8,7 +8,7 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
-import { handleRnagePicker2 } from "./functions";
+import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
@@ -99,8 +99,7 @@ const AuditHeaderFilters = ({
   bullets,
   isNextRow,
   badges,
-  getFilters,
-  username
+  username,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -122,7 +121,7 @@ const AuditHeaderFilters = ({
             </div>
           )}
           {isSelector2 ? (
-            <div className="col-xl-2" style={{ zIndex: "999" }}>
+            <div className="col-xl-2">
               {" "}
               <Selector
                 selectlabel={selectlabel2}
@@ -135,19 +134,18 @@ const AuditHeaderFilters = ({
           {isAduitDueDate && (
             <div className="col-xl-2">
               <DateRangePicker
-                selectedDates={""}
                 pickerlabel={audipickerlabel1}
                 defaultStartDate={audidefaultStartDate}
                 defaultEndDate={audidefaultEndDate}
                 setStartDate={audisetStartDate}
                 setEndDate={audisetEndDate}
+                disabled={true}
               />
             </div>
           )}
           {isAuditCompleteDate && (
             <div className="col-xl-2">
               <DateRangePicker
-                selectedDates={""}
                 pickerlabel={audipickerlabe2}
                 defaultStartDate={audidefaultStartDate2}
                 defaultEndDate={audidefaultEndDate2}
@@ -160,10 +158,10 @@ const AuditHeaderFilters = ({
             <div
               className="col-xl-2"
               onClick={() => {
-                dispatch(getFilters("auditAllocatedBy",username));
+                dispatch(getFilters("auditAllocatedBy", username));
               }}
             >
-              <label>{audiallocatedBylabel}</label>
+              <label className={styles.label}>{audiallocatedBylabel}</label>
               <div class="form-group has-search">
                 <Select
                   onChange={(selectedOption) => {
@@ -225,7 +223,7 @@ const AuditHeaderFilters = ({
         <div style={{ margin: "50px 0px 0px -4px" }}>
           <div className="row filter-contain">
             {isSelector ? (
-              <div className="col-xl-2" style={{ zIndex: "999" }}>
+              <div className="col-xl-2">
                 {" "}
                 <Selector
                   selectlabel={selectlabel}
@@ -239,12 +237,13 @@ const AuditHeaderFilters = ({
             {isRangePicker && (
               <div className="col-xl-2">
                 <DateRangePicker
-                  selectedDates={selectedDates}
                   pickerlabel={pickerlabel}
                   defaultStartDate={defaultStartDate}
                   defaultEndDate={defaultEndDate}
                   setStartDate={setStartDate}
                   setEndDate={setEndDate}
+                  // disabled="pastDate"
+                  disabled={true}
                 />
               </div>
             )}
@@ -252,7 +251,7 @@ const AuditHeaderFilters = ({
             {isAnotherPicker && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe2}</label>
+                  <label className={styles.label}>{pickerlabe2}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -273,6 +272,7 @@ const AuditHeaderFilters = ({
                             ]
                           : []
                       }
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>
@@ -281,7 +281,7 @@ const AuditHeaderFilters = ({
             {isAllocatedDate && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe3}</label>
+                  <label className={styles.label}>{pickerlabe3}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -293,6 +293,7 @@ const AuditHeaderFilters = ({
                           setEndDate3,
                         });
                       }}
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>
@@ -302,10 +303,11 @@ const AuditHeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("patientAllocated",username));
+                  dispatch(getFilters("allocatedBy", username));
                 }}
+                style={{zIndex:"2"}}
               >
-                <label>{allocatedBylabel}</label>
+                <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {

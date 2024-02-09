@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Select, notification } from "antd";
+import { Select, notification ,Modal} from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { selectedUserRole } from "../../store/actions/AuthActions";
 import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
+import { checkDeviceLogin,logoutAllDevice } from "../../services/AuthService";
+
 
 const SelectRole = () => {
   const dispatch = useDispatch();
@@ -15,15 +17,19 @@ const SelectRole = () => {
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [role, setRole] = useState();
+  const [decodedParams, setDecodedParams] = useState();
+  const [confirmModal, setConfirmModal] = useState(false);
 
   const items =
     role?.length > 0 ? role?.map((info) => ({ value: info, label: info })) : [];
 
-  const onSubmitRole = (e) => {
+  const onSubmitRole = async (e) => {
     e.preventDefault();
     if (!selectedRole) {
       setRoleError(true);
     } else {
+      // var result = await checkDeviceLogin();
+      // setConfirmModal(true);
       notification.success({
         message: "Login Successfully",
         duration: 1,
@@ -39,15 +45,35 @@ const SelectRole = () => {
       const selectedRoleInfo = rolesMapping[selectedRole];
 
       if (selectedRoleInfo && !roleError) {
-        localStorage.setItem("userRole", selectedRoleInfo.userRole);
+        localStorage.setItem("userRole", selectedRoleInfo?.userRole);
         localStorage.setItem("role", selectedRole);
-        router?.push(selectedRoleInfo.route);
+        router?.push(selectedRoleInfo?.route);
       }
     }
   };
+
+  const handleLogout=()=>{
+
+  }
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setUsername(searchParams.get("username"));
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const encodedParams = urlParams.get("params");
+    const decodedParams = JSON.parse(atob(encodedParams));
+    const { mfa, skipEntry, username, password } = decodedParams;
+    const skipParam = decodedParams?.skipEntry;
+    const encodeParams = btoa(
+      JSON.stringify({
+        mfa: mfa,
+        skipEntry: skipParam,
+        username: username,
+        password: password,
+      })
+    );
+    setDecodedParams(encodeParams);
+
     const rolesArray = JSON.parse(localStorage.getItem("roles"));
     setRole(rolesArray);
   }, []);
@@ -55,7 +81,7 @@ const SelectRole = () => {
   return (
     <div className="page-wraper">
       <div className="login-account">
-        <div className="row h-100">
+      <div className={`row h-100 ${styles.loginContainer}`}>
           <div className="col-lg-6 align-self-start">
             <div
               className="account-info-area"
@@ -106,16 +132,18 @@ const SelectRole = () => {
                     <button
                       className={styles.backBtn}
                       onClick={() => {
+                        setSelectedRole(null)
                         setRoleError(false);
-                        router?.push(
-                          `/twofactorAuthentication/Authentication?mfa=true&username=${username}`
-                        );
+                        router?.push({
+                          pathname: `/twofactorAuthentication/Authentication`,
+                          search: `params=${decodedParams}`,
+                        });
                       }}
                     >
                       {"BACK"}
                     </button>
                   </div>
-                  <div className="col-lg-6" >
+                  <div className="col-lg-6">
                     <button type="submit" className={styles.sendBtn}>
                       {"NEXT"}
                     </button>
@@ -126,6 +154,13 @@ const SelectRole = () => {
           </div>
         </div>
       </div>
+          <Modal
+            title="You are currently logged in on another device. Once you log in, all other devices will be automatically logged out."
+            open={confirmModal}
+            centered
+            onOk={handleLogout}
+            onCancel={() => setConfirmModal(false)}
+          ></Modal>
     </div>
   );
 };

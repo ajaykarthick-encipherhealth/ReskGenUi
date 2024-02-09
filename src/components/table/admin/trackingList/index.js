@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
+import { renderUserPrfoileAvatar } from "../../../headerFilters/functions";
 
 function TrackingTable({
   patinetListAll,
@@ -25,7 +26,7 @@ function TrackingTable({
   const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-
+  const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
   const navigate = useRouter();
 
@@ -115,81 +116,52 @@ function TrackingTable({
         <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
           {data.patientName}
         </td>
-        <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
-          <Tooltip
-            title={renderUserName(
-              data.allocatedByFirstName,
-              data.allocatedByLastName
-            )}
-          >
-            <Avatar
-              style={{
-                backgroundColor: "#F3C217 ",
-                color: "white",
-                cursor: "pointer",
-              }}
-            >
-              {getInitials(data.allocatedByFirstName, data.allocatedByLastName)}
-            </Avatar>
-            <span style={{ textAlign: "center" }}> {getInitials(
-                  data.allocatedByFirstName,
-                  data.allocatedByFirstName
-                )}</span>
-          </Tooltip>
-        </td>
+
         <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
-          {data?.patientAllocatedFirstName ? (
-            <Tooltip
-              title={renderUserName(
-                data.patientAllocatedFirstName,
-                data.patientAllocatedLastName
-              )}
-            >
-              <Avatar
-                style={{
-                  backgroundColor: "#04306f ",
-                  color: "white",
-                  cursor: "pointer",
-                  marginRight: "10px",
-                }}
-              >
-                {getInitials(
-                  data.patientAllocatedFirstName,
-                  data.patientAllocatedLastName
+          {data.allocatedByFirstName ||
+          data.allocatedByLastName ||
+          data.allocatedByProfileImage ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.allocatedByFirstName,
+                  data.allocatedByLastName,
+                  data.allocatedByProfileImage,
+                  "header"
                 )}
-              </Avatar>
-              <span style={{ textAlign: "center" }}> {getInitials(
-                  data.patientAllocatedFirstName,
-                  data.patientAllocatedLastName
-                )}</span>
-              {/* {data.allocatedBy ? (
-              <img
-                src={dummyProfileImageUrl}
-                alt="User Avatar"
-                width={30}
-                height={30}
-                style={{ borderRadius: "50%" , marginRight:"5px"}}
-              />
-            ) : (
-              <img
-                src={nullImg}
-                alt="User Avatar"
-                width={30}
-                height={30}
-                style={{ borderRadius: "50%", marginRight:"10px"}}
-              />
-            )} */}
-              {/* {data.patientAllocated ? (
-              <>
-                {data.patientAllocated.split("@")[0].charAt(0).toUpperCase() +
-                  data.patientAllocated.split("@")[0].slice(1)}
-              </>
-            ) : (
-              <span style={{textAlign:"center"}}>---</span>
-            )} */}
-            </Tooltip>
+              </span>
+              <span>
+                {data.allocatedByFirstName} {data.allocatedByLastName}
+              </span>
+            </div>
           ) : (
-            <span style={{ textAlign: "center" }}>---</span>
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
+        </td>
+
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+          {data.patientAllocatedFirstName ||
+          data.patientAllocatedLastName ||
+          data.patientAllocatedProfileImage ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.patientAllocatedFirstName,
+                  data.patientAllocatedLastName,
+                  data.patientAllocatedProfileImage,
+                  "header"
+                )}
+              </span>
+              <span>
+                {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
           )}
         </td>
         <td
@@ -201,33 +173,27 @@ function TrackingTable({
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
             : "---"}
         </td>
-        <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
-          {data?.auditAllocatedByFirstName ? (
-            <Tooltip
-              title={renderUserName(
-                data.auditAllocatedByFirstName,
-                data.auditAllocatedByLastName
-              )}
-            >
-              <Avatar
-                style={{
-                  backgroundColor: "#F3C217 ",
-                  color: "white",
-                  cursor: "pointer",
-                }}
-              >
-                {getInitials(
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+          {data.auditAllocatedByFirstName ||
+          data.auditAllocatedByLastName ||
+          data.auditAllocatedByProfileImage ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
                   data.auditAllocatedByFirstName,
-                  data.auditAllocatedByLastName
+                  data.auditAllocatedByLastName,
+                  data.auditAllocatedByProfileImage,
+                  "header"
                 )}
-              </Avatar>
-              <span style={{ textAlign: "center" }}> {getInitials(
-                  data.auditAllocatedByFirstName,
-                  data.auditAllocatedByFirstName
-                )}</span>
-            </Tooltip>
+              </span>
+              <span>
+                {data.auditAllocatedByFirstName} {data.auditAllocatedByLastName}
+              </span>
+            </div>
           ) : (
-            <span style={{ textAlign: "center" }}>---</span>
+            <div style={{ textAlign: "center" }}>---</div>
           )}
         </td>
         <td
@@ -272,8 +238,8 @@ function TrackingTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th style={{ textAlign: "center" }}>ALLOCATED BY</th>
-            <th style={{ textAlign: "left" }}>ALLOCATED TO</th>
+            <th style={{ textAlign: "left",paddingLeft:"20px" }}>ALLOCATED BY</th>
+            <th style={{ textAlign: "left",paddingLeft:"20px" }}>ALLOCATED TO</th>
             <th style={{ textAlign: "center" }}>ALLOCATED DATE</th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED DATE</th>
@@ -294,7 +260,7 @@ function TrackingTable({
               </span> */}
             </th>
             <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
-            <th style={{ textAlign: "center" }}>STATUS</th>
+            <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
           </tr>
         </thead>
 

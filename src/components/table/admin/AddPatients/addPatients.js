@@ -7,15 +7,20 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
+import { renderUserPrfoileAvatar, sortFunction } from "../../../headerFilters/functions";
 
 function AddPatientListTable({
   patinetListAll,
   actionBodyTemplate,
   statusBodyTemplate,
   patientDetails,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
-  const [sortDueOrder, setSortDueOrder] = useState("asc");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
+
 
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -105,24 +110,31 @@ function AddPatientListTable({
               {data.patientName}
             </td>
 
-            <td
-              className={TableStyle.childBorder}
-              style={{ textAlign: "center" }}
-            >
-              {data?.allocatedBy ? data?.allocatedBy : "--"}
-            </td>
-            <td
-              className={TableStyle.childBorder}
-              style={{ textAlign: "center" }}
-            >
-              {data?.createdBy ? data?.createdBy : "--"}
-            </td>
-            <td
-              className={TableStyle.childBorder}
-              style={{ textAlign: "center" }}
-            >
-              {data?.patientAllocated ? data?.patientAllocated : "--"}
-            </td>
+       
+     
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+          {data.createdByFirstName ||
+          data.createdByLastName ||
+          data.createdByProfileImage ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.createdByFirstName,
+                  data.createdByLastName,
+                  data.createdByProfileImage,
+                  "header"
+                )}
+              </span>
+              <span>
+                {data.createdByFirstName} {data.createdByLastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
+        </td>
             <td
               style={{ textAlign: "center" }}
               className={TableStyle.childBorder}
@@ -167,35 +179,37 @@ function AddPatientListTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th style={{ textAlign: "center" }}>ALLOCATED BY</th>
-            <th style={{ textAlign: "center" }}>ALLOCATED TO</th>
-            <th style={{ textAlign: "center" }}>CREATED BY</th>
-            <th
-              style={{ textAlign: "center" }}
+          
+            <th className={TableStyle.rowStyle}>CREATED BY</th>
+          
+            
+                <th
+                  style={{ cursor: "pointer" ,paddingLeft:"15px",textAlign:"center"}}
+                  onClick={() => {
+                    sortFunction(sortOrder, setSortOrder, setSort, "computedDate");
+                  }}
+                >
+                  COMPUTED DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
+                <th
               onClick={() => {
-                requestSort("lastModifiedDate");
-                sortTableByDate();
+                sortFunction(
+                  sortCompleteOrder,
+                  setSortCompleteOrder,
+                  setSort,
+                  "createdDate"
+                );
               }}
+              style={{textAlign:"center"}}
             >
-              COMPUTED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder === "asc" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
-            </th>
-            <th
-              style={{ textAlign: "center" }}
-              onClick={() => {
-                requestSort("lastModifiedDate");
-                sortTableByDate();
-              }}
-            >
-              CREATED DATE
-              <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder === "asc" ? (
+                CREATED DATE
+              <span style={{ padding: "10px", cursor: "pointer", textAlign:"center", paddingLeft:"15px" }}>
+                {sortCompleteOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />

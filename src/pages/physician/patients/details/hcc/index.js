@@ -52,7 +52,7 @@ import {
   submitMeatQuery,
   updateMeatQuery,
   getProviderDetails,
-  manuallyAddComboCode
+  manuallyAddComboCode,
 } from "../../../../../services/PatientsListSevice";
 const { Option } = Select;
 
@@ -164,9 +164,8 @@ const Hcc = ({ patientHccResult }) => {
     queryComment: "",
     reason: "",
     diagnosisCodeQuery: "",
-    comboCode:"",
-    additionalCode:""
-
+    comboCode: "",
+    additionalCode: "",
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -406,9 +405,9 @@ const Hcc = ({ patientHccResult }) => {
         var deleteHccList = [];
 
         if (fileloadCondition != "fileNotLoad") {
-          getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
-          setSelectMeatFileId(patientHccResult.fileId);
-          setPatientFileDTO(result.fileDetailDTO);
+          getPatientPdfFile(result?.fileDetailDTO?.azureBlobPath, tenId);
+          setSelectMeatFileId(patientHccResult?.fileId);
+          setPatientFileDTO(result?.fileDetailDTO);
         }
         // setPatientDocumentResult(result);
 
@@ -431,12 +430,12 @@ const Hcc = ({ patientHccResult }) => {
         var unMacthResList = [];
 
         validDis = result.validDisease;
-        validDiseaseNewRes = result.validDisease;
+        validDiseaseNewRes = result?.validDisease;
         // invalidDiseaseNewRes =validDisArray;
         var validDisArray = [];
         var validEncounterDateArray = [];
-        validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+        validDiseaseNewRes?.map((res, index) => {
+          const encounterDatearray = res?.encounterDate?.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -447,11 +446,27 @@ const Hcc = ({ patientHccResult }) => {
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
             providerName: res.provider,
+            dbDescription: res.dbDescription,
+            isMostSpecific: res.isMostSpecific,
+            getPlace: "Hcc",
           });
         });
 
+        if (result?.insulinDisease) {
+          validDisArray.push({
+            actualDescription: result?.insulinDisease?.description,
+            capturedSections: [result?.insulinDisease?.section],
+            diagnosisCode: result?.insulinDisease?.code,
+            encounterDate: null,
+            encounterDateSplit: [result?.insulinDisease?.dos],
+            getPlace: "Insulin",
+            isHccValid: true,
+            defaultPosition: null,
+          });
+        }
+
         result?.invalidDisease?.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+          const encounterDatearray = res?.encounterDate?.split(",");
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -466,7 +481,7 @@ const Hcc = ({ patientHccResult }) => {
 
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             deleteHccList.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -488,7 +503,7 @@ const Hcc = ({ patientHccResult }) => {
           // getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -504,7 +519,7 @@ const Hcc = ({ patientHccResult }) => {
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
-              const encounterDatearray = res.encounterDate.split(",");
+              const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
                 capturedSections: [],
@@ -523,7 +538,7 @@ const Hcc = ({ patientHccResult }) => {
           // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -540,7 +555,7 @@ const Hcc = ({ patientHccResult }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -643,11 +658,11 @@ const Hcc = ({ patientHccResult }) => {
           "encounterDateTag8",
         ];
 
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
+        validDiseaseNewRes?.map((res) => {
+          res.capturedSections?.map((res2, index) => {
+            capturedSectionsArr?.push({
               name: res2,
-              diagnosisCode: res.diagnosisCode,
+              diagnosisCode: res?.diagnosisCode,
             });
           });
         });
@@ -660,11 +675,11 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-        suggestListAll.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
+        suggestListAll?.map((res) => {
+          res?.capturedSections?.map((res2, index) => {
+            capturedSectionsArr?.push({
               name: res2,
-              diagnosisCode: res.diagnosisCode,
+              diagnosisCode: res?.diagnosisCode,
             });
           });
         });
@@ -720,44 +735,44 @@ const Hcc = ({ patientHccResult }) => {
         var encounterDateArr = [];
 
         validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.invalidDisease.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.unMatchedDisease?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.unMatchedDisease?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
-        result.suggestRadiology?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.suggestRadiology?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.suggestLab?.map((res) => {
-          const array = res.encounterDate.split(",");
+        result?.suggestLab?.map((res) => {
+          const array = res?.encounterDate.split(",");
           array.map((res2) => {
-            encounterDateArr.push({
+            encounterDateArr?.push({
               name: res2,
             });
           });
@@ -2437,8 +2452,10 @@ const Hcc = ({ patientHccResult }) => {
 
   function removeDuplicates(array) {
     let output = [];
-    for (let item of array) {
-      if (!output.includes(item)) output.push(item);
+    if (array) {
+      for (let item of array) {
+        if (!output.includes(item)) output.push(item);
+      }
     }
 
     return output;
@@ -2560,7 +2577,7 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getEncounterDateBackground = (value) => {
-    return value.map((res) => {
+    return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
@@ -2783,8 +2800,9 @@ const Hcc = ({ patientHccResult }) => {
       var opationArray = [];
       var pageNumbervalue = result.response[key];
       for (var key2 in pageNumbervalue) {
+        var keyValue = key2 == "first" ? "Start - " : "End - "
         opationArray.push({
-          label: key2 + " page - " + pageNumbervalue[key2],
+          label: keyValue +" "+ pageNumbervalue[key2],
           value: pageNumbervalue[key2],
         });
       }
@@ -2850,39 +2868,38 @@ const Hcc = ({ patientHccResult }) => {
     return value;
   };
 
-  const addComboCode =()=>{
+  const addComboCode = () => {
     setIsAddComboCode(true);
-  }
+  };
 
   const handleSubmitComboCode = async (event) => {
     var dos = dosYearDefalutSelect.label;
     const form = event.currentTarget;
     event.preventDefault();
-      if (form.checkValidity() === true) {
-        var updateDataformat = {
-          patientId: localPatientId,
-          dosYear: selectedDosValue,
-          comboCode: inputValue.comboCode,
-          additionalCode: inputValue.additionalCode,
-          description: inputValue.description,
-        };
-        var result = await manuallyAddComboCode(updateDataformat);
-        if (result.status == "SUCCESS") {
-          setIsAddComboCode(false);
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-            getPatientDetailsReload(
-              localPatientId,
-              localOrgId,
-              localTenantId,
-              "fileNotLoad"
-            );
-
-        }          
+    if (form.checkValidity() === true) {
+      var updateDataformat = {
+        patientId: localPatientId,
+        dosYear: selectedDosValue,
+        comboCode: inputValue.comboCode,
+        additionalCode: inputValue.additionalCode,
+        description: inputValue.description,
+      };
+      var result = await manuallyAddComboCode(updateDataformat);
+      if (result.status == "SUCCESS") {
+        setIsAddComboCode(false);
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1,
+        });
+        getPatientDetailsReload(
+          localPatientId,
+          localOrgId,
+          localTenantId,
+          "fileNotLoad"
+        );
       }
+    }
 
     setValidated(true);
   };
@@ -3038,7 +3055,11 @@ const Hcc = ({ patientHccResult }) => {
                                               title=""
                                               trigger="hover"
                                             >
-                                              - {data.actualDescription}
+                                              {data?.isMostSpecific != true ? (
+                                                <>- {data.actualDescription} </>
+                                              ) : (
+                                                <> - {data.dbDescription}</>
+                                              )}
                                             </Popover>
                                           </span>
                                         </div>
@@ -3142,6 +3163,15 @@ const Hcc = ({ patientHccResult }) => {
                                             data.encounterDateSplit
                                           )}
                                         </div>
+                                        {data.getPlace ==
+                                                  "Insulin" ? (
+                                                  <span
+                                                    className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                    bg={`  mt-2 bg-bg-eight `}
+                                                  >
+                                                    Insulin Disease
+                                                  </span>
+                                                ) :null}
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         ></div>
@@ -3169,6 +3199,17 @@ const Hcc = ({ patientHccResult }) => {
                                             data.diagnosisCode
                                           )}
                                         </div>
+                                        {data.isMostSpecific == true ? (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            <span
+                                              className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}
+                                            >
+                                              IsMostSpecific
+                                            </span>
+                                          </div>
+                                        ) : null}
                                       </div>
                                     </div>
                                   </li>
@@ -4485,16 +4526,18 @@ const Hcc = ({ patientHccResult }) => {
                                             title=""
                                             trigger="hover"
                                           >
-                                            - {data.actualDescription}
+                                            {data?.isMostSpecific != true ? (
+                                              <>- {data.actualDescription} </>
+                                            ) : (
+                                              <> - {data.dbDescription}</>
+                                            )}
                                           </Popover>
                                         </span>
                                       </div>
 
-                                      {data.defaultPosition == "VALID" ? (
-                                        <span
-                                          className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
-                                        ></span>
-                                      ) : data.defaultPosition == "INVALID" ? (
+                                      {data.defaultPosition ==
+                                      "VALID" ? null : data.defaultPosition ==
+                                        "INVALID" ? (
                                         <span
                                           className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
                                         ></span>
@@ -4603,11 +4646,22 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
                                         {getCaptureSectionBackgroundFile(
-                                          data.capturedSections,
-                                          data.encounterDate,
-                                          data.actualDescription
+                                          data?.capturedSections,
+                                          data?.encounterDate,
+                                          data?.actualDescription
                                         )}
                                       </div>
+                                      {data?.isMostSpecific == true ? (
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          <span
+                                            className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}
+                                          >
+                                            IsMostSpecific
+                                          </span>
+                                        </div>
+                                      ) : null}
                                     </div>
                                   </div>
                                 </li>
@@ -5051,9 +5105,9 @@ const Hcc = ({ patientHccResult }) => {
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
                                                   {getCaptureSectionBackgroundFile(
-                                                    data.capturedSections,
-                                                    data.encounterDate,
-                                                    data.actualDescription
+                                                    data?.capturedSections,
+                                                    data?.encounterDate,
+                                                    data?.actualDescription
                                                   )}
                                                 </div>
                                               )}
@@ -5208,9 +5262,9 @@ const Hcc = ({ patientHccResult }) => {
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
                                           {getCaptureSectionBackgroundFile(
-                                            data.capturedSections,
-                                            data.encounterDate,
-                                            data.actualDescription
+                                            data?.capturedSections,
+                                            data?.encounterDate,
+                                            data?.actualDescription
                                           )}
                                         </div>
                                       </div>
@@ -5695,9 +5749,9 @@ const Hcc = ({ patientHccResult }) => {
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
                                 {getCaptureSectionBackgroundFile(
-                                  data.capturedSections,
-                                  data.encounterDate,
-                                  data.actualDescription
+                                  data?.capturedSections,
+                                  data?.encounterDate,
+                                  data?.actualDescription
                                 )}
                               </div>
                             </div>
@@ -6199,11 +6253,15 @@ const Hcc = ({ patientHccResult }) => {
         </div>
         <div className="offcanvas-body">
           <div className="container-fluid">
-            <Form noValidate validated={validated} onSubmit={handleSubmitComboCode}>
+            <Form
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmitComboCode}
+            >
               <div className="row">
                 <div className="col-xl-12 mb-3">
                   <Form.Label>
-                   Combo Code <span className="text-danger">*</span>{" "}
+                    Combo Code <span className="text-danger">*</span>{" "}
                   </Form.Label>
                   <Form.Control
                     required
@@ -6211,7 +6269,7 @@ const Hcc = ({ patientHccResult }) => {
                     id="comboCode"
                     name="comboCode"
                     onChange={handleChange}
-                  />                  
+                  />
                 </div>
                 <div className="col-xl-12 mb-3">
                   <Form.Label>Additional Code</Form.Label>

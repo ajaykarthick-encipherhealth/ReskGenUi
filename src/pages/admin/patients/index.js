@@ -26,7 +26,10 @@ import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
-import { generateOptionsList } from "../../../components/headerFilters/functions";
+import {
+  generateOptionsList,
+  validateYear,
+} from "../../../components/headerFilters/functions";
 
 const bullets = [
   {
@@ -93,6 +96,9 @@ export default function Patient() {
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
+  const [computedSortOrder, setComputedSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [errors,setErrors]=useState({year:""})
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -114,7 +120,8 @@ export default function Patient() {
         completedEndDate,
         selAllocatedTo,
         selAllocatedBy,
-        selCreatedBy
+        selCreatedBy,
+        sort
       )
     );
   }, [
@@ -128,6 +135,7 @@ export default function Patient() {
     selAllocatedTo,
     selAllocatedBy,
     selCreatedBy,
+    sort,
   ]);
 
   useEffect(() => {
@@ -166,6 +174,12 @@ export default function Patient() {
           lastModifiedDate: res.lastModifiedDate,
           createdDate: res.createdDate,
           createdBy: res.createdBy,
+          allocatedByFirstName: res.allocatedByFirstName,
+          allocatedByLastName: res.allocatedByLastName,
+          allocatedByProfileImage: res.allocatedByProfileImage,
+          createdByFirstName: res.createdByFirstName,
+          createdByLastName: res.createdByLastName,
+          createdByProfileImage: res.createdByProfileImage,
         });
       });
       var newArray = [];
@@ -202,7 +216,15 @@ export default function Patient() {
   const handleChange = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
+    if (e.target.name === "year") {
+      const validateYearField = validateYear(e.target.value, setErrors);
+      if (validateYearField) {
+        setErrors({year:""})
+        setInputValue({ ...inputValue, [key]: value });
+      }
+    } else {
+      setInputValue({ ...inputValue, [key]: value });
+    }
   };
 
   const handleChangePatientId = async (e) => {
@@ -264,7 +286,8 @@ export default function Patient() {
               completedEndDate,
               selAllocatedTo,
               selAllocatedBy,
-              selCreatedBy
+              selCreatedBy,
+              sort
             )
           );
           setAddPatientId(false);
@@ -406,7 +429,8 @@ export default function Patient() {
           completedEndDate,
           selAllocatedTo,
           selAllocatedBy,
-          selCreatedBy
+          selCreatedBy,
+          sort
         )
       );
       eventStreming(
@@ -424,7 +448,8 @@ export default function Patient() {
         completedEndDate,
         selAllocatedTo,
         selAllocatedBy,
-        selCreatedBy
+        selCreatedBy,
+        sort
       );
       setAddPatient(false);
       setAddPatient(false);
@@ -509,38 +534,24 @@ export default function Patient() {
                             setStartDate={setComputedStartDate}
                             setEndDate={setComputedEndDate}
                             isRangePicker={true}
-                            // completed date
+                            disable="Yes"
+                            // created date
                             pickerlabe2="Created Date"
                             defaultStartDate2={""}
                             defaultEndDate2={""}
                             setStartDate2={setCompletedStartDate}
                             setEndDate2={setCompletedEndDate}
                             isAnotherPicker={true}
-                            defaultAllocateTo={"All"}
+                            // defaultAllocateTo={"All"}
                             // allocated by
                             isAllocatedBySelector={true}
-                            allocatedBylabel="Allocated By"
-                            allocatedByOptoons={
-                              generateOptionsList(filteredList)
-                            }
+                            allocatedBylabel="Created By"
+                            allocatedByOptoons={generateOptionsList(
+                              filteredList
+                            )}
                             setSelAllocatedBy={setSelAllocatedBy}
-                            defaultAllocatedBy={"All"}
-                            // allocated to
-                            isAllocatedToSelector={true}
-                            allocatedTolabel="Allocated To"
-                            allocatedToOptoons={
-                              generateOptionsList(filteredList)
-
-                            }
-                            setSelAllocatedTo={setSelAllocatedTo}
-                            defaultCreatedBy={"All"}
-                            // created by
-                            isCreatedBySelector={true}
-                            createdTolabel="Created to"
-                            createdByOptoons={
-                              generateOptionsList(filteredList)
-
-                            }
+                            selectorField="CreatedBy"
+                            // defaultAllocatedBy={"All"}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={true}
                             addUserForm={addPatientFormId}
@@ -565,6 +576,9 @@ export default function Patient() {
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
+                              setSortOrder={setComputedSortOrder}
+                              sortOrder={computedSortOrder}
+                              setSort={setSort}
                             />
                             <div>
                               <div className="pagination-container">
@@ -579,7 +593,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-                            <Footer />
                           </>
                         )}
                       </div>
@@ -599,6 +612,7 @@ export default function Patient() {
           handleChange={handleChange}
           isLoadingBtn={isLoadingBtn}
           onChangeFile={onChangeFile}
+          errors={errors}
         />
         <Addpatients
           addPatientId={addPatientId}

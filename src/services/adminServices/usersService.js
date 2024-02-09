@@ -10,12 +10,17 @@ export const UsersList = async ({
   endDate = "",
   status = "",
   role = "",
+  sort,
 }) => {
   const token = localStorage.getItem("token");
   const selectedStatus = status === "ALL" ? "" : status;
   try {
     const response = await axios.get(
-      ` ${ENDPOINTS?.apiEndoint}dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}`,
+      ` ${
+        ENDPOINTS?.apiEndoint
+      }dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}&sortdirection=${
+        sort?.sortDir ? sort?.sortDir : ""
+      }&sortfield=${sort?.sortField ? sort?.sortField : ""}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,8 +33,9 @@ export const UsersList = async ({
   }
 };
 
-export const AddUser = async (data) => {
+export const AddUser = async (data, setErrors) => {
   const token = localStorage.getItem("token");
+  delete data?.confirmPassword
   try {
     const response = await axios.post(
       ` ${ENDPOINTS?.apiEndoint}securityservice/admin/getusers/createuser`,
@@ -41,28 +47,63 @@ export const AddUser = async (data) => {
         },
       }
     );
-    return response;
+    if (response) {
+      if (response?.data?.status === "SUCCESS") {
+        setErrors({
+          email: "",
+          password: "",
+          confirmPass: "",
+        });
+        notification.success({
+          message: response?.data?.message,
+          duration: 1,
+        });
+      } else {
+        setErrors({
+          email: "",
+          password: "",
+          confirmPass: "",
+        });
+        notification.warning({
+          message: response?.data?.message,
+          duration: 1,
+        });
+      }
+      return response;
+    }
   } catch (err) {
+    setErrors({
+      email: "",
+      password: "",
+      confirmPass: "",
+    });
     notification.error({ description: err?.response?.data?.message });
   }
 };
 
-export const enableUser = (checked, user, role) => {
+export const enableUser = (checked, user, role, setPopoverVisible, field) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
     var orgId = localStorage.getItem("orgId");
-    const checkedVal = checked ? checked : false;
+    const checkedVal = checked === "yes" ? true : false;
     const data = {
       orgId: orgId,
       tenantId: tenId,
       userId: user?.userId,
-      accountEnabled: checkedVal,
       userName: user?.userName,
     };
-  
-    const datas = role ? { ...data, role: role } : data;
-    if (checked !== undefined && user !== undefined) {
+
+    const datas = role
+      ? { ...data, role: role }
+      : checked
+      ? { ...data, accountEnabled: checkedVal }
+      : data;
+
+    if (
+      (field && role && user !== undefined) ||
+      (checked !== undefined && checked !== null && user !== undefined)
+    ) {
       try {
         const response = await axios.put(
           `${ENDPOINTS?.apiEndoint}management/admin/updateuser`,
@@ -83,6 +124,9 @@ export const enableUser = (checked, user, role) => {
             description: response?.data?.message,
           });
           dispatch(getUsers(0));
+          if (setPopoverVisible) {
+            setPopoverVisible(true);
+          }
         }
       } catch (err) {
         console.log(err);

@@ -20,24 +20,56 @@ import { generateOptionsList } from "../../../components/headerFilters/functions
 
 const bullets = [
   {
-    color: "#34ace8",
-    name: "Computed",
+    title: "Audited Status",
+    option: [
+      {
+        color: "#452b90",
+        name: "Pending",
+      },
+      {
+        color: "red",
+        name: "Declined",
+      },
+      {
+        color: "#3a9b94",
+        name: "Completed",
+      },
+      { color: "#d8c11b", name: "Hold" },
+    ],
   },
   {
-    color: "#452b90",
-    name: "Processing",
-  },
-  {
-    color: "#be3144",
-    name: "Not Computed",
+    title: "Processed Status",
+    option: [
+      {
+        color: "rgb(55, 120, 128)",
+        name: "Audited",
+      },
+      {
+        color: "red",
+        name: "Not Audited",
+      },
+      {
+        color: "rgb(226, 130, 19)",
+        name: "Pending",
+      },
+      {
+        color:'rgb(206, 153, 0)',
+        name:"Audit Hold"
+      },
+      {
+        color:"rgb(150, 75, 0)",
+        name:"Re Audit"
+      }
+    ],
   },
 ];
 
 const statusOptions = [
   { label: "ALL", value: "" },
-  { label: "PROCESSING", value: "1", status: 1 },
-  { label: "COMPUTED", value: "2", status: 2 },
-  { label: "NOT COMPUTED", value: "0", status: 0 },
+  { label: "COMPLETED", value: "COMPLETED", status: 2 },
+  { label: "PENDING", value: "PENDING", status: 0 },
+  { label: "DECLINED", value: "DECLINED", status: 0 },
+  { label: "HOLD", value: "HOLD", status: 0 },
 ];
 
 export default function Patient() {
@@ -73,6 +105,11 @@ export default function Patient() {
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
   const [parsedData, setParsedData] = useState([]);
+  const [allocatedStartDate, setAllocatedStartDate] = useState("");
+  const [allocatedEndDate, setAllocatedEndDate] = useState("");
+  const [auditedStartDate, setAuditedStartDate] = useState("");
+  const [auditedEndDate, setAuditedEnsDate] = useState("");
+  const [selAllocatedBy, setSelAllocatedBy] = useState("");
 
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
 
@@ -94,18 +131,22 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    dispatch(
-      getTrackingList(
-        pageNo,
-        dueDateStart,
-        dueDateEnd,
-        searchTextValue,
-        selectedOption,
-        processedStart,
-        processedEnd,
-        selAllocatedTo
-      )
-    );
+    const datas = {
+      pageNo,
+      dueDateStart,
+      dueDateEnd,
+      searchTextValue,
+      selectedOption,
+      processedStart,
+      processedEnd,
+      selAllocatedTo,
+      auditedStartDate,
+      auditedEndDate,
+      allocatedStartDate,
+      allocatedEndDate,
+      selAllocatedBy,
+    };
+    dispatch(getTrackingList(datas));
   }, [
     pageNo,
     dueDateStart,
@@ -115,6 +156,11 @@ export default function Patient() {
     processedEnd,
     selAllocatedTo,
     selectedOption,
+    auditedStartDate,
+    auditedEndDate,
+    allocatedStartDate,
+    allocatedEndDate,
+    selAllocatedBy,
   ]);
 
   useEffect(() => {
@@ -153,7 +199,9 @@ export default function Patient() {
           patientAllocatedFirstName: res.patientAllocatedFirstName,
           patientAllocatedLastName: res.patientAllocatedLastName,
 
-
+          patientAllocatedProfileImage: res.patientAllocatedProfileImage,
+          allocatedByProfileImage: res.allocatedByProfileImage,
+          auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
         });
       });
       var newArray = [];
@@ -291,6 +339,25 @@ export default function Patient() {
             </span>
           </div>
         );
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <span className={`badge audited-text`} style={{ color: "#377880" }}>
+              Audited
+            </span>
+          </div>
+        );
+      case "NOT_AUDIT":
+        return (
+          <div className="patient-status">
+            <span
+              className={`badge audited-text`}
+              style={{ color: "red", background: "#fcc" }}
+            >
+              Not Audited
+            </span>
+          </div>
+        );
       case null:
         return <div className="patient-status">---</div>;
     }
@@ -334,7 +401,7 @@ export default function Patient() {
                           <HeaderFilters
                             setSearch={setSearchTextValue}
                             isSearch={true}
-                            searchlabel="Search By Patient Name"
+                            searchlabel="Search By Patient Name / Id"
                             // select status
                             selectlabel="Select Status"
                             isSelector={true}
@@ -346,17 +413,47 @@ export default function Patient() {
                             setStartDate={setDueDateStart}
                             setEndDate={setDueDateEnd}
                             pickerlabel="Due date"
+                            defaultStartDate={""}
+                            defaultEndDate={""}
+                            disabled="pastDate"
                             // completed date
                             isAnotherPicker={true}
                             setStartDate2={setProcessedStart}
                             setEndDate2={setProcessedEnd}
                             pickerlabe2="Audited date"
+                            defaultStartDate2={""}
+                            defaultEndDate2={""}
+                            // Audit allocated date
+                            pickerlabe5="Audit Allocated Date"
+                            defaultStartDate5={""}
+                            defaultEndDate5={""}
+                            setStartDate5={setAllocatedStartDate}
+                            setEndDate5={setAllocatedEndDate}
+                            isAnotherPicker5={true}
+                            // Auditeddate
+                            pickerlabe4="Allocated Date"
+                            defaultStartDate4={""}
+                            defaultEndDate4={""}
+                            setStartDate4={setAuditedStartDate}
+                            setEndDate4={setAuditedEnsDate}
+                            isAnotherPicker3={true}
                             // allocatedTo
                             isAllocatedToSelector={true}
                             allocatedTolabel="Allocated to"
-                            allocatedToOptoons={ generateOptionsList(filteredList)}
+                            allocatedToOptoons={generateOptionsList(
+                              filteredList
+                            )}
                             setSelAllocatedTo={setSelAllocatedTo}
-                            defaultAllocateTo="All"
+                            // defaultAllocateTo="All"
+                            tracking={true}
+                            // allocated by
+                            isAllocatedBySelector={true}
+                            allocatedBylabel=" Allocated By"
+                            allocatedByOptoons={generateOptionsList(
+                              filteredList
+                            )}
+                            setSelAllocatedBy={setSelAllocatedBy}
+                            // defaultAllocatedBy={"All"}
                             bullets={bullets}
                             isNextRow={true}
                           />
@@ -392,7 +489,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-                            <Footer />
                           </>
                         )}
                       </div>

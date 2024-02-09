@@ -58,20 +58,12 @@ export const ChangePriority = async (patientId, year, priority) => {
 
 
 export const GetWorkListFilters = async (
-    // pageNo,
-    // computationStart = "",
-    // computationEnd = "",
-    // status,
-    // search = "",
-    // completedStartDate,
-    // completedEndDate,
-    // pageSize = 15,
     datas
   ) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
-        `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/workqueue/filter?&page=${datas?.pageNo}&size=15&auditedStatus=${datas?.selectedOption}&auditDueDateStart=${datas?.computedStartDate}&auditDueDateEnd=${datas?.computedEndDate}&auditedDateStart=${datas?.completedStartDate}&auditedDateEnd=${datas?.completedEndDate}&searchString=${datas?.search}&sortField=${datas?.sort?.sortField}&sortdirection=${datas?.sort?.sortDir}`,
+        `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/workqueue/filter?&page=${datas?.pageNo}&size=15&auditedStatus=${datas?.selectedOption}&auditDueDateStart=${datas?.computedStartDate}&auditDueDateEnd=${datas?.computedEndDate}&auditedDateStart=${datas?.completedStartDate}&auditedDateEnd=${datas?.completedEndDate}&searchString=${datas?.search}&sortField=${datas?.sort?.sortField}&sortdirection=${datas?.sort?.sortDir}&patientAllocated=${datas?.selCreatedBy}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

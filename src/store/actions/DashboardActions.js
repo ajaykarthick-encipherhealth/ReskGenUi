@@ -31,6 +31,7 @@ export const getWorkFlow = (startDate, endDate, router) => {
       type: WORKFLOWDATA,
       payload: {
         loding: true,
+        data: null,
       },
     });
     try {

@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { getCOmpletedScore } from "../../../../store/actions/DashboardActions";
 import { useRouter } from "next/router";
-import spinSTYles from '../../../../styles/auth.module.css'
+import spinSTYles from "../../../../styles/auth.module.css";
 import { Empty, Spin } from "antd";
 
 const CompletedStatus = () => {
@@ -38,12 +38,14 @@ const CompletedStatus = () => {
   }, [currentBtn, selectedMonth, selectedYear]);
 
   const completedDatas = useSelector((state) => state?.workFlow?.completed);
-  const CompletedSortedData = completedDatas?.data?.response?.completedData?.sort(
-    (a, b) => a._id.month - b._id.month
-  );
-  const ALlocatedSortedData = completedDatas?.data?.response?.allocatedData?.sort(
-    (a, b) => a._id.month - b._id.month
-  );
+  const CompletedSortedData =
+    completedDatas?.data?.response?.completedData?.sort(
+      (a, b) => a._id.month - b._id.month
+    );
+  const ALlocatedSortedData =
+    completedDatas?.data?.response?.allocatedData?.sort(
+      (a, b) => a._id.month - b._id.month
+    );
 
   const allocatedData = CompletedSortedData?.map((item) => item?.count);
   const completedData = ALlocatedSortedData?.map((item) => item?.count);
@@ -80,7 +82,7 @@ const CompletedStatus = () => {
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
-    xAxisData = getDays(currentDate);
+    xAxisData = getDays(completedDatas?.data?.response?.completedData && Object.keys(completedDatas?.data?.response?.completedData)?.length);
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
@@ -187,18 +189,20 @@ const CompletedStatus = () => {
             </div>
           ) : completedDatas?.loading === false &&
             completedDatas?.data?.response ? (
-            <ReactECharts
-              option={option}
-              style={{ width: "100%", height: "300px", marginTop: "-15px" }}
-            />
+            <>
+              <ReactECharts
+                option={option}
+                style={{ width: "100%", height: "300px", marginTop: "-15px" }}
+              />
+              <div className={styles.bulletContainer}>
+                <Legends bullets={bullets} />
+              </div>
+            </>
           ) : (
             <div className={spinSTYles.spinStyle}>
               <Empty />
             </div>
           )}
-          <div className={styles.bulletContainer}>
-            <Legends bullets={bullets} />
-          </div>
         </Card>
       </div>
     </>

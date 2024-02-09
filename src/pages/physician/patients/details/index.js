@@ -18,6 +18,8 @@ import {
   faCalendarAlt,
   faIdCardClip,
   faClock,
+  faAngleDoubleRight,
+  faAngleDoubleLeft
 } from "@fortawesome/free-solid-svg-icons";
 import { Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
@@ -120,6 +122,7 @@ const Details = ({}) => {
   const [actionItems, setActionItems] = useState([]);
   const [actionItems2, setActionItems2] = useState([]);
   const [actionItems3, setActionItems3] = useState([]);
+  const [adminActionItems, setAdminActionItems] = useState([]);
   const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
   const [userDetails, setUserDetails] = useState("");
   const [currentTime, setCurrentTime] = useState("");
@@ -144,6 +147,7 @@ const Details = ({}) => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
+  const [allocateClicked, setAllocateClicked] = useState(false);
 
   const flagPostList = [
     {
@@ -267,7 +271,7 @@ const Details = ({}) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
   const onPageChange = async (e) => {
@@ -283,7 +287,7 @@ const Details = ({}) => {
       processedEnd,
       e.page
     );
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
 
@@ -304,7 +308,7 @@ const Details = ({}) => {
       "",
       0
     );
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
   const handleShowCard = () => {
@@ -486,10 +490,32 @@ const Details = ({}) => {
         </Menu.Item>
       </Menu>
     );
+    const menu4 = (
+      <Menu>
+          <Menu.Item key="4" onClick={() => {allocatePatient()}}>
+            <div className="patient-status">
+              <span className={`badge processed-text`}>ALLOCATE</span>
+            </div>
+          </Menu.Item>
+        <Menu.Item key="5" onClick={() => handleActionClick("ADD RADIOLOGY")}>
+          <div className="patient-status">
+            <span className={`badge  ${visitStyles.add_text}`}>
+              + ADD RADIOLOGY
+            </span>
+          </div>
+        </Menu.Item>
+        <Menu.Item key="6" onClick={() => handleActionClick("ADD LAB")}>
+          <div className="patient-status">
+            <span className={`badge processing-text`}>+ ADD LAB</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
 
     setActionItems(menu);
     setActionItems2(menu2);
     setActionItems3(menu3);
+    setAdminActionItems(menu4)
   };
 
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
@@ -520,7 +546,7 @@ const Details = ({}) => {
 
         var validDisArray = [];
         result?.validDisease?.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+          const encounterDatearray = res?.encounterDate?.split(",");
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -589,6 +615,8 @@ const Details = ({}) => {
     setIsModalComments(false);
     setFlagContainerActive("");
     setConfirmCompleteModal(false);
+    setOpenPicker(false);
+    setOpenPicker2(false);
   };
 
   const handleSubmitValidNotes = async (event) => {
@@ -987,7 +1015,7 @@ const Details = ({}) => {
         "",
         0
       );
-      setPatientList(result.response.content);
+      setPatientList(result?.response?.content);
       setTotalElements(result?.response?.totalElements);
       setFilterDataLoading(false);
     }
@@ -1060,7 +1088,7 @@ const Details = ({}) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
 
@@ -1281,6 +1309,7 @@ const Details = ({}) => {
       moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
     setDueDateStart(convertStartDate);
     setDueDateEnd(convertEndDate);
+    setOpenPicker(false);
     var result = await patientListFilter(
       localUserId,
       processedStatus,
@@ -1291,7 +1320,7 @@ const Details = ({}) => {
       processedEnd,
       pageNo
     );
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
 
@@ -1302,6 +1331,7 @@ const Details = ({}) => {
       moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
     setProcessedStart(convertStartDate);
     setProcessedEnd(convertEndDate);
+    setOpenPicker2(false);
     var result = await patientListFilter(
       localUserId,
       processedStatus,
@@ -1312,7 +1342,7 @@ const Details = ({}) => {
       convertEndDate,
       pageNo
     );
-    setPatientList(result.response.content);
+    setPatientList(result?.response?.content);
     setTotalElements(result?.response?.totalElements);
   };
 
@@ -1601,7 +1631,7 @@ const Details = ({}) => {
                 <div className="row patient-file-container">
                   <div className="col-xl-12">
                     <div className="row">
-                      <div className="col-xl-1 col-sm-12">
+                      <div className="col-xl-1 col-sm-12" style={{zIndex:"999"}}>
                         <Button
                           onClick={backToPatientData}
                           className={`ms-2 ${visitStyles.backArrowBtn}`}
@@ -1888,18 +1918,14 @@ const Details = ({}) => {
                       <div className="col-xl-1 col-sm-12">
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
-                            <div
-                              className="patient-status"
-                              onClick={() => {
-                                allocatePatient();
-                              }}
-                            >
-                              <span
-                                className={`badge processed-text cr-pointer`}
+                            <Dropdown.Button
+                                type="primary"
+                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                                icon={<DownOutlined />}
+                                overlay={adminActionItems}
                               >
                                 ALLOCATE
-                              </span>
-                            </div>
+                              </Dropdown.Button>
                           </div>
                         ) : userRole == "l2auditor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
@@ -2025,7 +2051,13 @@ const Details = ({}) => {
                                     className={`${visitStyles.sideNavArrow}`}
                                   >
                                     <span className="line">
-                                      {SVGICON.navSideIcon}
+                                    <FontAwesomeIcon
+                                className="fa fa-search form-control-feedback"
+                                icon={isSideNavShow ? faAngleDoubleLeft : faAngleDoubleRight}
+                                style={{
+                                  fontSize:"16px"
+                                }}
+                              />
                                     </span>
                                   </div>
                                 </div>
@@ -3120,7 +3152,10 @@ const Details = ({}) => {
                                     height={30}
                                     width={30}
                                     color="#A20404"
-                                    onClick={() => closeFilterIcons(false)}
+                                    onClick={() => {closeFilterIcons(false);
+                                      setOpenPicker(false);
+                                      setOpenPicker2(false)
+                                    }}
                                   />
                                 ) : (
                                   SVGICON.filter
@@ -3141,6 +3176,7 @@ const Details = ({}) => {
                                       className={visitStyles.circleCard}
                                       onClick={() => {
                                         setOpenPicker(!openPicker);
+                                        setOpenPicker2(false)
                                       }}
                                     >
                                       {SVGICON.dateIcon}
@@ -3154,6 +3190,7 @@ const Details = ({}) => {
                                       className={visitStyles.circleCard}
                                       onClick={() => {
                                         setOpenPicker2(!openPicker2);
+                                        setOpenPicker(false)
                                       }}
                                     >
                                       {SVGICON.dateIcon}
@@ -3501,6 +3538,7 @@ const Details = ({}) => {
         open={allocateModal}
         setOpen={setAllocateModal}
         selectedRowsId={selectedRowsId}
+        setAllocateClicked={setAllocateClicked}
         setSelectedRowsId={setSelectedRowsId}
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}

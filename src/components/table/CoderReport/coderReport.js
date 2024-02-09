@@ -7,8 +7,9 @@ import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate } from "../../headerFilters/functions";
+import { dateFormate, sortFunction } from "../../headerFilters/functions";
 import visitStyles from "../../../styles/visitdata.module.css";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 function CoderReport({
   setModal,
@@ -23,28 +24,27 @@ function CoderReport({
   setSelectedRows,
   selectAll,
   setSelectAll,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(selectedRow(selectedRows));
-  }, [selectedRows]);
 
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll;
+    const updatedRows = selectAll ? [] : reportListAll?.data;
     setSelectedRows(updatedRows);
   };
 
   const handleRowCheckboxChange = (row) => {
-    const isSelected = selectedRows.some(
-      (selectedRow) => selectedRow.patientId === row.patientId
+    const isSelected = selectedRows?.some(
+      (selectedRow) => selectedRow.patientId === row?.patientId
     );
-
     let updatedRows;
 
     if (isSelected) {
-      updatedRows = selectedRows.filter(
-        (selectedRow) => selectedRow.patientId !== row.patientId
+      updatedRows = selectedRows?.filter(
+        (selectedRow) => selectedRow.patientId !== row?.patientId
       );
     } else {
       updatedRows = [...selectedRows, row];
@@ -208,6 +208,11 @@ function CoderReport({
         );
     }
   };
+
+  useEffect(() => {
+    dispatch(selectedRow(selectedRows));
+  }, [selectedRows]);
+
   return (
     <div className={TableStyle.classContaineer}>
       {reportListAll?.data?.length === 0 ? (
@@ -215,19 +220,35 @@ function CoderReport({
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
-            <tr style={{ textAlign: "center" }}>
+            <tr>
               <>
                 <th></th>
-                <th>PATIENT ID</th>
+                <th className={TableStyle.rowStyle2}>PATIENT ID</th>
                 <th>PATIENT NAME</th>
-
-                <th>COMPLETE DATE </th>
+                <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "processedDate"
+                    );
+                  }}
+                >
+                  COMPLETE DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 <th>COMMENTS </th>
-                <th>AUDITOR NAME </th>
+                <th className={TableStyle.rowAudited}>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th>STATUS</th>
+                <th className={TableStyle.rowStyle2}>STATUS</th>
                 <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
@@ -252,11 +273,11 @@ function CoderReport({
           </thead>
 
           <tbody className={TableStyle.bodytable}>
-            {reportListAll?.data?.length > 0?
+            {reportListAll?.data?.length > 0 ? (
               reportListAll?.data?.map((row, index) => (
                 <tr
                   key={index}
-                  style={{ padding: " 22px !important", textAlign: "center" }}
+                 
                 >
                   {row?.auditedBy && (
                     <td className={TableStyle.firstTdBorder}>
@@ -273,6 +294,7 @@ function CoderReport({
                         style={{
                           borderTop: "0.2px solid #e1e1e1",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          paddingLeft: "60px",
                         }}
                         className={TableStyle.childBorder}
                       >
@@ -306,7 +328,9 @@ function CoderReport({
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.auditedBy ? row?.auditedBy : "---"}
+                      <div className={TableStyle.rowAlignment}>
+                          {row?.auditedBy ? row?.auditedBy : "---"}
+                        </div>
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}
@@ -331,7 +355,7 @@ function CoderReport({
                           onChange={() => {
                             handleRowCheckboxChange(row);
                           }}
-                          checked={selectedRows?.data?.some(
+                          checked={selectedRows?.some(
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
@@ -351,6 +375,7 @@ function CoderReport({
                         style={{
                           borderTop: "0.2px solid #e1e1e1",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          paddingLeft: "60px",
                         }}
                         className={TableStyle.childBorder}
                       >
@@ -379,7 +404,9 @@ function CoderReport({
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.auditedBy ? row?.auditedBy : "---"}
+                      <div className={TableStyle.rowAlignment}>
+                          {row?.auditedBy ? row?.auditedBy : "---"}
+                        </div>
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}{" "}
@@ -405,7 +432,7 @@ function CoderReport({
                           onChange={() => {
                             handleRowCheckboxChange(row);
                           }}
-                          checked={selectedRows?.data?.some(
+                          checked={selectedRows?.some(
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
@@ -422,12 +449,14 @@ function CoderReport({
                     </>
                   )}
                 </tr>
-              )):
+              ))
+            ) : (
               <tr>
-              <td colSpan={11}>
-                <Empty />
-              </td>
-            </tr>}
+                <td colSpan={11}>
+                  <Empty />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}
@@ -442,7 +471,6 @@ function CoderReport({
           Total count: {ReportPatientDetails?.totalElements}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

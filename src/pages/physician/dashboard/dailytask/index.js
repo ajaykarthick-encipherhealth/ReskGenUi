@@ -49,7 +49,7 @@ const DailyTask = () => {
     "Saturday",
   ];
 
-  const router = useRouter;
+  const router = useRouter();
   useEffect(() => {
     const days = [];
     for (let i = 0; i < 3; i++) {
@@ -72,7 +72,7 @@ const DailyTask = () => {
 
   useEffect(() => {
     if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData?.data?.response);
+      getDays(selectedDate, dailyStatusData);
     }
   }, [dailyStatusData]);
 
@@ -96,18 +96,18 @@ const DailyTask = () => {
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = statusData?.find((status) => {
-        return status?.response?.date === dayInfo?.dateString;
+        return status?.data?.response?.date === dayInfo?.dateString;
       });
       return {
         id: index + 1,
         day: dayInfo?.day,
         date: dayInfo?.date,
-        dateString: matchingStatusData?.response?.date,
-        pending: matchingStatusData?.response?.pending || 0,
-        hold: matchingStatusData?.response?.hold || 0,
-        completed: matchingStatusData?.response?.completed || 0,
-        decline: matchingStatusData?.response?.declined || 0,
-        allocated: matchingStatusData?.response?.allocated || 0,
+        dateString: matchingStatusData?.data?.response?.date,
+        pending: matchingStatusData?.data?.response?.pending || 0,
+        hold: matchingStatusData?.data?.response?.hold || 0,
+        completed: matchingStatusData?.data?.response?.completed || 0,
+        decline: matchingStatusData?.data?.response?.declined || 0,
+        allocated: matchingStatusData?.data?.response?.allocated || 0,
       };
     });
     const sorted = processedDays?.sort((a, b) => {

@@ -37,6 +37,7 @@ const Addpatients = ({
             noValidate
             validated={validated}
             onSubmit={handleSubmitPatientId}
+            autoComplete="off"
           >
             <div className="row">
               <div className="col-xl-12 mb-3">

@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { getDateRange } from "../../store/actions/DashboardActions";
 import moment from "moment";
+import { disableFutureDate } from "../headerFilters/functions";
 
 const { RangePicker } = DatePicker;
 
@@ -20,6 +21,7 @@ const HeadTitle = ({
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
   const [dateValues, setDates] = useState();
+  const [isDisabled, setIsDisabled] = useState(true);
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
   useEffect(() => {
@@ -39,7 +41,7 @@ const HeadTitle = ({
     }
   };
 
-  const last30thDate = currentDate.subtract(31, "day");
+  const last30thDate = currentDate.subtract(30, "day");
   const lastDateWithTime = currentDate.endOf("day").toISOString();
 
   return (
@@ -71,7 +73,8 @@ const HeadTitle = ({
       </div>
       {anchorTag && (
         <span className={styles.anchor} onClick={handleOpen}>
-          view all
+
+          View All
         </span>
       )}
       <Modal
@@ -83,9 +86,11 @@ const HeadTitle = ({
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);
+          setIsDisabled(false);
         }}
         onCancel={() => {
           setOpenPicker(false);
+          setIsDisabled(false);
         }}
       >
         <div className={styles.modalDetails}>
@@ -102,13 +107,15 @@ const HeadTitle = ({
             open={openPicker}
             value={selectedDates}
             onChange={(dates, dateStrings) => {
+              setIsDisabled(false);
               setSelectedDates(dates);
               handleDatePickerChange(dateStrings);
             }}
             suffixIcon={false}
             className={styles.datepicker}
+            disabledDate={(current) => disableFutureDate(current)}
           />
-          <span
+          <div
             style={{
               cursor: "pointer",
               position: "relative",
@@ -119,14 +126,15 @@ const HeadTitle = ({
               const dates = {
                 startDate: last30thDate.toISOString(),
                 endDate: lastDateWithTime,
+                clear: true,
               };
               dispatch(getDateRange(dates));
-              // setOpenPicker(false);
+              setOpenPicker(false);
               setSelectedDates([]);
             }}
           >
-            <Button>Clear</Button>
-          </span>
+            <Button disabled={isDisabled ? true : false}>Clear</Button>
+          </div>
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
       </Modal>

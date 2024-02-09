@@ -11,6 +11,8 @@ import {
   accuracy,
   filters,
   CurrentUser,
+  currentUser,
+
 } from "../../services/AuthService";
 import { notification } from "antd";
 import ENDPOINTS from "../../utility/enpoints";
@@ -32,6 +34,8 @@ export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
 export const PROFILE_URL = "PROFILE_URL";
 export const CURRENTUSER = "CURRENTUSER";
+export const CURRENT_USER = "CURRENT_USER";
+
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -67,15 +71,21 @@ export function Logout(navigate) {
 }
 
 export const getMFAValidation = (username, route, password) => {
-  localStorage.setItem("password", password);
-  return (dispatch) => {
+  return () => {
     mfaValidation(username, route).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response?.data?.response) {
-        route?.push(
-          `/twofactorAuthentication/Authentication?mfa=${mfa}&skipEntry=${skip}&username=${username}`
-        );
+        const encodedParams = btoa(JSON.stringify({
+          mfa: mfa,
+          skipEntry: skip,
+          username: username,
+          password: password
+        }));
+        route?.push({
+          pathname: `/twofactorAuthentication/Authentication`,
+          search: `params=${encodedParams}`
+        });
       }
     });
   };
@@ -93,13 +103,12 @@ export const getQrCode = (username, route) => {
     });
   };
 };
-export const getValidateCode = (username, code, route, validate) => {
-  const password = localStorage.getItem("password");
+export const getValidateCode = (username, code, route, validate,password) => {
   return (dispatch) => {
     verifyCode(username, code, route).then((response) => {
       if (response?.data?.response) {
         if (validate && password) {
-          dispatch(loginAction(username, route, code));
+          dispatch(loginAction(username, route, code,password));
         } else {
           notification.success({
             message: "Code verified successfully",
@@ -137,12 +146,11 @@ export function LogInRoute(navigate) {
   navigate("/dashboard");
 }
 
-export function loginAction(email, router, code) {
-  const password = localStorage.getItem("password");
+export function loginAction(email, router, code,password,mfa,skip) {
   return (dispatch) => {
     login(email, password, code)
       .then((response) => {
-        var result = response.data.response;
+        var result = response?.data?.response;
         let emailSplit = email?.split("@");
 
         if (response?.data?.status === "SUCCESS") {
@@ -153,7 +161,22 @@ export function loginAction(email, router, code) {
           localStorage.setItem("orgId", result.organizationId);
           localStorage.setItem("userName", emailSplit[0]);
           localStorage.setItem("loginCheck", true);
-          router?.push(`/twofactorAuthentication/SelectRole?username=${email}`);
+          const encodedParams = btoa(JSON.stringify({
+            mfa: mfa,
+            skipEntry: skip,
+            username: email,
+            password: password
+          }));
+          router?.push({
+            pathname: `/twofactorAuthentication/SelectRole`,
+            search: `params=${encodedParams}`
+          });
+          // router?.push(`/twofactorAuthentication/SelectRole?username=${email}&params=${decodedParams}`);
+        }
+        if (response.data?.response === null) {
+          notification.error({
+            description: response?.data?.message,
+          });
         }
       })
       .catch((err) => {
@@ -225,16 +248,18 @@ export const getCoderDetails = ({ name, search, selectedOption, router }) => {
   };
 };
 
-export const getFilters = (field, username) => {
+export const getFilters = (field, username, pageQueue) => {
   return (dispatch) => {
     dispatch({
       type: FILTER,
       payload: {
         loading: true,
+        data:null
       },
     });
     try {
-      filters(field, username).then((response) => {
+      filters(field, username, pageQueue).then((response) => {
+
         dispatch({
           type: FILTER,
           payload: {
@@ -248,6 +273,7 @@ export const getFilters = (field, username) => {
     }
   };
 };
+
 export const getCurrentUser = (userId) => {
   return (dispatch) => {
     try {
@@ -262,6 +288,7 @@ export const getCurrentUser = (userId) => {
     }
   };
 };
+
 export const preSendURl = (type, file) => async (dispatch) => {
   const token = localStorage.getItem("token");
 
@@ -335,3 +362,4 @@ export const updateImage = (url) => async (dispatch) => {
     }
   }
 };
+

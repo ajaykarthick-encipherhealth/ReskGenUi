@@ -7,8 +7,13 @@ import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate } from "../../../../components/headerFilters/functions";
+import {
+  dateFormate,
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 function TeamReport({
   setModal,
@@ -23,6 +28,9 @@ function TeamReport({
   selectedRows,
   selectAll,
   setSelectAll,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -250,37 +258,35 @@ function TeamReport({
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
-            <tr style={{ textAlign: "center" }}>
+            <tr>
               <>
-                <th>PATIENT ID</th>
+                <th className={TableStyle.rowStyle3}>PATIENT ID</th>
                 <th>PATIENT NAME</th>
-                <th style={{ textAlign: "left" }}>L1 AUDITOR </th>
-                <th>COMPLETE DATE </th>
+                <th className={TableStyle.rowStyle2}>L1 AUDITOR </th>
+                <th
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "processedDate"
+                    );
+                  }}
+                >
+                  COMPLETE DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 <th>COMMENTS </th>
-                <th style={{ textAlign: "left" }}>AUDITOR NAME </th>
+                <th className={TableStyle.rowStyle2}>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th>AUDIT STATUS</th>
-                {/* <th>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-around" }}
-                  >
-                    <input
-                      type="checkbox"
-                      onChange={handleHeaderCheckboxChange}
-                      style={{
-                        paddingTop: "10px",
-                        width: "20px",
-                        height: "20px",
-                        flexhrink: "0",
-                        borderRadius: "4px",
-                        backgroundColor: "pink",
-                      }}
-                      checked={selectAll}
-                    />
-                  </div>
-                </th> */}
+                <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
               </>
             </tr>
           </thead>
@@ -290,7 +296,7 @@ function TeamReport({
               ReportPatientDetails?.data?.map((row, index) => (
                 <tr
                   key={index}
-                  style={{ padding: " 22px !important", textAlign: "center" }}
+                  // style={{ padding: " 22px !important", textAlign: "center" }}
                 >
                   <>
                     <td className={TableStyle.firstTdBorder}>
@@ -307,7 +313,7 @@ function TeamReport({
                       ) : null}
                       <span
                         style={{
-                          paddingLeft: "40px",
+                          paddingLeft: "70px",
                         }}
                       >
                         {row?.patientId}
@@ -319,72 +325,29 @@ function TeamReport({
                     </td>
                     <td
                       className={TableStyle.childBorder}
-                      style={{ textAlign: "left" }}
+                      style={{ textAlign: "center" }}
                     >
-                      {row.patientAllocated ? (
-                        <Tooltip title={row.patientAllocated}>
-                          {row.patientAllocated ===
-                          "praveen01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={praveen01}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "5px",
-                              }}
-                            />
-                          ) : row.patientAllocated ===
-                            "ranjith01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={dummyProfileImageUrl}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          ) : row.patientAllocated ===
-                            "varsha01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={varsha01}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          ) : (
-                            <img
-                              src={nullImg}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          )}
-                          {row.patientAllocated ? (
-                            <>
-                              {row.patientAllocated
-                                .split("@")[0]
-                                .charAt(0)
-                                .toUpperCase() +
-                                row.patientAllocated.split("@")[0].slice(1)}
-                            </>
-                          ) : (
-                            "---"
-                          )}
-                        </Tooltip>
+                      {row.patientAllocatedFirstName ||
+                      row.patientAllocatedLastName ||
+                      row?.patientAllocatedProfileImage ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {" "}
+                          <span style={{ marginRight: "10px" }}>
+                            {" "}
+                            {renderUserPrfoileAvatar(
+                              row.patientAllocatedFirstName,
+                              row.patientAllocatedLastName,
+                              row?.patientAllocatedProfileImage,
+                              "header"
+                            )}
+                          </span>
+                          <span>
+                            {row.patientAllocatedFirstName}{" "}
+                            {row.patientAllocatedLastName}
+                          </span>
+                        </div>
                       ) : (
-                        "---"
+                        <div style={{ textAlign: "center" }}>---</div>
                       )}
                     </td>
 
@@ -404,59 +367,30 @@ function TeamReport({
                         {row?.comment ? SVGICON.comment : SVGICON.emptyComments}
                       </div>
                     </td>
-                    <td className={TableStyle.childBorder}>
-                      {row.auditedBy ? (
-                        <Tooltip title={row.auditedBy}>
-                          {row.auditedBy ===
-                          "praveen01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={praveen01}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "5px",
-                              }}
-                            />
-                          ) : row.auditedBy ===
-                            "ranjith01@encipherhealth.onmicrosoft.com" ? (
-                            <img
-                              src={dummyProfileImageUrl}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          ) : (
-                            <img
-                              src={nullImg}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                          )}
-                          {row.auditedBy ? (
-                            <>
-                              {row.auditedBy
-                                .split("@")[0]
-                                .charAt(0)
-                                .toUpperCase() +
-                                row.auditedBy.split("@")[0].slice(1)}
-                            </>
-                          ) : (
-                            "---"
-                          )}
-                        </Tooltip>
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      {row.auditedByFirstName ||
+                      row.auditedByLastName ||
+                      row?.auditedByProfileImage ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {" "}
+                          <span style={{ marginRight: "10px" }}>
+                            {" "}
+                            {renderUserPrfoileAvatar(
+                              row.auditedByFirstName,
+                              row.auditedByLastName,
+                              row?.auditedByProfileImage,
+                              "header"
+                            )}
+                          </span>
+                          <span>
+                            {row.auditedByFirstName} {row.auditedByLastName}
+                          </span>
+                        </div>
                       ) : (
-                        "---"
+                        <div style={{ textAlign: "center" }}>---</div>
                       )}
                     </td>
 
@@ -512,7 +446,6 @@ function TeamReport({
           Total count: {ReportPatientDetails?.totalElements}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
