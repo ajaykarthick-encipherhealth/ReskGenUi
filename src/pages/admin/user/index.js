@@ -301,7 +301,9 @@ const UserList = () => {
             <button
               type="button"
               className="btn-close"
-              onClick={() => setAddPatientId(false)}
+              onClick={() => {
+                setAddPatientId(false);
+              }}
             >
               <i className="fa-solid fa-xmark"></i>
             </button>
@@ -369,6 +371,7 @@ const UserList = () => {
               className="btn-close"
               onClick={() => {
                 setAddUser(false);
+                setFormData();
                 setErrors({
                   email: "",
                   password: "",
