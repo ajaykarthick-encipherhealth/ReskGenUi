@@ -13,8 +13,6 @@ import {
   FILTER,
   PROFILE_URL,
   CURRENTUSER,
-  CURRENT_USER
-  
 } from "../actions/AuthActions";
 
 const initialState = {
@@ -35,9 +33,7 @@ const initialState = {
   accuracy: "",
   filterList: null,
   url: null,
-  userInfo:null
-  filterList:null,
-  currentUserInfo:null
+  currentUserInfo: null,
 };
 
 const initialStatePatient = {
@@ -132,13 +128,7 @@ export function AuthReducer(state = initialState, action) {
       url: action.payload,
     };
   }
-  if(action.type===CURRENTUSER){
-    return{
-      ...state,
-      userInfo:action.payload
-    }
-  }
-  if (action.type === CURRENT_USER) {
+  if (action.type === CURRENTUSER) {
     return {
       ...state,
       currentUserInfo: action.payload,

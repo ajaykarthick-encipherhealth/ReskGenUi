@@ -93,7 +93,7 @@ const Header = () => {
 
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const accuracy = useSelector((state) => state.auth.accuracy);
-  const currentUserInfo = useSelector((state) => state.auth.userInfo);
+  const currentUserInfo = useSelector((state) => state.auth.currentUserInfo);
 
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;

@@ -34,7 +34,6 @@ export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
 export const PROFILE_URL = "PROFILE_URL";
 export const CURRENTUSER = "CURRENTUSER";
-export const CURRENT_USER = "CURRENT_USER";
 
 
 export const selectedUserRole = (data) => ({
