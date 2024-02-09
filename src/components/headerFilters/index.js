@@ -11,7 +11,7 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
-import { handleRnagePicker2 } from "./functions";
+import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
@@ -51,6 +51,7 @@ const HeaderFilters = ({
   setStartDate,
   setEndDate,
   isRangePicker,
+  disabled,
   // for report
   setReceivedStartDate,
   setReceivedEndDate,
@@ -81,6 +82,14 @@ const HeaderFilters = ({
   defaultStartDate4,
   defaultEndDate4,
   isAnotherPicker3,
+
+  // if has audited allocated date oicker
+  pickerlabe5,
+  setStartDate5,
+  setEndDate5,
+  defaultStartDate5,
+  defaultEndDate5,
+  isAnotherPicker5,
 
   // conditions to display extra components
   addUser,
@@ -117,13 +126,17 @@ const HeaderFilters = ({
   btnTitle,
   badges,
   setIsModalVisible,
+  optionKey,
+  disable,
+  tracking,
+  selectorField
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   return (
     <>
       <div style={{ display: "flex" }}>
-        <div className="row filter-contain" style={{ width: "98%" }}>
+        <div className="row filter-contain" style={{ width: "100%" }}>
           {isSearch && (
             <div className="col-xl-2">
               {" "}
@@ -138,7 +151,7 @@ const HeaderFilters = ({
             </div>
           )}
           {isSelector ? (
-            <div className="col-xl-2" style={{ zIndex: "999" }}>
+            <div className="col-xl-2">
               {" "}
               <Selector
                 selectlabel={selectlabel}
@@ -150,14 +163,14 @@ const HeaderFilters = ({
           ) : null}
           {selectOptions2 && (
             <div className="col-xl-2">
-              <label>{selectlabel2}</label>
+              <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
                   }}
                   options={selectOptions2}
-                  defaultValue={defaultSelectValue2}
+                  placeholder={defaultSelectValue2?.label}
                   className="custom-react-select"
                   isSearchable={false}
                 />
@@ -179,6 +192,7 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
+                disabled={disable != "Yes" && true}
               />
             </div>
           )}
@@ -186,7 +200,7 @@ const HeaderFilters = ({
           {isAnotherPicker && (
             <>
               <div className="col-xl-2">
-                <label>{pickerlabe2}</label>
+                <label className={styles.label}>{pickerlabe2}</label>
                 <div>
                   <RangePicker
                     format="YYYY-MM-DD"
@@ -207,6 +221,7 @@ const HeaderFilters = ({
                           ]
                         : []
                     }
+                    disabledDate={(current) => disableFutureDate(current)}
                   />
                 </div>
               </div>
@@ -310,10 +325,10 @@ const HeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("allocatedBy"));
+                  dispatch(getFilters(selectorField?selectorField:"allocatedBy"));
                 }}
               >
-                <label>{allocatedBylabel}</label>
+                <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -330,11 +345,12 @@ const HeaderFilters = ({
             {isAllocatedToSelector && (
               <div
                 className="col-xl-2"
+                style={{ zIndex: tracking && "2" }}
                 onClick={() => {
                   dispatch(getFilters("patientAllocated"));
                 }}
               >
-                <label>{allocatedTolabel}</label>
+                <label className={styles.label}>{allocatedTolabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -352,10 +368,16 @@ const HeaderFilters = ({
               <div
                 className="col-xl-2"
                 onClick={() => {
-                  dispatch(getFilters("createdBy"));
+                  dispatch(
+                    getFilters(
+                      optionKey ? optionKey : "createdBy",
+                      null,
+                      "audited queue"
+                    )
+                  );
                 }}
               >
-                <label>{createdTolabel}</label>
+                <label className={styles.label}>{createdTolabel}</label>
                 <div class="form-group has-search">
                   <Select
                     onChange={(selectedOption) => {
@@ -372,7 +394,7 @@ const HeaderFilters = ({
             {isAnotherPicker2 && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe3}</label>
+                  <label className={styles.label}>{pickerlabe3}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -392,7 +414,7 @@ const HeaderFilters = ({
             {isAnotherPicker3 && (
               <>
                 <div className="col-xl-2">
-                  <label>{pickerlabe4}</label>
+                  <label className={styles.label}>{pickerlabe4}</label>
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
@@ -404,6 +426,28 @@ const HeaderFilters = ({
                           setEndDate4,
                         })
                       }
+                      disabledDate={(current) => disableFutureDate(current)}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+            {isAnotherPicker5 && (
+              <>
+                <div className="col-xl-2">
+                  <label className={styles.label}>{pickerlabe5}</label>
+                  <div>
+                    <RangePicker
+                      format="YYYY-MM-DD"
+                      onChange={(date, dateString) =>
+                        handleRnagePicker2({
+                          date,
+                          dateString,
+                          setStartDate5,
+                          setEndDate5,
+                        })
+                      }
+                      disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
                 </div>

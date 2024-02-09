@@ -9,16 +9,19 @@ import TableStyle from "../../../../components/table/table.module.css";
 import {
   priorityOptions,
   processstatusBodyTemplate,
+  renderUserPrfoile,
+  renderUserPrfoileAvatar,
+  sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 
 const UserQueue = ({ userList, setSort }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [processSort, setProcessSort] = useState("ASC");
-  const [auditAllocatedSort, setAuditAllocatedSort] = useState("ASC");
-  const [audirDateSort, setAuditDateSort] = useState("ASC");
-  const [auditDueSort, setAuditDueSort] = useState("ASC");
+  const [processSort, setProcessSort] = useState("DESC");
+  const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
+  const [audirDateSort, setAuditDateSort] = useState("DESC");
+  const [auditDueSort, setAuditDueSort] = useState("DESC");
   const badgeDisplay = (data) => {
     if (data?.auditedStatus === "AUDITED") {
       return (
@@ -43,16 +46,16 @@ const UserQueue = ({ userList, setSort }) => {
           text="Audit Hold"
           color="#964B00"
           placement="start"
-          style={{fontSize:"10px"}}
+          style={{ fontSize: "10px" }}
         ></Badge.Ribbon>
       );
-    }else if (data.auditedStatus === "AUDIT_PENDING") {
+    } else if (data.auditedStatus === "AUDIT_PENDING") {
       return (
         <Badge.Ribbon
           text="Audit Pending"
           color="#F28585"
           placement="start"
-          style={{fontSize:"10px"}}
+          style={{ fontSize: "10px" }}
         ></Badge.Ribbon>
       );
     } else return null;
@@ -65,17 +68,14 @@ const UserQueue = ({ userList, setSort }) => {
       router?.push("details");
     }
   };
-  const dummyProfileImageUrl =
-    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
-  const nullImg =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
+
   const renderRows = () => {
     return userList?.length === 0 ? (
       <Empty />
     ) : (
       userList?.map((data, index) => (
         <tr key={index}>
-          <td 
+          <td
             className={TableStyle.firstTdBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
@@ -126,39 +126,17 @@ const UserQueue = ({ userList, setSort }) => {
                   <div>
                     <span className={TableStyle.subTitle}> Allocated By</span>
                     <div>
-                      {data.allocatedBy ? (
+                      {data?.allocatedBy ? (
                         <>
-                          {data.allocatedBy ? (
-                            <img
-                              src={dummyProfileImageUrl}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "5px",
-                              }}
-                            />
-                          ) : (
-                            <img
-                              src={nullImg}
-                              alt="User Avatar"
-                              width={30}
-                              height={30}
-                              style={{
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
+                          {renderUserPrfoile(
+                            data?.allocatedByFirstName,
+                            data?.allocatedByLastName,
+                            data?.allocatedByProfileImage
                           )}
                           {data.allocatedBy ? (
                             <>
-                              {data.allocatedBy
-                                // .split("@")[0]
-                                // .charAt(0)
-                                // .toUpperCase() +
-                                // data.allocatedBy.split("@")[0].slice(1)
-                                }
+                              &nbsp;{data?.allocatedByFirstName}
+                              &nbsp;&nbsp;{data?.allocatedByLastName}
                             </>
                           ) : (
                             "---"
@@ -199,53 +177,69 @@ const UserQueue = ({ userList, setSort }) => {
             </div>
           </td>
 
-          <td className={TableStyle.childBorder}>
-            <div className={TableStyle.innerAlignments}>
-              {data.auditAllocatedBy ? (
-                <Tooltip title={data.auditAllocatedBy}>
-                  {data.auditAllocatedBy ? (
-                    <img
-                      src={dummyProfileImageUrl}
-                      alt="User Avatar"
-                      width={30}
-                      height={30}
-                      style={{ borderRadius: "50%", marginRight: "5px" }}
-                    />
-                  ) : (
-                    <img
-                      src={nullImg}
-                      alt="User Avatar"
-                      width={30}
-                      height={30}
-                      style={{ borderRadius: "50%", marginRight: "10px" }}
-                    />
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
+            {data.auditAllocatedByFirstName ||
+            data.auditAllocatedByLastName ||
+            data?.auditAllocatedByProfileImage ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {" "}
+                <span style={{ marginRight: "10px" }}>
+                  {" "}
+                  {renderUserPrfoileAvatar(
+                    data.auditAllocatedByFirstName,
+                    data.auditAllocatedByLastName,
+                    data?.auditAllocatedByProfileImage,
+                    "header"
                   )}
-                  {data.auditAllocatedBy ? (
-                    <>
-                      {data.auditAllocatedBy
-                        .split("@")[0]
-                        .charAt(0)
-                        .toUpperCase() +
-                        data.auditAllocatedBy.split("@")[0].slice(1)}
-                    </>
-                  ) : (
-                    "---"
-                  )}
-                </Tooltip>
-              ) : (
-                "---"
-              )}
-            </div>
+                </span>
+                <span>
+                  {data.auditAllocatedByFirstName}{" "}
+                  {data.auditAllocatedByLastName}
+                </span>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
           </td>
           <td
             className={TableStyle.childBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-            {data.auditedDate
-              ? moment(data.auditedDate).format("MM-DD-YYYY")
-              : "---"}
+            <Popover
+              content={
+                data?.auditedDate &&
+                (data?.auditedByFirstName ||
+                  data?.auditedByLastName ||
+                  data?.auditedByProfileImage) && (
+                  <>
+                    {renderUserPrfoile(
+                      data?.auditedByFirstName,
+                      data?.auditedByLastName,
+                      data?.auditedByProfileImage,
+                      null,
+                      "30px",
+                      "30px"
+                    )}
+                    {data.auditedDate ? (
+                      <>
+                        &nbsp;{data?.auditedByFirstName}&nbsp;&nbsp;
+                        {data?.auditedByLastName}
+                      </>
+                    ) : (
+                      "---"
+                    )}
+                  </>
+                )
+              }
+            >
+              {data?.auditedDate
+                ? moment(data?.auditedDate).format("MM-DD-YYYY")
+                : "---"}
+            </Popover>
           </td>
-      
 
           <td className={TableStyle.childBorder}>
             <Select
@@ -269,6 +263,7 @@ const UserQueue = ({ userList, setSort }) => {
 
           <td
             className={TableStyle.childBorder}
+            style={{textAlign:"center"}}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {processstatusBodyTemplate(data)}
@@ -287,49 +282,53 @@ const UserQueue = ({ userList, setSort }) => {
             <th>PATIENT NAME</th>
             <th
               onClick={() => {
-                setProcessSort(processSort === "ASC" ? "DESC" : "ASC");
-                setSort({
-                  sortDir: processSort,
-                  sortField: "processedDate",
-                });
+                sortFunction(
+                  processSort,
+                  setProcessSort,
+                  setSort,
+                  "processedDate"
+                );
               }}
             >
               COMPLETED DATE
-              <span style={{cursor: "pointer" }}>
-                {processSort === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
+              <span style={{ cursor: "pointer",padding: "5px" }}>
+                {processSort === "DESC" ? (
                   <ArrowDownOutlined />
+                ) : (
+                  <ArrowUpOutlined />
                 )}
               </span>
             </th>
             <th
               onClick={() => {
-                setAuditAllocatedSort(
-                  auditAllocatedSort === "ASC" ? "DESC" : "ASC"
+                sortFunction(
+                  auditAllocatedSort,
+                  setAuditAllocatedSort,
+                  setSort,
+                  "auditAllocatedDate"
                 );
-                setSort({
-                  sortDir: auditAllocatedSort,
-                  sortField: "auditAllocatedDate",
-                });
               }}
             >
-              AUDITED ALLOCATED DATE
+              AUDIT ALLOCATED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {auditAllocatedSort === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
+                {auditAllocatedSort === "DESC" ? (
                   <ArrowDownOutlined />
+                ) : (
+                  <ArrowUpOutlined />
                 )}
               </span>
             </th>
             <th
               onClick={() => {
-                setAuditDueSort(auditDueSort === "ASC" ? "DESC" : "ASC");
-                setSort({ sortDir: auditDueSort, sortField: "auditDueDate" });
+                sortFunction(
+                  auditDueSort,
+                  setAuditDueSort,
+                  setSort,
+                  "auditDueDate"
+                );
               }}
             >
-              AUDITED DUE DATE
+              AUDIT DUE DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
                 {auditDueSort === "ASC" ? (
                   <ArrowUpOutlined />
@@ -338,25 +337,29 @@ const UserQueue = ({ userList, setSort }) => {
                 )}
               </span>
             </th>
-            <th>AUDITED ALLOCATED BY</th>
+            <th>AUDIT ALLOCATED BY</th>
             <th
               onClick={() => {
-                setAuditDateSort(audirDateSort === "ASC" ? "DESC" : "ASC");
-                setSort({ sortDir: audirDateSort, sortField: "auditedDate" });
+                sortFunction(
+                  audirDateSort,
+                  setAuditDateSort,
+                  setSort,
+                  "auditedDate"
+                );
               }}
             >
               AUDITED DATE
               <span style={{ padding: "5px", cursor: "pointer" }}>
-                {audirDateSort === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
+                {audirDateSort === "DESC" ? (
                   <ArrowDownOutlined />
+                ) : (
+                  <ArrowUpOutlined />
                 )}
               </span>
             </th>
             {/* <th>ALLOCATED BY</th> */}
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
-            <th>PROCESSED STATUS</th>
+            <th style={{textAlign:"center"}}>PROCESSED STATUS</th>
           </tr>
         </thead>
 

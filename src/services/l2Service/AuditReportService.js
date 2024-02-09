@@ -1,12 +1,16 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
 
-export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="") => {
+export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="",sort) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
 
   const searchValue = filter === "ALL" ? "" : filter
- const url=`dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}`
+  const sortField = sort?.sortField === "undefined" ? "" : sort?.sortField
+  const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir
+
+
+ const url=`dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}`
 
   try {
     const response = await axios.get(
@@ -22,12 +26,14 @@ export const patientDetails = async (pagenum,startDate="",endDate="",search,filt
     console.log(err);
   }
 };
-export const TeamReport = async (pagenum,startDate="",endDate="",search,filter="") => {
+export const TeamReport = async (pagenum,startDate="",endDate="",search,filter="",sort) => {
     const token = localStorage.getItem("token");
     const orgId = localStorage.getItem("orgId");
   
     const searchValue = filter === "ALL" ? "" : filter
-   const url=`dbservice/patient/auditorreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}`
+    const sortField = sort?.sortField === "undefined" ? "" : sort?.sortField
+    const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir
+   const url=`dbservice/patient/auditorreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`
   
     try {
       const response = await axios.get(
@@ -44,10 +50,10 @@ export const TeamReport = async (pagenum,startDate="",endDate="",search,filter="
     }
   };
 
-export const AuditSentReport = async (pagenum,startDate="",endDate="",search) => {
+export const AuditSentReport = async (pagenum,startDate="",endDate="",search,sort) => {
   const token = localStorage.getItem("token");
  
-  const url= `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}`
+  const url= `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
@@ -63,9 +69,12 @@ export const AuditSentReport = async (pagenum,startDate="",endDate="",search) =>
     console.log(err);
   }
 };
-export const AuditReceivedReport = async (pagenum,startDate="",endDate="",search,sortfield="",sortdirection="") => {
+export const AuditReceivedReport = async (pagenum,startDate="",endDate="",search,sort) => {
   const token = localStorage.getItem("token");
-  const url= `dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sortfield}&sortdirection=${sortdirection}`
+  const sortField = sort?.sortField === "undefined" ? "" : sort?.sortField
+  const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir
+  const url= `dbservice/reportdetails/received?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sortField}&sortdirection=${sortDirection}`
+  
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,

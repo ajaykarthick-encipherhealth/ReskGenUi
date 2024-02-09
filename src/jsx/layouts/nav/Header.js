@@ -20,6 +20,7 @@ import {
   Avatar,
   Modal,
   Divider,
+
 } from "antd";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
@@ -48,6 +49,7 @@ import {
   getCurrentUser,
 } from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
+import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
@@ -107,10 +109,12 @@ const Header = () => {
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
   const [dropdownContent, setDropdownContent] = useState();
   const [currentRole, setCurrentRole] = useState();
+  const [isChat, setIsChat] = useState(false);
   const [profileImg, setProfileImg] = useState();
   const [lastName, setLastName] = useState();
   const [openUploader, setOpenUploader] = useState();
   const [openContent, setOpenContent] = useState(false);
+
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -184,13 +188,7 @@ const Header = () => {
   const percentage = 95;
   const PopContent = (
     <div className={styles.innerPop}>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
+      <div className={styles.codesContainer}>
         <div style={{ width: "70%" }}>
           {btnItems?.map((data) => (
             <button
@@ -207,7 +205,7 @@ const Header = () => {
             </button>
           ))}
         </div>
-        <div style={{ width: "30%", marginTop: "-25px" }}>
+        <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
           {selectedbtn === "HCC" && (
             <Selector
               selectlabel={""}
@@ -218,24 +216,17 @@ const Header = () => {
           )}
         </div>
       </div>
-      <div
-        style={{
-          width: "80%",
-          margin: "10px 50px",
-        }}
-      >
-        <Search
-          searchlabel={""}
-          setSearch={setSearch}
-          style={{ border: "1px solid red" }}
-        />
+      <div className={styles.codesContainer}>
+        <div className={styles.codesContainer2}>
+          <Search searchlabel={""} setSearch={setSearch} />
+        </div>
       </div>
       <div className={styles.displayDiv}>
         {codDetails?.response
           ? codDetails?.response?.map((data) => (
               <div className={styles.hoverDiv}>
                 {data?.diagnosisCode} &nbsp;
-                {data?.description}
+                {data?.description}&nbsp;
                 {selectedbtn === "HCC" && (
                   <>
                     {getStatus(data) === "CMS" && (
@@ -248,7 +239,12 @@ const Header = () => {
                     )}
                     {getStatus(data) === "CMS RX" && (
                       <>
-                        <span className={styles.cmsStatus}>CMS</span>
+                        <span
+                          className={styles.cmsStatus}
+                          style={{ marginRight: "5px" }}
+                        >
+                          CMS
+                        </span>
                         <span className={styles.rxStatus}>RX</span>
                       </>
                     )}
@@ -268,14 +264,6 @@ const Header = () => {
     }
   );
 
-  const handleNewUserMessage = (newMessage) => {
-    dispatch(getChatReply(newMessage));
-  };
-
-  const handleQuickButtonClicked = (data) => {
-    console.log(data);
-  };
-
   const notificationDrawer = async () => {
     setOpen(true);
     dispatch(getNotificationAlertClear([]));
@@ -288,8 +276,8 @@ const Header = () => {
     }))
     .filter(
       (info) =>
-        info.key.toLowerCase() !== userRole.toLowerCase() &&
-        info.label.toLowerCase() !== userRole.toLowerCase()
+        info.key.toLowerCase() !== userRole?.toLowerCase() &&
+        info.label.toLowerCase() !== userRole?.toLowerCase()
     );
 
   const onClick = ({ key }) => {
@@ -346,13 +334,14 @@ const Header = () => {
 
     dispatch(getAccuracy());
   }, []);
+
+  const gotoChat = () => {
+    setOpenMsg(true);
+    // window.open("/chat",'_blank');
+  };
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
 
-    if (typeof window !== "undefined") {
-      const { addResponseMessage } = require("react-chat-widget");
-      addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
-    }
     if (selectedbtn && userRoleLocal !== "admin") {
       dispatch(
         getCoderDetails({
@@ -420,18 +409,16 @@ const Header = () => {
                             trigger={"click"}
                           >
                             <Button className={styles.codeBtn}>
-                              <CodeIcon /> Codes
+                              <div style={{ margin: " -7px 0 0 -25px" }}>
+                                <CodeIcon />
+                              </div>
+                              <div style={{ margin: " -6px 0 0 -7px" }}>
+                                Codes
+                              </div>
                             </Button>
                           </Popover>
                         )}
-                        <TerminalComponent
-                          handleNewUserMessage={handleNewUserMessage}
-                          handleQuickButtonClicked={handleQuickButtonClicked}
-                          showBadge={false}
-                          emojis={true}
-                          title="CogentAI"
-                          subtitle="Chat with CogentAI"
-                        />
+
                         <Tooltip
                           title={` Quality : ${
                             userRole === "l1auditor"
@@ -439,7 +426,7 @@ const Header = () => {
                               : Math.round(accuracy?.data?.response)
                           }%`}
                         >
-                          <div className="notificationIcon">
+                          <div className="header-progress">
                             <div style={{ width: 40, height: 40 }}>
                               <CircularProgressbar
                                 value={
@@ -458,13 +445,19 @@ const Header = () => {
                             </div>
                           </div>
                         </Tooltip>
+                        <div
+                          className="chatheaderIcon"
+                          onClick={() => gotoChat()}
+                        >
+                          <Image src={IMAGES.chatIcons} alt="" />
+                        </div>
 
                         <div
                           className="notificationIcon"
                           onClick={() => notificationDrawer()}
                         >
                           <Badge
-                            count={notificationAlertData.length}
+                            count={notificationAlertData?.length}
                             color="#3479fe"
                           >
                             {SVGICON.dashboardNotification}
@@ -610,6 +603,12 @@ const Header = () => {
           <ImageUploader setOpenUploader={setOpenUploader} />
         </div>
       </Modal>
+      {openMsg ? (
+        <div className="chat-box ">
+          <ChatCommunication openMsg={openMsg} offMsg={setOpenMsg} />
+        </div>
+      ) : null}
+
     </div>
   );
 };

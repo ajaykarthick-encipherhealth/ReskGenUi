@@ -10,8 +10,12 @@ import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import { getAccuracyScore ,getAccuracyScoreNew,getUserByIndividual} from "../../../../store/actions/l2Action/DashboardAction";
-import { Empty, Spin,Select } from "antd";
+import {
+  getAccuracyScore,
+  getAccuracyScoreNew,
+  getUserByIndividual,
+} from "../../../../store/actions/l2Action/DashboardAction";
+import { Empty, Spin, Select } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
 import moment from "moment";
 export const getDateWeek = (date) => {
@@ -20,13 +24,11 @@ export const getDateWeek = (date) => {
   const currentDate = date.getDate();
   const startingWeek = Math.ceil((currentDate + firstDayWeek) / 7);
   var currentWeek = moment().isoWeek().toString();
-  return currentWeek;
+  return startingWeek;
 };
 
-export const getDays = (currentDate) => {
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-  const totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+export const getDays = (dataLength) => {
+  const totalDaysInMonth =  dataLength
   return Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
 };
 
@@ -71,7 +73,6 @@ const Accuracy = () => {
   );
   const router = useRouter();
 
-
   const options = [
     { value: "TEAM", label: "TEAM" },
     { value: "INDIVIDUAL", label: "INDIVIDUAL" },
@@ -98,13 +99,9 @@ const Accuracy = () => {
     setSelectUser([e]);
   };
 
-
-  
   useEffect(() => {
     dispatch(getUserByIndividual());
   }, [selectMemberType]);
-
-
 
   useEffect(() => {
     dispatch(
@@ -118,7 +115,7 @@ const Accuracy = () => {
         selectUser
       )
     );
-  }, [currentBtn, selectedMonth, selectedYear,selectMemberType, selectUser]);
+  }, [currentBtn, selectedMonth, selectedYear, selectMemberType, selectUser]);
 
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);
@@ -140,7 +137,8 @@ const Accuracy = () => {
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
-    xAxisData = getDays(currentDate);
+    xAxisData = getDays(accuracyDatas?.data?.response?.mapAccuracy &&
+      Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length);
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
@@ -211,59 +209,59 @@ const Accuracy = () => {
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
-          <div className={`d-flex ${styles.selectContainer}`}>
-          <div className={styles.select}>
-              <Select
-                value={selectMemberType}
-                onChange={(e) => memberTypeChanges(e)}
-                className={`custom_select_type ${styles.custom_select_type}`}
-                options={options}
-                style={{ backgroundColor: "#F3F3FF" }}
-              />
-            </div>
-            {isindividual ? (
+            <div className={`d-flex ${styles.selectContainer}`}>
               <div className={styles.select}>
                 <Select
-                showSearch
-                placeholder="Select User"
-                  className={`custom_select_user ${styles.custom_select_user}`}
-                  onChange={(e) => onChangeUser(e)}
-                  options={optionsUser}
+                  value={selectMemberType}
+                  onChange={(e) => memberTypeChanges(e)}
+                  className={`custom_select_type ${styles.custom_select_type}`}
+                  options={options}
+                  style={{ backgroundColor: "#F3F3FF" }}
                 />
               </div>
-            ) : null}
-          </div>
-           <div className="d-flex">
-           <div className={styles.picker}>
-              <YearPicker
-                onChange={handleYearChange}
-                type={"year"}
-                bgColor="#E6EEFF"
-              />
-              {currentBtn !== "Monthly" && (
+              {isindividual ? (
+                <div className={styles.select}>
+                  <Select
+                    showSearch
+                    placeholder="Select User"
+                    className={`custom_select_user ${styles.custom_select_user}`}
+                    onChange={(e) => onChangeUser(e)}
+                    options={optionsUser}
+                  />
+                </div>
+              ) : null}
+            </div>
+            <div className="d-flex">
+              <div className={styles.picker}>
                 <YearPicker
-                  onChange={handleMonthChange}
-                  type={"month"}
+                  onChange={handleYearChange}
+                  type={"year"}
                   bgColor="#E6EEFF"
                 />
-              )}
-            </div>
-            <div className={styles.btnScroller}>
-              <Buttonscroller
-                Buttons={Buttons}
-                handleButtonClick={handleButtonClick}
-                activeButton={activeButton}
-                activeColor="#fff"
-                inActiveColor="
+                {currentBtn !== "Monthly" && (
+                  <YearPicker
+                    onChange={handleMonthChange}
+                    type={"month"}
+                    bgColor="#E6EEFF"
+                  />
+                )}
+              </div>
+              <div className={styles.btnScroller}>
+                <Buttonscroller
+                  Buttons={Buttons}
+                  handleButtonClick={handleButtonClick}
+                  activeButton={activeButton}
+                  activeColor="#fff"
+                  inActiveColor="
                 #000000"
-                activeBg="#3479FE"
-                inActiveBg="
+                  activeBg="#3479FE"
+                  inActiveBg="
                 #E6EEFF"
-                containerBg="
+                  containerBg="
                 #E6EEFF"
-              />
+                />
+              </div>
             </div>
-           </div>
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
@@ -271,8 +269,8 @@ const Accuracy = () => {
                 <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
-              ) : (
-                accuracyDatas?.loading===false && accuracyDatas?.data?.response?.mapAccuracy?
+              ) : accuracyDatas?.loading === false &&
+                accuracyDatas?.data?.response?.mapAccuracy ? (
                 option && (
                   <ReactECharts
                     option={option}
@@ -283,11 +281,11 @@ const Accuracy = () => {
                       overflowX: "hidden",
                     }}
                   />
-                ):<div
-                className={spinSTYles.spinStyle}
-               >
-                <Empty/>
-               </div>
+                )
+              ) : (
+                <div className={spinSTYles.spinStyle}>
+                  <Empty />
+                </div>
               )}
             </div>
             <div className={styles.accuracy}>
@@ -304,8 +302,13 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {accuracyDatas?.data?.response?.mapAccuracy
-                    ? `${accuracyDatas?.data?.response?.mapAccuracy[highlightIndex + 1]}%`
+                  {accuracyDatas?.data?.response?.mapAccuracy &&
+                  accuracyDatas?.data?.response?.mapAccuracy[highlightIndex + 1]
+                    ? `${
+                        accuracyDatas?.data?.response?.mapAccuracy[
+                          highlightIndex + 1
+                        ]
+                      }%`
                     : "0%"}
                 </span>
               </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
+import dayjs from "dayjs";
 import Image from "next/image";
 import completed from "../../../../images/dashboard/completed.png";
 import calender from "../../../../images/dashboard/calender.png";
@@ -15,10 +16,24 @@ import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
 const WorkFlow = () => {
+  const currentDate = dayjs();
   const worlFlowData = useSelector((state) => state?.workFlow?.data);
+  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
+
+  const last30thDate = currentDate?.subtract(31, "day");
+  const lastDateWithTime = currentDate?.endOf("day");
+
+  const startDate = DateRanges
+    ? new Date(DateRanges?.startDate).toISOString()
+    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+  const endDate = DateRanges
+    ? new Date(DateRanges?.endDate).toISOString()
+    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
@@ -28,7 +43,9 @@ const WorkFlow = () => {
       icon: allocated,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.allocated,
-      days: "Last 30 days",
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: allocatedbg,
     },
     {
@@ -36,7 +53,9 @@ const WorkFlow = () => {
       icon: pending,
       title: "Pending",
       charts: worlFlowData?.data?.response?.pending,
-      days: "Last 30 days",
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: pendingbg,
     },
     {
@@ -44,7 +63,9 @@ const WorkFlow = () => {
       icon: hold,
       title: "Hold",
       charts: worlFlowData?.data?.response?.hold,
-      days: "Last 30 days",
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: holdbg,
     },
     {
@@ -52,7 +73,9 @@ const WorkFlow = () => {
       icon: completed,
       title: "Completed",
       charts: worlFlowData?.data?.response?.completed,
-      days: "Last 30 days",
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: completedbg,
     },
   ];
@@ -60,14 +83,22 @@ const WorkFlow = () => {
   return (
     <div className={styles.card1}>
       <HeadTitle
-        header="Last 30 days work flow "
+        header={
+          !DateRanges || DateRanges?.clear
+            ? `Last 30 days work flow`
+            : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
+                .subtract(1, "day")
+                .format("MM-DD-YYYY")}`
+        }
         icon={calender}
         handleOpen={handleOpen}
         openPicker={openPicker}
         setOpenPicker={setOpenPicker}
       />
       <Card borderRadius="28px">
-        {worlFlowData?.loading ? (
+        {!worlFlowData ||
+        worlFlowData?.loading ||
+        worlFlowData?.data === null ? (
           <div className={spinSTYles.spinStyle}>
             <Spin loading={worlFlowData?.loading} />
           </div>
@@ -96,7 +127,7 @@ const WorkFlow = () => {
           </Row>
         ) : (
           <div className={spinSTYles.spinStyle}>
-            <Empty/>
+            <Empty />
           </div>
         )}
       </Card>

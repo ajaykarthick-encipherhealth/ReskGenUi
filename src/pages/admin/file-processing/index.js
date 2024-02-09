@@ -425,18 +425,14 @@ export default function Patient() {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {isLoading ? (
-                          <SpinnerDots />
-                        ) : (
-                          <>
-                            <FileProcessingTable
-                              patinetListAll={patinetListAll}
-                              actionBodyTemplate={actionBodyTemplate}
-                              statusBodyTemplate={processstatusBodyTemplate}
-                              gotoPatientDetails={gotoPatientDetails}
-                              patientDetails={patientDetails}
-                            />
-                            {/* <div>
+                        <FileProcessingTable
+                          patinetListAll={patinetListAll}
+                          actionBodyTemplate={actionBodyTemplate}
+                          statusBodyTemplate={processstatusBodyTemplate}
+                          gotoPatientDetails={gotoPatientDetails}
+                          patientDetails={patientDetails}
+                        />
+                        {/* <div>
                               <div className="pagination-container">
                                 <Paginator
                                   first={paginationFirst}
@@ -450,9 +446,6 @@ export default function Patient() {
                               </div>
                             </div> */}
 
-                            <Footer />
-                          </>
-                        )}
                       </div>
                     </div>
                   </div>

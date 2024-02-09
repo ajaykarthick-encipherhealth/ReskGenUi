@@ -4,14 +4,19 @@ import { Paginator } from "primereact/paginator";
 import { Empty, Modal, Popover } from "antd";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate } from "../../../../components/headerFilters/functions";
+import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+
 
 function SentReportTable({
   details,
   onSentPageChange,
   paginationFirst,
   loading,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
@@ -71,8 +76,26 @@ function SentReportTable({
                   <th>REPORT ID</th>
                   <th>REPORT NAME</th>
                   {/* <th>SENDER</th> */}
-                  <th>USER LIST</th>
-                  <th>DATE</th>
+                  <th style={{paddingLeft:"100px"}}>USER LIST</th>
+                  <th
+                  className={TableStyle.rowStyle}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    sortFunction(
+                      sortOrder,
+                      setSortOrder,
+                      setSort,
+                      "sendDate"
+                    );
+                  }}
+                >
+                   DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
                 </tr>
               </thead>
 
@@ -108,6 +131,7 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          width:"25%"
                         }}
                         className={TableStyle.childBorder}
                       >
@@ -157,7 +181,6 @@ function SentReportTable({
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

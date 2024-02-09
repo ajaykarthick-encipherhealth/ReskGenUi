@@ -22,6 +22,8 @@ const index = () => {
   const [username, setUsername] = useState();
   const [skip, setSkip] = useState();
   const [code, setCode] = useState([]);
+  const [password, setPassword] = useState();
+  const [decodedParams, setDecodedParams] = useState();
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
@@ -34,14 +36,16 @@ const index = () => {
   };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const mfaParam = searchParams.get("mfa");
-    const enableMFAValue = mfaParam === "true";
-    setEnableMFA(enableMFAValue);
-    setUsername(searchParams.get("username"));
-    const skipParam = searchParams.get("skipEntry");
-    const skipValue = skipParam === "true";
-    setSkip(skipValue);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const encodedParams = urlParams.get("params");
+    const decodedParams = JSON.parse(atob(encodedParams));
+    const { mfa, skipEntry, username, password } = decodedParams;
+    setEnableMFA(decodedParams?.mfa);
+    setUsername(decodedParams?.username);
+    setPassword(decodedParams?.password);
+    const skipParam = decodedParams?.skipEntry;
+    setSkip(skipParam);
     const intervalId = setInterval(() => {
       setSeconds((prevSeconds) => {
         if (prevSeconds === 0) {
@@ -110,7 +114,13 @@ const index = () => {
                 onClick={() => {
                   const codeString = code?.join("");
                   dispatch(
-                    getValidateCode(username, codeString, router, "validate")
+                    getValidateCode(
+                      username,
+                      codeString,
+                      router,
+                      "validate",
+                      password
+                    )
                   );
                 }}
               >
@@ -146,7 +156,14 @@ const index = () => {
                   className={styles.sendBtn}
                   onClick={() => {
                     dispatch(
-                      loginAction(username, router, code?.join(""))
+                      loginAction(
+                        username,
+                        router,
+                        code?.join(""),
+                        password,
+                        enableMFA,
+                        skip
+                      )
                     );
                   }}
                 >

@@ -152,7 +152,7 @@ export const patientListFilter = async (userId,status,searchText,startDate,endDa
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/patient/filter?patientAllocated=${userId}&page=${pageNo}&size=${10}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/filter?patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

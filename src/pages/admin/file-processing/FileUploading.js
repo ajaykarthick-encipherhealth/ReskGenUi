@@ -11,6 +11,7 @@ const FileUploading = ({
   handleChange,
   isLoadingBtn,
   onChangeFile,
+  errors,
 }) => {
   return (
     <Offcanvas
@@ -33,7 +34,12 @@ const FileUploading = ({
       </div>
       <div className="offcanvas-body">
         <div className="container-fluid">
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmit}
+            autoComplete="off"
+          >
             <div className="row">
               <div className="col-xl-12 mb-3">
                 <Form.Label>
@@ -84,6 +90,9 @@ const FileUploading = ({
                   onChange={(e) => handleChange(e)}
                 />
               </div>
+              {errors?.year && (
+                <div className="text-danger fs-12">{errors?.year}</div>
+              )}
             </div>
 
             <div>

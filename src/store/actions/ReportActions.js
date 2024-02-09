@@ -35,11 +35,12 @@ export const getReportDetails = (
   startDate,
   endDate,
   search,
-  filter
+  filter,
+  sort
 ) => {
   return (dispatch) => {
     try {
-      patientDetails(pagenum, startDate, endDate, search, filter).then(
+      patientDetails(pagenum, startDate, endDate, search, filter,sort).then(
         (response) => {
           if (response) {
             dispatch({
@@ -88,16 +89,10 @@ export const getUsersList = (id, search) => {
   };
 };
 
-export const getSentDetails = (pagenum, startDate, endDate, search) => {
+export const getSentDetails = (pagenum, startDate, endDate, search,sort) => {
   return (dispatch) => {
-    dispatch({
-      type: SENT_REPORT,
-      payload: {
-        loading: true,
-      },
-    });
     try {
-      SentReport(pagenum, startDate, endDate, search).then((response) => {
+      SentReport(pagenum, startDate, endDate, search,sort).then((response) => {
         if (response) {
           dispatch({
             type: SENT_REPORT,
@@ -113,16 +108,10 @@ export const getSentDetails = (pagenum, startDate, endDate, search) => {
     }
   };
 };
-export const getReceivedDetails = (pagenum, startDate, endDate, search,sortfield,sortdirection) => {
+export const getReceivedDetails = (pagenum, startDate, endDate, search,sort) => {
   return (dispatch) => {
-    dispatch({
-      type: RECEIVED_REPORT,
-      payload: {
-        loading: true,
-      },
-    });
     try {
-      ReceivedReport(pagenum, startDate, endDate, search,sortfield,sortdirection).then((response) => {
+      ReceivedReport(pagenum, startDate, endDate, search,sort).then((response) => {
         if (response) {
           dispatch({
             type: RECEIVED_REPORT,

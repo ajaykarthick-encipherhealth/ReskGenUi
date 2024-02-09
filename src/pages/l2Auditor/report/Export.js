@@ -24,12 +24,14 @@ const Export = ({
   setSelectedRows,
   setSelectAll,
 }) => {
+  const usersList = useSelector((state) => state.report?.usersList);
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
   const [userList, setUsersList] = useState([]);
   const [selectedList, setSelectedList] = useState([]);
   const [open, setOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
   const [form] = Form.useForm();
   const checkBoxData = [
     {
@@ -114,19 +116,32 @@ const Export = ({
   const [checkall, setCheckAll] = useState(checkBoxData);
 
   useEffect(() => {
+    setCurrentUser(localStorage.getItem("userId"));
+
     var orgId = localStorage.getItem("orgId");
     dispatch(getUsersList(orgId, search));
   }, [search]);
   const dispatch = useDispatch();
-  const usersList = useSelector((state) => state.AuditReport.usersList);
-  const options = usersList?.response?.map((data) => ({
-    label: data.userName,
-    value: data.userName,
-  }));
+  const options = usersList?.response
+    ?.map(
+      (data) =>
+        data?.userName !== currentUser && {
+          label: (
+            <span>
+              {data?.firstName}&nbsp;&nbsp;{data?.lastName}
+            </span>
+          ),
+          value: data?.userName,
+        }
+    )
+    .filter(Boolean);
 
   const handleSelectedOption = (value) => {
-    setSelectedList(value);
-    setSelectedUser((prevUsers) => [{ ...prevUsers, user: value }]);
+    const filteredData = usersList?.response?.filter(
+      (data) => data?.userName === value[0]
+    );
+    setSelectedList(filteredData?.map((item) => item?.userName));
+    setSelectedUser((prevUsers) => [{ ...prevUsers, user: filteredData,role:null }]);
     setOpen(false);
   };
 
@@ -144,7 +159,9 @@ const Export = ({
   const filteredOptions =
     userList &&
     options?.filter((option) => {
-      return !userList?.some((data) => data?.user?.includes(option?.label));
+      return !userList?.some((data) =>
+        data?.user?.some((info) => info?.userName?.includes(option?.value))
+      );
     });
 
   const debouncedSearch = debounce((value) => {
@@ -156,12 +173,13 @@ const Export = ({
 
   const onFinish = (values) => {
     const patientIds = rowsLength?.data?.map((item) => item?.patientId);
-    const userAndAccess = userList.reduce((result, { user, role }) => {
-      result[user] = role;
+    const userAndAccess = userList?.reduce((result, { user, role }) => {
+      result[user.map((info) => info?.userName)] = role;
       return result;
     }, {});
+
     const fields = checkall?.reduce((acc, data) => {
-      acc[data.title] = data?.checked;
+      acc[data?.title] = data?.checked;
       return acc;
     }, {});
     const data = {
@@ -186,9 +204,14 @@ const Export = ({
     }, 500);
   };
 
-  const deleteUser = (user) => {
-    setUsersList(userList?.filter((item) => item.user != user));
+  const deleteUser = (userInfo) => {
+    setUsersList((prevUserList) =>
+      prevUserList?.filter(
+        (user) => user?.user[0]?.userId !== userInfo[0]?.userId
+      )
+    );
   };
+
   return (
     <Modal
       title="Export "
@@ -317,7 +340,6 @@ const Export = ({
                   className={styles.selectDiv}
                   value={selectedList}
                   open={open}
-                  // disabled={selectedList?.length >= 1}
                   onDropdownVisibleChange={(visible) => setOpen(visible)}
                 >
                   {filteredOptions?.map((data) => (
@@ -369,11 +391,14 @@ const Export = ({
               {userList?.map((item, index) => (
                 <div className={styles.userName}>
                   <div key={index} className={styles.userRoleContainer}>
-                    {item.user}
+                    {item?.user?.map(
+                      (info) => `${info?.firstName}  ${info?.lastName}`
+                    )}
                   </div>
                   <div key={index} className={styles.userRoleContainer}>
                     {item.role}
                   </div>
+
                   <div
                     style={{ cursor: "pointer" }}
                     onClick={() => deleteUser(item.user)}

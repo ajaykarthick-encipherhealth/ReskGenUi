@@ -12,11 +12,12 @@ export const getPatients = (
   computationEnd,
   status,
   search,
-  completedStartDate,
-  completedEndDate,
+  createdStartDate,
+  createdEndDate,
   selAllocatedTo,
   selAllocatedBy,
-  selCreatedBy
+  selCreatedBy,
+  sort
 ) => {
   return (dispatch) => {
     try {
@@ -26,11 +27,12 @@ export const getPatients = (
         computationEnd,
         status,
         search,
-        completedStartDate,
-        completedEndDate,
+        createdStartDate,
+        createdEndDate,
         selAllocatedTo,
         selAllocatedBy,
-        selCreatedBy
+        selCreatedBy,
+        sort
       ).then((response) => {
         if (response) {
           dispatch({
@@ -45,28 +47,10 @@ export const getPatients = (
   };
 };
 
-export const getTrackingList = (
-  pageNo,
-  dStart ,
-  dEnd ,
-  search,
-  status,
-  pStart,
-  pEnd,
-  selAllocatedTo
-) => {
+export const getTrackingList = (datas) => {
   return (dispatch) => {
     try {
-      TrackingList(
-        pageNo,
-        dStart ,
-        dEnd ,
-        search,
-        status,
-        pStart,
-        pEnd,
-        selAllocatedTo
-      ).then((response) => {
+      TrackingList(datas).then((response) => {
         if (response) {
           dispatch({
             type: TRACKING,

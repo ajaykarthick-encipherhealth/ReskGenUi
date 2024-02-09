@@ -5,13 +5,17 @@ import { Empty, Modal, Popover } from "antd";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import SpinnerDots from "../../spinner";
-import { dateFormate } from "../../headerFilters/functions";
+import { dateFormate, sortFunction } from "../../headerFilters/functions";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 function SentReportTable({
   details,
   onSentPageChange,
   paginationFirst,
   loading,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
@@ -58,7 +62,7 @@ function SentReportTable({
   );
   return (
     <div className={TableStyle.classContaineer}>
-      {loading ? (
+      {!details?.data ? (
         <SpinnerDots />
       ) : (
         <>
@@ -67,9 +71,21 @@ function SentReportTable({
               <tr>
                 <th>REPORT ID</th>
                 <th>REPORT NAME</th>
-                {/* <th>SENDER</th> */}
-                <th>USER LIST</th>
-                <th>DATE</th>
+                <th style={{paddingLeft:"100px"}}>USER LIST</th>
+                <th
+                  className={TableStyle.rowStyle}
+                  style={{ cursor: "pointer" ,paddingLeft:"15px"}}
+                  onClick={() => {
+                    sortFunction(sortOrder, setSortOrder, setSort, "sendDate");
+                  }}
+                >
+                  DATE{" "}
+                  {sortOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </th>
               </tr>
             </thead>
 
@@ -106,10 +122,11 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
+                          width:"25%"
                         }}
                         className={TableStyle.childBorder}
                       >
-                        <Popover content={popCOntent}>
+                        <Popover content={popCOntent} style={{position:"relative",left:"-330px"}}>
                           <div
                             onMouseOver={() =>
                               displayReceivedUsers(row.receivedUsers)
@@ -117,7 +134,7 @@ function SentReportTable({
                           >
                             {row?.receivedUsers?.slice(0, 2)?.map((data) => (
                               <ul>
-                                <li style={{ marginBottom: "5px" }}>
+                                <li style={{ marginBottom: "5px"}}>
                                   {data.user}
                                 </li>
                               </ul>
@@ -161,7 +178,6 @@ function SentReportTable({
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
