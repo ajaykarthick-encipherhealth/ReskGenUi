@@ -276,6 +276,7 @@ export const renderUserPrfoile = (
   width,
   height
 ) => {
+
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
   const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
