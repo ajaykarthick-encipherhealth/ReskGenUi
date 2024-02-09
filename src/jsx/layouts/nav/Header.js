@@ -51,6 +51,7 @@ import {
 import Selector from "../../../components/selector";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
+import {logoutAllDevice } from "../../../services/AuthService";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from '../../../images/svg/edit.svg'
@@ -136,7 +137,7 @@ const Header = () => {
     setOpenMsg(false);
   };
 
-  const logoutFunction = () => {
+  const logoutFunction = async () => {
     setOpenContent(false)
     Swal.fire({
       title: "Warning!",
@@ -146,8 +147,9 @@ const Header = () => {
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       closeOnConfirm: false,
-    }).then((result) => {
+    }).then( async (result) => {
       if (result.isConfirmed) {
+        await logoutAllDevice();
         localStorage.clear();
         localStorage.removeItem("loginCheck");
         localStorage.removeItem("userRole");
