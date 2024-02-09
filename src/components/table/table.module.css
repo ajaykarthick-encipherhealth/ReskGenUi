@@ -161,6 +161,10 @@
   width: 60px;
   text-align: center;
 }
+.innerProcessingDiv:nth-child(1) {
+  position: relative;
+  left: -10px;
+}
 .innerProcessingDiv:nth-child(2) {
   position: relative;
   left: -10px;

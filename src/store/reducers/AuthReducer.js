@@ -11,8 +11,8 @@ import {
   VERIFYCODE,
   ACCURACYSCRORE,
   FILTER,
-  CURRENT_USER
-  
+  PROFILE_URL,
+  CURRENTUSER,
 } from "../actions/AuthActions";
 
 const initialState = {
@@ -31,8 +31,9 @@ const initialState = {
   codeDetails: null,
   qrcode: "",
   accuracy: "",
-  filterList:null,
-  currentUserInfo:null
+  filterList: null,
+  url: null,
+  currentUserInfo: null,
 };
 
 const initialStatePatient = {
@@ -121,7 +122,13 @@ export function AuthReducer(state = initialState, action) {
       filterList: action.payload,
     };
   }
-  if (action.type === CURRENT_USER) {
+  if (action.type === PROFILE_URL) {
+    return {
+      ...state,
+      url: action.payload,
+    };
+  }
+  if (action.type === CURRENTUSER) {
     return {
       ...state,
       currentUserInfo: action.payload,

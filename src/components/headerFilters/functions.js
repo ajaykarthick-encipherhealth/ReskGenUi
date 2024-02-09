@@ -276,6 +276,7 @@ export const renderUserPrfoile = (
   width,
   height
 ) => {
+
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
   const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
@@ -446,6 +447,34 @@ export const validateConfirmPassword = (
       confirmPass: "Passwords do not match",
     });
     setIsLoading(false);
+    return false;
+  }
+
+  return true;
+};
+
+export const validateYear = (year, setErrors) => {
+  const yearPattern = /^[0-9]{4}$/;
+  const correctYear = parseInt(year) > 0;
+  const currentYear = new Date().getFullYear();
+
+  if (year?.length === 0) {
+    setErrors({
+      year: "Please enter year",
+    });
+
+    return false;
+  }
+  if (!yearPattern.test(year) && !correctYear) {
+    setErrors({
+      year: "Please enter a valid 4-digit positive year",
+    });
+    return false;
+  }
+  if (year > currentYear || year?.length < 4) {
+    setErrors({
+      year: "Please enter a valid year",
+    });
     return false;
   }
 

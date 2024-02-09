@@ -4,6 +4,17 @@ import { loginConfirmedAction, Logout } from "../store/actions/AuthActions";
 import axiosApi from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 
+export function CurrentUser(userId) {
+  const token = localStorage.getItem("token");
+  return axios.get(
+    `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
 export function signUp(email, password) {
   //axios call
   const postData = {
@@ -255,3 +266,4 @@ export const filters = async (field,username,pageQueue) => {
       console.log(err);
     }
   };
+

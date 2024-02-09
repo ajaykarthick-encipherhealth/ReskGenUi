@@ -26,7 +26,10 @@ import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
-import { generateOptionsList } from "../../../components/headerFilters/functions";
+import {
+  generateOptionsList,
+  validateYear,
+} from "../../../components/headerFilters/functions";
 
 const bullets = [
   {
@@ -95,6 +98,7 @@ export default function Patient() {
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [errors,setErrors]=useState({year:""})
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -212,7 +216,15 @@ export default function Patient() {
   const handleChange = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
+    if (e.target.name === "year") {
+      const validateYearField = validateYear(e.target.value, setErrors);
+      if (validateYearField) {
+        setErrors({year:""})
+        setInputValue({ ...inputValue, [key]: value });
+      }
+    } else {
+      setInputValue({ ...inputValue, [key]: value });
+    }
   };
 
   const handleChangePatientId = async (e) => {
@@ -581,7 +593,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-                        
                           </>
                         )}
                       </div>
@@ -601,6 +612,7 @@ export default function Patient() {
           handleChange={handleChange}
           isLoadingBtn={isLoadingBtn}
           onChangeFile={onChangeFile}
+          errors={errors}
         />
         <Addpatients
           addPatientId={addPatientId}
