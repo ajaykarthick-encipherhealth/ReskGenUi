@@ -21,7 +21,6 @@ const RafScore = ({ rafScoreList }) => {
 
   useEffect(() => {
     var rafScroeArray = [];
-    var rafScroeArrayAll = [];
     rafScoreList?.scoreOutputDTOList?.map((res) => {
       res?.dx_hccs.map((res2) => {
         if (res?.hcc_model.version == "v24_2022" && res2?.dx_name) {
