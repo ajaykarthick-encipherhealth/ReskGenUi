@@ -7,30 +7,7 @@ import TableStyle from "../../../../../../components/table/table.module.css";
 const RafScore = ({ rafScoreList }) => {
   const [rafScoreData, setRafScoreData] = useState([]);
 
-  function getHcc(dxCode, version) {
-    var result = [];
-    rafScoreList?.scoreOutputDTOList?.map((res) => {
-      res?.dx_hccs.map((res2) => {
-        if (res2.dx_name == dxCode && res?.hcc_model.version == version) {
-          result = res2.hcc_list;
-        }
-      });
-    });
-    return result;
-  }
-
-  function getRafScrore(dxCode, version) {
-    var result = [];
-    rafScoreList?.scoreOutputDTOList?.map((res) => {
-      res?.dx_hccs.map((res2) => {
-        if (res2.dx_name == dxCode && res?.hcc_model.version == version) {
-          result = res2.hcc_list;
-        }
-      });
-    });
-    return result;
-  }
-  function getPremium(dxCode, version) {
+  function getRafDetails(dxCode, version) {
     var result = [];
     rafScoreList?.scoreOutputDTOList?.map((res) => {
       res?.dx_hccs.map((res2) => {
@@ -43,7 +20,6 @@ const RafScore = ({ rafScoreList }) => {
   }
 
   useEffect(() => {
-    console.log(rafScoreList);
     var rafScroeArray = [];
     var rafScroeArrayAll = [];
     rafScoreList?.scoreOutputDTOList?.map((res) => {
@@ -58,7 +34,6 @@ const RafScore = ({ rafScoreList }) => {
       });
     });
     setRafScoreData(rafScroeArray);
-    console.log(rafScroeArray);
   }, [rafScoreList]);
 
   return (
@@ -92,39 +67,42 @@ const RafScore = ({ rafScoreList }) => {
                             {item.dx_desc}
                           </td>
                           <td className={TableStyle.childBorder}>
-                            {getHcc(item.dx_name, "v24_2022")?.map((item) => (
-                              <div>{item.hcc_name}</div>
-                            ))}
+                            {getRafDetails(item.dx_name, "v24_2022")?.map(
+                              (item) => (
+                                <div>{item.hcc_name}</div>
+                              )
+                            )}
                           </td>
                           <td className={TableStyle.childBorder}>
-                            {getHcc(item.dx_name, "v28_2023")?.map((item) => (
-                              <div>{item.hcc_name}</div>
-                            ))}
+                            {getRafDetails(item.dx_name, "v28_2023")?.map(
+                              (item) => (
+                                <div>{item.hcc_name}</div>
+                              )
+                            )}
                           </td>
                           <td className={TableStyle.childBorder}>
-                            {getRafScrore(item.dx_name, "v24_2022")?.map(
+                            {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
                                 <div>{item.hcc_raf}</div>
                               )
                             )}
                           </td>
                           <td className={TableStyle.childBorder}>
-                            {getRafScrore(item.dx_name, "v28_2023")?.map(
+                            {getRafDetails(item.dx_name, "v28_2023")?.map(
                               (item) => (
                                 <div>{item.hcc_raf}</div>
                               )
                             )}
                           </td>
                           <td className={TableStyle.childBorder}>
-                            {" "}
-                            {getPremium(item.dx_name, "v24_2022")?.map(
+                            {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
                                 <div>${item.premium}</div>
                               )
                             )}
                           </td>
                           <td className={style.lastBorder}>
-                            {getPremium(item.dx_name, "v28_2023")?.map(
+                            {getRafDetails(item.dx_name, "v28_2023")?.map(
                               (item) => (
                                 <div>${item.premium}</div>
                               )
