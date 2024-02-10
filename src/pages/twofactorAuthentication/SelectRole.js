@@ -29,14 +29,13 @@ const SelectRole = () => {
       setRoleError(true);
     } else {
       var result = await checkDeviceLogin();
-      loginSuccessCallBack();
-      // if (result?.data?.response == "ALREADY_LOGGED_IN") {
-      //   loginSuccessCallBack();
-      //   setLogoutMessage(result?.data?.message);
-      //   setConfirmModal(true);
-      // } else {
-      //   loginSuccessCallBack();
-      // }
+      if (result?.data?.response == "ALREADY_LOGGED_IN") {
+        loginSuccessCallBack();
+        setLogoutMessage(result?.data?.message);
+        setConfirmModal(true);
+      } else {
+        loginSuccessCallBack();
+      }
     }
   };
 
