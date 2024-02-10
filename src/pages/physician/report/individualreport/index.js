@@ -128,13 +128,13 @@ const IndividualReceiverReport = () => {
             <div className={styles.container}>
               <div
                 className={"col-xl-1 d-flex"}
-                style={{ cursor: "pointer", zIndex: "999",height: "30px" }}
+                style={{ cursor: "pointer",marginLeft:"10px"}}
               >
                 <button
-                  style={{width:"100%",height:"100%"}}
+                  style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    router?.push("/physician/report");
+                    router?.push("/l2Auditor/report");
                     dispatch(getActiveTab("ReceivedReport"));
                     setLoading(true);
                   }}
@@ -158,16 +158,14 @@ const IndividualReceiverReport = () => {
 
             {/* users */}
             <div className={styles.list}>
-               {!searchValue && detailsContent?.length === 0 ? (
+              {!searchValue && detailsContent?.length === 0 ? (
                 <div style={{ marginTop: "60px" }}>
                   <SpinnerDots />
                 </div>
               ) : (
                 <>
                   {searchValue && detailsContent?.length === 0 ? (
-                    <div>
-                      No data
-                    </div>
+                    <div>No data</div>
                   ) : (
                     detailsContent
                       // ?.filter((item) => item?.reportId !== selectedRow?.reportId)

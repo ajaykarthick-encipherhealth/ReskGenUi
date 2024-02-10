@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import styles from "./styles.module.css";
 import { preSendURl } from "../../store/actions/AuthActions";
 
-const ImageUploader = ({ setOpenUploader }) => {
+const ImageUploader = ({ setOpenUploader,setOpenContent }) => {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -15,6 +15,10 @@ const ImageUploader = ({ setOpenUploader }) => {
       setOpenUploader(false);
     }
   };
+
+  useEffect(()=>{
+    setOpenContent(true)
+  },[])
 
   return (
     <div className={styles.videoflex}>
