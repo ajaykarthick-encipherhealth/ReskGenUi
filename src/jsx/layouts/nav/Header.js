@@ -20,7 +20,6 @@ import {
   Avatar,
   Modal,
   Divider,
-
 } from "antd";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
@@ -51,10 +50,10 @@ import {
 import Selector from "../../../components/selector";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
-import {logoutAllDevice } from "../../../services/AuthService";
+import { logoutAllDevice } from "../../../services/AuthService";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
-import editImg from '../../../images/svg/edit.svg'
+import editImg from "../../../images/svg/edit.svg";
 
 const btnItems = [
   {
@@ -116,7 +115,6 @@ const Header = () => {
   const [openUploader, setOpenUploader] = useState();
   const [openContent, setOpenContent] = useState(false);
 
-
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
     const isRX = data?.rxHcc_model_category_V08_for_2023_payment_year;
@@ -138,7 +136,7 @@ const Header = () => {
   };
 
   const logoutFunction = async () => {
-    setOpenContent(false)
+    setOpenContent(true);
     Swal.fire({
       title: "Warning!",
       text: "Do you want Logout!",
@@ -147,7 +145,7 @@ const Header = () => {
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       closeOnConfirm: false,
-    }).then( async (result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         await logoutAllDevice();
         localStorage.clear();
@@ -186,7 +184,7 @@ const Header = () => {
       sse.close();
     };
   };
-  
+
   const percentage = 95;
   const PopContent = (
     <div className={styles.innerPop}>
@@ -259,13 +257,6 @@ const Header = () => {
     </div>
   );
 
-  const TerminalComponent = dynamic(
-    () => import("react-chat-widget").then((mod) => mod.Widget),
-    {
-      ssr: false,
-    }
-  );
-
   const notificationDrawer = async () => {
     setOpen(true);
     dispatch(getNotificationAlertClear([]));
@@ -310,7 +301,7 @@ const Header = () => {
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
 
-    dispatch(getCurrentUser(userId))
+    dispatch(getCurrentUser(userId,router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
     setMenuList(getMenuListByRole(userRoleLocal));
@@ -354,10 +345,10 @@ const Header = () => {
         })
       );
     }
-    if(currentUserInfo){
-      getUserIdDetails(currentUserInfo)
+    if (currentUserInfo) {
+      getUserIdDetails(currentUserInfo);
     }
-  }, [msgReply, selectedbtn, search, selectedOption,currentUserInfo]);
+  }, [msgReply, selectedbtn, search, selectedOption, currentUserInfo]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -468,57 +459,59 @@ const Header = () => {
                         <div className="header-media d-flex">
                           <Popover
                             trigger="click"
-                            open={openContent}
                             content={
-                              <div className={styles.popDIv} 
-                             >
-                                <div
-                                  style={{ margin: "20px 0px 0 30px", display: "flex" }}
-                                >
-                                  <div style={{width:"80px"}}>
-                                    {renderUserPrfoile(
-                                      userName,
-                                      lastName,
-                                      profileImg,
-                                      "header",
-                                      "70px",
-                                      "70px"
-                                    )}
-                                    <div
-                                      onClick={() =>{
-                                        setOpenContent(false)
-                                        setOpenUploader(!openUploader)
-                                      }
-                                      }
-                                      className={styles.edit}
-                                    >
-                                     <span>
-                                       <Image src={editImg} alt="noimg"/>
-                                     </span>
+                              !openContent && (
+                                <div className={styles.popDIv}>
+                                  <div
+                                    style={{
+                                      margin: "20px 0px 0 30px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div style={{ width: "80px" }}>
+                                      {renderUserPrfoile(
+                                        userName,
+                                        lastName,
+                                        profileImg,
+                                        "header",
+                                        "70px",
+                                        "70px"
+                                      )}
+                                      <div
+                                        onClick={() => {
+                                          setOpenContent(false);
+                                          setOpenUploader(!openUploader);
+                                        }}
+                                        className={styles.edit}
+                                      >
+                                        <span>
+                                          <Image src={editImg} alt="noimg" />
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div style={{ margin: "10px 0 0 5px" }}>
+                                      <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
+                                        {userName}
+                                      </span>
+                                      <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
+                                        {currentRole}
+                                      </span>
                                     </div>
                                   </div>
-                                  <div style={{margin:"10px 0 0 5px"}}>
-                                    <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
-                                      {userName}
-                                    </span>
-                                    <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
-                                      {currentRole}
+
+                                  <Divider className={styles.divider} />
+                                  <div
+                                    className={styles.footerDiv}
+                                    onClick={logoutFunction}
+                                  >
+                                    <Image src={logout} />
+                                    <span className={styles.footerCont}>
+                                      {" "}
+                                      Logout
                                     </span>
                                   </div>
                                 </div>
-
-                                <Divider className={styles.divider} />
-                                <div
-                                  className={styles.footerDiv}
-                                  onClick={logoutFunction}
-                                >
-                                  <Image src={logout} />
-                                  <span className={styles.footerCont}>
-                                    {" "}
-                                    Logout
-                                  </span>
-                                </div>
-                              </div>
+                              )
                             }
                           >
                             <div>
@@ -526,16 +519,13 @@ const Header = () => {
                                 <div
                                   className="header-media"
                                   style={{ marginTop: "-7px" }}
-                                  onClick={() =>
-                                    setOpenContent(!openContent)
-                                  }
+                                  onClick={() => setOpenContent(false)}
                                 >
                                   {renderUserPrfoile(
                                     userName,
                                     lastName,
                                     profileImg,
-                                    "header",
-                                    
+                                    "header"
                                   )}
                                 </div>
                               </div>
@@ -602,7 +592,10 @@ const Header = () => {
         onCancel={() => setOpenUploader(false)}
       >
         <div>
-          <ImageUploader setOpenUploader={setOpenUploader} />
+          <ImageUploader
+            setOpenUploader={setOpenUploader}
+            setOpenContent={setOpenContent}
+          />
         </div>
       </Modal>
       {openMsg ? (
@@ -610,7 +603,6 @@ const Header = () => {
           <ChatCommunication openMsg={openMsg} offMsg={setOpenMsg} />
         </div>
       ) : null}
-
     </div>
   );
 };

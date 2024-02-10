@@ -30,6 +30,7 @@ const SelectRole = () => {
     } else {
       var result = await checkDeviceLogin();
       if (result?.data?.response == "ALREADY_LOGGED_IN") {
+        loginSuccessCallBack();
         setLogoutMessage(result?.data?.message);
         setConfirmModal(true);
       } else {
@@ -98,7 +99,7 @@ const SelectRole = () => {
             >
               <div className="login-content">
                 <p className="sub-title"></p>
-                <Image className="login-logo" src={IMAGES.loginPageLogo} />
+                <Image className="login-logo" src={IMAGES.loginPageLogo1} />
               </div>
             </div>
           </div>
