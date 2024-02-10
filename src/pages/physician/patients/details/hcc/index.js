@@ -54,6 +54,8 @@ import {
   getProviderDetails,
   manuallyAddComboCode,
 } from "../../../../../services/PatientsListSevice";
+import RafScore from "../components/rafScore";
+
 const { Option } = Select;
 
 const Hcc = ({ patientHccResult }) => {
@@ -282,6 +284,7 @@ const Hcc = ({ patientHccResult }) => {
   const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
   const [providerDetails, setProviderDetails] = useState("");
   const [isAddComboCode, setIsAddComboCode] = useState(false);
+  const [comboCodeTree, setComboCodeTree] = useState(true);
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -2800,9 +2803,9 @@ const Hcc = ({ patientHccResult }) => {
       var opationArray = [];
       var pageNumbervalue = result.response[key];
       for (var key2 in pageNumbervalue) {
-        var keyValue = key2 == "first" ? "Start - " : "End - "
+        var keyValue = key2 == "first" ? "Start - " : "End - ";
         opationArray.push({
-          label: keyValue +" "+ pageNumbervalue[key2],
+          label: keyValue + " " + pageNumbervalue[key2],
           value: pageNumbervalue[key2],
         });
       }
@@ -3163,15 +3166,14 @@ const Hcc = ({ patientHccResult }) => {
                                             data.encounterDateSplit
                                           )}
                                         </div>
-                                        {data.getPlace ==
-                                                  "Insulin" ? (
-                                                  <span
-                                                    className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                                    bg={`  mt-2 bg-bg-eight `}
-                                                  >
-                                                    Insulin Disease
-                                                  </span>
-                                                ) :null}
+                                        {data.getPlace == "Insulin" ? (
+                                          <span
+                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                            bg={`  mt-2 bg-bg-eight `}
+                                          >
+                                            Insulin
+                                          </span>
+                                        ) : null}
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         ></div>
@@ -4191,297 +4193,7 @@ const Hcc = ({ patientHccResult }) => {
                   </div>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="RafScore">
-                  <div className="my-post-content pt-3">
-                    <div className={`${visitStyles.rafContainer}`}>
-                      <div className={visitStyles.hccStickeyRaf_head}>
-                        <div className={`row ${visitStyles.rafContainer2}`}>
-                          {rafScore != null ? (
-                            <>
-                              <div className="col-xl-9">
-                                {rafScore.scoreOutputDTOList != null ? (
-                                  <>
-                                    {rafScore.scoreOutputDTOList.map(
-                                      (rafScoreMapResult, index) => {
-                                        return (
-                                          <>
-                                            {index == 0 ? (
-                                              <label
-                                                className={`${visitStyles.labelStyle} ${visitStyles.raflablehead2}`}
-                                              >
-                                                {
-                                                  rafScoreMapResult.hcc_model
-                                                    .version
-                                                }
-                                              </label>
-                                            ) : (
-                                              <label
-                                                className={`${visitStyles.labelStyle} ${visitStyles.raflablehead1}`}
-                                              >
-                                                {
-                                                  rafScoreMapResult.hcc_model
-                                                    .version
-                                                }
-                                              </label>
-                                            )}
-
-                                            <div className="row raf-main-card">
-                                              <div className="col-xl-4">
-                                                <div className="raf-card">
-                                                  <div className="row raf-head">
-                                                    <div className="col-xl-6">
-                                                      <label
-                                                        className={`${visitStyles.labelStyle}`}
-                                                      >
-                                                        DX Code
-                                                      </label>
-                                                    </div>
-                                                    <div className="col-xl-6">
-                                                      <label
-                                                        className={`${visitStyles.labelStyle}`}
-                                                      >
-                                                        DX Description
-                                                      </label>
-                                                    </div>
-                                                  </div>
-
-                                                  {rafScoreMapResult.dx_hccs.map(
-                                                    (item) => {
-                                                      return (
-                                                        <div className="row raf-details">
-                                                          <div className="col-xl-6">
-                                                            <span>
-                                                              {item.dx_name}
-                                                            </span>
-                                                          </div>
-                                                          <div className="col-xl-6">
-                                                            <span>
-                                                              {item.dx_desc}
-                                                            </span>
-                                                          </div>
-                                                        </div>
-                                                      );
-                                                    }
-                                                  )}
-                                                </div>
-                                              </div>
-                                              <div className="col-xl-4">
-                                                <div className="raf-card">
-                                                  <div className="row raf-head">
-                                                    <div className="col-xl-6">
-                                                      <label
-                                                        className={`${visitStyles.labelStyle}`}
-                                                      >
-                                                        HCC
-                                                      </label>
-                                                    </div>
-                                                    <div className="col-xl-6">
-                                                      <label
-                                                        className={`${visitStyles.labelStyle}`}
-                                                      >
-                                                        HCC Description
-                                                      </label>
-                                                    </div>
-                                                  </div>
-                                                  {rafScoreMapResult.dx_hccs.map(
-                                                    (res) => {
-                                                      return res.hcc_list.map(
-                                                        (res1) => {
-                                                          return (
-                                                            <div className="row raf-details">
-                                                              <div className="col-xl-6">
-                                                                <span>
-                                                                  {
-                                                                    res1.hcc_name
-                                                                  }
-                                                                </span>
-                                                              </div>
-                                                              <div className="col-xl-6">
-                                                                <span>
-                                                                  {
-                                                                    res1.hcc_desc
-                                                                  }
-                                                                </span>
-                                                              </div>
-                                                            </div>
-                                                          );
-                                                        }
-                                                      );
-                                                    }
-                                                  )}
-                                                </div>
-                                              </div>
-                                              <div className="col-xl-4">
-                                                <div className="raf-card">
-                                                  <div className="row raf-head">
-                                                    {/* <div className="col-xl-4">
-                                                                            <label className={`${visitStyles.labelStyle}`}>
-                                                                              Trumped By
-                                                                            </label>
-                                                                          </div> */}
-                                                    <div className="col-xl-6">
-                                                      <label
-                                                        className={`${visitStyles.labelStyle}`}
-                                                      >
-                                                        RAF
-                                                      </label>
-                                                    </div>
-                                                    <div className="col-xl-6">
-                                                      <label
-                                                        className={`${visitStyles.labelStyle}`}
-                                                      >
-                                                        Monthly Premium
-                                                      </label>
-                                                    </div>
-                                                  </div>
-                                                  {rafScoreMapResult.dx_hccs.map(
-                                                    (res) => {
-                                                      return res.hcc_list.map(
-                                                        (res1) => {
-                                                          return (
-                                                            <div className="row  raf-details">
-                                                              {/* <div className="col-xl-4">
-                                                                                      <span>
-                                                                                        -
-                                                                                      </span>
-                                                                                    </div> */}
-                                                              <div className="col-xl-6">
-                                                                <span>
-                                                                  {res1.hcc_raf}
-                                                                </span>
-                                                              </div>
-                                                              <div className="col-xl-6">
-                                                                <span>
-                                                                  $
-                                                                  {res1.premium}
-                                                                </span>
-                                                              </div>
-                                                            </div>
-                                                          );
-                                                        }
-                                                      );
-                                                    }
-                                                  )}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </>
-                                        );
-                                      }
-                                    )}
-                                  </>
-                                ) : null}
-                              </div>
-                              <div className="col-xl-3">
-                                <label
-                                  className={`${visitStyles.labelStyle} ${visitStyles.raflableheadOverall}`}
-                                >
-                                  Overall score
-                                </label>
-                                <div
-                                  className={`row raf-main-card ${visitStyles.overallScoreContainer}`}
-                                >
-                                  <div className="raf-card ">
-                                    <div className="row raf-head">
-                                      <div className="col-xl-4">
-                                        <label
-                                          className={`${visitStyles.labelStyle}`}
-                                        >
-                                          V24 score
-                                        </label>
-                                      </div>
-                                      <div className="col-xl-4">
-                                        <label
-                                          className={`${visitStyles.labelStyle}`}
-                                        >
-                                          v24Score(70%)
-                                        </label>
-                                      </div>
-                                    </div>
-
-                                    <div className="row  raf-details">
-                                      <div className="col-xl-4">
-                                        <span>{rafScore.v24Score}</span>
-                                      </div>
-                                      <div className="col-xl-4">
-                                        {rafScore.v24Score70Percent != null ? (
-                                          <span>
-                                            {rafScore.v24Score70Percent.toFixed(
-                                              3
-                                            )}
-                                          </span>
-                                        ) : null}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="raf-card">
-                                    <div className="row raf-head">
-                                      <div className="col-xl-4">
-                                        <label
-                                          className={`${visitStyles.labelStyle}`}
-                                        >
-                                          V28 score
-                                        </label>
-                                      </div>
-                                      <div className="col-xl-4">
-                                        <label
-                                          className={`${visitStyles.labelStyle}`}
-                                        >
-                                          v28Score(30%)
-                                        </label>
-                                      </div>
-                                    </div>
-
-                                    <div className="row  raf-details">
-                                      <div className="col-xl-4 ">
-                                        <span>{rafScore.v28Score}</span>
-                                      </div>
-                                      <div className="col-xl-4">
-                                        {rafScore.v28Score30Percent != null ? (
-                                          <span>
-                                            {rafScore.v28Score30Percent.toFixed(
-                                              3
-                                            )}
-                                          </span>
-                                        ) : null}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="raf-card">
-                                    <div className=" col raf-head">
-                                      <div className="col-xl-12">
-                                        <label
-                                          className={`${visitStyles.labelStyle}`}
-                                        >
-                                          Overall score
-                                        </label>
-                                      </div>
-                                    </div>
-
-                                    <div className="row  raf-details">
-                                      {rafScore.score != null ? (
-                                        <span>{rafScore.score.toFixed(3)}</span>
-                                      ) : null}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          ) : null}
-                          {rafScore == null ? (
-                            // <div className="card box-shadow-none">
-                            //   <div className="card combo-card">
-                            <div className="col-xl-12">
-                              <span className="no-patient-data">
-                                No RAF Score
-                              </span>
-                            </div>
-                          ) : //   </div>
-                          // </div>
-                          null}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <RafScore rafScoreList={rafScore} />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
                   <div className="my-post-content pt-3 row">

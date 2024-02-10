@@ -1,0 +1,117 @@
+.width_100 {
+  width: 100px !important;
+}
+.width_300 {
+  width: 300px !important;
+}
+.classThead {
+  background: #e1edfe !important;
+  padding: 15px 15px !important;
+}
+.classThead th {
+  color: #000 !important;
+  padding: 15px 15px !important;
+}
+
+.classTable > thead {
+  background-color: #e1edfe !important;
+  border-radius: 10px !important;
+}
+
+.classTable {
+  border-collapse: separate !important;
+  border-spacing: 0 3px !important;
+  width: 100%;
+}
+.bodytable > td:first-child,
+.classThead > :first-child {
+  border-radius: 10px 0 0 10px !important;
+}
+.bodytable > td:last-child,
+.classThead > :last-child {
+  border-radius: 10px 0 0 10px !important;
+}
+.classTable table th {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+.classTable td:first-child,
+.classTable th:first-child {
+  border-radius: 10px 0 0 10px !important;
+}
+.classTable td:last-child,
+.classTable th:last-child {
+  border-radius: 0 10px 10px 0 !important;
+}
+
+.classTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.classThead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.classTable &::-webkit-scrollbar {
+  width: 12px;
+}
+
+.classTable &::-webkit-scrollbar-thumb {
+  background-color: #241571;
+}
+.classTable &::-webkit-scrollbar-track {
+  background-color: #fafcff;
+}
+
+.classContaineer {
+  overflow: scroll;
+  padding: 10px;
+}
+.trDiv {
+  background: #ffff !important;
+}
+.firstTdBorder {
+  border-top: 0.2px solid #e1e1e1;
+  border-left: 0.2px solid #e1e1e1;
+  border-bottom: 0.2px solid #e1e1e1;
+}
+.childBorder {
+  border-top: 0.2px solid #e1e1e1;
+  border-bottom: 0.2px solid #e1e1e1;
+}
+.lastBorder {
+  border-top: 0.2px solid #e1e1e1;
+  border-bottom: 0.2px solid #e1e1e1;
+  border-right: 0.2px solid #e1e1e1;
+}
+.classTable tbody tr td {
+  font-size: 13px;
+  font-weight: 400;
+  padding: 15px 15px;
+  color: #000 !important;
+}
+.classTable tbody tr {
+  text-align: left;
+  margin-left: 20px;
+}
+.classTable thead tr {
+  text-align: left;
+}
+.classTable tbody tr:hover {
+  cursor: pointer;
+  border-radius: 10px 10px 10px 10px !important;
+  background-color: #ffff !important;
+}
+.stickeyRaf_head {
+  min-height: 69vh;
+  max-height: 69vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.classTable table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
