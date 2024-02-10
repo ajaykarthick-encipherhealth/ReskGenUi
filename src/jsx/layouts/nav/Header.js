@@ -301,7 +301,7 @@ const Header = () => {
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
 
-    dispatch(getCurrentUser(userId));
+    dispatch(getCurrentUser(userId,router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
     setMenuList(getMenuListByRole(userRoleLocal));

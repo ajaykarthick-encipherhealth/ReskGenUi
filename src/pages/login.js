@@ -75,7 +75,7 @@ export default function Login() {
             >
               <div className="login-content">
                 <p className="sub-title"></p>
-                <Image className="login-logo" src={IMAGES.loginPageLogo} />
+                <Image className="login-logo" src={IMAGES.loginPageLogo1} />
               </div>
             </div>
           </div>

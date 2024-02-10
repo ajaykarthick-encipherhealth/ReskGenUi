@@ -274,10 +274,10 @@ export const getFilters = (field, username, pageQueue) => {
   };
 };
 
-export const getCurrentUser = (userId) => {
+export const getCurrentUser = (userId, router) => {
   return (dispatch) => {
     try {
-      CurrentUser(userId).then((response) => {
+      CurrentUser(userId, router).then((response) => {
         dispatch({
           type: CURRENTUSER,
           payload: response,
