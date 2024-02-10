@@ -335,7 +335,6 @@ export default function Patient() {
         : isFinished || rowData?.computing == 2
         ? "Computed"
         : "Not Computed";
-    // console.log(isFinished)
     return (
       <div className="patient-status">
         <div
