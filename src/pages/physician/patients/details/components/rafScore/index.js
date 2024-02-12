@@ -49,10 +49,10 @@ const RafScore = ({ rafScoreList }) => {
                       <th className={style.width_300}>DX Description</th>
                       <th className={style.width_100}>HCC(V24)</th>
                       <th className={style.width_100}>HCC(V28)</th>
-                      <th>RAF(V24)</th>
-                      <th>RAF(V28)</th>
-                      <th>Monthly Premium(V24)</th>
-                      <th>Monthly Premium(V28)</th>
+                      <th className={style.width_100}>RAF(V24)</th>
+                      <th className={style.borderBox}>RAF(V28)</th>
+                      <th className={style.borderBox}>Monthly Premium(V24)</th>
+                      <th className={style.borderBox2}>Monthly Premium(V28)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -62,38 +62,36 @@ const RafScore = ({ rafScoreList }) => {
                           <td className={style.firstTdBorder}>
                             {item.dx_name}
                           </td>
-                          <td className={TableStyle.childBorder}>
-                            {item.dx_desc}
-                          </td>
-                          <td className={TableStyle.childBorder}>
+                          <td className={style.childBorder}>{item.dx_desc}</td>
+                          <td className={style.childBorder}>
                             {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
                                 <div>{item.hcc_name}</div>
                               )
                             )}
                           </td>
-                          <td className={TableStyle.childBorder}>
+                          <td className={style.childBorder}>
                             {getRafDetails(item.dx_name, "v28_2023")?.map(
                               (item) => (
                                 <div>{item.hcc_name}</div>
                               )
                             )}
                           </td>
-                          <td className={TableStyle.childBorder}>
+                          <td className={style.childBorder}>
                             {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
                                 <div>{item.hcc_raf}</div>
                               )
                             )}
                           </td>
-                          <td className={TableStyle.childBorder}>
+                          <td className={style.childBorder}>
                             {getRafDetails(item.dx_name, "v28_2023")?.map(
                               (item) => (
                                 <div>{item.hcc_raf}</div>
                               )
                             )}
                           </td>
-                          <td className={TableStyle.childBorder}>
+                          <td className={style.childBorder}>
                             {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
                                 <div>${item.premium}</div>
@@ -132,9 +130,9 @@ const RafScore = ({ rafScoreList }) => {
                             <div
                               className={`row  ${visitStyles.overallScoreContainer}`}
                             >
-                              <div className="raf-card ">
+                              {/* <div className="raf-card ">
                                 <div className="row raf-head">
-                                  <div className="col-xl-2">
+                                  <div className="col-xl-2 border">
                                     <label
                                       className={`${visitStyles.labelStyle}`}
                                     >
@@ -204,6 +202,69 @@ const RafScore = ({ rafScoreList }) => {
                                     ) : null}
                                   </div>
                                 </div>
+                              </div> */}
+                              <div className="raf-card ">
+                                <table className={style.classTable}>
+                                  <thead className={style.classThead}>
+                                    <tr>
+                                      <th className={style.width_100}>
+                                        {" "}
+                                        V24 score
+                                      </th>
+                                      <th className={style.width_100}>
+                                        {" "}
+                                        v24Score(70%)
+                                      </th>
+                                      <th className={style.width_100}>
+                                        V28 score
+                                      </th>
+                                      <th className={style.width_100}>
+                                        {" "}
+                                        v28Score(30%)
+                                      </th>
+                                      <th className={style.width1_100}>
+                                        Overall score
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr className={style.trDiv}>
+                                      <td className={style.firstTdBorder}>
+                                        {rafScoreList.v24Score}
+                                      </td>
+                                      <td className={style.childBorder}>
+                                        {rafScoreList.v24Score70Percent !=
+                                        null ? (
+                                          <span>
+                                            {rafScoreList.v24Score70Percent.toFixed(
+                                              3
+                                            )}
+                                          </span>
+                                        ) : null}
+                                      </td>
+                                      <td className={style.childBorder}>
+                                        {rafScoreList.v28Score}
+                                      </td>
+                                      <td className={style.childBorder}>
+                                        {rafScoreList.v28Score30Percent !=
+                                        null ? (
+                                          <span>
+                                            {rafScoreList.v28Score30Percent.toFixed(
+                                              3
+                                            )}
+                                          </span>
+                                        ) : null}
+                                      </td>
+                                      <td className={style.childBorder}>
+                                        {rafScoreList.score != null ? (
+                                          <span>
+                                            {rafScoreList.score.toFixed(3)}
+                                          </span>
+                                        ) : null}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
                               </div>
                             </div>
                           </div>
