@@ -19,7 +19,7 @@ function AddPatientListTable({
   setSort,
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
 
   const dispatch = useDispatch();
