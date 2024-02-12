@@ -98,7 +98,7 @@ export default function Patient() {
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [errors,setErrors]=useState({year:""})
+  const [errors, setErrors] = useState({ year: "" });
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -219,7 +219,7 @@ export default function Patient() {
     if (e.target.name === "year") {
       const validateYearField = validateYear(e.target.value, setErrors);
       if (validateYearField) {
-        setErrors({year:""})
+        setErrors({ year: "" });
         setInputValue({ ...inputValue, [key]: value });
       }
     } else {
@@ -258,23 +258,24 @@ export default function Patient() {
     // inputValuePatientId.allocatedUserId = localUserId;
 
     if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
-        inputValuePatientId
-      );
-      if (response?.status == 200) {
-        if (response.data.message == "patient Already Present") {
-          setIsLoadingBtn(false);
-          notification.warning({
-            message: "Patient Id Already Present",
-            duration: 1,
-          });
-        } else {
-          notification.success({
-            message: "Patient Id Created Successfully!",
-            duration: 1,
-          });
+      try {
+        setIsLoadingBtn(true);
+        const response = await axios.post(
+          ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
+          inputValuePatientId
+        );
+        if (response?.status == 200) {
+          // if (response.data.message == "patient Already Present") {
+          //   setIsLoadingBtn(false);
+          //   notification.warning({
+          //     message: "Patient Id Already Present",
+          //     duration: 1,
+          //   });
+          // } else {
+          //   notification.success({
+          //     message: "Patient Id Created Successfully!",
+          //     duration: 1,
+          //   });
           dispatch(
             getPatients(
               pageNo,
@@ -292,12 +293,22 @@ export default function Patient() {
           );
           setAddPatientId(false);
           setIsLoadingBtn(false);
+          notification.success({
+            message: response?.data?.message,
+            duration: 1,
+          });
+          // }
+        } else {
+          setIsLoadingBtn(false);
         }
-      } else {
-        setIsLoadingBtn(false);
+        // setAddPatientId(false);
+        getAllList(response?.response);
+      } catch (Err) {
+        notification.error({
+          message: Err?.response?.data?.message,
+          duration: 1,
+        });
       }
-      // setAddPatientId(false);
-      getAllList(response?.response);
     }
 
     setValidated(true);
