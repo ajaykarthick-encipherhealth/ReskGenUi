@@ -38,15 +38,14 @@ const SelectRole = () => {
     if (!selectedRole) {
       setRoleError(true);
     } else {
-      loginSuccessCallBack();
-      // var result = await checkDeviceLogin();
-      // if (result?.data?.response == "ALREADY_LOGGED_IN") {
-      //   loginSuccessCallBack();
-      //   setLogoutMessage(result?.data?.message);
-      //   setConfirmModal(true);
-      // } else {
-      //   loginSuccessCallBack();
-      // }
+      // loginSuccessCallBack();
+      var result = await checkDeviceLogin();
+      if (result?.data?.response == "ALREADY_LOGGED_IN") {
+        setLogoutMessage(result?.data?.message);
+        setConfirmModal(true);
+      } else {
+        loginSuccessCallBack();
+      }
     }
   };
 
@@ -102,7 +101,7 @@ const SelectRole = () => {
   return (
     <div className="page-wraper">
       <div className="login-account">
-      <div className={`row h-100 ${styles.loginContainer}`}>
+        <div className={`row h-100 ${styles.loginContainer}`}>
           <div className="col-lg-6 align-self-start">
             <div
               className="account-info-area"
