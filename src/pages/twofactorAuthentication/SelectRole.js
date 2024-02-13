@@ -21,7 +21,17 @@ const SelectRole = () => {
   const [logoutMessgae, setLogoutMessage] = useState("");
 
   const items =
-    role?.length > 0 ? role?.map((info) => ({ value: info, label: info })) : [];
+    role?.length > 0
+      ? role?.map((info) => ({
+          value: info,
+          label:
+            info == "L1AUDITOR"
+              ? "AUDITOR"
+              : info == "L2AUDITOR"
+              ? "SUPERVISOR"
+              : "ADMIN",
+        }))
+      : [];
 
   const onSubmitRole = async (e) => {
     e.preventDefault();

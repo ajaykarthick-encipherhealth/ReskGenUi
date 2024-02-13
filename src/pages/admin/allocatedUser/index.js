@@ -512,7 +512,7 @@ export default function Patient() {
                                     to="#my-posts"
                                     eventKey="validDiseases"
                                   >
-                                    L1 Auditor Allocation
+                                    Auditor Allocation
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item
@@ -531,7 +531,7 @@ export default function Patient() {
                                       setTableLoading(true);
                                     }}
                                   >
-                                    L2 Auditor Allocation
+                                    Supervisor Allocation
                                   </Nav.Link>
                                 </Nav.Item>
                               </Nav>
