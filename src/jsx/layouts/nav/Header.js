@@ -495,7 +495,7 @@ const Header = () => {
                                       </span>
                                       <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
                                         {currentRole == "l1auditor"
-                                          ? "Auditor"
+                                          ? "Reviewer"
                                           : currentRole == "l2auditor"
                                           ? "Supervisor"
                                           : "Admin"}
@@ -564,7 +564,7 @@ const Header = () => {
                           ) : (
                             <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
                               {currentRole == "l1auditor"
-                                ? "Auditor"
+                                ? "Reviewer"
                                 : currentRole == "l2auditor"
                                 ? "Supervisor"
                                 : "Admin"}

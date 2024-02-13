@@ -26,7 +26,7 @@ const SelectRole = () => {
           value: info,
           label:
             info == "L1AUDITOR"
-              ? "AUDITOR"
+              ? "REVIEWER"
               : info == "L2AUDITOR"
               ? "SUPERVISOR"
               : "ADMIN",
