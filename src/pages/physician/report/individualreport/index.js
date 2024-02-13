@@ -126,14 +126,17 @@ const IndividualReceiverReport = () => {
         <div className={styles.cont1}>
           <div>
             <div className={styles.container}>
-              <div className={"col-xl-1 d-flex"} style={{ cursor: "pointer" }}>
+              <div
+                className={"col-xl-1 d-flex"}
+                style={{ cursor: "pointer",marginLeft:"10px"}}
+              >
                 <button
                   style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    router?.push("/physician/report");
+                    router?.push("/l2Auditor/report");
                     dispatch(getActiveTab("ReceivedReport"));
-                    setLoading(true)
+                    setLoading(true);
                   }}
                 >
                   <Image src={leftArrow} />
@@ -155,62 +158,66 @@ const IndividualReceiverReport = () => {
 
             {/* users */}
             <div className={styles.list}>
-              {searchValue !== null && detailsContent?.length === 0 ? (
+              {!searchValue && detailsContent?.length === 0 ? (
                 <div style={{ marginTop: "60px" }}>
                   <SpinnerDots />
                 </div>
               ) : (
                 <>
-                  {detailsContent
-                    // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
-                    ?.map((item) => (
-                      <div key={item.reportId}>
-                        <div
-                          style={{
-                            display: "flex",
-                            cursor: "pointer",
-                            marginBottom: "10px",
-                          }}
-                          onClick={() => {
-                            dispatch(selectedReport({ reportUser: item }));
-                            setReportInfo(item);
-                            dispatch(
-                              getSelectedReportDetails(item?.reportId, item)
-                            );
-                          }}
-                        >
-                          <div className={styles.user}>
-                            <div>{item?.reportName}</div>
-                            {item?.type && (
-                              <div
-                                style={{ margin: "5px 0 0 5px" }}
-                                className={
-                                  item.type === "EXCEL"
-                                    ? styles.excelStyle
-                                    : styles.csvSTyle
-                                }
-                              >
-                                {item?.type}
-                              </div>
-                            )}
-                            {item?.role && (
-                              <div
-                                className={
-                                  item.role.toLowerCase() === "download"
-                                    ? styles.download1
-                                    : styles.read
-                                }
-                              >
-                                {item?.role.toLowerCase()}
-                              </div>
-                            )}
+                  {searchValue && detailsContent?.length === 0 ? (
+                    <div>No data</div>
+                  ) : (
+                    detailsContent
+                      // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
+                      ?.map((item) => (
+                        <div key={item.reportId}>
+                          <div
+                            style={{
+                              display: "flex",
+                              cursor: "pointer",
+                              marginBottom: "10px",
+                            }}
+                            onClick={() => {
+                              dispatch(selectedReport({ reportUser: item }));
+                              setReportInfo(item);
+                              dispatch(
+                                getSelectedReportDetails(item?.reportId, item)
+                              );
+                            }}
+                          >
+                            <div className={styles.user}>
+                              <div>{item?.reportName}</div>
+                              {item?.type && (
+                                <div
+                                  style={{ margin: "5px 0 0 5px" }}
+                                  className={
+                                    item.type === "EXCEL"
+                                      ? styles.excelStyle
+                                      : styles.csvSTyle
+                                  }
+                                >
+                                  {item?.type}
+                                </div>
+                              )}
+                              {item?.role && (
+                                <div
+                                  className={
+                                    item.role.toLowerCase() === "download"
+                                      ? styles.download1
+                                      : styles.read
+                                  }
+                                >
+                                  {item?.role.toLowerCase()}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className={styles.date}>
+                            {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
                           </div>
                         </div>
-                        <div className={styles.date}>
-                          {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
-                        </div>
-                      </div>
-                    ))}
+                      ))
+                  )}
                 </>
               )}
             </div>
@@ -303,7 +310,6 @@ const IndividualReceiverReport = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

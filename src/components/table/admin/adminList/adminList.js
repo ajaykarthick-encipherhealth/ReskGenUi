@@ -35,7 +35,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const [popoverVisible, setPopoverVisible] = useState(true);
   const onChange = (item, checked) => {
     setRowData(item);
-    setChecked(checked?"yes":"no");
+    setChecked(checked ? "yes" : "no");
   };
 
   const handleRows = (value) => {
@@ -89,7 +89,13 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             onClick={() => {
               if (selectedRoles?.length > 0) {
                 dispatch(
-                  enableUser(null, rowData, selectedRoles, setPopoverVisible,"addrole")
+                  enableUser(
+                    null,
+                    rowData,
+                    selectedRoles,
+                    setPopoverVisible,
+                    "addrole"
+                  )
                 );
                 setPopoverVisible(false);
               }
@@ -108,20 +114,15 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   return (
     <div className={TableStyle.classContaineer}>
-      {usersData?.loading ? (
+      {!usersData || usersData?.loading ? (
         <SpinnerDots />
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>
             <tr>
-              <th style={{ textAlign: "left", paddingLeft: "72px" }}>NAME</th>
-              <th
-                className={TableStyle.rowStyle}
-                style={{ textAlign: "center" }}
-              >
-                EMAIL
-              </th>
-              <th style={{ textAlign: "center", paddingLeft: "33px" }}>ROLE</th>
+              <th className={TableStyle.rowEmailStyle}>NAME</th>
+              <th className={TableStyle.rowEmailStyle}>EMAIL</th>
+              <th style={{ textAlign: "center", width: "170px" }}>ROLE</th>
               <th
                 style={{ cursor: "pointer", textAlign: "center" }}
                 onClick={() => {
@@ -146,7 +147,8 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             </tr>
           </thead>
           <tbody>
-            {usersData?.data?.response?.content?.length > 0 ? (
+            {!usersData?.loading &&
+            usersData?.data?.response?.content?.length > 0 ? (
               usersData?.data?.response?.content?.map((item, index) => (
                 <tr key={index} style={{ height: "35px" }}>
                   <td
@@ -175,32 +177,18 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       <div style={{ textAlign: "center" }}>---</div>
                     )}
                   </td>
-
                   <td
                     className={TableStyle.childBorder}
-                    style={{ height: "40px !important", textAlign: "center" }}
+                    
                   >
                     <span>{item?.email ? item?.email : "---"}</span>
                   </td>
-                  <td
-                    className={TableStyle.childBorder}
-                    style={{
-                      height: "40px !important",
-                      textAlign: "center",
-                      paddingLeft: "70px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        margin: "0px 0px 0px 0px",
-                        width: "100%",
-                        textAlign: "center",
-                      }}
-                    >
+                  <td className={TableStyle.childBorder}>
+                    <div className={TableStyle.rowStyle2}>
                       {item?.role?.length > 0 ? (
                         <>
                           <Popover
-                            trigger="hover"
+                            trigger="hover" 
                             content={
                               item?.role?.length > 1 &&
                               item?.role?.map((data) => (
@@ -249,7 +237,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                         >
                           <div
                             onClick={() => {
-                              setChecked()
+                              setChecked();
                               setRowData(item);
                               setPopoverVisible(true);
                             }}
@@ -276,8 +264,9 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     <Switch
                       defaultChecked={item?.accountStatus}
                       onChange={(checked) => {
-                        onChange(item, checked)
-                        setPopoverVisible(true)}}
+                        onChange(item, checked);
+                        setPopoverVisible(true);
+                      }}
                       style={{ color: "red" }}
                     />
                   </td>
@@ -285,7 +274,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="8">
+                <td colSpan={7}>
                   <Empty />
                 </td>
               </tr>

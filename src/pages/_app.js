@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux";
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const [showTerminal, setShowTerminal] = useState(true);
 
@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const currentPath = window.location.pathname;
     if (
-      currentPath === "/login" ||
+      currentPath === "/" ||currentPath === "/login" ||
       currentPath?.includes("/twofactorAuthentication/")
     ) {
       setShowTerminal(false);
@@ -70,6 +70,7 @@ function MyApp({ Component, pageProps }) {
             />
           )}
           <Component {...pageProps} />
+          {showTerminal && <Footer />}
         </Provider>
       </PrimeReactProvider>
     </>

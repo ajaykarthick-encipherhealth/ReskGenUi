@@ -26,7 +26,10 @@ import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
-import { generateOptionsList } from "../../../components/headerFilters/functions";
+import {
+  generateOptionsList,
+  validateYear,
+} from "../../../components/headerFilters/functions";
 
 const bullets = [
   {
@@ -95,6 +98,7 @@ export default function Patient() {
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [errors, setErrors] = useState({ year: "" });
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -212,7 +216,15 @@ export default function Patient() {
   const handleChange = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
+    if (e.target.name === "year") {
+      const validateYearField = validateYear(e.target.value, setErrors);
+      if (validateYearField) {
+        setErrors({ year: "" });
+        setInputValue({ ...inputValue, [key]: value });
+      }
+    } else {
+      setInputValue({ ...inputValue, [key]: value });
+    }
   };
 
   const handleChangePatientId = async (e) => {
@@ -246,23 +258,24 @@ export default function Patient() {
     // inputValuePatientId.allocatedUserId = localUserId;
 
     if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
-        inputValuePatientId
-      );
-      if (response?.status == 200) {
-        if (response.data.message == "patient Already Present") {
-          setIsLoadingBtn(false);
-          notification.warning({
-            message: "Patient Id Already Present",
-            duration: 1,
-          });
-        } else {
-          notification.success({
-            message: "Patient Id Created Successfully!",
-            duration: 1,
-          });
+      try {
+        setIsLoadingBtn(true);
+        const response = await axios.post(
+          ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
+          inputValuePatientId
+        );
+        if (response?.status == 200) {
+          // if (response.data.message == "patient Already Present") {
+          //   setIsLoadingBtn(false);
+          //   notification.warning({
+          //     message: "Patient Id Already Present",
+          //     duration: 1,
+          //   });
+          // } else {
+          //   notification.success({
+          //     message: "Patient Id Created Successfully!",
+          //     duration: 1,
+          //   });
           dispatch(
             getPatients(
               pageNo,
@@ -280,12 +293,22 @@ export default function Patient() {
           );
           setAddPatientId(false);
           setIsLoadingBtn(false);
+          notification.success({
+            message: response?.data?.message,
+            duration: 1,
+          });
+          // }
+        } else {
+          setIsLoadingBtn(false);
         }
-      } else {
-        setIsLoadingBtn(false);
+        // setAddPatientId(false);
+        getAllList(response?.response);
+      } catch (Err) {
+        notification.error({
+          message: Err?.response?.data?.message,
+          duration: 1,
+        });
       }
-      // setAddPatientId(false);
-      getAllList(response?.response);
     }
 
     setValidated(true);
@@ -323,7 +346,6 @@ export default function Patient() {
         : isFinished || rowData?.computing == 2
         ? "Computed"
         : "Not Computed";
-    // console.log(isFinished)
     return (
       <div className="patient-status">
         <div
@@ -581,7 +603,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-                            <Footer />
                           </>
                         )}
                       </div>
@@ -601,6 +622,7 @@ export default function Patient() {
           handleChange={handleChange}
           isLoadingBtn={isLoadingBtn}
           onChangeFile={onChangeFile}
+          errors={errors}
         />
         <Addpatients
           addPatientId={addPatientId}

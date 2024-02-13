@@ -276,6 +276,7 @@ export const renderUserPrfoile = (
   width,
   height
 ) => {
+
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
   const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
@@ -401,9 +402,15 @@ export const getValidatePassword = (password, setErrors, setIsLoading) => {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
+  if (password.length === 0) {
+    setErrors({
+      password: "Please enter the password",
+    });
+    setIsLoading(false);
+    return false;
+  }
   if (password.length < 8) {
     setErrors({
-      email: "",
       password: "Password should be greater than 8 characters",
     });
     setIsLoading(false);
@@ -411,15 +418,13 @@ export const getValidatePassword = (password, setErrors, setIsLoading) => {
   }
   if (password.length > 14) {
     setErrors({
-      email: "",
       password: "Password should be less than 14 characters",
     });
     setIsLoading(false);
     return false;
   }
-  if (!passwordRegex.test(password)) {
+  if (password.length > 0 && !passwordRegex.test(password)) {
     setErrors({
-      email: "",
       password:
         "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character",
     });
@@ -442,6 +447,34 @@ export const validateConfirmPassword = (
       confirmPass: "Passwords do not match",
     });
     setIsLoading(false);
+    return false;
+  }
+
+  return true;
+};
+
+export const validateYear = (year, setErrors) => {
+  const yearPattern = /^[0-9]{4}$/;
+  const correctYear = parseInt(year) > 0;
+  const currentYear = new Date().getFullYear();
+
+  if (year?.length === 0) {
+    setErrors({
+      year: "Please enter year",
+    });
+
+    return false;
+  }
+  if (!yearPattern.test(year) && !correctYear) {
+    setErrors({
+      year: "Please enter a valid 4-digit positive year",
+    });
+    return false;
+  }
+  if (year > currentYear || year?.length < 4) {
+    setErrors({
+      year: "Please enter a valid year",
+    });
     return false;
   }
 

@@ -43,10 +43,10 @@ function PatientTable({
   onPageChange,
   setSort,
 }) {
-  const [sortDueOrder, setSortDueOrder] = useState("ASC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-  const [sortAllocateOrder, setSortAllocateOrder] = useState("ASC");
+  const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
 
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -268,7 +268,7 @@ function PatientTable({
               </span>
             </th>
 
-            <th>ALLOCATED BY</th>
+            <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
             <th style={{paddingLeft:"35px"}}>PRIORITY</th>
             <th style={{paddingLeft:"65px"}}>STATUS</th>
           </tr>

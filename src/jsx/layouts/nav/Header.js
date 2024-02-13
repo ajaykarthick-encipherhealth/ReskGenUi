@@ -18,6 +18,8 @@ import {
   Drawer,
   Popover,
   Avatar,
+  Modal,
+  Divider,
 } from "antd";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
@@ -43,10 +45,15 @@ import Search from "../../../components/search";
 import {
   getAccuracy,
   getCoderDetails,
+  getCurrentUser,
 } from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
+import { logoutAllDevice } from "../../../services/AuthService";
+import ImageUploader from "../../../components/imageUploading/ImageUploader";
+import logout from "../../../images/svg/logout.svg";
+import editImg from "../../../images/svg/edit.svg";
 
 const btnItems = [
   {
@@ -86,6 +93,7 @@ const Header = () => {
 
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const accuracy = useSelector((state) => state.auth.accuracy);
+  const currentUserInfo = useSelector((state) => state.auth.currentUserInfo);
 
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;
@@ -104,6 +112,8 @@ const Header = () => {
   const [isChat, setIsChat] = useState(false);
   const [profileImg, setProfileImg] = useState();
   const [lastName, setLastName] = useState();
+  const [openUploader, setOpenUploader] = useState();
+  const [openContent, setOpenContent] = useState(false);
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -125,7 +135,8 @@ const Header = () => {
     setOpenMsg(false);
   };
 
-  const logoutFunction = () => {
+  const logoutFunction = async () => {
+    setOpenContent(true);
     Swal.fire({
       title: "Warning!",
       text: "Do you want Logout!",
@@ -134,8 +145,9 @@ const Header = () => {
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       closeOnConfirm: false,
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
+        await logoutAllDevice();
         localStorage.clear();
         localStorage.removeItem("loginCheck");
         localStorage.removeItem("userRole");
@@ -146,17 +158,14 @@ const Header = () => {
     });
   };
 
-  const getUserIdDetails = async (userId) => {
+  const getUserIdDetails = async (currentUserInfo) => {
     const token = localStorage.getItem("token");
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint + `dbservice/user/get?userName=${userId}`
-    );
-    setUserIdDetails(response?.data?.response);
-    setProfileImg(response?.data?.response?.profileImageUrl);
-    setUserName(response?.data?.response?.firstName);
-    setLastName(response?.data?.response?.lastName);
-    setDropdownContent(response?.data?.response?.role);
-    var userId = response?.data?.response?.id;
+    setUserIdDetails(currentUserInfo?.data?.response);
+    setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
+    setUserName(currentUserInfo?.data?.response?.firstName);
+    setLastName(currentUserInfo?.data?.response?.lastName);
+    setDropdownContent(currentUserInfo?.data?.response?.role);
+    var userId = currentUserInfo?.data?.response?.id;
     dispatch(getNotificationList(userId));
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userId}?token=${token}`
@@ -175,6 +184,7 @@ const Header = () => {
       sse.close();
     };
   };
+
   const percentage = 95;
   const PopContent = (
     <div className={styles.innerPop}>
@@ -247,13 +257,6 @@ const Header = () => {
     </div>
   );
 
-  const TerminalComponent = dynamic(
-    () => import("react-chat-widget").then((mod) => mod.Widget),
-    {
-      ssr: false,
-    }
-  );
-
   const notificationDrawer = async () => {
     setOpen(true);
     dispatch(getNotificationAlertClear([]));
@@ -298,7 +301,7 @@ const Header = () => {
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
 
-    getUserIdDetails(userId);
+    dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
     setMenuList(getMenuListByRole(userRoleLocal));
@@ -342,7 +345,10 @@ const Header = () => {
         })
       );
     }
-  }, [msgReply, selectedbtn, search, selectedOption]);
+    if (currentUserInfo) {
+      getUserIdDetails(currentUserInfo);
+    }
+  }, [msgReply, selectedbtn, search, selectedOption, currentUserInfo]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -396,12 +402,12 @@ const Header = () => {
                             trigger={"click"}
                           >
                             <Button className={styles.codeBtn}>
-                             <div style={{margin:" -7px 0 0 -25px"}}>
-                             <CodeIcon  /></div>
-                             <div style={{margin:" -6px 0 0 -7px"}}>
-                          
-                             Codes
-                             </div>
+                              <div style={{ margin: " -7px 0 0 -25px" }}>
+                                <CodeIcon />
+                              </div>
+                              <div style={{ margin: " -6px 0 0 -7px" }}>
+                                Codes
+                              </div>
                             </Button>
                           </Popover>
                         )}
@@ -444,32 +450,91 @@ const Header = () => {
                           onClick={() => notificationDrawer()}
                         >
                           <Badge
-                            count={notificationAlertData.length}
+                            count={notificationAlertData?.length}
                             color="#3479fe"
                           >
                             {SVGICON.dashboardNotification}
                           </Badge>
                         </div>
-                        <div
-                          className="header-media d-flex"
-                          onClick={logoutFunction}
-                          style={{marginLeft:"-20px"}}
-                        >
-                         
-                            <div className="header-info2 d-flex align-items-center">
-                              <div
-                                className="header-media"
-                                style={{ marginTop: "-2px" }}
-                              >
-                                {renderUserPrfoile(
-                                  userName,
-                                  lastName,
-                                  profileImg,
-                                  "header"
-                                )}
+                        <div className="header-media d-flex">
+                          <Popover
+                            trigger="click"
+                            content={
+                              !openContent && (
+                                <div className={styles.popDIv}>
+                                  <div
+                                    style={{
+                                      margin: "20px 0px 0 30px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div style={{ width: "80px" }}>
+                                      {renderUserPrfoile(
+                                        userName,
+                                        lastName,
+                                        profileImg,
+                                        "header",
+                                        "70px",
+                                        "70px"
+                                      )}
+                                      <div
+                                        onClick={() => {
+                                          setOpenContent(false);
+                                          setOpenUploader(!openUploader);
+                                        }}
+                                        className={styles.edit}
+                                      >
+                                        <span>
+                                          <Image src={editImg} alt="noimg" />
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div style={{ margin: "10px 0 0 5px" }}>
+                                      <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
+                                        {userName}
+                                      </span>
+                                      <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
+                                        {currentRole == "l1auditor"
+                                          ? "Auditor"
+                                          : currentRole == "l2auditor"
+                                          ? "Supervisor"
+                                          : "Admin"}
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  <Divider className={styles.divider} />
+                                  <div
+                                    className={styles.footerDiv}
+                                    onClick={logoutFunction}
+                                  >
+                                    <Image src={logout} />
+                                    <span className={styles.footerCont}>
+                                      {" "}
+                                      Logout
+                                    </span>
+                                  </div>
+                                </div>
+                              )
+                            }
+                          >
+                            <div>
+                              <div className="header-info2 d-flex align-items-center">
+                                <div
+                                  className="header-media"
+                                  style={{ marginTop: "-7px" }}
+                                  onClick={() => setOpenContent(false)}
+                                >
+                                  {renderUserPrfoile(
+                                    userName,
+                                    lastName,
+                                    profileImg,
+                                    "header"
+                                  )}
+                                </div>
                               </div>
                             </div>
-                         
+                          </Popover>
                         </div>
                         <div className="mx-15">
                           <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
@@ -498,7 +563,11 @@ const Header = () => {
                             </span>
                           ) : (
                             <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
-                              {currentRole}
+                              {currentRole == "l1auditor"
+                                ? "Auditor"
+                                : currentRole == "l2auditor"
+                                ? "Supervisor"
+                                : "Admin"}
                             </span>
                           )}
                         </div>
@@ -511,6 +580,7 @@ const Header = () => {
           </div>
         </nav>
       </div>
+
       <Drawer
         title="Notification"
         placement="right"
@@ -522,6 +592,20 @@ const Header = () => {
           <Notification notificationResponse={notificationResponse?.data} />
         ) : null}
       </Drawer>
+
+      <Modal
+        title="Upload Profile Image"
+        open={openUploader}
+        onOk={() => setOpenUploader(false)}
+        onCancel={() => setOpenUploader(false)}
+      >
+        <div>
+          <ImageUploader
+            setOpenUploader={setOpenUploader}
+            setOpenContent={setOpenContent}
+          />
+        </div>
+      </Modal>
       {openMsg ? (
         <div className="chat-box ">
           <ChatCommunication openMsg={openMsg} offMsg={setOpenMsg} />

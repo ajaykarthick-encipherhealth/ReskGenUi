@@ -446,7 +446,6 @@ export default function Patient() {
                               </div>
                             </div> */}
 
-                        <Footer />
                       </div>
                     </div>
                   </div>

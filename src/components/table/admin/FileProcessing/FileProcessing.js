@@ -155,15 +155,14 @@ function FileProcessingTable({ patinetListAll }) {
       if (data) {
         setParsedData(data);
         setLoading(false);
-      }
-
-      if (
-        (!isFinished && data[0]?.processStageChart === "FINISHED") ||
-        errStages[data[0]?.processStageChart]
-      ) {
-        isFinished = true;
-        sse.close();
-        setLoading(false);
+        if (
+          (!isFinished && data[0]?.processStageChart === "FINISHED") ||
+          errStages[data[0]?.processStageChart]
+        ) {
+          isFinished = true;
+          sse.close();
+          setLoading(false);
+        }
       }
     };
 
@@ -207,7 +206,7 @@ function FileProcessingTable({ patinetListAll }) {
 
   const handleToggleStepper = (index, data) => {
     setToggle((prevToggle) => ({
-      ...prevToggle,
+      ...Object.fromEntries(Object.keys(prevToggle).map((key) => [key, false])), // Close all other items
       [data?.patientId]: !prevToggle[data.patientId],
     }));
     setActiveId(data?.patientId);
@@ -368,7 +367,7 @@ function FileProcessingTable({ patinetListAll }) {
         title: "",
         description: "Finished",
         status:
-          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+          data?.processStageChart === "FINISHED"
             ? "finish"
             : stageChartMap2[data?.processStageChart] === "STORED_FAILED" &&
               "error",
@@ -469,23 +468,17 @@ function FileProcessingTable({ patinetListAll }) {
           >{`${uploadStatus}% Complete`}</div>
           {toggle[data?.patientId] && (
             <>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  margin: "20px 0px 0px 10px",
-                  gap: "10px",
-                  flexWrap: "wrap",
-                  justifyContent: "space-around",
-                }}
-              >
+              <div className={TableStyle.fileprocessing}>
                 {mappedSteps?.length > 0 &&
                   mappedSteps?.map((step, index) => {
                     const findData = selectedRowTime?.find(
                       (item) => item?.processStageChart === step?.info
                     );
                     return (
-                      <div key={index} style={{ width: "10%" }}>
+                      <div
+                        key={index}
+                        className={TableStyle.innerProcessingDiv}
+                      >
                         {selectedRowTime?.length > 0 && findData ? (
                           <span>
                             {findData?.createdDate

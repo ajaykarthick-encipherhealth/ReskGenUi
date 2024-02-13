@@ -291,7 +291,7 @@ const UserQueue = ({ userList, setSort }) => {
               }}
             >
               COMPLETED DATE
-              <span style={{ cursor: "pointer" }}>
+              <span style={{ cursor: "pointer",padding: "5px" }}>
                 {processSort === "DESC" ? (
                   <ArrowDownOutlined />
                 ) : (

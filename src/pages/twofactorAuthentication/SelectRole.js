@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Select, notification } from "antd";
+import { Select, notification, Modal } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { selectedUserRole } from "../../store/actions/AuthActions";
 import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
+import { checkDeviceLogin, logoutAllDevice } from "../../services/AuthService";
 
 const SelectRole = () => {
   const dispatch = useDispatch();
@@ -15,39 +16,85 @@ const SelectRole = () => {
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [role, setRole] = useState();
+  const [decodedParams, setDecodedParams] = useState();
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [logoutMessgae, setLogoutMessage] = useState("");
 
   const items =
-    role?.length > 0 ? role?.map((info) => ({ value: info, label: info })) : [];
+    role?.length > 0
+      ? role?.map((info) => ({
+          value: info,
+          label:
+            info == "L1AUDITOR"
+              ? "AUDITOR"
+              : info == "L2AUDITOR"
+              ? "SUPERVISOR"
+              : "ADMIN",
+        }))
+      : [];
 
-  const onSubmitRole = (e) => {
+  const onSubmitRole = async (e) => {
     e.preventDefault();
     if (!selectedRole) {
       setRoleError(true);
     } else {
-      notification.success({
-        message: "Login Successfully",
-        duration: 1,
-      });
-      localStorage.removeItem("password");
-      setRoleError(false);
-      const rolesMapping = {
-        admin: { userRole: "admin", route: "/admin/user" },
-        l1auditor: { userRole: "l1auditor", route: "/physician/dashboard" },
-        l2auditor: { userRole: "l2auditor", route: "/l2Auditor/dashboard" },
-      };
+      loginSuccessCallBack();
+      // var result = await checkDeviceLogin();
+      // if (result?.data?.response == "ALREADY_LOGGED_IN") {
+      //   loginSuccessCallBack();
+      //   setLogoutMessage(result?.data?.message);
+      //   setConfirmModal(true);
+      // } else {
+      //   loginSuccessCallBack();
+      // }
+    }
+  };
 
-      const selectedRoleInfo = rolesMapping[selectedRole];
+  const handleLogout = () => {
+    logoutAllDevice();
+    checkDeviceLogin();
+    setConfirmModal(false);
+    loginSuccessCallBack();
+  };
 
-      if (selectedRoleInfo && !roleError) {
-        localStorage.setItem("userRole", selectedRoleInfo?.userRole);
-        localStorage.setItem("role", selectedRole);
-        router?.push(selectedRoleInfo?.route);
-      }
+  const loginSuccessCallBack = () => {
+    notification.success({
+      message: "Login Successfully",
+      duration: 1,
+    });
+    localStorage.removeItem("password");
+    setRoleError(false);
+    const rolesMapping = {
+      admin: { userRole: "admin", route: "/admin/user" },
+      l1auditor: { userRole: "l1auditor", route: "/physician/dashboard" },
+      l2auditor: { userRole: "l2auditor", route: "/l2Auditor/dashboard" },
+    };
+    const selectedRoleInfo = rolesMapping[selectedRole];
+    if (selectedRoleInfo && !roleError) {
+      localStorage.setItem("userRole", selectedRoleInfo?.userRole);
+      localStorage.setItem("role", selectedRole);
+      router?.push(selectedRoleInfo?.route);
     }
   };
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setUsername(searchParams.get("username"));
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const encodedParams = urlParams.get("params");
+    const decodedParams = JSON.parse(atob(encodedParams));
+    const { mfa, skipEntry, username, password } = decodedParams;
+    const skipParam = decodedParams?.skipEntry;
+    const encodeParams = btoa(
+      JSON.stringify({
+        mfa: mfa,
+        skipEntry: skipParam,
+        username: username,
+        password: password,
+      })
+    );
+    setDecodedParams(encodeParams);
+
     const rolesArray = JSON.parse(localStorage.getItem("roles"));
     setRole(rolesArray);
   }, []);
@@ -63,7 +110,7 @@ const SelectRole = () => {
             >
               <div className="login-content">
                 <p className="sub-title"></p>
-                <Image className="login-logo" src={IMAGES.loginPageLogo} />
+                <Image className="login-logo" src={IMAGES.loginPageLogo1} />
               </div>
             </div>
           </div>
@@ -106,16 +153,18 @@ const SelectRole = () => {
                     <button
                       className={styles.backBtn}
                       onClick={() => {
+                        setSelectedRole(null);
                         setRoleError(false);
-                        router?.push(
-                          `/twofactorAuthentication/Authentication?mfa=true&username=${username}`
-                        );
+                        router?.push({
+                          pathname: `/twofactorAuthentication/Authentication`,
+                          search: `params=${decodedParams}`,
+                        });
                       }}
                     >
                       {"BACK"}
                     </button>
                   </div>
-                  <div className="col-lg-6" >
+                  <div className="col-lg-6">
                     <button type="submit" className={styles.sendBtn}>
                       {"NEXT"}
                     </button>
@@ -126,6 +175,13 @@ const SelectRole = () => {
           </div>
         </div>
       </div>
+      <Modal
+        title={logoutMessgae}
+        open={confirmModal}
+        centered
+        onOk={handleLogout}
+        onCancel={() => setConfirmModal(false)}
+      ></Modal>
     </div>
   );
 };

@@ -19,7 +19,7 @@ function AddPatientListTable({
   setSort,
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("ASC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
 
   const dispatch = useDispatch();
@@ -180,7 +180,7 @@ function AddPatientListTable({
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
           
-            <th style={{ textAlign: "left" }}>CREATED BY</th>
+            <th className={TableStyle.rowStyle}>CREATED BY</th>
           
             
                 <th

@@ -34,7 +34,6 @@ const WorkFlow = () => {
     ? new Date(DateRanges?.endDate).toISOString()
     : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
 
-
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
@@ -44,7 +43,9 @@ const WorkFlow = () => {
       icon: allocated,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.allocated,
-      days: `Last ${DateRanges && !DateRanges?.clear?getSelectedDaysCount(DateRanges): 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: allocatedbg,
     },
     {
@@ -52,7 +53,9 @@ const WorkFlow = () => {
       icon: pending,
       title: "Pending",
       charts: worlFlowData?.data?.response?.pending,
-      days: `Last ${DateRanges && !DateRanges?.clear?getSelectedDaysCount(DateRanges): 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: pendingbg,
     },
     {
@@ -60,7 +63,9 @@ const WorkFlow = () => {
       icon: hold,
       title: "Hold",
       charts: worlFlowData?.data?.response?.hold,
-      days: `Last ${DateRanges && !DateRanges?.clear?getSelectedDaysCount(DateRanges): 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: holdbg,
     },
     {
@@ -68,7 +73,9 @@ const WorkFlow = () => {
       icon: completed,
       title: "Completed",
       charts: worlFlowData?.data?.response?.completed,
-      days: `Last ${DateRanges && !DateRanges?.clear?getSelectedDaysCount(DateRanges): 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: completedbg,
     },
   ];
@@ -89,7 +96,9 @@ const WorkFlow = () => {
         setOpenPicker={setOpenPicker}
       />
       <Card borderRadius="28px">
-        {worlFlowData?.loading ? (
+        {!worlFlowData ||
+        worlFlowData?.loading ||
+        worlFlowData?.data === null ? (
           <div className={spinSTYles.spinStyle}>
             <Spin loading={worlFlowData?.loading} />
           </div>

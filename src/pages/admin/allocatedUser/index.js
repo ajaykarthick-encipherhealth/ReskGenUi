@@ -332,7 +332,7 @@ export default function Patient() {
     setIsLoading(true);
     var dataMap = {
       firstName: data?.firstName,
-      lastName:data?.lastName,
+      lastName: data?.lastName,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
@@ -512,7 +512,7 @@ export default function Patient() {
                                     to="#my-posts"
                                     eventKey="validDiseases"
                                   >
-                                    L1 Auditor Allocation
+                                    Auditor Allocation
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item
@@ -531,7 +531,7 @@ export default function Patient() {
                                       setTableLoading(true);
                                     }}
                                   >
-                                    L2 Auditor Allocation
+                                    Supervisor Allocation
                                   </Nav.Link>
                                 </Nav.Item>
                               </Nav>
@@ -571,8 +571,6 @@ export default function Patient() {
                                           </div>
                                         </div>
                                       </div>
-
-                                      <Footer />
                                     </>
                                   )}
                                 </Tab.Pane>
@@ -667,8 +665,6 @@ export default function Patient() {
                                           </>
                                         )}
                                       </div>
-
-                                      <Footer />
                                     </>
                                   )}
                                 </Tab.Pane>

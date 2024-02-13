@@ -63,9 +63,6 @@ const index = () => {
               <HoldStatus />
             </Col>
           </Row>
-          <Row className={styles.lastRow}>
-            <Footer />
-          </Row>
         </div>
       </div>
     </div>

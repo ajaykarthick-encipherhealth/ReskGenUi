@@ -11,14 +11,13 @@ import axios from "../../../utility/axiosConfig";
 import AdminList from "../../../components/table/admin/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
+import Select from "react-select";
 import {
   getAddUser,
   getUsers,
 } from "../../../store/actions/adminAction/usersAction";
 import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
-import SpinnerDots from "../../../components/spinner";
-import Footer from "../../../jsx/layouts/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -39,6 +38,16 @@ const RoleList = [
   { value: "L2AUDITOR", label: "L2AUDITOR" },
 ];
 
+const intialValues = {
+  firstName: "",
+  lastName: "",
+  emailId: "",
+  password: "",
+  role: "",
+  userName: "",
+  mobileNumber: "",
+  confirmPassword: "",
+};
 const UserList = () => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
@@ -57,17 +66,7 @@ const UserList = () => {
   const [sortOrder, setSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [useAdd, setUseAdd] = useState(false);
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    emailId: "",
-    password: "",
-    role: "",
-    userName: "",
-    mobileNumber: "",
-    confirmPassword: "",
-  });
+  const [formData, setFormData] = useState(intialValues);
   const [pageCount, setPageCount] = useState(0);
   const [addPatientId, setAddPatientId] = useState(false);
   const [search, setSearch] = useState("");
@@ -76,19 +75,19 @@ const UserList = () => {
   const [selectedDates, setSelectedDates] = useState();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [showPassword, setShowPassword] = useState(true);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [inputValuePatientId, setInputValuePatientId] = useState({
     patientId: "",
     patientName: "",
   });
   let errorsObj = { email: "", password: "", confirmPass: "" };
   const [errors, setErrors] = useState(errorsObj);
+  const [isLoading, setIsLoading] = useState(false);
   const addUserForm = () => {
     setValidated(false);
     setAddUser(true);
   };
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -238,7 +237,7 @@ const UserList = () => {
                         defaultSelectValue1={""}
                         //  selecte Role
                         selectlabel2="Select Role"
-                        selectOptions2={RoleList}
+                        selectOptions2={[]}
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                         // computation date
@@ -302,7 +301,9 @@ const UserList = () => {
             <button
               type="button"
               className="btn-close"
-              onClick={() => setAddPatientId(false)}
+              onClick={() => {
+                setAddPatientId(false);
+              }}
             >
               <i className="fa-solid fa-xmark"></i>
             </button>
@@ -313,6 +314,7 @@ const UserList = () => {
                 noValidate
                 validated={validated}
                 onSubmit={handleSubmitPatientId}
+                autoComplete="off"
               >
                 <div className="row">
                   <div className="col-xl-12 mb-3">
@@ -367,14 +369,27 @@ const UserList = () => {
             <button
               type="button"
               className="btn-close"
-              onClick={() => setAddUser(false)}
+              onClick={() => {
+                setAddUser(false);
+                setFormData();
+                setErrors({
+                  email: "",
+                  password: "",
+                  confirmPass: "",
+                });
+              }}
             >
               <i className="fa-solid fa-xmark"></i>
             </button>
           </div>
           <div className="offcanvas-body">
             <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
+              <Form
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmit}
+                autoComplete="off"
+              >
                 <div className="row">
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
@@ -420,7 +435,6 @@ const UserList = () => {
                         type="text"
                         onChange={handleChange}
                       />
-                      {/* <span className="input-group-text">@encipherhealth.com</span> */}
                     </div>
                   </div>
                   <div className="col-xl-6 mb-3">
@@ -438,16 +452,23 @@ const UserList = () => {
                     <Form.Label>
                       Role <span className="text-danger">*</span>{" "}
                     </Form.Label>
-                    <Form.Control
+                    <Select
+                      styles={{ border: "1px solid #e6e6e6 !important" }}
                       name="role"
-                      as="select"
+                      options={[
+                        { value: "ADMIN", label: "ADMIN" },
+                        { value: "L1AUDITOR", label: "L1AUDITOR" },
+                        { value: "L2AUDITOR", label: "L2AUDITOR" },
+                        { value: "ADMIN_TECHNICAL_SUPPORT", label: "ADMIN TECHNICAL SUPPORT" },
+                        { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
+                      ]}
+                      onChange={(selectedOption) =>
+                        handleChange({
+                          target: { name: "role", value: selectedOption.value },
+                        })
+                      }
                       required
-                      onChange={handleChange}
-                    >
-                      <option value="ADMIN">ADMIN</option>
-                      <option value="L1AUDITOR">L1AUDITOR</option>
-                      <option value="L2AUDITOR">L2AUDITOR</option>
-                    </Form.Control>
+                    />
                   </div>
 
                   <div className="col-xl-6 mb-3">
@@ -455,7 +476,10 @@ const UserList = () => {
                       Password <span className="text-danger">*</span>{" "}
                     </Form.Label>
 
-                    <div className={styles.passCOntainer}>
+                    <div
+                      className={styles.passCOntainer}
+                      style={{ border: errors?.password && "1px solid red" }}
+                    >
                       <div style={{ width: "100%" }}>
                         <Form.Control
                           name="password"
@@ -497,7 +521,10 @@ const UserList = () => {
                     <Form.Label>
                       Confirm Password <span className="text-danger">*</span>{" "}
                     </Form.Label>
-                    <div className={styles.passCOntainer}>
+                    <div
+                      className={styles.passCOntainer}
+                      style={{ border: errors?.password && "1px solid red" }}
+                    >
                       <div style={{ width: "95%" }}>
                         <Form.Control
                           name="confirmPassword"
@@ -533,7 +560,14 @@ const UserList = () => {
                     Submit
                   </Button>
                   <Button
-                    onClick={() => setAddUser(false)}
+                    onClick={() => {
+                      setAddUser(false);
+                      setErrors({
+                        email: "",
+                        password: "",
+                        confirmPass: "",
+                      });
+                    }}
                     className="btn btn-danger btn-sm light ms-1"
                   >
                     Cancel
@@ -544,7 +578,6 @@ const UserList = () => {
           </div>
         </Offcanvas>
       </div>
-      <Footer />
     </>
   );
 };

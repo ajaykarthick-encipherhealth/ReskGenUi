@@ -74,6 +74,7 @@ function ReceivedReport({
                   <th>ACCESS TYPE</th>
                   <th  style={{textAlign:"center"}}>SENDER</th>
                   <th
+                  className={TableStyle.rowStyle}
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     sortFunction(
@@ -189,7 +190,7 @@ function ReceivedReport({
           receivedEndDate={receivedEndDate}
         />
       </Modal> */}
-      <Footer />
+   
     </div>
   );
 }

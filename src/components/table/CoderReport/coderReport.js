@@ -220,10 +220,10 @@ function CoderReport({
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
-            <tr style={{ textAlign: "center" }}>
+            <tr>
               <>
                 <th></th>
-                <th style={{ paddingLeft: "40px" }}>PATIENT ID</th>
+                <th className={TableStyle.rowStyle2}>PATIENT ID</th>
                 <th>PATIENT NAME</th>
                 <th
                   style={{ cursor: "pointer" }}
@@ -244,11 +244,11 @@ function CoderReport({
                   )}
                 </th>
                 <th>COMMENTS </th>
-                <th>AUDITOR NAME </th>
+                <th className={TableStyle.rowAudited}>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th>STATUS</th>
+                <th className={TableStyle.rowStyle2}>STATUS</th>
                 <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
@@ -277,7 +277,7 @@ function CoderReport({
               reportListAll?.data?.map((row, index) => (
                 <tr
                   key={index}
-                  style={{ padding: " 22px !important", textAlign: "center" }}
+                 
                 >
                   {row?.auditedBy && (
                     <td className={TableStyle.firstTdBorder}>
@@ -328,7 +328,9 @@ function CoderReport({
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.auditedBy ? row?.auditedBy : "---"}
+                      <div className={TableStyle.rowAlignment}>
+                          {row?.auditedBy ? row?.auditedBy : "---"}
+                        </div>
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}
@@ -402,7 +404,9 @@ function CoderReport({
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.auditedBy ? row?.auditedBy : "---"}
+                      <div className={TableStyle.rowAlignment}>
+                          {row?.auditedBy ? row?.auditedBy : "---"}
+                        </div>
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}{" "}
@@ -467,7 +471,6 @@ function CoderReport({
           Total count: {ReportPatientDetails?.totalElements}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

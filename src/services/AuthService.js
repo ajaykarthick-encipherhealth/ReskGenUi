@@ -4,6 +4,26 @@ import { loginConfirmedAction, Logout } from "../store/actions/AuthActions";
 import axiosApi from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 
+export const CurrentUser = async (userId, router) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router.push("/login");
+    }
+    console.log(err);
+  }
+};
 export function signUp(email, password) {
   //axios call
   const postData = {
@@ -182,39 +202,74 @@ export const accuracy = async () => {
   }
 };
 
-export const filters = async (field,username,pageQueue) => {
+export const filters = async (field, username, pageQueue) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("userRole");
-  const userRole=role.toUpperCase()
-  const url=username?`dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`:`dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${pageQueue}`
-    try {
-      const response = await axios.get(
-        `${ENDPOINTS?.apiEndoint}${url}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response;
-    } catch (err) {
-      console.log(err);
-    }
+  const userRole = role.toUpperCase();
+  const url = username
+    ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
+    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${pageQueue}`;
+  try {
+    const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (err) {
+    console.log(err);
   }
+};
 
-  export const currentUser=async(userId)=>{
-    const token = localStorage.getItem("token");
-      try {
-        const response = await axios.get(
-          `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        return response;
-      } catch (err) {
-        console.log(err);
+export const currentUser = async (userId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
   }
+};
+
+export const checkDeviceLogin = async (email) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}securityservice/gateway/login`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const logoutAllDevice = async (email) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}securityservice/gateway/logout`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};

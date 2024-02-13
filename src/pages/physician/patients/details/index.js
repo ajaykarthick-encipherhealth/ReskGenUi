@@ -19,7 +19,7 @@ import {
   faIdCardClip,
   faClock,
   faAngleDoubleRight,
-  faAngleDoubleLeft
+  faAngleDoubleLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
@@ -45,7 +45,7 @@ import {
   auditPatientupdate,
   reAuditupdate,
   auditPending,
-  auditHold
+  auditHold,
 } from "../../../../services/PatientsListSevice";
 import LoadingSpinner from "../../../../components/loadingSpinner";
 
@@ -492,11 +492,16 @@ const Details = ({}) => {
     );
     const menu4 = (
       <Menu>
-          <Menu.Item key="4" onClick={() => {allocatePatient()}}>
-            <div className="patient-status">
-              <span className={`badge processed-text`}>ALLOCATE</span>
-            </div>
-          </Menu.Item>
+        <Menu.Item
+          key="4"
+          onClick={() => {
+            allocatePatient();
+          }}
+        >
+          <div className="patient-status">
+            <span className={`badge processed-text`}>ALLOCATE</span>
+          </div>
+        </Menu.Item>
         <Menu.Item key="5" onClick={() => handleActionClick("ADD RADIOLOGY")}>
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>
@@ -515,7 +520,7 @@ const Details = ({}) => {
     setActionItems(menu);
     setActionItems2(menu2);
     setActionItems3(menu3);
-    setAdminActionItems(menu4)
+    setAdminActionItems(menu4);
   };
 
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
@@ -605,6 +610,11 @@ const Details = ({}) => {
   };
 
   const handleCloseModal = () => {
+    setInputValue({
+      notes: "",
+      flag: "",
+      comments: "",
+    });
     setValidated(false);
     setConfirmNotesModalValid(false);
     setConfirmNotesModalInValid(false);
@@ -1189,57 +1199,56 @@ const Details = ({}) => {
 
   const handleEnterTextComments = async (event) => {
     if (event.charCode == 13) {
-      var dataFormatSuggested = {
-        patientId: localPatientId,
-        orgId: localOrgId,
-        comment: inputValue.comments,
-        year: selectedDosValue,
-      };
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/comment`,
-        [dataFormatSuggested]
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        inputValue.comments = "";
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        notification.success({
-          message: "Comment added Successfully!",
-          placement: "top",
-          duration: 1,
-        });
-        getCommentsList();
-      } else {
+      if (inputValue.comments.trim() != "") {
+        var dataFormatSuggested = {
+          patientId: localPatientId,
+          orgId: localOrgId,
+          comment: inputValue.comments,
+          year: selectedDosValue,
+        };
+        const response = await axios.post(
+          ENDPOINTS.apiEndointFileUploadHcc + `dbservice/comment`,
+          [dataFormatSuggested]
+        );
+        var result = response.data;
+        if (result.status == "SUCCESS") {
+          inputValue.comments = "";
+          notification.success({
+            message: result.message,
+            placement: "top",
+            duration: 1,
+          });
+          getCommentsList();
+        } else {
+        }
       }
     }
   };
 
   const handleEnterTextNotes = async (event) => {
     if (event.charCode == 13) {
-      var dataFormatSuggested = {
-        patientId: localPatientId,
-        orgId: localOrgId,
-        notes: inputValue.comments,
-        year: selectedDosValue,
-      };
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/notes`,
-        [dataFormatSuggested]
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        inputValue.comments = "";
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        getNotesList();
-      } else {
+      if (inputValue.comments.trim() != "") {
+        var dataFormatSuggested = {
+          patientId: localPatientId,
+          orgId: localOrgId,
+          notes: inputValue.comments,
+          year: selectedDosValue,
+        };
+        const response = await axios.post(
+          ENDPOINTS.apiEndointFileUploadHcc + `dbservice/notes`,
+          [dataFormatSuggested]
+        );
+        var result = response.data;
+        if (result.status == "SUCCESS") {
+          inputValue.comments = "";
+          notification.success({
+            message: result.message,
+            placement: "top",
+            duration: 1,
+          });
+          getNotesList();
+        } else {
+        }
       }
     }
   };
@@ -1596,17 +1605,23 @@ const Details = ({}) => {
           </Menu.Item>
           <Menu.Item key="2" onClick={() => auditPatient(2)}>
             <div className="patient-status">
-              <span className={`badge ${visitStyles.reaudit_text}`}>RE AUDIT</span>
+              <span className={`badge ${visitStyles.reaudit_text}`}>
+                RE AUDIT
+              </span>
             </div>
           </Menu.Item>
           <Menu.Item key="3" onClick={() => auditPatient(3)}>
             <div className="patient-status">
-              <span className={`badge ${visitStyles.auditpending_text}`}>AUDIT PENDING</span>
+              <span className={`badge ${visitStyles.auditpending_text}`}>
+                AUDIT PENDING
+              </span>
             </div>
           </Menu.Item>
           <Menu.Item key="4" onClick={() => auditPatient(4)}>
             <div className="patient-status">
-              <span className={`badge ${visitStyles.audithold_text}`}>AUDIT HOLD</span>
+              <span className={`badge ${visitStyles.audithold_text}`}>
+                AUDIT HOLD
+              </span>
             </div>
           </Menu.Item>
         </>
@@ -1631,7 +1646,10 @@ const Details = ({}) => {
                 <div className="row patient-file-container">
                   <div className="col-xl-12">
                     <div className="row">
-                      <div className="col-xl-1 col-sm-12" style={{zIndex:"999"}}>
+                      <div
+                        className="col-xl-1 col-sm-12"
+                        style={{ zIndex: "999" }}
+                      >
                         <Button
                           onClick={backToPatientData}
                           className={`ms-2 ${visitStyles.backArrowBtn}`}
@@ -1919,13 +1937,13 @@ const Details = ({}) => {
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown.Button
-                                type="primary"
-                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
-                                icon={<DownOutlined />}
-                                overlay={adminActionItems}
-                              >
-                                ALLOCATE
-                              </Dropdown.Button>
+                              type="primary"
+                              className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                              icon={<DownOutlined />}
+                              overlay={adminActionItems}
+                            >
+                              ALLOCATE
+                            </Dropdown.Button>
                           </div>
                         ) : userRole == "l2auditor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
@@ -1934,16 +1952,14 @@ const Details = ({}) => {
                               className={
                                 patienIdDetails?.auditedStatus == "AUDITHOLD"
                                   ? `auditHoldBtnHcc`
-                                  :
-                                  patienIdDetails?.auditedStatus == "AUDITPENDING"
+                                  : patienIdDetails?.auditedStatus ==
+                                    "AUDITPENDING"
                                   ? `auditPendingBtnHcc`
-                                  :
-                                  patienIdDetails?.auditedStatus == "AUDITED"
+                                  : patienIdDetails?.auditedStatus == "AUDITED"
                                   ? `auditBtnHcc`
                                   : patienIdDetails?.auditedStatus == "REAUDIT"
                                   ? `reauditBtnHcc`
-                                  :
-                                  `auditBtnHcc`
+                                  : `auditBtnHcc`
                               }
                               icon={<DownOutlined />}
                               overlay={renderAuditMenu()}
@@ -2051,13 +2067,17 @@ const Details = ({}) => {
                                     className={`${visitStyles.sideNavArrow}`}
                                   >
                                     <span className="line">
-                                    <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={isSideNavShow ? faAngleDoubleLeft : faAngleDoubleRight}
-                                style={{
-                                  fontSize:"16px"
-                                }}
-                              />
+                                      <FontAwesomeIcon
+                                        className="fa fa-search form-control-feedback"
+                                        icon={
+                                          isSideNavShow
+                                            ? faAngleDoubleLeft
+                                            : faAngleDoubleRight
+                                        }
+                                        style={{
+                                          fontSize: "16px",
+                                        }}
+                                      />
                                     </span>
                                   </div>
                                 </div>
@@ -2446,6 +2466,7 @@ const Details = ({}) => {
                                 name="year"
                                 required
                                 type="number"
+                                min="1"
                                 onChange={handleChange}
                               />
                             </div>
@@ -2455,6 +2476,7 @@ const Details = ({}) => {
                               <Form.Control
                                 type="file"
                                 accept="application/pdf,text/plain"
+                                required
                                 onChange={(e) =>
                                   onChangeFileRadiology(e.target.files)
                                 }
@@ -2529,6 +2551,7 @@ const Details = ({}) => {
                                 name="year"
                                 required
                                 type="number"
+                                min="1"
                                 onChange={handleChange}
                               />
                             </div>
@@ -2538,6 +2561,7 @@ const Details = ({}) => {
                               <Form.Control
                                 type="file"
                                 accept="application/pdf,text/plain"
+                                required
                                 onChange={(e) =>
                                   onChangeLabReportFile(e.target.files)
                                 }
@@ -2834,22 +2858,24 @@ const Details = ({}) => {
                                           </div>
                                         </Popover>
                                       </Tooltip>
-                                    ) : <Tooltip
-                                    title={item.userName}
-                                    placement="bottom"
-                                  >
-                                    <Popover
-                                      placement="bottom"
-                                      content={userDetails}
-                                      onOpenChange={() =>
-                                        renderUserDetails(item.userName)
-                                      }
-                                    >
-                                      <div className="timeline-badge DECLINED">
-                                        {splitUserName(item.userName)}
-                                      </div>
-                                    </Popover>
-                                  </Tooltip>}
+                                    ) : (
+                                      <Tooltip
+                                        title={item.userName}
+                                        placement="bottom"
+                                      >
+                                        <Popover
+                                          placement="bottom"
+                                          content={userDetails}
+                                          onOpenChange={() =>
+                                            renderUserDetails(item.userName)
+                                          }
+                                        >
+                                          <div className="timeline-badge DECLINED">
+                                            {splitUserName(item.userName)}
+                                          </div>
+                                        </Popover>
+                                      </Tooltip>
+                                    )}
                                     <a className="timeline-panel text-muted">
                                       {item.action ==
                                       "MOVED_INVALID_TO_VALID" ? (
@@ -2911,8 +2937,7 @@ const Details = ({}) => {
                                           {item.previousProcessedState} to
                                           AUDITED
                                         </span>
-                                      )
-                                      : item.action == "REAUDIT" ? (
+                                      ) : item.action == "REAUDIT" ? (
                                         <span
                                           className={
                                             visitStyles.timelineheading
@@ -2922,8 +2947,7 @@ const Details = ({}) => {
                                           {item.previousProcessedState} to
                                           REAUDIT
                                         </span>
-                                      )
-                                      : item.action == "AUDITHOLD" ? (
+                                      ) : item.action == "AUDITHOLD" ? (
                                         <span
                                           className={
                                             visitStyles.timelineheading
@@ -2933,8 +2957,7 @@ const Details = ({}) => {
                                           {item.previousProcessedState} to
                                           AUDITHOLD
                                         </span>
-                                      )
-                                      : item.action == "AUDITPENDING" ? (
+                                      ) : item.action == "AUDITPENDING" ? (
                                         <span
                                           className={
                                             visitStyles.timelineheading
@@ -2944,19 +2967,17 @@ const Details = ({}) => {
                                           {item.previousProcessedState} to
                                           AUDITPENDING
                                         </span>
-                                      )
-                                      : item.action == "MEAT_QUERY_STORED" ? (
+                                      ) : item.action == "MEAT_QUERY_STORED" ? (
                                         <span
                                           className={
                                             visitStyles.timelineheading
                                           }
                                         >
                                           Changed from {""}
-                                          {item.previousProcessedState} to
-                                          Meat Query Stored
+                                          {item.previousProcessedState} to Meat
+                                          Query Stored
                                         </span>
-                                      )
-                                      : item.action == "COMPLETED" ? (
+                                      ) : item.action == "COMPLETED" ? (
                                         <span
                                           className={
                                             visitStyles.timelineheading
@@ -3152,9 +3173,10 @@ const Details = ({}) => {
                                     height={30}
                                     width={30}
                                     color="#A20404"
-                                    onClick={() => {closeFilterIcons(false);
+                                    onClick={() => {
+                                      closeFilterIcons(false);
                                       setOpenPicker(false);
-                                      setOpenPicker2(false)
+                                      setOpenPicker2(false);
                                     }}
                                   />
                                 ) : (
@@ -3176,7 +3198,7 @@ const Details = ({}) => {
                                       className={visitStyles.circleCard}
                                       onClick={() => {
                                         setOpenPicker(!openPicker);
-                                        setOpenPicker2(false)
+                                        setOpenPicker2(false);
                                       }}
                                     >
                                       {SVGICON.dateIcon}
@@ -3190,7 +3212,7 @@ const Details = ({}) => {
                                       className={visitStyles.circleCard}
                                       onClick={() => {
                                         setOpenPicker2(!openPicker2);
-                                        setOpenPicker(false)
+                                        setOpenPicker(false);
                                       }}
                                     >
                                       {SVGICON.dateIcon}

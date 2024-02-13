@@ -7,10 +7,13 @@ import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate, renderUserPrfoileAvatar, sortFunction } from "../../../../components/headerFilters/functions";
+import {
+  dateFormate,
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-
 
 function TeamReport({
   setModal,
@@ -255,11 +258,11 @@ function TeamReport({
       ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
-            <tr style={{ textAlign: "center" }}>
+            <tr>
               <>
-                <th>PATIENT ID</th>
+                <th className={TableStyle.rowStyle3}>PATIENT ID</th>
                 <th>PATIENT NAME</th>
-                <th style={{ textAlign: "left" }}>L1 AUDITOR </th>
+                <th className={TableStyle.rowStyle2}>L1 AUDITOR </th>
                 <th
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -279,30 +282,11 @@ function TeamReport({
                   )}
                 </th>
                 <th>COMMENTS </th>
-                <th style={{ textAlign: "left" }}>AUDITOR NAME </th>
+                <th className={TableStyle.rowStyle2}>AUDITOR NAME </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th>AUDIT STATUS</th>
-                {/* <th>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-around" }}
-                  >
-                    <input
-                      type="checkbox"
-                      onChange={handleHeaderCheckboxChange}
-                      style={{
-                        paddingTop: "10px",
-                        width: "20px",
-                        height: "20px",
-                        flexhrink: "0",
-                        borderRadius: "4px",
-                        backgroundColor: "pink",
-                      }}
-                      checked={selectAll}
-                    />
-                  </div>
-                </th> */}
+                <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
               </>
             </tr>
           </thead>
@@ -312,7 +296,7 @@ function TeamReport({
               ReportPatientDetails?.data?.map((row, index) => (
                 <tr
                   key={index}
-                  style={{ padding: " 22px !important", textAlign: "center" }}
+                  // style={{ padding: " 22px !important", textAlign: "center" }}
                 >
                   <>
                     <td className={TableStyle.firstTdBorder}>
@@ -329,7 +313,7 @@ function TeamReport({
                       ) : null}
                       <span
                         style={{
-                          paddingLeft: "40px",
+                          paddingLeft: "70px",
                         }}
                       >
                         {row?.patientId}
@@ -340,29 +324,32 @@ function TeamReport({
                       {row?.patientName ? row?.patientName : "---"}
                     </td>
                     <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {row.patientAllocatedFirstName || row.patientAllocatedLastName || row?.patientAllocatedProfileImage ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
-                        {" "}
-                        {renderUserPrfoileAvatar(
-                          row.patientAllocatedFirstName,
-                          row.patientAllocatedLastName,
-                          row?.patientAllocatedProfileImage,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {row.patientAllocatedFirstName} {row.patientAllocatedLastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
-                  )}
-                </td>
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      {row.patientAllocatedFirstName ||
+                      row.patientAllocatedLastName ||
+                      row?.patientAllocatedProfileImage ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {" "}
+                          <span style={{ marginRight: "10px" }}>
+                            {" "}
+                            {renderUserPrfoileAvatar(
+                              row.patientAllocatedFirstName,
+                              row.patientAllocatedLastName,
+                              row?.patientAllocatedProfileImage,
+                              "header"
+                            )}
+                          </span>
+                          <span>
+                            {row.patientAllocatedFirstName}{" "}
+                            {row.patientAllocatedLastName}
+                          </span>
+                        </div>
+                      ) : (
+                        <div style={{ textAlign: "center" }}>---</div>
+                      )}
+                    </td>
 
                     <td className={TableStyle.childBorder}>
                       {dateFormate(dayjs, row?.processedDate)}
@@ -381,29 +368,31 @@ function TeamReport({
                       </div>
                     </td>
                     <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {row.auditedByFirstName || row.auditedByLastName || row?.auditedByProfileImage ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
-                        {" "}
-                        {renderUserPrfoileAvatar(
-                          row.auditedByFirstName,
-                          row.auditedByLastName,
-                          row?.auditedByProfileImage,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {row.auditedByFirstName} {row.auditedByLastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
-                  )}
-                </td>
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      {row.auditedByFirstName ||
+                      row.auditedByLastName ||
+                      row?.auditedByProfileImage ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {" "}
+                          <span style={{ marginRight: "10px" }}>
+                            {" "}
+                            {renderUserPrfoileAvatar(
+                              row.auditedByFirstName,
+                              row.auditedByLastName,
+                              row?.auditedByProfileImage,
+                              "header"
+                            )}
+                          </span>
+                          <span>
+                            {row.auditedByFirstName} {row.auditedByLastName}
+                          </span>
+                        </div>
+                      ) : (
+                        <div style={{ textAlign: "center" }}>---</div>
+                      )}
+                    </td>
 
                     <td className={TableStyle.childBorder}>
                       {row?.rafSum ? row?.rafSum : "000"}{" "}
@@ -457,7 +446,6 @@ function TeamReport({
           Total count: {ReportPatientDetails?.totalElements}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

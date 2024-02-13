@@ -35,6 +35,7 @@ export const UsersList = async ({
 
 export const AddUser = async (data, setErrors) => {
   const token = localStorage.getItem("token");
+  delete data?.confirmPassword
   try {
     const response = await axios.post(
       ` ${ENDPOINTS?.apiEndoint}securityservice/admin/getusers/createuser`,
