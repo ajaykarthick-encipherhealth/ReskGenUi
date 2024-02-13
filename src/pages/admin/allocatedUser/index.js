@@ -512,7 +512,7 @@ export default function Patient() {
                                     to="#my-posts"
                                     eventKey="validDiseases"
                                   >
-                                    Auditor Allocation
+                                    Reviewer Allocation
                                   </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item
