@@ -21,21 +21,32 @@ const SelectRole = () => {
   const [logoutMessgae, setLogoutMessage] = useState("");
 
   const items =
-    role?.length > 0 ? role?.map((info) => ({ value: info, label: info })) : [];
+    role?.length > 0
+      ? role?.map((info) => ({
+          value: info,
+          label:
+            info == "L1AUDITOR"
+              ? "AUDITOR"
+              : info == "L2AUDITOR"
+              ? "SUPERVISOR"
+              : "ADMIN",
+        }))
+      : [];
 
   const onSubmitRole = async (e) => {
     e.preventDefault();
     if (!selectedRole) {
       setRoleError(true);
     } else {
-      var result = await checkDeviceLogin();
-      if (result?.data?.response == "ALREADY_LOGGED_IN") {
-        loginSuccessCallBack();
-        setLogoutMessage(result?.data?.message);
-        setConfirmModal(true);
-      } else {
-        loginSuccessCallBack();
-      }
+      loginSuccessCallBack();
+      // var result = await checkDeviceLogin();
+      // if (result?.data?.response == "ALREADY_LOGGED_IN") {
+      //   loginSuccessCallBack();
+      //   setLogoutMessage(result?.data?.message);
+      //   setConfirmModal(true);
+      // } else {
+      //   loginSuccessCallBack();
+      // }
     }
   };
 

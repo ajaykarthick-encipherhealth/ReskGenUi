@@ -301,7 +301,7 @@ const Header = () => {
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
 
-    dispatch(getCurrentUser(userId,router));
+    dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
     setMenuList(getMenuListByRole(userRoleLocal));
@@ -494,7 +494,11 @@ const Header = () => {
                                         {userName}
                                       </span>
                                       <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
-                                        {currentRole}
+                                        {currentRole == "l1auditor"
+                                          ? "Auditor"
+                                          : currentRole == "l2auditor"
+                                          ? "Supervisor"
+                                          : "Admin"}
                                       </span>
                                     </div>
                                   </div>
@@ -559,7 +563,11 @@ const Header = () => {
                             </span>
                           ) : (
                             <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
-                              {currentRole}
+                              {currentRole == "l1auditor"
+                                ? "Auditor"
+                                : currentRole == "l2auditor"
+                                ? "Supervisor"
+                                : "Admin"}
                             </span>
                           )}
                         </div>
