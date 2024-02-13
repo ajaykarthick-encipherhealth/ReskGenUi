@@ -38,14 +38,14 @@ const SelectRole = () => {
     if (!selectedRole) {
       setRoleError(true);
     } else {
-      // loginSuccessCallBack();
-      var result = await checkDeviceLogin();
-      if (result?.data?.response == "ALREADY_LOGGED_IN") {
-        setLogoutMessage(result?.data?.message);
-        setConfirmModal(true);
-      } else {
-        loginSuccessCallBack();
-      }
+      loginSuccessCallBack();
+      // var result = await checkDeviceLogin();
+      // if (result?.data?.response == "ALREADY_LOGGED_IN") {
+      //   setLogoutMessage(result?.data?.message);
+      //   setConfirmModal(true);
+      // } else {
+      //   loginSuccessCallBack();
+      // }
     }
   };
 
