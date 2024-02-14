@@ -27,7 +27,7 @@ const CompletedStatus = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
-  const [selectMemberType, setSelectMemberType] = useState("TEAM");
+  const [selectMemberType, setSelectMemberType] = useState("All");
 
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
@@ -153,15 +153,16 @@ const CompletedStatus = () => {
   ];
 
   const options = [
-    { value: "TEAM", label: "TEAM" },
-    { value: "INDIVIDUAL", label: "INDIVIDUAL" },
+    { value: "All", label: "All" },
+    { value: "L1Auditor", label: "L1Auditor" },
+    { value: "L2Auditor", label: "L2Auditor" },
   ];
 
   const memberTypeChanges = (e) => {
     setSelectMemberType(e);
     setIsindividual(false);
     setSelectUser([]);
-    if (e == "INDIVIDUAL") {
+    if (e != "All") {
       setIsindividual(true);
     }
   };
