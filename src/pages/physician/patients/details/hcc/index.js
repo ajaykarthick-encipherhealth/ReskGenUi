@@ -286,6 +286,8 @@ const Hcc = ({ patientHccResult }) => {
   const [isAddComboCode, setIsAddComboCode] = useState(false);
   const [comboCodeTree, setComboCodeTree] = useState(true);
   const [listPageNumber, setListPageNumber] = useState([]);
+  const [activeTabNumber, setActiveTabNumber] = useState(0);
+  const [meatModalTitle, setMeatModalTitle] = useState("");
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -352,40 +354,27 @@ const Hcc = ({ patientHccResult }) => {
     );
     setUserDetails(dotLoading);
     setvalidHccDetails(dotLoading);
-  }, []);
+  }, [activeTabNumber]);
 
   useEffect(() => {
     setDocumentLoaded(true);
     if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
-        if (fileInitialPage) {
+        if (fileInitialPage != null) {
           setTargetPages(
             (targetPage) => targetPage.pageIndex === fileInitialPage
           );
+        } else {
+          setTargetPages((targetPage) => targetPage.pageIndex);
+          setMeatModalTitle(selectMeatName);
         }
         highlight({
           keyword: findFileKeyword,
         });
       }, 1000);
     }
-  }, [fileInitialPage, findFileKeyword, fileModalTitle, fileDosPageNumber]);
-
-  // useEffect(() => {
-  //   if (findFileKeyword) {
-  //     setTimeout(() => {
-  //       setFileModalHeader(fileModalTitle);
-  //       if (fileDosPageNumber) {
-  //         setTargetPages(
-  //           (targetPage) => targetPage.pageIndex === fileDosPageNumber
-  //         );
-  //       }
-  //       highlight({
-  //         keyword: findFileKeyword,
-  //       });
-  //     }, 1000);
-  //   }
-  // }, [fileDosPageNumber]);
+  }, [fileInitialPage, findFileKeyword, fileModalTitle]);
 
   const getPatientDetails = async (
     patientId,
@@ -1324,6 +1313,7 @@ const Hcc = ({ patientHccResult }) => {
     setIsMeatQueryModal(false);
     setMeatQueriedDetailsModal(false);
     setIsAddComboCode(false);
+    setFindFileKeyword(null);
   };
 
   const handleOpenModal = (value, disDescription, encounterDate) => {
@@ -1333,17 +1323,13 @@ const Hcc = ({ patientHccResult }) => {
         <Spinner />
       </div>
     );
-    setSelectMeatName(dotLoading);
+    setMeatModalTitle(dotLoading);
     setIsLoadingSection(true);
+    setFileInitialPage(null);
+    setFindFileKeyword(splitPoint);
     setIsModalOpen(true);
-    setTimeout(() => {
-      highlight({
-        keyword: splitPoint,
-        matchCase: true,
-      });
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    }, 2000);
+    var dataset = value + " / (" + disDescription + ")";
+    setSelectMeatName(dataset);
   };
 
   const getSectionPageNumber = async (header, encounterDate) => {
@@ -2808,19 +2794,16 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
   const selectTab = async (number) => {
+    setActiveTabNumber(number);
     setSelectPreviousCode(null);
     setFlagTagActive(false);
     setIsDosSelect(false);
-    setFindFileKeyword(null);
-    setFileInitialPage(0);
-    setFileDosPageNumber(0);
     switch (number) {
       case 1:
         setFlagTagActive(true);
         setIsDosSelect(false);
         break;
       case 5:
-        getFileDosPageNumber(0);
         setIsDosSelect(true);
         break;
       case 6:
@@ -4451,7 +4434,7 @@ const Hcc = ({ patientHccResult }) => {
                             {" "}
                             <Viewer
                               fileUrl={selectFileURL}
-                              initialPage={fileDosPageNumber}
+                              initialPage={fileInitialPage}
                               plugins={[defaultLayoutPluginInstance]}
                               onDocumentLoad={handleDocumentLoadFile}
                               renderLoader={(percentages) => (
@@ -5237,7 +5220,7 @@ const Hcc = ({ patientHccResult }) => {
       {/* Modals */}
       {isModalOpen && (
         <Modal
-          title={selectMeatName}
+          title={meatModalTitle}
           // title="Pdf Test"
           centered
           open={isModalOpen}
@@ -5263,7 +5246,7 @@ const Hcc = ({ patientHccResult }) => {
                     <Viewer
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
-                      onDocumentLoad={handleDocumentLoad}
+                      onDocumentLoad={handleDocumentLoadFile}
                       renderLoader={(percentages) => (
                         <div style={{ width: "240px" }}>
                           <ProgressBar progress={Math.round(percentages)} />
