@@ -287,6 +287,7 @@ const Hcc = ({ patientHccResult }) => {
   const [comboCodeTree, setComboCodeTree] = useState(true);
   const [listPageNumber, setListPageNumber] = useState([]);
   const [activeTabNumber, setActiveTabNumber] = useState(0);
+  const [meatModalTitle, setMeatModalTitle] = useState("");
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -366,6 +367,7 @@ const Hcc = ({ patientHccResult }) => {
           );
         } else {
           setTargetPages((targetPage) => targetPage.pageIndex);
+          setMeatModalTitle(selectMeatName);
         }
         highlight({
           keyword: findFileKeyword,
@@ -1321,19 +1323,13 @@ const Hcc = ({ patientHccResult }) => {
         <Spinner />
       </div>
     );
-    setSelectMeatName(dotLoading);
+    setMeatModalTitle(dotLoading);
     setIsLoadingSection(true);
     setFileInitialPage(null);
     setFindFileKeyword(splitPoint);
     setIsModalOpen(true);
-    setTimeout(() => {
-      // highlight({
-      //   keyword: splitPoint,
-      //   matchCase: true,
-      // });
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    }, 2000);
+    var dataset = value + " / (" + disDescription + ")";
+    setSelectMeatName(dataset);
   };
 
   const getSectionPageNumber = async (header, encounterDate) => {
@@ -5224,7 +5220,7 @@ const Hcc = ({ patientHccResult }) => {
       {/* Modals */}
       {isModalOpen && (
         <Modal
-          title={selectMeatName}
+          title={meatModalTitle}
           // title="Pdf Test"
           centered
           open={isModalOpen}
