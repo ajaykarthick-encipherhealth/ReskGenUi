@@ -131,13 +131,7 @@ export const ChatBot = async (msg) => {
   }
 };
 
-export const CompletedScoreNew = async (
-  btn,
-  date,
-  month,
-  year,
-  router,
-) => {
+export const CompletedScoreNew = async (btn, date, month, year, router) => {
   const token = localStorage.getItem("token");
   const url =
     btn === "DAILY"
@@ -188,8 +182,8 @@ export const accuracyScoreNew = async (
     date: date,
     l1AccuracyMemberType: type,
     l1AccuracyDateType: btn,
-    "weekStart":11,
-    "weekEnd":13,
+    weekStart: 11,
+    weekEnd: 13,
     orgId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
     userIds: user,
   };
@@ -209,7 +203,6 @@ export const accuracyScoreNew = async (
   }
 };
 
-
 export const UserByIndividual = async (router) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
@@ -225,6 +218,31 @@ export const UserByIndividual = async (router) => {
     return response.data;
   } catch (err) {
     if (err.response.status === 401) {
+      router.push("/login");
+    }
+  }
+};
+
+export const DeliveryScore = async (btn, date, month, year, router) => {
+  const token = localStorage.getItem("token");
+  const url =
+    btn === "DAILY"
+      ? `daily?month=${month}&year=${year}`
+      : btn === "WEEKLY"
+      ? `weekly?month=${month}&year=${year}`
+      : `monthly?year=${year}`;
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/chartdeliverystatus/${url}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err?.response?.status === 401) {
       router.push("/login");
     }
   }
