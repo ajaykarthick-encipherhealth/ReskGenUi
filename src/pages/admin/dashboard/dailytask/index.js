@@ -219,7 +219,7 @@ const DailyTask = () => {
   }, []);
   return (
     <>
-      <HeadTitle header=" &nbsp;" />
+      <HeadTitle header="Total Users" />
       <div className={styles.card2} style={{ height: "75%" }}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
           <Row>
