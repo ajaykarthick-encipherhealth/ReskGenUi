@@ -172,8 +172,8 @@ export default function Patient() {
   const getAllList = (info) => {
     if (info) {
       var resultMap = [];
-      var result = info?.content;
-      setTotalElements(info?.totalElements);
+      var result = info?.patientDTOList?.content;
+      setTotalElements(info?.patientDTOList?.totalElements);
       result?.map((res) => {
         resultMap?.push({
           patientId: res.patientId,

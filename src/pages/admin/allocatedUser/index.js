@@ -28,8 +28,16 @@ import {
   renderUserPrfoile,
 } from "../../../components/headerFilters/functions";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
+import Selector from "../../../components/selector";
 
 const { RangePicker } = DatePicker;
+
+const statusOption = [
+  { value: "URGENT", label: "URGENT" },
+  { value: "HIGH", label: "HIGH" },
+  { value: "NORMAL", label: "NORMAL" },
+  { value: "LOW", label: "LOW" },
+];
 export default function Patient() {
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
@@ -63,6 +71,10 @@ export default function Patient() {
   const [totalElementsUser, setTotalElementsUser] = useState(0);
   const [searchString, setSearchString] = useState("");
   const [checkedLoading, setCheckedLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [batchCount, setBatchCount] = useState("");
+  const [filterBatchCount, setFilterBatchCount] = useState(false);
+
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
@@ -80,7 +92,11 @@ export default function Patient() {
     sort
   ) => {
     const uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
+      sort?.sortDir
+    }&sortfield=${sort?.sortField}&priority=${
+      selectedOption ? selectedOption : ""
+    }&batch=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
       var resultMap = [];
@@ -107,7 +123,7 @@ export default function Patient() {
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=0&size=${totalElements}&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=ture&status=2&searchString=${search}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}&priority=${selectedOption}&batch=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var result = response?.data?.response?.content;
@@ -404,7 +420,15 @@ export default function Patient() {
     setSelectAllChecked(false);
     setSelectAllCheckedL2(false);
     setIsLoading(false);
-  }, [isPatientList, pageNoL2Patient, sort, allocateClicked]);
+    setFilterBatchCount(false);
+  }, [
+    isPatientList,
+    pageNoL2Patient,
+    sort,
+    allocateClicked,
+    selectedOption,
+    filterBatchCount,
+  ]);
 
   return (
     <>
@@ -419,9 +443,9 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-2 d-flex">
-                            <div className={reportStyles.backDiv}>
-                              {isPatientList && (
+                          <div className="col-xl-2">
+                            {isPatientList && (
+                              <div className={reportStyles.backDiv}>
                                 <button
                                   style={{ width: "40px", height: "40px" }}
                                   className={reportStyles.filterBtn}
@@ -429,8 +453,9 @@ export default function Patient() {
                                 >
                                   <Image src={leftArrow} />
                                 </button>
-                              )}
-                            </div>
+                              </div>
+                            )}
+
                             <div>
                               <label>Search by Name or ID</label>
                               <div class="form-group has-search">
@@ -451,28 +476,65 @@ export default function Patient() {
                             </div>
                           </div>
                           {!isPatientList && activeTab == 1 ? (
-                            <div className="col-xl-2">
-                              <label>Computed Date</label>
-                              <div>
-                                <RangePicker
-                                  format="MM-DD-YYYY"
-                                  onChange={(dates, dateStrings) => {
-                                    setDateRange(dateStrings);
-                                    handleReceivedDatePicker(
-                                      dates,
-                                      dateStrings
-                                    );
-                                  }}
-                                  disabledDate={(current) =>
-                                    disableFutureDate(current)
-                                  }
-                                />
+                            <>
+                              <div className="col-xl-2">
+                                <label>Computed Date</label>
+                                <div>
+                                  <RangePicker
+                                    format="MM-DD-YYYY"
+                                    onChange={(dates, dateStrings) => {
+                                      setDateRange(dateStrings);
+                                      handleReceivedDatePicker(
+                                        dates,
+                                        dateStrings
+                                      );
+                                    }}
+                                    disabledDate={(current) =>
+                                      disableFutureDate(current)
+                                    }
+                                  />
+                                </div>
                               </div>
-                            </div>
+                              <div className="col-xl-2">
+                                <div>
+                                  <Selector
+                                    selectlabel={"Select Priority"}
+                                    setSelectedOption={setSelectedOption}
+                                    selectOptions={statusOption}
+                                    defaultSelectValue1={""}
+                                    isClose={true}
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-xl-2">
+                                <label>Batch Count</label>
+                                <div class="form-group d-flex">
+                                  <InputText
+                                    type="text"
+                                    onChange={(e) => {
+                                      setBatchCount(e.target.value);
+                                      if (e.target.value.length <= 0) {
+                                        setFilterBatchCount(true);
+                                      }
+                                    }}
+                                    value={batchCount}
+                                    className="form-control new-form-controls"
+                                    placeholder="Batch Count"
+                                    style={{ width: "40%" }}
+                                  />
+                                  <button
+                                    onClick={() => setFilterBatchCount(true)}
+                                    className="btn btn-outline-secondary py-0 px-2 select-count"
+                                  >
+                                    Select
+                                  </button>
+                                </div>
+                              </div>
+                            </>
                           ) : (
                             <div className="col-xl-2"></div>
                           )}
-                          <div className="col-xl-8 mt-4">
+                          <div className="col-xl-4 mt-4">
                             {isPatientList || activeTab === 1 ? (
                               <>
                                 <button
