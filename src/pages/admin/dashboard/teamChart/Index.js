@@ -146,7 +146,7 @@ const BarChart = () => {
                   <div
                     className={spinSTYles.spinStyle}
                     style={{
-                      height: "100%",
+                      
                       paddingTop: "150px",
                       display: "flex",
                       justifyContent: "center",
@@ -161,7 +161,7 @@ const BarChart = () => {
                       option={option}
                       style={{
                         width: "100%",
-                        height: "340px",
+                        height: "640px",
                         marginTop: "-30px",
                         overflowX: "hidden",
                       }}
