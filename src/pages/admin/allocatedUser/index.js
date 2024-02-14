@@ -123,7 +123,7 @@ export default function Patient() {
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=ture&status=2&searchString=${search}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}&priority=${selectedOption}&batchCount=${batchCount}`;
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${batchCount ? batchCount :pageSize}&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}&priority=${selectedOption ? selectedOption : ""}&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var result = response?.data?.response?.content;
