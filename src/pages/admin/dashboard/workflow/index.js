@@ -17,10 +17,10 @@ import auditHold from "../../.../../../../images/dashboard/auditHold.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import spinSTYles from "../../../../styles/auth.module.css";
-import pendingIcon from "../../.../../../../images/dashboard/Pending.png";
+import pendingIcon from "../../.../../../../images/dashboard/Pending_2.png";
 import declineIcon from "../../.../../../../images/dashboard/Decline.png";
 import reAuditIcon from "../../.../../../../images/dashboard/ReAudit.png";
-import auditHoldIcon from "../../.../../../../images/dashboard/Hold.png";
+import auditHoldIcon from "../../.../../../../images/dashboard/Hold_2.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import TC from "../../.../../../../images/dashboard/TC.png";
 
@@ -119,9 +119,7 @@ const WorkFlow = () => {
       id: 5,
       icon: auditedIcon,
       title: "Audited",
-      charts:  dateRange.auditedStatus
-      ? dateRange.auditedStatus.AUDITED
-      : "0",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -132,8 +130,8 @@ const WorkFlow = () => {
       icon: reAuditIcon,
       title: "Audit Pending",
       charts: dateRange.auditedStatus
-      ? dateRange.auditedStatus.AUDIT_PENDING
-      : "0",
+        ? dateRange.auditedStatus.AUDIT_PENDING
+        : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -143,9 +141,7 @@ const WorkFlow = () => {
       id: 7,
       icon: auditHoldIcon,
       title: "Audit Hold",
-      charts: dateRange.auditedStatus
-      ? dateRange.auditedStatus.AUDITHOLD
-      : "0",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITHOLD : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -155,9 +151,7 @@ const WorkFlow = () => {
       id: 8,
       icon: declineIcon,
       title: "Declined",
-      charts: dateRange.auditedStatus
-      ? dateRange.auditedStatus.DECLINED
-      : "0",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.DECLINED : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
