@@ -183,7 +183,7 @@ const SpeedoMeter = () => {
                     <div className={styles.compus}>
                       <div>0%</div>
                       <div style={{ marginLeft: "20px" }}>10%</div>
-                      <div>100%</div>
+                      <div>{`${meterDatas?.data?.response}%`}</div>
                     </div>
                   </>
                 )
