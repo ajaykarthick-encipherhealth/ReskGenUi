@@ -2631,9 +2631,17 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getEncounterDetails = async (date) => {
-    console.log(date);
     const findPageNumber = listPageNumber.filter((i) => i.date === date);
     if (findPageNumber.length != 0) {
+      var date = findPageNumber[0].date;
+      if (findPageNumber[0].startPage.length != 0) {
+        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+        var splitPoint = date.substring(" ", 5);
+        setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+        setFindFileKeyword(splitPoint);
+      }
     }
     // var dotLoading = (
     //   <div className={visitStyles.loadingFileHeader}>
@@ -2830,34 +2838,45 @@ const Hcc = ({ patientHccResult }) => {
     var groupPageNumber = [];
     var groupEncounterDate = [];
     for (var key in result?.response) {
-      var opationArray = [];
+      var optionArray = [];
+      var optionPage = [];
       var pageNumbervalue = result.response[key];
       for (var key2 in pageNumbervalue) {
-        var startPage = pageNumbervalue[key2];
+        var startPage = key2 == "first" ? pageNumbervalue[key2] : null;
         var keyValue = key2 == "first" ? "Start - " : "End - ";
-        opationArray.push({
+        optionArray.push({
           label: keyValue + " " + pageNumbervalue[key2],
-          value: pageNumbervalue[key2],
+          value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
         });
+        if (startPage) {
+          optionPage.push({
+            pageNumber: startPage,
+          });
+        }
       }
       groupPageNumber.push({
         label: moment(key).format("MM-DD-YYYY"),
-        options: opationArray,
+        options: optionArray,
       });
       groupEncounterDate.push({
         date: moment(key).format("MM/DD/YYYY"),
-        startPage: startPage,
+        startPage: optionPage,
       });
     }
-    console.log(groupEncounterDate);
     setPageNumberOptions(groupPageNumber);
     setListPageNumber(groupEncounterDate);
   };
 
   const handleChangePageNumber = async (value) => {
+    var str_array = value.split(",");
+    var pageNumber = str_array[0];
+    var findData = str_array[1];
     setFindFileKeyword(null);
-    var pageIndex = value - 1;
+    var pageIndex = pageNumber - 1;
+    setFileInitialPage(pageIndex);
     setFileDosPageNumber(pageIndex);
+    setTargetPages((targetPage) => targetPage.pageIndex === pageIndex);
+    setFindFileKeyword(findData);
   };
 
   const getPreviousData = (code, action) => {
@@ -2940,7 +2959,6 @@ const Hcc = ({ patientHccResult }) => {
         );
       }
     }
-
     setValidated(true);
   };
 
