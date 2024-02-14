@@ -10,6 +10,7 @@ import CompletedStatus from "./completedStatus";
 import DeliveryStatus from "./deliveryStatus";
 
 import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
+import BarChart from "./teamChart/Index";
 
 const index = () => {
   const currentDate = dayjs();
@@ -34,12 +35,42 @@ const index = () => {
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
+          <Row className={styles.RowCon} gutter={8}>
+            <Col span={16} >
+            <DeliveryStatus />
+            </Col>
+            <Col span={7} offset={1}>
+            <BarChart />
+            </Col>
+          </Row>
           <Row className={styles.RowCon}>
             <Col span={14} className={styles.column2}>
+            <CompletedStatus />
+            </Col>
+            <Col span={9} offset={1} className={styles.columns}>
+              
+            </Col>
+          </Row>
+          <Row className={styles.RowCon}>
+            <Col span={14} className={styles.column2}>
+              
+            </Col>
+            <Col span={9} offset={1} className={styles.columns}>
+              
+            </Col>
+          </Row>
+        </div>
+      </div>
+      {/* <div className={styles.maincontainer}>
+        <div className={styles.rowCOntainer}>
+          <Row className={styles.RowCon}  gutter={8}>
+            <Col span={18} className={styles.first_column}>
               <DeliveryStatus />
+            </Col>
+            <Col span={7}  className={styles.column1}>
+              <BarChart />
             </Col>
           </Row>
           <Row className={styles.RowCon}>
@@ -49,7 +80,7 @@ const index = () => {
           </Row>
           <Row className={styles.lastRow}></Row>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
