@@ -61,7 +61,7 @@ export const AdminMenuList = [
   },
   {
     title: "Users",
-    iconStyle: SVGICON.dashboardIcon,
+    iconStyle: SVGICON.adminUser,
     to: "/admin/user",
   },
 

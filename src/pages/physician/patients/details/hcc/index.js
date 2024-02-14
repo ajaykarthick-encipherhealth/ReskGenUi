@@ -1344,7 +1344,6 @@ const Hcc = ({ patientHccResult }) => {
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
     }, 2000);
-    setDocumentLoaded(true);
   };
 
   const getSectionPageNumber = async (header, encounterDate) => {
@@ -2821,7 +2820,7 @@ const Hcc = ({ patientHccResult }) => {
         setIsDosSelect(false);
         break;
       case 5:
-        getFileDosPageNumber();
+        getFileDosPageNumber(0);
         setIsDosSelect(true);
         break;
       case 6:
@@ -5265,6 +5264,11 @@ const Hcc = ({ patientHccResult }) => {
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
                       onDocumentLoad={handleDocumentLoad}
+                      renderLoader={(percentages) => (
+                        <div style={{ width: "240px" }}>
+                          <ProgressBar progress={Math.round(percentages)} />
+                        </div>
+                      )}
                     />
                   </div>
                 </Worker>
