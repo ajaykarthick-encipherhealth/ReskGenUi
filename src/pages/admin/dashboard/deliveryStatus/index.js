@@ -12,10 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Spin } from "antd";
-import {
-  getDeliveryStatus,
-  getCOmpletedScore,
-} from "../../../../store/actions/l2Action/DashboardAction";
+import { getDeliveryStatus } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 const DeliveryStatus = () => {
   const dispatch = useDispatch();
@@ -23,9 +20,6 @@ const DeliveryStatus = () => {
   const completedDatas = useSelector(
     (state) => state?.l2Dashboard?.deliveryStatus
   );
-
-  console.log(completedDatas);
-
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();

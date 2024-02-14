@@ -12,12 +12,21 @@ import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Spin, Select } from "antd";
-import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
+import {
+  getCompletedStatus,
+  getSelectUserList,
+} from "../../../../store/actions/adminAction/DashboardAction";
+
 import spinSTYles from "../../../../styles/auth.module.css";
 const CompletedStatus = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const completedDatas = useSelector((state) => state?.workFlow?.completed);
+  const completedDatas = useSelector(
+    (state) => state?.AdminDashboardReducers?.completedStatus
+  );
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -27,18 +36,22 @@ const CompletedStatus = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
-  const [selectMemberType, setSelectMemberType] = useState("All");
+  const [selectMemberType, setSelectMemberType] = useState("");
 
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
 
   completedWeeks =
-    completedDatas?.data?.response?.audit &&
-    new Set(Object.keys(completedDatas?.data?.response?.audit).map(Number));
+    completedDatas?.data?.response?.allocatedChartMap &&
+    new Set(
+      Object.keys(completedDatas?.data?.response?.allocatedChartMap).map(Number)
+    );
 
   allocatedWeeks =
-    completedDatas?.data?.response?.allocate &&
-    new Set(Object.keys(completedDatas?.data?.response?.allocate).map(Number));
+    completedDatas?.data?.response?.completedMap &&
+    new Set(
+      Object.keys(completedDatas?.data?.response?.completedMap).map(Number)
+    );
 
   const uniqueWeeks =
     completedWeeks && allocatedWeeks
@@ -72,21 +85,21 @@ const CompletedStatus = () => {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
-      completedDatas?.data?.response?.audit &&
-        Object.keys(completedDatas?.data?.response?.audit)?.length
+      completedDatas?.data?.response?.allocatedChartMap &&
+        Object.keys(completedDatas?.data?.response?.allocatedChartMap)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
 
   const allocatedValues = xAxisData?.map((day, index) =>
-    completedDatas?.data?.response?.allocate
-      ? completedDatas?.data?.response?.allocate[index + 1]
+    completedDatas?.data?.response?.completedMap
+      ? completedDatas?.data?.response?.completedMap[index + 1]
       : 0 || 0
   );
   const auditedValues = xAxisData?.map((day, index) =>
-    completedDatas?.data?.response?.audit
-      ? completedDatas?.data?.response?.audit[index + 1]
+    completedDatas?.data?.response?.allocatedChartMap
+      ? completedDatas?.data?.response?.allocatedChartMap[index + 1]
       : 0 || 0
   );
 
@@ -106,7 +119,7 @@ const CompletedStatus = () => {
         const dataIndex = params[0]?.dataIndex;
         const allocatedValue = allocatedValues[dataIndex];
         const auditedValue = auditedValues[dataIndex];
-        return `Audited: ${auditedValue}<br/>Allocated: ${allocatedValue}`;
+        return `Allocated: ${auditedValue}<br/>Completed: ${allocatedValue}`;
       },
     },
     series: [
@@ -144,18 +157,17 @@ const CompletedStatus = () => {
   const bullets = [
     {
       color: "#4A3AFF",
-      name: "Audited",
+      name: "Allocated",
     },
     {
       color: "#FF718B",
-      name: "Allocated",
+      name: "Completed",
     },
   ];
 
   const options = [
-    { value: "All", label: "All" },
-    { value: "L1Auditor", label: "L1Auditor" },
-    { value: "L2Auditor", label: "L2Auditor" },
+    { value: "L1AUDITOR", label: "L1AUDITOR" },
+    { value: "L2AUDITOR", label: "L2AUDITOR" },
   ];
 
   const memberTypeChanges = (e) => {
@@ -173,24 +185,29 @@ const CompletedStatus = () => {
 
   const optionsUser = [];
 
-  //   const individualUserRes = individualUserList?.data?.response?.map((res) =>
-  //     optionsUser.push({
-  //       value: res.userName,
-  //       label: res.firstName + " " + res.lastName,
-  //     })
-  //   );
+  const individualUserRes = selectUserList?.data?.response?.map((res) =>
+    optionsUser.push({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })
+  );
+
+  useEffect(() => {
+    dispatch(getSelectUserList(selectMemberType));
+  }, [selectMemberType]);
 
   useEffect(() => {
     dispatch(
-      getCOmpletedScore(
+      getCompletedStatus(
         currentBtn.toUpperCase(),
         currentDate.getDate(),
         selectedMonth,
         selectedYear,
-        router
+        router,
+        selectUser
       )
     );
-  }, [currentBtn, selectedMonth, selectedYear]);
+  }, [currentBtn, selectedMonth, selectedYear, selectUser]);
   return (
     <>
       <HeadTitle header="Completed Status" />
@@ -201,6 +218,7 @@ const CompletedStatus = () => {
               <div className={styles.select}>
                 <Select
                   value={selectMemberType}
+                  placeholder="Select User Type"
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
                   options={options}
