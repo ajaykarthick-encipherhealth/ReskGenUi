@@ -8,12 +8,17 @@ import {
   SELECTED_DAY,
   CHATBOT,
   INDIVIDUAL_USER,
+  COMPLETED_STATUS,
+  SELECTED_USER,
 } from "../../actions/adminAction/DashboardAction";
 
 import {
   MANAGERS,
   TEAM_CHART,
   SPEEDOMETER,
+  ACCURACY_DAILY,
+  ACCURACY_MONTHLY,
+  ACCURACY_WEEKLY,
 } from "../../../services/adminServices/DashboardService";
 const initialState = {
   data: null,
@@ -28,6 +33,8 @@ const initialState = {
   teamData: null,
   managers: null,
   speedometer: null,
+  completedStatus: null,
+  selectedUsers: null,
 };
 
 export const AdminDashboardReducer = (state = initialState, action) => {
@@ -49,7 +56,19 @@ export const AdminDashboardReducer = (state = initialState, action) => {
       dailyTask: [...state.dailyTask, action.payload],
     };
   }
-  if (action.type === ACCURACY) {
+  if (action.type === ACCURACY_MONTHLY) {
+    return {
+      ...state,
+      accuracy: action.payload,
+    };
+  }
+  if (action.type === ACCURACY_WEEKLY) {
+    return {
+      ...state,
+      accuracy: action.payload,
+    };
+  }
+  if (action.type === ACCURACY_DAILY) {
     return {
       ...state,
       accuracy: action.payload,
@@ -101,6 +120,18 @@ export const AdminDashboardReducer = (state = initialState, action) => {
     return {
       ...state,
       speedometer: action.payload,
+    };
+  }
+  if (action.type === COMPLETED_STATUS) {
+    return {
+      ...state,
+      completedStatus: action.payload,
+    };
+  }
+  if (action.type === SELECTED_USER) {
+    return {
+      ...state,
+      selectedUsers: action.payload,
     };
   }
   return state;

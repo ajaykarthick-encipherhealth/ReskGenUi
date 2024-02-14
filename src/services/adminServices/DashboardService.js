@@ -2,8 +2,11 @@ import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
 
 export const TEAM_CHART = "TEAM_CHART";
-export const MANAGERS='MANAGERS'
-export const SPEEDOMETER='SPEEDOMETER'
+export const MANAGERS = "MANAGERS";
+export const SPEEDOMETER = "SPEEDOMETER";
+export const ACCURACY_MONTHLY = "ACCURACY_MONTHLY";
+export const ACCURACY_WEEKLY = "ACCURACY_WEEKLY";
+export const ACCURACY_DAILY = "ACCURACY_DAILY";
 // chnaged
 export async function workStatusApiAdmin(startDate, endDate, router) {
   const token = localStorage.getItem("token");
@@ -134,13 +137,7 @@ export const ChatBot = async (msg) => {
   }
 };
 
-export const CompletedScoreNew = async (
-  btn,
-  date,
-  month,
-  year,
-  router,
-) => {
+export const CompletedScoreNew = async (btn, date, month, year, router) => {
   const token = localStorage.getItem("token");
   const url =
     btn === "DAILY"
@@ -191,8 +188,8 @@ export const accuracyScoreNew = async (
     date: date,
     l1AccuracyMemberType: type,
     l1AccuracyDateType: btn,
-    "weekStart":11,
-    "weekEnd":13,
+    weekStart: 11,
+    weekEnd: 13,
     orgId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
     userIds: user,
   };
@@ -211,7 +208,6 @@ export const accuracyScoreNew = async (
     console.log(err);
   }
 };
-
 
 export const UserByIndividual = async (router) => {
   const token = localStorage.getItem("token");
@@ -298,7 +294,7 @@ export const getManagers = () => async (dispatch) => {
       });
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 
@@ -332,6 +328,153 @@ export const getSppedoMeterDatas = (managerId) => async (dispatch) => {
       });
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
+  }
+};
+
+export const getAccuracyMOnthly = (year) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  try {
+    dispatch({
+      type: ACCURACY_MONTHLY,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.get(
+      `${ENDPOINTS.apiEndoint}dbservice/accuracyscore/machine/monthly?year=${year}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response) {
+      dispatch({
+        type: ACCURACY_MONTHLY,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getAccuracyWeekly = (year, month) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  try {
+    dispatch({
+      type: ACCURACY_WEEKLY,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.get(
+      `${ENDPOINTS.apiEndoint}dbservice/accuracyscore/machine/weekly?year=${year}&month=${month}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response) {
+      dispatch({
+        type: ACCURACY_WEEKLY,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const getAccuracyDaily = (year, month) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  try {
+    dispatch({
+      type: ACCURACY_DAILY,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.get(
+      `${ENDPOINTS.apiEndoint}dbservice/accuracyscore/machine/daily?year=${year}&month=${month}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response) {
+      dispatch({
+        type: ACCURACY_DAILY,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const CompletedStatus = async (
+  btn,
+  date,
+  month,
+  year,
+  router,
+  userName
+) => {
+  const token = localStorage.getItem("token");
+  const url =
+    btn === "DAILY"
+      ? `daily?month=${month}&year=${year}&userName=${userName}`
+      : btn === "WEEKLY"
+      ? `weekly?month=${month}&year=${year}&userName=${userName}`
+      : `monthyly?year=${year}&userName=${userName}`;
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/chartdeliverystatus/${url}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router.push("/login");
+    }
+  }
+};
+
+export const SelectUserList = async (role) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router.push("/login");
+    }
   }
 };
