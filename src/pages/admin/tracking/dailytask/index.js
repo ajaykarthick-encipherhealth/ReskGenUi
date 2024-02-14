@@ -120,14 +120,14 @@ const DailyTask = ({ trackChart }) => {
                     <div className={styles.container}>
                       <ReactECharts
                         option={getChartOption(
-                          trackChart.PENDING +
-                            trackChart.HOLD +
-                            trackChart.DECLINED +
-                            trackChart.COMPLETED,
-                          trackChart.PENDING,
-                          trackChart.HOLD,
-                          trackChart.DECLINED,
-                          trackChart.COMPLETED
+                          trackChart?.PENDING +
+                            trackChart?.HOLD +
+                            trackChart?.DECLINED +
+                            trackChart?.COMPLETED,
+                          trackChart?.PENDING,
+                          trackChart?.HOLD,
+                          trackChart?.DECLINED,
+                          trackChart?.COMPLETED
                         )}
                         style={{ width: "300px", height: "200px" }}
                       />
@@ -145,17 +145,17 @@ const DailyTask = ({ trackChart }) => {
                                   backgroundColor: item.color,
                                 }}
                               ></div>
-                              {item.name}
+                              {item?.name}
                             </div>
                             <div className={styles.subText}>
-                              {item.name === "Pending"
-                                ? trackChart.PENDING
-                                : item.name === "Declined"
-                                ? trackChart.DECLINED
-                                : item.name === "Hold"
-                                ? trackChart.HOLD
-                                : item.name === "Completed" &&
-                                  trackChart.COMPLETED}
+                              {item?.name === "Pending"
+                                ? trackChart?.PENDING
+                                : item?.name === "Declined"
+                                ? trackChart?.DECLINED
+                                : item?.name === "Hold"
+                                ? trackChart?.HOLD
+                                : item?.name === "Completed" &&
+                                  trackChart?.COMPLETED}
                             </div>
                           </div>
                         );
