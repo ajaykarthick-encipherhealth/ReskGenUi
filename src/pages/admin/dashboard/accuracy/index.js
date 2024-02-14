@@ -171,7 +171,6 @@ const Accuracy = () => {
     }
   }, [currentBtn, selectedMonth, selectedYear]);
 
-  console.log(accuracyDatas);
   return (
     <>
       <HeadTitle header="Accuracy Score" />
