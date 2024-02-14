@@ -371,7 +371,7 @@ const Hcc = ({ patientHccResult }) => {
         });
       }, 1000);
     }
-  }, [findFileKeyword]);
+  }, [fileInitialPage, findFileKeyword, fileModalTitle]);
 
   // useEffect(() => {
   //   if (findFileKeyword) {
