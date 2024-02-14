@@ -44,7 +44,7 @@ const reducers = combineReducers({
   l2Dashboard:L2DashboardReducers,
 
   AdminDashboardReducers:AdminDashboardReducers,
-  l2User:L2UserReducers
+  l2User:L2UserReducers,
   l2User:L2UserReducers,
   adminDatas:AdminDashboardReducer
 

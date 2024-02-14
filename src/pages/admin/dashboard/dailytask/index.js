@@ -261,6 +261,7 @@ const DailyTask = () => {
                           </span>
                         </div> */}
                       </h4>
+                      
                       <Row>
                         <Col span={12}>
                           <div className={styles.container} style={{width:"308%"}}>
