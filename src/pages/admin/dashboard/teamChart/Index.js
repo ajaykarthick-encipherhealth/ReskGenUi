@@ -139,7 +139,7 @@ const BarChart = () => {
               <div
                 style={{
                   width: "100%",
-                  marginTop: !teamChartData?.loading ? "0px" : "30px",
+                  marginTop: "30px",
                 }}
               >
                 {teamChartData?.loading ? (
