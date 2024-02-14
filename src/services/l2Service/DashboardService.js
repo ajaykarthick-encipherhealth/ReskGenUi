@@ -230,7 +230,7 @@ export const DeliveryScore = async (btn, date, month, year, router) => {
       ? `daily?month=${month}&year=${year}`
       : btn === "WEEKLY"
       ? `weekly?month=${month}&year=${year}`
-      : `monthly?year=${year}`;
+      : `monthyly?year=${year}`;
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/chartdeliverystatus/${url}`,

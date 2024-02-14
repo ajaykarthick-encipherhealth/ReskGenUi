@@ -24,6 +24,8 @@ const DeliveryStatus = () => {
     (state) => state?.l2Dashboard?.deliveryStatus
   );
 
+  console.log(completedDatas);
+
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -36,12 +38,16 @@ const DeliveryStatus = () => {
   let allocatedWeeks = new Set();
 
   completedWeeks =
-    completedDatas?.data?.response?.audit &&
-    new Set(Object.keys(completedDatas?.data?.response?.audit).map(Number));
+    completedDatas?.data?.response?.allocatedChartMap &&
+    new Set(
+      Object.keys(completedDatas?.data?.response?.allocatedChartMap).map(Number)
+    );
 
   allocatedWeeks =
-    completedDatas?.data?.response?.allocate &&
-    new Set(Object.keys(completedDatas?.data?.response?.allocate).map(Number));
+    completedDatas?.data?.response?.completedMap &&
+    new Set(
+      Object.keys(completedDatas?.data?.response?.completedMap).map(Number)
+    );
 
   const uniqueWeeks =
     completedWeeks && allocatedWeeks
@@ -75,21 +81,21 @@ const DeliveryStatus = () => {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
-      completedDatas?.data?.response?.audit &&
-        Object.keys(completedDatas?.data?.response?.audit)?.length
+      completedDatas?.data?.response?.allocatedChartMap &&
+        Object.keys(completedDatas?.data?.response?.allocatedChartMap)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
 
   const allocatedValues = xAxisData?.map((day, index) =>
-    completedDatas?.data?.response?.allocate
-      ? completedDatas?.data?.response?.allocate[index + 1]
+    completedDatas?.data?.response?.completedMap
+      ? completedDatas?.data?.response?.completedMap[index + 1]
       : 0 || 0
   );
   const auditedValues = xAxisData?.map((day, index) =>
-    completedDatas?.data?.response?.audit
-      ? completedDatas?.data?.response?.audit[index + 1]
+    completedDatas?.data?.response?.allocatedChartMap
+      ? completedDatas?.data?.response?.allocatedChartMap[index + 1]
       : 0 || 0
   );
 
