@@ -1,6 +1,9 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
 
+export const TEAM_CHART = "TEAM_CHART";
+export const MANAGERS='MANAGERS'
+export const SPEEDOMETER='SPEEDOMETER'
 // chnaged
 export async function workStatusApi(startDate, endDate, router) {
   const token = localStorage.getItem("token");
@@ -227,5 +230,108 @@ export const UserByIndividual = async (router) => {
     if (err.response.status === 401) {
       router.push("/login");
     }
+  }
+};
+
+export const TeamChart = () => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    dispatch({
+      type: TEAM_CHART,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.get(
+      `${ENDPOINTS.apiEndoint}dbservice/admindashboard/teamchart?orgId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response) {
+      dispatch({
+        type: TEAM_CHART,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+    }
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router?.push("/login");
+    }
+  }
+};
+
+export const getManagers = () => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  const role=localStorage.getItem("userRole")
+  try {
+    dispatch({
+      type: MANAGERS,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.get(
+      `${ENDPOINTS.apiEndoint}/dbservice/user/getByRole?role=${role?.toUpperCase()}&orgId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response) {
+      dispatch({
+        type: MANAGERS,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err)
+  }
+};
+
+export const getSppedoMeterDatas = (managerId) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+
+  try {
+    dispatch({
+      type: SPEEDOMETER,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.get(
+      `${ENDPOINTS.apiEndoint}dbservice/admindashboard/accuracybymanagerid?managerId=${managerId}&organizationId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response) {
+      dispatch({
+        type: SPEEDOMETER,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err)
   }
 };
