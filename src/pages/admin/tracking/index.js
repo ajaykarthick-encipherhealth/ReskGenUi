@@ -17,6 +17,7 @@ import HeaderFilters from "../../../components/headerFilters";
 import TrackingTable from "../../../components/table/admin/trackingList";
 import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
+import DailyTask from "./dailytask";
 
 const bullets = [
   {
@@ -53,13 +54,13 @@ const bullets = [
         name: "Pending",
       },
       {
-        color:'rgb(206, 153, 0)',
-        name:"Audit Hold"
+        color: "rgb(206, 153, 0)",
+        name: "Audit Hold",
       },
       {
-        color:"rgb(150, 75, 0)",
-        name:"Re Audit"
-      }
+        color: "rgb(150, 75, 0)",
+        name: "Re Audit",
+      },
     ],
   },
 ];
@@ -110,7 +111,12 @@ export default function Patient() {
   const [auditedStartDate, setAuditedStartDate] = useState("");
   const [auditedEndDate, setAuditedEnsDate] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
-
+  const [trackChart, setTrackChart] = useState({
+    COMPLETED: 0,
+    PENDING: 0,
+    DECLINED: 0,
+    HOLD: 0,
+  });
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
 
   const allocatedToOptions = [
@@ -204,6 +210,7 @@ export default function Patient() {
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
         });
       });
+      setTrackChart(info?.processStatusCount);
       var newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
@@ -396,8 +403,8 @@ export default function Patient() {
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption  align-items-center">
-                        <div className="tbl-caption  align-items-center">
+                      <div className="tbl-caption row d-flex align-items-center">
+                        <div className="tbl-caption col-xl-10 align-items-center">
                           <HeaderFilters
                             setSearch={setSearchTextValue}
                             isSearch={true}
@@ -456,7 +463,12 @@ export default function Patient() {
                             // defaultAllocatedBy={"All"}
                             bullets={bullets}
                             isNextRow={true}
+                            defaultShow={true}
+                            defaultSize={"col-xl-2"}
                           />
+                        </div>
+                        <div className="col-xl-2">
+                          <DailyTask trackChart={trackChart} />
                         </div>
                       </div>
 
