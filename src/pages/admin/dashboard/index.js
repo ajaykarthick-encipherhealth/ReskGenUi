@@ -10,6 +10,10 @@ import CompletedStatus from "./completedStatus";
 import DeliveryStatus from "./deliveryStatus";
 
 import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
+import WorkFlow from "./workflow";
+import DailyTask from "./dailytask";
+import Accuracy from "./accuracy";
+
 
 const index = () => {
   const currentDate = dayjs();
@@ -38,9 +42,15 @@ const index = () => {
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
           <Row className={styles.RowCon}>
-            <Col span={14} className={styles.column2}>
-              <DeliveryStatus />
+            <Col span={9} >
+              <WorkFlow />
             </Col>
+            <Col span={5} offset={1} className={styles.columns}>
+              <DailyTask />
+            </Col>
+            <Col span={10} className={styles.column2}>
+            <Accuracy />
+                        </Col>
           </Row>
           <Row className={styles.RowCon}>
             <Col span={14} className={styles.column2}>
