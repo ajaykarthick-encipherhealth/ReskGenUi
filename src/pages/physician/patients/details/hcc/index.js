@@ -356,7 +356,6 @@ const Hcc = ({ patientHccResult }) => {
   }, [activeTabNumber]);
 
   useEffect(() => {
-    console.log(findFileKeyword);
     setDocumentLoaded(true);
     if (findFileKeyword) {
       setTimeout(() => {
@@ -365,6 +364,8 @@ const Hcc = ({ patientHccResult }) => {
           setTargetPages(
             (targetPage) => targetPage.pageIndex === fileInitialPage
           );
+        } else {
+          setTargetPages((targetPage) => targetPage.pageIndex);
         }
         highlight({
           keyword: findFileKeyword,
@@ -372,22 +373,6 @@ const Hcc = ({ patientHccResult }) => {
       }, 1000);
     }
   }, [fileInitialPage, findFileKeyword, fileModalTitle]);
-
-  // useEffect(() => {
-  //   if (findFileKeyword) {
-  //     setTimeout(() => {
-  //       setFileModalHeader(fileModalTitle);
-  //       if (fileDosPageNumber) {
-  //         setTargetPages(
-  //           (targetPage) => targetPage.pageIndex === fileDosPageNumber
-  //         );
-  //       }
-  //       highlight({
-  //         keyword: findFileKeyword,
-  //       });
-  //     }, 1000);
-  //   }
-  // }, [fileDosPageNumber]);
 
   const getPatientDetails = async (
     patientId,
@@ -1326,6 +1311,7 @@ const Hcc = ({ patientHccResult }) => {
     setIsMeatQueryModal(false);
     setMeatQueriedDetailsModal(false);
     setIsAddComboCode(false);
+    setFindFileKeyword(null);
   };
 
   const handleOpenModal = (value, disDescription, encounterDate) => {
@@ -1337,8 +1323,9 @@ const Hcc = ({ patientHccResult }) => {
     );
     setSelectMeatName(dotLoading);
     setIsLoadingSection(true);
-    setIsModalOpen(true);
+    setFileInitialPage(null);
     setFindFileKeyword(splitPoint);
+    setIsModalOpen(true);
     setTimeout(() => {
       // highlight({
       //   keyword: splitPoint,
