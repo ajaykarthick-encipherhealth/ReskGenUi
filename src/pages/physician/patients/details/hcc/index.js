@@ -286,6 +286,7 @@ const Hcc = ({ patientHccResult }) => {
   const [isAddComboCode, setIsAddComboCode] = useState(false);
   const [comboCodeTree, setComboCodeTree] = useState(true);
   const [listPageNumber, setListPageNumber] = useState([]);
+  const [activeTabNumber, setActiveTabNumber] = useState(0);
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -352,9 +353,10 @@ const Hcc = ({ patientHccResult }) => {
     );
     setUserDetails(dotLoading);
     setvalidHccDetails(dotLoading);
-  }, []);
+  }, [activeTabNumber]);
 
   useEffect(() => {
+    console.log(findFileKeyword);
     setDocumentLoaded(true);
     if (findFileKeyword) {
       setTimeout(() => {
@@ -369,7 +371,7 @@ const Hcc = ({ patientHccResult }) => {
         });
       }, 1000);
     }
-  }, [fileInitialPage, findFileKeyword, fileModalTitle, fileDosPageNumber]);
+  }, [fileInitialPage, findFileKeyword, fileModalTitle]);
 
   // useEffect(() => {
   //   if (findFileKeyword) {
@@ -1336,6 +1338,7 @@ const Hcc = ({ patientHccResult }) => {
     setSelectMeatName(dotLoading);
     setIsLoadingSection(true);
     setIsModalOpen(true);
+    // setFindFileKeyword(splitPoint);
     setTimeout(() => {
       highlight({
         keyword: splitPoint,
@@ -2808,19 +2811,16 @@ const Hcc = ({ patientHccResult }) => {
     }
   };
   const selectTab = async (number) => {
+    setActiveTabNumber(number);
     setSelectPreviousCode(null);
     setFlagTagActive(false);
     setIsDosSelect(false);
-    setFindFileKeyword(null);
-    setFileInitialPage(0);
-    setFileDosPageNumber(0);
     switch (number) {
       case 1:
         setFlagTagActive(true);
         setIsDosSelect(false);
         break;
       case 5:
-        getFileDosPageNumber(0);
         setIsDosSelect(true);
         break;
       case 6:
@@ -4451,7 +4451,7 @@ const Hcc = ({ patientHccResult }) => {
                             {" "}
                             <Viewer
                               fileUrl={selectFileURL}
-                              initialPage={fileDosPageNumber}
+                              initialPage={fileInitialPage}
                               plugins={[defaultLayoutPluginInstance]}
                               onDocumentLoad={handleDocumentLoadFile}
                               renderLoader={(percentages) => (
