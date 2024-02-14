@@ -16,7 +16,7 @@ import DailyTask from "./dailytask";
 import Accuracy from "./accuracy";
 
 import BarChart from "./teamChart/Index";
-
+import SpeedoMeter from "./speedometer";
 
 const index = () => {
   const currentDate = dayjs();
@@ -63,22 +63,37 @@ const index = () => {
 </Col>
 </Row>
           <Row className={styles.RowCon} gutter={8}>
-            <Col span={16} >
-            <DeliveryStatus />
+            <Col span={16}>
+              <DeliveryStatus />
             </Col>
             <Col span={7} offset={1}>
-            <BarChart />
+              <BarChart />
             </Col>
           </Row>
           <Row className={styles.RowCon}>
             <Col span={14} className={styles.column2}>
-            <CompletedStatus />
+              <CompletedStatus />
             </Col>
             <Col span={9} offset={1} className={styles.columns}>
-              
+              <SpeedoMeter/>
             </Col>
           </Row>
-        
+
+          <Row className={styles.RowCon}>
+            <Col span={9}>
+              <WorkFlow />
+            </Col>
+            <Col span={5} offset={1} className={styles.columns}>
+              <DailyTask />
+            </Col>
+            <Col span={10} className={styles.column2}>
+              <Accuracy />
+            </Col>
+
+            <Col span={14} className={styles.column2}></Col>
+            <Col span={9} offset={1} className={styles.columns}></Col>
+          </Row>
+
         </div>
       </div>
       {/* <div className={styles.maincontainer}>

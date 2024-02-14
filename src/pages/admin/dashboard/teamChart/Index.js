@@ -6,77 +6,19 @@ import Card from "../../../../components/card";
 import { Empty, Spin } from "antd";
 import Selector from "../../../../components/selector";
 import { useDispatch } from "react-redux";
-import { TeamChart } from "../../../../services/adminServices/dashboardService";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { TeamChart } from "../../../../services/adminServices/DashboardService";
 
-const staticDatas = {
-  status: "SUCCESS",
-  message: "Success!!",
-  response: [
-    {
-      totalFileProcessed: 95,
-      totalFileAllocated: 148,
-      totalFilePending: 48,
-      totalFileHold: 3,
-      totalFileDeclined: 10,
-      userName: "praveen01@encipherhealth.onmicrosoft.com",
-      firstName: "Mason",
-      lastName: "Carter",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/a0867bd9-0528-4d34-bdd2-459ea7c2a4b7.png",
-    },
-    {
-      totalFileProcessed: null,
-      totalFileAllocated: null,
-      totalFilePending: null,
-      totalFileHold: null,
-      totalFileDeclined: null,
-      userName: "jansi01@encipherhealth.onmicrosoft.com",
-      firstName: "Jansi",
-      lastName: "Patel",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/9c81a14f-7154-4ea9-9190-e52ad210e244.jpeg",
-    },
-    {
-      totalFileProcessed: null,
-      totalFileAllocated: null,
-      totalFilePending: null,
-      totalFileHold: null,
-      totalFileDeclined: null,
-      userName: "uvais01@encipherhealth.onmicrosoft.com",
-      firstName: "Alexander",
-      lastName: "Harris",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/8ed49b11-2369-4526-8df9-f6205e957e4c.avif",
-    },
-    {
-      totalFileProcessed: null,
-      totalFileAllocated: null,
-      totalFilePending: null,
-      totalFileHold: null,
-      totalFileDeclined: null,
-      userName: "vignesh@encipherhealth.onmicrosoft.com",
-      firstName: "Gabriel",
-      lastName: "Jenkins",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/080e0d00-56fb-4b45-941e-c6787f47dad3.jpg",
-    },
-  ],
-};
 const BarChart = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const teamChartData = useSelector((state) => state.adminDatas.data);
-  const [selectOption, setSelectedOption] = useState();
-  const selectorOptions = [
-    { label: "Team1", value: "team1" },
-    { label: "Team2", value: "team2" },
-    { label: "Team3", value: "team3" },
-    { label: "Team4", value: "team4" },
-  ];
-  const datas = teamChartData?.data ? teamChartData?.data : staticDatas;
+  const teamChartData = useSelector(
+    (state) => state.AdminDashboardReducers.teamData
+  );
+
+  const datas = teamChartData?.data ? teamChartData?.data : [];
   const teams = [];
   for (var i = 0; i <= datas?.response?.length; i++) {
     teams?.push(`Team${i}`);
@@ -197,31 +139,10 @@ const BarChart = () => {
               <div
                 style={{
                   width: "100%",
-                  marginTop:
-                    !teamChartData?.loading && !datas?.response
-                      ? "0px"
-                      : "30px",
+                  marginTop: !teamChartData?.loading ? "0px" : "30px",
                 }}
               >
-                {/* <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    alignItems: "flex-end",
-                    position:"relative",
-                    top:"-10px",
-                    right:"30px"
-                  }}
-                >
-                  <Selector
-                    selectlabel=""
-                    setSelectedOption={setSelectedOption}
-                    selectOptions={selectorOptions}
-                    defaultSelectValue1="Select Team"
-                  />
-                </div> */}
-
-                {!teamChartData?.loading && !datas?.response ? (
+                {teamChartData?.loading ? (
                   <div
                     className={spinSTYles.spinStyle}
                     style={{
@@ -234,7 +155,7 @@ const BarChart = () => {
                   >
                     <Spin loading={teamChartData?.loading} />
                   </div>
-                ) : datas?.response ? (
+                ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
                     <ReactECharts
                       option={option}

@@ -15,8 +15,6 @@ import { AdminUsersReducer } from "./reducers/adminRecucers/usewrsReducer";
 // import { DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
 import { WorkReducers } from "./reducers/l2Reducers/AuditReducer";
 import { L2DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
-import { AdminDashboardReducers } from "./reducers/adminRecucers/DashboardReducer";
-
 import {L2UserReducers} from "./reducers/l2Reducers/usersReducers"
 import { AuditReportReducer } from "./reducers/l2Reducers/AuditReportReducer";
 import { AdminDashboardReducer } from "./reducers/adminRecucers/dashboardReducer";
@@ -42,11 +40,8 @@ const reducers = combineReducers({
   adminList:AdminPatientsListReducer,
   adminUsers:AdminUsersReducer,
   l2Dashboard:L2DashboardReducers,
-
-  AdminDashboardReducers:AdminDashboardReducers,
+  AdminDashboardReducers:AdminDashboardReducer,
   l2User:L2UserReducers,
-  l2User:L2UserReducers,
-  adminDatas:AdminDashboardReducer
 
 
   //form: reduxFormReducer,
