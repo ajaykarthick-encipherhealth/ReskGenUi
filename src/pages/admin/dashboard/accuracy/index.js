@@ -173,7 +173,7 @@ const Accuracy = () => {
 
   return (
     <>
-      <HeadTitle header="Accuracy Score" />
+      <HeadTitle header="Team Accuracy Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>

@@ -168,7 +168,7 @@ const DeliveryStatus = () => {
   }, [currentBtn, selectedMonth, selectedYear]);
   return (
     <>
-      <HeadTitle header="Delivery Status" />
+      <HeadTitle header="Team Delivery Status" />
       <div className={styles.card5}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
