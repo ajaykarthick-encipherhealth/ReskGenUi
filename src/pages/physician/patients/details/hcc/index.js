@@ -2846,7 +2846,7 @@ const Hcc = ({ patientHccResult }) => {
         var keyValue = key2 == "first" ? "Start - " : "End - ";
         optionArray.push({
           label: keyValue + " " + pageNumbervalue[key2],
-          value: pageNumbervalue[key2],
+          value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
         });
         if (startPage) {
           optionPage.push({
@@ -2868,9 +2868,15 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const handleChangePageNumber = async (value) => {
+    var str_array = value.split(",");
+    var pageNumber = str_array[0];
+    var findData = str_array[1];
     setFindFileKeyword(null);
-    var pageIndex = value - 1;
+    var pageIndex = pageNumber - 1;
+    setFileInitialPage(pageIndex);
     setFileDosPageNumber(pageIndex);
+    setTargetPages((targetPage) => targetPage.pageIndex === pageIndex);
+    setFindFileKeyword(findData);
   };
 
   const getPreviousData = (code, action) => {
@@ -2953,7 +2959,6 @@ const Hcc = ({ patientHccResult }) => {
         );
       }
     }
-
     setValidated(true);
   };
 
