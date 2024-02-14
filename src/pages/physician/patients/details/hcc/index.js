@@ -352,24 +352,24 @@ const Hcc = ({ patientHccResult }) => {
     );
     setUserDetails(dotLoading);
     setvalidHccDetails(dotLoading);
-  }, [fileInitialPage, findFileKeyword, fileModalTitle, fileDosPageNumber]);
+  }, []);
 
-  // useEffect(() => {
-  //   setDocumentLoaded(true);
-  //   if (findFileKeyword) {
-  //     setTimeout(() => {
-  //       setFileModalHeader(fileModalTitle);
-  //       if (fileInitialPage) {
-  //         setTargetPages(
-  //           (targetPage) => targetPage.pageIndex === fileInitialPage
-  //         );
-  //       }
-  //       highlight({
-  //         keyword: findFileKeyword,
-  //       });
-  //     }, 1000);
-  //   }
-  // }, [fileInitialPage, findFileKeyword, fileModalTitle, fileDosPageNumber]);
+  useEffect(() => {
+    setDocumentLoaded(true);
+    if (findFileKeyword) {
+      setTimeout(() => {
+        setFileModalHeader(fileModalTitle);
+        if (fileInitialPage) {
+          setTargetPages(
+            (targetPage) => targetPage.pageIndex === fileInitialPage
+          );
+        }
+        highlight({
+          keyword: findFileKeyword,
+        });
+      }, 1000);
+    }
+  }, [fileInitialPage, findFileKeyword, fileModalTitle, fileDosPageNumber]);
 
   // useEffect(() => {
   //   if (findFileKeyword) {
@@ -1900,14 +1900,12 @@ const Hcc = ({ patientHccResult }) => {
         var dataFormatSuggested = {
           patientComputeDetailId: localPatientId,
           year: dos,
-          diseaseFormats: [
-            {
-              diagnosisCode: inputValue.diagnosisCode,
-              actualDescription: inputValue.actualDescription,
-              encounterDate: convertDate,
-              capturedSections: [inputValue.capturedSections],
-            },
-          ],
+          diseaseFormat: {
+            diagnosisCode: inputValue.diagnosisCode,
+            actualDescription: inputValue.actualDescription,
+            encounterDate: convertDate,
+            capturedSections: [inputValue.capturedSections],
+          },
         };
 
         try {
@@ -2618,16 +2616,15 @@ const Hcc = ({ patientHccResult }) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        <div onClick={() => getEncounterDetails(res)}>
-          <span
-            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-          >
-            <i>
-              <CalendarOutlined className={visitStyles.calenderIcon} />
-            </i>
-            {moment(res).format("MMM DD")}
-          </span>
-        </div>
+        <span
+          onClick={() => getEncounterDetails(res)}
+          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+        >
+          <i>
+            <CalendarOutlined className={visitStyles.calenderIcon} />
+          </i>
+          {moment(res).format("MMM DD")}
+        </span>
       );
       return sectionMapArr;
     });
@@ -2637,8 +2634,6 @@ const Hcc = ({ patientHccResult }) => {
     console.log(date);
     const findPageNumber = listPageNumber.filter((i) => i.date === date);
     if (findPageNumber.length != 0) {
-      setFileDosPageNumber(findPageNumber[0].startPage);
-      console.log(findPageNumber[0].startPage);
     }
     // var dotLoading = (
     //   <div className={visitStyles.loadingFileHeader}>
