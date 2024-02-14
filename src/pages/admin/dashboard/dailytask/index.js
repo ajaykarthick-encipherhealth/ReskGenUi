@@ -14,21 +14,27 @@ import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { GetUserCount } from "../../../../services/adminServices/DashboardService";
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
   const dailyStatusData = useSelector((state) => state.l2Dashboard.dailyTask);
   const dispatch = useDispatch();
+  const [roles, setRoles] = useState({
+    L1AUDITOR: 0,
+    L2AUDITOR: 0,
+    ADMIN: 0,
+  });
 
   const bullets = [
     {
       color: "#7599FF",
-      name: "L1Auditor",
+      name: "Reviewer",
     },
     {
       color: "#64C8FF",
-      name: "L2Auditor",
+      name: "Supervisor",
     },
     {
       color: "#FA896B",
@@ -114,14 +120,8 @@ const DailyTask = () => {
     });
     return setCurrentDays(sorted);
   };
-  const getChartOption = (
-    allocated,
-    pending,
-    hold,
-    reAudited,
-    audited,
-    declined
-  ) => {
+  const getChartOption = (res) => {
+    console.log(res);
     return {
       tooltip: {
         trigger: "item",
@@ -140,22 +140,22 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: audited,
-              name: "L1 Auditor",
+              value: roles?.L1AUDITOR,
+              name: "Reviewer",
               itemStyle: {
                 color: "#7599FF",
               },
             },
             {
-              value: pending,
-              name: "AuditPending",
+              value: roles?.L2AUDITOR,
+              name: "Supervisor",
               itemStyle: {
                 color: "#64C8FF",
               },
             },
             {
-              value: hold,
-              name: "AuditHold",
+              value: roles?.ADMIN,
+              name: "Admin",
               itemStyle: {
                 color: "#FA896B",
               },
@@ -169,7 +169,7 @@ const DailyTask = () => {
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${allocated}}`,
+            formatter: `{b|${roles?.L1AUDITOR + roles?.L2AUDITOR + roles?.ADMIN}}`,
             backgroundColor: "transparent",
 
             rich: {
@@ -186,8 +186,8 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: allocated,
-              name: "AuditAlocated",
+              value: roles?.L1AUDITOR + roles?.L2AUDITOR + roles?.ADMIN,
+              name: "Total",
               itemStyle: {
                 color: "#fff",
               },
@@ -197,27 +197,26 @@ const DailyTask = () => {
       ],
     };
   };
-  const showNext = () => {
-    if (currentDays?.length > 3) {
-      const updatedData = currentDays?.shift();
-      const datas = [];
-      const valyes = currentDays?.map((item) => {
-        datas?.push({
-          id: item?.id,
-          day: item?.day,
-          date: item?.date,
-          dateString: item?.dateString,
-        });
-      });
-      setSelectedDate(datas);
-    }
-  };
+
   const uniqueData = currentDays?.filter((value, index, self) => {
     const firstIndex = self?.findIndex(
       (item) => item?.day === value?.day && item?.date === value?.date
     );
     return index === firstIndex;
   });
+
+  const getUser = async () => {
+    try {
+      const data = await GetUserCount();
+      setRoles(data.response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <>
       <HeadTitle header=" &nbsp;" />
@@ -303,16 +302,13 @@ const DailyTask = () => {
                                     {item.name}
                                   </div>
                                   <div className={styles.subText}>
-                                    {item.name === "AuditPending"
-                                      ? data.pending
-                                      : item.name === "L1 Auditor"
-                                      ? data?.audited
-                                      : item.name === "AuditHold"
-                                      ? data.hold
-                                      : item.name === "ReAudited"
-                                      ? data?.reAudited
-                                      : item.name === "AuditDeclined" &&
-                                        data.declined}
+                                    {item.name === "Admin"
+                                      ? roles.ADMIN
+                                      : item.name === "Supervisor"
+                                      ? roles.L2AUDITOR
+                                      : item.name === "Reviewer"
+                                      ? roles.L1AUDITOR
+                                      : data.declined}
                                   </div>
                                 </div>
                               );

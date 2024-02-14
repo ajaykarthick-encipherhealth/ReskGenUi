@@ -459,6 +459,26 @@ export const CompletedStatus = async (
   }
 };
 
+export const GetUserCount = async (role) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getusercountbyrole`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router.push("/login");
+    }
+  }
+};
+
 export const SelectUserList = async (role) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
