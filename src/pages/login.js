@@ -16,13 +16,11 @@ import {
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [enteredEmail, setEmail] = useState(
-    "ranjith01@encipherhealth.onmicrosoft.com"
-  );
+  const [enteredEmail, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
-  const [password, setPassword] = useState("@Asdf123");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (enteredEmail) => {
