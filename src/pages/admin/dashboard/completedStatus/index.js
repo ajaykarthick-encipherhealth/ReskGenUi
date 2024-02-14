@@ -166,8 +166,8 @@ const CompletedStatus = () => {
   ];
 
   const options = [
-    { value: "L1AUDITOR", label: "L1AUDITOR" },
-    { value: "L2AUDITOR", label: "L2AUDITOR" },
+    { value: "L1AUDITOR", label: "REVIEWER" },
+    { value: "L2AUDITOR", label: "SUPERVISOR" },
   ];
 
   const memberTypeChanges = (e) => {
