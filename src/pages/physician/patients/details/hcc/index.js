@@ -1338,12 +1338,12 @@ const Hcc = ({ patientHccResult }) => {
     setSelectMeatName(dotLoading);
     setIsLoadingSection(true);
     setIsModalOpen(true);
-    // setFindFileKeyword(splitPoint);
+    setFindFileKeyword(splitPoint);
     setTimeout(() => {
-      highlight({
-        keyword: splitPoint,
-        matchCase: true,
-      });
+      // highlight({
+      //   keyword: splitPoint,
+      //   matchCase: true,
+      // });
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
     }, 2000);
@@ -5263,7 +5263,7 @@ const Hcc = ({ patientHccResult }) => {
                     <Viewer
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
-                      onDocumentLoad={handleDocumentLoad}
+                      onDocumentLoad={handleDocumentLoadFile}
                       renderLoader={(percentages) => (
                         <div style={{ width: "240px" }}>
                           <ProgressBar progress={Math.round(percentages)} />
