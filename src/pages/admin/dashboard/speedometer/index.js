@@ -28,7 +28,6 @@ const SpeedoMeter = () => {
     label: `${item?.firstName}${item?.lastName}`,
     value: item?.userName,
   }));
-
   const option = {
     series: [
       {
@@ -36,7 +35,7 @@ const SpeedoMeter = () => {
         startAngle: 180,
         endAngle: 0,
         min: 0,
-        max: 240,
+        max: 100,
         splitNumber: 12,
         itemStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
@@ -117,7 +116,7 @@ const SpeedoMeter = () => {
         },
         data: [
           {
-            value: meterDatas ? meterDatas?.data?.response : 0,
+            value: meterDatas?.data?.response ? meterDatas.data.response.accuracy : 0,
           },
         ],
       },
@@ -182,7 +181,11 @@ const SpeedoMeter = () => {
                     />
                     <div className={styles.compus}>
                       <div>0%</div>
-                      <div style={{ marginLeft: "20px" }}>{`${meterDatas?.data?.response?meterDatas?.data?.response:0}%`}</div>
+                      <div style={{ marginLeft: "20px" }}>{`${
+                        meterDatas?.data?.response
+                          ? meterDatas.data.response.accuracy
+                          : 0
+                      }%`}</div>
                       <div>100%</div>
                     </div>
                   </>

@@ -5,11 +5,11 @@ export const TEAM_CHART = "TEAM_CHART";
 export const MANAGERS='MANAGERS'
 export const SPEEDOMETER='SPEEDOMETER'
 // chnaged
-export async function workStatusApi(startDate, endDate, router) {
+export async function workStatusApiAdmin(startDate, endDate, router) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -271,7 +271,7 @@ export const TeamChart = () => async (dispatch) => {
 export const getManagers = () => async (dispatch) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
-  const role=localStorage.getItem("userRole")
+  const role= 'L1AUDITOR'
   try {
     dispatch({
       type: MANAGERS,
@@ -281,7 +281,7 @@ export const getManagers = () => async (dispatch) => {
       },
     });
     const response = await axios.get(
-      `${ENDPOINTS.apiEndoint}/dbservice/user/getByRole?role=${role?.toUpperCase()}&orgId=${orgId}`,
+      `${ENDPOINTS.apiEndoint}dbservice/user/getByRole?role=${role?.toUpperCase()}&orgId=${orgId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -315,7 +315,7 @@ export const getSppedoMeterDatas = (managerId) => async (dispatch) => {
       },
     });
     const response = await axios.get(
-      `${ENDPOINTS.apiEndoint}dbservice/admindashboard/accuracybymanagerid?managerId=${managerId}&organizationId=${orgId}`,
+      `${ENDPOINTS.apiEndoint}dbservice/admindashboard/accuracybyuser?userName=${managerId}&organizationId=${orgId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
