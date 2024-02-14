@@ -20,7 +20,7 @@ import { generateOptionsList } from "../../../components/headerFilters/functions
 
 const bullets = [
   {
-    title: "Audited Status",
+    title: "Processed Status",
     option: [
       {
         color: "#452b90",
@@ -38,7 +38,7 @@ const bullets = [
     ],
   },
   {
-    title: "Processed Status",
+    title: "Audited Status",
     option: [
       {
         color: "rgb(55, 120, 128)",
