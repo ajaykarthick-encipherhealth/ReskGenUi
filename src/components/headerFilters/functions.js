@@ -346,6 +346,7 @@ export const renderUserPrfoile = (
           width: width ? width : "50px",
           height: height ? height : "50px",
           borderRadius: "50%",
+          // objectFit: "cover"
         }}
       />
     );

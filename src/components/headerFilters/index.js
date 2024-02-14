@@ -129,16 +129,18 @@ const HeaderFilters = ({
   optionKey,
   disable,
   tracking,
-  selectorField
+  selectorField,
+  defaultShow = false,
+  defaultSize = 'col-xl-2'
 }) => {
   const dispatch = useDispatch();
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(defaultShow);
   return (
     <>
       <div style={{ display: "flex" }}>
         <div className="row filter-contain" style={{ width: "100%" }}>
           {isSearch && (
-            <div className="col-xl-2">
+            <div className={defaultSize}>
               {" "}
               <Search
                 searchlabel={searchlabel}
@@ -151,7 +153,7 @@ const HeaderFilters = ({
             </div>
           )}
           {isSelector ? (
-            <div className="col-xl-2">
+            <div className={defaultSize}>
               {" "}
               <Selector
                 selectlabel={selectlabel}
@@ -162,7 +164,7 @@ const HeaderFilters = ({
             </div>
           ) : null}
           {selectOptions2 && (
-            <div className="col-xl-2">
+            <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
@@ -178,7 +180,7 @@ const HeaderFilters = ({
             </div>
           )}
           {isRangePicker && (
-            <div className="col-xl-2">
+            <div className={defaultSize}>
               <DateRangePicker
                 selectedDates={selectedDates}
                 pickerlabel={pickerlabel}
@@ -199,7 +201,7 @@ const HeaderFilters = ({
 
           {isAnotherPicker && (
             <>
-              <div className="col-xl-2">
+              <div className={defaultSize}>
                 <label className={styles.label}>{pickerlabe2}</label>
                 <div>
                   <RangePicker
@@ -318,12 +320,12 @@ const HeaderFilters = ({
           )}
         </div>
       </div>
-      {showFilters && (
+      {(showFilters) && (
         <div style={{ marginTop: "50px" }}>
           <div className="row filter-contain">
             {isAllocatedBySelector && (
               <div
-                className="col-xl-2"
+                className={defaultSize}
                 onClick={() => {
                   dispatch(getFilters(selectorField?selectorField:"allocatedBy"));
                 }}
@@ -344,7 +346,7 @@ const HeaderFilters = ({
             )}
             {isAllocatedToSelector && (
               <div
-                className="col-xl-2"
+                className={defaultSize}
                 style={{ zIndex: tracking && "2" }}
                 onClick={() => {
                   dispatch(getFilters("patientAllocated"));
@@ -366,7 +368,7 @@ const HeaderFilters = ({
             )}
             {isCreatedBySelector && (
               <div
-                className="col-xl-2"
+                className={defaultSize}
                 onClick={() => {
                   dispatch(
                     getFilters(
@@ -393,7 +395,7 @@ const HeaderFilters = ({
             )}
             {isAnotherPicker2 && (
               <>
-                <div className="col-xl-2">
+                <div className={defaultSize}>
                   <label className={styles.label}>{pickerlabe3}</label>
                   <div>
                     <RangePicker
@@ -413,7 +415,7 @@ const HeaderFilters = ({
             )}
             {isAnotherPicker3 && (
               <>
-                <div className="col-xl-2">
+                <div className={defaultSize}>
                   <label className={styles.label}>{pickerlabe4}</label>
                   <div>
                     <RangePicker
@@ -434,7 +436,7 @@ const HeaderFilters = ({
             )}
             {isAnotherPicker5 && (
               <>
-                <div className="col-xl-2">
+                <div className={defaultSize}>
                   <label className={styles.label}>{pickerlabe5}</label>
                   <div>
                     <RangePicker
