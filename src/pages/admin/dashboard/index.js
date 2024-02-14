@@ -43,6 +43,25 @@ const index = () => {
       <Header />
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
+        <Row className={styles.RowCon}>
+
+<Col span={9} >
+  <WorkFlow />
+</Col>
+<Col span={5} offset={1} className={styles.columns}>
+  <DailyTask />
+</Col>
+<Col span={10} className={styles.column2}>
+<Accuracy />
+            </Col>
+
+<Col span={14} className={styles.column2}>
+  
+</Col>
+<Col span={9} offset={1} className={styles.columns}>
+  
+</Col>
+</Row>
           <Row className={styles.RowCon} gutter={8}>
             <Col span={16}>
               <DeliveryStatus />
@@ -59,6 +78,7 @@ const index = () => {
               <SpeedoMeter/>
             </Col>
           </Row>
+
           <Row className={styles.RowCon}>
             <Col span={9}>
               <WorkFlow />
@@ -73,6 +93,7 @@ const index = () => {
             <Col span={14} className={styles.column2}></Col>
             <Col span={9} offset={1} className={styles.columns}></Col>
           </Row>
+
         </div>
       </div>
       {/* <div className={styles.maincontainer}>

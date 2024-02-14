@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { LoadingOutlined } from "@ant-design/icons";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
-import { sortFunction } from "../../../headerFilters/functions";
+import { priorityStatus, sortFunction } from "../../../headerFilters/functions";
 
 function AllocatedAdminList({
   patinetListAll,
@@ -62,6 +62,9 @@ function AllocatedAdminList({
             {data.computedDate
               ? moment.utc(data.computedDate).format("MM-DD-YYYY")
               : "---"}
+          </td>
+          <td className={TableStyle.lastBorder}>
+            {data?.priority ? priorityStatus(data?.priority) : '---'}
           </td>
           <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
             {loading ? (
@@ -138,6 +141,7 @@ function AllocatedAdminList({
                 )}
               </span>
             </th>
+            <th >PRIORITY</th>
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <input

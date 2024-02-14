@@ -7,7 +7,8 @@ import {
   ChatBot,
   CompletedScoreNew,
   UserByIndividual,
-  accuracyScoreNew
+  accuracyScoreNew,
+  DeliveryScore,
 } from "../../../services/l2Service/DashboardService";
 
 export const WORKFLOWDATA = "WORKFLOWDATA";
@@ -19,7 +20,7 @@ export const HOLD_STATUS = "HOLD_STATUS";
 export const SELECTED_DAY = "SELECTED_DAY";
 export const CHATBOT = "CHATBOT";
 export const INDIVIDUAL_USER = "INDIVIDUAL_USER";
-
+export const DELIVERY = "DELIVERY";
 
 export const getSelectedDay = (day) => ({
   type: SELECTED_DAY,
@@ -160,7 +161,6 @@ export const getChatReply = (msg) => {
   };
 };
 
-
 export const getCompletedScoreNew = (btn, date, month, year, router) => {
   return (dispatch) => {
     dispatch({
@@ -185,7 +185,15 @@ export const getCompletedScoreNew = (btn, date, month, year, router) => {
   };
 };
 
-export const getAccuracyScoreNew = (btn, date, month, year, router,type,user) => {
+export const getAccuracyScoreNew = (
+  btn,
+  date,
+  month,
+  year,
+  router,
+  type,
+  user
+) => {
   return (dispatch) => {
     dispatch({
       type: ACCURACY,
@@ -194,15 +202,17 @@ export const getAccuracyScoreNew = (btn, date, month, year, router,type,user) =>
       },
     });
     try {
-      accuracyScoreNew(btn, date, month, year, router,type,user).then((response) => {
-        dispatch({
-          type: ACCURACY,
-          payload: {
-            data: response,
-            loading: false,
-          },
-        });
-      });
+      accuracyScoreNew(btn, date, month, year, router, type, user).then(
+        (response) => {
+          dispatch({
+            type: ACCURACY,
+            payload: {
+              data: response,
+              loading: false,
+            },
+          });
+        }
+      );
     } catch (err) {
       console.log(err);
     }
@@ -221,6 +231,30 @@ export const getUserByIndividual = (router) => {
       UserByIndividual(router).then((response) => {
         dispatch({
           type: INDIVIDUAL_USER,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const getDeliveryStatus = (btn, date, month, year, router) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELIVERY,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      DeliveryScore(btn, date, month, year, router).then((response) => {
+        dispatch({
+          type: DELIVERY,
           payload: {
             data: response,
             loading: false,

@@ -21,7 +21,11 @@ import pendingIcon from "../../.../../../../images/dashboard/Pending.png";
 import declineIcon from "../../.../../../../images/dashboard/Decline.png";
 import reAuditIcon from "../../.../../../../images/dashboard/ReAudit.png";
 import auditHoldIcon from "../../.../../../../images/dashboard/Hold.png";
+import completedbg from "../../.../../../../images/dashboard/completedbg.png";
+import TC from "../../.../../../../images/dashboard/TC.png";
+
 import auditedIcon from "../../.../../../../images/dashboard/Audit.png";
+import tci from "../../.../../../../images/dashboard/tci.png";
 
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -49,72 +53,88 @@ const WorkFlow = () => {
   const card1Data = [
     {
       id: 1,
-      icon: allocated,
-      title: "Allocated",
-      charts: worlFlowData?.data?.response?.auditAllocated,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
-      bg: allocatedbg,
+      icon: tci,
+      title: "Total charts",
+      charts: worlFlowData?.data?.response?.auditDecliend,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: TC,
     },
     {
       id: 2,
-      icon: auditedIcon,
-      title: "Audited",
-      charts: worlFlowData?.data?.response?.audited,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
-      bg: auditedbg,
+      icon: allocated,
+      title: "Allocated",
+      charts: worlFlowData?.data?.response?.auditAllocated,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: allocatedbg,
     },
     {
       id: 3,
-      icon: reAuditIcon,
-      title: "Re Audit",
-      charts: worlFlowData?.data?.response?.reAudited,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
-      bg: reAuditbg,
+      icon: pendingIcon,
+      title: "Pending",
+      charts: worlFlowData?.data?.response?.auditPending,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: pendingbg,
     },
     {
       id: 4,
+      icon: completed,
+      title: "Completed",
+      charts: worlFlowData?.data?.response?.auditPending,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: completedbg,
+    },
+    {
+      id: 5,
+      icon: auditedIcon,
+      title: "Audited",
+      charts: worlFlowData?.data?.response?.audited,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: auditedbg,
+    },
+    {
+      id: 6,
+      icon: reAuditIcon,
+      title: "Re Audit",
+      charts: worlFlowData?.data?.response?.reAudited,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: reAuditbg,
+    },
+    {
+      id: 7,
       icon: auditHoldIcon,
       title: "Audit Hold",
       charts: worlFlowData?.data?.response?.auditHold,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: auditHold,
     },
     {
-      id: 5,
-      icon: pendingIcon,
-      title: "Pending",
-      charts: worlFlowData?.data?.response?.auditPending,
-      days: `Last ${DateRanges && !DateRanges?.clear? getSelectedDaysCount(DateRanges) : 30} days`,
-      bg: pendingbg,
-    },
-    {
-      id: 6,
+      id: 8,
       icon: declineIcon,
       title: "Declined",
       charts: worlFlowData?.data?.response?.auditDecliend,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
-      bg: auditDecliendbg,
-    },
-    {
-      id: 5,
-      icon: pendingIcon,
-      title: "Pending",
-      charts: worlFlowData?.data?.response?.auditPending,
-      days: `Last ${DateRanges && !DateRanges?.clear? getSelectedDaysCount(DateRanges) : 30} days`,
-      bg: pendingbg,
-    },
-    {
-      id: 6,
-      icon: declineIcon,
-      title: "Declined",
-      charts: worlFlowData?.data?.response?.auditDecliend,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: auditDecliendbg,
     },
   ];
 
   return (
-    <div className={styles.card1} style={{height:"75%"}}  >
+    <div className={styles.card1} style={{ height: "75%" }}>
       <HeadTitle
         header={
           !DateRanges || DateRanges?.clear
@@ -128,13 +148,13 @@ const WorkFlow = () => {
         openPicker={openPicker}
         setOpenPicker={setOpenPicker}
       />
-      <Card borderRadius="28px" style={{height:"75%"}}>
+      <Card borderRadius="28px" style={{ height: "75%" }}>
         {worlFlowData?.loading ? (
           <div className={spinSTYles.spinStyle}>
             <Spin loading={worlFlowData?.loading} />
           </div>
         ) : worlFlowData?.data?.response ? (
-          <Row className={styles.carddiv} style={{height:"80%"}}>
+          <Row className={styles.carddiv} style={{ height: "80%" }}>
             {card1Data?.map((data) => (
               <Col
                 span={5}

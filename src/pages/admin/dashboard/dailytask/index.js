@@ -23,18 +23,17 @@ const DailyTask = () => {
 
   const bullets = [
     {
-      color: "#64B4BE",
-      name: "Audited",
+      color: "#7599FF",
+      name: "L1Auditor",
     },
     {
-      color: "#FFB54D",
-      name: "AuditPending",
+      color: "#64C8FF",
+      name: "L2Auditor",
     },
     {
-      color: "#F4CE14",
-      name: "AuditHold",
+      color: "#FA896B",
+      name: "Admin",
     },
-  
   ];
   const daysOfWeek = [
     "Sunday",
@@ -142,26 +141,25 @@ const DailyTask = () => {
           data: [
             {
               value: audited,
-              name: "Audited",
+              name: "L1 Auditor",
               itemStyle: {
-                color: "#64B4BE",
+                color: "#7599FF",
               },
             },
             {
               value: pending,
               name: "AuditPending",
               itemStyle: {
-                color: "#FFB54D",
+                color: "#64C8FF",
               },
             },
             {
               value: hold,
               name: "AuditHold",
               itemStyle: {
-                color: "#F4CE14",
+                color: "#FA896B",
               },
             },
-        
           ],
         },
         {
@@ -223,12 +221,10 @@ const DailyTask = () => {
   return (
     <>
       <HeadTitle header=" &nbsp;" />
-      <div className={styles.card2} style={{height:"75%"}}  >
+      <div className={styles.card2} style={{ height: "75%" }}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
           <Row>
-            <Col span={1}>
-          
-            </Col>
+            <Col span={1}></Col>
             <Col span={30}>
               {currentDays?.length > 0 ? (
                 <Row
@@ -238,7 +234,7 @@ const DailyTask = () => {
                     <Col
                       key={index}
                       span={70}
-                      
+
                       // onClick={() => setSelectedDate(currentWeek[index])}
                     >
                       <h4
@@ -261,10 +257,13 @@ const DailyTask = () => {
                           </span>
                         </div> */}
                       </h4>
+
                       <Row>
                         <Col span={12}>
-                          <div className={styles.container} style={{width:"308%"}}>
-                           
+                          <div
+                            className={styles.container}
+                            style={{ width: "308%" }}
+                          >
                             <ReactECharts
                               option={getChartOption(
                                 data?.allocated,
@@ -306,7 +305,7 @@ const DailyTask = () => {
                                   <div className={styles.subText}>
                                     {item.name === "AuditPending"
                                       ? data.pending
-                                      : item.name === "Audited"
+                                      : item.name === "L1 Auditor"
                                       ? data?.audited
                                       : item.name === "AuditHold"
                                       ? data.hold
@@ -334,9 +333,7 @@ const DailyTask = () => {
                 <Legends bullets={bullets} />
               </div> */}
             </Col>
-            <Col span={1}>
-         
-            </Col>
+            <Col span={1}></Col>
           </Row>
         </Card>
       </div>
