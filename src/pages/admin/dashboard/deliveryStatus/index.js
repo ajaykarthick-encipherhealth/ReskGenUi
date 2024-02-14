@@ -12,12 +12,19 @@ import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Spin } from "antd";
-import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
+import {
+  getDeliveryStatus,
+  getCOmpletedScore,
+} from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 const DeliveryStatus = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const completedDatas = useSelector((state) => state?.workFlow?.completed);
+  const completedDatas = useSelector(
+    (state) => state?.l2Dashboard?.deliveryStatus
+  );
+  // const datatTest = useSelector((state) => state?.l2Dashboard?.deliveryStatus);
+  console.log(completedDatas);
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -151,7 +158,7 @@ const DeliveryStatus = () => {
 
   useEffect(() => {
     dispatch(
-      getCOmpletedScore(
+      getDeliveryStatus(
         currentBtn.toUpperCase(),
         currentDate.getDate(),
         selectedMonth,
