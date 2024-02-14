@@ -48,6 +48,7 @@ import {
   auditHold,
 } from "../../../../services/PatientsListSevice";
 import LoadingSpinner from "../../../../components/loadingSpinner";
+import { validateYear } from "../../../../components/headerFilters/functions";
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -148,6 +149,7 @@ const Details = ({}) => {
   const [totalElements, setTotalElements] = useState(10);
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
   const [allocateClicked, setAllocateClicked] = useState(false);
+  const [error, setError] = useState({year: ''})
 
   const flagPostList = [
     {
@@ -320,6 +322,12 @@ const Details = ({}) => {
     const key = e.target.name;
     if (key == "encodedDate") {
       setInputValueFileDate(e.target.value);
+    } else if (e.target.name === "year") {
+      const validateYearField = validateYear(e.target.value, setError);
+      if (validateYearField) {
+        setError({ year: "" });
+        setInputValue({ ...inputValue, [key]: value });
+      }
     }
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
@@ -2469,6 +2477,11 @@ const Details = ({}) => {
                                 min="1"
                                 onChange={handleChange}
                               />
+                              {error?.year && (
+                                <div className="text-danger fs-12">
+                                  {error.year}
+                                </div>
+                              )}
                             </div>
 
                             <div className="col-xl-12 mb-3">
@@ -2554,6 +2567,11 @@ const Details = ({}) => {
                                 min="1"
                                 onChange={handleChange}
                               />
+                              {error?.year && (
+                                <div className="text-danger fs-12">
+                                  {error.year}
+                                </div>
+                              )}
                             </div>
 
                             <div className="col-xl-12 mb-3">

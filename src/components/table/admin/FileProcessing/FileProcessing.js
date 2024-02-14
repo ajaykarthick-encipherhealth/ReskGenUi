@@ -503,7 +503,7 @@ function FileProcessingTable({ patinetListAll }) {
                 }}
               >
                 <Steps
-                  current={currentIndex}
+                  current={currentIndex + 1}
                   labelPlacement="vertical"
                   items={mappedSteps}
                   percent={count}

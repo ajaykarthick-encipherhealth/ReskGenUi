@@ -55,6 +55,11 @@ export const PhysicanMenuList = [
 ];
 export const AdminMenuList = [
   {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/admin/dashboard",
+  },
+  {
     title: "Users",
     iconStyle: SVGICON.dashboardIcon,
     to: "/admin/user",
@@ -65,7 +70,7 @@ export const AdminMenuList = [
     iconStyle: SVGICON.patientListIcon,
     to: "/admin/patients",
   },
-   {
+  {
     title: "File Processing",
     iconStyle: SVGICON.Usermanagement,
     to: "/admin/file-processing",
@@ -90,7 +95,7 @@ export const AdminMenuList = [
   //   iconStyle: SVGICON.Usermanagement,
   //   to: "/coder/auditing",
   // },
-]
+];
 export const L2AuditMenuList = [
   {
     title: "Dashboard",
@@ -121,7 +126,6 @@ export const L2AuditorMenuList = [
     to: "/l2Auditor/user",
     childRoute: "/l2Auditor/user/userQueue",
     childRoute2: "/l2Auditor/user/details",
-
   },
   {
     title: "Audited Queue",
@@ -135,5 +139,3 @@ export const L2AuditorMenuList = [
     childRoute: "/l2Auditor/report/individualreport",
   },
 ];
-
-

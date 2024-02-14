@@ -7,6 +7,7 @@ const Selector = ({
   setSelectedOption,
   selectOptions,
   defaultSelectValue1,
+  isClose = false
 }) => {
   return (
     <div>
@@ -19,6 +20,7 @@ const Selector = ({
           options={selectOptions}
           className="custom-react-select"
           isSearchable={false}
+          isClearable={isClose}
           placeholder={defaultSelectValue1?.label}
         />
       </div>

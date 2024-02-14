@@ -64,7 +64,7 @@ const SelectRole = () => {
     localStorage.removeItem("password");
     setRoleError(false);
     const rolesMapping = {
-      admin: { userRole: "admin", route: "/admin/user" },
+      admin: { userRole: "admin", route: "/admin/dashboard" },
       l1auditor: { userRole: "l1auditor", route: "/physician/dashboard" },
       l2auditor: { userRole: "l2auditor", route: "/l2Auditor/dashboard" },
     };

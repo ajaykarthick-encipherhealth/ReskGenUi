@@ -8,8 +8,9 @@ import {
   CompletedScoreNew,
   UserByIndividual,
   accuracyScoreNew,
-  DeliveryScore,
-} from "../../../services/l2Service/DashboardService";
+  CompletedStatus,
+  SelectUserList,
+} from "../../../services/adminServices/DashboardService";
 
 export const WORKFLOWDATA = "WORKFLOWDATA";
 export const DATE_RANGE = "DATE_RANGE";
@@ -20,7 +21,8 @@ export const HOLD_STATUS = "HOLD_STATUS";
 export const SELECTED_DAY = "SELECTED_DAY";
 export const CHATBOT = "CHATBOT";
 export const INDIVIDUAL_USER = "INDIVIDUAL_USER";
-export const DELIVERY = "DELIVERY";
+export const COMPLETED_STATUS = "COMPLETED_STATUS";
+export const SELECTED_USER = "SELECTED_USER";
 
 export const getSelectedDay = (day) => ({
   type: SELECTED_DAY,
@@ -243,18 +245,51 @@ export const getUserByIndividual = (router) => {
   };
 };
 
-export const getDeliveryStatus = (btn, date, month, year, router) => {
+export const getCompletedStatus = (
+  btn,
+  date,
+  month,
+  year,
+  router,
+  selectUser
+) => {
   return (dispatch) => {
     dispatch({
-      type: DELIVERY,
+      type: COMPLETED_STATUS,
       payload: {
         loading: true,
       },
     });
     try {
-      DeliveryScore(btn, date, month, year, router).then((response) => {
+      CompletedStatus(btn, date, month, year, router, selectUser).then(
+        (response) => {
+          dispatch({
+            type: COMPLETED_STATUS,
+            payload: {
+              data: response,
+              loading: false,
+            },
+          });
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const getSelectUserList = (role) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECTED_USER,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      SelectUserList(role).then((response) => {
         dispatch({
-          type: DELIVERY,
+          type: SELECTED_USER,
           payload: {
             data: response,
             loading: false,

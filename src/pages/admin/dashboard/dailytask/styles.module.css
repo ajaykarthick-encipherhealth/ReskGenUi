@@ -1,0 +1,97 @@
+.card2 {
+  width: 100%;
+  height: 345px;
+}
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 15px 10px 10px;
+  color: #000000;
+}
+.sliderdiv {
+  margin-top: 10px;
+  border-radius: 12px;
+  height:260px;
+  box-shadow: 0 0px 3px 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  /* overflow-x: hidden;
+  overflow-y: scroll; */
+}
+.container {
+  width: 100%;
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+/* .container > div > div > canvas {
+  position: absolute !important;
+  left: 0px !important;
+  top: 10px !important; 
+  width: 100% !important;
+  height: 200px !important;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+} */
+
+.bgColor {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin: 6px 5px 0 0;
+}
+.infoCards {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
+.insideCard {
+  display: flex;
+  margin: 15px;
+  color: #000000;
+}
+.headerDisplay{
+  display :flex;
+}
+.dateDisplay{
+  font-weight: 700;
+  margin-left: 10px;
+}
+.headerTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  padding-top: 10px;
+}
+.ImgDIv {
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.subText {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  margin-left: 20px;
+}
+
+/* @media screen and (min-width: 1700px) {
+  .container > div > div > canvas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100% !important;
+  }
+} */
+
+

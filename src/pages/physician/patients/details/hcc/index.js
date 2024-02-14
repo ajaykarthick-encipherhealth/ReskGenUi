@@ -285,6 +285,7 @@ const Hcc = ({ patientHccResult }) => {
   const [providerDetails, setProviderDetails] = useState("");
   const [isAddComboCode, setIsAddComboCode] = useState(false);
   const [comboCodeTree, setComboCodeTree] = useState(true);
+  const [listPageNumber, setListPageNumber] = useState([]);
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -351,7 +352,40 @@ const Hcc = ({ patientHccResult }) => {
     );
     setUserDetails(dotLoading);
     setvalidHccDetails(dotLoading);
+  }, []);
+
+  useEffect(() => {
+    setDocumentLoaded(true);
+    if (findFileKeyword) {
+      setTimeout(() => {
+        setFileModalHeader(fileModalTitle);
+        if (fileInitialPage) {
+          setTargetPages(
+            (targetPage) => targetPage.pageIndex === fileInitialPage
+          );
+        }
+        highlight({
+          keyword: findFileKeyword,
+        });
+      }, 1000);
+    }
   }, [fileInitialPage, findFileKeyword, fileModalTitle, fileDosPageNumber]);
+
+  // useEffect(() => {
+  //   if (findFileKeyword) {
+  //     setTimeout(() => {
+  //       setFileModalHeader(fileModalTitle);
+  //       if (fileDosPageNumber) {
+  //         setTargetPages(
+  //           (targetPage) => targetPage.pageIndex === fileDosPageNumber
+  //         );
+  //       }
+  //       highlight({
+  //         keyword: findFileKeyword,
+  //       });
+  //     }, 1000);
+  //   }
+  // }, [fileDosPageNumber]);
 
   const getPatientDetails = async (
     patientId,
@@ -1351,9 +1385,9 @@ const Hcc = ({ patientHccResult }) => {
 
     // getSectionPageNumber(headerNames, encounterDate);
 
-    var splitPoint = disDescription.substring(" ", 40);
+    var splitPoint = actualDescription.substring(" ", 10);
     setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-    setFindFileKeyword(actualDescription);
+    setFindFileKeyword(splitPoint);
     // highlight({
     //   keyword: actualDescription,
     //   // matchCase: true,
@@ -1432,7 +1466,7 @@ const Hcc = ({ patientHccResult }) => {
         }
         setSelectActiveCode(value);
         var splitPoint = "";
-        splitPoint = actualDescription.substring(" ", 40);
+        splitPoint = actualDescription.substring(" ", 10);
         setFindFileKeyword(splitPoint);
         var dataset =
           value +
@@ -1866,14 +1900,12 @@ const Hcc = ({ patientHccResult }) => {
         var dataFormatSuggested = {
           patientComputeDetailId: localPatientId,
           year: dos,
-          diseaseFormats: [
-            {
-              diagnosisCode: inputValue.diagnosisCode,
-              actualDescription: inputValue.actualDescription,
-              encounterDate: convertDate,
-              capturedSections: [inputValue.capturedSections],
-            },
-          ],
+          diseaseFormat: {
+            diagnosisCode: inputValue.diagnosisCode,
+            actualDescription: inputValue.actualDescription,
+            encounterDate: convertDate,
+            capturedSections: [inputValue.capturedSections],
+          },
         };
 
         try {
@@ -2584,56 +2616,61 @@ const Hcc = ({ patientHccResult }) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        <Popover
+        <span
           onClick={() => getEncounterDetails(res)}
-          content={providerDetails}
-          title=""
-          placement="bottom"
-          trigger="click"
+          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
         >
-          <span
-            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-          >
-            <i>
-              <CalendarOutlined className={visitStyles.calenderIcon} />
-            </i>
-            {moment(res).format("MMM DD")}
-          </span>
-        </Popover>
+          <i>
+            <CalendarOutlined className={visitStyles.calenderIcon} />
+          </i>
+          {moment(res).format("MMM DD")}
+        </span>
       );
       return sectionMapArr;
     });
   };
 
   const getEncounterDetails = async (date) => {
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    setProviderDetails(dotLoading);
-    var encounterDate = moment(date).format("MM/DD/YYYY");
-    var result = await getProviderDetails(localPatientId, encounterDate);
-    var data = "";
-    if (result?.status == "SUCCESS") {
-      var datas = result.response;
-      data = (
-        <div className="validhcc-details">
-          <div>Provider Name : {datas.providerName}</div>
-          <div>Authorized Provider : {datas.authorizedProvider}</div>
-          <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
-          <div>No Credential : {datas.noCredential}</div>
-          <div>UnSigned : {datas.unSigned}</div>
-        </div>
-      );
-    } else {
-      data = (
-        <div className="validhcc-details">
-          <div>Provider Not Found</div>
-        </div>
-      );
+    const findPageNumber = listPageNumber.filter((i) => i.date === date);
+    if (findPageNumber.length != 0) {
+      var date = findPageNumber[0].date;
+      if (findPageNumber[0].startPage.length != 0) {
+        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+        var splitPoint = date.substring(" ", 5);
+        setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+        setFindFileKeyword(splitPoint);
+      }
     }
-    setProviderDetails(data);
+    // var dotLoading = (
+    //   <div className={visitStyles.loadingFileHeader}>
+    //     <Spinner />
+    //   </div>
+    // );
+    // setProviderDetails(dotLoading);
+    // var encounterDate = moment(date).format("MM/DD/YYYY");
+    // var result = await getProviderDetails(localPatientId, encounterDate);
+    // var data = "";
+    // if (result?.status == "SUCCESS") {
+    //   var datas = result.response;
+    //   data = (
+    //     <div className="validhcc-details">
+    //       <div>Provider Name : {datas.providerName}</div>
+    //       <div>Authorized Provider : {datas.authorizedProvider}</div>
+    //       <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
+    //       <div>No Credential : {datas.noCredential}</div>
+    //       <div>UnSigned : {datas.unSigned}</div>
+    //     </div>
+    //   );
+    // } else {
+    //   data = (
+    //     <div className="validhcc-details">
+    //       <div>Provider Not Found</div>
+    //     </div>
+    //   );
+    // }
+    // setProviderDetails(data);
   };
 
   const getCaptureSectionBackgroundMeat = (value, dis, encounterDate) => {
@@ -2799,28 +2836,47 @@ const Hcc = ({ patientHccResult }) => {
   const getFileDosPageNumber = async () => {
     var result = await getFilePageNumber(patientHccResult.fileId);
     var groupPageNumber = [];
+    var groupEncounterDate = [];
     for (var key in result?.response) {
-      var opationArray = [];
+      var optionArray = [];
+      var optionPage = [];
       var pageNumbervalue = result.response[key];
       for (var key2 in pageNumbervalue) {
+        var startPage = key2 == "first" ? pageNumbervalue[key2] : null;
         var keyValue = key2 == "first" ? "Start - " : "End - ";
-        opationArray.push({
+        optionArray.push({
           label: keyValue + " " + pageNumbervalue[key2],
-          value: pageNumbervalue[key2],
+          value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
         });
+        if (startPage) {
+          optionPage.push({
+            pageNumber: startPage,
+          });
+        }
       }
       groupPageNumber.push({
         label: moment(key).format("MM-DD-YYYY"),
-        options: opationArray,
+        options: optionArray,
+      });
+      groupEncounterDate.push({
+        date: moment(key).format("MM/DD/YYYY"),
+        startPage: optionPage,
       });
     }
     setPageNumberOptions(groupPageNumber);
+    setListPageNumber(groupEncounterDate);
   };
 
   const handleChangePageNumber = async (value) => {
+    var str_array = value.split(",");
+    var pageNumber = str_array[0];
+    var findData = str_array[1];
     setFindFileKeyword(null);
-    var pageIndex = value - 1;
+    var pageIndex = pageNumber - 1;
+    setFileInitialPage(pageIndex);
     setFileDosPageNumber(pageIndex);
+    setTargetPages((targetPage) => targetPage.pageIndex === pageIndex);
+    setFindFileKeyword(findData);
   };
 
   const getPreviousData = (code, action) => {
@@ -2903,7 +2959,6 @@ const Hcc = ({ patientHccResult }) => {
         );
       }
     }
-
     setValidated(true);
   };
 
