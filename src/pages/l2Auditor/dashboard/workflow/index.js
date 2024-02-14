@@ -17,10 +17,10 @@ import auditHold from "../../.../../../../images/dashboard/auditHold.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import auditDecliendbg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
 import spinSTYles from "../../../../styles/auth.module.css";
-import pendingIcon from "../../.../../../../images/dashboard/Pending.png";
+import pendingIcon from "../../.../../../../images/dashboard/Pending_2.png";
 import declineIcon from "../../.../../../../images/dashboard/Decline.png";
 import reAuditIcon from "../../.../../../../images/dashboard/ReAudit.png";
-import auditHoldIcon from "../../.../../../../images/dashboard/Hold.png";
+import auditHoldIcon from "../../.../../../../images/dashboard/Hold_2.png";
 import auditedIcon from "../../.../../../../images/dashboard/Audit.png";
 
 import { useSelector } from "react-redux";
@@ -52,7 +52,9 @@ const WorkFlow = () => {
       icon: allocated,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.auditAllocated,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: allocatedbg,
     },
     {
@@ -60,7 +62,9 @@ const WorkFlow = () => {
       icon: auditedIcon,
       title: "Audited",
       charts: worlFlowData?.data?.response?.audited,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: auditedbg,
     },
     {
@@ -68,7 +72,9 @@ const WorkFlow = () => {
       icon: reAuditIcon,
       title: "Re Audit",
       charts: worlFlowData?.data?.response?.reAudited,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: reAuditbg,
     },
     {
@@ -76,7 +82,9 @@ const WorkFlow = () => {
       icon: auditHoldIcon,
       title: "Audit Hold",
       charts: worlFlowData?.data?.response?.auditHold,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: auditHold,
     },
     {
@@ -84,7 +92,9 @@ const WorkFlow = () => {
       icon: pendingIcon,
       title: "Pending",
       charts: worlFlowData?.data?.response?.auditPending,
-      days: `Last ${DateRanges && !DateRanges?.clear? getSelectedDaysCount(DateRanges) : 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: pendingbg,
     },
     {
@@ -92,7 +102,9 @@ const WorkFlow = () => {
       icon: declineIcon,
       title: "Declined",
       charts: worlFlowData?.data?.response?.auditDecliend,
-      days: `Last ${DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30} days`,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
       bg: auditDecliendbg,
     },
   ];
