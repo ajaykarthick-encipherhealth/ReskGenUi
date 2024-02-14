@@ -357,6 +357,7 @@ const Hcc = ({ patientHccResult }) => {
   }, [activeTabNumber]);
 
   useEffect(() => {
+    console.log(findFileKeyword);
     setDocumentLoaded(true);
     if (findFileKeyword) {
       setTimeout(() => {
