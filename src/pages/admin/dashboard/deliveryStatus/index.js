@@ -23,8 +23,7 @@ const DeliveryStatus = () => {
   const completedDatas = useSelector(
     (state) => state?.l2Dashboard?.deliveryStatus
   );
-  // const datatTest = useSelector((state) => state?.l2Dashboard?.deliveryStatus);
-  console.log(completedDatas);
+
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();

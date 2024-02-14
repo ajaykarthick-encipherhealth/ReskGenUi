@@ -14,6 +14,9 @@ import {
   MANAGERS,
   TEAM_CHART,
   SPEEDOMETER,
+  ACCURACY_DAILY,
+  ACCURACY_MONTHLY,
+  ACCURACY_WEEKLY
 } from "../../../services/adminServices/DashboardService";
 const initialState = {
   data: null,
@@ -49,7 +52,19 @@ export const AdminDashboardReducer = (state = initialState, action) => {
       dailyTask: [...state.dailyTask, action.payload],
     };
   }
-  if (action.type === ACCURACY) {
+  if (action.type === ACCURACY_MONTHLY) {
+    return {
+      ...state,
+      accuracy: action.payload,
+    };
+  }
+  if (action.type === ACCURACY_WEEKLY) {
+    return {
+      ...state,
+      accuracy: action.payload,
+    };
+  }
+  if (action.type === ACCURACY_DAILY) {
     return {
       ...state,
       accuracy: action.payload,
