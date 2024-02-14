@@ -59,7 +59,7 @@ const Accuracy = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
   const dispatch = useDispatch();
-  const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
+  const accuracyDatas = useSelector((state) => state?.AdminDashboardReducers?.accuracy);
   const individualUserList = useSelector(
     (state) => state?.l2Dashboard?.individualUser
   );

@@ -10,7 +10,13 @@ import CompletedStatus from "./completedStatus";
 import DeliveryStatus from "./deliveryStatus";
 
 import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
+
+import WorkFlow from "./workflow";
+import DailyTask from "./dailytask";
+import Accuracy from "./accuracy";
+
 import BarChart from "./teamChart/Index";
+
 
 const index = () => {
   const currentDate = dayjs();
@@ -54,6 +60,17 @@ const index = () => {
             </Col>
           </Row>
           <Row className={styles.RowCon}>
+
+            <Col span={9} >
+              <WorkFlow />
+            </Col>
+            <Col span={5} offset={1} className={styles.columns}>
+              <DailyTask />
+            </Col>
+            <Col span={10} className={styles.column2}>
+            <Accuracy />
+                        </Col>
+
             <Col span={14} className={styles.column2}>
               
             </Col>
