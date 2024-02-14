@@ -24,8 +24,6 @@ const DeliveryStatus = () => {
     (state) => state?.l2Dashboard?.deliveryStatus
   );
 
-  console.log(completedDatas);
-
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
