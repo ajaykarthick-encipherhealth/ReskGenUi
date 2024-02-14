@@ -522,7 +522,7 @@ const Header = () => {
                               <div className="header-info2 d-flex align-items-center">
                                 <div
                                   className="header-media"
-                                  style={{ marginTop: "-7px" }}
+                                  style={{ marginTop: "-3px" }}
                                   onClick={() => setOpenContent(false)}
                                 >
                                   {renderUserPrfoile(

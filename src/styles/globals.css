@@ -5039,6 +5039,7 @@ label {
   justify-content: center;
   position: relative;
   height: 45px;
+  align-items: center;
 }
 
 .header-right .nav-item .nav-link {
