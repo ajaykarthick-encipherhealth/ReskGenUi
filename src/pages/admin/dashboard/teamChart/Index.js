@@ -74,11 +74,12 @@ const BarChart = () => {
       },
       showSymbol: false,
       data: rawData[sid]?.map((d, did) =>
-        totalData[did] <= 0 ? 0 : d / totalData[did]
+        totalData[did]
       ),
     };
   });
 
+  console.log(series);
   const option = {
     legend: false,
     grid,
@@ -129,6 +130,36 @@ const BarChart = () => {
     dispatch(TeamChart(router));
   }, [router]);
 
+  const options = {
+    xAxis: {
+      type: 'category',
+      data: ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5"]
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        data: [30, 60, 10, 40, 70],
+        type: 'bar',
+        label: {
+          show: true, // Show the label
+          position: 'top' // Position of the label
+        },
+        color: [
+          "#962DFF",
+          // "#BF80FF",
+          "#CC99FF",
+          // "#D4A8FF",
+          "#DBB9FE",
+          "#EAD8FE",
+          "#F4EDFD",
+        ],
+      }
+    ]
+};
+
+
   return (
     <>
       <HeadTitle header="Team Chart Status" />
@@ -158,7 +189,7 @@ const BarChart = () => {
                 ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
                     <ReactECharts
-                      option={option}
+                      option={options}
                       style={{
                         width: "100%",
                         height: "640px",
