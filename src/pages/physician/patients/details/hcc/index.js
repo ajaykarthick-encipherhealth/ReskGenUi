@@ -360,7 +360,7 @@ const Hcc = ({ patientHccResult }) => {
     if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
-        if (fileInitialPage) {
+        if (fileInitialPage != null) {
           setTargetPages(
             (targetPage) => targetPage.pageIndex === fileInitialPage
           );
