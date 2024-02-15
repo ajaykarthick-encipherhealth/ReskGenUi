@@ -23,6 +23,7 @@ import reAuditIcon from "../../.../../../../images/dashboard/ReAudit.png";
 import auditHoldIcon from "../../.../../../../images/dashboard/Hold_2.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import TC from "../../.../../../../images/dashboard/TC.png";
+import { useRouter } from "next/router";
 
 import auditedIcon from "../../.../../../../images/dashboard/Audit.png";
 import tci from "../../.../../../../images/dashboard/tci.png";
@@ -34,8 +35,9 @@ import { workStatusApiAdmin } from "../../../../services/adminServices/Dashboard
 
 const WorkFlow = () => {
   const currentDate = dayjs();
-  const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+  const router = useRouter();
+  const worlFlowData = useSelector((state) => state?.AdminDashboardReducer?.data);
+  const DateRanges = useSelector((state) => state?.workFlows?.dateRange);
   const [dateRange, setDateRange] = useState({
     processedStatus: {
       PENDING: 0,
@@ -49,6 +51,7 @@ const WorkFlow = () => {
       AUDITHOLD: 0,
     },
   });
+
   const [openPicker, setOpenPicker] = useState(false);
 
   const last30thDate = currentDate?.subtract(31, "day");
@@ -65,7 +68,7 @@ const WorkFlow = () => {
     setOpenPicker(!openPicker);
   };
 
-  console.log(dateRange.response);
+  console.log(dateRange.processedStatus);
   const card1Data = [
     {
       id: 1,
@@ -167,9 +170,20 @@ const WorkFlow = () => {
       console.log(error);
     }
   };
+  const getWorkFlow = async () => {
+    try {
+      const data = await getWorkFlowDatas(startDate, endDate, router);
+
+      setDateRange(data.response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(startDate, endDate, "test");
+  
   useEffect(() => {
-    getWorkFlowDatas();
-  }, []);
+    getWorkFlow();
+  }, [startDate, endDate, router]);
 
   return (
     <div className={styles.card1} style={{ height: "75%" }}>

@@ -1,5 +1,5 @@
 import {
-  workStatusApi,
+  workStatusApiAdmin,
   DailyTaskApi,
   accuracyScore,
   CompletedScore,
@@ -33,7 +33,7 @@ export const getDateRange = (val) => ({
   payload: val,
 });
 
-export const getWorkFlow = (startDate, endDate, router) => {
+export const getWorkFlow = (startDate ="", endDate = "", router) => {
   return (dispatch) => {
     dispatch({
       type: WORKFLOWDATA,
@@ -42,7 +42,7 @@ export const getWorkFlow = (startDate, endDate, router) => {
       },
     });
     try {
-      workStatusApi(startDate, endDate, router).then((response) => {
+      workStatusApiAdmin(startDate, endDate, router).then((response) => {
         dispatch({
           type: WORKFLOWDATA,
           payload: {

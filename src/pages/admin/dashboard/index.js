@@ -9,7 +9,7 @@ import styles from "./styles.module.css";
 import CompletedStatus from "./completedStatus";
 import DeliveryStatus from "./deliveryStatus";
 
-import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
+import { getWorkFlow } from "../../../store/actions/adminAction/DashboardAction";
 
 import WorkFlow from "./workflow";
 import DailyTask from "./dailytask";
@@ -23,8 +23,9 @@ const index = () => {
   const currentDate = dayjs();
   const router = useRouter();
   const dispatch = useDispatch();
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+  const DateRanges = useSelector((state) => state?.AdminDashboardReducers?.dateRange);
 
+  console.log(DateRanges,"t");
   const last30thDate = currentDate?.subtract(31, "day");
   const lastDateWithTime = currentDate?.endOf("day");
 
@@ -56,9 +57,9 @@ const index = () => {
               </Row>
 
               <Row>
-              <Col span={22}>
-                <Accuracy />
-              </Col>
+                <Col span={22}>
+                  <Accuracy />
+                </Col>
               </Row>
             </Col>
             <Col span={6}>
