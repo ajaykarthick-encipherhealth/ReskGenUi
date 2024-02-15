@@ -10,6 +10,7 @@ import {
 import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
+import dayjs from 'dayjs';
 
 export const eventStreming = (
   ENDPOINTS,
@@ -482,9 +483,7 @@ function FileProcessingTable({ patinetListAll }) {
                         {selectedRowTime?.length > 0 && findData ? (
                           <span>
                             {findData?.createdDate
-                              ? new Date(findData?.createdDate)
-                                  ?.toISOString()
-                                  .substr(11, 8)
+                              ? dayjs(findData?.createdDate).format("hh:mm:ss A")
                               : "---"}
                           </span>
                         ) : (
