@@ -36,7 +36,11 @@ import { workStatusApiAdmin } from "../../../../services/adminServices/Dashboard
 const WorkFlow = () => {
   const currentDate = dayjs();
   const router = useRouter();
-  const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
+  const worlFlowData = useSelector(
+    (state) => state?.AdminDashboardReducers?.data
+  );
+
+  console.log(worlFlowData, "work");
   const DateRanges = useSelector((state) => state?.workFlows?.dateRange);
   const [dateRange, setDateRange] = useState({
     processedStatus: {
@@ -59,25 +63,25 @@ const WorkFlow = () => {
 
   const startDate = DateRanges
     ? new Date(DateRanges?.startDate).toISOString()
-    : last30thDate.toISOString().split("T")[0];
+    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
   const endDate = DateRanges
     ? new Date(DateRanges?.endDate).toISOString()
-    : lastDateWithTime.toISOString().split("T")[0];
+    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
 
   const handleOpen = () => {
     setOpenPicker(!openPicker);
   };
 
-  console.log(dateRange.response);
+  console.log(worlFlowData?.data?.response?.processedStatus, "range");
   const card1Data = [
     {
       id: 1,
       icon: tci,
       title: "Total charts",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.PENDING +
-          dateRange.processedStatus.COMPLETED +
-          dateRange.processedStatus.HOLD
+      charts: worlFlowData?.data?.response?.processedStatus
+        ? worlFlowData?.data?.response?.processedStatus.PENDING +
+          worlFlowData?.data?.response?.processedStatus.COMPLETED +
+          worlFlowData?.data?.response?.processedStatus.HOLD
         : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -88,7 +92,9 @@ const WorkFlow = () => {
       id: 2,
       icon: allocated,
       title: "Hold",
-      charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
+      charts: worlFlowData?.data?.response?.processedStatus
+        ? worlFlowData?.data?.response?.processedStatus.HOLD
+        : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -98,8 +104,8 @@ const WorkFlow = () => {
       id: 3,
       icon: pendingIcon,
       title: "Pending",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.PENDING
+      charts: worlFlowData?.data?.response?.processedStatus
+        ? worlFlowData?.data?.response?.processedStatus.PENDING
         : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -110,8 +116,8 @@ const WorkFlow = () => {
       id: 4,
       icon: completed,
       title: "Completed",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.COMPLETED
+      charts: worlFlowData?.data?.response?.processedStatus
+        ? worlFlowData?.data?.response?.processedStatus.COMPLETED
         : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -122,7 +128,9 @@ const WorkFlow = () => {
       id: 5,
       icon: auditedIcon,
       title: "Audited",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
+      charts: worlFlowData?.data?.response?.auditedStatus
+        ? worlFlowData?.data?.response?.auditedStatus.AUDITED
+        : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -132,8 +140,8 @@ const WorkFlow = () => {
       id: 6,
       icon: reAuditIcon,
       title: "Audit Pending",
-      charts: dateRange.auditedStatus
-        ? dateRange.auditedStatus.AUDIT_PENDING
+      charts: worlFlowData?.data?.response?.auditedStatus
+        ? worlFlowData?.data?.response?.auditedStatus.AUDIT_PENDING
         : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -144,7 +152,7 @@ const WorkFlow = () => {
       id: 7,
       icon: auditHoldIcon,
       title: "Audit Hold",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITHOLD : "0",
+      charts: worlFlowData?.data?.response?.auditedStatus? worlFlowData?.data?.response?.auditedStatus.AUDITHOLD : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -154,7 +162,7 @@ const WorkFlow = () => {
       id: 8,
       icon: declineIcon,
       title: "Declined",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.DECLINED : "0",
+      charts: worlFlowData?.data?.response?.auditedStatus? worlFlowData?.data?.response?.auditedStatus.DECLINED : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -165,6 +173,7 @@ const WorkFlow = () => {
   const getWorkFlowDatas = async () => {
     try {
       const data = await workStatusApiAdmin();
+      console.log(data, "res");
       setDateRange(data.response);
     } catch (error) {
       console.log(error);
@@ -172,17 +181,18 @@ const WorkFlow = () => {
   };
   const getWorkFlow = async () => {
     try {
-      const data = await getWorkFlowDatas(startDate, endDate, router);
-
+      const data = await workStatusApiAdmin(startDate, endDate, router);
+      console.log(data, "res");
       setDateRange(data.response);
     } catch (error) {
       console.log(error);
     }
   };
   console.log(startDate, endDate, "test");
-  
+
   useEffect(() => {
     getWorkFlow();
+    console.log(card1Data, "data");
   }, [startDate, endDate, router]);
 
   return (

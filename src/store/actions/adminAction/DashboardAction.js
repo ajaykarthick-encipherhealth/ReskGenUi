@@ -33,7 +33,7 @@ export const getDateRange = (val) => ({
   payload: val,
 });
 
-export const getWorkFlow = (startDate ="", endDate = "", router) => {
+export const getWorkFlow = (startDate = "", endDate = "", router) => {
   return (dispatch) => {
     dispatch({
       type: WORKFLOWDATA,

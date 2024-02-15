@@ -31,10 +31,12 @@ const index = () => {
 
   const startDate = DateRanges
     ? new Date(DateRanges?.startDate).toISOString()
-    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+    : "";
   const endDate = DateRanges
     ? new Date(DateRanges?.endDate).toISOString()
-    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+    : ""
+
+
 
   useEffect(() => {
     dispatch(getWorkFlow(startDate, endDate, router));
