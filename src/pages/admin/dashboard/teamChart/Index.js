@@ -25,19 +25,19 @@ const BarChart = () => {
 
   const rawData = [
     datas?.response?.map((item) =>
-      item?.totalFileProcessed ? item.totalFileProcessed : [0, 0, 0, 0]
+      item?.totalFileProcessed ? item.totalFileProcessed : 0
     ),
     datas?.response?.map((item) =>
-      item?.totalFileAllocated ? item.totalFileAllocated : [0, 0, 0, 0]
+      item?.totalFileAllocated ? item.totalFileAllocated : 0
     ),
     datas?.response?.map((item) =>
-      item?.totalFilePending ? item.totalFilePending : [0, 0, 0, 0]
+      item?.totalFilePending ? item.totalFilePending : 0
     ),
     datas?.response?.map((item) =>
-      item?.totalFileHold ? item.totalFileHold : [0, 0, 0, 0]
+      item?.totalFileHold ? item.totalFileHold : 0
     ),
     datas?.response?.map((item) =>
-      item?.totalFileDeclined ? item.totalFileDeclined : [0, 0, 0, 0]
+      item?.totalFileDeclined ? item.totalFileDeclined : 0
     ),
   ];
 
@@ -49,6 +49,7 @@ const BarChart = () => {
     }
     totalData?.push(sum);
   }
+
   const grid = {
     left: 100,
     right: 100,
@@ -60,7 +61,7 @@ const BarChart = () => {
     "totalFileAllocated",
     "totalFilePending",
     "totalFileHold",
-    "totalFileDEclined",
+    "totalFileDeclined",
   ]?.map((name, sid) => {
     return {
       name,
@@ -75,10 +76,29 @@ const BarChart = () => {
       data: rawData[sid]?.map((d, did) => totalData[did]),
     };
   });
-
   const option = {
     legend: false,
     grid,
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      },
+      formatter: function (params) {
+        let tooltipText = params[0].axisValue + '<br/>'; // Display category name
+        let includedSeries = []; // Maintain a list of included series names
+        params.forEach(function (item) {
+          datas.response.forEach(function (info) {
+            if (item.seriesName in info && !includedSeries.includes(item.seriesName)) {
+              tooltipText += item.seriesName + ': ' + info[item.seriesName] + '<br/>'; // Display series name and its corresponding value
+              includedSeries.push(item.seriesName); // Add the series name to the list
+            }
+          });
+        });
+        return tooltipText;
+      }
+  
+    },
     yAxis: {
       type: "value",
     },
@@ -137,7 +157,7 @@ const BarChart = () => {
                       option={option}
                       style={{
                         width: "100%",
-                        height: "640px",
+                        height: "680px",
                         marginTop: "-30px",
                         overflowX: "hidden",
                       }}
