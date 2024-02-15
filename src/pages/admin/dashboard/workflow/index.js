@@ -36,7 +36,7 @@ import { workStatusApiAdmin } from "../../../../services/adminServices/Dashboard
 const WorkFlow = () => {
   const currentDate = dayjs();
   const router = useRouter();
-  const worlFlowData = useSelector((state) => state?.AdminDashboardReducer?.data);
+  const worlFlowData = useSelector((state) => state?.l2Dashboard?.data);
   const DateRanges = useSelector((state) => state?.workFlows?.dateRange);
   const [dateRange, setDateRange] = useState({
     processedStatus: {
@@ -68,7 +68,7 @@ const WorkFlow = () => {
     setOpenPicker(!openPicker);
   };
 
-  console.log(dateRange.processedStatus);
+  console.log(dateRange.response);
   const card1Data = [
     {
       id: 1,
