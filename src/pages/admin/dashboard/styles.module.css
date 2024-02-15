@@ -14,12 +14,14 @@
 
 }
 .column1{
-  flex: 0 0 27% !important;
+  /* flex: 0 0 27% !important; */
   max-width: 30% !important;
+  
+  margin-inline-start: 3% !important;
+
 }
 .first_column{
-  margin-inline-start: 2.166666666666666% !important;
-  min-width: 70% !important;
+  min-width: 72% !important;
 }
 .columns{
   margin-inline-start: 2.166666666666666% !important;

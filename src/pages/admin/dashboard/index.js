@@ -46,17 +46,17 @@ const index = () => {
         <div className={styles.rowCOntainer}>
           <Row className={styles.RowCon}>
             <Col span={18}>
-              <Row>
-                <Col span={16}>
+              <Row className={styles.RowCon}>
+                <Col span={15}>
                   <WorkFlow />
                 </Col>
-                <Col span={6} offset={1} className={styles.columns}>
+                <Col span={7} offset={1}>
                   <DailyTask />
                 </Col>
               </Row>
 
               <Row>
-              <Col span={22}>
+              <Col span={23}>
                 <Accuracy />
               </Col>
               </Row>
@@ -65,19 +65,19 @@ const index = () => {
               <BarChart />
             </Col>
           </Row>
-          <Row className={styles.RowCon}>
-            <Col span={17}>
+          <Row >
+            <Col span={17} className={styles.first_column}>
               <DeliveryStatus />
             </Col>
-            <Col span={6} offset={1}>
+            <Col span={6} className={styles.column1}>
               <SpeedoMeter />
             </Col>
           </Row>
-          <Row className={styles.RowCon}>
-            <Col span={17}>
+          <Row >
+            <Col span={17} className={styles.first_column}>
               <CompletedStatus />
             </Col>
-            <Col span={6} offset={1}>
+            <Col span={6} className={styles.column1}>
               <Notifications />
             </Col>
           </Row>

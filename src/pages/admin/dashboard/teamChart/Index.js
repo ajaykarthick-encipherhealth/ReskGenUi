@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import ReactECharts from "echarts-for-react";
 import HeadTitle from "../../../../components/headtitle";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card";
 import { Empty, Spin } from "antd";
-import Selector from "../../../../components/selector";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -26,19 +25,19 @@ const BarChart = () => {
 
   const rawData = [
     datas?.response?.map((item) =>
-      item?.totalFileProcessed ? item.totalFileProcessed : 0
+      item?.totalFileProcessed ? item.totalFileProcessed : [0, 0, 0, 0]
     ),
     datas?.response?.map((item) =>
-      item?.totalFileAllocated ? item.totalFileAllocated : 0
+      item?.totalFileAllocated ? item.totalFileAllocated : [0, 0, 0, 0]
     ),
     datas?.response?.map((item) =>
-      item?.totalFilePending ? item.totalFilePending : 0
+      item?.totalFilePending ? item.totalFilePending : [0, 0, 0, 0]
     ),
     datas?.response?.map((item) =>
-      item?.totalFileHold ? item.totalFileHold : 0
+      item?.totalFileHold ? item.totalFileHold : [0, 0, 0, 0]
     ),
     datas?.response?.map((item) =>
-      item?.totalFileDeclined ? item.totalFileDeclined : 0
+      item?.totalFileDeclined ? item.totalFileDeclined : [0, 0, 0, 0]
     ),
   ];
 
@@ -73,36 +72,13 @@ const BarChart = () => {
         show: false,
       },
       showSymbol: false,
-      data: rawData[sid]?.map((d, did) =>
-        totalData[did]
-      ),
+      data: rawData[sid]?.map((d, did) => totalData[did]),
     };
   });
 
-  console.log(series);
   const option = {
     legend: false,
     grid,
-    // tooltip: {
-    //   trigger: "axis",
-    //   axisPointer: {
-    //     type: "shadow",
-    //   },
-    //   formatter: function (params) {
-    //     let tooltipContent = "";
-    //     params.forEach((param) => {
-    //       const seriesName = param.seriesName;
-
-    //       const value = Array.isArray(param.value)
-    //         ? param.value.reduce((acc, curr) => acc + curr, 0)
-    //         : param.value;
-    //       console.log(param.value, value);
-    //       const formattedValue = value === 0 ? value : value + "+";
-    //       tooltipContent += `${seriesName}: ${formattedValue}<br/>`;
-    //     });
-    //     return tooltipContent;
-    //   },
-    // },
     yAxis: {
       type: "value",
     },
@@ -130,36 +106,6 @@ const BarChart = () => {
     dispatch(TeamChart(router));
   }, [router]);
 
-  const options = {
-    xAxis: {
-      type: 'category',
-      data: ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5"]
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        data: [30, 60, 10, 40, 70],
-        type: 'bar',
-        label: {
-          show: true, // Show the label
-          position: 'top' // Position of the label
-        },
-        color: [
-          "#962DFF",
-          // "#BF80FF",
-          "#CC99FF",
-          // "#D4A8FF",
-          "#DBB9FE",
-          "#EAD8FE",
-          "#F4EDFD",
-        ],
-      }
-    ]
-};
-
-
   return (
     <>
       <HeadTitle header="Team Chart Status" />
@@ -177,7 +123,6 @@ const BarChart = () => {
                   <div
                     className={spinSTYles.spinStyle}
                     style={{
-                      
                       paddingTop: "150px",
                       display: "flex",
                       justifyContent: "center",
@@ -189,7 +134,7 @@ const BarChart = () => {
                 ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
                     <ReactECharts
-                      option={options}
+                      option={option}
                       style={{
                         width: "100%",
                         height: "640px",
