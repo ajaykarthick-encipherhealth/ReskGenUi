@@ -24,8 +24,6 @@ const index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const DateRanges = useSelector((state) => state?.AdminDashboardReducers?.dateRange);
-
-  console.log(DateRanges,"t");
   const last30thDate = currentDate?.subtract(31, "day");
   const lastDateWithTime = currentDate?.endOf("day");
 

@@ -173,7 +173,6 @@ const WorkFlow = () => {
   const getWorkFlowDatas = async () => {
     try {
       const data = await workStatusApiAdmin();
-      console.log(data, "res");
       setDateRange(data.response);
     } catch (error) {
       console.log(error);
@@ -182,7 +181,6 @@ const WorkFlow = () => {
   const getWorkFlow = async () => {
     try {
       const data = await workStatusApiAdmin(startDate, endDate, router);
-      console.log(data, "res");
       setDateRange(data.response);
     } catch (error) {
       console.log(error);
@@ -192,7 +190,6 @@ const WorkFlow = () => {
 
   useEffect(() => {
     getWorkFlow();
-    console.log(card1Data, "data");
   }, [startDate, endDate, router]);
 
   return (
