@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TableStyle from "../../table.module.css";
-import { Empty, Progress, Steps, Tooltip } from "antd";
+import { Empty, Progress,Steps, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {
@@ -10,6 +10,7 @@ import {
 import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
+import dayjs from "dayjs";
 
 export const eventStreming = (
   ENDPOINTS,
@@ -471,7 +472,7 @@ function FileProcessingTable({ patinetListAll }) {
               <div className={TableStyle.fileprocessing}>
                 {mappedSteps?.length > 0 &&
                   mappedSteps?.map((step, index) => {
-                    const findData = selectedRowTime?.find(
+                    const findData = selectedRowTime?.data?.find(
                       (item) => item?.processStageChart === step?.info
                     );
                     return (
@@ -479,16 +480,20 @@ function FileProcessingTable({ patinetListAll }) {
                         key={index}
                         className={TableStyle.innerProcessingDiv}
                       >
-                        {selectedRowTime?.length > 0 && findData ? (
-                          <span>
-                            {findData?.createdDate
-                              ? new Date(findData?.createdDate)
-                                  ?.toISOString()
-                                  .substr(11, 8)
-                              : "---"}
-                          </span>
+                        {selectedRowTime?.data?.length > 0 ? (
+                          findData ? (
+                            <span>
+                              {findData?.createdDate
+                                ? dayjs(findData?.createdDate).format(
+                                    "hh:mm:ss A"
+                                  )
+                                : "---"}
+                            </span>
+                          ) : (
+                            "---"
+                          )
                         ) : (
-                          "---"
+                          "Loading..."
                         )}
                       </div>
                     );
