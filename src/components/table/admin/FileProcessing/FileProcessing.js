@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TableStyle from "../../table.module.css";
-import { Empty, Progress,Steps, Tooltip } from "antd";
+import { Empty, Progress, Steps, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {
@@ -137,6 +137,7 @@ function FileProcessingTable({ patinetListAll }) {
   const [activeId, setActiveId] = useState();
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(patinetListAll);
+  const [failedList, setFiledList] = useState();
 
   const selectedRowTime = useSelector(
     (state) => state?.adminPatient?.patientsList
@@ -216,6 +217,8 @@ function FileProcessingTable({ patinetListAll }) {
       stepperVisible?.length > 0 &&
       stepperVisible?.map((value, i) => (i === index ? !value : false));
     setStepperVisible(updatedVisibility);
+    const failed = errStages[data?.processStageChart];
+    setFiledList(failed);
   };
 
   const renderUploadStatus = (data, index) => {
@@ -511,7 +514,7 @@ function FileProcessingTable({ patinetListAll }) {
                   current={currentIndex + 1}
                   labelPlacement="vertical"
                   items={mappedSteps}
-                  percent={count}
+                  percent={failedList?0:count}
                   finishIconBorderColor="#000"
                 />
               </div>
@@ -530,7 +533,6 @@ function FileProcessingTable({ patinetListAll }) {
       </div>
     );
   };
-
   const renderRows = () => {
     return parsedData?.map((data, index) => (
       <tr key={index}>
