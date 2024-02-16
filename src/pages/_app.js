@@ -47,7 +47,7 @@ function MyApp({ Component, pageProps }) {
   }, [msgReply]);
   useEffect(() => {
     const currentPath = window.location.pathname;
-    const role = localStorage.getItem("role");
+    const role = JSON.parse(localStorage.getItem("roles"));
     if (
       currentPath === "/" ||
       currentPath === "/login" ||
@@ -57,30 +57,17 @@ function MyApp({ Component, pageProps }) {
       setValidatePath(true);
     } else {
       setShowTerminal(true);
-      // console.log(role, "resre");
-      // if (role[0] === "reviewer") {
-      //   setValidatePath(
-      //     window.location.pathname.toLowerCase().includes("physician")
-      //   );
-      // } else if (role[0] === "supervisor") {
-      //   setValidatePath(
-      //     window.location.pathname.toLowerCase().includes("l2Auditor")
-      //   );
-      // } else {
-      //   setValidatePath(
-      //     window.location.pathname
-      //       .toLowerCase()
-      //       .includes(role[0]?.toLowerCase())
-      //   );
-      // }
+      setValidatePath(
+        window.location.pathname.toLowerCase().includes(role[0]?.toLowerCase())
+      );
     }
   });
 
   return (
     <>
-      {!validatedPath ? (
+      {/* {!validatedPath ? (
         <UnAuthorized />
-      ) : (
+      ) : ( */}
         <PrimeReactProvider>
           <Provider store={store}>
             {showTerminal && (
@@ -97,7 +84,7 @@ function MyApp({ Component, pageProps }) {
             {showTerminal && <Footer />}
           </Provider>
         </PrimeReactProvider>
-      )}
+      {/* )} */}
     </>
   );
 }
