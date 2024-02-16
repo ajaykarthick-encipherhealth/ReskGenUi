@@ -94,7 +94,6 @@ const Header = () => {
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const accuracy = useSelector((state) => state.auth.accuracy);
   const currentUserInfo = useSelector((state) => state.auth.currentUserInfo);
-
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -303,7 +302,6 @@ const Header = () => {
 
     dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
-    console.log(userRole, "role");
     setCurrentRole(userRole);
     setMenuList(getMenuListByRole(userRoleLocal));
 
@@ -412,33 +410,33 @@ const Header = () => {
                             </Button>
                           </Popover>
                         )}
-
+                        {(userRole !== "admin") && 
                         <Tooltip
                           title={` Quality : ${
-                            userRole === "reviewer"
-                              ? percentage
-                              : Math.round(accuracy?.data?.response)
+                            accuracy?.data?.response
+                              ? Math.round(accuracy?.data?.response)
+                              : 100
                           }%`}
                         >
                           <div className="header-progress">
                             <div style={{ width: 40, height: 40 }}>
                               <CircularProgressbar
                                 value={
-                                  userRole === "reviewer"
-                                    ? percentage
-                                    : Math.round(accuracy?.data?.response)
+                                  accuracy?.data?.response
+                                    ? Math.round(accuracy?.data?.response)
+                                    : Math.round(100)
                                 }
                                 text={`${
-                                  userRole === "reviewer"
-                                    ? percentage
-                                    : Math.round(accuracy?.data?.response)
+                                  accuracy?.data?.response
+                                    ? Math.round(accuracy?.data?.response)
+                                    : Math.round(100)
                                 }%`}
                               />
 
                               {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
                             </div>
                           </div>
-                        </Tooltip>
+                        </Tooltip> }
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
