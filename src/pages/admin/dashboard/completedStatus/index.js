@@ -36,7 +36,7 @@ const CompletedStatus = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
-  const [selectMemberType, setSelectMemberType] = useState('All');
+  const [selectMemberType, setSelectMemberType] = useState("");
 
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
@@ -218,7 +218,7 @@ const CompletedStatus = () => {
             <div className={`d-flex ${styles.selectContainer}`}>
               <div className={styles.select}>
                 <Select
-                  value={selectMemberType}
+                  value={selectMemberType?.length===0?"All":selectMemberType}
                   // placeholder="Select User Type"
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
