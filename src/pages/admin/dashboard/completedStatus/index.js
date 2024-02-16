@@ -166,8 +166,8 @@ const CompletedStatus = () => {
   ];
 
   const options = [
-    { value: "L1AUDITOR", label: "REVIEWER" },
-    { value: "L2AUDITOR", label: "SUPERVISOR" },
+    { value: "REVIEWER", label: "REVIEWER" },
+    { value: "SUPERVISOR", label: "SUPERVISOR" },
   ];
 
   const memberTypeChanges = (e) => {
@@ -218,7 +218,9 @@ const CompletedStatus = () => {
             <div className={`d-flex ${styles.selectContainer}`}>
               <div className={styles.select}>
                 <Select
-                  value={selectMemberType?.length===0?"All":selectMemberType}
+                  value={
+                    selectMemberType?.length === 0 ? "All" : selectMemberType
+                  }
                   // placeholder="Select User Type"
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
