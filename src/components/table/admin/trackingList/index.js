@@ -140,6 +140,53 @@ function TrackingTable({
             <div style={{ textAlign: "center" }}>---</div>
           )}
         </td>
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+          {data.auditAllocatedByFirstName ||
+          data.auditAllocatedByLastName ||
+          data.auditAllocatedByProfileImage ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.auditAllocatedByFirstName,
+                  data.auditAllocatedByLastName,
+                  data.auditAllocatedByProfileImage,
+                  "header"
+                )}
+              </span>
+              <span>
+                {data.auditAllocatedByFirstName} {data.auditAllocatedByLastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
+        </td>
+
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+          {data.auditedAssignedFirstName ||
+          data.auditedAssignedLastName ||
+          data.auditedAssignedProfileImage ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.auditedAssignedFirstName,
+                  data.auditedAssignedLastName,
+                  data.auditedAssignedProfileImage,
+                  "header"
+                )}
+              </span>
+              <span>
+                {data.auditedAssignedFirstName} {data.auditedAssignedLastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
+        </td>
 
         <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
           {data.patientAllocatedFirstName ||
@@ -173,29 +220,7 @@ function TrackingTable({
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
             : "---"}
         </td>
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
-          {data.auditAllocatedByFirstName ||
-          data.auditAllocatedByLastName ||
-          data.auditAllocatedByProfileImage ? (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {" "}
-              <span style={{ marginRight: "10px" }}>
-                {" "}
-                {renderUserPrfoileAvatar(
-                  data.auditAllocatedByFirstName,
-                  data.auditAllocatedByLastName,
-                  data.auditAllocatedByProfileImage,
-                  "header"
-                )}
-              </span>
-              <span>
-                {data.auditAllocatedByFirstName} {data.auditAllocatedByLastName}
-              </span>
-            </div>
-          ) : (
-            <div style={{ textAlign: "center" }}>---</div>
-          )}
-        </td>
+
         <td
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
@@ -212,6 +237,16 @@ function TrackingTable({
           style={{ textAlign: "center" }}
         >
           {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
+        </td>
+
+        <td
+          className={TableStyle.childBorder}
+          onClick={handleTableRowClick}
+          style={{ textAlign: "center" }} 
+        >
+          {data.auditDueDate
+            ? moment(data.auditDueDate).format("MM-DD-YYYY")
+            : "---"}
         </td>
         <td
           className={TableStyle.lastBorder}
@@ -238,10 +273,16 @@ function TrackingTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th style={{ textAlign: "left",paddingLeft:"20px" }}>ALLOCATED BY</th>
-            <th style={{ textAlign: "left",paddingLeft:"20px" }}>ALLOCATED TO</th>
-            <th style={{ textAlign: "center" }}>ALLOCATED DATE</th>
+            <th style={{ textAlign: "left", paddingLeft: "20px" }}>
+              ALLOCATED BY
+            </th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
+            <th style={{ textAlign: "left", paddingLeft: "20px" }}>
+              ALLOCATED TO
+            </th>
+            <th style={{ paddingLeft: "45px" }}>SUPERVISOR</th>
+            <th style={{ textAlign: "center" }}>ALLOCATED DATE</th>
+
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED DATE</th>
             <th
               style={{ textAlign: "center" }}
@@ -259,6 +300,7 @@ function TrackingTable({
                 )}
               </span> */}
             </th>
+            <th style={{ textAlign: "center" }}>AUDIT DUE DATE</th>
             <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
             <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
           </tr>

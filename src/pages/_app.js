@@ -18,12 +18,14 @@ import dynamic from "next/dynamic";
 import { getChatReply } from "../store/actions/DashboardActions";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import UnAuthorized from "../403page";
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const [showTerminal, setShowTerminal] = useState(true);
+  const [validatedPath, setValidatePath] = useState();
 
   const handleNewUserMessage = (newMessage) => {
     dispatch(getChatReply(newMessage));
@@ -45,34 +47,57 @@ function MyApp({ Component, pageProps }) {
   }, [msgReply]);
   useEffect(() => {
     const currentPath = window.location.pathname;
+    const role = localStorage.getItem("role");
     if (
-      currentPath === "/" ||currentPath === "/login" ||
+      currentPath === "/" ||
+      currentPath === "/login" ||
       currentPath?.includes("/twofactorAuthentication/")
     ) {
       setShowTerminal(false);
+      setValidatePath(true);
     } else {
       setShowTerminal(true);
+      // console.log(role, "resre");
+      // if (role[0] === "reviewer") {
+      //   setValidatePath(
+      //     window.location.pathname.toLowerCase().includes("physician")
+      //   );
+      // } else if (role[0] === "supervisor") {
+      //   setValidatePath(
+      //     window.location.pathname.toLowerCase().includes("l2Auditor")
+      //   );
+      // } else {
+      //   setValidatePath(
+      //     window.location.pathname
+      //       .toLowerCase()
+      //       .includes(role[0]?.toLowerCase())
+      //   );
+      // }
     }
   });
 
   return (
     <>
-      <PrimeReactProvider>
-        <Provider store={store}>
-          {showTerminal && (
-            <TerminalComponent
-              handleNewUserMessage={handleNewUserMessage}
-              handleQuickButtonClicked={handleQuickButtonClicked}
-              showBadge={false}
-              emojis={true}
-              title="CogentAI"
-              subtitle="Chat with CogentAI"
-            />
-          )}
-          <Component {...pageProps} />
-          {showTerminal && <Footer />}
-        </Provider>
-      </PrimeReactProvider>
+      {!validatedPath ? (
+        <UnAuthorized />
+      ) : (
+        <PrimeReactProvider>
+          <Provider store={store}>
+            {showTerminal && (
+              <TerminalComponent
+                handleNewUserMessage={handleNewUserMessage}
+                handleQuickButtonClicked={handleQuickButtonClicked}
+                showBadge={false}
+                emojis={true}
+                title="CogentAI"
+                subtitle="Chat with CogentAI"
+              />
+            )}
+            <Component {...pageProps} />
+            {showTerminal && <Footer />}
+          </Provider>
+        </PrimeReactProvider>
+      )}
     </>
   );
 }

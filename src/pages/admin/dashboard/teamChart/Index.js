@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import ReactECharts from "echarts-for-react";
 import HeadTitle from "../../../../components/headtitle";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card";
 import { Empty, Spin } from "antd";
-import Selector from "../../../../components/selector";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -50,6 +49,7 @@ const BarChart = () => {
     }
     totalData?.push(sum);
   }
+
   const grid = {
     left: 100,
     right: 100,
@@ -61,7 +61,7 @@ const BarChart = () => {
     "totalFileAllocated",
     "totalFilePending",
     "totalFileHold",
-    "totalFileDEclined",
+    "totalFileDeclined",
   ]?.map((name, sid) => {
     return {
       name,
@@ -73,36 +73,32 @@ const BarChart = () => {
         show: false,
       },
       showSymbol: false,
-      data: rawData[sid]?.map((d, did) =>
-        totalData[did]
-      ),
+      data: rawData[sid]?.map((d, did) => totalData[did]),
     };
   });
-
-  console.log(series);
   const option = {
     legend: false,
     grid,
-    // tooltip: {
-    //   trigger: "axis",
-    //   axisPointer: {
-    //     type: "shadow",
-    //   },
-    //   formatter: function (params) {
-    //     let tooltipContent = "";
-    //     params.forEach((param) => {
-    //       const seriesName = param.seriesName;
-
-    //       const value = Array.isArray(param.value)
-    //         ? param.value.reduce((acc, curr) => acc + curr, 0)
-    //         : param.value;
-    //       console.log(param.value, value);
-    //       const formattedValue = value === 0 ? value : value + "+";
-    //       tooltipContent += `${seriesName}: ${formattedValue}<br/>`;
-    //     });
-    //     return tooltipContent;
-    //   },
-    // },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      },
+      formatter: function (params) {
+        let tooltipText = params[0].axisValue + '<br/>'; // Display category name
+        let includedSeries = []; // Maintain a list of included series names
+        params.forEach(function (item) {
+          datas.response.forEach(function (info) {
+            if (item.seriesName in info && !includedSeries.includes(item.seriesName)) {
+              tooltipText += item.seriesName + ': ' + info[item.seriesName] + '<br/>'; // Display series name and its corresponding value
+              includedSeries.push(item.seriesName); // Add the series name to the list
+            }
+          });
+        });
+        return tooltipText;
+      }
+  
+    },
     yAxis: {
       type: "value",
     },
@@ -130,36 +126,6 @@ const BarChart = () => {
     dispatch(TeamChart(router));
   }, [router]);
 
-  const options = {
-    xAxis: {
-      type: 'category',
-      data: ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5"]
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        data: [30, 60, 10, 40, 70],
-        type: 'bar',
-        label: {
-          show: true, // Show the label
-          position: 'top' // Position of the label
-        },
-        color: [
-          "#962DFF",
-          // "#BF80FF",
-          "#CC99FF",
-          // "#D4A8FF",
-          "#DBB9FE",
-          "#EAD8FE",
-          "#F4EDFD",
-        ],
-      }
-    ]
-};
-
-
   return (
     <>
       <HeadTitle header="Team Chart Status" />
@@ -177,7 +143,6 @@ const BarChart = () => {
                   <div
                     className={spinSTYles.spinStyle}
                     style={{
-                      
                       paddingTop: "150px",
                       display: "flex",
                       justifyContent: "center",
@@ -189,10 +154,10 @@ const BarChart = () => {
                 ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
                     <ReactECharts
-                      option={options}
+                      option={option}
                       style={{
                         width: "100%",
-                        height: "640px",
+                        height: "680px",
                         marginTop: "-30px",
                         overflowX: "hidden",
                       }}

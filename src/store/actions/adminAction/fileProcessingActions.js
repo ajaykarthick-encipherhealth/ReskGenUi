@@ -26,12 +26,22 @@ export const completedReport = (data) => {
 };
 export const getPatientsList = (patientId, chartId) => {
   return (dispatch) => {
+    dispatch({
+      type: PATIENTS_LIST,
+      payload: {
+        loading:true,
+        data:null
+      },
+    });
     try {
       patientDetails(patientId, chartId).then((response) => {
         if (response) {
           dispatch({
             type: PATIENTS_LIST,
-            payload: response.data,
+            payload: {
+              loading:false,
+              data:response.data
+            },
           });
         }
       });

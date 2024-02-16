@@ -4,17 +4,17 @@ import styles from "./style.module.css";
 import HeadTitle from "../../../../components/headtitle";
 import ReactECharts from "echarts-for-react";
 import Card from "../../../../components/card";
-import Selector from "../../../../components/selector";
 import { useSelector } from "react-redux";
 import {
   getManagers,
   getSppedoMeterDatas,
 } from "../../../../services/adminServices/DashboardService";
 import { useDispatch } from "react-redux";
-import { Empty, Spin } from "antd";
+import { Select, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
-import { renderUserPrfoile } from "../../../../components/headerFilters/functions";
+import completStyle from '../completedStatus/styles.module.css'
 
+const { Option } = Select;
 const SpeedoMeter = () => {
   const dispatch = useDispatch();
   const managerOptions = useSelector(
@@ -116,7 +116,9 @@ const SpeedoMeter = () => {
         },
         data: [
           {
-            value: meterDatas?.data?.response ? meterDatas.data.response.accuracy : 0,
+            value: meterDatas?.data?.response
+              ? meterDatas.data.response.accuracy
+              : 0,
           },
         ],
       },
@@ -128,6 +130,9 @@ const SpeedoMeter = () => {
       dispatch(getSppedoMeterDatas(selectOption));
     }
   }, [selectOption]);
+  const handleClearSelection = () => {
+    setSelectedOption(null);
+  };
 
   return (
     <>
@@ -135,26 +140,40 @@ const SpeedoMeter = () => {
       <div className={styles.card3}>
         <Card borderRadius="28px">
           <div className={styles.header}>
-            <div style={{ width: "85%", overflowX: "scroll" }}>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  position: "relative",
-                  top: "-30px",
-                  left: "-10px",
-                }}
-              >
-                <Selector
-                  selectlabel=""
-                  setSelectedOption={setSelectedOption}
-                  selectOptions={selectorOptions}
-                  defaultSelectValue1="Select Team"
-                />
+            <div style={{ width: "85%", overflow: "hidden" }}>
+              <div>
+                <Select
+                  showSearch
+                  style={{ width: 150 }}
+                  placeholder= "Select manager"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "").includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.label ?? "")
+                      .toLowerCase()
+                      .localeCompare((optionB?.label ?? "").toLowerCase())
+                  }
+                  value={selectOption ==='clear' ?<span style={{color:"#d9d9d9"}}>{"Select manager"}</span>:selectOption}
+                  onChange={(value) => {
+                    setSelectedOption(value);
+                  }}
+                  className={`custom_select_user ${completStyle.custom_select_user}`}
+                >
+                  <Option key={"clear"} onClick={handleClearSelection} 
+                  disabled={selectOption?.length>0?false:true}>
+                    Clear
+               
+                  </Option>
+                  {selectorOptions?.map((option) => (
+                    <Option key={option.value} value={option.value}>
+                      {option.label}
+                    </Option>
+                  ))}
+                </Select>
               </div>
-              {managerOptions?.loading ? (
+              {meterDatas?.loading || managerOptions?.loading ? (
                 <div
                   className={spinSTYles.spinStyle}
                   style={{
@@ -165,35 +184,26 @@ const SpeedoMeter = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Spin loading={managerOptions?.loading} />
+                  <Spin
+                    loading={meterDatas?.loading || managerOptions?.loading}
+                  />
                 </div>
-              ) : managerOptions?.data?.response?.length > 0 ? (
-                option && (
-                  <>
-                    <ReactECharts
-                      option={option}
-                      style={{
-                        width: "100%",
-                        height: "340px",
-                        marginTop: "-30px",
-                        overflowX: "hidden",
-                      }}
-                    />
-                    <div className={styles.compus}>
-                      <div>0%</div>
-                      <div style={{ marginLeft: "20px" }}>{`${
-                        meterDatas?.data?.response
-                          ? meterDatas.data.response.accuracy
-                          : 0
-                      }%`}</div>
-                      <div>100%</div>
-                    </div>
-                  </>
-                )
               ) : (
-                <div className={spinSTYles.spinStyle}>
-                  <Empty />
-                </div>
+                <>
+                  <ReactECharts
+                    option={option}
+                    className={styles.chartOption}
+                  />
+                  <div className={styles.compus}>
+                    <div>0%</div>
+                    <div>{`${
+                      meterDatas?.data?.response
+                        ? meterDatas.data.response.accuracy
+                        : 0
+                    }%`}</div>
+                    <div>100%</div>
+                  </div>
+                </>
               )}
             </div>
           </div>

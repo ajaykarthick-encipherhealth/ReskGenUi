@@ -19,8 +19,8 @@ import { useSelector } from "react-redux";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
-  { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
-  { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
+  { value: "REVIEWER", label: "REVIEWER", role: "REVIEWER" },
+  { value: "SUPERVISOR", label: "SUPERVISOR", role: "SUPERVISOR" },
 ];
 
 const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
@@ -177,10 +177,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       <div style={{ textAlign: "center" }}>---</div>
                     )}
                   </td>
-                  <td
-                    className={TableStyle.childBorder}
-                    
-                  >
+                  <td className={TableStyle.childBorder}>
                     <span>{item?.email ? item?.email : "---"}</span>
                   </td>
                   <td className={TableStyle.childBorder}>
@@ -188,7 +185,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       {item?.role?.length > 0 ? (
                         <>
                           <Popover
-                            trigger="hover" 
+                            trigger="hover"
                             content={
                               item?.role?.length > 1 &&
                               item?.role?.map((data) => (

@@ -10,6 +10,7 @@ import {
 import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
+import dayjs from "dayjs";
 
 export const eventStreming = (
   ENDPOINTS,
@@ -136,6 +137,7 @@ function FileProcessingTable({ patinetListAll }) {
   const [activeId, setActiveId] = useState();
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(patinetListAll);
+  const [failedList, setFiledList] = useState();
 
   const selectedRowTime = useSelector(
     (state) => state?.adminPatient?.patientsList
@@ -215,6 +217,8 @@ function FileProcessingTable({ patinetListAll }) {
       stepperVisible?.length > 0 &&
       stepperVisible?.map((value, i) => (i === index ? !value : false));
     setStepperVisible(updatedVisibility);
+    const failed = errStages[data?.processStageChart];
+    setFiledList(failed);
   };
 
   const renderUploadStatus = (data, index) => {
@@ -471,7 +475,7 @@ function FileProcessingTable({ patinetListAll }) {
               <div className={TableStyle.fileprocessing}>
                 {mappedSteps?.length > 0 &&
                   mappedSteps?.map((step, index) => {
-                    const findData = selectedRowTime?.find(
+                    const findData = selectedRowTime?.data?.find(
                       (item) => item?.processStageChart === step?.info
                     );
                     return (
@@ -479,16 +483,20 @@ function FileProcessingTable({ patinetListAll }) {
                         key={index}
                         className={TableStyle.innerProcessingDiv}
                       >
-                        {selectedRowTime?.length > 0 && findData ? (
-                          <span>
-                            {findData?.createdDate
-                              ? new Date(findData?.createdDate)
-                                  ?.toISOString()
-                                  .substr(11, 8)
-                              : "---"}
-                          </span>
+                        {selectedRowTime?.data?.length > 0 ? (
+                          findData ? (
+                            <span>
+                              {findData?.createdDate
+                                ? dayjs(findData?.createdDate).format(
+                                    "hh:mm:ss A"
+                                  )
+                                : "---"}
+                            </span>
+                          ) : (
+                            "---"
+                          )
                         ) : (
-                          "---"
+                          "Loading..."
                         )}
                       </div>
                     );
@@ -506,7 +514,7 @@ function FileProcessingTable({ patinetListAll }) {
                   current={currentIndex + 1}
                   labelPlacement="vertical"
                   items={mappedSteps}
-                  percent={count}
+                  percent={failedList?0:count}
                   finishIconBorderColor="#000"
                 />
               </div>
@@ -525,7 +533,6 @@ function FileProcessingTable({ patinetListAll }) {
       </div>
     );
   };
-
   const renderRows = () => {
     return parsedData?.map((data, index) => (
       <tr key={index}>

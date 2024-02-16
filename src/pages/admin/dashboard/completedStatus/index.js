@@ -166,8 +166,8 @@ const CompletedStatus = () => {
   ];
 
   const options = [
-    { value: "L1AUDITOR", label: "REVIEWER" },
-    { value: "L2AUDITOR", label: "SUPERVISOR" },
+    { value: "REVIEWER", label: "REVIEWER" },
+    { value: "SUPERVISOR", label: "SUPERVISOR" },
   ];
 
   const memberTypeChanges = (e) => {
@@ -208,6 +208,7 @@ const CompletedStatus = () => {
       )
     );
   }, [currentBtn, selectedMonth, selectedYear, selectUser]);
+
   return (
     <>
       <HeadTitle header="Completed Status" />
@@ -217,8 +218,10 @@ const CompletedStatus = () => {
             <div className={`d-flex ${styles.selectContainer}`}>
               <div className={styles.select}>
                 <Select
-                  value={selectMemberType}
-                  placeholder="Select User Type"
+                  value={
+                    selectMemberType?.length === 0 ? "All" : selectMemberType
+                  }
+                  // placeholder="Select User Type"
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
                   options={options}
@@ -229,6 +232,7 @@ const CompletedStatus = () => {
                 <div className={styles.select}>
                   <Select
                     showSearch
+                    value={selectUser}
                     placeholder="Select User"
                     className={`custom_select_user ${styles.custom_select_user}`}
                     onChange={(e) => onChangeUser(e)}

@@ -30,7 +30,7 @@ const reducers = combineReducers({
   patientDetails: PatientStore,
   todoReducers,
   workFlow: DashboardReducer,
-  // workFlows: DashboardReducers,
+  // workFlows: AdminDashboardReducer,
   report:ReportReducer,
   AuditReport:AuditReportReducer,
   patients:PatientsReducer,

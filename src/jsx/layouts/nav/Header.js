@@ -277,9 +277,9 @@ const Header = () => {
     localStorage.setItem("userRole", key);
     if (key === "admin") {
       router.push("/admin/user");
-    } else if (key === "l1auditor") {
+    } else if (key === "reviewer") {
       router.push("/physician/dashboard");
-    } else if (key === "l2auditor") {
+    } else if (key === "supervisor") {
       router.push("/l2Auditor/dashboard");
     }
   };
@@ -287,9 +287,9 @@ const Header = () => {
     switch (role) {
       case "admin":
         return AdminMenuList;
-      case "l1auditor":
+      case "reviewer":
         return PhysicanMenuList;
-      case "l2auditor":
+      case "supervisor":
         return L2AuditorMenuList;
       default:
         return [];
@@ -303,6 +303,7 @@ const Header = () => {
 
     dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
+    console.log(userRole, "role");
     setCurrentRole(userRole);
     setMenuList(getMenuListByRole(userRoleLocal));
 
@@ -414,7 +415,7 @@ const Header = () => {
 
                         <Tooltip
                           title={` Quality : ${
-                            userRole === "l1auditor"
+                            userRole === "reviewer"
                               ? percentage
                               : Math.round(accuracy?.data?.response)
                           }%`}
@@ -423,12 +424,12 @@ const Header = () => {
                             <div style={{ width: 40, height: 40 }}>
                               <CircularProgressbar
                                 value={
-                                  userRole === "l1auditor"
+                                  userRole === "reviewer"
                                     ? percentage
                                     : Math.round(accuracy?.data?.response)
                                 }
                                 text={`${
-                                  userRole === "l1auditor"
+                                  userRole === "reviewer"
                                     ? percentage
                                     : Math.round(accuracy?.data?.response)
                                 }%`}
@@ -494,9 +495,9 @@ const Header = () => {
                                         {userName}
                                       </span>
                                       <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
-                                        {currentRole == "l1auditor"
+                                        {currentRole == "reviewer"
                                           ? "Reviewer"
-                                          : currentRole == "l2auditor"
+                                          : currentRole == "supervisor"
                                           ? "Supervisor"
                                           : "Admin"}
                                       </span>
@@ -563,9 +564,9 @@ const Header = () => {
                             </span>
                           ) : (
                             <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
-                              {currentRole == "l1auditor"
+                              {currentRole == "reviewer"
                                 ? "Reviewer"
-                                : currentRole == "l2auditor"
+                                : currentRole == "supervisor"
                                 ? "Supervisor"
                                 : "Admin"}
                             </span>

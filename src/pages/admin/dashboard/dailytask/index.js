@@ -22,8 +22,8 @@ const DailyTask = () => {
   const dailyStatusData = useSelector((state) => state.l2Dashboard.dailyTask);
   const dispatch = useDispatch();
   const [roles, setRoles] = useState({
-    L1AUDITOR: 0,
-    L2AUDITOR: 0,
+    REVIEWER: 0,
+    SUPERVISOR: 0,
     ADMIN: 0,
   });
 
@@ -121,7 +121,6 @@ const DailyTask = () => {
     return setCurrentDays(sorted);
   };
   const getChartOption = (res) => {
-    console.log(res);
     return {
       tooltip: {
         trigger: "item",
@@ -140,14 +139,14 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: roles?.L1AUDITOR,
+              value: roles?.REVIEWER,
               name: "Reviewer",
               itemStyle: {
                 color: "#7599FF",
               },
             },
             {
-              value: roles?.L2AUDITOR,
+              value: roles?.SUPERVISOR,
               name: "Supervisor",
               itemStyle: {
                 color: "#64C8FF",
@@ -169,7 +168,9 @@ const DailyTask = () => {
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${roles?.L1AUDITOR + roles?.L2AUDITOR + roles?.ADMIN}}`,
+            formatter: `{b|${
+              roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN
+            }}`,
             backgroundColor: "transparent",
 
             rich: {
@@ -186,7 +187,7 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: roles?.L1AUDITOR + roles?.L2AUDITOR + roles?.ADMIN,
+              value: roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN,
               name: "Total",
               itemStyle: {
                 color: "#fff",
@@ -217,6 +218,7 @@ const DailyTask = () => {
   useEffect(() => {
     getUser();
   }, []);
+
   return (
     <>
       <HeadTitle header="Total Users" />
@@ -305,9 +307,9 @@ const DailyTask = () => {
                                     {item.name === "Admin"
                                       ? roles.ADMIN
                                       : item.name === "Supervisor"
-                                      ? roles.L2AUDITOR
+                                      ? roles.SUPERVISOR
                                       : item.name === "Reviewer"
-                                      ? roles.L1AUDITOR
+                                      ? roles.REVIEWER
                                       : data.declined}
                                   </div>
                                 </div>
