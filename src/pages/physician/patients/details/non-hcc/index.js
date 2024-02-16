@@ -31,9 +31,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Avatar, Tooltip } from "antd";
 import Spinner from "../../../../../components/loadingSpinner";
-import {
-  getProviderDetails,
-} from "../../../../../services/PatientsListSevice";
+import { getProviderDetails } from "../../../../../services/PatientsListSevice";
 
 const NonHcc = ({ patientNonHccResult }) => {
   const navigate = useRouter();
@@ -373,6 +371,11 @@ const NonHcc = ({ patientNonHccResult }) => {
         });
         result.invalidDisease.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
+          var providerList = [];
+          providerList.push({
+            providerName: res.providerName,
+            authorizedProvider: true,
+          });
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -382,7 +385,7 @@ const NonHcc = ({ patientNonHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res.provider,
+            providerName: providerList,
           });
         });
 
@@ -1318,6 +1321,34 @@ const NonHcc = ({ patientNonHccResult }) => {
     setInputValue({ ...inputValue, [key]: value });
   };
 
+  const getProviderNameList = (data) => {
+    var value = data?.map((res) =>
+      res.providerName ? (
+        <Badge
+          className={
+            res.authorizedProvider === true
+              ? `mt-2 text-start ${visitStyles.provider_name}`
+              : `mt-2 text-start ${visitStyles.un_provider_name}`
+          }
+        >
+          <i>
+            {" "}
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              style={{
+                size: 10,
+                color:
+                  res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
+              }}
+            />
+          </i>
+          {res.providerName}
+        </Badge>
+      ) : null
+    );
+    return value;
+  };
+
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>
@@ -1434,31 +1465,9 @@ const NonHcc = ({ patientNonHccResult }) => {
                                       <div
                                         className={`${visitStyles.encounterAndSectionHeader}`}
                                       >
-                                        {data?.providerName?.map((res) => (
-                                          <Badge
-                                            className={
-                                              res.authorizedProvider === true
-                                                ? `mt-2 text-start ${visitStyles.provider_name}`
-                                                : `mt-2 text-start ${visitStyles.un_provider_name}`
-                                            }
-                                          >
-                                            <i>
-                                              {" "}
-                                              <FontAwesomeIcon
-                                                icon={faCircleUser}
-                                                style={{
-                                                  size: 10,
-                                                  color:
-                                                    res.authorizedProvider ===
-                                                    true
-                                                      ? "#ffa500"
-                                                      : "#ff0000cc",
-                                                }}
-                                              />
-                                            </i>
-                                            {res.providerName}
-                                          </Badge>
-                                        ))}
+                                        {getProviderNameList(
+                                          data?.providerName
+                                        )}
                                         {getEncounterDateBackground(
                                           data.encounterDateSplit
                                         )}

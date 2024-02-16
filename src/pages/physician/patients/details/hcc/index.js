@@ -288,6 +288,7 @@ const Hcc = ({ patientHccResult }) => {
   const [listPageNumber, setListPageNumber] = useState([]);
   const [activeTabNumber, setActiveTabNumber] = useState(0);
   const [meatModalTitle, setMeatModalTitle] = useState("");
+  const [fileLoading, setFileLoading] = useState(false);
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -357,22 +358,24 @@ const Hcc = ({ patientHccResult }) => {
   }, [activeTabNumber]);
 
   useEffect(() => {
-    console.log(findFileKeyword);
     setDocumentLoaded(true);
     if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
+        setMeatModalTitle(selectMeatName);
         if (fileInitialPage != null) {
           setTargetPages(
             (targetPage) => targetPage.pageIndex === fileInitialPage
           );
         } else {
-          setTargetPages((targetPage) => targetPage.pageIndex);
-          setMeatModalTitle(selectMeatName);
+          setTargetPages(null);
         }
         highlight({
           keyword: findFileKeyword,
         });
+        setTimeout(() => {
+          setFileLoading(false);
+        }, 1000);
       }, 1000);
     }
   }, [fileInitialPage, findFileKeyword, fileModalTitle]);
@@ -463,6 +466,11 @@ const Hcc = ({ patientHccResult }) => {
         var validEncounterDateArray = [];
         validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
+          var providerList = [];
+          providerList.push({
+            providerName: res.providerName,
+            authorizedProvider: true,
+          });
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -472,7 +480,7 @@ const Hcc = ({ patientHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res.provider,
+            providerName: providerList,
             dbDescription: res.dbDescription,
             isMostSpecific: res.isMostSpecific,
             getPlace: "Hcc",
@@ -509,6 +517,11 @@ const Hcc = ({ patientHccResult }) => {
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
+            var providerList = [];
+            providerList.push({
+              providerName: res.providerName,
+              authorizedProvider: true,
+            });
             deleteHccList.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -518,7 +531,7 @@ const Hcc = ({ patientHccResult }) => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
-              providerName: res.provider,
+              providerName: providerList,
             });
           });
         }
@@ -531,6 +544,11 @@ const Hcc = ({ patientHccResult }) => {
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
+            var providerList = [];
+            providerList.push({
+              providerName: res.providerName,
+              authorizedProvider: true,
+            });
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -540,7 +558,7 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Radio",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
-              providerName: res.provider,
+              providerName: providerList,
             });
           });
 
@@ -583,6 +601,11 @@ const Hcc = ({ patientHccResult }) => {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
+            var providerList = [];
+            providerList.push({
+              providerName: res.providerName,
+              authorizedProvider: true,
+            });
             if (res.isHccValid == true) {
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -594,7 +617,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
                 defaultPosition: res.defaultPosition,
-                providerName: res.provider,
+                providerName: providerList,
               });
             } else {
               // suggestListAll.push({
@@ -615,7 +638,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
-                providerName: res.provider,
+                providerName: providerList,
               });
             }
           });
@@ -831,7 +854,7 @@ const Hcc = ({ patientHccResult }) => {
 
         var meatHeaderList = [];
 
-        meatCri.map((res, index) => {
+        meatCri?.map((res, index) => {
           if (
             res.monitorCapturedFromHeader != "" &&
             res.monitorCapturedFromHeader != null
@@ -888,7 +911,7 @@ const Hcc = ({ patientHccResult }) => {
           setMeatColorCodeList(dublicateRemoveSecondArr);
         });
 
-        meatCri.map((res, index) => {
+        meatCri?.map((res, index) => {
           if (res.category == "Invalid") {
             nonHccMeatListArr.push({
               diagnosisCode: res.diagnosisCode,
@@ -1315,18 +1338,35 @@ const Hcc = ({ patientHccResult }) => {
     setMeatQueriedDetailsModal(false);
     setIsAddComboCode(false);
     setFindFileKeyword(null);
+    setFileLoading(false);
   };
 
-  const handleOpenModal = (value, disDescription, encounterDate) => {
+  const handleOpenModal = async (value, disDescription, encounterDate) => {
+    setFileLoading(true);
     var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
       </div>
     );
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}`
+    );
+    var result = response.data.response;
+    if (result?.length != 0) {
+      var pageNumber = result[0] - 1;
+      setFileInitialPage(pageNumber);
+      setFileDosPageNumber(pageNumber);
+    } else {
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+    }
     setMeatModalTitle(dotLoading);
     setIsLoadingSection(true);
-    setFileInitialPage(null);
     setFindFileKeyword(splitPoint);
     setIsModalOpen(true);
     var dataset = value + " / (" + disDescription + ")";
@@ -1344,6 +1384,9 @@ const Hcc = ({ patientHccResult }) => {
     if (result?.length) {
       var pageNumber = result[0] - 1;
       setFileInitialPage(pageNumber);
+    } else {
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
     }
   };
 
@@ -1354,6 +1397,7 @@ const Hcc = ({ patientHccResult }) => {
     encounterDate,
     actualDescription
   ) => {
+    setFileLoading(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
@@ -1367,6 +1411,18 @@ const Hcc = ({ patientHccResult }) => {
       var pageNumber = result[0] - 1;
       setFileInitialPage(pageNumber);
       setFileDosPageNumber(pageNumber);
+      console.log(pageNumber, fileInitialPage);
+      if (pageNumber == fileInitialPage) {
+        setFileLoading(false);
+        notification.warning({
+          message: "This detail also same page",
+          placement: "top",
+          duration: 1,
+        });
+      }
+    } else {
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
     }
 
     // getSectionPageNumber(headerNames, encounterDate);
@@ -1391,6 +1447,7 @@ const Hcc = ({ patientHccResult }) => {
     actualDescription,
     testModal
   ) => {
+    setFileLoading(true);
     setDocumentLoaded(false);
     if (
       documentPlace == "Radio" ||
@@ -1399,19 +1456,16 @@ const Hcc = ({ patientHccResult }) => {
     ) {
       handleOpenModalRadiology(value, disDescription, true);
     } else if (documentPlace == "Lab" || whereCome == "Lab") {
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
       var splitPoint = disDescription.substring(" ", 40);
+      setFindFileKeyword(splitPoint);
       setTimeout(() => {
-        highlight({
-          keyword: splitPoint,
-          matchCase: true,
-          // wholeWords:true
-        });
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
       }, 2000);
       setDocumentLoaded(true);
       var dataset = value + " - (" + disDescription + ")";
-      // setSelectMeatName(dataset);
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
       setIsModalOpenLab(true);
@@ -1530,20 +1584,17 @@ const Hcc = ({ patientHccResult }) => {
     // getSectionResult(value.toLowerCase());
   };
   const handleOpenModalRadiology = (value, disDescription, radiologyCheck) => {
+    setFileInitialPage(null);
+    setFileDosPageNumber(null);
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
+      setFindFileKeyword(splitPoint);
       setTimeout(() => {
-        highlight({
-          keyword: splitPoint,
-          // matchCase: true,
-          // wholeWords:true
-        });
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
       }, 2000);
       setDocumentLoaded(true);
       var dataset = value + " - (" + disDescription + ")";
-      // setSelectMeatName(dataset);
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
       setIsModalOpenRadiology(true);
@@ -2312,7 +2363,7 @@ const Hcc = ({ patientHccResult }) => {
         var dublicateRemoveSecondArr = [];
         var nonHccMeatListArr = [];
 
-        meatCri.map((res, index) => {
+        meatCri?.map((res, index) => {
           if (
             res.monitorCapturedFromHeader != "" &&
             res.monitorCapturedFromHeader != null
@@ -2369,7 +2420,7 @@ const Hcc = ({ patientHccResult }) => {
           setMeatColorCodeList(dublicateRemoveSecondArr);
         });
 
-        meatCri.map((res, index) => {
+        meatCri?.map((res, index) => {
           if (res.category == "Invalid") {
             nonHccMeatListArr.push({
               diagnosisCode: res.diagnosisCode,
@@ -2597,6 +2648,44 @@ const Hcc = ({ patientHccResult }) => {
     });
   };
 
+  const getEncounterDateBackgroundHcc = (value) => {
+    return value?.map((res) => {
+      const result = encounterDateMatching.filter((res2) => res2.name == res);
+      var backColor = result[0]?.colors;
+      var sectionMapArr = (
+        <span
+          onClick={() => getEncounterDetailsHcc(res)}
+          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+        >
+          <i>
+            <CalendarOutlined className={visitStyles.calenderIcon} />
+          </i>
+          {moment(res).format("MMM DD")}
+        </span>
+      );
+      return sectionMapArr;
+    });
+  };
+
+  const getEncounterDetailsHcc = async (date) => {
+    const findPageNumber = listPageNumber.filter((i) => i.date === date);
+    if (findPageNumber.length != 0) {
+      setFileLoading(true);
+      setIsModalOpenValidCodes(true);
+      var date = findPageNumber[0].date;
+      if (findPageNumber[0].startPage.length != 0) {
+        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+        var splitPoint = date.substring(" ", 5);
+        setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+        setFindFileKeyword(splitPoint);
+        if (pageNumber == fileInitialPage) {
+        }
+      }
+    }
+  };
+
   const getEncounterDateBackground = (value) => {
     return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -2619,6 +2708,7 @@ const Hcc = ({ patientHccResult }) => {
   const getEncounterDetails = async (date) => {
     const findPageNumber = listPageNumber.filter((i) => i.date === date);
     if (findPageNumber.length != 0) {
+      setFileLoading(true);
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
         var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
@@ -2627,6 +2717,14 @@ const Hcc = ({ patientHccResult }) => {
         var splitPoint = date.substring(" ", 5);
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         setFindFileKeyword(splitPoint);
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
       }
     }
     // var dotLoading = (
@@ -2886,27 +2984,30 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getProviderNameList = (data) => {
-    var value = data?.map((res) => (
-      <Badge
-        className={
-          res.authorizedProvider === true
-            ? `mt-2 text-start ${visitStyles.provider_name}`
-            : `mt-2 text-start ${visitStyles.un_provider_name}`
-        }
-      >
-        <i>
-          {" "}
-          <FontAwesomeIcon
-            icon={faCircleUser}
-            style={{
-              size: 10,
-              color: res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
-            }}
-          />
-        </i>
-        {res.providerName}
-      </Badge>
-    ));
+    var value = data?.map((res) =>
+      res.providerName ? (
+        <Badge
+          className={
+            res.authorizedProvider === true
+              ? `mt-2 text-start ${visitStyles.provider_name}`
+              : `mt-2 text-start ${visitStyles.un_provider_name}`
+          }
+        >
+          <i>
+            {" "}
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              style={{
+                size: 10,
+                color:
+                  res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
+              }}
+            />
+          </i>
+          {res.providerName}
+        </Badge>
+      ) : null
+    );
     return value;
   };
 
@@ -2947,6 +3048,15 @@ const Hcc = ({ patientHccResult }) => {
 
   return (
     <>
+      {fileLoading ? (
+        <div className={styles.overlay_style}>
+          <div className={styles.overlay__inner_style}>
+            <div className={styles.overlay__content_style}>
+              <span className={styles.spinner_style}></span>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className={visitStyles.visitdata_tab_body}>
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1 ">
@@ -3200,7 +3310,7 @@ const Hcc = ({ patientHccResult }) => {
                                           {getProviderNameList(
                                             data?.providerName
                                           )}
-                                          {getEncounterDateBackground(
+                                          {getEncounterDateBackgroundHcc(
                                             data.encounterDateSplit
                                           )}
                                         </div>
@@ -3444,7 +3554,7 @@ const Hcc = ({ patientHccResult }) => {
                                                   {getProviderNameList(
                                                     data?.providerName
                                                   )}
-                                                  {getEncounterDateBackground(
+                                                  {getEncounterDateBackgroundHcc(
                                                     data.encounterDateSplit
                                                   )}
                                                 </div>
@@ -3632,7 +3742,7 @@ const Hcc = ({ patientHccResult }) => {
                                             {getProviderNameList(
                                               data?.providerName
                                             )}
-                                            {getEncounterDateBackground(
+                                            {getEncounterDateBackgroundHcc(
                                               data.encounterDateSplit
                                             )}
                                           </div>
@@ -5590,7 +5700,12 @@ const Hcc = ({ patientHccResult }) => {
                 <Viewer
                   fileUrl={selectFileURLRadiology}
                   plugins={[defaultLayoutPluginInstance]}
-                  onDocumentLoad={handleDocumentLoad}
+                  onDocumentLoad={handleDocumentLoadFile}
+                  renderLoader={(percentages) => (
+                    <div style={{ width: "240px" }}>
+                      <ProgressBar progress={Math.round(percentages)} />
+                    </div>
+                  )}
                 />
               </div>
             </Worker>
@@ -5623,7 +5738,12 @@ const Hcc = ({ patientHccResult }) => {
                 <Viewer
                   fileUrl={labReportFile}
                   plugins={[defaultLayoutPluginInstance]}
-                  onDocumentLoad={handleDocumentLoad}
+                  onDocumentLoad={handleDocumentLoadFile}
+                  renderLoader={(percentages) => (
+                    <div style={{ width: "240px" }}>
+                      <ProgressBar progress={Math.round(percentages)} />
+                    </div>
+                  )}
                 />
               </div>
             </Worker>
