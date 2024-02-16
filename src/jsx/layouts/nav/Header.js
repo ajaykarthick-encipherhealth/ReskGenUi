@@ -277,9 +277,9 @@ const Header = () => {
     localStorage.setItem("userRole", key);
     if (key === "admin") {
       router.push("/admin/user");
-    } else if (key === "REVIEWER") {
+    } else if (key === "reviewer") {
       router.push("/physician/dashboard");
-    } else if (key === "SUPERVISOR") {
+    } else if (key === "supervisor") {
       router.push("/l2Auditor/dashboard");
     }
   };
@@ -287,9 +287,9 @@ const Header = () => {
     switch (role) {
       case "admin":
         return AdminMenuList;
-      case "REVIEWER":
+      case "reviewer":
         return PhysicanMenuList;
-      case "SUPERVISOR":
+      case "supervisor":
         return L2AuditorMenuList;
       default:
         return [];
@@ -415,7 +415,7 @@ const Header = () => {
 
                         <Tooltip
                           title={` Quality : ${
-                            userRole === "REVIEWER"
+                            userRole === "reviewer"
                               ? percentage
                               : Math.round(accuracy?.data?.response)
                           }%`}
@@ -424,12 +424,12 @@ const Header = () => {
                             <div style={{ width: 40, height: 40 }}>
                               <CircularProgressbar
                                 value={
-                                  userRole === "REVIEWER"
+                                  userRole === "reviewer"
                                     ? percentage
                                     : Math.round(accuracy?.data?.response)
                                 }
                                 text={`${
-                                  userRole === "REVIEWER"
+                                  userRole === "reviewer"
                                     ? percentage
                                     : Math.round(accuracy?.data?.response)
                                 }%`}
