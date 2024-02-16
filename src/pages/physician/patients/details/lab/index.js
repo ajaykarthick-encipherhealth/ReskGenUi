@@ -32,9 +32,7 @@ import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import Select from "react-select";
 import { Modal } from "antd";
-import {
-  getProviderDetails,
-} from "../../../../../services/PatientsListSevice";
+import { getProviderDetails } from "../../../../../services/PatientsListSevice";
 import Spinner from "../../../../../components/loadingSpinner";
 
 const Lab = ({}) => {
@@ -332,6 +330,11 @@ const Lab = ({}) => {
         validDiseaseNewRes = result.validDisease[dateofService];
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
+          var providerList = [];
+          providerList.push({
+            providerName: res.providerName,
+            authorizedProvider: true,
+          });
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -341,7 +344,7 @@ const Lab = ({}) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res.provider,
+            providerName: providerList,
           });
         });
         var capturedSectionsColorsMatching = [];
@@ -803,27 +806,30 @@ const Lab = ({}) => {
   };
 
   const getProviderNameList = (data) => {
-    var value = data?.map((res) => (
-      <Badge
-        className={
-          res.authorizedProvider === true
-            ? `mt-2 text-start ${visitStyles.provider_name}`
-            : `mt-2 text-start ${visitStyles.un_provider_name}`
-        }
-      >
-        <i>
-          {" "}
-          <FontAwesomeIcon
-            icon={faCircleUser}
-            style={{
-              size: 10,
-              color: res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
-            }}
-          />
-        </i>
-        {res.providerName}
-      </Badge>
-    ));
+    var value = data?.map((res) =>
+      res.providerName ? (
+        <Badge
+          className={
+            res.authorizedProvider === true
+              ? `mt-2 text-start ${visitStyles.provider_name}`
+              : `mt-2 text-start ${visitStyles.un_provider_name}`
+          }
+        >
+          <i>
+            {" "}
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              style={{
+                size: 10,
+                color:
+                  res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+              }}
+            />
+          </i>
+          {res.providerName}
+        </Badge>
+      ) : null
+    );
     return value;
   };
 
@@ -1327,9 +1333,7 @@ const Lab = ({}) => {
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
-                                     {getProviderNameList(
-                                                    data?.providerName
-                                      )}
+                                    {getProviderNameList(data?.providerName)}
                                     {getEncounterDateBackground(
                                       data.encounterDateSplit
                                     )}

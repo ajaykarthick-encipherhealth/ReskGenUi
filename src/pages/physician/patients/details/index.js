@@ -149,7 +149,7 @@ const Details = ({}) => {
   const [totalElements, setTotalElements] = useState(10);
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
   const [allocateClicked, setAllocateClicked] = useState(false);
-  const [error, setError] = useState({year: ''})
+  const [error, setError] = useState({ year: "" });
 
   const flagPostList = [
     {
@@ -1953,7 +1953,7 @@ const Details = ({}) => {
                               ALLOCATE
                             </Dropdown.Button>
                           </div>
-                        ) : userRole == "l2auditor" ? (
+                        ) : userRole == "SUPERVISOR" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown.Button
                               type="primary"
