@@ -2904,6 +2904,7 @@ const Hcc = ({ patientHccResult }) => {
     setSelectPreviousCode(null);
     setFlagTagActive(false);
     setIsDosSelect(false);
+    setFileInitialPage(0);
     switch (number) {
       case 1:
         setFlagTagActive(true);
@@ -2960,6 +2961,7 @@ const Hcc = ({ patientHccResult }) => {
     var pageNumber = str_array[0];
     var findData = str_array[1];
     setFindFileKeyword(null);
+    setFileLoading(true);
     var pageIndex = pageNumber - 1;
     setFileInitialPage(pageIndex);
     setFileDosPageNumber(pageIndex);
