@@ -22,8 +22,8 @@ const DailyTask = () => {
   const dailyStatusData = useSelector((state) => state.l2Dashboard.dailyTask);
   const dispatch = useDispatch();
   const [roles, setRoles] = useState({
-    L1AUDITOR: 0,
-    L2AUDITOR: 0,
+    REVIEWER: 0,
+    SUPERVISOR: 0,
     ADMIN: 0,
   });
 
@@ -139,14 +139,14 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: roles?.L1AUDITOR,
+              value: roles?.REVIEWER,
               name: "Reviewer",
               itemStyle: {
                 color: "#7599FF",
               },
             },
             {
-              value: roles?.L2AUDITOR,
+              value: roles?.SUPERVISOR,
               name: "Supervisor",
               itemStyle: {
                 color: "#64C8FF",
@@ -168,7 +168,7 @@ const DailyTask = () => {
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${roles?.L1AUDITOR + roles?.L2AUDITOR + roles?.ADMIN}}`,
+            formatter: `{b|${roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN}}`,
             backgroundColor: "transparent",
 
             rich: {
@@ -185,7 +185,7 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: roles?.L1AUDITOR + roles?.L2AUDITOR + roles?.ADMIN,
+              value: roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN,
               name: "Total",
               itemStyle: {
                 color: "#fff",
@@ -263,6 +263,7 @@ const DailyTask = () => {
                             className={styles.container}
                             style={{ width: "308%" }}
                           >
+                            {console.log(data)}
                             <ReactECharts
                               option={getChartOption(
                                 data?.allocated,
