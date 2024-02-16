@@ -10,14 +10,15 @@ import { NotificationReducer } from "./reducers/NotificationReducer";
 //import { reducer as reduxFormReducer } from 'redux-form';
 import { createWrapper } from "next-redux-wrapper";
 import { AdminPatientsReducer } from "./reducers/adminRecucers/fileProcessingReducer";
-import { AdminPatientsListReducer } from "./reducers/adminRecucers/patientsReducers"
+import { AdminPatientsListReducer } from "./reducers/adminRecucers/patientsReducers";
 import { AdminUsersReducer } from "./reducers/adminRecucers/usewrsReducer";
 // import { DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
 import { WorkReducers } from "./reducers/l2Reducers/AuditReducer";
 import { L2DashboardReducers } from "./reducers/l2Reducers/DashboardReducer";
-import {L2UserReducers} from "./reducers/l2Reducers/usersReducers"
+import { L2UserReducers } from "./reducers/l2Reducers/usersReducers";
 import { AuditReportReducer } from "./reducers/l2Reducers/AuditReportReducer";
 import { AdminDashboardReducer } from "./reducers/adminRecucers/dashboardReducer";
+import { AdminReportReducer } from "./reducers/adminRecucers/ReportReducer";
 
 const middleware = applyMiddleware(thunk);
 
@@ -31,18 +32,18 @@ const reducers = combineReducers({
   todoReducers,
   workFlow: DashboardReducer,
   // workFlows: AdminDashboardReducer,
-  report:ReportReducer,
-  AuditReport:AuditReportReducer,
-  patients:PatientsReducer,
-  AuditWork:  WorkReducers,
-  notificationDatas:NotificationReducer,
-  adminPatient:AdminPatientsReducer,
-  adminList:AdminPatientsListReducer,
-  adminUsers:AdminUsersReducer,
-  l2Dashboard:L2DashboardReducers,
-  AdminDashboardReducers:AdminDashboardReducer,
-  l2User:L2UserReducers,
-
+  report: ReportReducer,
+  AuditReport: AuditReportReducer,
+  patients: PatientsReducer,
+  AuditWork: WorkReducers,
+  notificationDatas: NotificationReducer,
+  adminPatient: AdminPatientsReducer,
+  adminList: AdminPatientsListReducer,
+  adminUsers: AdminUsersReducer,
+  l2Dashboard: L2DashboardReducers,
+  AdminDashboardReducers: AdminDashboardReducer,
+  adminReport: AdminReportReducer,
+  l2User: L2UserReducers,
 
   //form: reduxFormReducer,
 });
