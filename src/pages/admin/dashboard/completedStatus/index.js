@@ -36,7 +36,7 @@ const CompletedStatus = () => {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
-  const [selectMemberType, setSelectMemberType] = useState("");
+  const [selectMemberType, setSelectMemberType] = useState('All');
 
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
@@ -208,6 +208,7 @@ const CompletedStatus = () => {
       )
     );
   }, [currentBtn, selectedMonth, selectedYear, selectUser]);
+console.log(selectMemberType)
   return (
     <>
       <HeadTitle header="Completed Status" />
@@ -218,7 +219,7 @@ const CompletedStatus = () => {
               <div className={styles.select}>
                 <Select
                   value={selectMemberType}
-                  placeholder="Select User Type"
+                  // placeholder="Select User Type"
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
                   options={options}
@@ -229,6 +230,7 @@ const CompletedStatus = () => {
                 <div className={styles.select}>
                   <Select
                     showSearch
+                    value={selectUser}
                     placeholder="Select User"
                     className={`custom_select_user ${styles.custom_select_user}`}
                     onChange={(e) => onChangeUser(e)}
