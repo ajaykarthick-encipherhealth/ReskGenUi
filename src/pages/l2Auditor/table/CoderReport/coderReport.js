@@ -349,7 +349,10 @@ function CoderReport({
                         {processstatusBodyTemplate(row)}
                       </td>
 
-                      <td className={TableStyle.lastBorder}>
+                      <td
+                        className={TableStyle.lastBorder}
+                        style={{ textAlign: "center" }}
+                      >
                         <input
                           type="checkbox"
                           onChange={() => {
@@ -426,7 +429,10 @@ function CoderReport({
                       <td className={TableStyle.childBorder}>
                         {processstatusBodyTemplate(row)}{" "}
                       </td>
-                      <td className={TableStyle.lastBorder}>
+                      <td
+                        className={TableStyle.lastBorder}
+                        style={{ textAlign: "center" }}
+                      >
                         <input
                           type="checkbox"
                           onChange={() => {
