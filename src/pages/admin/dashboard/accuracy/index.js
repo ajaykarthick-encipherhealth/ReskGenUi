@@ -159,7 +159,6 @@ const Accuracy = () => {
     ],
   };
   useEffect(() => {
-    console.log(currentBtn);
     if (currentBtn === "Daily") {
       dispatch(getAccuracyDaily(selectedYear, selectedMonth));
     }

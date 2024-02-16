@@ -121,7 +121,6 @@ const DailyTask = () => {
     return setCurrentDays(sorted);
   };
   const getChartOption = (res) => {
-    console.log(res);
     return {
       tooltip: {
         trigger: "item",
