@@ -216,6 +216,7 @@ const DailyTask = () => {
   useEffect(() => {
     getUser();
   }, []);
+ 
   return (
     <>
       <HeadTitle header="Total Users" />
@@ -304,9 +305,9 @@ const DailyTask = () => {
                                     {item.name === "Admin"
                                       ? roles.ADMIN
                                       : item.name === "Supervisor"
-                                      ? roles.L2AUDITOR
+                                      ? roles.SUPERVISOR
                                       : item.name === "Reviewer"
-                                      ? roles.L1AUDITOR
+                                      ? roles.REVIEWER
                                       : data.declined}
                                   </div>
                                 </div>
