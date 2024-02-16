@@ -47,11 +47,11 @@ export const PhysicanMenuList = [
     to: "/physician/report",
     childRoute: "/physician/report/individualreport",
   },
-  {
-    title: "Working Status",
-    iconStyle: SVGICON.workingStatus,
-    to: "/physician/workingstatus",
-  },
+  // {
+  //   title: "Working Status",
+  //   iconStyle: SVGICON.workingStatus,
+  //   to: "/physician/workingstatus",
+  // },
 ];
 export const AdminMenuList = [
   {
