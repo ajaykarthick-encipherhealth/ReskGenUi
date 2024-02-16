@@ -208,7 +208,7 @@ const CompletedStatus = () => {
       )
     );
   }, [currentBtn, selectedMonth, selectedYear, selectUser]);
-console.log(selectMemberType)
+
   return (
     <>
       <HeadTitle header="Completed Status" />
