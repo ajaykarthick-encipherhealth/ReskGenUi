@@ -47,7 +47,7 @@ function MyApp({ Component, pageProps }) {
   }, [msgReply]);
   useEffect(() => {
     const currentPath = window.location.pathname;
-    const role = JSON.parse(localStorage.getItem("roles"));
+    const role = localStorage.getItem("role");
     if (
       currentPath === "/" ||
       currentPath === "/login" ||
@@ -57,9 +57,22 @@ function MyApp({ Component, pageProps }) {
       setValidatePath(true);
     } else {
       setShowTerminal(true);
-      setValidatePath(
-        window.location.pathname.toLowerCase().includes(role[0]?.toLowerCase())
-      );
+      // console.log(role, "resre");
+      // if (role[0] === "reviewer") {
+      //   setValidatePath(
+      //     window.location.pathname.toLowerCase().includes("physician")
+      //   );
+      // } else if (role[0] === "supervisor") {
+      //   setValidatePath(
+      //     window.location.pathname.toLowerCase().includes("l2Auditor")
+      //   );
+      // } else {
+      //   setValidatePath(
+      //     window.location.pathname
+      //       .toLowerCase()
+      //       .includes(role[0]?.toLowerCase())
+      //   );
+      // }
     }
   });
 
