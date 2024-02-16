@@ -266,7 +266,7 @@ const Hcc = ({ patientHccResult }) => {
   const [dragFileDate, setdragFileDate] = useState(false);
   const [inputValueFileDate, setInputValueFileDate] = useState("");
   const [patientFileDTO, setPatientFileDTO] = useState("");
-  const [fileInitialPage, setFileInitialPage] = useState(0);
+  const [fileInitialPage, setFileInitialPage] = useState(null);
   const [sectionAllColor, setSectionAllColor] = useState([]);
 
   const [findFileKeyword, setFindFileKeyword] = useState("");
@@ -1409,9 +1409,6 @@ const Hcc = ({ patientHccResult }) => {
     var result = response.data.response;
     if (result?.length) {
       var pageNumber = result[0] - 1;
-      setFileInitialPage(pageNumber);
-      setFileDosPageNumber(pageNumber);
-      console.log(pageNumber, fileInitialPage);
       if (pageNumber == fileInitialPage) {
         setFileLoading(false);
         notification.warning({
@@ -1420,6 +1417,8 @@ const Hcc = ({ patientHccResult }) => {
           duration: 1,
         });
       }
+      setFileInitialPage(pageNumber);
+      setFileDosPageNumber(pageNumber);
     } else {
       setFileInitialPage(null);
       setFileDosPageNumber(null);
@@ -2712,11 +2711,6 @@ const Hcc = ({ patientHccResult }) => {
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
         var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
-        setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
-        var splitPoint = date.substring(" ", 5);
-        setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-        setFindFileKeyword(splitPoint);
         if (pageNumber == fileInitialPage) {
           setFileLoading(false);
           notification.warning({
@@ -2725,6 +2719,11 @@ const Hcc = ({ patientHccResult }) => {
             duration: 1,
           });
         }
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+        var splitPoint = date.substring(" ", 5);
+        setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+        setFindFileKeyword(splitPoint);
       }
     }
     // var dotLoading = (
