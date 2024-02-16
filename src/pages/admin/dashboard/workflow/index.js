@@ -40,7 +40,6 @@ const WorkFlow = () => {
     (state) => state?.AdminDashboardReducers?.data
   );
 
-  console.log(worlFlowData, "work");
   const DateRanges = useSelector((state) => state?.workFlows?.dateRange);
   const [dateRange, setDateRange] = useState({
     processedStatus: {
@@ -72,7 +71,6 @@ const WorkFlow = () => {
     setOpenPicker(!openPicker);
   };
 
-  console.log(worlFlowData?.data?.response?.processedStatus, "range");
   const card1Data = [
     {
       id: 1,
@@ -186,8 +184,6 @@ const WorkFlow = () => {
       console.log(error);
     }
   };
-  console.log(startDate, endDate, "test");
-
   useEffect(() => {
     getWorkFlow();
   }, [startDate, endDate, router]);

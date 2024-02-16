@@ -133,7 +133,7 @@ const SpeedoMeter = () => {
   const handleClearSelection = () => {
     setSelectedOption(null);
   };
-  console.log(selectOption)
+
   return (
     <>
       <HeadTitle header="Accuracy" />
