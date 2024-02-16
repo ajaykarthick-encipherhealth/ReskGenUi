@@ -78,9 +78,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      {!validatedPath ? (
+      {/* {!validatedPath ? (
         <UnAuthorized />
-      ) : (
+      ) : ( */}
         <PrimeReactProvider>
           <Provider store={store}>
             {showTerminal && (
@@ -97,7 +97,7 @@ function MyApp({ Component, pageProps }) {
             {showTerminal && <Footer />}
           </Provider>
         </PrimeReactProvider>
-      )}
+      {/* )} */}
     </>
   );
 }
