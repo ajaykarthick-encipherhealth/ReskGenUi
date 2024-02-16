@@ -287,7 +287,7 @@ const Header = () => {
     switch (role) {
       case "admin":
         return AdminMenuList;
-      case "":
+      case "REVIEWER":
         return PhysicanMenuList;
       case "SUPERVISOR":
         return L2AuditorMenuList;
