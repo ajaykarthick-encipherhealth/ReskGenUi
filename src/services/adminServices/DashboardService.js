@@ -8,7 +8,7 @@ export const ACCURACY_MONTHLY = "ACCURACY_MONTHLY";
 export const ACCURACY_WEEKLY = "ACCURACY_WEEKLY";
 export const ACCURACY_DAILY = "ACCURACY_DAILY";
 // chnaged
-export async function workStatusApiAdmin(startDate ="", endDate ="", router) {
+export async function workStatusApiAdmin(startDate = "", endDate = "", router) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
@@ -267,7 +267,7 @@ export const TeamChart = () => async (dispatch) => {
 export const getManagers = () => async (dispatch) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
-  const role = "L1AUDITOR";
+  const role = "REVIEWER";
   try {
     dispatch({
       type: MANAGERS,

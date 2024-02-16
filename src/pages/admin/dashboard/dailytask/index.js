@@ -168,7 +168,9 @@ const DailyTask = () => {
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN}}`,
+            formatter: `{b|${
+              roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN
+            }}`,
             backgroundColor: "transparent",
 
             rich: {
@@ -216,7 +218,7 @@ const DailyTask = () => {
   useEffect(() => {
     getUser();
   }, []);
- 
+
   return (
     <>
       <HeadTitle header="Total Users" />
@@ -263,7 +265,6 @@ const DailyTask = () => {
                             className={styles.container}
                             style={{ width: "308%" }}
                           >
-                            {console.log(data)}
                             <ReactECharts
                               option={getChartOption(
                                 data?.allocated,
