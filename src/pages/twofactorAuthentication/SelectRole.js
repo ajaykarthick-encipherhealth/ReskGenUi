@@ -25,9 +25,9 @@ const SelectRole = () => {
       ? role?.map((info) => ({
           value: info,
           label:
-            info == "L1AUDITOR"
+            info == "REVIEWER"
               ? "REVIEWER"
-              : info == "L2AUDITOR"
+              : info == "SUPERVISOR"
               ? "SUPERVISOR"
               : "ADMIN",
         }))
