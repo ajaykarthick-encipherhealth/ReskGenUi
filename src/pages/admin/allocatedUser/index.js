@@ -443,7 +443,7 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-2">
+                          <div className="d-flex col-xl-2">
                             {isPatientList && (
                               <div className={reportStyles.backDiv}>
                                 <button
@@ -532,7 +532,7 @@ export default function Patient() {
                               </div>
                             </>
                           ) : (
-                            <div className="col-xl-2"></div>
+                            <div className="col-xl-6"></div>
                           )}
                           <div className="col-xl-4 mt-4">
                             {isPatientList || activeTab === 1 ? (

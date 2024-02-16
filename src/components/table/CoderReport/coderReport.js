@@ -249,7 +249,7 @@ function CoderReport({
                 <th>HCC </th>
                 <th>FLAG </th>
                 <th className={TableStyle.rowStyle2}>STATUS</th>
-                <th>
+                <th >
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
                   >
@@ -275,10 +275,7 @@ function CoderReport({
           <tbody className={TableStyle.bodytable}>
             {reportListAll?.data?.length > 0 ? (
               reportListAll?.data?.map((row, index) => (
-                <tr
-                  key={index}
-                 
-                >
+                <tr key={index}>
                   {row?.auditedBy && (
                     <td className={TableStyle.firstTdBorder}>
                       <Badge.Ribbon
@@ -328,7 +325,7 @@ function CoderReport({
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
-                      <div className={TableStyle.rowAlignment}>
+                        <div className={TableStyle.rowAlignment}>
                           {row?.auditedBy ? row?.auditedBy : "---"}
                         </div>
                       </td>
@@ -404,7 +401,7 @@ function CoderReport({
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
-                      <div className={TableStyle.rowAlignment}>
+                        <div className={TableStyle.rowAlignment}>
                           {row?.auditedBy ? row?.auditedBy : "---"}
                         </div>
                       </td>
@@ -426,7 +423,7 @@ function CoderReport({
                       <td className={TableStyle.childBorder}>
                         {processstatusBodyTemplate(row)}{" "}
                       </td>
-                      <td className={TableStyle.lastBorder}>
+                      <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
                         <input
                           type="checkbox"
                           onChange={() => {
