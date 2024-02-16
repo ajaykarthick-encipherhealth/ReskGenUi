@@ -219,20 +219,20 @@ const index = () => {
                         isSearch={true}
                         searchlabel="Search By Patient Id / Name"
                         // auditedStatus
-                        selectlabel2="Audited Status"
+                        selectlabel2="Audit Status"
                         isSelector2={true}
                         setSelectedOption2={setSelectedAuditOption}
                         selectOptions2={AuditOptions}
                         defaultSelectValue2={"Select Status"}
                         //audit due date
-                        audipickerlabel1="Audited Due Date"
+                        audipickerlabel1="Audit Due Date"
                         audidefaultStartDate={""}
                         audidefaultEndDate={""}
                         audisetStartDate={setAduitDueStartDate}
                         audisetEndDate={setAduitDueEndDate}
                         isAduitDueDate={true}
                         // audited completed date
-                        audipickerlabe2="Audited Completed Date"
+                        audipickerlabe2="Audit Completed Date"
                         audidefaultStartDate2={""}
                         audidefaultEndDate2={""}
                         audisetStartDate2={setAduitCompletedStartDate}
@@ -240,7 +240,7 @@ const index = () => {
                         isAuditCompleteDate={true}
                         // allocated by
                         isAuditAllocatedBy={true}
-                        audiallocatedBylabel="Audited AllocatedBy"
+                        audiallocatedBylabel="Audit AllocatedBy"
                         auditallocatedByOptions={generateOptionsList(
                           filteredList
                         )}

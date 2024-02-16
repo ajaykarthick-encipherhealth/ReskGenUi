@@ -38,12 +38,8 @@ import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import Select from "react-select";
 import { Modal } from "antd";
 import { useRouter } from "next/navigation";
-import {
-  getProviderDetails,
-} from "../../../../../services/PatientsListSevice";
+import { getProviderDetails } from "../../../../../services/PatientsListSevice";
 import Spinner from "../../../../../components/loadingSpinner";
-
-
 
 const Radiology = ({}) => {
   const navigate = useRouter();
@@ -391,6 +387,11 @@ const Radiology = ({}) => {
         var validDisArray = [];
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
+          var providerList = [];
+          providerList.push({
+            providerName: res.providerName,
+            authorizedProvider: true,
+          });
           validDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -400,7 +401,7 @@ const Radiology = ({}) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res.provider,
+            providerName: providerList,
           });
         });
 
@@ -997,27 +998,30 @@ const Radiology = ({}) => {
   };
 
   const getProviderNameList = (data) => {
-    var value = data?.map((res) => (
-      <Badge
-        className={
-          res.authorizedProvider === true
-            ? `mt-2 text-start ${visitStyles.provider_name}`
-            : `mt-2 text-start ${visitStyles.un_provider_name}`
-        }
-      >
-        <i>
-          {" "}
-          <FontAwesomeIcon
-            icon={faCircleUser}
-            style={{
-              size: 10,
-              color: res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
-            }}
-          />
-        </i>
-        {res.providerName}
-      </Badge>
-    ));
+    var value = data?.map((res) =>
+      res.providerName ? (
+        <Badge
+          className={
+            res.authorizedProvider === true
+              ? `mt-2 text-start ${visitStyles.provider_name}`
+              : `mt-2 text-start ${visitStyles.un_provider_name}`
+          }
+        >
+          <i>
+            {" "}
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              style={{
+                size: 10,
+                color:
+                  res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+              }}
+            />
+          </i>
+          {res.providerName}
+        </Badge>
+      ) : null
+    );
     return value;
   };
 
