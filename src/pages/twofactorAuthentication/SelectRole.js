@@ -65,8 +65,8 @@ const SelectRole = () => {
     setRoleError(false);
     const rolesMapping = {
       admin: { userRole: "admin", route: "/admin/dashboard" },
-      REVIEWER: { userRole: "REVIEWER", route: "/physician/dashboard" },
-      SUPERVISOR: { userRole: "SUPERVISOR", route: "/l2Auditor/dashboard" },
+      reviewer: { userRole: "reviewer", route: "/physician/dashboard" },
+      supervisor: { userRole: "supervisor", route: "/l2Auditor/dashboard" },
     };
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
