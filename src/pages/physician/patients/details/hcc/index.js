@@ -2647,13 +2647,13 @@ const Hcc = ({ patientHccResult }) => {
     });
   };
 
-  const getEncounterDateBackgroundHcc = (value) => {
+  const getEncounterDateBackgroundHcc = (value, code) => {
     return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
         <span
-          onClick={() => getEncounterDetailsHcc(res)}
+          onClick={() => getEncounterDetailsHcc(res, code)}
           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
@@ -2666,9 +2666,17 @@ const Hcc = ({ patientHccResult }) => {
     });
   };
 
-  const getEncounterDetailsHcc = async (date) => {
+  const getEncounterDetailsHcc = async (date, code) => {
     const findPageNumber = listPageNumber.filter((i) => i.date === date);
     if (findPageNumber.length != 0) {
+      var dataset = code + " - (" + date + ")";
+      var headerName =
+        patientDocumentResult.patientId +
+        " / " +
+        patientDocumentResult.patientName +
+        " / " +
+        dataset;
+      setFileModalTitle(headerName);
       setFileLoading(true);
       setIsModalOpenValidCodes(true);
       var date = findPageNumber[0].date;
@@ -3310,7 +3318,8 @@ const Hcc = ({ patientHccResult }) => {
                                             data?.providerName
                                           )}
                                           {getEncounterDateBackgroundHcc(
-                                            data.encounterDateSplit
+                                            data.encounterDateSplit,
+                                            data.diagnosisCode
                                           )}
                                         </div>
                                         {data.getPlace == "Insulin" ? (
@@ -3554,7 +3563,8 @@ const Hcc = ({ patientHccResult }) => {
                                                     data?.providerName
                                                   )}
                                                   {getEncounterDateBackgroundHcc(
-                                                    data.encounterDateSplit
+                                                    data.encounterDateSplit,
+                                                    data.diagnosisCode
                                                   )}
                                                 </div>
                                                 {data.getPlace == "Lab" ? (
@@ -3742,7 +3752,8 @@ const Hcc = ({ patientHccResult }) => {
                                               data?.providerName
                                             )}
                                             {getEncounterDateBackgroundHcc(
-                                              data.encounterDateSplit
+                                              data.encounterDateSplit,
+                                              data.diagnosisCode
                                             )}
                                           </div>
                                         </div>
