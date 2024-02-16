@@ -147,3 +147,14 @@
   border: 1px solid black;
   border-collapse: collapse;
 }
+
+.v24B_color {
+  background: #ceceda;
+}
+
+.v28B_color {
+  background: #b2b2c8;
+}
+.total_score {
+  background: #8888aa;
+}
