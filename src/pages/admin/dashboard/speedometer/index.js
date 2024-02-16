@@ -12,6 +12,7 @@ import {
 import { useDispatch } from "react-redux";
 import { Select, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
+import completStyle from '../completedStatus/styles.module.css'
 
 const { Option } = Select;
 const SpeedoMeter = () => {
@@ -154,10 +155,11 @@ const SpeedoMeter = () => {
                       .toLowerCase()
                       .localeCompare((optionB?.label ?? "").toLowerCase())
                   }
-                  value={selectOption ==='clear' ?"Select manager":selectOption}
+                  value={selectOption ==='clear' ?<span style={{color:"#d9d9d9"}}>{"Select manager"}</span>:selectOption}
                   onChange={(value) => {
                     setSelectedOption(value);
                   }}
+                  className={`custom_select_user ${completStyle.custom_select_user}`}
                 >
                   <Option key={"clear"} onClick={handleClearSelection} 
                   disabled={selectOption?.length>0?false:true}>
