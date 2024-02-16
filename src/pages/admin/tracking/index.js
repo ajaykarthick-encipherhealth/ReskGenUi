@@ -13,7 +13,7 @@ import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
 import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
-import HeaderFilters from "../../../components/headerFilters";
+import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/admin/trackingList";
 import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
@@ -73,6 +73,15 @@ const statusOptions = [
   { label: "HOLD", value: "HOLD", status: 0 },
 ];
 
+const auditStatusOptions = [
+  { label: "ALL", value: "" },
+  { label: "AUDITHOLD", value: "AUDITHOLD", status: 2 },
+  { label: "REAUDIT", value: "REAUDIT", status: 0 },
+  { label: "AUDIT_PENDING", value: "AUDIT_PENDING", status: 0 },
+  { label: "NOT_AUDIT", value: "NOT_AUDIT", status: 0 },
+  { label: "AUDITED", value: "AUDITED", status: 0 },
+];
+
 export default function Patient() {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -110,6 +119,8 @@ export default function Patient() {
   const [allocatedEndDate, setAllocatedEndDate] = useState("");
   const [auditedStartDate, setAuditedStartDate] = useState("");
   const [auditedEndDate, setAuditedEnsDate] = useState("");
+  const [auditedDueStartDate, setAuditedDueStartDate] = useState("");
+  const [auditedDueEndDate, setAuditedDueEndDate] = useState("");
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
@@ -118,6 +129,14 @@ export default function Patient() {
     HOLD: 0,
   });
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
+  const [auditSelectedOption, setAuditSelectedOption] = useState("");
+  const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
+console.log(auditedDueStartDate, auditedDueEndDate);
+console.log(auditSelectedOption);
+// new changes
+
+const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
+
 
   const allocatedToOptions = [
     { label: "All", value: "All" },
@@ -151,6 +170,11 @@ export default function Patient() {
       allocatedStartDate,
       allocatedEndDate,
       selAllocatedBy,
+      auditedDueStartDate,
+      auditedDueEndDate,
+      auditSelectedOption,
+      selAuditAllocatedBy,
+      auditSelAllocatedTo
     };
     dispatch(getTrackingList(datas));
   }, [
@@ -167,6 +191,11 @@ export default function Patient() {
     allocatedStartDate,
     allocatedEndDate,
     selAllocatedBy,
+    auditedDueStartDate, 
+    auditedDueEndDate,
+    auditSelectedOption,
+    selAuditAllocatedBy,
+    auditSelAllocatedTo 
   ]);
 
   useEffect(() => {
@@ -204,10 +233,13 @@ export default function Patient() {
           auditAllocatedByLastName: res.auditAllocatedByLastName,
           patientAllocatedFirstName: res.patientAllocatedFirstName,
           patientAllocatedLastName: res.patientAllocatedLastName,
-
           patientAllocatedProfileImage: res.patientAllocatedProfileImage,
+          auditedAssignedFirstName: res.auditedAssignedFirstName,
+          auditedAssignedLastName: res.auditedAssignedLastName,
+          auditedAssignedProfileImage: res.auditedAssignedProfileImage,
           allocatedByProfileImage: res.allocatedByProfileImage,
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
+          auditDueDate: res.auditDueDate
         });
       });
       setTrackChart(info?.processStatusCount);
@@ -406,6 +438,15 @@ export default function Patient() {
                       <div className="tbl-caption row d-flex align-items-center">
                         <div className="tbl-caption col-xl-10 align-items-center">
                           <HeaderFilters
+                          // audioAllocatedTo
+                          isAuditAllocatedToSelector={true}
+                            auditAllocatedTolabel="Audit Allocated to"
+                            auditallocatedToOptoons={generateOptionsList(
+                              filteredList
+                            )}
+                            setAuditSelAllocatedTo={setAuditSelAllocatedTo}
+
+
                             setSearch={setSearchTextValue}
                             isSearch={true}
                             searchlabel="Search By Patient Name / Id"
@@ -465,6 +506,16 @@ export default function Patient() {
                             isNextRow={true}
                             defaultShow={true}
                             defaultSize={"col-xl-2"}
+
+                            auditStatusOptions={auditStatusOptions}
+                            setAuditSelectedOption={setAuditSelectedOption}
+                           
+                              setStartDate6={setAuditedDueStartDate}
+                              setEndDate6={setAuditedDueEndDate}
+                              setSelAuditAllocatedBy={setSelAuditAllocatedBy}
+                              auditAllocatedByOptoons={generateOptionsList(
+                                filteredList
+                              )}
                           />
                         </div>
                         <div className="col-xl-2">
