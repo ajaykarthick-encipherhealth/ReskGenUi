@@ -362,13 +362,13 @@ const Hcc = ({ patientHccResult }) => {
     if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
+        setMeatModalTitle(selectMeatName);
         if (fileInitialPage != null) {
           setTargetPages(
             (targetPage) => targetPage.pageIndex === fileInitialPage
           );
         } else {
           setTargetPages(null);
-          setMeatModalTitle(selectMeatName);
         }
         highlight({
           keyword: findFileKeyword,
