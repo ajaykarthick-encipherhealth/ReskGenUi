@@ -23,6 +23,12 @@ const items = [
   { value: "SUPERVISOR", label: "SUPERVISOR", role: "SUPERVISOR" },
 ];
 
+// const itemss = [
+//   { value: "ADMIN", label: "Admin", role: "admin" },
+//   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
+//   { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
+// ];
+
 const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const usersData = useSelector((state) => state.adminUsers.usersData);
 
