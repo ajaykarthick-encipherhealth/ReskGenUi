@@ -18,10 +18,7 @@ const BarChart = () => {
   );
 
   const datas = teamChartData?.data ? teamChartData?.data : [];
-  const teams = [];
-  for (var i = 0; i <= datas?.response?.length; i++) {
-    teams?.push(`Team${i}`);
-  }
+  const teams = datas?.response?.map(info=>`${info?.firstName}${info?.lastName}`);
 
   const colors = [
     "#962DFF",
@@ -111,6 +108,10 @@ const BarChart = () => {
     xAxis: {
       type: "category",
       data: teams,
+      axisLabel: {
+        rotate: 360, 
+        interval: 0,
+      },
     },
     yAxis: {
       type: "value",
