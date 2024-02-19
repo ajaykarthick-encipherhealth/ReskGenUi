@@ -1,0 +1,193 @@
+.classModal {
+  width: 95% !important;
+  border-radius: 18px;
+  height:100% !important;
+  overflow-y: scroll !important;
+}
+.exceltable {
+  width: 100% !important;
+  border-collapse: collapse;
+  border: 2px solid #c7c7c7;
+  font-family: Arial, sans-serif;
+}
+
+.exceltable th,
+.exceltable td {
+  border: 2px solid #c7c7c7;
+  padding: 5px;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: start;
+  background-color: #fff;
+}
+
+.exceltable th {
+  background-color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+tbody.csvBody tr:nth-child(odd) td {
+  background-color: #F6F8FE;
+}
+.cont1 {
+  width: 20%;
+  /* height:100vh; */
+  margin-top: -80px;
+  overflow-y: scroll;
+  border-right: 0.5px solid #c7c7c7;
+  margin-right: 20px;
+  font-weight: 700;
+}
+.tablediv {
+  width: 80%;
+  margin-right: 20px;
+}
+.container1 {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.container {
+  width: auto;
+  display: flex;
+  position: relative;
+  top: 50px;
+  margin: 30px 10px;
+  justify-content: space-between;
+  /* padding:20px; */
+}
+
+.innerFlex {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.list{
+  margin: 40px 0px 0 20px;
+  height:100vh;
+  overflow-y: scroll;
+}
+.divContainer {
+  height: 30px;
+  display: flex;
+  margin: 0 5px;
+  /* border:1px solid red; */
+  border-radius: 8px;
+  padding-left: 5px;
+  box-shadow: 0 0px 6px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+.sort {
+  border-radius: 8px;
+  box-shadow: 0 0px 6px 0 rgba(0, 0, 0, 0.2);
+  padding: 0 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #fff;
+}
+.search {
+  border: none !important;
+}
+.search:focus {
+  border: none !important;
+  box-shadow: none !important;
+}
+.user {
+  min-height: 30px;
+  width: 100%;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  display:flex;
+  /* padding-left: 10px; */
+}
+.date {
+  font-size: 12px;
+  color: #7e7e7e;
+  font-weight: 400;
+}
+.excelStyle {
+  width: 56px;
+  height: 22px;
+  border-radius: 8px;
+  background-color: #e7cbf5;
+  color: #a63ed9;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  padding-top: 2px;
+}
+.csvSTyle {
+  width: 56px;
+  height: 22px;
+  border-radius: 8px;
+  background-color: #e7cbb1;
+  color: #9c6530;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  padding-top: 2px;
+}
+.download {
+  width: 110px;
+  height: 32px;
+  border-radius: 8px;
+  background: #b8e0cc;
+  color: #48a878;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  padding-top: 2px;
+ 
+}
+.readOption, .readOption:hover, .readOption:focus,
+.readOption:focus {
+  width: 110px;
+  height: 32px;
+  border-radius: 8px;
+  background: #FFDA99;
+  color: #FFA400 !important;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  padding-top: 2px;
+  border:none !important;
+ 
+}
+.download1 {
+    width: auto;
+    height: 22px;
+    border-radius: 8px;
+    background: #b8e0cc;
+    color: #48a878;
+    font-size: 12px;
+    font-weight: 400;
+    padding:2px 5px 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+  }
+.read {
+    width: auto;
+    height: 22px;
+    border-radius: 8px;
+    background: #FFDA99;
+    color: #FFA400;
+    font-size: 12px;
+    font-weight: 400;
+    padding:2px 5px 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+  }
+.download:active,
+.download:hover {
+  background: #b8e0cc;
+  color: #48a878 !important;
+  border: none !important;
+}
+.header {
+  color: #221c1c;
+  font-weight: 400;
+  font-size: 14px;
+}
