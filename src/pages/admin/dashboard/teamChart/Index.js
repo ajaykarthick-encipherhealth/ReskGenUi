@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import ReactECharts from "echarts-for-react";
 import HeadTitle from "../../../../components/headtitle";
 import styles from "./styles.module.css";
@@ -18,114 +18,116 @@ const BarChart = () => {
   );
 
   const datas = teamChartData?.data ? teamChartData?.data : [];
-  const teams = [];
-  for (var i = 0; i <= datas?.response?.length; i++) {
-    teams?.push(`Team${i}`);
-  }
+  const teams = datas?.response?.map(info=>`${info?.firstName}${info?.lastName}`);
 
-  const rawData = [
-    datas?.response?.map((item) =>
-      item?.totalFileProcessed ? item.totalFileProcessed : 0
-    ),
-    datas?.response?.map((item) =>
-      item?.totalFileAllocated ? item.totalFileAllocated : 0
-    ),
-    datas?.response?.map((item) =>
-      item?.totalFilePending ? item.totalFilePending : 0
-    ),
-    datas?.response?.map((item) =>
-      item?.totalFileHold ? item.totalFileHold : 0
-    ),
-    datas?.response?.map((item) =>
-      item?.totalFileDeclined ? item.totalFileDeclined : 0
-    ),
+  const colors = [
+    "#962DFF",
+    // "#BF80FF",
+    "#CC99FF",
+    // "#D4A8FF",
+    "#DBB9FE",
+    "#EAD8FE",
+    "#F4EDFD",
   ];
-
-  const totalData = [];
-  for (let i = 0; i < rawData[0]?.length; ++i) {
-    let sum = 0;
-    for (let j = 0; j < rawData?.length; ++j) {
-      sum += rawData[j][i];
-    }
-    totalData?.push(sum);
-  }
-
-  const grid = {
-    left: 100,
-    right: 100,
-    top: 50,
-    bottom: 50,
-  };
-  const series = [
-    "totalFileProcessed",
-    "totalFileAllocated",
-    "totalFilePending",
-    "totalFileHold",
-    "totalFileDeclined",
-  ]?.map((name, sid) => {
-    return {
-      name,
+  var series = [
+    {
+      data: datas?.response?.map((item) =>
+        item?.totalFileAllocated ? item.totalFileAllocated : 0
+      ),
       type: "bar",
-      stack: "total",
-      barWidth: "50%",
+      stack: "a",
+      name: "totalFileAllocated",
+    },
+    {
+      data: datas?.response?.map((item) =>
+        item?.totalFileProcessed ? item.totalFileProcessed : 0
+      ),
+      type: "bar",
+      stack: "a",
+      name: "totalFileProcessed",
+    },
 
-      label: {
-        show: false,
-      },
-      showSymbol: false,
-      data: rawData[sid]?.map((d, did) => totalData[did]),
-    };
-  });
-  const option = {
-    legend: false,
-    grid,
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'shadow'
-      },
-      formatter: function (params) {
-        let tooltipText = params[0].axisValue + '<br/>'; // Display category name
-        let includedSeries = []; // Maintain a list of included series names
-        params.forEach(function (item) {
-          datas.response.forEach(function (info) {
-            if (item.seriesName in info && !includedSeries.includes(item.seriesName)) {
-              tooltipText += item.seriesName + ': ' + info[item.seriesName] + '<br/>'; // Display series name and its corresponding value
-              includedSeries.push(item.seriesName); // Add the series name to the list
-            }
-          });
-        });
-        return tooltipText;
+    {
+      data: datas?.response?.map((item) =>
+        item?.totalFilePending ? item.totalFilePending : 0
+      ),
+      type: "bar",
+      stack: "a",
+      name: "totalFilePending",
+    },
+    {
+      data: datas?.response?.map((item) =>
+        item?.totalFileDeclined ? item.totalFileDeclined : 0
+      ),
+      type: "bar",
+      stack: "a",
+      name: "totalFileDeclined",
+      barWidth:30
+    },
+  ];
+  const stackInfo = {};
+  for (let i = 0; i < series[0].data?.length; ++i) {
+    for (let j = 0; j < series?.length; ++j) {
+      const stackName = series[j]?.stack;
+      if (!stackName) {
+        continue;
       }
-  
+      if (!stackInfo[stackName]) {
+        stackInfo[stackName] = {
+          stackStart: [],
+          stackEnd: [],
+        };
+      }
+      const info = stackInfo[stackName];
+      const data = series[j]?.data[i];
+      if (data && data !== "-") {
+        if (info.stackStart[i] == null) {
+          info.stackStart[i] = j;
+        }
+        info.stackEnd[i] = j;
+      }
+    }
+  }
+  for (let i = 0; i < series?.length; ++i) {
+    const data = series[i].data;
+    const info = stackInfo[series[i]?.stack];
+    for (let j = 0; j < series[i]?.data?.length; ++j) {
+      const isEnd = info.stackEnd[j] === i;
+      const topBorder = isEnd ? 20 : 0;
+      const bottomBorder = 0;
+      data[j] = {
+        value: data[j],
+        itemStyle: {
+          borderRadius: [topBorder, topBorder, bottomBorder, bottomBorder],
+          color: colors[i],
+        },
+      };
+    }
+  }
+  const option = {
+    xAxis: {
+      type: "category",
+      data: teams,
+      axisLabel: {
+        rotate: 360, 
+        interval: 0,
+      },
     },
     yAxis: {
       type: "value",
     },
-    xAxis: {
-      type: "category",
-      data: teams,
-    },
-    series: series.map((serie, index) => ({
-      ...serie,
-      itemStyle: {
-        color: [
-          "#962DFF",
-          // "#BF80FF",
-          "#CC99FF",
-          // "#D4A8FF",
-          "#DBB9FE",
-          "#EAD8FE",
-          "#F4EDFD",
-        ][index],
+    series: series,
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
       },
-    })),
+    },
   };
-
   useEffect(() => {
     dispatch(TeamChart(router));
   }, [router]);
-
+ 
   return (
     <>
       <HeadTitle header="Team Chart Status" />
