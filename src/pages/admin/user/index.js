@@ -34,9 +34,10 @@ const options3 = [
 const RoleList = [
   { value: "", label: "ALL" },
   { value: "ADMIN", label: "ADMIN" },
-  { value: "L1AUDITOR", label: "L1AUDITOR" },
-  { value: "L2AUDITOR", label: "L2AUDITOR" },
+  { value: "REVIEWER", label: "REVIEWER" },
+  { value: "SUPERVISOR", label: "SUPERVISOR" },
 ];
+
 
 const intialValues = {
   firstName: "",
@@ -237,7 +238,7 @@ const UserList = () => {
                         defaultSelectValue1={""}
                         //  selecte Role
                         selectlabel2="Select Role"
-                        selectOptions2={[]}
+                        selectOptions2={RoleList}
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                         // computation date
