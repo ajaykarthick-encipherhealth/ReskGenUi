@@ -199,7 +199,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                               ))
                             }
                           >
-                            <span>{capitalizeFirstLetter(item?.role[0])}</span>
+                            <span>{item?.role?.map(data=>(capitalizeFirstLetter(data))).join(",")}</span>
                           </Popover>
                         </>
                       ) : (
