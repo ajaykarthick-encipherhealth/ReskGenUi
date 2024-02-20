@@ -190,17 +190,11 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     <div className={TableStyle.rowStyle2}>
                       {item?.role?.length > 0 ? (
                         <>
-                          <Popover
-                            trigger="hover"
-                            content={
-                              item?.role?.length > 1 &&
-                              item?.role?.map((data) => (
-                                <div> {capitalizeFirstLetter(data)}</div>
-                              ))
-                            }
-                          >
-                            <span>{item?.role?.map(data=>(capitalizeFirstLetter(data))).join(",")}</span>
-                          </Popover>
+                          <span>
+                            {item?.role
+                              ?.map((data) => capitalizeFirstLetter(data))
+                              .join(",")}
+                          </span>
                         </>
                       ) : (
                         "---"
