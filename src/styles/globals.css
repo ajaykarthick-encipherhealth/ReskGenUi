@@ -8948,7 +8948,7 @@ button:focus {
 
 .header-logo img {
   position: relative;
-  width: 118%;
+  width: 100%;
   height: 54px;
   left:-20px; 
 }
