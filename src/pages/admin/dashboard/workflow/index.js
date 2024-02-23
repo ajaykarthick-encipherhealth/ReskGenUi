@@ -197,10 +197,10 @@ const WorkFlow = () => {
       <HeadTitle
         header={
           !DateRanges || DateRanges?.clear
-            ? `Last 30 days work flow`
+            ? `Overall Workflow`
             : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
                 .subtract(1, "day")
-                .format("MM-DD-YYYY")}`
+                .format("MM-DD-YYYY")} (Last 30 Days Workflow)`
         }
         icon={calender}
         handleOpen={handleOpen}
