@@ -98,6 +98,7 @@ const UserList = () => {
       setRoleValue([value]);
     }
   };
+  
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
@@ -126,6 +127,11 @@ const UserList = () => {
       if (response?.data?.status === "SUCCESS") {
         setAddUser(false);
         setUseAdd(true);
+        setFormData({
+          ...intialValues,
+          userName: "", 
+          confirmPassword: "",
+        });
         setErrors({
           email: "",
           password: "",
@@ -206,10 +212,12 @@ const UserList = () => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
     var orgId = localStorage.getItem("orgId");
+    setFormData(intialValues);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
+ 
     dispatch(
       getUsers({ pageCount, search, startDate, endDate, status, role, sort })
     );
@@ -290,7 +298,7 @@ const UserList = () => {
         </div>
 
         <Offcanvas
-          onHide={setAddPatientId}
+          onHide={setAddPatientId }
           show={addPatientId}
           className="offcanvas-end"
           placement="end"
@@ -357,9 +365,16 @@ const UserList = () => {
             </div>
           </div>
         </Offcanvas>
+        {console.log(formData,"test")}
         <Offcanvas
           show={addUser}
-          onHide={setAddUser}
+          onHide={() => {setAddUser(false);
+            setFormData(intialValues);
+            setErrors({
+              email: "",
+              password: "",
+              confirmPass: "",
+            })}}
           className="offcanvas-end  offcanvas-md-size"
           placement="end"
         >
@@ -401,6 +416,7 @@ const UserList = () => {
                       required
                       type="text"
                       onChange={handleChange}
+                      placeholder="Enter First Name"
                     />
                   </div>
                   <div className="col-xl-6 mb-3">
@@ -412,6 +428,7 @@ const UserList = () => {
                       required
                       type="text"
                       onChange={handleChange}
+                      placeholder="Enter Last Name"
                     />
                   </div>
                   <div className="col-xl-6 mb-3">
@@ -423,6 +440,7 @@ const UserList = () => {
                       required
                       type="email"
                       onChange={handleChange}
+                      placeholder="Enter Email"
                     />
                   </div>
                   <div className="col-xl-6 mb-3">
@@ -435,6 +453,7 @@ const UserList = () => {
                         required
                         type="text"
                         onChange={handleChange}
+                        placeholder="Enter User Name"
                       />
                     </div>
                   </div>
@@ -447,6 +466,7 @@ const UserList = () => {
                       required
                       type="number"
                       onChange={handleChange}
+                      placeholder="Enter Mobile Number"
                     />
                   </div>
                   <div className="col-xl-6 mb-3">
@@ -458,8 +478,8 @@ const UserList = () => {
                       name="role"
                       options={[
                         { value: "ADMIN", label: "ADMIN" },
-                        { value: "L1AUDITOR", label: "L1AUDITOR" },
-                        { value: "L2AUDITOR", label: "L2AUDITOR" },
+                        { value: "REVIEWER", label: "REVIEWER" },
+                        { value: "SUPERVISOR", label: "SUPERVISOR" },
                         { value: "ADMIN_TECHNICAL_SUPPORT", label: "ADMIN TECHNICAL SUPPORT" },
                         { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
                       ]}
@@ -489,6 +509,7 @@ const UserList = () => {
                           value={formData?.password ? formData?.password : null}
                           onChange={handleChange}
                           className={styles.passField}
+                          placeholder="Enter Password"
                         />
                       </div>
                       <div className={styles.passwordBox2}>
@@ -533,6 +554,8 @@ const UserList = () => {
                           type={showConfirmPassword ? "text" : "password"}
                           onChange={handleChange}
                           className={styles.passField}
+                          placeholder="Confirm Password"
+
                         />
                       </div>
                       <div className={styles.passwordBox2}>
