@@ -40,7 +40,7 @@ const WorkFlow = () => {
     (state) => state?.AdminDashboardReducers?.data
   );
 
-  const DateRanges = useSelector((state) => state?.workFlows?.dateRange);
+  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [dateRange, setDateRange] = useState({
     processedStatus: {
       PENDING: 0,
@@ -150,7 +150,9 @@ const WorkFlow = () => {
       id: 7,
       icon: auditHoldIcon,
       title: "Audit Hold",
-      charts: worlFlowData?.data?.response?.auditedStatus? worlFlowData?.data?.response?.auditedStatus.AUDITHOLD : "0",
+      charts: worlFlowData?.data?.response?.auditedStatus
+        ? worlFlowData?.data?.response?.auditedStatus.AUDITHOLD
+        : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -160,7 +162,9 @@ const WorkFlow = () => {
       id: 8,
       icon: declineIcon,
       title: "Declined",
-      charts: worlFlowData?.data?.response?.auditedStatus? worlFlowData?.data?.response?.auditedStatus.DECLINED : "0",
+      charts: worlFlowData?.data?.response?.auditedStatus
+        ? worlFlowData?.data?.response?.auditedStatus.DECLINED
+        : "0",
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,

@@ -11,6 +11,7 @@ import ENDPOINTS from "../../../../utility/enpoints";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
 import dayjs from "dayjs";
+import { flightRouterStateSchema } from "next/dist/server/app-render/types";
 
 export const eventStreming = (
   ENDPOINTS,
@@ -138,75 +139,13 @@ function FileProcessingTable({ patinetListAll }) {
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(patinetListAll);
   const [failedList, setFiledList] = useState();
-
+  const [finished, setIsFInished] = useState(false);
   const selectedRowTime = useSelector(
     (state) => state?.adminPatient?.patientsList
   );
 
-  useEffect(() => {
-    const id = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    let isFinished = false; // State variable to track if FINISHED status received
-    const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
-    );
-
-    setLoading(true);
-    const fileStatusEventListener = (event) => {
-      const data = JSON.parse(event.data);
-      if (data) {
-        setParsedData(data);
-        setLoading(false);
-        if (
-          (!isFinished && data[0]?.processStageChart === "FINISHED") ||
-          errStages[data[0]?.processStageChart]
-        ) {
-          isFinished = true;
-          sse.close();
-          setLoading(false);
-        }
-      }
-    };
-
-    if (!isFinished) {
-      sse.addEventListener("file-status-event", fileStatusEventListener);
-    } else {
-      sse.close();
-      setLoading(false);
-    }
-
-    sse.onerror = () => {
-      if (!isFinished) {
-        sse.close();
-        setLoading(false);
-      }
-    };
-
-    return () => {
-      sse.removeEventListener("file-status-event", fileStatusEventListener);
-      sse.close();
-      setLoading(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (activeId && parsedData) {
-      parsedData?.map((info) => {
-        if (info?.patientId === activeId && info?.processStageId) {
-          dispatch(getPatientsList(info?.patientId, info?.processStageId));
-        }
-      });
-    }
-    if (parsedData) {
-      const interval = setInterval(() => {
-        setCount((prevCount) => (prevCount + 5) % 100);
-      }, 100);
-
-      return () => clearInterval(interval);
-    }
-  }, [parsedData, activeId]);
-
   const handleToggleStepper = (index, data) => {
+    setIsFInished(true);
     setToggle((prevToggle) => ({
       ...Object.fromEntries(Object.keys(prevToggle).map((key) => [key, false])), // Close all other items
       [data?.patientId]: !prevToggle[data.patientId],
@@ -220,6 +159,75 @@ function FileProcessingTable({ patinetListAll }) {
     const failed = errStages[data?.processStageChart];
     setFiledList(failed);
   };
+
+  useEffect(() => {
+    const id = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    let isFinished = false; // State variable to track if FINISHED status received
+    const sse = new EventSource(
+      `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
+    );
+
+    const fileStatusEventListener = (event) => {
+      setLoading(true);
+      const data = JSON.parse(event.data);
+      if (data) {
+        setParsedData(data);
+        setLoading(false);
+      }
+      const patient = data?.find((item) => item?.patientId === activeId);
+      if (
+        errStages[patient?.processStageChart] ||
+        patient?.processStageChart === "FINISHED"
+      ) {
+        isFinished = true;
+        setIsFInished(true);
+        sse.close();
+        setLoading(false);
+      }
+    };
+
+    // if (!finished) {
+    sse.addEventListener("file-status-event", fileStatusEventListener);
+    // } else {
+    //   sse.close();
+    //   setLoading(false);
+    // }
+
+    sse.onerror = () => {
+      if (!isFinished) {
+        sse.close();
+        setLoading(false);
+      }
+    };
+
+    return () => {
+      sse.removeEventListener("file-status-event", fileStatusEventListener);
+      sse.close();
+      setLoading(false);
+    };
+  }, [activeId]);
+
+  useEffect(() => {
+    if (activeId && parsedData) {
+      setIsFInished(false);
+      parsedData?.map((info) => {
+        if (
+          info?.patientId === activeId &&
+          info?.processStageId !== "FINISHED"
+        ) {
+          dispatch(getPatientsList(info?.patientId, info?.processStageId));
+        }
+      });
+    }
+    if (parsedData) {
+      const interval = setInterval(() => {
+        setCount((prevCount) => (prevCount + 5) % 100);
+      }, 100);
+
+      return () => clearInterval(interval);
+    }
+  }, [parsedData, activeId, finished]);
 
   const renderUploadStatus = (data, index) => {
     let uploadStatus = 0;
@@ -472,35 +480,35 @@ function FileProcessingTable({ patinetListAll }) {
           >{`${uploadStatus}% Complete`}</div>
           {toggle[data?.patientId] && (
             <>
-              <div className={TableStyle.fileprocessing}>
-                {mappedSteps?.length > 0 &&
-                  mappedSteps?.map((step, index) => {
-                    const findData = selectedRowTime?.data?.find(
+              <div
+                className={TableStyle.fileprocessing}
+                style={{ height: "30px" }}
+              >
+                {mappedSteps?.map((step, index) => {
+                  const findData =
+                    selectedRowTime?.data &&
+                    selectedRowTime?.data?.find(
                       (item) => item?.processStageChart === step?.info
                     );
-                    return (
-                      <div
-                        key={index}
-                        className={TableStyle.innerProcessingDiv}
-                      >
-                        {selectedRowTime?.data?.length > 0 ? (
-                          findData ? (
+
+                  return (
+                    <div key={index} className={TableStyle.innerProcessingDiv}>
+                      {finished
+                        ? "Loading..."
+                        : selectedRowTime?.data?.length > 0 &&
+                          (findData ? (
                             <span>
-                              {findData?.createdDate
-                                ? dayjs(findData?.createdDate).format(
-                                    "hh:mm:ss A"
-                                  )
-                                : "---"}
+                              {findData?.createdDate &&
+                                dayjs(findData?.createdDate).format(
+                                  "hh:mm:ss A"
+                                )}
                             </span>
                           ) : (
                             "---"
-                          )
-                        ) : (
-                          "Loading..."
-                        )}
-                      </div>
-                    );
-                  })}
+                          ))}
+                    </div>
+                  );
+                })}
               </div>
 
               <div
@@ -514,7 +522,7 @@ function FileProcessingTable({ patinetListAll }) {
                   current={currentIndex + 1}
                   labelPlacement="vertical"
                   items={mappedSteps}
-                  percent={failedList?0:count}
+                  percent={failedList ? 0 : count}
                   finishIconBorderColor="#000"
                 />
               </div>

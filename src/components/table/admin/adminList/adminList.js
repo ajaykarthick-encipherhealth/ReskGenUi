@@ -23,6 +23,12 @@ const items = [
   { value: "SUPERVISOR", label: "SUPERVISOR", role: "SUPERVISOR" },
 ];
 
+// const itemss = [
+//   { value: "ADMIN", label: "Admin", role: "admin" },
+//   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
+//   { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
+// ];
+
 const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const usersData = useSelector((state) => state.adminUsers.usersData);
 
@@ -184,17 +190,11 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     <div className={TableStyle.rowStyle2}>
                       {item?.role?.length > 0 ? (
                         <>
-                          <Popover
-                            trigger="hover"
-                            content={
-                              item?.role?.length > 1 &&
-                              item?.role?.map((data) => (
-                                <div> {capitalizeFirstLetter(data)}</div>
-                              ))
-                            }
-                          >
-                            <span>{capitalizeFirstLetter(item?.role[0])}</span>
-                          </Popover>
+                          <span>
+                            {item?.role
+                              ?.map((data) => capitalizeFirstLetter(data))
+                              .join(",")}
+                          </span>
                         </>
                       ) : (
                         "---"

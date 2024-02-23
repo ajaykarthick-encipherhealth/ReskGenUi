@@ -86,6 +86,12 @@ export const AdminMenuList = [
     to: "/admin/tracking",
   },
   // {
+  //   title: "Report",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/admin/report",
+  // },
+  
+  // {
   //   title: "Notification",
   //   iconStyle: SVGICON.ReportIcon,
   //   to: "/admin/notification",
