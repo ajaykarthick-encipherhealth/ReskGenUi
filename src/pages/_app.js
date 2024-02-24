@@ -19,10 +19,13 @@ import { getChatReply } from "../store/actions/DashboardActions";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import UnAuthorized from "../403page";
+import { refreshToken } from "../services/AuthService";
+import { useRouter } from "next/router";
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
+  const router=useRouter()
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const [showTerminal, setShowTerminal] = useState(true);
   const [validatedPath, setValidatePath] = useState();
@@ -41,7 +44,8 @@ function MyApp({ Component, pageProps }) {
   );
 
   const timerFunction = () => {
-    console.log("timer");
+    dispatch(refreshToken())
+    router.push("/login")
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -63,7 +67,7 @@ function MyApp({ Component, pageProps }) {
     } else {
       setShowTerminal(true);
       const timer = setTimeout(timerFunction, 30 * 60 * 1000);
-
+       
       // console.log(role, "resre");
       // if (role[0] === "reviewer") {
       //   setValidatePath(

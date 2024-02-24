@@ -273,3 +273,21 @@ export const logoutAllDevice = async (email) => {
     console.log(err);
   }
 };
+
+export const refreshToken = async () => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}securityservice/gateway/logout`, //mock api 
+      token,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
