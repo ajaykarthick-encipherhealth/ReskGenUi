@@ -25,7 +25,7 @@ config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
-  const router=useRouter()
+  const router = useRouter();
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const [showTerminal, setShowTerminal] = useState(true);
   const [validatedPath, setValidatePath] = useState();
@@ -44,8 +44,7 @@ function MyApp({ Component, pageProps }) {
   );
 
   const timerFunction = () => {
-    dispatch(refreshToken())
-    router.push("/login")
+    dispatch(refreshToken());
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -66,8 +65,10 @@ function MyApp({ Component, pageProps }) {
       setValidatePath(true);
     } else {
       setShowTerminal(true);
-      const timer = setTimeout(timerFunction, 30 * 60 * 1000);
-       
+      const timer = setTimeout(() => {
+        timerFunction();
+      }, 30 * 60 * 1000);
+
       // console.log(role, "resre");
       // if (role[0] === "reviewer") {
       //   setValidatePath(
