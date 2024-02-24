@@ -39,12 +39,17 @@ function MyApp({ Component, pageProps }) {
       ssr: false,
     }
   );
+
+  const timerFunction = () => {
+    console.log("timer");
+  };
   useEffect(() => {
     if (typeof window !== "undefined") {
       const { addResponseMessage } = require("react-chat-widget");
       addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
     }
   }, [msgReply]);
+
   useEffect(() => {
     const currentPath = window.location.pathname;
     const role = localStorage.getItem("role");
@@ -57,6 +62,8 @@ function MyApp({ Component, pageProps }) {
       setValidatePath(true);
     } else {
       setShowTerminal(true);
+      const timer = setTimeout(timerFunction, 30 * 60 * 1000);
+
       // console.log(role, "resre");
       // if (role[0] === "reviewer") {
       //   setValidatePath(
@@ -73,6 +80,9 @@ function MyApp({ Component, pageProps }) {
       //       .includes(role[0]?.toLowerCase())
       //   );
       // }
+      return () => {
+        clearTimeout(timer);
+      };
     }
   });
 
@@ -81,22 +91,22 @@ function MyApp({ Component, pageProps }) {
       {/* {!validatedPath ? (
         <UnAuthorized />
       ) : ( */}
-        <PrimeReactProvider>
-          <Provider store={store}>
-            {showTerminal && (
-              <TerminalComponent
-                handleNewUserMessage={handleNewUserMessage}
-                handleQuickButtonClicked={handleQuickButtonClicked}
-                showBadge={false}
-                emojis={true}
-                title="CogentAI"
-                subtitle="Chat with CogentAI"
-              />
-            )}
-            <Component {...pageProps} />
-            {showTerminal && <Footer />}
-          </Provider>
-        </PrimeReactProvider>
+      <PrimeReactProvider>
+        <Provider store={store}>
+          {showTerminal && (
+            <TerminalComponent
+              handleNewUserMessage={handleNewUserMessage}
+              handleQuickButtonClicked={handleQuickButtonClicked}
+              showBadge={false}
+              emojis={true}
+              title="CogentAI"
+              subtitle="Chat with CogentAI"
+            />
+          )}
+          <Component {...pageProps} />
+          {showTerminal && <Footer />}
+        </Provider>
+      </PrimeReactProvider>
       {/* )} */}
     </>
   );
