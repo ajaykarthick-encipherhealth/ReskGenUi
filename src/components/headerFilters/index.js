@@ -15,15 +15,18 @@ import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { getSelectUserListReport } from "../../store/actions/adminAction/ReportActions";
+import { getSelectUserList } from "../../store/actions/adminAction/DashboardAction";
 
 const { RangePicker } = DatePicker;
 const options = [
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
 ];
+
+
 
 const HeaderFilters = ({
   // for search
@@ -146,6 +149,11 @@ const HeaderFilters = ({
   defaultShow = false,
   defaultSize = "col-xl-2",
 }) => {
+
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
+  console.log(selectUserList,"data");
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
   const [selectMemberType, setSelectMemberType] = useState("");
@@ -153,17 +161,26 @@ const HeaderFilters = ({
   const [selectUser, setSelectUser] = useState([]);
 
   const optionsUser = [];
+  const individualUserRes = selectUserList?.data?.response?.map((res) =>
+  optionsUser.push({
+    value: res.userName,
+    label: res.firstName + " " + res.lastName,
+  })
+);
   const memberTypeChanges = (e) => {
-    setSelectMemberType(e);
+    setSelectMemberType(e.value);
     setIsindividual(false);
     setSelectUser([]);
-    if (e != "All") {
+    if (e.value != "All") {
       setIsindividual(true);
     }
+    console.log(e,"test");
   };
   useEffect(() => {
-    dispatch(getSelectUserListReport(selectMemberType));
+    dispatch(getSelectUserList(selectMemberType));
+    
   }, [selectMemberType]);
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -213,9 +230,9 @@ const HeaderFilters = ({
               <label className={styles.label}>{selectlabel3}</label>
               <div class="form-group has-search">
                 <Select
-                  value={
-                    selectMemberType?.length === 0 ? "All" : selectMemberType
-                  }
+                  // value={
+                  //   selectMemberType?.length === 0 ? "All" : selectMemberType
+                  // }
                   // placeholder="Select User Type"
                   onChange={(e) => memberTypeChanges(e)}
                   className="custom-react-select"
@@ -227,10 +244,13 @@ const HeaderFilters = ({
                 <div className={styles.select} style={{ marginTop: "2px" }}>
                   <Select
                     showSearch
-                    value={selectUser}
+                    // value={selectUser}
                     placeholder="Select User"
                     className="custom-react-select"
-                    onChange={(e) => onChangeUser(e)}
+                    onChange={(selectedOption) => {
+                      setSelectedOption3(selectedOption?.value);
+                    }}
+                  
                     options={optionsUser}
                     style={{ backgroundColor: "#F3F3FF", marginTop: "2px" }}
                   />

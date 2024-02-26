@@ -8,7 +8,7 @@ import {
   REPORT_DETAILS,
   FILEDETAILS,
   REPORT,
-  SELECTED_USER
+  SELECTED_USER_REPORT
 } from "../../actions/adminAction/ReportActions";
 
 const initialState = {
@@ -80,7 +80,7 @@ export const AdminReportReducer = (state = initialState, action) => {
       reportInfo: action.payload,
     };
   } 
-  if (action.type === SELECTED_USER) {
+  if (action.type === SELECTED_USER_REPORT) {
     return {
       ...state,
       selectedUsers: action.payload,

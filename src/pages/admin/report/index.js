@@ -80,6 +80,8 @@ const index = () => {
   const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
+  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
+
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
@@ -164,6 +166,7 @@ const index = () => {
           receivedStartDate,
           receivedEndDate,
           receivedSearch,
+
           sort
         )
       );
@@ -177,6 +180,7 @@ const index = () => {
           coderEndDate,
           coderSearch,
           selectedCoderOpt,
+          selectedCoderOptReport,
           sort
         )
       );
@@ -191,6 +195,7 @@ const index = () => {
     activeTab,
     ExportResponse,
     selectedCoderOpt,
+    selectedCoderOptReport,
     coderSearch,
     coderStartDate,
     coderEndDate,
@@ -245,6 +250,8 @@ const index = () => {
                               activeTab === "CoderReport" ? true : false
                             }
                             selectOptions3={statusOptions}
+                            setSelectedOption3={setSelectedCoderOptReport}
+
                             // rangepicker
                             isRangePicker={true}
                             pickerlabel="Select Range"
