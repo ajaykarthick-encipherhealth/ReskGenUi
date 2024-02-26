@@ -123,3 +123,22 @@ export const getFile = (pathname) => {
     }
   );
 };
+export const SelectUserList = async (role) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router.push("/login");
+    }
+  }
+};

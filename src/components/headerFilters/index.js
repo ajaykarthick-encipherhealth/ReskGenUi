@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
@@ -17,7 +17,14 @@ import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
 import { useDispatch } from "react-redux";
 
+import { getSelectUserListReport } from "../../store/actions/adminAction/ReportActions";
+
 const { RangePicker } = DatePicker;
+const options = [
+  { value: "REVIEWER", label: "REVIEWER" },
+  { value: "SUPERVISOR", label: "SUPERVISOR" },
+];
+
 const HeaderFilters = ({
   // for search
   setSearch,
@@ -40,6 +47,12 @@ const HeaderFilters = ({
   defaultSelectValue2,
   selectOptions2,
   setSelectedOption2,
+
+  // if has 3 selectors
+  selectlabel3,
+  defaultSelectValue3,
+  selectOptions3,
+  setSelectedOption3,
 
   // for picker
   pickerlabel,
@@ -131,10 +144,26 @@ const HeaderFilters = ({
   tracking,
   selectorField,
   defaultShow = false,
-  defaultSize = 'col-xl-2'
+  defaultSize = "col-xl-2",
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
+  const [selectMemberType, setSelectMemberType] = useState("");
+  const [isindividual, setIsindividual] = useState(false);
+  const [selectUser, setSelectUser] = useState([]);
+
+  const optionsUser = [];
+  const memberTypeChanges = (e) => {
+    setSelectMemberType(e);
+    setIsindividual(false);
+    setSelectUser([]);
+    if (e != "All") {
+      setIsindividual(true);
+    }
+  };
+  useEffect(() => {
+    dispatch(getSelectUserListReport(selectMemberType));
+  }, [selectMemberType]);
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -177,6 +206,36 @@ const HeaderFilters = ({
                   isSearchable={false}
                 />
               </div>
+            </div>
+          )}
+          {selectOptions3 && (
+            <div className={defaultSize}>
+              <label className={styles.label}>{selectlabel3}</label>
+              <div class="form-group has-search">
+                <Select
+                  value={
+                    selectMemberType?.length === 0 ? "All" : selectMemberType
+                  }
+                  // placeholder="Select User Type"
+                  onChange={(e) => memberTypeChanges(e)}
+                  className="custom-react-select"
+                  options={options}
+                  style={{ backgroundColor: "#F3F3FF", width: "20px" }}
+                />
+              </div>
+              {isindividual ? (
+                <div className={styles.select} style={{ marginTop: "2px" }}>
+                  <Select
+                    showSearch
+                    value={selectUser}
+                    placeholder="Select User"
+                    className="custom-react-select"
+                    onChange={(e) => onChangeUser(e)}
+                    options={optionsUser}
+                    style={{ backgroundColor: "#F3F3FF", marginTop: "2px" }}
+                  />
+                </div>
+              ) : null}
             </div>
           )}
           {isRangePicker && (
@@ -297,7 +356,7 @@ const HeaderFilters = ({
             </div>
           )}
           {activeTab === "CoderReport" && (
-            <div className="col-xl-6  d-flex justify-content-end">
+            <div className="col-xl-4  d-flex justify-content-end">
               <div className="row flr mt-3">
                 <button
                   onClick={() => {
@@ -320,14 +379,16 @@ const HeaderFilters = ({
           )}
         </div>
       </div>
-      {(showFilters) && (
+      {showFilters && (
         <div style={{ marginTop: "50px" }}>
           <div className="row filter-contain">
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
                 onClick={() => {
-                  dispatch(getFilters(selectorField?selectorField:"allocatedBy"));
+                  dispatch(
+                    getFilters(selectorField ? selectorField : "allocatedBy")
+                  );
                 }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>

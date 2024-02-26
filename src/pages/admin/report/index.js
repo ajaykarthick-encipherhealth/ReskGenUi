@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
+
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { FilterMatchMode } from "primereact/api";
@@ -20,6 +21,7 @@ import {
   getReportDetails,
   getSentDetails,
 } from "../../../store/actions/adminAction/ReportActions";
+import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 
@@ -30,6 +32,10 @@ const statusOptions = [
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
+];
+const options = [
+  { value: "REVIEWER", label: "REVIEWER" },
+  { value: "SUPERVISOR", label: "SUPERVISOR" },
 ];
 
 const index = () => {
@@ -81,6 +87,9 @@ const index = () => {
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [isindividual, setIsindividual] = useState(false);
+  const [selectMemberType, setSelectMemberType] = useState("");
+  const [selectUser, setSelectUser] = useState([]);
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -88,6 +97,13 @@ const index = () => {
   });
   const SentOptions = [];
   const uniqueRoles = new Set();
+
+  const completedDatas = useSelector(
+    (state) => state?.AdminDashboardReducers?.completedStatus
+  );
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
 
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
@@ -98,6 +114,15 @@ const index = () => {
       }
     });
   });
+  const memberTypeChanges = (e) => {
+    setSelectMemberType(e);
+    setIsindividual(false);
+    setSelectUser([]);
+    if (e != "All") {
+      setIsindividual(true);
+    }
+  };
+  const optionsUser = [];
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -122,6 +147,9 @@ const index = () => {
     setSelectedDates(null);
     setActiveTab(name);
   };
+  useEffect(() => {
+    dispatch(getSelectUserList(selectMemberType));
+  }, [selectMemberType]);
   useEffect(() => {
     setIsLoading(false);
     if (activeTab === "SentReport") {
@@ -211,6 +239,12 @@ const index = () => {
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
                             defaultSelectValue1={""}
+                            // selector
+                            selectlabel3="Select"
+                            isSelector3={
+                              activeTab === "CoderReport" ? true : false
+                            }
+                            selectOptions3={statusOptions}
                             // rangepicker
                             isRangePicker={true}
                             pickerlabel="Select Range"
@@ -227,6 +261,34 @@ const index = () => {
                             setSelectedDates={setSelectedDates}
                             disable="Yes"
                           />
+                          {/* <div className={`d-flex ${styles.selectContainer}`}>
+                            <div className={styles.select}>
+                              <Select
+                                value={
+                                  selectMemberType?.length === 0
+                                    ? "All"
+                                    : selectMemberType
+                                }
+                                // placeholder="Select User Type"
+                                onChange={(e) => memberTypeChanges(e)}
+                                className={`custom_select_type ${styles.custom_select_type}`}
+                                options={options}
+                                style={{ backgroundColor: "#F3F3FF" }}
+                              />
+                            </div>
+                            {isindividual ? (
+                              <div className={styles.select}>
+                                <Select
+                                  showSearch
+                                  value={selectUser}
+                                  placeholder="Select User"
+                                  className={`custom_select_user ${styles.custom_select_user}`}
+                                  onChange={(e) => onChangeUser(e)}
+                                  options={optionsUser}
+                                />
+                              </div>
+                            ) : null}
+                          </div> */}
                         </div>
                         <Export
                           isModalVisible={isModalVisible}
@@ -265,7 +327,7 @@ const index = () => {
                                       to="#my-posts"
                                       eventKey="validDiseases"
                                     >
-                                      Coder Report
+                                      Admin Report
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item

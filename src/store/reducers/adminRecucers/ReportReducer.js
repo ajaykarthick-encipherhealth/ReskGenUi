@@ -8,6 +8,7 @@ import {
   REPORT_DETAILS,
   FILEDETAILS,
   REPORT,
+  SELECTED_USER
 } from "../../actions/adminAction/ReportActions";
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   getReport: null,
   uploadFile: null,
   reportInfo: null,
+  selectedUsers:null
 };
 
 export const AdminReportReducer = (state = initialState, action) => {
@@ -76,6 +78,12 @@ export const AdminReportReducer = (state = initialState, action) => {
     return {
       ...state,
       reportInfo: action.payload,
+    };
+  } 
+  if (action.type === SELECTED_USER) {
+    return {
+      ...state,
+      selectedUsers: action.payload,
     };
   }
   return state;
