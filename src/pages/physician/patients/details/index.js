@@ -1953,7 +1953,7 @@ const Details = ({}) => {
                               ALLOCATE
                             </Dropdown.Button>
                           </div>
-                        ) : userRole == "SUPERVISOR" ? (
+                        ) : userRole == "supervisor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown.Button
                               type="primary"
