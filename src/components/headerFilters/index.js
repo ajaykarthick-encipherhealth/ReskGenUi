@@ -147,6 +147,7 @@ const HeaderFilters = ({
   tracking,
   selectorField,
   defaultShow = false,
+  setSelect,
   defaultSize = "col-xl-2",
 }) => {
   const dispatch = useDispatch();
@@ -205,6 +206,8 @@ const HeaderFilters = ({
                   // value={selectedCoderOptReport}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
+                    setSelectedOption3(null);
+                    setSelect(null)
                   }}
                   options={selectOptions2}
                   placeholder={defaultSelectValue2?.label}
@@ -221,8 +224,12 @@ const HeaderFilters = ({
                 <Select
                   showSearch
                   onChange={(selectedOption) => {
-                    setSelectedOption2(null);
                     setSelectedOption3(selectedOption?.value);
+                    setSelectedOption2(null);
+                    if(selectedCoderOptReport==='REVIEWER'){
+
+                      setSelect(selectedOption?.value)
+                    }
                   }}
                   className="custom-react-select"
                   options={selectOptions3}

@@ -86,7 +86,7 @@ const index = () => {
   const [selectMemberType, setSelectMemberType] = useState("");
   const [selectUser, setSelectUser] = useState([]);
   const [selectManager, setSelectedManger] = useState("");
-
+  const [select, setSelect] = useState(null);
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
@@ -159,12 +159,11 @@ const index = () => {
           receivedStartDate,
           receivedEndDate,
           receivedSearch,
-
           sort
         )
       );
     }
-
+    console.log(selectedCoderOpt, "test");
     if (activeTab === "CoderReport") {
       dispatch(
         getReportDetails(
@@ -173,9 +172,13 @@ const index = () => {
           coderEndDate,
           coderSearch,
           selectedCoderOpt,
-          selectedCoderOptReport?selectedCoderOptReport:"",
+          selectedCoderOptReport
+            ? selectedCoderOptReport !== null
+              ? selectedCoderOptReport
+              : select
+            : "",
           sort,
-          selectManager
+          selectManager ? selectManager : ""
         )
       );
     }
@@ -203,6 +206,7 @@ const index = () => {
     receivedSortOrder,
     sort,
     selectManager,
+    select,
   ]);
 
   useEffect(() => {
@@ -227,7 +231,7 @@ const index = () => {
     value: res.userName,
     label: res.firstName + " " + res.lastName,
   }));
-  console.log(selectedCoderOptReport);
+
   return (
     <>
       <Header />
@@ -290,6 +294,7 @@ const index = () => {
                             selectedDates={selectedDates}
                             setSelectedDates={setSelectedDates}
                             disable="Yes"
+                            setSelect={setSelect}
                           />
                           {/* <div className={`d-flex ${styles.selectContainer}`}>
                             <div className={styles.select}>

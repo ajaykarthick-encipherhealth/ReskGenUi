@@ -41,7 +41,7 @@ export const getReportDetails = (
   filter,
   userName,
   sort,
-  selectManager
+  selectManager = ""
 ) => {
   return (dispatch) => {
     try {
