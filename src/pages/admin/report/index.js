@@ -163,7 +163,7 @@ const index = () => {
         )
       );
     }
-    console.log(selectedCoderOpt, "test");
+ 
     if (activeTab === "CoderReport") {
       dispatch(
         getReportDetails(
@@ -173,9 +173,8 @@ const index = () => {
           coderSearch,
           selectedCoderOpt,
           selectedCoderOptReport
-            ? selectedCoderOptReport !== null
-              ? selectedCoderOptReport
-              : select
+            ? selectedCoderOptReport
+              
             : "",
           sort,
           selectManager ? selectManager : ""
@@ -213,7 +212,7 @@ const index = () => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
   useEffect(() => {
-    if (selectedCoderOptReport) {
+    if (selectedCoderOptReport && !select) {
       dispatch(
         getSelectUserList(
           selectedCoderOptReport === null ? " " : selectedCoderOptReport

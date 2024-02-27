@@ -224,11 +224,16 @@ const HeaderFilters = ({
                 <Select
                   showSearch
                   onChange={(selectedOption) => {
-                    setSelectedOption3(selectedOption?.value);
-                    setSelectedOption2(null);
+                    if(selectedCoderOptReport==='SUPERVISOR'){
+                      setSelectedOption3(selectedOption?.value);
+                      setSelectedOption2(null);
+                      setSelect(null)
+                    }
                     if(selectedCoderOptReport==='REVIEWER'){
-
+                      console.log(selectedOption?.value)
                       setSelect(selectedOption?.value)
+                      setSelectedOption2(selectedOption?.value);
+                      setSelectedOption3(null);
                     }
                   }}
                   className="custom-react-select"
