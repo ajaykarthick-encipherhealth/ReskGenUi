@@ -32,7 +32,6 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-
 const index = () => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.adminReport?.exportRes);
@@ -75,8 +74,7 @@ const index = () => {
   const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
-  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState(null);
-
+  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
@@ -87,7 +85,7 @@ const index = () => {
   const [isindividual, setIsindividual] = useState(false);
   const [selectMemberType, setSelectMemberType] = useState("");
   const [selectUser, setSelectUser] = useState([]);
-  const [selectManager, setSelectedManger] = useState();
+  const [selectManager, setSelectedManger] = useState("");
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -102,7 +100,6 @@ const index = () => {
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
-
 
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
@@ -176,7 +173,7 @@ const index = () => {
           coderEndDate,
           coderSearch,
           selectedCoderOpt,
-          selectedCoderOptReport,
+          selectedCoderOptReport?selectedCoderOptReport:"",
           sort,
           selectManager
         )
@@ -205,15 +202,20 @@ const index = () => {
     receivedSearch,
     receivedSortOrder,
     sort,
-    selectManager
+    selectManager,
   ]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
   useEffect(() => {
-    dispatch(getSelectUserList(selectedCoderOptReport));
-    
+    if (selectedCoderOptReport) {
+      dispatch(
+        getSelectUserList(
+          selectedCoderOptReport === null ? " " : selectedCoderOptReport
+        )
+      );
+    }
   }, [selectedCoderOptReport]);
   const options = [
     { value: " ", label: "All" },
@@ -225,7 +227,7 @@ const index = () => {
     value: res.userName,
     label: res.firstName + " " + res.lastName,
   }));
- 
+  console.log(selectedCoderOptReport);
   return (
     <>
       <Header />
@@ -262,13 +264,15 @@ const index = () => {
                             selectOptions2={options}
                             setSelectedOption2={setSelectedCoderOptReport}
                             defaultSelectValue2="All"
-
                             // selector3
-                            isSelector3={selectedCoderOptReport?true:false}
-                            selectlabel3="Select Status"
-                            selectOptions3={
-                             optionsUser 
+                            isSelector3={
+                              selectUserList?.data?.response?.length
+                                ? true
+                                : false
                             }
+                            selectedCoderOptReport={selectedCoderOptReport}
+                            selectlabel3="Select Status"
+                            selectOptions3={optionsUser}
                             setSelectedOption3={setSelectedManger}
                             defaultSelectValue3="All"
                             // rangepicker

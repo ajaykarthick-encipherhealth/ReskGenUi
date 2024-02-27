@@ -135,6 +135,7 @@ const HeaderFilters = ({
   createdByOptoons,
   setSelCreatedBy,
   defaultCreatedBy,
+  selectedCoderOptReport,
 
   bullets,
   isNextRow,
@@ -167,6 +168,7 @@ const HeaderFilters = ({
     dispatch(getSelectUserList(selectMemberType));
   }, [selectMemberType]);
 
+  console.log(selectedCoderOptReport);
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -200,6 +202,7 @@ const HeaderFilters = ({
               <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
+                  // value={selectedCoderOptReport}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
                   }}
@@ -211,13 +214,14 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
-          {selectOptions3 && (
+          {isSelector3 && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel3}</label>
               <div class="form-group has-search">
                 <Select
                   showSearch
                   onChange={(selectedOption) => {
+                    setSelectedOption2(null);
                     setSelectedOption3(selectedOption?.value);
                   }}
                   className="custom-react-select"
