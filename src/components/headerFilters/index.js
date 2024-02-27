@@ -26,8 +26,6 @@ const options = [
   { value: "SUPERVISOR", label: "SUPERVISOR" },
 ];
 
-
-
 const HeaderFilters = ({
   // for search
   setSearch,
@@ -55,6 +53,7 @@ const HeaderFilters = ({
   selectlabel3,
   defaultSelectValue3,
   selectOptions3,
+  isSelector3,
   setSelectedOption3,
 
   // for picker
@@ -149,24 +148,12 @@ const HeaderFilters = ({
   defaultShow = false,
   defaultSize = "col-xl-2",
 }) => {
-
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
-  console.log(selectUserList,"data");
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
   const [selectMemberType, setSelectMemberType] = useState("");
   const [isindividual, setIsindividual] = useState(false);
   const [selectUser, setSelectUser] = useState([]);
 
-  const optionsUser = [];
-  const individualUserRes = selectUserList?.data?.response?.map((res) =>
-  optionsUser.push({
-    value: res.userName,
-    label: res.firstName + " " + res.lastName,
-  })
-);
   const memberTypeChanges = (e) => {
     setSelectMemberType(e.value);
     setIsindividual(false);
@@ -174,11 +161,10 @@ const HeaderFilters = ({
     if (e.value != "All") {
       setIsindividual(true);
     }
-    console.log(e,"test");
+    console.log(e, "test");
   };
   useEffect(() => {
     dispatch(getSelectUserList(selectMemberType));
-    
   }, [selectMemberType]);
 
   return (
@@ -230,32 +216,15 @@ const HeaderFilters = ({
               <label className={styles.label}>{selectlabel3}</label>
               <div class="form-group has-search">
                 <Select
-                  // value={
-                  //   selectMemberType?.length === 0 ? "All" : selectMemberType
-                  // }
-                  // placeholder="Select User Type"
-                  onChange={(e) => memberTypeChanges(e)}
+                  showSearch
+                  onChange={(selectedOption) => {
+                    setSelectedOption3(selectedOption?.value);
+                  }}
                   className="custom-react-select"
-                  options={options}
+                  options={selectOptions3}
                   style={{ backgroundColor: "#F3F3FF", width: "20px" }}
                 />
               </div>
-              {isindividual ? (
-                <div className={styles.select} style={{ marginTop: "2px" }}>
-                  <Select
-                    showSearch
-                    // value={selectUser}
-                    placeholder="Select User"
-                    className="custom-react-select"
-                    onChange={(selectedOption) => {
-                      setSelectedOption3(selectedOption?.value);
-                    }}
-                  
-                    options={optionsUser}
-                    style={{ backgroundColor: "#F3F3FF", marginTop: "2px" }}
-                  />
-                </div>
-              ) : null}
             </div>
           )}
           {isRangePicker && (
@@ -376,7 +345,7 @@ const HeaderFilters = ({
             </div>
           )}
           {activeTab === "CoderReport" && (
-            <div className="col-xl-4  d-flex justify-content-end">
+            <div className="col-xl-2  d-flex justify-content-end">
               <div className="row flr mt-3">
                 <button
                   onClick={() => {

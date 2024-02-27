@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
-
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { FilterMatchMode } from "primereact/api";
@@ -25,7 +24,6 @@ import { getSelectUserList } from "../../../store/actions/adminAction/DashboardA
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 
-const { RangePicker } = DatePicker;
 const statusOptions = [
   { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
@@ -33,10 +31,7 @@ const statusOptions = [
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
 ];
-const options = [
-  { value: "REVIEWER", label: "REVIEWER" },
-  { value: "SUPERVISOR", label: "SUPERVISOR" },
-];
+
 
 const index = () => {
   const dispatch = useDispatch();
@@ -80,7 +75,7 @@ const index = () => {
   const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
-  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
+  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState(null);
 
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
@@ -92,6 +87,7 @@ const index = () => {
   const [isindividual, setIsindividual] = useState(false);
   const [selectMemberType, setSelectMemberType] = useState("");
   const [selectUser, setSelectUser] = useState([]);
+  const [selectManager, setSelectedManger] = useState();
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -106,6 +102,7 @@ const index = () => {
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
+
 
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
@@ -124,7 +121,6 @@ const index = () => {
       setIsindividual(true);
     }
   };
-  const optionsUser = [];
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -181,7 +177,8 @@ const index = () => {
           coderSearch,
           selectedCoderOpt,
           selectedCoderOptReport,
-          sort
+          sort,
+          selectManager
         )
       );
     }
@@ -208,12 +205,27 @@ const index = () => {
     receivedSearch,
     receivedSortOrder,
     sort,
+    selectManager
   ]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
+  useEffect(() => {
+    dispatch(getSelectUserList(selectedCoderOptReport));
+    
+  }, [selectedCoderOptReport]);
+  const options = [
+    { value: " ", label: "All" },
+    { value: "REVIEWER", label: "REVIEWER" },
+    { value: "SUPERVISOR", label: "SUPERVISOR" },
+  ];
 
+  const optionsUser = selectUserList?.data?.response?.map((res) => ({
+    value: res.userName,
+    label: res.firstName + " " + res.lastName,
+  }));
+ 
   return (
     <>
       <Header />
@@ -245,13 +257,20 @@ const index = () => {
                             selectOptions={statusOptions}
                             defaultSelectValue1={""}
                             // selector
-                            selectlabel3="Select"
-                            isSelector3={
-                              activeTab === "CoderReport" ? true : false
-                            }
-                            selectOptions3={statusOptions}
-                            setSelectedOption3={setSelectedCoderOptReport}
 
+                            selectlabel2="Select Status"
+                            selectOptions2={options}
+                            setSelectedOption2={setSelectedCoderOptReport}
+                            defaultSelectValue2="All"
+
+                            // selector3
+                            isSelector3={selectedCoderOptReport?true:false}
+                            selectlabel3="Select Status"
+                            selectOptions3={
+                             optionsUser 
+                            }
+                            setSelectedOption3={setSelectedManger}
+                            defaultSelectValue3="All"
                             // rangepicker
                             isRangePicker={true}
                             pickerlabel="Select Range"

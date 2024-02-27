@@ -40,11 +40,12 @@ export const getReportDetails = (
   search,
   filter,
   userName,
-  sort
+  sort,
+  selectManager
 ) => {
   return (dispatch) => {
     try {
-      patientDetails(pagenum, startDate, endDate, search, filter,userName, sort).then(
+      patientDetails(pagenum, startDate, endDate, search, filter,userName, sort,selectManager).then(
         (response) => {
           if (response) {
             dispatch({

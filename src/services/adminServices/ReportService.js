@@ -8,13 +8,14 @@ export const patientDetails = async (
   search,
   filter = "",
   userName = "",
-  sort
+  sort,
+  selectManager
 ) => {
   const token = localStorage.getItem("token");
 
   const searchValue = filter === "ALL" ? "" : filter;
    
-  const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}&userName=${userName}`;
+  const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}&userName=${userName}&managerId=${selectManager}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
