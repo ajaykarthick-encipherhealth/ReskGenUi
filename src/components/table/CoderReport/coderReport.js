@@ -106,7 +106,7 @@ function CoderReport({
   };
 
   const getFlag = (data) => {
-    switch (data["2023"][0]?.flag) {
+    switch (data["2023"][data["2023"]?.length - 1]?.flag) {
       case "PATIENT_NAME_MISSED":
         return (
           <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
@@ -249,7 +249,7 @@ function CoderReport({
                 <th>HCC </th>
                 <th>FLAG </th>
                 <th className={TableStyle.rowStyle2}>STATUS</th>
-                <th >
+                <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
                   >
@@ -339,14 +339,17 @@ function CoderReport({
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
+                          <div>{SVGICON?.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {processstatusBodyTemplate(row)}
                       </td>
 
-                      <td className={TableStyle.lastBorder} style={{textAlign:"center"}}>
+                      <td
+                        className={TableStyle.lastBorder}
+                        style={{ textAlign: "center" }}
+                      >
                         <input
                           type="checkbox"
                           onChange={() => {
@@ -417,13 +420,16 @@ function CoderReport({
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
+                          <div>{SVGICON?.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {processstatusBodyTemplate(row)}{" "}
                       </td>
-                      <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
+                      <td
+                        className={TableStyle.lastBorder}
+                        style={{ textAlign: "center" }}
+                      >
                         <input
                           type="checkbox"
                           onChange={() => {

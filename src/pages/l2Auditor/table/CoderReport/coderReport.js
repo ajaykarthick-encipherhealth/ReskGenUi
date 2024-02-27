@@ -109,7 +109,7 @@ function CoderReport({
   };
 
   const getFlag = (data) => {
-    switch (data["2023"][0]?.flag) {
+    switch (data["2023"][data["2023"].length-1]?.flag) {
       case "PATIENT_NAME_MISSED":
         return (
           <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
@@ -342,7 +342,7 @@ function CoderReport({
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
+                          <div >{SVGICON?.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
@@ -423,7 +423,7 @@ function CoderReport({
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
+                          <div >{SVGICON.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
