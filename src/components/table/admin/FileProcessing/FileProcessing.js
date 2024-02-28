@@ -467,17 +467,7 @@ function FileProcessingTable({ patinetListAll }) {
               />
             </Tooltip>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              color: errStages[data?.processStageChart]
-                ? "red"
-                : stageChartMap2[data?.processStageChart] === "FINISHED"
-                ? "green"
-                : "#0000",
-            }}
-          >{`${uploadStatus}% Complete`}</div>
+
           {toggle[data?.patientId] && (
             <>
               <div
@@ -528,6 +518,17 @@ function FileProcessingTable({ patinetListAll }) {
               </div>
             </>
           )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              color: errStages[data?.processStageChart]
+                ? "red"
+                : stageChartMap2[data?.processStageChart] === "Finished"
+                ? "green"
+                : "#00000",
+            }}
+          >{`${uploadStatus}% Complete`}</div>
         </div>
         <div style={{ width: "2%", marginTop: "6px" }}>
           <div onClick={() => handleToggleStepper(index, data)}>
