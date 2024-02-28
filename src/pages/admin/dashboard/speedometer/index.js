@@ -116,7 +116,7 @@ const SpeedoMeter = () => {
         },
         data: [
           {
-            value: meterDatas?.data?.response
+            value: (selectOption &&meterDatas?.data?.response)
               ? meterDatas.data.response.accuracy
               : 0,
           },
