@@ -152,24 +152,7 @@ const HeaderFilters = ({
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
-  const [selectMemberType, setSelectMemberType] = useState("");
-  const [isindividual, setIsindividual] = useState(false);
-  const [selectUser, setSelectUser] = useState([]);
 
-  const memberTypeChanges = (e) => {
-    setSelectMemberType(e.value);
-    setIsindividual(false);
-    setSelectUser([]);
-    if (e.value != "All") {
-      setIsindividual(true);
-    }
-    console.log(e, "test");
-  };
-  useEffect(() => {
-    dispatch(getSelectUserList(selectMemberType));
-  }, [selectMemberType]);
-
-  console.log(selectedCoderOptReport);
   return (
     <>
       <div style={{ display: "flex" }}>

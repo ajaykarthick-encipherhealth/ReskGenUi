@@ -163,7 +163,7 @@ const index = () => {
         )
       );
     }
- 
+
     if (activeTab === "CoderReport") {
       dispatch(
         getReportDetails(
@@ -172,10 +172,7 @@ const index = () => {
           coderEndDate,
           coderSearch,
           selectedCoderOpt,
-          selectedCoderOptReport
-            ? selectedCoderOptReport
-              
-            : "",
+          selectedCoderOptReport ? selectedCoderOptReport : "",
           sort,
           selectManager ? selectManager : ""
         )
@@ -264,7 +261,9 @@ const index = () => {
                             // selector
 
                             selectlabel2="Select Status"
-                            selectOptions2={options}
+                            selectOptions2={
+                              activeTab === "CoderReport" ? options : null
+                            }
                             setSelectedOption2={setSelectedCoderOptReport}
                             defaultSelectValue2="All"
                             // selector3
