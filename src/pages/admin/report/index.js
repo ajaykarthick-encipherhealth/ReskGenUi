@@ -260,7 +260,7 @@ const index = () => {
                             defaultSelectValue1={""}
                             // selector
 
-                            selectlabel2="Select Status"
+                            selectlabel2="Select User Role"
                             selectOptions2={
                               activeTab === "CoderReport" ? options : null
                             }
@@ -273,7 +273,7 @@ const index = () => {
                                 : false
                             }
                             selectedCoderOptReport={selectedCoderOptReport}
-                            selectlabel3="Select Status"
+                            selectlabel3="Select User"
                             selectOptions3={optionsUser}
                             setSelectedOption3={setSelectedManger}
                             defaultSelectValue3="All"
@@ -294,34 +294,6 @@ const index = () => {
                             disable="Yes"
                             setSelect={setSelect}
                           />
-                          {/* <div className={`d-flex ${styles.selectContainer}`}>
-                            <div className={styles.select}>
-                              <Select
-                                value={
-                                  selectMemberType?.length === 0
-                                    ? "All"
-                                    : selectMemberType
-                                }
-                                // placeholder="Select User Type"
-                                onChange={(e) => memberTypeChanges(e)}
-                                className={`custom_select_type ${styles.custom_select_type}`}
-                                options={options}
-                                style={{ backgroundColor: "#F3F3FF" }}
-                              />
-                            </div>
-                            {isindividual ? (
-                              <div className={styles.select}>
-                                <Select
-                                  showSearch
-                                  value={selectUser}
-                                  placeholder="Select User"
-                                  className={`custom_select_user ${styles.custom_select_user}`}
-                                  onChange={(e) => onChangeUser(e)}
-                                  options={optionsUser}
-                                />
-                              </div>
-                            ) : null}
-                          </div> */}
                         </div>
                         <Export
                           isModalVisible={isModalVisible}

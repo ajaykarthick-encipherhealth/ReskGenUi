@@ -190,7 +190,7 @@ const HeaderFilters = ({
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
                     setSelectedOption3(null);
-                    setSelect(null)
+                    setSelect(null);
                   }}
                   options={selectOptions2}
                   placeholder={defaultSelectValue2?.label}
@@ -207,14 +207,13 @@ const HeaderFilters = ({
                 <Select
                   showSearch
                   onChange={(selectedOption) => {
-                    if(selectedCoderOptReport==='SUPERVISOR'){
+                    if (selectedCoderOptReport === "SUPERVISOR") {
                       setSelectedOption3(selectedOption?.value);
                       setSelectedOption2(null);
-                      setSelect(null)
+                      setSelect(null);
                     }
-                    if(selectedCoderOptReport==='REVIEWER'){
-                      console.log(selectedOption?.value)
-                      setSelect(selectedOption?.value)
+                    if (selectedCoderOptReport === "REVIEWER") {
+                      setSelect(selectedOption?.value);
                       setSelectedOption2(selectedOption?.value);
                       setSelectedOption3(null);
                     }
