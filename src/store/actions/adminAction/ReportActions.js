@@ -6,6 +6,8 @@ import {
   exportData,
   usersList,
   getFile,
+  SelectUserList,
+
 } from "../../../services/adminServices/ReportService";
 import { notification } from "antd";
 
@@ -19,6 +21,7 @@ export const SEARCH = "SEARCH";
 export const FILEPATH = "FILEPATH";
 export const FILEDETAILS = "FILEDETAILS";
 export const REPORT = "REPORT";
+export const  SELECTED_USER_REPORT = "SELECTED_USER_REPORT"
 
 export const selectedRow = (val) => ({
   type: SELECTEDROW,
@@ -36,11 +39,13 @@ export const getReportDetails = (
   endDate,
   search,
   filter,
-  sort
+  userName,
+  sort,
+  selectManager = ""
 ) => {
   return (dispatch) => {
     try {
-      patientDetails(pagenum, startDate, endDate, search, filter, sort).then(
+      patientDetails(pagenum, startDate, endDate, search, filter,userName, sort,selectManager).then(
         (response) => {
           if (response) {
             dispatch({
@@ -168,6 +173,29 @@ export const getFileDetails = (pathname, reportInfo) => {
           });
         }
       }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+export const getSelectUserListReport = (role) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECTED_USER_REPORT,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      SelectUserList(role).then((response) => {
+        dispatch({
+          type: SELECTED_USER_REPORT,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
     } catch (err) {
       console.log(err);
     }

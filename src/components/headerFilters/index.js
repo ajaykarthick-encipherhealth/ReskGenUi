@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
@@ -15,9 +15,17 @@ import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { getSelectUserListReport } from "../../store/actions/adminAction/ReportActions";
+import { getSelectUserList } from "../../store/actions/adminAction/DashboardAction";
 
 const { RangePicker } = DatePicker;
+const options = [
+  { value: "REVIEWER", label: "REVIEWER" },
+  { value: "SUPERVISOR", label: "SUPERVISOR" },
+];
+
 const HeaderFilters = ({
   // for search
   setSearch,
@@ -40,6 +48,13 @@ const HeaderFilters = ({
   defaultSelectValue2,
   selectOptions2,
   setSelectedOption2,
+
+  // if has 3 selectors
+  selectlabel3,
+  defaultSelectValue3,
+  selectOptions3,
+  isSelector3,
+  setSelectedOption3,
 
   // for picker
   pickerlabel,
@@ -120,6 +135,7 @@ const HeaderFilters = ({
   createdByOptoons,
   setSelCreatedBy,
   defaultCreatedBy,
+  selectedCoderOptReport,
 
   bullets,
   isNextRow,
@@ -131,10 +147,12 @@ const HeaderFilters = ({
   tracking,
   selectorField,
   defaultShow = false,
-  defaultSize = 'col-xl-2'
+  setSelect,
+  defaultSize = "col-xl-2",
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -168,13 +186,41 @@ const HeaderFilters = ({
               <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
+                  // value={selectedCoderOptReport}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
+                    setSelectedOption3(null);
+                    setSelect(null);
                   }}
                   options={selectOptions2}
                   placeholder={defaultSelectValue2?.label}
                   className="custom-react-select"
                   isSearchable={false}
+                />
+              </div>
+            </div>
+          )}
+          {isSelector3 && (
+            <div className={defaultSize}>
+              <label className={styles.label}>{selectlabel3}</label>
+              <div class="form-group has-search">
+                <Select
+                  showSearch
+                  onChange={(selectedOption) => {
+                    if (selectedCoderOptReport === "SUPERVISOR") {
+                      setSelectedOption3(selectedOption?.value);
+                      setSelectedOption2(null);
+                      setSelect(null);
+                    }
+                    if (selectedCoderOptReport === "REVIEWER") {
+                      setSelect(selectedOption?.value);
+                      setSelectedOption2(selectedOption?.value);
+                      setSelectedOption3(null);
+                    }
+                  }}
+                  className="custom-react-select"
+                  options={selectOptions3}
+                  style={{ backgroundColor: "#F3F3FF", width: "20px" }}
                 />
               </div>
             </div>
@@ -297,7 +343,7 @@ const HeaderFilters = ({
             </div>
           )}
           {activeTab === "CoderReport" && (
-            <div className="col-xl-6  d-flex justify-content-end">
+            <div className="col-xl-2  d-flex justify-content-end">
               <div className="row flr mt-3">
                 <button
                   onClick={() => {
@@ -320,14 +366,16 @@ const HeaderFilters = ({
           )}
         </div>
       </div>
-      {(showFilters) && (
+      {showFilters && (
         <div style={{ marginTop: "50px" }}>
           <div className="row filter-contain">
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
                 onClick={() => {
-                  dispatch(getFilters(selectorField?selectorField:"allocatedBy"));
+                  dispatch(
+                    getFilters(selectorField ? selectorField : "allocatedBy")
+                  );
                 }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>
