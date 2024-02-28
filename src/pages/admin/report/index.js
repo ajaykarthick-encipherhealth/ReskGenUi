@@ -20,10 +20,10 @@ import {
   getReportDetails,
   getSentDetails,
 } from "../../../store/actions/adminAction/ReportActions";
+import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 
-const { RangePicker } = DatePicker;
 const statusOptions = [
   { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
@@ -74,6 +74,7 @@ const index = () => {
   const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
+  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
@@ -81,13 +82,24 @@ const index = () => {
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-
+  const [isindividual, setIsindividual] = useState(false);
+  const [selectMemberType, setSelectMemberType] = useState("");
+  const [selectUser, setSelectUser] = useState([]);
+  const [selectManager, setSelectedManger] = useState("");
+  const [select, setSelect] = useState(null);
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
   });
   const SentOptions = [];
   const uniqueRoles = new Set();
+
+  const completedDatas = useSelector(
+    (state) => state?.AdminDashboardReducers?.completedStatus
+  );
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
 
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
@@ -98,6 +110,14 @@ const index = () => {
       }
     });
   });
+  const memberTypeChanges = (e) => {
+    setSelectMemberType(e);
+    setIsindividual(false);
+    setSelectUser([]);
+    if (e != "All") {
+      setIsindividual(true);
+    }
+  };
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -122,6 +142,9 @@ const index = () => {
     setSelectedDates(null);
     setActiveTab(name);
   };
+  useEffect(() => {
+    dispatch(getSelectUserList(selectMemberType));
+  }, [selectMemberType]);
   useEffect(() => {
     setIsLoading(false);
     if (activeTab === "SentReport") {
@@ -149,7 +172,9 @@ const index = () => {
           coderEndDate,
           coderSearch,
           selectedCoderOpt,
-          sort
+          selectedCoderOptReport ? selectedCoderOptReport : "",
+          sort,
+          selectManager ? selectManager : ""
         )
       );
     }
@@ -163,6 +188,7 @@ const index = () => {
     activeTab,
     ExportResponse,
     selectedCoderOpt,
+    selectedCoderOptReport,
     coderSearch,
     coderStartDate,
     coderEndDate,
@@ -175,11 +201,32 @@ const index = () => {
     receivedSearch,
     receivedSortOrder,
     sort,
+    selectManager,
+    select,
   ]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
+  useEffect(() => {
+    if (selectedCoderOptReport && !select) {
+      dispatch(
+        getSelectUserList(
+          selectedCoderOptReport === null ? " " : selectedCoderOptReport
+        )
+      );
+    }
+  }, [selectedCoderOptReport]);
+  const options = [
+    { value: " ", label: "All" },
+    { value: "REVIEWER", label: "REVIEWER" },
+    { value: "SUPERVISOR", label: "SUPERVISOR" },
+  ];
+
+  const optionsUser = selectUserList?.data?.response?.map((res) => ({
+    value: res.userName,
+    label: res.firstName + " " + res.lastName,
+  }));
 
   return (
     <>
@@ -211,6 +258,25 @@ const index = () => {
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
                             defaultSelectValue1={""}
+                            // selector
+
+                            selectlabel2="Select User Role"
+                            selectOptions2={
+                              activeTab === "CoderReport" ? options : null
+                            }
+                            setSelectedOption2={setSelectedCoderOptReport}
+                            defaultSelectValue2="All"
+                            // selector3
+                            isSelector3={
+                              selectUserList?.data?.response?.length
+                                ? true
+                                : false
+                            }
+                            selectedCoderOptReport={selectedCoderOptReport}
+                            selectlabel3="Select User"
+                            selectOptions3={optionsUser}
+                            setSelectedOption3={setSelectedManger}
+                            defaultSelectValue3="All"
                             // rangepicker
                             isRangePicker={true}
                             pickerlabel="Select Range"
@@ -226,6 +292,7 @@ const index = () => {
                             selectedDates={selectedDates}
                             setSelectedDates={setSelectedDates}
                             disable="Yes"
+                            setSelect={setSelect}
                           />
                         </div>
                         <Export
@@ -265,7 +332,7 @@ const index = () => {
                                       to="#my-posts"
                                       eventKey="validDiseases"
                                     >
-                                      Coder Report
+                                      Admin Report
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item
