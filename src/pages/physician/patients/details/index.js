@@ -1656,7 +1656,7 @@ const Details = ({}) => {
                     <div className="row">
                       <div
                         className="col-xl-1 col-sm-12"
-                        style={{ zIndex: "999" }}
+                        style={{ zIndex: "1" }}
                       >
                         <Button
                           onClick={backToPatientData}
@@ -1953,7 +1953,7 @@ const Details = ({}) => {
                               ALLOCATE
                             </Dropdown.Button>
                           </div>
-                        ) : userRole == "SUPERVISOR" ? (
+                        ) : userRole == "supervisor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown.Button
                               type="primary"

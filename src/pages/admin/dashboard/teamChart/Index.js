@@ -109,7 +109,7 @@ const BarChart = () => {
       type: "category",
       data: teams,
       axisLabel: {
-        rotate: 360, 
+        rotate: 40, 
         interval: 0,
       },
     },

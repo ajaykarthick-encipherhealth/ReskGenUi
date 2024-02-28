@@ -81,7 +81,7 @@ const WorkFlow = () => {
           worlFlowData?.data?.response?.processedStatus.COMPLETED +
           worlFlowData?.data?.response?.processedStatus.HOLD
         : "0",
-      days: `Last ${
+      days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: TC,
@@ -93,7 +93,7 @@ const WorkFlow = () => {
       charts: worlFlowData?.data?.response?.processedStatus
         ? worlFlowData?.data?.response?.processedStatus.HOLD
         : "0",
-      days: `Last ${
+      days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: allocatedbg,
@@ -105,7 +105,7 @@ const WorkFlow = () => {
       charts: worlFlowData?.data?.response?.processedStatus
         ? worlFlowData?.data?.response?.processedStatus.PENDING
         : "0",
-      days: `Last ${
+      days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: pendingbg,
@@ -117,7 +117,7 @@ const WorkFlow = () => {
       charts: worlFlowData?.data?.response?.processedStatus
         ? worlFlowData?.data?.response?.processedStatus.COMPLETED
         : "0",
-      days: `Last ${
+      days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: completedbg,
@@ -129,7 +129,7 @@ const WorkFlow = () => {
       charts: worlFlowData?.data?.response?.auditedStatus
         ? worlFlowData?.data?.response?.auditedStatus.AUDITED
         : "0",
-      days: `Last ${
+      days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: auditedbg,
@@ -141,7 +141,7 @@ const WorkFlow = () => {
       charts: worlFlowData?.data?.response?.auditedStatus
         ? worlFlowData?.data?.response?.auditedStatus.AUDIT_PENDING
         : "0",
-      days: `Last ${
+      days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: reAuditbg,
@@ -153,7 +153,7 @@ const WorkFlow = () => {
       charts: worlFlowData?.data?.response?.auditedStatus
         ? worlFlowData?.data?.response?.auditedStatus.AUDITHOLD
         : "0",
-      days: `Last ${
+      days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: auditHold,
@@ -165,7 +165,7 @@ const WorkFlow = () => {
       charts: worlFlowData?.data?.response?.auditedStatus
         ? worlFlowData?.data?.response?.auditedStatus.DECLINED
         : "0",
-      days: `Last ${
+      days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: auditDecliendbg,
@@ -197,10 +197,10 @@ const WorkFlow = () => {
       <HeadTitle
         header={
           !DateRanges || DateRanges?.clear
-            ? `Last 30 days work flow`
+            ? `Overall Workflow`
             : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
                 .subtract(1, "day")
-                .format("MM-DD-YYYY")}`
+                .format("MM-DD-YYYY")} (Workflow)`
         }
         icon={calender}
         handleOpen={handleOpen}

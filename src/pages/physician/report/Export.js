@@ -25,6 +25,7 @@ const Export = ({
   setSelectAll,
 }) => {
   const usersList = useSelector((state) => state.report?.usersList);
+  const list=useSelector(state=>state.report.row)
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
@@ -33,6 +34,8 @@ const Export = ({
   const [open, setOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
   const [form] = Form.useForm();
+  const idList=list?.map(data=>(data?.patientId))
+
   const checkBoxData = [
     {
       id: 1,
@@ -117,7 +120,6 @@ const Export = ({
 
   useEffect(() => {
     setCurrentUser(localStorage.getItem("userId"));
-
     var orgId = localStorage.getItem("orgId");
     dispatch(getUsersList(orgId, search));
   }, [search]);
@@ -188,6 +190,7 @@ const Export = ({
       fileType: values.ReportTYpe,
       reportName: values.ReportName,
       userAndAccess: userAndAccess,
+      patientIds:idList
     };
     dispatch(getExportDetails(data));
     form.resetFields();

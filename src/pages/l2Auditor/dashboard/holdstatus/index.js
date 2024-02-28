@@ -82,7 +82,7 @@ const HoldStatus = () => {
       />
       <div className={styles.card6}>
         <Card borderRadius="28px" padding="10px">
-          {holdStatusData?.laoding ? (
+          {holdStatusData?.loading ? (
             <div
               style={{
                 width: "100%",

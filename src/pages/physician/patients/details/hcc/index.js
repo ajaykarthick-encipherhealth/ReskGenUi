@@ -3055,6 +3055,12 @@ const Hcc = ({ patientHccResult }) => {
     setValidated(true);
   };
 
+  const underScoreRemove = (value) => {
+    var str = value;
+    var newStr = str.replace(/_/g, " ");
+    return newStr;
+  };
+
   return (
     <>
       {fileLoading ? (
@@ -3837,7 +3843,7 @@ const Hcc = ({ patientHccResult }) => {
                                             {item.diagnosisCodeCombo}
                                           </span>
                                           <span className={styles.ruleTypeCol}>
-                                            {item.ruleType}
+                                            {underScoreRemove(item.ruleType)}
                                           </span>
                                         </div>
                                         <div className="col-xl-3">
