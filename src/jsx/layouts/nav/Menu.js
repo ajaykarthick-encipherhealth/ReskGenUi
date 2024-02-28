@@ -90,7 +90,7 @@ export const AdminMenuList = [
   //   iconStyle: SVGICON.ReportIcon,
   //   to: "/admin/report",
   // },
-  
+
   // {
   //   title: "Notification",
   //   iconStyle: SVGICON.ReportIcon,
@@ -143,5 +143,23 @@ export const L2AuditorMenuList = [
     iconStyle: SVGICON.ReportIcon,
     to: "/l2Auditor/report",
     childRoute: "/l2Auditor/report/individualreport",
+  },
+];
+
+export const ProviderMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/provider/dashboard",
+  },
+  {
+    title: "Comparison",
+    iconStyle: SVGICON.adminUser,
+    to: "/provider/comparison",
+  },
+  {
+    title: "Query",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/l2Auditor/auditing",
   },
 ];

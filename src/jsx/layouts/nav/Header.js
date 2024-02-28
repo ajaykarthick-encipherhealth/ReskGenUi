@@ -29,6 +29,7 @@ import {
   PhysicanMenuList,
   L2AuditMenuList,
   L2AuditorMenuList,
+  ProviderMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
@@ -290,6 +291,8 @@ const Header = () => {
         return PhysicanMenuList;
       case "supervisor":
         return L2AuditorMenuList;
+      case "provider":
+        return ProviderMenuList;
       default:
         return [];
     }
@@ -410,33 +413,34 @@ const Header = () => {
                             </Button>
                           </Popover>
                         )}
-                        {(userRole !== "admin") && 
-                        <Tooltip
-                          title={` Quality : ${
-                            accuracy?.data?.response
-                              ? Math.round(accuracy?.data?.response)
-                              : 100
-                          }%`}
-                        >
-                          <div className="header-progress">
-                            <div style={{ width: 40, height: 40 }}>
-                              <CircularProgressbar
-                                value={
-                                  accuracy?.data?.response
-                                    ? Math.round(accuracy?.data?.response)
-                                    : Math.round(100)
-                                }
-                                text={`${
-                                  accuracy?.data?.response
-                                    ? Math.round(accuracy?.data?.response)
-                                    : Math.round(100)
-                                }%`}
-                              />
+                        {userRole !== "admin" && (
+                          <Tooltip
+                            title={` Quality : ${
+                              accuracy?.data?.response
+                                ? Math.round(accuracy?.data?.response)
+                                : 100
+                            }%`}
+                          >
+                            <div className="header-progress">
+                              <div style={{ width: 40, height: 40 }}>
+                                <CircularProgressbar
+                                  value={
+                                    accuracy?.data?.response
+                                      ? Math.round(accuracy?.data?.response)
+                                      : Math.round(100)
+                                  }
+                                  text={`${
+                                    accuracy?.data?.response
+                                      ? Math.round(accuracy?.data?.response)
+                                      : Math.round(100)
+                                  }%`}
+                                />
 
-                              {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
+                                {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
+                              </div>
                             </div>
-                          </div>
-                        </Tooltip> }
+                          </Tooltip>
+                        )}
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
