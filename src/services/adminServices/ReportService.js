@@ -7,12 +7,15 @@ export const patientDetails = async (
   endDate = "",
   search,
   filter = "",
-  sort
+  userName = "",
+  sort,
+  selectManager = ""
 ) => {
   const token = localStorage.getItem("token");
-
+  const orgId = localStorage.getItem("orgId");
   const searchValue = filter === "ALL" ? "" : filter;
-  const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
+
+  const url = `dbservice/patient/adminreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}&username=${userName}&managerid=${selectManager}&orgid=${orgId}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
@@ -122,4 +125,23 @@ export const getFile = (pathname) => {
       },
     }
   );
+};
+export const SelectUserList = async (role) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router.push("/login");
+    }
+  }
 };
