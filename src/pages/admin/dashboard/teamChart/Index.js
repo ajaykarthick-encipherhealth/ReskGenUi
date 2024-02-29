@@ -18,22 +18,27 @@ const BarChart = () => {
   );
 
   const datas = teamChartData?.data ? teamChartData?.data : [];
-  const teams = datas?.response?.map(info=>`${info?.firstName}${info?.lastName}`);
-
+  const teams = datas?.response?.map((info) => {
+    const firstNameInitial = info?.firstName?.charAt(0) || "";
+    const lastNameInitial = info?.lastName?.charAt(0) || "";
+    return `${firstNameInitial}${lastNameInitial}`;
+  });
   const colors = [
+    "#F4EDFD",
+    // "#D4A8FF",
+    "#EAD8FE",
+    "#DBB9FE",
     "#962DFF",
+    
     // "#BF80FF",
     "#CC99FF",
-    // "#D4A8FF",
-    "#DBB9FE",
-    "#EAD8FE",
-    "#F4EDFD",
   ];
   var series = [
     {
       data: datas?.response?.map((item) =>
         item?.totalFileAllocated ? item.totalFileAllocated : 0
       ),
+      // data: [120, 330, 20, 50, 20, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileAllocated",
@@ -42,6 +47,7 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFileProcessed ? item.totalFileProcessed : 0
       ),
+      // data: [120, 330, 90, 150, 20, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileProcessed",
@@ -51,6 +57,7 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFilePending ? item.totalFilePending : 0
       ),
+      // data: [120, 30, 220, 50, 120, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFilePending",
@@ -59,10 +66,11 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFileDeclined ? item.totalFileDeclined : 0
       ),
+      // data: [120, 300, 160, 250, 90, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileDeclined",
-      barWidth:30
+      barWidth: 30,
     },
   ];
   const stackInfo = {};
@@ -98,23 +106,26 @@ const BarChart = () => {
       data[j] = {
         value: data[j],
         itemStyle: {
-          borderRadius: [topBorder, topBorder, bottomBorder, bottomBorder],
+          // borderRadius: [bottomBorder, topBorder, topBorder, bottomBorder],
           color: colors[i],
         },
       };
     }
   }
   const option = {
-    xAxis: {
+    yAxis: {
       type: "category",
       data: teams,
       axisLabel: {
-        rotate: 40, 
+        rotate: 0,
         interval: 0,
       },
     },
-    yAxis: {
+    xAxis: {
       type: "value",
+      splitLine: {
+        show: false,
+      },
     },
     series: series,
     tooltip: {
@@ -127,7 +138,7 @@ const BarChart = () => {
   useEffect(() => {
     dispatch(TeamChart(router));
   }, [router]);
- 
+
   return (
     <>
       <HeadTitle header="Team Chart Status" />
@@ -161,7 +172,7 @@ const BarChart = () => {
                         width: "100%",
                         height: "680px",
                         marginTop: "-30px",
-                        overflowX: "hidden",
+                        overflowY: "hidden",
                       }}
                     />
                   )
