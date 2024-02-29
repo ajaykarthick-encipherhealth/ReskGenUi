@@ -251,6 +251,9 @@ const Radiology = ({}) => {
   const [dragFileDate, setdragFileDate] = useState(false);
   const [inputValueFileDate, setInputValueFileDate] = useState("");
   const [providerDetails, setProviderDetails] = useState("");
+  const [selectMeatResult, setSelectMeatResult] = useState(null);
+  const [isModalOpenRadiologyMeat, setIsModalOpenRadiologyMeat] =
+    useState(false);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -464,6 +467,43 @@ const Radiology = ({}) => {
           });
         });
 
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
+        );
+
+        var sectionColorResult = response.data.response;
+
+        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+        );
+        let sectionColorResultNotMatch = dublicateSectionArr.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+        );
+
+        var notMatchColorArray = [];
+        sectionColorResultNotMatch?.map((res, index) => {
+          var radomColorcode = stringToColour(res.name);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArray.push({
+            sectionName: res.name,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          // submitSectionColors(
+          //   res.name,
+          //   radomColorcode,
+          //   randomColorChangeShadow
+          // );
+        });
+
+        var newArrayColorMatchs = [];
+        newArrayColorMatchs = [
+          ...sectionColorResultMatch,
+          ...notMatchColorArray,
+        ];
+
+        setCaptureSectionMatching(newArrayColorMatchs);
+
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
 
@@ -489,7 +529,7 @@ const Radiology = ({}) => {
 
         setEncounterDateMatching(encounterDateColorsMatching);
 
-        setCaptureSectionMatching(capturedSectionsColorsMatching);
+        // setCaptureSectionMatching(capturedSectionsColorsMatching);
         setNewValidDiseaseListRadiology(validDisArray);
         setInNewValidDiseaseListRadiology(invalidDisArray);
         setUnMatchHccListRadiology(unMatchRes);
@@ -774,6 +814,7 @@ const Radiology = ({}) => {
     setConfirmCompleteModal(false);
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
+    setIsModalOpenRadiologyMeat(false);
   };
 
   const handleOpenModal = (value, disDescription) => {
@@ -814,7 +855,13 @@ const Radiology = ({}) => {
   ) => {
     handleOpenModalRadiology(value, disDescription, true);
   };
-  const handleOpenModalRadiology = (value, disDescription, radiologyCheck) => {
+  const handleOpenModalRadiology = (
+    value,
+    disDescription,
+    radiologyCheck,
+    meatresult
+  ) => {
+    setSelectMeatResult(meatresult);
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
       setTimeout(() => {
@@ -831,7 +878,7 @@ const Radiology = ({}) => {
       // setSelectMeatName(dataset);
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
-      setIsModalOpenRadiology(true);
+      setIsModalOpenRadiologyMeat(true);
     } else {
       handleOpenModal(value, disDescription);
     }
@@ -896,18 +943,24 @@ const Radiology = ({}) => {
 
   const getCaptureSectionBackgroundFile = (value) => {
     var dublicateCaptureDelete = removeDuplicates(value);
+    console.log(dublicateCaptureDelete);
     return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var headerNames = result[0]?.sectionName;
       var disCode = result[0]?.diagnosisCode;
 
       var sectionMapArr = (
-        <Badge
+        <span
           onClick={() => findValueDocument(disCode, res)}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
         >
           {res}
-        </Badge>
+        </span>
       );
       return sectionMapArr;
     });
@@ -916,12 +969,15 @@ const Radiology = ({}) => {
   const getCaptureSectionBackground = (value, documentPlace) => {
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var disCode = result[0]?.diagnosisCode;
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var headerNames = result[0]?.sectionName;
 
       var sectionMapArr = (
-        <Badge
+        <span
           onClick={() =>
             handleOpenModalCombinationCode(
               disCode,
@@ -931,10 +987,11 @@ const Radiology = ({}) => {
               documentPlace
             )
           }
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
         >
           {res}
-        </Badge>
+        </span>
       );
       return sectionMapArr;
     });
@@ -995,6 +1052,38 @@ const Radiology = ({}) => {
       );
     }
     setProviderDetails(data);
+  };
+
+  const getCaptureSectionBackgroundMeat = (
+    value,
+    dis,
+    radiology,
+    meatresult
+  ) => {
+    if (value) {
+      var igonreCase = value.toLowerCase();
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == igonreCase
+      );
+
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var disCode = result[0]?.diagnosisCode;
+      var headerNames = result[0]?.sectionName;
+
+      var sectionMapArr = (
+        <span
+          onClick={() =>
+            handleOpenModalRadiology(value, dis, radiology, meatresult)
+          }
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeat}`}
+        >
+          {value}
+        </span>
+      );
+      return sectionMapArr;
+    }
   };
 
   const getProviderNameList = (data) => {
@@ -1641,19 +1730,15 @@ const Radiology = ({}) => {
                                         -
                                       </span>
                                     )}
-                                    <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.monitorCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModalRadiology(
-                                          item.monitorCapturedFromHeader,
-                                          item.monitor,
-                                          item.radiology
-                                        )
-                                      }
-                                    >
-                                      {item.monitorCapturedFromHeader}
-                                    </Badge>
+
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.monitorCapturedFromHeader,
+                                        item.monitor,
+                                        item.radiology,
+                                        item
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.evaluate != "" ? (
@@ -1671,19 +1756,14 @@ const Radiology = ({}) => {
                                         -
                                       </span>
                                     )}
-                                    <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.evaluateCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModalRadiology(
-                                          item.monitorCapturedFromHeader,
-                                          item.monitor,
-                                          item.radiology
-                                        )
-                                      }
-                                    >
-                                      {item.evaluateCapturedFromHeader}
-                                    </Badge>
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.evaluateCapturedFromHeader,
+                                        item.evaluate,
+                                        item.radiology,
+                                        item
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.assessment != "" ? (
@@ -1701,19 +1781,14 @@ const Radiology = ({}) => {
                                         -
                                       </span>
                                     )}
-                                    <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.assessmentCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModalRadiology(
-                                          item.monitorCapturedFromHeader,
-                                          item.monitor,
-                                          item.radiology
-                                        )
-                                      }
-                                    >
-                                      {item.assessmentCapturedFromHeader}
-                                    </Badge>
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.assessmentCapturedFromHeader,
+                                        item.assessment,
+                                        item.radiology,
+                                        item
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     {item.treatment != "" ? (
@@ -1732,19 +1807,14 @@ const Radiology = ({}) => {
                                       </span>
                                     )}
 
-                                    <Badge
-                                      className="badge-meat cr-pointer badge-circle mt-2"
-                                      bg={` badge-circle mt-2 ${item.treatmentCapturedFromHeaderColor} `}
-                                      onClick={() =>
-                                        handleOpenModalRadiology(
-                                          item.monitorCapturedFromHeader,
-                                          item.monitor,
-                                          item.radiology
-                                        )
-                                      }
-                                    >
-                                      {item.treatmentCapturedFromHeader}
-                                    </Badge>
+                                    <div>
+                                      {getCaptureSectionBackgroundMeat(
+                                        item.treatmentCapturedFromHeader,
+                                        item.treatment,
+                                        item.radiology,
+                                        item
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="col-xl-1 meatclose">
                                     <Popconfirm
@@ -1804,12 +1874,6 @@ const Radiology = ({}) => {
                       ) : (
                         <div></div>
                       )}
-                      <button
-                        onClick={() => openNewTabDownloadPdfradiology()}
-                        className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn newtab-btn flr"
-                      >
-                        Open New Tab
-                      </button>
                     </div>
                     <div className="row">
                       <div className="col-xl-2">
@@ -2153,30 +2217,521 @@ const Radiology = ({}) => {
           // style={{ top: 5 }}
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
-          width="70%"
+          width="90%"
+          footer={false}
           // height={400}
         >
           <div className="section-container">
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-              <div
-                style={{
-                  height: "80vh",
-                  // width: "900px",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                {" "}
-                <Viewer
-                  fileUrl={selectFileURLRadiology}
-                  plugins={[defaultLayoutPluginInstance]}
-                  onDocumentLoad={handleDocumentLoad}
-                />
+            <div className="my-post-content pt-3">
+              <div className="row">
+                <div className="col-xl-2">
+                  <ul className="timeline">
+                    <div
+                      className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                    >
+                      <span className={`${visitStyles.hcc_title_name}`}>
+                        HCC
+                      </span>
+                      <div className="d-flex justify-content-center">
+                        <span className={`${visitStyles.hcc_title_badge}`}>
+                          {newValidDiseaseListRadiology.length}
+                        </span>
+                      </div>
+                    </div>
+
+                    {newValidDiseaseListRadiology.map((data, i) => (
+                      <li>
+                        <div className={`${visitStyles.hcc_card}`}>
+                          <div className={`${visitStyles.hcc_card_nameHead}`}>
+                            <div
+                              className="media-body"
+                              onClick={() =>
+                                findValueDocument(
+                                  data.diagnosisCode,
+                                  data.actualDescription
+                                )
+                              }
+                            >
+                              <span className="mb-1 disease-name d-flex">
+                                <span className="valid-dis-name">
+                                  {data.diagnosisCode}
+                                </span>{" "}
+                                - {data.actualDescription}
+                              </span>
+                            </div>
+
+                            <Popconfirm
+                              title="You want to delete?"
+                              description={data.diagnosisCode}
+                              onConfirm={confirmvalid}
+                              placement="leftTop"
+                              okText="Yes"
+                              cancelText="No"
+                              onOpenChange={() =>
+                                onchangeValid(data.diagnosisCode)
+                              }
+                            >
+                              <div className={visitStyles.close_icon}>
+                                <FontAwesomeIcon
+                                  icon={faArrowsAlt}
+                                  style={{ size: 8, color: "#a80404" }}
+                                />
+                              </div>
+                            </Popconfirm>
+                          </div>
+                          <div className={`${visitStyles.hoverActiveHcc}`}>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {getProviderNameList(data?.providerName)}
+                              {getEncounterDateBackground(
+                                data.encounterDateSplit
+                              )}
+                            </div>
+                            <div>
+                              {getCaptureSectionBackgroundFile(
+                                data.capturedSections,
+                                "Radio"
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="col-xl-8">
+                  <div className="card-body p-0 z-index-low">
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                      <div
+                        style={{
+                          height: "80vh",
+                          marginLeft: "auto",
+                          marginRight: "auto",
+                        }}
+                      >
+                        {" "}
+                        <Viewer
+                          fileUrl={selectFileURLRadiology}
+                          plugins={[defaultLayoutPluginInstance]}
+                          onDocumentLoad={handleDocumentLoad}
+                          renderLoader={(percentages) => (
+                            <div style={{ width: "240px" }}>
+                              <ProgressBar progress={Math.round(percentages)} />
+                            </div>
+                          )}
+                        />
+                      </div>
+                    </Worker>
+                  </div>
+                </div>
+                <div className="col-xl-2">
+                  <div className="">
+                    <ul className="timeline">
+                      <div
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                      >
+                        <span className={`${visitStyles.suggested_title_name}`}>
+                          NON-HCC
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span
+                            className={`${visitStyles.suggested_title_badge}`}
+                          >
+                            {newInValidDiseaseListRadiology.length}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={visitStyles.suggestedcontainer2}>
+                        <div className={visitStyles.hccStickey_head}>
+                          {newInValidDiseaseListRadiology.map((data, i) => (
+                            <li>
+                              <div className={`${visitStyles.hcc_card}`}>
+                                <div
+                                  className={`${visitStyles.hcc_card_nameHead}`}
+                                >
+                                  <div
+                                    className="media-body"
+                                    onClick={() =>
+                                      findValueDocument(
+                                        data.diagnosisCode,
+                                        data.actualDescription
+                                      )
+                                    }
+                                  >
+                                    <span className="mb-1 disease-name d-flex">
+                                      <span className="valid-dis-name">
+                                        {data.diagnosisCode}
+                                      </span>{" "}
+                                      - {data.actualDescription}
+                                    </span>
+                                  </div>
+
+                                  <Popconfirm
+                                    title="You want to delete?"
+                                    description={data.diagnosisCode}
+                                    onConfirm={confirmvalid}
+                                    placement="leftTop"
+                                    okText="Yes"
+                                    cancelText="No"
+                                    onOpenChange={() =>
+                                      onchangeValid(data.diagnosisCode)
+                                    }
+                                  >
+                                    <div className={visitStyles.close_icon}>
+                                      <FontAwesomeIcon
+                                        icon={faArrowsAlt}
+                                        style={{
+                                          size: 8,
+                                          color: "#a80404",
+                                        }}
+                                      />
+                                    </div>
+                                  </Popconfirm>
+                                </div>
+                                <div
+                                  className={`${visitStyles.hoverActiveHcc}`}
+                                >
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {getProviderNameList(data?.providerName)}
+                                    {getEncounterDateBackground(
+                                      data.encounterDateSplit
+                                    )}
+                                  </div>
+                                  <div>
+                                    {getCaptureSectionBackgroundFile(
+                                      data.capturedSections,
+                                      "Radio"
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </div>
+                      </div>
+                    </ul>
+                  </div>
+
+                  <div className="">
+                    <ul className="timeline">
+                      <div
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                      >
+                        <span className={`${visitStyles.deleted_title_name}`}>
+                          DELETED CODES
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span
+                            className={`${visitStyles.deleted_title_badge}`}
+                          >
+                            {invalidMoveDiseasesList.length}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={visitStyles.suggestedcontainer2}>
+                        <div className={visitStyles.hccStickey_head}>
+                          {invalidMoveDiseasesList.map((data, i) => (
+                            <li>
+                              <div className="timeline-panel invalid-disease">
+                                <div className="media-body">
+                                  <span className="mb-1 disease-name d-flex">
+                                    <span className="valid-dis-name">
+                                      {data.diagnosisCode}
+                                    </span>{" "}
+                                    - {data.actualDescription}
+                                  </span>
+                                </div>
+                                <Popover
+                                  content={data.dbDescription}
+                                  title={data.diagnosisCode}
+                                  placement="bottom"
+                                  trigger="click"
+                                >
+                                  <div className="icon-box  bg-danger-light me-1">
+                                    <FontAwesomeIcon
+                                      icon={faInfo}
+                                      style={{
+                                        color: "blue",
+                                      }}
+                                    />
+                                  </div>
+                                </Popover>
+                                <Popconfirm
+                                  title="You want move to valid?"
+                                  description={data.diagnosisCode}
+                                  onConfirm={confirmInvalidMoveDis}
+                                  placement="leftTop"
+                                  okText="Yes"
+                                  cancelText="No"
+                                  onOpenChange={() =>
+                                    onchangeValid(data.diagnosisCode)
+                                  }
+                                >
+                                  <div className="icon-box  bg-danger-light me-1">
+                                    <FontAwesomeIcon
+                                      icon={faCheck}
+                                      style={{
+                                        color: "orange",
+                                      }}
+                                    />
+                                  </div>
+                                </Popconfirm>
+                              </div>
+                            </li>
+                          ))}
+                        </div>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
               </div>
-            </Worker>
+            </div>
           </div>
         </Modal>
       )}
+      <Modal
+        title={selectMeatName}
+        // title="Pdf Test"
+        centered
+        open={isModalOpenRadiologyMeat}
+        // style={{ top: 5 }}
+        onOk={handleCloseModal}
+        onCancel={handleCloseModal}
+        width="90%"
+        footer={false}
+        // height={400}
+      >
+        <div className="section-container">
+          <div className="my-post-content pt-3">
+            <div className="row">
+              <div className="col-xl-4">
+                <div className={visitStyles.meat_head_card}>
+                  <div className="row">
+                    <div className="col-xl-6">
+                      <label>Codes</label>
+                    </div>
+                    <div className="col-xl-6">
+                      <label>Description</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-6 d-grid">
+                      <span className="font-bold">
+                        {selectMeatResult?.diagnosisCode}
+                      </span>
+                      {selectMeatResult?.category == "Valid" ? (
+                        <Badge
+                          className="valid-meat badge-circle mt-2"
+                          bg={` badge-circle mt-2 bg-validmeat`}
+                        >
+                          {selectMeatResult?.category}
+                        </Badge>
+                      ) : (
+                        <Badge
+                          className="valid-meat badge-circle mt-2"
+                          bg={` badge-circle mt-2 bg-validUnmatch`}
+                        >
+                          {selectMeatResult?.category}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="col-xl-6 d-grid">
+                      <Popover
+                        placement="topLeft"
+                        title="Description"
+                        content={selectMeatResult?.diseaseName}
+                      >
+                        <span className="meat-name-details2">
+                          {selectMeatResult?.diseaseName}
+                        </span>
+                      </Popover>
+                    </div>
+                  </div>
+                </div>
+                <div className={visitStyles.meat_head_card}>
+                  <div className="row">
+                    <div className="col-xl-6">
+                      <label>Monitor</label>
+                    </div>
+                    <div className="col-xl-6">
+                      <label>Evaluation</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-6 d-grid">
+                      {selectMeatResult?.monitor != "" ? (
+                        <Popover
+                          placement="topLeft"
+                          title="Monitor"
+                          content={selectMeatResult?.monitor}
+                        >
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.monitor}
+                          </span>
+                        </Popover>
+                      ) : (
+                        <span className="meat-name-details2 text-center font-bold">
+                          -
+                        </span>
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeat(
+                          selectMeatResult?.monitorCapturedFromHeader,
+                          selectMeatResult?.monitor,
+                          selectMeatResult?.radiology,
+                          selectMeatResult
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-xl-6 d-grid">
+                      {selectMeatResult?.evaluate != "" ? (
+                        <Popover
+                          placement="topLeft"
+                          title="Evaluation"
+                          content={selectMeatResult?.evaluate}
+                        >
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.evaluate}
+                          </span>
+                        </Popover>
+                      ) : (
+                        <span className="meat-name-details2 text-center font-bold">
+                          -
+                        </span>
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeat(
+                          selectMeatResult?.evaluateCapturedFromHeader,
+                          selectMeatResult?.evaluate,
+                          selectMeatResult?.radiology,
+                          selectMeatResult
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={visitStyles.meat_head_card}>
+                  <div className="row">
+                    <div className="col-xl-6">
+                      <label>Assessment</label>
+                    </div>
+                    <div className="col-xl-6">
+                      <label>Treatment</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-6 d-grid">
+                      {selectMeatResult?.assessment != "" ? (
+                        <Popover
+                          placement="topLeft"
+                          title="Assessment"
+                          content={selectMeatResult?.assessment}
+                        >
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.assessment}
+                          </span>
+                        </Popover>
+                      ) : (
+                        <span className="meat-name-details2 text-center font-bold">
+                          -
+                        </span>
+                      )}
+
+                      <div>
+                        {getCaptureSectionBackgroundMeat(
+                          selectMeatResult?.assessmentCapturedFromHeader,
+                          selectMeatResult?.assessment,
+                          selectMeatResult?.radiology,
+                          selectMeatResult
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-xl-6 d-grid">
+                      {selectMeatResult?.treatment != "" ? (
+                        <Popover
+                          placement="topLeft"
+                          title="Treatment"
+                          content={selectMeatResult?.treatment}
+                        >
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.treatment}
+                          </span>
+                        </Popover>
+                      ) : (
+                        <span className="meat-name-details2 text-center font-bold">
+                          -
+                        </span>
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeat(
+                          selectMeatResult?.treatmentCapturedFromHeader,
+                          selectMeatResult?.treatment,
+                          selectMeatResult?.radiology,
+                          selectMeatResult
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-8">
+                <div className="card-body p-0 z-index-low">
+                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                    <div
+                      style={{
+                        height: "80vh",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                      }}
+                    >
+                      {" "}
+                      <Viewer
+                        fileUrl={selectFileURLRadiology}
+                        plugins={[defaultLayoutPluginInstance]}
+                        onDocumentLoad={handleDocumentLoad}
+                        renderLoader={(percentages) => (
+                          <div style={{ width: "240px" }}>
+                            <ProgressBar progress={Math.round(percentages)} />
+                          </div>
+                        )}
+                      />
+                    </div>
+                  </Worker>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };
