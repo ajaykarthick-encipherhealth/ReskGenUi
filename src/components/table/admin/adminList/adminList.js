@@ -10,12 +10,14 @@ import {
   dateFormate,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
+  renderUserPrfoileAvatarDisabled,
   sortFunction,
 } from "../../../headerFilters/functions";
 import { enableUser } from "../../../../services/adminServices/usersService";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
 import { useSelector } from "react-redux";
+import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
@@ -156,26 +158,60 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             {!usersData?.loading &&
             usersData?.data?.response?.content?.length > 0 ? (
               usersData?.data?.response?.content?.map((item, index) => (
-                <tr key={index} style={{ height: "35px", backgroundColor: item.accountStatus  === true ? "" : "#0000001a" }} >
+                <tr
+                  key={index}
+                  style={{
+                    height: "35px",
+                    backgroundColor:
+                      item.accountStatus === true ? "" : "#0000001a",
+                  }}
+                >
                   <td
                     className={TableStyle.childBorder}
-                    style={{ textAlign: "center",  backgroundColor: item.accountStatus  === true ? "" : "#0000001a" }}
+                    style={{
+                      textAlign: "center",
+                      backgroundColor:
+                        item.accountStatus === true ? "" : "#0000001a",
+                    }}
                   >
                     {item.firstName ||
                     item.lastName ||
                     item?.profileImageUrl ? (
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        {" "}
-                        <span style={{ marginRight: "10px" }}>
-                          {" "}
+
+                    {item.accountStatus === true  ?  <span
+                          style={{
+                            marginRight: "10px",
+                            color: item.accountStatus === true ? "" : "gray",
+                          }}
+                        >
+                    
                           {renderUserPrfoileAvatar(
                             item.firstName,
                             item.lastName,
                             item?.profileImageUrl,
                             "header"
                           )}
-                        </span>
-                        <span>
+                        </span> : <span
+                          style={{
+                            marginRight: "10px",
+                            color: item.accountStatus === true ? "" : "gray",
+                          }}
+                        >
+                    
+                          {renderUserPrfoileAvatarDisabled(
+                            item.firstName,
+                            item.lastName,
+                            item?.profileImageUrl,
+                            "header"
+                          )}
+                        </span> }
+                       
+                        <span
+                          style={{
+                            color: item.accountStatus === true ? "" : "gray",
+                          }}
+                        >
                           {item.firstName} {item.lastName}
                         </span>
                       </div>
@@ -183,14 +219,36 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       <div style={{ textAlign: "center" }}>---</div>
                     )}
                   </td>
-                  <td className={TableStyle.childBorder} style={{ backgroundColor: item.accountStatus  === true ? "" : "#0000001a"}}>
-                    <span>{item?.email ? item?.email : "---"}</span>
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{
+                      backgroundColor:
+                        item.accountStatus === true ? "" : "#0000001a",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: item.accountStatus === true ? "" : "gray",
+                      }}
+                    >
+                      {item?.email ? item?.email : "---"}
+                    </span>
                   </td>
-                  <td className={TableStyle.childBorder} style={{ backgroundColor: item.accountStatus  === true ? "" : "#0000001a"}}>
+                  <td
+                    className={TableStyle.childBorder}
+                    style={{
+                      backgroundColor:
+                        item.accountStatus === true ? "" : "#0000001a",
+                    }}
+                  >
                     <div className={TableStyle.rowStyle2}>
                       {item?.role?.length > 0 ? (
                         <>
-                          <span>
+                          <span
+                            style={{
+                              color: item.accountStatus === true ? "" : "gray",
+                            }}
+                          >
                             {item?.role
                               ?.map((data) => capitalizeFirstLetter(data))
                               .join(",")}
@@ -204,60 +262,104 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
                   <td
                     className={TableStyle.lastBorder}
-                    style={{ height: "40px !important", textAlign: "center" ,  backgroundColor: item.accountStatus  === true ? "" : "#0000001a"}}
+                    style={{
+                      height: "40px !important",
+                      textAlign: "center",
+                      backgroundColor:
+                        item.accountStatus === true ? "" : "#0000001a",
+                    }}
                   >
-                    <span>{dateFormate(dayjs, item?.createdDate)}</span>
-                  </td>
-                  <td
-                    className={TableStyle.childBorder}
-                    style={{ height: "40px !important", textAlign: "center",  backgroundColor: item.accountStatus  === true ? "" : "#0000001a" }}
-                  >
-                    <span>
-                      {" "}
-                      {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
+                    <span
+                      style={{
+                        color: item.accountStatus === true ? "" : "gray",
+                      }}
+                    >
+                      {dateFormate(dayjs, item?.createdDate)}
                     </span>
                   </td>
                   <td
                     className={TableStyle.childBorder}
                     style={{
                       height: "40px !important",
-                      cursor: "pointer",
                       textAlign: "center",
-                      backgroundColor: item.accountStatus  === true ? "" : "#0000001a"
+                      backgroundColor:
+                        item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
-                    <div>
-                      {popoverVisible ? (
-                        <Popover
-                          content={() => getContent(item)}
-                          title="Change Role"
-                          trigger="click"
-                        >
+                    <span
+                      style={{
+                        color: item.accountStatus === true ? "" : "gray",
+                      }}
+                    >
+                      {" "}
+                      {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
+                    </span>
+                  </td>
+                  {item.accountStatus === true ? (
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{
+                        height: "40px !important",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor:
+                          item.accountStatus === true ? "" : "#0000001a",
+                      }}
+                    >
+                      <div>
+                        {popoverVisible ? (
+                          <Popover
+                            content={() => getContent(item)}
+                            title="Change Role"
+                            trigger="click"
+                          >
+                            <div
+                              onClick={() => {
+                                setChecked();
+                                setRowData(item);
+                                setPopoverVisible(true);
+                              }}
+                            >
+                              <EditButton />
+                            </div>
+                          </Popover>
+                        ) : (
                           <div
                             onClick={() => {
-                              setChecked();
                               setRowData(item);
                               setPopoverVisible(true);
                             }}
                           >
                             <EditButton />
                           </div>
-                        </Popover>
-                      ) : (
-                        <div
-                          onClick={() => {
-                            setRowData(item);
-                            setPopoverVisible(true);
-                          }}
-                        >
-                          <EditButton />
-                        </div>
-                      )}
-                    </div>
-                  </td>
+                        )}
+                      </div>
+                    </td>
+                  ) : (
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{
+                        height: "40px !important",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor:
+                          item.accountStatus === true ? "" : "#0000001a",
+                      }}
+                    >
+                      <div>
+                        <EditButtonDisbled />
+                      </div>
+                    </td>
+                  )}
+
                   <td
                     className={TableStyle.lastBorder}
-                    style={{ height: "40px !important", textAlign: "center" ,  backgroundColor: item.accountStatus  === true ? "" : "#0000001a"}}
+                    style={{
+                      height: "40px !important",
+                      textAlign: "center",
+                      backgroundColor:
+                        item.accountStatus === true ? "" : "#0000001a",
+                    }}
                   >
                     <Switch
                       defaultChecked={item?.accountStatus}
