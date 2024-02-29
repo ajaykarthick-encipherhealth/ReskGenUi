@@ -109,7 +109,7 @@ function CoderReport({
   };
 
   const getFlag = (data) => {
-    switch (data["2023"][data["2023"].length-1]?.flag) {
+    switch (data["2023"][data["2023"].length - 1]?.flag) {
       case "PATIENT_NAME_MISSED":
         return (
           <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
@@ -265,9 +265,9 @@ function CoderReport({
                         height: "20px",
                         flexhrink: "0",
                         borderRadius: "4px",
-                        backgroundColor: "pink",
                       }}
                       checked={selectAll}
+                      className={selectAll ? TableStyle.customChecked2 : ""}
                     />
                   </div>
                 </th>
@@ -342,7 +342,7 @@ function CoderReport({
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div >{SVGICON?.emptyFlag}</div>
+                          <div>{SVGICON?.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
@@ -362,12 +362,7 @@ function CoderReport({
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                          }}
+                          className={TableStyle.customChecked}
                         />
                       </td>
                     </>
@@ -423,7 +418,7 @@ function CoderReport({
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div >{SVGICON.emptyFlag}</div>
+                          <div>{SVGICON.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
@@ -442,14 +437,7 @@ function CoderReport({
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                            backgroundColor: "pink",
-                            cursor: "pointer",
-                          }}
+                          className={TableStyle.customChecked}
                         />
                       </td>
                     </>

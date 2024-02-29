@@ -454,9 +454,11 @@ const Header = () => {
                         >
                           <Badge
                             count={notificationAlertData?.length}
-                            color="#3479fe"
+                            color="#241571"
                           >
+                            <div style={{color:"#241571"}}>
                             {SVGICON.dashboardNotification}
+                            </div>
                           </Badge>
                         </div>
                         <div className="header-media d-flex">

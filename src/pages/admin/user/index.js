@@ -367,7 +367,6 @@ const UserList = () => {
             </div>
           </div>
         </Offcanvas>
-
         <Offcanvas
           show={addUser}
           onHide={() => {setAddUser(false);

@@ -14025,3 +14025,6 @@ overflow: scroll;
 .table-responsive{
 overflow-x: hidden !important;
 }
+.ant-progress-text{
+  display: none !important;
+}

@@ -200,13 +200,8 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
-                    <span
-                      style={{
-                        color: item.accountStatus === true ? "" : "gray",
-                      }}
-                    >
-                      {item?.email ? item?.email : "---"}
-                    </span>
+
+                    <span>{item?.email ? item?.email : "---"}</span>
                   </td>
                   <td
                     className={TableStyle.childBorder}
@@ -242,6 +237,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       backgroundColor:
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
+
                   >
                     <span
                       style={{
@@ -341,7 +337,6 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                         onChange(item, checked);
                         setPopoverVisible(true);
                       }}
-                      style={{ color: "red" }}
                     />
                   </td>
                 </tr>
