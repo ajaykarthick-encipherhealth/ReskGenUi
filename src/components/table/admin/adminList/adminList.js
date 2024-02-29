@@ -156,10 +156,10 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             {!usersData?.loading &&
             usersData?.data?.response?.content?.length > 0 ? (
               usersData?.data?.response?.content?.map((item, index) => (
-                <tr key={index} style={{ height: "35px" }}>
+                <tr key={index} style={{ height: "35px", backgroundColor: item.accountStatus  === true ? "" : "#0000001a" }} >
                   <td
                     className={TableStyle.childBorder}
-                    style={{ textAlign: "center" }}
+                    style={{ textAlign: "center",  backgroundColor: item.accountStatus  === true ? "" : "#0000001a" }}
                   >
                     {item.firstName ||
                     item.lastName ||
@@ -183,10 +183,10 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       <div style={{ textAlign: "center" }}>---</div>
                     )}
                   </td>
-                  <td className={TableStyle.childBorder}>
+                  <td className={TableStyle.childBorder} style={{ backgroundColor: item.accountStatus  === true ? "" : "#0000001a"}}>
                     <span>{item?.email ? item?.email : "---"}</span>
                   </td>
-                  <td className={TableStyle.childBorder}>
+                  <td className={TableStyle.childBorder} style={{ backgroundColor: item.accountStatus  === true ? "" : "#0000001a"}}>
                     <div className={TableStyle.rowStyle2}>
                       {item?.role?.length > 0 ? (
                         <>
@@ -204,13 +204,13 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
                   <td
                     className={TableStyle.lastBorder}
-                    style={{ height: "40px !important", textAlign: "center" }}
+                    style={{ height: "40px !important", textAlign: "center" ,  backgroundColor: item.accountStatus  === true ? "" : "#0000001a"}}
                   >
                     <span>{dateFormate(dayjs, item?.createdDate)}</span>
                   </td>
                   <td
                     className={TableStyle.childBorder}
-                    style={{ height: "40px !important", textAlign: "center" }}
+                    style={{ height: "40px !important", textAlign: "center",  backgroundColor: item.accountStatus  === true ? "" : "#0000001a" }}
                   >
                     <span>
                       {" "}
@@ -223,6 +223,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       height: "40px !important",
                       cursor: "pointer",
                       textAlign: "center",
+                      backgroundColor: item.accountStatus  === true ? "" : "#0000001a"
                     }}
                   >
                     <div>
@@ -256,7 +257,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   </td>
                   <td
                     className={TableStyle.lastBorder}
-                    style={{ height: "40px !important", textAlign: "center" }}
+                    style={{ height: "40px !important", textAlign: "center" ,  backgroundColor: item.accountStatus  === true ? "" : "#0000001a"}}
                   >
                     <Switch
                       defaultChecked={item?.accountStatus}
