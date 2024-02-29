@@ -389,9 +389,10 @@ export default function Patient() {
       <div className="d-flex ">
         <button
           onClick={() => addPatientFile(rowData)}
-          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
+          className="btn hegiht10 shadow  sharp me-1 action-btn"
+          style={{background:"#241571"}}
         >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} />
+          <FontAwesomeIcon icon={faUpload} fontSize={11} style={{color:"#ffff"}}/>
         </button>
       </div>
     );

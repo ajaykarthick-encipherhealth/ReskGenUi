@@ -1,6 +1,6 @@
 import React from "react";
 
-const EditButton = () => {
+const EditButtonDisbled = () => {
   return (
     <svg
       width="24"
@@ -9,7 +9,7 @@ const EditButton = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="24" height="24" rx="4" fill="#04306F" />
+      <rect width="24" height="24" rx="4" fill="gray" />
       <g clip-path="url(#clip0_1405_2731)">
         <path
           d="M16.6667 14.3333V16.6666C16.6667 16.976 16.5438 17.2728 16.325 17.4915C16.1062 17.7103 15.8094 17.8333 15.5 17.8333H7.33335C7.02393 17.8333 6.72719 17.7103 6.5084 17.4915C6.2896 17.2728 6.16669 16.976 6.16669 16.6666V8.49992C6.16669 8.1905 6.2896 7.89375 6.5084 7.67496C6.72719 7.45617 7.02393 7.33325 7.33335 7.33325H9.66669"
@@ -39,4 +39,4 @@ const EditButton = () => {
 };
 
 
-export default EditButton;
+export default EditButtonDisbled;

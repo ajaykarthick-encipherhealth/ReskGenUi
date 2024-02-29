@@ -14087,3 +14087,9 @@ span.meat-name-details2 {
   height: 20px;
   width: 230px;
 }
+.table-responsive{
+overflow-x: hidden !important;
+}
+.ant-progress-text{
+  display: none !important;
+}

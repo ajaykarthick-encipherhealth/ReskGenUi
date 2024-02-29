@@ -93,13 +93,7 @@ function AllocatedAdminList({
                 checked={selectedRowsId?.some(
                   (item) => item.id === data.patientId
                 )}
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  flexhrink: "0",
-                  borderRadius: "4px",
-                  backgroundColor: "pink",
-                }}
+                className={TableStyle.customChecked}
               />
             )}
           </td>
@@ -148,17 +142,19 @@ function AllocatedAdminList({
                   type="checkbox"
                   onClick={() => setSelectAllChecked(!selectAllChecked)}
                   style={{
-                    paddingTop: "10px",
+                    // paddingTop: "10px",
                     width: "20px",
                     height: "20px",
                     flexhrink: "0",
                     borderRadius: "4px",
-                    backgroundColor: "pink",
+                     cursor:"pointer"
                   }}
                   checked={
                     selectAllChecked &&
                     selectedRowsId.length == selectedChart.length
                   }
+                  className={ selectAllChecked &&
+                    selectedRowsId.length == selectedChart.length?TableStyle.customChecked2:""}
                 />
               </div>
             </th>
