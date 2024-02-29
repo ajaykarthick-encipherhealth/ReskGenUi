@@ -213,12 +213,12 @@
   flex-shrink: 0;
   border-radius: 4px;
   cursor: pointer;
-  appearance: none; /* Remove default appearance */
-  -webkit-appearance: none; /* For WebKit (Safari, Chrome) */
-  -moz-appearance: none; /* For Mozilla Firefox */
-  border: 1px solid #d4c9c9; /* Border color */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
   outline: none;
-  transition: background-color 0.3s; /* Add transition for smoother effect */
+  transition: background-color 0.3s;
 }
 
 .customChecked[type="checkbox"]:checked {
@@ -227,14 +227,13 @@
   background-color: #241571;
 }
 .customChecked[type="checkbox"]::before {
-  content: '\2713'; /* Checkmark character */
+  content: "\2713";
   display: flex;
   justify-content: center;
-  color: #fff; 
+  color: #fff;
   font-weight: 800;
   font-size: 18px;
   margin-top: -2px;
-
 }
 .customChecked2[type="checkbox"] {
   width: 20px;
@@ -242,26 +241,24 @@
   flex-shrink: 0;
   border-radius: 4px;
   cursor: pointer;
-  appearance: none; /* Remove default appearance */
-  -webkit-appearance: none; /* For WebKit (Safari, Chrome) */
-  -moz-appearance: none; /* For Mozilla Firefox */
-  border: 1px solid #d4c9c9; /* Border color */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
   outline: none;
   transition: background-color 0.3s;
-  background-color: #fff; /* Add transition for smoother effect */
+  background-color: #fff;
 }
 
 .customChecked2[type="checkbox"]:checked {
   background-color: #fff;
 }
 .customChecked2[type="checkbox"]::before {
-  content: '\2713'; /* Checkmark character */
+  content: "\2713";
   display: flex;
   justify-content: center;
-  color: #241571; 
+  color: #241571;
   font-weight: 800;
   font-size: 18px;
   margin-top: -2px;
 }
-
-
