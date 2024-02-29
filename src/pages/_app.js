@@ -43,9 +43,10 @@ function MyApp({ Component, pageProps }) {
     }
   );
 
-  const timerFunction = () => {
-    dispatch(refreshToken());
-  };
+  // const timerFunction = () => {
+  //   dispatch(refreshToken());
+  // };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const { addResponseMessage } = require("react-chat-widget");
@@ -66,8 +67,8 @@ function MyApp({ Component, pageProps }) {
     } else {
       setShowTerminal(true);
       const timer = setTimeout(() => {
-        timerFunction();
-      }, 30 * 60 * 1000);
+        dispatch(refreshToken());
+      }, 60 * 1000);
 
       // console.log(role, "resre");
       // if (role[0] === "reviewer") {

@@ -278,12 +278,12 @@ export const refreshToken = async () => {
   const token = localStorage.getItem("refreshToken");
   try {
     const response = await axios.post(
-      `${ENDPOINTS?.apiEndoint}securityservice/auth/refreshtoken`,
-      token
+      `${ENDPOINTS.apiEndoint}securityservice/auth/refreshtoken`,
+      { token: token }
     );
     if (response) {
       console.log(response);
-      localStorage.setItem("token", response.data?.response);
+      // localStorage.setItem("token", response.data?.response);
     }
   } catch (err) {
     console.log(err);
