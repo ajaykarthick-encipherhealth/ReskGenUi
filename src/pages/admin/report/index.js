@@ -293,6 +293,7 @@ const index = () => {
                             setSelectedDates={setSelectedDates}
                             disable="Yes"
                             setSelect={setSelect}
+                            adminReport={true}
                           />
                         </div>
                         <Export
