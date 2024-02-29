@@ -43,10 +43,6 @@ function MyApp({ Component, pageProps }) {
     }
   );
 
-  // const timerFunction = () => {
-  //   dispatch(refreshToken());
-  // };
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const { addResponseMessage } = require("react-chat-widget");
@@ -56,7 +52,6 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const currentPath = window.location.pathname;
-    const role = localStorage.getItem("role");
     if (
       currentPath === "/" ||
       currentPath === "/login" ||
@@ -68,29 +63,12 @@ function MyApp({ Component, pageProps }) {
       setShowTerminal(true);
       const timer = setTimeout(() => {
         dispatch(refreshToken());
-      }, 60 * 1000);
-
-      // console.log(role, "resre");
-      // if (role[0] === "reviewer") {
-      //   setValidatePath(
-      //     window.location.pathname.toLowerCase().includes("physician")
-      //   );
-      // } else if (role[0] === "supervisor") {
-      //   setValidatePath(
-      //     window.location.pathname.toLowerCase().includes("l2Auditor")
-      //   );
-      // } else {
-      //   setValidatePath(
-      //     window.location.pathname
-      //       .toLowerCase()
-      //       .includes(role[0]?.toLowerCase())
-      //   );
-      // }
+      }, 30 * 60 * 1000);
       return () => {
         clearTimeout(timer);
       };
     }
-  });
+  }, [router]);
 
   return (
     <>

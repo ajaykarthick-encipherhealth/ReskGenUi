@@ -4,6 +4,7 @@ import { loginConfirmedAction, Logout } from "../store/actions/AuthActions";
 import axiosApi from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 
+export const REFRESH_TOKEN = "REFRESH_TOKEN";
 export const CurrentUser = async (userId, router) => {
   const token = localStorage.getItem("token");
   try {
@@ -274,7 +275,7 @@ export const logoutAllDevice = async (email) => {
   }
 };
 
-export const refreshToken = async () => {
+export const refreshToken = () => async (dispatch) =>  {
   const token = localStorage.getItem("refreshToken");
   try {
     const response = await axios.post(
@@ -282,8 +283,14 @@ export const refreshToken = async () => {
       { token: token }
     );
     if (response) {
-      console.log(response);
-      // localStorage.setItem("token", response.data?.response);
+      dispatch({
+        type: REFRESH_TOKEN,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+      localStorage.setItem("token", response?.data?.response);
     }
   } catch (err) {
     console.log(err);
