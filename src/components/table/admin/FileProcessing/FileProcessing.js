@@ -462,7 +462,7 @@ function FileProcessingTable({ patinetListAll }) {
                     ? "green"
                     : errStages[data?.processStageChart]
                     ? "red"
-                    : "#1677ff"
+                    : "#241571"
                 }
               />
             </Tooltip>

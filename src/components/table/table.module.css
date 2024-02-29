@@ -1,7 +1,7 @@
 .classTable > thead {
   /* background-color: #222b40 !important; */
   /* background-color: #133DD4 !important; */
-  background-color: #04306f !important;
+  background: #241571 !important;
   border-radius: 10px !important;
 }
 
@@ -181,8 +181,7 @@
 }
 .innerProcessingDiv:nth-child(7),
 .innerProcessingDiv:nth-child(8),
-.innerProcessingDiv:nth-child(9)
-{
+.innerProcessingDiv:nth-child(9) {
   position: relative;
   left: -15px;
 }
@@ -204,7 +203,65 @@
   width: 350px;
   text-align: center;
 }
-.rowAlignment{
+.rowAlignment {
   text-align: center;
 }
+
+.customChecked[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none; /* Remove default appearance */
+  -webkit-appearance: none; /* For WebKit (Safari, Chrome) */
+  -moz-appearance: none; /* For Mozilla Firefox */
+  border: 1px solid #d4c9c9; /* Border color */
+  outline: none;
+  transition: background-color 0.3s; /* Add transition for smoother effect */
+}
+
+.customChecked[type="checkbox"]:checked {
+  width: 22px;
+  height: 22px;
+  background-color: #241571;
+}
+.customChecked[type="checkbox"]::before {
+  content: '\2713'; /* Checkmark character */
+  display: flex;
+  justify-content: center;
+  color: #fff; 
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: -2px;
+
+}
+.customChecked2[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none; /* Remove default appearance */
+  -webkit-appearance: none; /* For WebKit (Safari, Chrome) */
+  -moz-appearance: none; /* For Mozilla Firefox */
+  border: 1px solid #d4c9c9; /* Border color */
+  outline: none;
+  transition: background-color 0.3s;
+  background-color: #fff; /* Add transition for smoother effect */
+}
+
+.customChecked2[type="checkbox"]:checked {
+  background-color: #fff;
+}
+.customChecked2[type="checkbox"]::before {
+  content: '\2713'; /* Checkmark character */
+  display: flex;
+  justify-content: center;
+  color: #241571; 
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: -2px;
+}
+
 

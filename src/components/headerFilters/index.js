@@ -303,7 +303,7 @@ const HeaderFilters = ({
                     {badges?.length > 0 &&
                       badges?.map((data) => (
                         <div style={{ marginBottom: "10px" }}>
-                          <Image src={data.src} width={20} height={30} />
+                          <Image src={data.src} width={20} height={30}/>
                           <span style={{ marginLeft: "5px" }}>
                             {data?.name}
                           </span>
@@ -314,7 +314,7 @@ const HeaderFilters = ({
                 trigger={["click"]}
                 placement="bottom"
               >
-                <Image src={warning} />
+                <Image src={warning} className="mt-[10px]"/>
               </Popover>
             </div>
           )}
@@ -325,7 +325,8 @@ const HeaderFilters = ({
             >
               <Button
                 onClick={addUserForm}
-                className="btn btn-primary btn-sm ms-2 flr width-max-content"
+                style={{background:"#241571"}}
+                className="btn btn-sm ms-2 flr width-max-content"
               >
                 + {btnTitle}
               </Button>
@@ -344,7 +345,7 @@ const HeaderFilters = ({
           )}
           {activeTab === "CoderReport" && (
             <div className="col-xl-2  d-flex justify-content-end">
-              <div className="row flr mt-3">
+              <div className="row flr">
                 <button
                   onClick={() => {
                     setIsModalVisible(true);
@@ -357,8 +358,11 @@ const HeaderFilters = ({
                       ? false
                       : true
                   }
+                  style={{color:"#241571"}}
                 >
-                  <Export />
+                 
+                  <Export/>
+                
                   Export
                 </button>
               </div>
