@@ -319,6 +319,7 @@ const UserList = () => {
           </div>
           <div className="offcanvas-body">
             <div className="container-fluid">
+
               <Form
                 noValidate
                 validated={validated}
@@ -362,6 +363,7 @@ const UserList = () => {
                   </Button>
                 </div>
               </Form>
+              
             </div>
           </div>
         </Offcanvas>

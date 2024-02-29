@@ -407,6 +407,54 @@ export const renderUserPrfoileAvatar = (
   }
 };
 
+export const renderUserPrfoileAvatarDisabled = (
+  firstName,
+  lastName,
+  imageUrl,
+  field
+) => {
+  const firstNameInitial = firstName?.charAt(0) || "";
+  const secondNameInitial = lastName?.charAt(0) || "";
+  const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
+  const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
+
+  if (!imageUrl) {
+    var profileAvatar = (
+      <Avatar
+        style={{
+          backgroundColor: "gray",
+          color: "white",
+          cursor: "pointer",
+          width: "30px",
+          height: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          fontWeight: 500,
+        }}
+      >
+        {firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase()}
+      </Avatar>
+    );
+    return profileAvatar;
+  } else {
+    var profileAvatar = (
+      <img
+        src={imageUrl}
+        alt="avatar"
+        // className="rounded-4 shadow-4"
+        style={{
+          width: "30px",
+          height: "30px",
+          borderRadius: "50%",
+        }}
+      />
+    );
+    return profileAvatar;
+  }
+};
+
 export const getSelectedDaysCount = (DateRanges) => {
   const startDate = new Date(
     moment(DateRanges?.startDate).format("YYYY-MM-DD")
