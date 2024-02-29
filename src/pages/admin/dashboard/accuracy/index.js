@@ -121,6 +121,9 @@ const Accuracy = () => {
     },
     yAxis: {
       type: "value",
+      axisLabel: {
+        formatter: '{value}%', 
+      },
     },
     tooltip: {
       show: true,
