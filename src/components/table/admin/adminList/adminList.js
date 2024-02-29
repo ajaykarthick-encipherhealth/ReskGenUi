@@ -19,15 +19,9 @@ import { useSelector } from "react-redux";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
-  { value: "REVIEWER", label: "REVIEWER", role: "REVIEWER" },
-  { value: "SUPERVISOR", label: "SUPERVISOR", role: "SUPERVISOR" },
+  { value: "REVIEWER", label: "Reviewer", role: "REVIEWER" },
+  { value: "SUPERVISOR", label: "Supervisor", role: "SUPERVISOR" },
 ];
-
-// const itemss = [
-//   { value: "ADMIN", label: "Admin", role: "admin" },
-//   { value: "L1AUDITOR", label: "L1auditor", role: "l1auditor" },
-//   { value: "L2AUDITOR", label: "L2auditor", role: "l2auditor" },
-// ];
 
 const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const usersData = useSelector((state) => state.adminUsers.usersData);
@@ -52,30 +46,10 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const getContent = (data) => {
     return (
       <div style={{ height: "250px" }}>
-        <div style={{ height: "200px" }}>
-          <div style={{ width: "100%", display: "flex" }}>
-            <button
-              className={styles.sendBtn}
-              style={{ width: "50%", marginRight: "5px" }}
-              onClick={() => {
-                setIsMultiple(true);
-              }}
-            >
-              Include Previous Roles
-            </button>
-            <button
-              className={styles.sendBtn}
-              style={{ width: "50%" }}
-              onClick={() => {
-                setIsMultiple(false);
-              }}
-            >
-              Selected Role Only
-            </button>
-          </div>
+        <div style={{ height: "200px",width:"100%" }}>
           <Select
-            style={{ width: "100%" }}
-            mode={isMultiple ? "multiple" : ""}
+            style={{ width: "300px" }}
+            mode={"multiple"}
             onChange={handleRows}
             options={items}
             placeholder={!data?.role[0] && "Select Role"}

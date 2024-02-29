@@ -532,7 +532,7 @@ const UserList = () => {
                       </div>
                     ) : (
                       <small id="emailHelp" class="form-text text-muted">
-                        Please enter an numeric, number with both lowercase and
+                        Please enter an number with both lowercase and
                         uppercase characters.
                       </small>
                     )}
