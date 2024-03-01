@@ -221,6 +221,7 @@ function PatientTable({
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th className={TableStyle.rowStyle2}>L1 AUDITOR</th>
+            
             <th
               onClick={() => {
                 sortFunction(
