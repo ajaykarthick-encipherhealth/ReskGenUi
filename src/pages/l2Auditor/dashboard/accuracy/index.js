@@ -238,6 +238,7 @@ const Accuracy = () => {
             fontWeight: "500",
           },
         },
+        lineColor: "#d9d9d9",
       },
     ],
     yAxis: [
@@ -262,10 +263,6 @@ const Accuracy = () => {
         // Secondary yAxis
         title: {
           text: "",
-          // style: {
-          // color:"#d9d9d9",
-          // },
-          // show:false
         },
         labels: {
           format: "{value} mm",
