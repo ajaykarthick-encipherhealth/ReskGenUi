@@ -157,7 +157,6 @@ const HeaderFilters = ({
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
-  console.log(clear);
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -183,7 +182,7 @@ const HeaderFilters = ({
                 setSelectedOption={setSelectedOption}
                 selectOptions={selectOptions}
                 defaultSelectValue1={defaultSelectValue1}
-                selectedValue={clear ? "" : selectedValue}
+                // selectedValue={selectedValue}
               />
             </div>
           )}
@@ -192,7 +191,7 @@ const HeaderFilters = ({
               <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
-                  value={clear ? "" : selectedValue2}
+                  // value={selectedValue2}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption);
                     if (selectOptions3) {
@@ -236,7 +235,7 @@ const HeaderFilters = ({
           {isRangePicker && (
             <div className={defaultSize}>
               <DateRangePicker
-                selectedDates={clear ?["",""]:selectedDates}
+                selectedDates={selectedDates}
                 pickerlabel={pickerlabel}
                 defaultStartDate={defaultStartDate}
                 defaultEndDate={defaultEndDate}
@@ -327,20 +326,9 @@ const HeaderFilters = ({
               </Popover>
             </div>
           )}
-
-          <div
-            className={"col-xl-1"}
-            style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
-            onClick={() => {
-              setClear(true);
-             
-            }}
-          >
-           
-          </div>
           {addUser && (
             <div
-              className={`${addUser ? "col-xl-2" : "col-xl-4"}`}
+              className={`${addUser ? "col-xl-1" : "col-xl-4"}`}
               style={{ marginTop: "20px" }}
             >
               <Button
