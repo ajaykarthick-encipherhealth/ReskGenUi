@@ -156,6 +156,7 @@
   padding: 0px 5px;
   margin-top: 5px;
   height: 17px;
+  width: max-content;
 }
 
 .mostSpecificTag {
