@@ -42,12 +42,14 @@ const HeaderFilters = ({
   setSelectedOption,
   selectOptions,
   defaultSelectValue1,
+  selectedValue,
 
   // if has 2 selectors
   selectlabel2,
   defaultSelectValue2,
   selectOptions2,
   setSelectedOption2,
+  selectedValue2,
 
   // if has 3 selectors
   selectlabel3,
@@ -67,6 +69,8 @@ const HeaderFilters = ({
   setEndDate,
   isRangePicker,
   disabled,
+  pickerStartValue,
+  pickerEndValue,
   // for report
   setReceivedStartDate,
   setReceivedEndDate,
@@ -153,7 +157,7 @@ const HeaderFilters = ({
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
-
+  console.log(clear);
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -171,7 +175,7 @@ const HeaderFilters = ({
               />
             </div>
           )}
-          {isSelector ? (
+          {isSelector && (
             <div className={defaultSize}>
               {" "}
               <Selector
@@ -179,22 +183,25 @@ const HeaderFilters = ({
                 setSelectedOption={setSelectedOption}
                 selectOptions={selectOptions}
                 defaultSelectValue1={defaultSelectValue1}
+                selectedValue={clear ? "" : selectedValue}
               />
             </div>
-          ) : null}
+          )}
           {selectOptions2 && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
-                  // value={selectedCoderOptReport}
+                  value={clear ? "" : selectedValue2}
                   onChange={(selectedOption) => {
-                    setSelectedOption2(selectedOption?.value);
-                    setSelectedOption3(null);
-                    setSelect(null);
+                    setSelectedOption2(selectedOption);
+                    if (selectOptions3) {
+                      setSelectedOption3(null);
+                      setSelect(null);
+                    }
                   }}
                   options={selectOptions2}
-                  placeholder={defaultSelectValue2?.label}
+                  // placeholder={defaultSelectValue2?.label}
                   className="custom-react-select"
                   isSearchable={false}
                 />
@@ -229,7 +236,7 @@ const HeaderFilters = ({
           {isRangePicker && (
             <div className={defaultSize}>
               <DateRangePicker
-                selectedDates={selectedDates}
+                selectedDates={clear ?["",""]:selectedDates}
                 pickerlabel={pickerlabel}
                 defaultStartDate={defaultStartDate}
                 defaultEndDate={defaultEndDate}
@@ -242,6 +249,7 @@ const HeaderFilters = ({
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
                 disabled={disable != "Yes" && true}
+               
               />
             </div>
           )}
@@ -304,7 +312,7 @@ const HeaderFilters = ({
                     {badges?.length > 0 &&
                       badges?.map((data) => (
                         <div style={{ marginBottom: "10px" }}>
-                          <Image src={data.src} width={20} height={30}/>
+                          <Image src={data.src} width={20} height={30} />
                           <span style={{ marginLeft: "5px" }}>
                             {data?.name}
                           </span>
@@ -315,18 +323,29 @@ const HeaderFilters = ({
                 trigger={["click"]}
                 placement="bottom"
               >
-                <Image src={warning} className="mt-[10px]"/>
+                <Image src={warning} className="mt-[10px]" />
               </Popover>
             </div>
           )}
+
+          <div
+            className={"col-xl-1"}
+            style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
+            onClick={() => {
+              setClear(true);
+             
+            }}
+          >
+           
+          </div>
           {addUser && (
             <div
-              className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
+              className={`${addUser ? "col-xl-2" : "col-xl-4"}`}
               style={{ marginTop: "20px" }}
             >
               <Button
                 onClick={addUserForm}
-                style={{background:"#241571"}}
+                style={{ background: "#241571" }}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
                 + {btnTitle}
@@ -360,11 +379,9 @@ const HeaderFilters = ({
                       ? false
                       : true
                   }
-                  style={{color:"#241571"}}
+                  style={{ color: "#241571" }}
                 >
-                 
-                  <Export/>
-                
+                  <Export />
                   Export
                 </button>
               </div>
