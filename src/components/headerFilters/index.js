@@ -153,8 +153,7 @@ const HeaderFilters = ({
   defaultShow = false,
   setSelect,
   defaultSize = "col-xl-2",
-  setClear,
-  clear,
+  adminReport
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -353,8 +352,9 @@ const HeaderFilters = ({
               </Button>
             </div>
           )}
-          {isAllocate && (
-            <div className="col-xl-8 mt-4">
+         
+            <div className="col-xl-2 mt-4">
+              {isAllocate &&
               <button
                 onClick={handleOpneModal}
                 className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
@@ -362,10 +362,10 @@ const HeaderFilters = ({
               >
                 Allocate
               </button>
+          }
             </div>
-          )}
           {activeTab === "CoderReport" && (
-            <div className="col-xl-2  d-flex justify-content-end">
+            <div className={`col-xl-${adminReport?"2":"4"} d-flex justify-content-end`}>
               <div className="row flr">
                 <button
                   onClick={() => {
