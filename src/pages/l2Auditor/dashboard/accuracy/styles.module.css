@@ -86,3 +86,7 @@
 .selectContainer{
   margin-left: 20px;
 }
+.highchartStyle > div {
+  width: 98% !important;
+  height: 280px !important;
+}
