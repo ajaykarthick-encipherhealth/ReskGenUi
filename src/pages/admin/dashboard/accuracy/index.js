@@ -206,14 +206,13 @@ const Accuracy = () => {
         ],
         crosshair: true,
         labels: {
-          
           style: {
             color: "gray",
-            fontWeight:"500"
+            fontWeight: "500",
           },
         },
+        lineColor: "#d9d9d9",
       },
-      
     ],
     yAxis: [
       {
@@ -222,14 +221,14 @@ const Accuracy = () => {
           format: "{value}°C",
           style: {
             color: "gray",
-            fontWeight:"500"
+            fontWeight: "500",
           },
         },
         title: {
           text: "",
           style: {
             color: "gray",
-            fontWeight:"500"
+            fontWeight: "500",
           },
         },
       },
@@ -246,7 +245,7 @@ const Accuracy = () => {
           format: "{value} mm",
           style: {
             color: "gray",
-            fontWeight:"500"
+            fontWeight: "500",
           },
         },
         opposite: true,

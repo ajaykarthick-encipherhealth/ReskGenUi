@@ -86,14 +86,8 @@
 .selectContainer {
   margin-left: 20px;
 }
-/* .header>div{
-  height:300px !important;
-  border: 1px solid red;;
-} */
 .highchartStyle > div {
   width: 98% !important;
   height: 280px !important;
 }
-.highchartStyle > div>text{
-  display: none !important;
-}
+

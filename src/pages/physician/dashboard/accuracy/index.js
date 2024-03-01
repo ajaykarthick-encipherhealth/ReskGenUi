@@ -13,6 +13,8 @@ import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
 
 export const getISOWeekNumber = (date) => {
   const currentDate = new Date(date);
@@ -125,47 +127,170 @@ const Accuracy = () => {
   if (currentBtn && accuracyDatas?.data?.response) {
     data = Object.values(accuracyDatas?.data?.response);
   }
+  // const option = {
+  //   xAxis: {
+  //     type: "category",
+  //     data: xAxisData,
+  //   },
+  //   yAxis: {
+  //     type: "value",
+  //   },
+  //   tooltip: {
+  //     show: true,
+
+  //     formatter: function (params) {
+  //       let tooltipContent = "";
+
+  //       if (Array.isArray(params)) {
+  //         params.forEach((item) => {
+  //           const allocatedValue = Number(item.data).toFixed(2);
+  //           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+  //         });
+  //       } else if (params.data) {
+  //         const allocatedValue = Number(params.data).toFixed(2);
+  //         tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+  //       }
+
+  //       return tooltipContent;
+  //     },
+  //   },
+  //   series: [
+  //     {
+  //       data: data,
+  //       type: "bar",
+  //       itemStyle: {
+  //         barBorderRadius: [10, 10, 0, 0],
+  //         color: function (params) {
+  //           return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
+  //         },
+  //       },
+  //       lineStyle: {
+  //         color: "#BD83B8",
+  //       },
+  //       showSymbol: false,
+  //     },
+  //   ],
+  // };
   const option = {
-    xAxis: {
-      type: "category",
-      data: xAxisData,
+    title: {
+      text: "",
     },
-    yAxis: {
-      type: "value",
+    xAxis: [
+      {
+        categories: ["2019", "2020", "2021"],
+        crosshair: true,
+        labels: {
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        lineColor: "#d9d9d9",
+      },
+    ],
+    yAxis: [
+      {
+        // Primary yAxis
+        labels: {
+          format: "{value}°C",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        title: {
+          text: "",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+      },
+      {
+        // Secondary yAxis
+        title: {
+          text: "",
+        },
+        labels: {
+          format: "{value} mm",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        opposite: true,
+      },
+    ],
+    legend: {
+      enabled: false,
+    },
+    credits: {
+      enabled: false,
     },
     tooltip: {
-      show: true,
-
-      formatter: function (params) {
-        let tooltipContent = "";
-
-        if (Array.isArray(params)) {
-          params.forEach((item) => {
-            const allocatedValue = Number(item.data).toFixed(2);
-            tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-          });
-        } else if (params.data) {
-          const allocatedValue = Number(params.data).toFixed(2);
-          tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-        }
-
-        return tooltipContent;
+      formatter: function () {
+        return (
+          "<b>" +
+          this.key +
+          "</b><br/>" +
+          this.series.name +
+          ": " +
+          this.y +
+          "<br/>" +
+          "Total: " +
+          this.point.stackTotal
+        );
+      },
+    },
+    plotOptions: {
+      column: {
+        stacking: "normal",
       },
     },
     series: [
       {
-        data: data,
-        type: "bar",
-        itemStyle: {
-          barBorderRadius: [10, 10, 0, 0],
-          color: function (params) {
-            return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-          },
+        name: "Road",
+        type: "column",
+        yAxis: 1,
+        data: [434, 290, 307],
+        tooltip: {
+          valueSuffix: " mm",
         },
-        lineStyle: {
-          color: "#BD83B8",
+      },
+      {
+        name: "Rail",
+        type: "column",
+        yAxis: 1,
+        data: [272, 153, 156],
+        tooltip: {
+          valueSuffix: " mm",
         },
-        showSymbol: false,
+      },
+      {
+        name: "Air",
+        type: "column",
+        yAxis: 1,
+        data: [13, 7, 8],
+        tooltip: {
+          valueSuffix: " mm",
+        },
+      },
+      {
+        name: "Sea",
+        type: "column",
+        yAxis: 1,
+        data: [55, 35, 41],
+        tooltip: {
+          valueSuffix: " mm",
+        },
+      },
+      {
+        name: "Temperature",
+        type: "spline",
+        data: [13.6, 14.9, 5.8],
+        tooltip: {
+          valueSuffix: "°C",
+        },
       },
     ],
   };
@@ -215,15 +340,13 @@ const Accuracy = () => {
               ) : accuracyDatas?.loading === false &&
                 accuracyDatas?.data?.response ? (
                 option && (
-                  <ReactECharts
-                    option={option}
-                    style={{
-                      width: "100%",
-                      height: "340px",
-                      marginTop: "-30px",
-                      overflowX: "hidden",
-                    }}
-                  />
+                  <div className={styles.highchartStyle}>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={option}
+                      className={styles.hightchartStyles}
+                    />
+                  </div>
                 )
               ) : (
                 <div className={spinSTYles.spinStyle}>
