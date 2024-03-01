@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../../../../components/table/table.module.css";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { SVGICON } from "../../../../jsx/constant/theme";
@@ -108,11 +108,10 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-            {data.patientId}
+            <div> {data.patientId ? data.patientId : "---"} </div>
+            <div> {data.patientName ? data.patientName : ""}</div>
           </td>
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.patientName}
-          </td>
+
           <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center" }}
@@ -140,6 +139,21 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center", paddingLeft: "40px" }}
+            onClick={handleTableRowClick}
+          >
+            000
+          </td>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center", paddingLeft: "40px" }}
+            onClick={handleTableRowClick}
+          >
+            000
+          </td>
+
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.auditAllocatedDate
               ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
@@ -218,10 +232,20 @@ function PatientTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
+            <th>PATIENTS</th>
             <th className={TableStyle.rowStyle2}>L1 AUDITOR</th>
-            
+            <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
+              <Tooltip placement="bottom" title="HCC VALID IDENTIFICATION">
+                HVI
+              </Tooltip>
+            </th>
+            <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
+              {" "}
+              <Tooltip placement="bottom" title="REJECTED COUNT">
+                RC
+              </Tooltip>
+            </th>
+
             <th
               onClick={() => {
                 sortFunction(
