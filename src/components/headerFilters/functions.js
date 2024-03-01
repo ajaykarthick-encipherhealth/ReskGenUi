@@ -198,19 +198,21 @@ export const priorityStatus = (value) => {
           <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
         </>
       );
-      case "NORMAL":
+    case "NORMAL":
       return (
         <>
-        <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-        <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>{" "}
-      </>
+          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+          <span style={{ fontSize: "13px", color: "#4466ff " }}>
+            Normal
+          </span>{" "}
+        </>
       );
-      case "LOW":
+    case "LOW":
       return (
         <>
-        <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-        <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-      </>
+          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
+        </>
       );
     default:
       break;
@@ -447,6 +449,56 @@ export const renderUserPrfoileAvatarDisabled = (
         style={{
           width: "30px",
           height: "30px",
+          borderRadius: "50%",
+        }}
+      />
+    );
+    return profileAvatar;
+  }
+};
+
+export const renderUserPrfoileAvatarCustom = (
+  firstName,
+  lastName,
+  imageUrl,
+  field,
+  width,
+  height
+) => {
+  const firstNameInitial = firstName?.charAt(0) || "";
+  const secondNameInitial = lastName?.charAt(0) || "";
+  const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
+  const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
+
+  if (!imageUrl) {
+    var profileAvatar = (
+      <Avatar
+        style={{
+          backgroundColor: backgroundColor,
+          color: "white",
+          cursor: "pointer",
+          width: width,
+          height: height,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          fontWeight: 500,
+        }}
+      >
+        {firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase()}
+      </Avatar>
+    );
+    return profileAvatar;
+  } else {
+    var profileAvatar = (
+      <img
+        src={imageUrl}
+        alt="avatar"
+        // className="rounded-4 shadow-4"
+        style={{
+          width: width,
+          height: height,
           borderRadius: "50%",
         }}
       />

@@ -90,11 +90,11 @@ export const AdminMenuList = [
     iconStyle: SVGICON.ReportIcon,
     to: "/admin/report",
   },
-  // {
-  //   title: "Notification",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/admin/notification",
-  // },
+  {
+    title: "Notification",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/admin/notification",
+  },
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,

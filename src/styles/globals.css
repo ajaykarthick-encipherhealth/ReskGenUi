@@ -13639,9 +13639,9 @@ overflow: scroll;
   border: 1px solid #e6e6e6 !important;
 }
 
-.ant_select_form > .ant-select-arrow {
+/* .ant_select_form > .ant-select-arrow {
   margin-top: 0px !important;
-}
+} */
 
 .overlay-loading {
   cursor: pointer;
@@ -14087,9 +14087,38 @@ span.meat-name-details2 {
   height: 20px;
   width: 230px;
 }
-.table-responsive{
-overflow-x: hidden !important;
+.table-responsive {
+  overflow-x: hidden !important;
 }
-.ant-progress-text{
+.ant-progress-text {
   display: none !important;
+}
+.notification .ant-checkbox .ant-checkbox-inner {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 6px;
+}
+.notification .ant-checkbox + span {
+  padding-inline-start: 8px;
+  padding-inline-end: 8px;
+  font-size: 15px !important;
+  font-weight: 500;
+}
+.notification.ant-checkbox .ant-checkbox-inner:after {
+  inset-inline-start: 35% !important;
+}
+.notification.ant-checkbox-group {
+  column-gap: 35px;
+  margin-top: 15px;
+}
+
+.notification .ant-radio-wrapper span.ant-radio + * {
+  font-size: 15px !important;
+  font-weight: 500;
+}
+.notification .ant-radio-group {
+  margin-top: 10px;
+}
+.notification .ant-radio-wrapper {
+  margin-inline-end: 40px;
 }

@@ -219,7 +219,7 @@ const UserList = () => {
 
     dispatch(
       getUsers({
-        pageCount: clear ?  "":pageCount,
+        pageCount: clear ? "" : pageCount,
         search: clear ? "" : search,
         startDate: clear ? "" : startDate,
         endDate: clear ? "" : endDate,
@@ -239,7 +239,7 @@ const UserList = () => {
     useAdd,
     clear,
   ]);
-console.log(status)
+  console.log(status);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -276,7 +276,7 @@ console.log(status)
                         defaultEndDate={""}
                         setStartDate={setStartDate}
                         setEndDate={setEndDate}
-                        pickerStartValue={ startDate}
+                        pickerStartValue={startDate}
                         pickerEndValue={endDate}
                         isRangePicker={true}
                         addUser={true}
