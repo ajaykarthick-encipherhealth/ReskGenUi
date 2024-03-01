@@ -219,7 +219,7 @@ const UserList = () => {
 
     dispatch(
       getUsers({
-        pageCount: clear ?  "":pageCount,
+        pageCount: clear ? "" : pageCount,
         search: clear ? "" : search,
         startDate: clear ? "" : startDate,
         endDate: clear ? "" : endDate,
@@ -275,7 +275,7 @@ const UserList = () => {
                         defaultEndDate={""}
                         setStartDate={setStartDate}
                         setEndDate={setEndDate}
-                        pickerStartValue={ startDate}
+                        pickerStartValue={startDate}
                         pickerEndValue={endDate}
                         isRangePicker={true}
                         addUser={true}
