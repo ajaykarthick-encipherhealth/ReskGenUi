@@ -7,21 +7,23 @@ const Selector = ({
   setSelectedOption,
   selectOptions,
   defaultSelectValue1,
-  isClose = false
+  isClose = false,
+  selectedValue
 }) => {
   return (
     <div>
-      <label style={{marginLeft:"10px"}}>{selectlabel}</label>
+      <label style={{ marginLeft: "10px" }}>{selectlabel}</label>
       <div class="form-group has-search">
         <Select
-          onChange={(value) => {
-            handleSelector(value, setSelectedOption);
-          }}
+          value={selectedValue}
           options={selectOptions}
           className="custom-react-select"
           isSearchable={false}
           isClearable={isClose}
-          placeholder={defaultSelectValue1?.label}
+          onChange={(value) => {
+            handleSelector(value, setSelectedOption);
+          }}
+          // placeholder={defaultSelectValue1?.label}
         />
       </div>
     </div>
