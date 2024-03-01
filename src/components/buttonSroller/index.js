@@ -10,6 +10,7 @@ const Buttonscroller = ({
   activeBg,
   inActiveBg,
   containerBg,
+  width
 }) => {
   return (
     <div
@@ -29,6 +30,7 @@ const Buttonscroller = ({
               backgroundColor: activeButton === index ? activeBg : inActiveBg,
               color: activeButton === index ? activeColor : inActiveColor,
               borderRadius: activeButton === index && "16px",
+              width:width &&"150px"
             }}
             onClick={() => handleButtonClick(index, btn?.title)}
           >
