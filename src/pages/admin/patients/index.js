@@ -97,6 +97,7 @@ export default function Patient() {
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
+
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
 
