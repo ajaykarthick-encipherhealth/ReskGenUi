@@ -25,7 +25,7 @@ export const searchFunction = (
 
 // for select
 export const handleSelector = (option, setSelectedOption) => {
-  setSelectedOption(option);
+  setSelectedOption(option?.value);
 };
 
 // for rangepicker

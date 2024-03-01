@@ -170,13 +170,12 @@
   font-family: Manrope; */
   color: black;
   text-align: center;
-  /* padding-top: 5px; */
+  padding-top: 5px;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  text-align: center;
   margin-right: 10px;
-  margin-top: 25px;
+  /* margin-top: 25px; */
 
 }
 .dateDisplay {

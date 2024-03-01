@@ -193,7 +193,7 @@ const HeaderFilters = ({
                 <Select
                   // value={selectedValue2}
                   onChange={(selectedOption) => {
-                    setSelectedOption2(selectedOption);
+                    setSelectedOption2(selectedOption?.value);
                     if (selectOptions3) {
                       setSelectedOption3(null);
                       setSelect(null);
@@ -353,7 +353,7 @@ const HeaderFilters = ({
           }
             </div>
           {activeTab === "CoderReport" && (
-            <div className={`col-xl-${adminReport?"2":"4"} d-flex justify-content-end`}>
+            <div className={`col-xl-${!adminReport&&"4"} d-flex justify-content-end`}>
               <div className="row flr">
                 <button
                   onClick={() => {
