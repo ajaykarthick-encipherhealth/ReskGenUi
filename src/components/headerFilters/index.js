@@ -337,7 +337,7 @@ const HeaderFilters = ({
              
             }}
           >
-            <button className={styles.filterBtn}>Clear</button>
+           
           </div>
           {addUser && (
             <div
