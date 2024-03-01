@@ -142,8 +142,9 @@ export default function Patient() {
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
   const [auditSelectedOption, setAuditSelectedOption] = useState("");
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
-  console.log(auditedDueStartDate, auditedDueEndDate);
-  console.log(auditSelectedOption);
+  const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+
   // new changes
 
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
@@ -185,6 +186,7 @@ export default function Patient() {
       auditSelectedOption,
       selAuditAllocatedBy,
       auditSelAllocatedTo,
+      sort
     };
     dispatch(getTrackingList(datas));
   }, [
@@ -206,6 +208,7 @@ export default function Patient() {
     auditSelectedOption,
     selAuditAllocatedBy,
     auditSelAllocatedTo,
+    sort
   ]);
 
   useEffect(() => {
@@ -642,6 +645,9 @@ export default function Patient() {
                               auditBodyTemplate={auditstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
+                              setSortOrder={setAllocatedSortOrder}
+                              sortOrder={allocatedSortOrder}
+                              setSort={setSort}
                             />
                             <div>
                               <div className="pagination-container">
