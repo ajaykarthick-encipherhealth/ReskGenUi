@@ -49,9 +49,12 @@ import {
 } from "../../../../services/PatientsListSevice";
 import LoadingSpinner from "../../../../components/loadingSpinner";
 import { validateYear } from "../../../../components/headerFilters/functions";
+import { getPatientID } from "../../../../store/actions/PatientsActions";
+import { useDispatch } from "react-redux";
 
 const Details = ({}) => {
   const navigate = useRouter();
+  const dispatch=useDispatch()
   const { RangePicker } = DatePicker;
   const sideMenu = useSelector((state) => state.sideMenu);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
@@ -1270,6 +1273,7 @@ const Details = ({}) => {
   };
 
   const backToPatientData = () => {
+    dispatch(getPatientID(null))
     navigate.back();
     // navigate.push("/physician/patients");
   };

@@ -40,7 +40,7 @@ import {
   getNotificationAlertClear,
 } from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
-import { getFilteredList } from "../../../store/actions/PatientsActions";
+import { getFilteredList, getPatientID } from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
 import {
@@ -377,7 +377,9 @@ const Header = () => {
                         }`}
                         key={index}
                         onClick={() => {
-                          dispatch(getFilteredList(null));
+                          dispatch(getFilteredList(null))
+                          dispatch(getPatientID(null))
+                          localStorage.removeItem("patientId");;
                         }}
                       >
                         <Link href={data.to} className="d-flex">
