@@ -1,0 +1,51 @@
+.container {
+  width: 200px;
+  height: 100px;
+}
+
+.cards {
+  border: 1px solid #4a3aff;
+  border-top: 5px;
+  border-style: solid;
+  border-color: #4a3aff;
+  width: 350px;
+  height: 130px;
+  /* box-shadow: 0px 8px 10px -6px  #4A3AFF; */
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.code {
+  font-size: 14px;
+  text-align: left;
+}
+.codeAlign {
+  font-size: 12px;
+  text-align: left;
+  white-space: nowrap;
+  width: 330px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chart td {
+  border-color: inherit;
+  border-style: revert-layer;
+  border-width: 1px;
+}
+
+.chart {
+  padding-top: 100px;
+  height: 90vh;
+}
+
+.chart table {
+  border-collapse: initial;
+}
+
+.subCard {
+  width: 350px;
+  border: 1px solid #4a3aff;
+  border-radius: 7px;
+  margin-top: 20px;
+}

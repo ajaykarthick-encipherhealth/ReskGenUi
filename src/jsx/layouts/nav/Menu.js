@@ -139,6 +139,11 @@ export const L2AuditorMenuList = [
     to: "/l2Auditor/auditing",
   },
   {
+    title: "Org",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/l2Auditor/org",
+  },
+  {
     title: "Report",
     iconStyle: SVGICON.ReportIcon,
     to: "/l2Auditor/report",
