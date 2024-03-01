@@ -81,7 +81,7 @@ export const AddUser = async (data, setErrors) => {
   }
 };
 
-export const enableUser = (checked, user, role, setPopoverVisible, field) => {
+export const enableUser = (checked, user, role, setPopoverVisible, selectedManager,field) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
@@ -92,6 +92,7 @@ export const enableUser = (checked, user, role, setPopoverVisible, field) => {
       tenantId: tenId,
       userId: user?.userId,
       userName: user?.userName,
+      managerId:selectedManager
     };
 
     const datas = role

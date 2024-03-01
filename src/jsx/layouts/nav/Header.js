@@ -40,7 +40,7 @@ import {
   getNotificationAlertClear,
 } from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
-import { getFilteredList } from "../../../store/actions/PatientsActions";
+import { getFilteredList, getPatientID } from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
 import {
@@ -55,6 +55,8 @@ import { logoutAllDevice } from "../../../services/AuthService";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-regular-svg-icons";
 
 const btnItems = [
   {
@@ -375,7 +377,9 @@ const Header = () => {
                         }`}
                         key={index}
                         onClick={() => {
-                          dispatch(getFilteredList(null));
+                          dispatch(getFilteredList(null))
+                          dispatch(getPatientID(null))
+                          localStorage.removeItem("patientId");;
                         }}
                       >
                         <Link href={data.to} className="d-flex">
@@ -454,10 +458,13 @@ const Header = () => {
                         >
                           <Badge
                             count={notificationAlertData?.length}
-                            color="#241571"
+                            color="#04306f"
                           >
-                            <div style={{color:"#241571"}}>
-                            {SVGICON.dashboardNotification}
+                            <div style={{ color: "#04306f" }}>
+                              <FontAwesomeIcon
+                                icon={faBell}
+                                className={`fa-regular ${styles.bellIcon}`}
+                              />
                             </div>
                           </Badge>
                         </div>

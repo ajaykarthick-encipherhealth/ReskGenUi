@@ -256,7 +256,7 @@ const IndividualReceiverReport = () => {
                   }}
                   className={styles.download}
                   disabled={
-                    csvTableData?.length === 0 && tableData?.length === 0
+                    csvTableData?.length === 0 || tableData?.length === 0
                       ? true
                       : false
                   }

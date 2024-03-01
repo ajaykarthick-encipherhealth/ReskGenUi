@@ -15,33 +15,29 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
-import { renderUserPrfoileAvatar } from "../../../headerFilters/functions";
+import {
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../../headerFilters/functions";
 
 function TrackingTable({
   patinetListAll,
   statusBodyTemplate,
   auditBodyTemplate,
   patientDetails,
+  sortOrder,
+  setSortOrder,
+  setSort,
 }) {
-  const [sortDueOrder, setSortDueOrder] = useState("asc");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("asc");
+  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
   const navigate = useRouter();
 
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: null,
-  });
 
-  const requestSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
@@ -67,32 +63,6 @@ function TrackingTable({
     }
   };
 
-  const sortTableByDate = (value) => {
-    const sortedContent = [...detailsContent];
-    if (value === "dueDate") {
-      if (sortDueOrder === "asc") {
-        sortedContent.sort((a, b) => dayjs(a.dueDate).diff(dayjs(b.dueDate)));
-        setSortDueOrder("desc");
-      } else {
-        sortedContent.sort((a, b) => dayjs(b.dueDate).diff(dayjs(a.dueDate)));
-        setSortDueOrder("asc");
-      }
-    }
-    if (value === "completeDate") {
-      if (sortCompleteOrder === "asc") {
-        sortedContent.sort((a, b) =>
-          dayjs(a.lastModifiedDate).diff(dayjs(b.lastModifiedDate))
-        );
-        setSortCompleteOrder("desc");
-      } else {
-        sortedContent.sort((a, b) =>
-          dayjs(b.lastModifiedDate).diff(dayjs(a.lastModifiedDate))
-        );
-        setSortCompleteOrder("asc");
-      }
-    }
-    setDetailsContent(sortedContent);
-  };
   useEffect(() => {
     setDetailsContent(patinetListAll);
   }, [patinetListAll]);
@@ -111,12 +81,8 @@ function TrackingTable({
     return patinetListAll?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
-          {data.patientId}
+          <div> {data.patientId} </div> <div> {data.patientName} </div>
         </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.patientName}
-        </td>
-
         <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
           {data.allocatedByFirstName ||
           data.allocatedByLastName ||
@@ -242,7 +208,7 @@ function TrackingTable({
         <td
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
-          style={{ textAlign: "center" }} 
+          style={{ textAlign: "center" }}
         >
           {data.auditDueDate
             ? moment(data.auditDueDate).format("MM-DD-YYYY")
@@ -271,36 +237,110 @@ function TrackingTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
+            <th>PATIENTS</th>
+
             <th style={{ textAlign: "left", paddingLeft: "20px" }}>
               ALLOCATED BY
             </th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
-            <th style={{ textAlign: "left", paddingLeft: "20px" }}>
-              ALLOCATED TO
-            </th>
+            <th style={{ textAlign: "center" }}>REVIEWER</th>
             <th style={{ paddingLeft: "45px" }}>SUPERVISOR</th>
-            <th style={{ textAlign: "center" }}>ALLOCATED DATE</th>
-
-            <th style={{ textAlign: "center" }}>AUDIT ALLOCATED DATE</th>
             <th
-              style={{ textAlign: "center" }}
+              style={{
+                cursor: "pointer",
+                paddingLeft: "15px",
+                textAlign: "center",
+              }}
               onClick={() => {
-                requestSort("dueDate");
-                sortTableByDate("dueDate");
+                sortFunction(sortOrder, setSortOrder, setSort, "allocatedOn");
               }}
             >
-              DUE DATE
-              {/* <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortDueOrder === "asc" ? (
+              ALLOCATED DATE{" "}
+              {sortOrder === "ASC" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
+            </th>
+
+            <th
+              onClick={() => {
+                sortFunction(
+                  sortAuditOrder,
+                  setSortAuditOrder,
+                  setSort,
+                  "auditAllocatedDate"
+                );
+              }}
+              style={{ textAlign: "center" }}
+            >
+              AUDIT ALLOCATED DATE
+              <span
+                style={{
+                  padding: "10px",
+                  cursor: "pointer",
+                  textAlign: "center",
+                  paddingLeft: "15px",
+                }}
+              >
+                {sortAuditOrder === "ASC" ? (
                   <ArrowUpOutlined />
                 ) : (
                   <ArrowDownOutlined />
                 )}
-              </span> */}
+              </span>
             </th>
-            <th style={{ textAlign: "center" }}>AUDIT DUE DATE</th>
+
+            <th
+              onClick={() => {
+                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
+              }}
+              style={{ textAlign: "center" }}
+            >
+              DUE DATE
+              <span
+                style={{
+                  padding: "10px",
+                  cursor: "pointer",
+                  textAlign: "center",
+                  paddingLeft: "15px",
+                }}
+              >
+                {sortDueOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+
+            <th
+              onClick={() => {
+                sortFunction(
+                  sortAuditDueOrder,
+                  setSortAuditDueOrder,
+                  setSort,
+                  "auditDueDate"
+                );
+              }}
+              style={{ textAlign: "center" }}
+            >
+              AUDIT DUE DATE
+              <span
+                style={{
+                  padding: "10px",
+                  cursor: "pointer",
+                  textAlign: "center",
+                  paddingLeft: "15px",
+                }}
+              >
+                {sortAuditDueOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
             <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
             <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
           </tr>

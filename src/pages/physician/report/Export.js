@@ -319,7 +319,7 @@ const Export = ({
         <div style={{ display: "flex", marginBottom: "20px" }}>
           <div style={{ width: "100%" }}>
             <Form.Item
-              label="Sender"
+              label="Send To"
               name="User"
               rules={[
                 {

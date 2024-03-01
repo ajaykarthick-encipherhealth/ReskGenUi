@@ -128,7 +128,7 @@ const IndividualReceiverReport = () => {
             <div className={styles.container}>
               <div
                 className={"col-xl-1 d-flex"}
-                style={{ cursor: "pointer",marginLeft:"10px", zIndex: "1"}}
+                style={{ cursor: "pointer",marginLeft:"10px"}}
               >
                 <button
                   style={{ width: "40px", height: "30px" }}
@@ -256,7 +256,7 @@ const IndividualReceiverReport = () => {
                   }}
                   className={styles.download}
                   disabled={
-                    csvTableData?.length === 0 && tableData?.length === 0
+                    csvTableData?.length === 0 || tableData?.length === 0
                       ? true
                       : false
                   }

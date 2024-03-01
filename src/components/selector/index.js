@@ -8,14 +8,14 @@ const Selector = ({
   selectOptions,
   defaultSelectValue1,
   isClose = false,
-  selectedValue
+  // selectedValue
 }) => {
   return (
     <div>
       <label style={{ marginLeft: "10px" }}>{selectlabel}</label>
       <div class="form-group has-search">
         <Select
-          value={selectedValue}
+          // value={selectedValue}
           options={selectOptions}
           className="custom-react-select"
           isSearchable={false}

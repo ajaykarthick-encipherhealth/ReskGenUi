@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import styles from "../../../pages/l2Auditor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { Spin, notification } from "antd";
+import { Spin, Tooltip, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
@@ -18,13 +19,23 @@ import TrackingTable from "../../../components/table/admin/trackingList";
 import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
+import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 
+import Image from "next/image";
 const bullets = [
   {
     title: "Processed Status",
     option: [
       {
-        color: "#452b90",
+        color: "#FFB54D",
         name: "Pending",
       },
       {
@@ -35,7 +46,7 @@ const bullets = [
         color: "#3a9b94",
         name: "Completed",
       },
-      { color: "#d8c11b", name: "Hold" },
+      { color: "#AD94FA", name: "Hold" },
     ],
   },
   {
@@ -131,12 +142,12 @@ export default function Patient() {
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
   const [auditSelectedOption, setAuditSelectedOption] = useState("");
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
-console.log(auditedDueStartDate, auditedDueEndDate);
-console.log(auditSelectedOption);
-// new changes
+  const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
-const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
+  // new changes
 
+  const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
 
   const allocatedToOptions = [
     { label: "All", value: "All" },
@@ -174,7 +185,8 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
       auditedDueEndDate,
       auditSelectedOption,
       selAuditAllocatedBy,
-      auditSelAllocatedTo
+      auditSelAllocatedTo,
+      sort
     };
     dispatch(getTrackingList(datas));
   }, [
@@ -191,11 +203,12 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
     allocatedStartDate,
     allocatedEndDate,
     selAllocatedBy,
-    auditedDueStartDate, 
+    auditedDueStartDate,
     auditedDueEndDate,
     auditSelectedOption,
     selAuditAllocatedBy,
-    auditSelAllocatedTo 
+    auditSelAllocatedTo,
+    sort
   ]);
 
   useEffect(() => {
@@ -239,7 +252,7 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
           auditedAssignedProfileImage: res.auditedAssignedProfileImage,
           allocatedByProfileImage: res.allocatedByProfileImage,
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
-          auditDueDate: res.auditDueDate
+          auditDueDate: res.auditDueDate,
         });
       });
       setTrackChart(info?.processStatusCount);
@@ -281,54 +294,70 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
+          <Tooltip placement="bottom" title="COMPLETED">
+            <div className="patient-status">
+              <Image src={Completed} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
         );
 
       case "PENDING":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status">
+              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
         );
 
       case "DECLINED":
         return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
+          <Tooltip placement="bottom" title="DECLINED">
+            <div className="patient-status">
+              <Image src={Declined} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
         );
 
       case "NOTCOMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status">
+              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
         );
       case "COMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status">
+              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
         );
       case "HOLD":
         return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
+          <Tooltip placement="bottom" title="HOLD">
+            <div className="patient-status">
+              <Image
+                src={Hold}
+                className={styles.ImgTrck}
+                style={{ height: "20%", width: "20%" }}
+              />
+            </div>
+          </Tooltip>
         );
       case null:
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status">
+              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
         );
     }
   };
-  const auditstatusBodyTemplate = (rowData) => {
+  const auditstatusBodyTemplateIcon = (rowData) => {
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
@@ -401,6 +430,88 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
         return <div className="patient-status">---</div>;
     }
   };
+  const auditstatusBodyTemplate = (rowData) => {
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
+        return (
+          <Tooltip placement="bottom" title="AUDIT_PENDING">
+            <div className="patient-status">
+              <Image
+                src={AuditPending}
+                className={styles.ImgTrck}
+                style={{ height: "35%", width: "35%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+
+      case "DECLINED":
+        return (
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
+          </div>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <Tooltip placement="bottom" title="AUDITHOLD">
+            <div className="patient-status">
+              <Image
+                src={AuditHold}
+                className={styles.ImgTrck}
+                style={{ height: "35%", width: "35%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+      case "REAUDIT":
+        return (
+          <Tooltip placement="bottom" title="REAUDIT">
+            <div className="patient-status">
+              <Image
+                src={ReAudit}
+                className={styles.ImgTrck}
+                style={{ height: "35%", width: "35%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+      case "AUDITED":
+        return (
+          <Tooltip placement="bottom" title="AUDITED">
+            <div className="patient-status">
+              <Image
+                src={AuditedTrack}
+                className={styles.ImgTrck}
+                style={{ height: "35%", width: "35%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <Image src={AuditedTrack} style={{ height: "35%", width: "35%" }} />
+          </div>
+        );
+      case "NOT_AUDIT":
+        return (
+          <Tooltip placement="bottom" title="NOT_AUDIT">
+            <div className="patient-status">
+              <Image
+                src={NotAudited}
+                className={styles.ImgTrck}
+                style={{ height: "35%", width: "35%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+      case null:
+        return <div className="patient-status">---</div>;
+    }
+  };
 
   const actionBodyTemplate = (rowData) => {
     return (
@@ -438,15 +549,13 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
                       <div className="tbl-caption row d-flex align-items-center">
                         <div className="tbl-caption col-xl-10 align-items-center">
                           <HeaderFilters
-                          // audioAllocatedTo
-                          isAuditAllocatedToSelector={true}
+                            // audioAllocatedTo
+                            isAuditAllocatedToSelector={true}
                             auditAllocatedTolabel="Audit Allocated to"
                             auditallocatedToOptoons={generateOptionsList(
                               filteredList
                             )}
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
-
-
                             setSearch={setSearchTextValue}
                             isSearch={true}
                             searchlabel="Search By Patient Name / Id"
@@ -506,16 +615,14 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
                             isNextRow={true}
                             defaultShow={true}
                             defaultSize={"col-xl-2"}
-
                             auditStatusOptions={auditStatusOptions}
                             setAuditSelectedOption={setAuditSelectedOption}
-                           
-                              setStartDate6={setAuditedDueStartDate}
-                              setEndDate6={setAuditedDueEndDate}
-                              setSelAuditAllocatedBy={setSelAuditAllocatedBy}
-                              auditAllocatedByOptoons={generateOptionsList(
-                                filteredList
-                              )}
+                            setStartDate6={setAuditedDueStartDate}
+                            setEndDate6={setAuditedDueEndDate}
+                            setSelAuditAllocatedBy={setSelAuditAllocatedBy}
+                            auditAllocatedByOptoons={generateOptionsList(
+                              filteredList
+                            )}
                           />
                         </div>
                         <div className="col-xl-2">
@@ -538,6 +645,9 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
                               auditBodyTemplate={auditstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
+                              setSortOrder={setAllocatedSortOrder}
+                              sortOrder={allocatedSortOrder}
+                              setSort={setSort}
                             />
                             <div>
                               <div className="pagination-container">

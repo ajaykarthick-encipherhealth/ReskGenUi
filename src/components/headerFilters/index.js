@@ -153,12 +153,10 @@ const HeaderFilters = ({
   defaultShow = false,
   setSelect,
   defaultSize = "col-xl-2",
-  setClear,
-  clear,
+  adminReport
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
-  console.log(clear);
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -184,7 +182,7 @@ const HeaderFilters = ({
                 setSelectedOption={setSelectedOption}
                 selectOptions={selectOptions}
                 defaultSelectValue1={defaultSelectValue1}
-                selectedValue={clear ? "" : selectedValue}
+                // selectedValue={selectedValue}
               />
             </div>
           )}
@@ -193,9 +191,9 @@ const HeaderFilters = ({
               <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
-                  value={clear ? "" : selectedValue2}
+                  // value={selectedValue2}
                   onChange={(selectedOption) => {
-                    setSelectedOption2(selectedOption);
+                    setSelectedOption2(selectedOption?.value);
                     if (selectOptions3) {
                       setSelectedOption3(null);
                       setSelect(null);
@@ -237,7 +235,7 @@ const HeaderFilters = ({
           {isRangePicker && (
             <div className={defaultSize}>
               <DateRangePicker
-                selectedDates={clear ?["",""]:selectedDates}
+                selectedDates={selectedDates}
                 pickerlabel={pickerlabel}
                 defaultStartDate={defaultStartDate}
                 defaultEndDate={defaultEndDate}
@@ -328,33 +326,23 @@ const HeaderFilters = ({
               </Popover>
             </div>
           )}
-
-          <div
-            className={"col-xl-1"}
-            style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
-            onClick={() => {
-              setClear(true);
-             
-            }}
-          >
-           
-          </div>
           {addUser && (
             <div
-              className={`${addUser ? "col-xl-2" : "col-xl-4"}`}
+              className={`${addUser ? "col-xl-1" : "col-xl-4"}`}
               style={{ marginTop: "20px" }}
             >
               <Button
                 onClick={addUserForm}
-                style={{ background: "#241571" }}
+                style={{background:"#04306f"}}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
                 + {btnTitle}
               </Button>
             </div>
           )}
-          {isAllocate && (
-            <div className="col-xl-8 mt-4">
+         
+            <div className="col-xl-2 mt-4">
+              {isAllocate &&
               <button
                 onClick={handleOpneModal}
                 className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
@@ -362,10 +350,10 @@ const HeaderFilters = ({
               >
                 Allocate
               </button>
+          }
             </div>
-          )}
           {activeTab === "CoderReport" && (
-            <div className="col-xl-2  d-flex justify-content-end">
+            <div className={`col-xl-${!adminReport&&"4"} d-flex justify-content-end`}>
               <div className="row flr">
                 <button
                   onClick={() => {
@@ -379,7 +367,7 @@ const HeaderFilters = ({
                       ? false
                       : true
                   }
-                  style={{ color: "#241571" }}
+                  style={{color:"#04306f"}}
                 >
                   <Export />
                   Export

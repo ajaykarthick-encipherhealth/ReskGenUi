@@ -11685,7 +11685,7 @@ button.p-paginator-element.p-link {
 }
 
 button.p-highlight {
-  background: #241571 !important;
+  background: #04306f !important;
   color: #fff !important;
   font-size: 14px !important;
 }
@@ -13634,9 +13634,13 @@ overflow: scroll;
   background: #241571 !important;
 }
 
-.ant_select_form > .ant-select-selector {
-  min-height: 42px !important;
+.ant_select_form > .ant-select-selector,
+.ant-select-selector:hover,
+.ant-select-selector:active,
+.ant-select-selector:focus {
+  /* min-height: 42px !important; */
   border: 1px solid #e6e6e6 !important;
+  box-shadow: none !important;
 }
 
 /* .ant_select_form > .ant-select-arrow {
@@ -14121,4 +14125,11 @@ span.meat-name-details2 {
 }
 .notification .ant-radio-wrapper {
   margin-inline-end: 40px;
+}
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #04306f !important;
+  border-color: #04306f !important;
+}
+.ant-checkbox-inner {
+  border: 1px solid #d9d9d9 !important;
 }

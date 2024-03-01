@@ -97,6 +97,7 @@ export default function Patient() {
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
+
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
 
@@ -390,7 +391,7 @@ export default function Patient() {
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 shadow  sharp me-1 action-btn"
-          style={{background:"#241571"}}
+          style={{background:"#04306f"}}
         >
           <FontAwesomeIcon icon={faUpload} fontSize={11} style={{color:"#ffff"}}/>
         </button>
