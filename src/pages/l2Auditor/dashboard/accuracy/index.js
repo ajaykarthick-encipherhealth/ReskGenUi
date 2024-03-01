@@ -18,6 +18,9 @@ import {
 import { Empty, Spin, Select } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
 import moment from "moment";
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
+
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstDayWeek = firstDayOfMonth.getDay();
@@ -28,7 +31,7 @@ export const getDateWeek = (date) => {
 };
 
 export const getDays = (dataLength) => {
-  const totalDaysInMonth =  dataLength
+  const totalDaysInMonth = dataLength;
   return Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
 };
 
@@ -137,8 +140,10 @@ const Accuracy = () => {
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
-    xAxisData = getDays(accuracyDatas?.data?.response?.mapAccuracy &&
-      Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length);
+    xAxisData = getDays(
+      accuracyDatas?.data?.response?.mapAccuracy &&
+        Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length
+    );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
@@ -158,51 +163,155 @@ const Accuracy = () => {
   if (currentBtn && accuracyDatas?.data?.response?.mapAccuracy) {
     data = Object.values(accuracyDatas?.data?.response?.mapAccuracy);
   }
+  // const option = {
+  //   xAxis: {
+  //     type: "category",
+  //     data: xAxisData,
+  //   },
+  //   yAxis: {
+  //     type: "value",
+  //   },
+  //   tooltip: {
+  //     show: true,
+
+  //     formatter: function (params) {
+  //       let tooltipContent = "";
+
+  //       if (Array.isArray(params)) {
+  //         params.forEach((item) => {
+  //           const allocatedValue = Number(item.data).toFixed(2);
+  //           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+  //         });
+  //       } else if (params.data) {
+  //         const allocatedValue = Number(params.data).toFixed(2);
+  //         tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+  //       }
+
+  //       return tooltipContent;
+  //     },
+  //   },
+  //   series: [
+  //     {
+  //       data: data,
+  //       type: "bar",
+  //       itemStyle: {
+  //         barBorderRadius: [10, 10, 0, 0],
+  //         color: function (params) {
+  //           return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
+  //         },
+  //       },
+  //       lineStyle: {
+  //         color: "#BD83B8",
+  //       },
+  //       showSymbol: false,
+  //     },
+  //   ],
+  // };
   const option = {
-    xAxis: {
-      type: "category",
-      data: xAxisData,
+    chart: {
+      zoomType: "xy",
     },
-    yAxis: {
-      type: "value",
+    title: {
+      text: "",
     },
-    tooltip: {
-      show: true,
 
-      formatter: function (params) {
-        let tooltipContent = "";
-
-        if (Array.isArray(params)) {
-          params.forEach((item) => {
-            const allocatedValue = Number(item.data).toFixed(2);
-            tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-          });
-        } else if (params.data) {
-          const allocatedValue = Number(params.data).toFixed(2);
-          tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-        }
-
-        return tooltipContent;
+    xAxis: [
+      {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        crosshair: true,
+        labels: {
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
       },
+    ],
+    yAxis: [
+      {
+        // Primary yAxis
+        labels: {
+          format: "{value}°C",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        title: {
+          text: "",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+      },
+      {
+        // Secondary yAxis
+        title: {
+          text: "",
+          // style: {
+          // color:"#d9d9d9",
+          // },
+          // show:false
+        },
+        labels: {
+          format: "{value} mm",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        opposite: true,
+      },
+    ],
+    tooltip: {
+      shared: true,
+    },
+    legend: {
+      enabled: false,
+    },
+    credits: {
+      enabled: false,
     },
     series: [
       {
-        data: data,
-        type: "bar",
-        itemStyle: {
-          barBorderRadius: [10, 10, 0, 0],
-          color: function (params) {
-            return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-          },
+        name: "Precipitation",
+        type: "column",
+        yAxis: 1,
+        data: [
+          27.6, 28.8, 21.7, 34.1, 29.0, 28.4, 45.6, 51.7, 39.0, 60.0, 28.6,
+          32.1,
+        ],
+        tooltip: {
+          valueSuffix: " mm",
         },
-        lineStyle: {
-          color: "#BD83B8",
+      },
+      {
+        name: "Temperature",
+        type: "spline",
+        data: [
+          -13.6, -14.9, -5.8, -0.7, 3.1, 13.0, 14.5, 10.8, 5.8, -0.7, -11.0,
+          -16.4,
+        ],
+        tooltip: {
+          valueSuffix: "°C",
         },
-        showSymbol: false,
       },
     ],
   };
-
   return (
     <>
       <HeadTitle header="Accuracy Score" />
@@ -272,15 +381,13 @@ const Accuracy = () => {
               ) : accuracyDatas?.loading === false &&
                 accuracyDatas?.data?.response?.mapAccuracy ? (
                 option && (
-                  <ReactECharts
-                    option={option}
-                    style={{
-                      width: "100%",
-                      height: "340px",
-                      marginTop: "-30px",
-                      overflowX: "hidden",
-                    }}
-                  />
+                  <div className={styles.highchartStyle}>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={option}
+                      className={styles.hightchartStyles}
+                    />
+                  </div>
                 )
               ) : (
                 <div className={spinSTYles.spinStyle}>
