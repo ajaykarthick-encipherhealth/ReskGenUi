@@ -392,7 +392,6 @@ export default function Patient() {
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={Hold}
-                className={styles.ImgTrck}
                 style={{ height: "20%", width: "20%" }}
               />
             </div>
