@@ -239,7 +239,6 @@ const UserList = () => {
     useAdd,
     clear,
   ]);
-console.log(status)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>

@@ -18,6 +18,7 @@ import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
 import { useSelector } from "react-redux";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
+import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 
 const items = [
   { value: "ADMIN", label: "Admin", role: "admin" },
@@ -36,6 +37,11 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const [open, setOpen] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(true);
   const [openManager, setOpenManager] = useState(false);
+  const [selectedManager, setSelectedManager] = useState();
+
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
   const onChange = (item, checked) => {
     setRowData(item);
     setChecked(checked ? "yes" : "no");
@@ -47,38 +53,45 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
     setOpen(false);
   };
   const handleManager = (value) => {
-    const updatedValue = Array.isArray(value) ? value : [value];
-    setSelectedRoles(updatedValue);
-    setOpen(false);
+    setSelectedManager(value);
+    setOpenManager(false);
   };
-  const getContent = (data, magerData) => {
+  const optionsUser = selectUserList?.data?.response?.map((res) => ({
+    value: res.userName,
+    label: res.firstName + " " + res.lastName,
+  }));
+  const getContent = (data) => {
     return (
       <div>
-        <div style={{height:"200px",width: "100%" }}>
+        <div style={{ height: "200px", width: "100%" }}>
           <div className="my-2">Change Role</div>
           <Select
-            style={{ width: "300px" ,height:"30px"}}
+            style={{ width: "300px", height: "30px" }}
             mode={"multiple"}
-            onChange={handleRows}
+            onChange={(e) => handleRows(e, data?.role)}
             options={items}
             placeholder={!data?.role[0] && "Select Role"}
             defaultValue={isMultiple ? data.role : data?.role}
             open={open}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
-          <div className="mt-4 my-2">Change Manager</div>
+          {selectedRoles?.length <= 1 && selectedRoles[0] === "REVIEWER" && (
+            <>
+              <div className="mt-4 my-2">Change Manager</div>
 
-          <Select
-            style={{ width: "300px" }}
-            onChange={handleManager}
-            options={items}
-            placeholder={"Change Manager"}
-            // defaultValue={isMultiple ? magerData.role : magerData?.role}
-            open={openManager}
-            onDropdownVisibleChange={(visible) => setOpenManager(visible)}
-          />
+              <Select
+                style={{ width: "300px" }}
+                onChange={handleManager}
+                options={optionsUser?.length > 0 ? optionsUser : []}
+                placeholder={"Change Manager"}
+                // defaultValue={isMultiple ? magerData.role : magerData?.role}
+                open={openManager}
+                onDropdownVisibleChange={(visible) => setOpenManager(visible)}
+              />
+            </>
+          )}
         </div>
-        
+
         <div
           style={{
             display: "flex",
@@ -95,12 +108,14 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     rowData,
                     selectedRoles,
                     setPopoverVisible,
+                    selectedManager,
                     "addrole"
                   )
                 );
                 setPopoverVisible(false);
               }
             }}
+            disabled={selectedRoles?.length === 0 ? true : false}
           >
             Save
           </button>
@@ -111,6 +126,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   useEffect(() => {
     dispatch(enableUser(checkedd, rowData));
+    dispatch(getSelectUserList("REVIEWER"));
   }, [checkedd, rowData]);
 
   return (
@@ -306,6 +322,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                                 setChecked();
                                 setRowData(item);
                                 setPopoverVisible(true);
+                                setSelectedRoles(item?.role);
                               }}
                             >
                               <EditButton />
