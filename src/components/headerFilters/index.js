@@ -345,7 +345,7 @@ const HeaderFilters = ({
             >
               <Button
                 onClick={addUserForm}
-                style={{ background: "#241571" }}
+                style={{background:"#04306f"}}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
                 + {btnTitle}
@@ -379,7 +379,7 @@ const HeaderFilters = ({
                       ? false
                       : true
                   }
-                  style={{ color: "#241571" }}
+                  style={{color:"#04306f"}}
                 >
                   <Export />
                   Export
