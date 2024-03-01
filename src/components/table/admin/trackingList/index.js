@@ -111,12 +111,8 @@ function TrackingTable({
     return patinetListAll?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
-          {data.patientId}
+          <div> {data.patientId} </div> <div> {data.patientName} </div>
         </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.patientName}
-        </td>
-
         <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
           {data.allocatedByFirstName ||
           data.allocatedByLastName ||
@@ -242,7 +238,7 @@ function TrackingTable({
         <td
           className={TableStyle.childBorder}
           onClick={handleTableRowClick}
-          style={{ textAlign: "center" }} 
+          style={{ textAlign: "center" }}
         >
           {data.auditDueDate
             ? moment(data.auditDueDate).format("MM-DD-YYYY")
@@ -271,15 +267,13 @@ function TrackingTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
+            <th>PATIENTS</th>
+
             <th style={{ textAlign: "left", paddingLeft: "20px" }}>
               ALLOCATED BY
             </th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
-            <th style={{ textAlign: "left", paddingLeft: "20px" }}>
-              ALLOCATED TO
-            </th>
+            <th style={{ textAlign: "center" }}>REVIEWER</th>
             <th style={{ paddingLeft: "45px" }}>SUPERVISOR</th>
             <th style={{ textAlign: "center" }}>ALLOCATED DATE</th>
 
