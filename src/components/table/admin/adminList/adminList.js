@@ -35,6 +35,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   const [isMultiple, setIsMultiple] = useState(false);
   const [open, setOpen] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(true);
+  const [openManager, setOpenManager] = useState(false);
   const onChange = (item, checked) => {
     setRowData(item);
     setChecked(checked ? "yes" : "no");
@@ -45,12 +46,18 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
     setSelectedRoles(updatedValue);
     setOpen(false);
   };
-  const getContent = (data) => {
+  const handleManager = (value) => {
+    const updatedValue = Array.isArray(value) ? value : [value];
+    setSelectedRoles(updatedValue);
+    setOpen(false);
+  };
+  const getContent = (data, magerData) => {
     return (
-      <div style={{ height: "250px" }}>
-        <div style={{ height: "200px",width:"100%" }}>
+      <div>
+        <div style={{height:"200px",width: "100%" }}>
+          <div className="my-2">Change Role</div>
           <Select
-            style={{ width: "300px" }}
+            style={{ width: "300px" ,height:"30px"}}
             mode={"multiple"}
             onChange={handleRows}
             options={items}
@@ -59,7 +66,19 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             open={open}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
+          <div className="mt-4 my-2">Change Manager</div>
+
+          <Select
+            style={{ width: "300px" }}
+            onChange={handleManager}
+            options={items}
+            placeholder={"Change Manager"}
+            // defaultValue={isMultiple ? magerData.role : magerData?.role}
+            open={openManager}
+            onDropdownVisibleChange={(visible) => setOpenManager(visible)}
+          />
         </div>
+        
         <div
           style={{
             display: "flex",
@@ -152,35 +171,36 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     item.lastName ||
                     item?.profileImageUrl ? (
                       <div style={{ display: "flex", alignItems: "center" }}>
+                        {item.accountStatus === true ? (
+                          <span
+                            style={{
+                              marginRight: "10px",
+                              color: item.accountStatus === true ? "" : "gray",
+                            }}
+                          >
+                            {renderUserPrfoileAvatar(
+                              item.firstName,
+                              item.lastName,
+                              item?.profileImageUrl,
+                              "header"
+                            )}
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              marginRight: "10px",
+                              color: item.accountStatus === true ? "" : "gray",
+                            }}
+                          >
+                            {renderUserPrfoileAvatarDisabled(
+                              item.firstName,
+                              item.lastName,
+                              item?.profileImageUrl,
+                              "header"
+                            )}
+                          </span>
+                        )}
 
-                    {item.accountStatus === true  ?  <span
-                          style={{
-                            marginRight: "10px",
-                            color: item.accountStatus === true ? "" : "gray",
-                          }}
-                        >
-                    
-                          {renderUserPrfoileAvatar(
-                            item.firstName,
-                            item.lastName,
-                            item?.profileImageUrl,
-                            "header"
-                          )}
-                        </span> : <span
-                          style={{
-                            marginRight: "10px",
-                            color: item.accountStatus === true ? "" : "gray",
-                          }}
-                        >
-                    
-                          {renderUserPrfoileAvatarDisabled(
-                            item.firstName,
-                            item.lastName,
-                            item?.profileImageUrl,
-                            "header"
-                          )}
-                        </span> }
-                       
                         <span
                           style={{
                             color: item.accountStatus === true ? "" : "gray",
@@ -200,7 +220,6 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
-
                     <span>{item?.email ? item?.email : "---"}</span>
                   </td>
                   <td
@@ -237,7 +256,6 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                       backgroundColor:
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
-
                   >
                     <span
                       style={{
@@ -280,7 +298,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                         {popoverVisible ? (
                           <Popover
                             content={() => getContent(item)}
-                            title="Change Role"
+                            // title="Change Role"
                             trigger="click"
                           >
                             <div

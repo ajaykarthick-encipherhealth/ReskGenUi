@@ -13637,8 +13637,8 @@ overflow: scroll;
 .ant_select_form > .ant-select-selector,
 .ant-select-selector:hover,
 .ant-select-selector:active,
-.ant-select-selector:focus{
-  min-height: 42px !important;
+.ant-select-selector:focus {
+  /* min-height: 42px !important; */
   border: 1px solid #e6e6e6 !important;
   box-shadow: none !important;
 }
@@ -14091,9 +14091,16 @@ span.meat-name-details2 {
   height: 20px;
   width: 230px;
 }
-.table-responsive{
-overflow-x: hidden !important;
+.table-responsive {
+  overflow-x: hidden !important;
 }
-.ant-progress-text{
+.ant-progress-text {
   display: none !important;
+}
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #04306f !important;
+  border-color: #04306f !important;
+}
+.ant-checkbox-inner {
+  border: 1px solid #d9d9d9 !important;
 }
