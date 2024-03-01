@@ -280,7 +280,7 @@ export const refreshToken = () => async (dispatch) =>  {
   try {
     const response = await axios.post(
       `${ENDPOINTS.apiEndoint}securityservice/auth/refreshtoken`,
-      { token: token }
+      { refreshToken: token }
     );
     if (response) {
       dispatch({
