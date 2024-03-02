@@ -10,6 +10,11 @@ import dayjs from "dayjs";
 import { dateFormate, sortFunction } from "../../headerFilters/functions";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import Image from "next/image";
 
 function CoderReport({
   setModal,
@@ -53,7 +58,7 @@ function CoderReport({
     setSelectedRows(updatedRows);
   };
 
-  const processstatusBodyTemplate = (rowData) => {
+  const processstatusBodyTemplateIcon = (rowData) => {
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
@@ -101,6 +106,74 @@ function CoderReport({
           <div className="patient-status">
             <span className={`badge processing-text`}>Pending</span>
           </div>
+        );
+    }
+  };
+
+  const processstatusBodyTemplate = (rowData) => {
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return (
+          <Tooltip placement="bottom" title="COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Completed} style={{ height: "15%", width: "15%" }} />
+            </div>
+          </Tooltip>
+        );
+
+      case "PENDING":
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "15%", width: "15%" }} />
+            </div>
+          </Tooltip>
+        );
+
+      case "DECLINED":
+        return (
+          <Tooltip placement="bottom" title="DECLINED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "15%", width: "15%" }} />
+            </div>
+          </Tooltip>
+        );
+
+      case "NOTCOMPUTED":
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "15%", width: "15%" }} />
+            </div>
+          </Tooltip>
+        );
+      case "COMPUTED":
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "15%", width: "15%" }} />
+            </div>
+          </Tooltip>
+        );
+      case "HOLD":
+        return (
+          <Tooltip placement="bottom" title="HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={Hold}
+               
+                style={{ height: "15%", width: "15%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+      case null:
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "15%", width: "15%" }} />
+            </div>
+          </Tooltip>
         );
     }
   };
@@ -248,7 +321,12 @@ function CoderReport({
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th className={TableStyle.rowStyle2}>STATUS</th>
+                <th
+                  style={{ textAlign: "center", paddingRight: "60px" }}
+                  className={TableStyle.rowStyle2}
+                >
+                  STATUS
+                </th>
                 <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
