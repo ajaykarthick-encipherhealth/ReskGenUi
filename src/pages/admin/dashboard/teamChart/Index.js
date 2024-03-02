@@ -1,14 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import HeadTitle from "../../../../components/headtitle";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card";
-import { Empty, Spin } from "antd";
+import { Empty, Spin, Select } from "antd";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { TeamChart } from "../../../../services/adminServices/DashboardService";
+import dynamic from "next/dynamic";
+
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 const BarChart = () => {
   const dispatch = useDispatch();
@@ -16,24 +21,34 @@ const BarChart = () => {
   const teamChartData = useSelector(
     (state) => state.AdminDashboardReducers.teamData
   );
+  const [selectUser, setSelectUser] = useState([]);
+
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
 
   const datas = teamChartData?.data ? teamChartData?.data : [];
-  const teams = datas?.response?.map(info=>`${info?.firstName}${info?.lastName}`);
-
+  const teams = datas?.response?.map((info) => {
+    const firstNameInitial = info?.firstName?.charAt(0) || "";
+    const lastNameInitial = info?.lastName?.charAt(0) || "";
+    return `${firstNameInitial}${lastNameInitial}`;
+  });
   const colors = [
+    "#F4EDFD",
+    // "#D4A8FF",
+    "#EAD8FE",
+    "#DBB9FE",
     "#962DFF",
+
     // "#BF80FF",
     "#CC99FF",
-    // "#D4A8FF",
-    "#DBB9FE",
-    "#EAD8FE",
-    "#F4EDFD",
   ];
   var series = [
     {
       data: datas?.response?.map((item) =>
         item?.totalFileAllocated ? item.totalFileAllocated : 0
       ),
+      // data: [120, 330, 20, 50, 20, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileAllocated",
@@ -42,6 +57,7 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFileProcessed ? item.totalFileProcessed : 0
       ),
+      // data: [120, 330, 90, 150, 20, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileProcessed",
@@ -51,6 +67,7 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFilePending ? item.totalFilePending : 0
       ),
+      // data: [120, 30, 220, 50, 120, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFilePending",
@@ -59,10 +76,11 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFileDeclined ? item.totalFileDeclined : 0
       ),
+      // data: [120, 300, 160, 250, 90, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileDeclined",
-      barWidth:30
+      barWidth: 30,
     },
   ];
   const stackInfo = {};
@@ -98,23 +116,35 @@ const BarChart = () => {
       data[j] = {
         value: data[j],
         itemStyle: {
-          borderRadius: [topBorder, topBorder, bottomBorder, bottomBorder],
+          // borderRadius: [bottomBorder, topBorder, topBorder, bottomBorder],
           color: colors[i],
         },
       };
     }
   }
   const option = {
-    xAxis: {
-      type: "category",
-      data: teams,
-      axisLabel: {
-        rotate: 40, 
-        interval: 0,
+    plotOptions: {
+      series: {
+        stacking: "normal",
+        dataSorting: {
+          enabled: true,
+          sortKey: "y",
+        },
       },
     },
     yAxis: {
+      type: "category",
+      data: teams,
+      axisLabel: {
+        rotate: 0,
+        interval: 0,
+      },
+    },
+    xAxis: {
       type: "value",
+      splitLine: {
+        show: false,
+      },
     },
     series: series,
     tooltip: {
@@ -124,22 +154,148 @@ const BarChart = () => {
       },
     },
   };
+
+  const series2 = [
+    {
+      name: "Total File Declined",
+      data: datas?.response?.map((item) =>
+        item?.totalFileDeclined ? item.totalFileDeclined : 0
+      ),
+      color: "#EB5252",
+    },
+    {
+      name: "Total File Pending",
+      data: datas?.response?.map((item) =>
+        item?.totalFilePending ? item.totalFilePending : 0
+      ),
+      color: "#eab077",
+    },
+    {
+      name: "Total File Allocated",
+      data: datas?.response?.map((item) =>
+        item?.totalFileAllocated ? item.totalFileAllocated : 0
+      ),
+      color: "#00BC13",
+    },
+    {
+      name: "Total File Processed",
+      data: datas?.response?.map((item) =>
+        item?.totalFileProcessed ? item.totalFileProcessed : 0
+      ),
+      color: "#ED9331",
+    },
+  ];
+
+  const options2 = {
+    grid: {
+      show: false,
+    },
+    bar: {
+      widhth: "30px",
+    },
+    // colors: ["#00BC13", "#ED9331", "#DBB9FE", , "#F4EDFD"],
+    chart: {
+      type: "bar",
+      height: "1000px",
+      horizontal: true,
+      stacked: true,
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: true,
+      },
+    },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          legend: {
+            position: "bottom",
+            offsetX: -10,
+            offsetY: 0,
+          },
+        },
+      },
+    ],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        borderRadius: 10,
+        dataLabels: {
+          total: {
+            enabled: false,
+            style: {
+              fontSize: "13px",
+              fontWeight: 900,
+            },
+          },
+        },
+        dataSorting: {
+          enabled: true,
+          sortKey: "y",
+        },
+      },
+    },
+    xaxis: {
+      type: "text",
+      categories: teams,
+      label: false,
+    },
+    yaxis: {
+      labels: {
+        show: false,
+      },
+    },
+    legend: {
+      show: false,
+      position: "bottom",
+      // offsetY: 40,
+    },
+    fill: {
+      opacity: 1,
+    },
+  };
+
+  const onChangeUser = (e) => {
+    setSelectUser([e]);
+  };
+
+  const optionsUser = [];
+
+  const individualUserRes = selectUserList?.data?.response?.map((res) =>
+    optionsUser.push({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })
+  );
+
   useEffect(() => {
     dispatch(TeamChart(router));
   }, [router]);
- 
+
   return (
     <>
       <HeadTitle header="Team Chart Status" />
       <div className={styles.card5}>
         <Card borderRadius="28px" padding="0px">
           <div className={styles.buttonDiv}>
+            <div className={styles.select}>
+              <Select
+                showSearch
+                value={selectUser}
+                placeholder="Select Team"
+                className={`custom_select_user ${styles.custom_select_user}`}
+                onChange={(e) => onChangeUser(e)}
+                options={optionsUser}
+              />
+            </div>
             <div className={styles.header}>
               <div
                 style={{
                   width: "100%",
-                  marginTop: "30px",
                 }}
+                className={styles.chartContainer}
               >
                 {teamChartData?.loading ? (
                   <div
@@ -155,15 +311,21 @@ const BarChart = () => {
                   </div>
                 ) : teamChartData?.data?.response?.length > 0 ? (
                   option && (
-                    <ReactECharts
-                      option={option}
-                      style={{
-                        width: "100%",
-                        height: "680px",
-                        marginTop: "-30px",
-                        overflowX: "hidden",
-                      }}
+                    <ReactApexChart
+                      options={options2}
+                      series={series2}
+                      type="bar"
+                      height={780}
                     />
+                    // <ReactECharts
+                    //   option={option}
+                    //   style={{
+                    //     width: "100%",
+                    //     height: "680px",
+                    //     marginTop: "-30px",
+                    //     overflowY: "hidden",
+                    //   }}
+                    // />
                   )
                 ) : (
                   <div className={spinSTYles.spinStyle}>
