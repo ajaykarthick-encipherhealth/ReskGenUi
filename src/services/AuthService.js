@@ -276,11 +276,17 @@ export const logoutAllDevice = async (email) => {
 };
 
 export const refreshToken = () => async (dispatch) =>  {
-  const token = localStorage.getItem("refreshToken");
+  const refreshToken = localStorage.getItem("refreshToken");
+  const token=localStorage.getItem("token")
   try {
     const response = await axios.post(
-      `${ENDPOINTS.apiEndoint}securityservice/auth/refreshtoken`,
-      { refreshToken: token }
+      `${ENDPOINTS.apiEndoint}securityservice/token/refreshtoken`,
+      { refreshToken: refreshToken },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (response) {
       dispatch({
