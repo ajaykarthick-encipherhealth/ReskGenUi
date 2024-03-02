@@ -155,6 +155,7 @@ export function loginAction(email, router, code, password, mfa, skip) {
         if (response?.data?.status === "SUCCESS") {
           localStorage.setItem("roles", JSON.stringify(result?.roles));
           localStorage.setItem("token", result.access_token);
+          localStorage.setItem("refreshToken", result?.refresh_token);
           localStorage.setItem("tenantId", result.tenantId);
           localStorage.setItem("userId", result.userEmail);
           localStorage.setItem("orgId", result.organizationId);
