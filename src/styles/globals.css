@@ -8599,7 +8599,7 @@ button:focus {
   /* background: linear-gradient(90deg, hsla(180, 33%, 88%, 1) 0%, hsla(310, 76%, 82%, 1) 50%, hsla(256, 83%, 72%, 1) 100%); */
   display: flex;
   justify-content: center;
-  background-image: url("../images/login/back_3.png");
+  background-image: url(https://t3.ftcdn.net/jpg/05/88/24/10/240_F_588241010_cdQJ2QTsyDtt36jZsAFR45aAXICnPAzR.jpg);
   background-repeat: no-repeat;
   background-size: cover;
 }
