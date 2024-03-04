@@ -37,8 +37,6 @@ function TrackingTable({
   const dispatch = useDispatch();
   const navigate = useRouter();
 
-
-
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
     if (data.computing === 2) {
@@ -349,7 +347,7 @@ function TrackingTable({
         <tbody>
           {detailsContent.length <= 0 ? (
             <tr>
-              <td colSpan="10">
+              <td colSpan="11">
                 <Empty />
               </td>
             </tr>
