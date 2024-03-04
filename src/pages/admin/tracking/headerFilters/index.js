@@ -14,9 +14,13 @@ import warning from "../../../../images/svg/warning.svg";
 import { useDispatch } from "react-redux";
 import Legends from "../../../../components/legends";
 import DateRangePicker from "../../../../components/rangepicker";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { InputText } from "primereact/inputtext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   disableFutureDate,
   handleRnagePicker2,
+  searchFunction,
 } from "../../../../components/headerFilters/functions";
 import { getFilters } from "../../../../store/actions/AuthActions";
 
@@ -26,6 +30,7 @@ const HeaderFilters = ({
   setSearch,
   isSearch,
   searchlabel,
+  searchValue,
   // for report
   setSentSearch,
   setReceivedSearch,
@@ -109,7 +114,24 @@ const HeaderFilters = ({
   auditStatusOptions,
   setAuditSelectedOption,
   auditAllocatedByOptoons,
-  setSelAuditAllocatedBy
+  setSelAuditAllocatedBy,
+  clear,
+  setClear,
+  selectorValue,
+  selector2Value,
+  selector3Value,
+  selector4value,
+  selector5value,
+  selector6value,
+  selector7value,
+  selectedDates2,
+  selectedDates3,
+  selectedDates4,
+  selectedDates5,
+  setSelectedDates2,
+  setSelectedDates3,
+  setSelectedDates4,
+  setSelectedDates5,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -128,8 +150,10 @@ const HeaderFilters = ({
               <label className={styles.label}>Reviewer</label>
               <div class="form-group has-search">
                 <Select
+                  value={clear ? "" : selectorValue}
                   onChange={(selectedOption) => {
-                    setSelAllocatedTo(selectedOption?.value);
+                    setSelAllocatedTo(selectedOption);
+                    setClear(false);
                   }}
                   options={allocatedToOptoons}
                   className="custom-react-select"
@@ -151,8 +175,10 @@ const HeaderFilters = ({
               <label className={styles.label}>Supervisor</label>
               <div class="form-group has-search">
                 <Select
+                  value={clear ? "" : selector2Value}
                   onChange={(selectedOption) => {
-                    setAuditSelAllocatedTo(selectedOption?.value);
+                    setAuditSelAllocatedTo(selectedOption);
+                    setClear(false);
                   }}
                   options={auditAllocatedToOptoons}
                   className="custom-react-select"
@@ -163,25 +189,29 @@ const HeaderFilters = ({
             </div>
           )}
 
-
-              <div className={defaultSize}>
-                <label className={styles.label}>{pickerlabe4}</label>
-                <div>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    onChange={(date, dateString) =>
-                      handleRnagePicker2({
-                        date,
-                        dateString,
-                        setStartDate4,
-                        setEndDate4,
-                      })
-                    }
-                    disabledDate={(current) => disableFutureDate(current)}
-                  />
-                </div>
-              </div>
-
+          <div className={defaultSize}>
+            <label className={styles.label}>{pickerlabe4}</label>
+            <div>
+              <RangePicker
+                value={clear ? "" : selectedDates}
+                format="YYYY-MM-DD"
+                onChange={(date, dateString) => {
+                  handleRnagePicker2({
+                    date,
+                    dateString,
+                    setStartDate4,
+                    setEndDate4,
+                  });
+                  setSelectedDates([
+                    dayjs(dateString[0]),
+                    dayjs(dateString[1]),
+                  ]);
+                  setClear(false);
+                }}
+                disabledDate={(current) => disableFutureDate(current)}
+              />
+            </div>
+          </div>
 
           {isAnotherPicker5 && (
             <>
@@ -189,15 +219,22 @@ const HeaderFilters = ({
                 <label className={styles.label}>{pickerlabe5}</label>
                 <div>
                   <RangePicker
+                    value={clear ? "" : selectedDates2}
                     format="YYYY-MM-DD"
-                    onChange={(date, dateString) =>
+                    onChange={(date, dateString) => {
                       handleRnagePicker2({
                         date,
                         dateString,
                         setStartDate5,
                         setEndDate5,
-                      })
-                    }
+                      });
+                      setSelectedDates2([
+                        dayjs(dateString[0]),
+                        dayjs(dateString[1]),
+                      ]);
+
+                      setClear(false);
+                    }}
                     disabledDate={(current) => disableFutureDate(current)}
                   />
                 </div>
@@ -211,6 +248,7 @@ const HeaderFilters = ({
                 <label className={styles.label}>{pickerlabe3}</label>
                 <div>
                   <RangePicker
+                    value={clear ? "" : selectedDates3}
                     format="YYYY-MM-DD"
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
@@ -219,6 +257,12 @@ const HeaderFilters = ({
                         setStartDate3,
                         setEndDate3,
                       });
+                      setSelectedDates3([
+                        dayjs(dateString[0]),
+                        dayjs(dateString[1]),
+                      ]);
+
+                      setClear(false);
                     }}
                   />
                 </div>
@@ -231,8 +275,10 @@ const HeaderFilters = ({
               <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
+                  value={clear ? "" : selector3Value}
                   onChange={(selectedOption) => {
-                    setSelectedOption2(selectedOption?.value);
+                    setSelectedOption2(selectedOption);
+                    setClear(false);
                   }}
                   options={selectOptions2}
                   placeholder={defaultSelectValue2?.label}
@@ -245,25 +291,54 @@ const HeaderFilters = ({
 
           {isSelector ? (
             <div className={defaultSize}>
-              {" "}
-              <Selector
+              <label className={styles.label}>Processed Status</label>
+              <div class="form-group has-search">
+                <Select
+                  value={clear ? "" : selector4value}
+                  onChange={(selectedOption) => {
+                    setSelectedOption(selectedOption);
+                    setClear(false);
+                  }}
+                  options={selectOptions}
+                  className="custom-react-select"
+                  isSearchable={false}
+                />
+              </div>
+              {/* <Selector
                 selectlabel={"Processed Status"}
                 setSelectedOption={setSelectedOption}
                 selectOptions={selectOptions}
                 defaultSelectValue1={defaultSelectValue1}
-              />
+                selectorValue={clear?"":selector4value}
+                setClear={setClear}
+              /> */}
             </div>
           ) : null}
 
           {isSelector ? (
             <div className={defaultSize}>
               {" "}
-              <Selector
+              <label className={styles.label}>Audit Status</label>
+              <div class="form-group has-search">
+                <Select
+                  value={clear ? "" : selector5value}
+                  onChange={(selectedOption) => {
+                    setAuditSelectedOption(selectedOption);
+                    setClear(false);
+                  }}
+                  options={auditStatusOptions}
+                  className="custom-react-select"
+                  isSearchable={false}
+                />
+              </div>
+              {/* <Selector
                 selectlabel={"Audit Status"}
                 setSelectedOption={setAuditSelectedOption}
                 selectOptions={auditStatusOptions}
                 defaultSelectValue1={defaultSelectValue1}
-              />
+                selectorValue={clear ? "" : selector5value}
+                setClear={setClear}
+              /> */}
             </div>
           ) : null}
         </div>
@@ -273,8 +348,29 @@ const HeaderFilters = ({
           <div className="row filter-contain">
             {isRangePicker && (
               <div className={defaultSize}>
-                <DateRangePicker
-                  selectedDates={selectedDates}
+                <label className={styles.label}>{"Reviewer Due Date"}</label>
+                <div>
+                  <RangePicker
+                    value={clear ? "" : selectedDates4}
+                    format="YYYY-MM-DD"
+                    onChange={(date, dateString) => {
+                      handleRnagePicker2({
+                        date,
+                        dateString,
+                        setStartDate,
+                        setEndDate,
+                      });
+                      setSelectedDates4([
+                        dayjs(dateString[0]),
+                        dayjs(dateString[1]),
+                      ]);
+
+                      setClear(false);
+                    }}
+                  />
+                </div>
+                {/* <DateRangePicker
+                  selectedDates={clear ? "" : selectedDates}
                   pickerlabel={"Reviewer Due Date"}
                   defaultStartDate={defaultStartDate}
                   defaultEndDate={defaultEndDate}
@@ -287,7 +383,7 @@ const HeaderFilters = ({
                   setCoderStartDate={setCoderStartDate}
                   setCoderEndDate={setCoderEndDate}
                   disabled={disable != "Yes" && true}
-                />
+                /> */}
               </div>
             )}
 
@@ -299,6 +395,7 @@ const HeaderFilters = ({
                   </label>
                   <div>
                     <RangePicker
+                      value={clear ? "" : selectedDates5}
                       format="YYYY-MM-DD"
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
@@ -307,6 +404,12 @@ const HeaderFilters = ({
                           setStartDate6,
                           setEndDate6,
                         });
+                        setSelectedDates5([
+                          dayjs(dateString[0]),
+                          dayjs(dateString[1]),
+                        ]);
+
+                        setClear(false);
                       }}
                     />
                   </div>
@@ -325,8 +428,10 @@ const HeaderFilters = ({
                 <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
                   <Select
+                    value={clear ? "" : selector6value}
                     onChange={(selectedOption) => {
-                      setSelAllocatedBy(selectedOption?.value);
+                      setSelAllocatedBy(selectedOption);
+                      setClear(false);
                     }}
                     options={allocatedByOptoons}
                     className="custom-react-select"
@@ -338,73 +443,107 @@ const HeaderFilters = ({
             )}
 
             {isSelector ? (
-               <div
-               className={defaultSize}
-               onClick={() => {
-                 dispatch(
-                   getFilters('auditAllocatedBy')
-                 );
-               }}
-             >
-               <label className={styles.label}>{"Audit Allocated By"}</label>
-               <div class="form-group has-search">
-                 <Select
-                   onChange={(selectedOption) => {
-                    setSelAuditAllocatedBy(selectedOption?.value);
-                   }}
-                   options={auditAllocatedByOptoons}
-                   className="custom-react-select"
-                   isSearchable={false}
-                   placeholder={defaultAllocatedBy}
-                 />
-               </div>
-             </div>
+              <div
+                className={defaultSize}
+                onClick={() => {
+                  dispatch(getFilters("auditAllocatedBy"));
+                }}
+              >
+                <label className={styles.label}>{"Audit Allocated By"}</label>
+                <div class="form-group has-search">
+                  <Select
+                    value={clear ? "" : selector7value}
+                    onChange={(selectedOption) => {
+                      setSelAuditAllocatedBy(selectedOption);
+                      setClear(false);
+                    }}
+                    options={auditAllocatedByOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultAllocatedBy}
+                  />
+                </div>
+              </div>
             ) : null}
 
             {isSearch && (
               <div className={defaultSize}>
                 {" "}
-                <Search
+                <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
+                <div class="form-group has-search">
+                  <FontAwesomeIcon
+                    className="fa fa-search form-control-feedback"
+                    icon={faSearch}
+                  />
+                  <InputText
+                    type="text"
+                    value={clear ? "" : searchValue}
+                    onChange={(e) => {
+                      searchFunction(
+                        e,
+                        setSearch,
+                        setSentSearch,
+                        setReceivedSearch,
+                        setCoderSearch,
+                        activeTab
+                      );
+                      setClear(false);
+                    }}
+                    className="form-control new-form-control"
+                    placeholder="Search"
+                  />
+                </div>
+                {/* <Search
                   searchlabel={searchlabel}
                   setSearch={setSearch}
                   activeTab={activeTab}
                   setSentSearch={setSentSearch}
                   setReceivedSearch={setReceivedSearch}
                   setCoderSearch={setCoderSearch}
-                />
+                  searchValue={clear ? "" : searchValue}
+                  setClear={setClear}
+                /> */}
               </div>
             )}
-            {bullets && (
-              <div
-                className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-                style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
-              >
-                <Popover
-                  content={
-                    <>
-                      <Legends
-                        bullets={bullets}
-                        display="block"
-                        padding="0 0px 10px 0"
-                      />
-                      {badges?.length > 0 &&
-                        badges?.map((data) => (
-                          <div style={{ marginBottom: "10px" }}>
-                            <Image src={data.src} width={20} height={30} />
-                            <span style={{ marginLeft: "5px" }}>
-                              {data?.name}
-                            </span>
-                          </div>
-                        ))}
-                    </>
-                  }
-                  trigger={["click"]}
-                  placement="bottom"
+            <div className={`${bullets ? "col-xl-2" : "col-xl-4"}`}>
+              {bullets && (
+                <div
+                  // className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
+                  style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
                 >
-                  <Image src={warning} />
-                </Popover>
+                  <Popover
+                    content={
+                      <>
+                        <Legends
+                          bullets={bullets}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                        {badges?.length > 0 &&
+                          badges?.map((data) => (
+                            <div style={{ marginBottom: "10px" }}>
+                              <Image src={data.src} width={20} height={30} />
+                              <span style={{ marginLeft: "5px" }}>
+                                {data?.name}
+                              </span>
+                            </div>
+                          ))}
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <Image src={warning} />
+                  </Popover>
+                </div>
+              )}
+              <div
+                style={{ margin: "-35px 0px 0 40px", cursor: "pointer" }}
+                onClick={() => setClear(true)}
+              >
+                <button className={`${styles.filterBtn} mx-3`}>clear</button>
               </div>
-            )}
+            </div>
           </div>
         </div>
       )}
