@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Badge } from "react-bootstrap";
+import { Badge, Button } from "react-bootstrap";
 import { Popover } from "antd";
-import { Flex, Progress } from "antd";
+import { Flex, Progress, Modal } from "antd";
+import Form from "react-bootstrap/Form";
 import moment, { months } from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -14,9 +15,13 @@ import ENDPOINTS from "../../../utility/enpoints";
 
 const Hcc = ({ patientHccResult }) => {
   const [validHccList, setvalidHccList] = useState([]);
+  const [validClienHccList, setvalidClienHccList] = useState([]);
   const [suggestedHccList, setSuggestedHccList] = useState([]);
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
+  const [fileUploadModal, setFileUploadModal] = useState(false);
+  const [validated, setValidated] = useState(false);
+  const [compareResults, setCompareResults] = useState({});
 
   const validhcc = [
     {
@@ -74,6 +79,52 @@ const Hcc = ({ patientHccResult }) => {
         "medications",
         "plan",
       ],
+      encounterDate: "05/03/2023,04/04/2023",
+      isManuallyAdded: null,
+      manuallyAddedAt: null,
+      manuallyAddedBy: null,
+      diagnosisCodeFinding: null,
+      isHccValid: null,
+      isChanged: null,
+      defaultPosition: null,
+      actionEventAuditId: null,
+      providerName: "Gloria Hernandez",
+      unAuthorizeProvider: null,
+      noCredential: null,
+      unsigned: null,
+      isMostSpecific: null,
+      formedTree: null,
+    },
+  ];
+  const validClientHcc = [
+    {
+      diagnosisCode: "N18.31",
+      actualDescription: "Chronic kidney disease (CKD), stage 3a",
+      dbDescription: "Chronic kidney disease, stage 3a",
+      notes: null,
+      capturedSections: ["assessment", "plan"],
+      encounterDate: "05/03/2023,04/04/2023",
+      isManuallyAdded: null,
+      manuallyAddedAt: null,
+      manuallyAddedBy: null,
+      diagnosisCodeFinding: null,
+      isHccValid: null,
+      isChanged: null,
+      defaultPosition: null,
+      actionEventAuditId: null,
+      providerName: "Gloria Hernandez",
+      unAuthorizeProvider: null,
+      noCredential: null,
+      unsigned: null,
+      isMostSpecific: null,
+      formedTree: null,
+    },
+    {
+      diagnosisCode: "E78.5",
+      actualDescription: "Diabetic Dyslipidemia",
+      dbDescription: "Hyperlipidemia, unspecified",
+      notes: null,
+      capturedSections: ["medical history", "assessment", "plan"],
       encounterDate: "05/03/2023,04/04/2023",
       isManuallyAdded: null,
       manuallyAddedAt: null,
@@ -179,6 +230,26 @@ const Hcc = ({ patientHccResult }) => {
       return sectionMapArr;
     });
   };
+  const closeModal = () => {
+    setFileUploadModal(false);
+    setValidated(false);
+  };
+
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    setValidated(true);
+  };
+
+  const compareHccList = () => {
+    var data = {
+      cogentAiPercentage: 100,
+      clientPercentage: 75,
+      cogentAiScore: "2.337",
+      clientScore: "1.286",
+    };
+    setCompareResults(data);
+  };
 
   useEffect(() => {
     const validDisArray = [];
@@ -202,7 +273,29 @@ const Hcc = ({ patientHccResult }) => {
         dbDescription: res.dbDescription,
       });
     });
+    const validDisClientArray = [];
+    validClientHcc?.map((res, index) => {
+      const encounterDatearray = res?.encounterDate?.split(",");
+      var providerList = [];
+      providerList.push({
+        providerName: res.providerName,
+        authorizedProvider: true,
+      });
+      validDisClientArray.push({
+        actualDescription: res.actualDescription,
+        capturedSections: res.capturedSections,
+        diagnosisCode: res.diagnosisCode,
+        encounterDate: res.encounterDate,
+        encounterDateSplit: encounterDatearray,
+        isManuallyAdded: res.isManuallyAdded,
+        isHccValid: res.isHccValid,
+        defaultPosition: res.defaultPosition,
+        providerName: providerList,
+        dbDescription: res.dbDescription,
+      });
+    });
     setvalidHccList(validDisArray);
+    setvalidClienHccList(validDisClientArray);
   }, []);
 
   return (
@@ -212,7 +305,7 @@ const Hcc = ({ patientHccResult }) => {
         <div className={visitStyles.headerFixed}>
           <div class="content-body">
             <div
-              className={`container-fluid ${visitStyles.container_fluid_patient}`}
+              className={`container-fluid ${styles.container_fluid_patient}`}
             >
               <div className={styles.mainContainer}>
                 <div className="row">
@@ -245,7 +338,7 @@ const Hcc = ({ patientHccResult }) => {
                                       </span>
                                     </div>
                                   </div>
-                                  <div className={visitStyles.container}>
+                                  <div className={styles.container}>
                                     <div
                                       className={visitStyles.hccStickey_head}
                                     >
@@ -327,7 +420,7 @@ const Hcc = ({ patientHccResult }) => {
                                     <div
                                       className={visitStyles.hccStickey_head}
                                     >
-                                      {validHccList.map((data, i) => (
+                                      {suggestedHccList.map((data, i) => (
                                         <li>
                                           <div
                                             className={`hccActiveCard ${visitStyles.hcc_card}`}
@@ -392,6 +485,7 @@ const Hcc = ({ patientHccResult }) => {
                               Client Results
                             </h6>
                             <button
+                              onClick={() => setFileUploadModal(true)}
                               className={`${visitStyles.combo_add_btn} ${styles.addFileBtn}`}
                             >
                               <FontAwesomeIcon
@@ -404,7 +498,10 @@ const Hcc = ({ patientHccResult }) => {
                             </button>
                           </div>
                           <div>
-                            <button className={styles.compareBtn}>
+                            <button
+                              className={styles.compareBtn}
+                              onClick={() => compareHccList()}
+                            >
                               Compare
                             </button>
                           </div>
@@ -426,7 +523,7 @@ const Hcc = ({ patientHccResult }) => {
                                       <span
                                         className={`${visitStyles.hcc_title_badge}`}
                                       >
-                                        {validHccList.length}
+                                        {validClienHccList.length}
                                       </span>
                                     </div>
                                   </div>
@@ -434,7 +531,7 @@ const Hcc = ({ patientHccResult }) => {
                                     <div
                                       className={visitStyles.hccStickey_head}
                                     >
-                                      {validHccList.map((data, i) => (
+                                      {validClienHccList.map((data, i) => (
                                         <li>
                                           <div
                                             className={`hccActiveCard ${visitStyles.hcc_card}`}
@@ -507,17 +604,32 @@ const Hcc = ({ patientHccResult }) => {
                           <div className={styles.accuracyCard}>
                             <div className={styles.accuracyCard2}>
                               <div className={`mainCard ${styles.card1}`}>
+                                <h6
+                                  className={`text-center ${styles.rafHeading1}`}
+                                >
+                                  Cogent AI RAF
+                                </h6>
                                 <Progress
                                   type="dashboard"
-                                  percent={75}
+                                  percent={compareResults?.cogentAiPercentage}
                                   width={250}
+                                  format={() =>
+                                    compareResults?.cogentAiPercentage
+                                      ? "100%"
+                                      : "0%"
+                                  }
                                   className="mainCard"
                                 />
                               </div>
                               <div className={styles.card2}>
+                                <h6
+                                  className={`text-center ${styles.rafHeading2}`}
+                                >
+                                  Client’s RAF
+                                </h6>
                                 <Progress
                                   type="dashboard"
-                                  percent={60}
+                                  percent={compareResults?.clientPercentage}
                                   width={250}
                                 />
                               </div>
@@ -534,7 +646,7 @@ const Hcc = ({ patientHccResult }) => {
                                       Cogent AI RAF
                                     </h6>
                                     <h1 className={styles.rafPercentage}>
-                                      2.337
+                                      {compareResults?.cogentAiScore}
                                     </h1>
                                   </div>
                                 </div>
@@ -546,7 +658,7 @@ const Hcc = ({ patientHccResult }) => {
                                       Client’s RAF
                                     </h6>
                                     <h1 className={styles.rafPercentage}>
-                                      1.286
+                                      {compareResults?.clientScore}
                                     </h1>
                                   </div>
                                 </div>
@@ -560,6 +672,48 @@ const Hcc = ({ patientHccResult }) => {
                 </div>
               </div>
             </div>
+            <Modal
+              title="Upload File"
+              open={fileUploadModal}
+              centered
+              onCancel={() => closeModal()}
+              footer={false}
+            >
+              <div className="offcanvas-body">
+                <div className="container-fluid">
+                  <Form
+                    noValidate
+                    validated={validated}
+                    onSubmit={handleSubmit}
+                  >
+                    <div className="row">
+                      <div className={styles.fileContainer}>
+                        <Form.Control
+                          required
+                          type="file"
+                          accept="application/pdf,text/plain"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Button
+                        type="submit"
+                        className="btn btn-primary btn-sm me-1"
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        onClick={() => closeModal()}
+                        className="btn btn-danger btn-sm light ms-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </Form>
+                </div>
+              </div>
+            </Modal>
           </div>
         </div>
       </div>
