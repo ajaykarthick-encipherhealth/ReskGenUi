@@ -216,7 +216,6 @@ const UserList = () => {
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
-    console.log(status, "status");
     dispatch(
       getUsers({
         pageCount,

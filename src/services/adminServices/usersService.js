@@ -14,7 +14,6 @@ export const UsersList = async ({
 }) => {
   const token = localStorage.getItem("token");
   const selectedStatus = status === "ALL" ? "" : status;
-  console.log(status, "test");
   try {
     const response = await axios.get(
       ` ${
