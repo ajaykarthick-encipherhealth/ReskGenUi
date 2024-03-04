@@ -144,6 +144,12 @@ export default function Patient() {
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
   const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [clear, setClear] = useState();
+  const [selectedDates, setSelectedDates] = useState();
+  const [selectedDates2, setSelectedDates2] = useState();
+  const [selectedDates3, setSelectedDates3] = useState();
+  const [selectedDates4, setSelectedDates4] = useState();
+  const [selectedDates5, setSelectedDates5] = useState();
 
   // new changes
 
@@ -169,24 +175,36 @@ export default function Patient() {
     setLocalUserId(uId);
     const datas = {
       pageNo,
-      dueDateStart,
-      dueDateEnd,
-      searchTextValue,
-      selectedOption,
-      processedStart,
-      processedEnd,
-      selAllocatedTo,
-      auditedStartDate,
-      auditedEndDate,
-      allocatedStartDate,
-      allocatedEndDate,
-      selAllocatedBy,
-      auditedDueStartDate,
-      auditedDueEndDate,
-      auditSelectedOption,
-      selAuditAllocatedBy,
-      auditSelAllocatedTo,
-      sort
+      dueDateStart: clear ? "" : dueDateStart,
+      dueDateEnd: clear ? "" : dueDateEnd,
+      searchTextValue: clear ? "" : searchTextValue,
+      selectedOption: clear ? "" : selectedOption ? selectedOption?.value : "",
+      processedStart: clear ? "" : processedStart,
+      processedEnd: clear ? "" : processedEnd,
+      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo?.value : "",
+      auditedStartDate: clear ? "" : auditedStartDate,
+      auditedEndDate: clear ? "" : auditedEndDate,
+      allocatedStartDate: clear ? "" : allocatedStartDate,
+      allocatedEndDate: clear ? "" : allocatedEndDate,
+      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy?.value : "",
+      auditedDueStartDate: clear ? "" : auditedDueStartDate,
+      auditedDueEndDate: clear ? "" : auditedDueEndDate,
+      auditSelectedOption: clear
+        ? ""
+        : auditSelectedOption
+        ? auditSelectedOption?.value
+        : "",
+      selAuditAllocatedBy: clear
+        ? ""
+        : selAuditAllocatedBy
+        ? selAuditAllocatedBy?.value
+        : "",
+      auditSelAllocatedTo: clear
+        ? ""
+        : auditSelAllocatedTo
+        ? auditSelAllocatedTo?.value
+        : "",
+      sort,
     };
     dispatch(getTrackingList(datas));
   }, [
@@ -208,7 +226,8 @@ export default function Patient() {
     auditSelectedOption,
     selAuditAllocatedBy,
     auditSelAllocatedTo,
-    sort
+    sort,
+    clear,
   ]);
 
   useEffect(() => {
@@ -623,6 +642,24 @@ export default function Patient() {
                             auditAllocatedByOptoons={generateOptionsList(
                               filteredList
                             )}
+                            setClear={setClear}
+                            clear={clear}
+                            selectedDates={selectedDates}
+                            selectedDates2={selectedDates2}
+                            selectedDates3={selectedDates3}
+                            selectedDates4={selectedDates4}
+                            selectedDates5={selectedDates5}
+                            setSelectedDates={setSelectedDates}
+                            setSelectedDates2={setSelectedDates2}
+                            setSelectedDates3={setSelectedDates3}
+                            setSelectedDates4={setSelectedDates4}
+                            setSelectedDates5={setSelectedDates5}
+                            selector7value={selAuditAllocatedBy}
+                            selector6value={selAllocatedBy}
+                            selector5value={auditSelectedOption}
+                            selector4value={selectedOption}
+                            selector2value={auditSelAllocatedTo}
+                            selectorValue={selAllocatedTo}
                           />
                         </div>
                         <div className="col-xl-2">
