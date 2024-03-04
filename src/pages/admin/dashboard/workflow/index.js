@@ -231,7 +231,7 @@ const WorkFlow = () => {
                 <div className={styles.charts}>{`${
                   data?.charts ? data?.charts : "0"
                 }  Charts`}</div>
-                <div className={styles.days}>{data.days}</div>
+                {/* <div className={styles.days}>{data.days}</div> */}
               </Col>
             ))}
           </Row>
