@@ -157,11 +157,12 @@ export const enableMFA = async (username) => {
     console.log(Err);
   }
 };
-export const verifyCode = async (username, code) => {
+export const verifyCode = async (username, code, userpassword) => {
   const datas = {
     username: username,
     code: code,
     newMfa: true,
+    password: userpassword,
   };
   try {
     const response = await axios.post(
@@ -275,9 +276,9 @@ export const logoutAllDevice = async (email) => {
   }
 };
 
-export const refreshToken = () => async (dispatch) =>  {
+export const refreshToken = () => async (dispatch) => {
   const refreshToken = localStorage.getItem("refreshToken");
-  const token=localStorage.getItem("token")
+  const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
       `${ENDPOINTS.apiEndoint}securityservice/token/refreshtoken`,

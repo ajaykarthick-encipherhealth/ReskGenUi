@@ -102,9 +102,15 @@ export const getQrCode = (username, route) => {
     });
   };
 };
-export const getValidateCode = (username, code, route, validate, password) => {
+export const getValidateCode = (
+  username,
+  code,
+  route,
+  validate,
+  userpassword
+) => {
   return (dispatch) => {
-    verifyCode(username, code, route).then((response) => {
+    verifyCode(username, code, userpassword).then((response) => {
       if (response?.data?.response) {
         if (validate && password) {
           dispatch(loginAction(username, route, code, password));
@@ -173,7 +179,6 @@ export function loginAction(email, router, code, password, mfa, skip) {
             pathname: `/twofactorAuthentication/SelectRole`,
             search: `params=${encodedParams}`,
           });
-          // router?.push(`/twofactorAuthentication/SelectRole?username=${email}&params=${decodedParams}`);
         }
         if (response.data?.response === null) {
           notification.error({

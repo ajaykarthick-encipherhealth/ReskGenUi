@@ -17,6 +17,7 @@ const GetOTP = () => {
   const url = useSelector((state) => state.auth.qrcode);
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
   const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
   const [code, setCode] = useState([]);
 
   const handleInput = (index, e) => {
@@ -27,9 +28,16 @@ const GetOTP = () => {
     }
   };
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    setUsername(searchParams.get("username"));
-    dispatch(getQrCode(searchParams.get("username"), router));
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const encodedParams = urlParams.get("params");
+    if (encodedParams) {
+      const decodedParams = JSON.parse(atob(encodedParams));
+      const { username, password } = decodedParams;
+      setUsername(decodedParams?.username);
+      setPassword(decodedParams?.password);
+      dispatch(getQrCode(decodedParams?.username, router));
+    }
   }, []);
 
   return (
@@ -97,13 +105,18 @@ const GetOTP = () => {
               />
             ))}
         </div>
+
         <div className={styles.btnDiv}>
           <button
             className={styles.sendBtn}
             style={{ width: "16%", margin: "auto" }}
             onClick={() => {
               const codeString = code?.join("");
-              dispatch(getValidateCode(username, codeString, router));
+              if (codeString?.length > 0) {
+                dispatch(
+                  getValidateCode(username, codeString, router, "", password)
+                );
+              }
             }}
           >
             VALIDATE
