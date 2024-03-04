@@ -14133,3 +14133,7 @@ span.meat-name-details2 {
 .ant-checkbox-inner {
   border: 1px solid #d9d9d9 !important;
 }
+.ant-tabs .ant-tabs-tab-btn {
+  font-size: 15px !important;
+  font-weight: 600;
+}

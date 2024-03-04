@@ -61,11 +61,13 @@ export default function Login() {
     );
     if (emailValidation && passValidation) {
       setIsLoading(true);
-      setErrors({
-        email: "",
-        password: "",
-      });
-      dispatch(getMFAValidation(enteredEmail, router, password));
+      localStorage.setItem("userRole", "EHR");
+      router.push("ehr/patients");
+      // setErrors({
+      //   email: "",
+      //   password: "",
+      // });
+      // dispatch(getMFAValidation(enteredEmail, router, password));
     } else {
       return;
     }

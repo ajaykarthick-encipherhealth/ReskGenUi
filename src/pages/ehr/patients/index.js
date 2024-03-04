@@ -9,6 +9,9 @@ import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
 import { getUsers } from "../../../store/actions/adminAction/usersAction";
 import { Paginator } from "primereact/paginator";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { InputText } from "primereact/inputtext";
 
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -87,14 +90,105 @@ const UserList = () => {
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
                     <div className="tbl-caption  align-items-center">
-                      <HeaderFilters
+                      <div className="row">
+                        <div className="col-xl-2">
+                          <label style={{ marginLeft: "8px" }}>
+                            Search By Name/MRN
+                          </label>
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
+                              type="text"
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-xl-2">
+                          <label style={{ marginLeft: "8px" }}>SSN</label>
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
+                              type="text"
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-xl-2">
+                          <label style={{ marginLeft: "8px" }}>Sex</label>
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
+                              type="text"
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-xl-2">
+                          <label style={{ marginLeft: "8px" }}>
+                            Date Of Birth
+                          </label>
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <input
+                              type="text"
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-xl-2">
+                          <label style={{ marginLeft: "8px" }}>Zip Code</label>
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
+                              type="text"
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-xl-2">
+                          <label style={{ marginLeft: "8px" }}>Phone</label>
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
+                              type="text"
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      {/* <HeaderFilters
                         setSearch={setSearch}
                         isSearch={true}
                         searchlabel="Search By Name/MRN"
                         // select status
 
                         //  selecte Role
-                      />
+                      /> */}
                     </div>
                     <div
                       id="task-tbl_wrapper"

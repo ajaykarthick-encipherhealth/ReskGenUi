@@ -39,7 +39,7 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
   );
 
   return (
-    <div className={TableStyle.classContaineer}>
+    <div>
       {!usersData || usersData?.loading ? (
         <SpinnerDots />
       ) : (
