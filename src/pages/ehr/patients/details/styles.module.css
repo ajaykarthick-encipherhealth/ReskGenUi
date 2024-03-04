@@ -1,0 +1,13 @@
+.container_fluid {
+  background: #fff !important;
+}
+.profileContainer {
+  border-radius: 6px;
+}
+.profile_details {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #e5dddd;
+  padding: 20px;
+  border-radius: 6px;
+}
