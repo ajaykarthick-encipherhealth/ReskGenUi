@@ -233,7 +233,7 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-            <th className={TableStyle.rowStyle2}>L1 AUDITOR</th>
+            <th className={TableStyle.rowStyle2}>REVIEWER</th>
             <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
               <Tooltip placement="bottom" title="HCC VALID IDENTIFICATION">
                 HVI
@@ -314,7 +314,7 @@ function PatientTable({
         <tbody>
           {patinetListAll?.length <= 0 ? (
             <tr>
-              <td colSpan="9">
+              <td colSpan="10">
                 <Empty />
               </td>
             </tr>

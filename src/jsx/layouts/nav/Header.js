@@ -40,7 +40,10 @@ import {
   getNotificationAlertClear,
 } from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
-import { getFilteredList, getPatientID } from "../../../store/actions/PatientsActions";
+import {
+  getFilteredList,
+  getPatientID,
+} from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
 import {
@@ -57,7 +60,7 @@ import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { faMessage } from '@fortawesome/free-regular-svg-icons';
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 const btnItems = [
   {
     id: 1,
@@ -377,13 +380,18 @@ const Header = () => {
                         }`}
                         key={index}
                         onClick={() => {
-                          dispatch(getFilteredList(null))
-                          dispatch(getPatientID(null))
-                          localStorage.removeItem("patientId");;
+                          dispatch(getFilteredList(null));
+                          dispatch(getPatientID(null));
+                          localStorage.removeItem("patientId");
                         }}
                       >
                         <Link href={data.to} className="d-flex">
-                          <div className="menu-icon">{data.iconStyle}</div>{" "}
+                          <div
+                            className="menu-icon"
+                            style={{ paddingRight: "5px" }}
+                          >
+                            {data.iconStyle}
+                          </div>{" "}
                           <span className={`nav-text header-nav-text`}>
                             {data.title}
                           </span>
@@ -450,13 +458,20 @@ const Header = () => {
                           onClick={() => gotoChat()}
                         >
                           <div style={{ color: "#04306f" }}>
-                          {/* <i class="far fa-message"></i> */}
-                          <div style={{ color: "#04306f" }}>
-  <FontAwesomeIcon icon={faMessage} 
-                                className={styles.bellIcon} style={{width:"20px",height:"20px",marginTop:"8px",fontWeight:"700"}}
-                                />
-</div>
+                            {/* <i class="far fa-message"></i> */}
+                            <div style={{ color: "#04306f" }}>
+                              <FontAwesomeIcon
+                                icon={faMessage}
+                                className={styles.bellIcon}
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  marginTop: "8px",
+                                  fontWeight: "700",
+                                }}
+                              />
                             </div>
+                          </div>
                         </div>
 
                         <div

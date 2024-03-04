@@ -77,12 +77,12 @@ export const AdminMenuList = [
   },
   {
     title: "Patient Allocate",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: SVGICON.Allocation,
     to: "/admin/allocatedUser",
   },
   {
     title: "Tracking",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: SVGICON.Tracking,
     to: "/admin/tracking",
   },
   {
@@ -92,7 +92,7 @@ export const AdminMenuList = [
   },
   {
     title: "Notification",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: SVGICON.Notification,
     to: "/admin/notification",
   },
   // {
