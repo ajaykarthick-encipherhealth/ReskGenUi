@@ -1,16 +1,18 @@
 # Use an official Node.js runtime as the base image
 FROM node:18
 
-# Set the working directory in the container
-WORKDIR /
+# Create and set the working directory in the container
+WORKDIR /app
 
-# Copy the package.json and package-lock.json files to the container
-COPY * /
+# Copy only the necessary files for package installation
+COPY package.json .
+COPY package-lock.json .
 
 # Install project dependencies
-# RUN npm install
-
 RUN npm install --legacy-peer-deps
+
+# Copy the rest of the application files
+COPY . .
 
 # Build your React.js application
 RUN npm run build
@@ -20,5 +22,3 @@ EXPOSE 3000
 
 # Start the application
 CMD ["npm", "start"]
-
-
