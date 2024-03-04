@@ -347,7 +347,7 @@ const Lab = ({}) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: providerList,
+            providerName: res?.provider,
           });
         });
         var capturedSectionsColorsMatching = [];
@@ -1033,8 +1033,13 @@ const Lab = ({}) => {
                                         {getProviderNameList(
                                           data?.providerName
                                         )}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
                                         {getEncounterDateBackground(
-                                          data.encounterDateSplit
+                                          data.encounterDateSplit,
+                                          data.diagnosisCode
                                         )}
                                       </div>
                                       <div
@@ -1406,8 +1411,13 @@ const Lab = ({}) => {
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
                                     {getProviderNameList(data?.providerName)}
+                                  </div>
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
                                     {getEncounterDateBackground(
-                                      data.encounterDateSplit
+                                      data.encounterDateSplit,
+                                      data.diagnosisCode
                                     )}
                                   </div>
                                   <div
@@ -1588,8 +1598,13 @@ const Lab = ({}) => {
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
                               {getProviderNameList(data?.providerName)}
+                            </div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
                               {getEncounterDateBackground(
-                                data.encounterDateSplit
+                                data.encounterDateSplit,
+                                data.diagnosisCode
                               )}
                             </div>
                             <div
