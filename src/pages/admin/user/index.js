@@ -216,16 +216,16 @@ const UserList = () => {
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
-
+    console.log(status, "status");
     dispatch(
       getUsers({
-        pageCount: clear ? "" : pageCount,
-        search: clear ? "" : search,
-        startDate: clear ? "" : startDate,
-        endDate: clear ? "" : endDate,
-        status: clear ? "" : status?.value,
-        role: clear ? "" : role?.value,
-        sort: clear ? "" : sort,
+        pageCount,
+        search,
+        startDate,
+        endDate,
+        status,
+        role,
+        sort
       })
     );
   }, [

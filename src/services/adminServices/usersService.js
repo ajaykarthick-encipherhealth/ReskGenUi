@@ -14,6 +14,7 @@ export const UsersList = async ({
 }) => {
   const token = localStorage.getItem("token");
   const selectedStatus = status === "ALL" ? "" : status;
+  console.log(status, "test");
   try {
     const response = await axios.get(
       ` ${
@@ -35,7 +36,7 @@ export const UsersList = async ({
 
 export const AddUser = async (data, setErrors) => {
   const token = localStorage.getItem("token");
-  delete data?.confirmPassword
+  delete data?.confirmPassword;
   try {
     const response = await axios.post(
       ` ${ENDPOINTS?.apiEndoint}securityservice/admin/getusers/createuser`,
@@ -81,7 +82,14 @@ export const AddUser = async (data, setErrors) => {
   }
 };
 
-export const enableUser = (checked, user, role, setPopoverVisible, selectedManager,field) => {
+export const enableUser = (
+  checked,
+  user,
+  role,
+  setPopoverVisible,
+  selectedManager,
+  field
+) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
@@ -92,7 +100,7 @@ export const enableUser = (checked, user, role, setPopoverVisible, selectedManag
       tenantId: tenId,
       userId: user?.userId,
       userName: user?.userName,
-      managerId:selectedManager
+      managerId: selectedManager,
     };
 
     const datas = role
