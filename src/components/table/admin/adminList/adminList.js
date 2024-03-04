@@ -126,7 +126,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   useEffect(() => {
     dispatch(enableUser(checkedd, rowData));
-    dispatch(getSelectUserList("REVIEWER"));
+    dispatch(getSelectUserList("SUPERVISOR"));
   }, [checkedd, rowData]);
 
   return (
