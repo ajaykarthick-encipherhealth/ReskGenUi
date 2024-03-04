@@ -495,7 +495,7 @@ const Hcc = ({ patientHccResult }) => {
             actualDescription: result?.insulinDisease?.description,
             capturedSections: [result?.insulinDisease?.section],
             diagnosisCode: result?.insulinDisease?.code,
-            encounterDate: null,
+            encounterDate: result?.insulinDisease?.dos,
             encounterDateSplit: [result?.insulinDisease?.dos],
             getPlace: "Insulin",
             isHccValid: true,
