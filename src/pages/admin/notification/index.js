@@ -166,13 +166,17 @@ const Notification = ({}) => {
     setNotificationList(result);
   };
 
-  useEffect(async () => {
+  const getTeamUser = async () => {
     var result = await SelectUserList("SUPERVISOR");
     const options = result.response?.map((data) => ({
       label: data?.firstName + "" + data?.lastName,
       value: data?.userName,
     }));
     setSelectedListTeam(options);
+  };
+
+  useEffect(() => {
+    getTeamUser();
   }, []);
 
   useEffect(() => {

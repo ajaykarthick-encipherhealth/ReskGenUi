@@ -14094,9 +14094,9 @@ span.meat-name-details2 {
 .table-responsive {
   overflow-x: hidden !important;
 }
-.ant-progress-text {
+/* .ant-progress-text {
   display: none !important;
-}
+} */
 .notification .ant-checkbox .ant-checkbox-inner {
   width: 20px !important;
   height: 20px !important;

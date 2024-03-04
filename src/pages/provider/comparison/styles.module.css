@@ -2,6 +2,7 @@
   padding: 10px;
   border-radius: 10px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin-bottom: 25px;
 }
 .mainContainer {
   padding-top: 20px;
@@ -88,4 +89,38 @@
 }
 .accuracyConatiner {
   padding: 10px;
+}
+.fileContainer {
+  margin: 20px 0 30px 0px;
+}
+.container,
+.suggestedcontainer {
+  min-height: 10vh;
+  max-height: 40vh;
+  overflow: hidden;
+}
+
+.container::-webkit-scrollbar,
+.suggestedcontainer::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+.container::-webkit-scrollbar-thumb,
+.suggestedcontainer::-webkit-scrollbar {
+  border-radius: 10px;
+  background: rgb(173, 162, 162);
+}
+.container:hover,
+.suggestedcontainer:hover,
+.suggestedcontainer2:hover,
+.deletedContainer:hover {
+  overflow-y: scroll;
+  position: inherit;
+}
+.container_fluid_patient {
+  /* height: 100vh !important; */
+  padding-top: 55px !important;
+  background-color: #fff !important;
+  margin-bottom: 20px;
 }

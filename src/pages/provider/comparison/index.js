@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Badge } from "react-bootstrap";
+import { Badge, Button } from "react-bootstrap";
 import { Popover } from "antd";
-import { Flex, Progress } from "antd";
+import { Flex, Progress, Modal } from "antd";
+import Form from "react-bootstrap/Form";
 import moment, { months } from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +18,8 @@ const Hcc = ({ patientHccResult }) => {
   const [suggestedHccList, setSuggestedHccList] = useState([]);
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
+  const [fileUploadModal, setFileUploadModal] = useState(false);
+  const [validated, setValidated] = useState(false);
 
   const validhcc = [
     {
@@ -179,6 +182,16 @@ const Hcc = ({ patientHccResult }) => {
       return sectionMapArr;
     });
   };
+  const closeModal = () => {
+    setFileUploadModal(false);
+    setValidated(false);
+  };
+
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    setValidated(true);
+  };
 
   useEffect(() => {
     const validDisArray = [];
@@ -212,7 +225,7 @@ const Hcc = ({ patientHccResult }) => {
         <div className={visitStyles.headerFixed}>
           <div class="content-body">
             <div
-              className={`container-fluid ${visitStyles.container_fluid_patient}`}
+              className={`container-fluid ${styles.container_fluid_patient}`}
             >
               <div className={styles.mainContainer}>
                 <div className="row">
@@ -245,7 +258,7 @@ const Hcc = ({ patientHccResult }) => {
                                       </span>
                                     </div>
                                   </div>
-                                  <div className={visitStyles.container}>
+                                  <div className={styles.container}>
                                     <div
                                       className={visitStyles.hccStickey_head}
                                     >
@@ -392,6 +405,7 @@ const Hcc = ({ patientHccResult }) => {
                               Client Results
                             </h6>
                             <button
+                              onClick={() => setFileUploadModal(true)}
                               className={`${visitStyles.combo_add_btn} ${styles.addFileBtn}`}
                             >
                               <FontAwesomeIcon
@@ -507,14 +521,25 @@ const Hcc = ({ patientHccResult }) => {
                           <div className={styles.accuracyCard}>
                             <div className={styles.accuracyCard2}>
                               <div className={`mainCard ${styles.card1}`}>
+                                <h6
+                                  className={`text-center ${styles.rafHeading1}`}
+                                >
+                                  Cogent AI RAF
+                                </h6>
                                 <Progress
                                   type="dashboard"
-                                  percent={75}
+                                  percent={100}
                                   width={250}
+                                  format={() => "100%"}
                                   className="mainCard"
                                 />
                               </div>
                               <div className={styles.card2}>
+                                <h6
+                                  className={`text-center ${styles.rafHeading2}`}
+                                >
+                                  Client’s RAF
+                                </h6>
                                 <Progress
                                   type="dashboard"
                                   percent={60}
@@ -560,6 +585,48 @@ const Hcc = ({ patientHccResult }) => {
                 </div>
               </div>
             </div>
+            <Modal
+              title="Upload File"
+              open={fileUploadModal}
+              centered
+              onCancel={() => closeModal()}
+              footer={false}
+            >
+              <div className="offcanvas-body">
+                <div className="container-fluid">
+                  <Form
+                    noValidate
+                    validated={validated}
+                    onSubmit={handleSubmit}
+                  >
+                    <div className="row">
+                      <div className={styles.fileContainer}>
+                        <Form.Control
+                          required
+                          type="file"
+                          accept="application/pdf,text/plain"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Button
+                        type="submit"
+                        className="btn btn-primary btn-sm me-1"
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        onClick={() => closeModal()}
+                        className="btn btn-danger btn-sm light ms-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </Form>
+                </div>
+              </div>
+            </Modal>
           </div>
         </div>
       </div>
