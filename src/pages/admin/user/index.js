@@ -283,6 +283,7 @@ const UserList = () => {
                         btnTitle="Add User"
                         setClear={setClear}
                         clear={clear}
+                        addBtn={true}
                       />
                     </div>
                     <div

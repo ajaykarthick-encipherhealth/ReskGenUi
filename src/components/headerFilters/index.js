@@ -153,7 +153,8 @@ const HeaderFilters = ({
   defaultShow = false,
   setSelect,
   defaultSize = "col-xl-2",
-  adminReport
+  adminReport,
+  addBtn
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -328,7 +329,7 @@ const HeaderFilters = ({
           )}
           {addUser && (
             <div
-              className={`${addUser ? "col-xl-1" : "col-xl-4"}`}
+              className={`${addUser ? `col-xl-${addBtn?"4":"1"}` : "col-xl-4"}`}
               style={{ marginTop: "20px" }}
             >
               <Button
@@ -353,7 +354,7 @@ const HeaderFilters = ({
           }
             </div>
           {activeTab === "CoderReport" && (
-            <div className={`col-xl-${!adminReport&&"4"} d-flex justify-content-end`}>
+            <div className={`col-xl-${!adminReport?"4":"2"} d-flex justify-content-end`}>
               <div className="row flr">
                 <button
                   onClick={() => {

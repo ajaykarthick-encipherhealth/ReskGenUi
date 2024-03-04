@@ -57,7 +57,7 @@ import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
-
+import { faMessage } from '@fortawesome/free-regular-svg-icons';
 const btnItems = [
   {
     id: 1,
@@ -449,7 +449,14 @@ const Header = () => {
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
                         >
-                          <Image src={IMAGES.chatIcons} alt="" />
+                          <div style={{ color: "#04306f" }}>
+                          {/* <i class="far fa-message"></i> */}
+                          <div style={{ color: "#04306f" }}>
+  <FontAwesomeIcon icon={faMessage} 
+                                className={styles.bellIcon} style={{width:"20px",height:"20px",marginTop:"8px",fontWeight:"700"}}
+                                />
+</div>
+                            </div>
                         </div>
 
                         <div
