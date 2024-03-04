@@ -236,7 +236,14 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
-                    <span>{item?.email ? item?.email : "---"}</span>
+                    <span
+                      style={{
+                        color: item.accountStatus === true ? "" : "gray",
+                      }}
+                    >
+                      {" "}
+                      {item?.email ? item?.email : "---"}
+                    </span>
                   </td>
                   <td
                     className={TableStyle.childBorder}
