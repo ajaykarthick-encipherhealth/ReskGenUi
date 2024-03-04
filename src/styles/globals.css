@@ -8824,7 +8824,7 @@ button:focus {
 
 .login-account .login-form {
   padding: 30px 40px;
-  max-width: 480px;
+  max-width: 485px;
   margin: 0 auto;
   background: #fff;
   border-radius: 10px;
@@ -14132,4 +14132,8 @@ span.meat-name-details2 {
 }
 .ant-checkbox-inner {
   border: 1px solid #d9d9d9 !important;
+}
+.ant-tabs .ant-tabs-tab-btn {
+  font-size: 15px !important;
+  font-weight: 600;
 }

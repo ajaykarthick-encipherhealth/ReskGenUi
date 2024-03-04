@@ -55,6 +55,7 @@ function MyApp({ Component, pageProps }) {
     if (
       currentPath === "/" ||
       currentPath === "/login" ||
+      currentPath === "/ehrlogin" ||
       currentPath?.includes("/twofactorAuthentication/")
     ) {
       setShowTerminal(false);
