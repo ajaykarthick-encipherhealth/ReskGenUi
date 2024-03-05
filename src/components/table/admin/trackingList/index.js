@@ -241,8 +241,8 @@ function TrackingTable({
               ALLOCATED BY
             </th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
-            <th style={{ textAlign: "center" }}>REVIEWER</th>
-            <th style={{ paddingLeft: "45px" }}>SUPERVISOR</th>
+            <th style={{ textAlign: "center" }}>SUPERVISOR</th>
+            <th style={{ paddingLeft: "45px" }}>REVIEWER</th>
             <th
               style={{
                 cursor: "pointer",
