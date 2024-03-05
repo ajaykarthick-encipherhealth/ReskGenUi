@@ -40,7 +40,7 @@ const ExcelDisplay = ({ tableData, loading }) => {
             alignItems: "center",
           }}
         >
-          Loading...
+         
         </div>
       ) : (
         <>

@@ -291,7 +291,18 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-              {url?.extention === "csv" ? (
+              {!url?.extention?
+              <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              loading....
+            </div>:
+             
+              url?.extention === "csv" ? (
                 <CSVDisplay
                   tableData={csvTableData}
                   fileUrl={url?.path}

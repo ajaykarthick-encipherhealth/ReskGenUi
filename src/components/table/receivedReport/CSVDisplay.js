@@ -43,7 +43,7 @@ const CSVDisplay = ({ tableData, fileUrl, extention, loading }) => {
             alignItems: "center",
           }}
         >
-          loading....
+          
         </div>
       ) : fileUrl && extention && dataRows?.length > 0 ? (
         <table className={styles.exceltable}>
