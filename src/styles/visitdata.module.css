@@ -426,7 +426,7 @@
   border-radius: 4px;
   background: #fee1e1;
   text-align: center;
-  margin-left: -8px;
+  /* margin-left: -8px; */
   margin-top: 7px;
   cursor: pointer;
 }

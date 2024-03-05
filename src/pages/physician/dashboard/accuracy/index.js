@@ -127,98 +127,56 @@ const Accuracy = () => {
   if (currentBtn && accuracyDatas?.data?.response) {
     data = Object.values(accuracyDatas?.data?.response);
   }
-  // const option = {
-  //   xAxis: {
-  //     type: "category",
-  //     data: xAxisData,
-  //   },
-  //   yAxis: {
-  //     type: "value",
-  //   },
-  //   tooltip: {
-  //     show: true,
-
-  //     formatter: function (params) {
-  //       let tooltipContent = "";
-
-  //       if (Array.isArray(params)) {
-  //         params.forEach((item) => {
-  //           const allocatedValue = Number(item.data).toFixed(2);
-  //           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-  //         });
-  //       } else if (params.data) {
-  //         const allocatedValue = Number(params.data).toFixed(2);
-  //         tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-  //       }
-
-  //       return tooltipContent;
-  //     },
-  //   },
-  //   series: [
-  //     {
-  //       data: data,
-  //       type: "bar",
-  //       itemStyle: {
-  //         barBorderRadius: [10, 10, 0, 0],
-  //         color: function (params) {
-  //           return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-  //         },
-  //       },
-  //       lineStyle: {
-  //         color: "#BD83B8",
-  //       },
-  //       showSymbol: false,
-  //     },
-  //   ],
-  // };
-  const option = {
+  const options = {
+    chart: {
+      type: "column",
+    },
     title: {
       text: "",
     },
-    xAxis: [
-      {
-        categories: ["2019", "2020", "2021"],
-        crosshair: true,
-        labels: {
-          style: {
-            color: "gray",
-            fontWeight: "500",
-          },
+
+    xAxis: {
+      categories: xAxisData,
+      crosshair: true,
+      labels: {
+        style: {
+          color: "gray",
+          fontWeight: "500",
         },
-        lineColor: "#d9d9d9",
       },
-    ],
+      lineColor: "#d9d9d9",
+    },
     yAxis: [
       {
-        // Primary yAxis
-        labels: {
-          format: "{value}°C",
-          style: {
-            color: "gray",
-            fontWeight: "500",
-          },
-        },
+        // primary yAxis (right)
         title: {
-          text: "",
+          text: "Accuracy",
+        },
+        labels: {
+          format: "{value}%",
           style: {
             color: "gray",
             fontWeight: "500",
           },
         },
+        opposite: false,
       },
       {
-        // Secondary yAxis
+        // Secondary yAxis (right)
         title: {
-          text: "",
+          text: "TotalCorrectCount",
         },
         labels: {
-          format: "{value} mm",
+          format: "{value}",
           style: {
             color: "gray",
             fontWeight: "500",
           },
         },
         opposite: true,
+        min: 0, // Set the minimum value
+        max: 10, // Set the maximum value
+        tickInterval: 4, // Set the tick interval to 1
       },
     ],
     legend: {
@@ -229,68 +187,87 @@ const Accuracy = () => {
     },
     tooltip: {
       formatter: function () {
-        return (
-          "<b>" +
-          this.key +
-          "</b><br/>" +
-          this.series.name +
-          ": " +
-          this.y +
-          "<br/>" +
-          "Total: " +
-          this.point.stackTotal
-        );
+        let finalData;
+        if (
+          typeof this.point.category === "string" &&
+          this.point.category.startsWith("Week")
+        ) {
+          const weekIndex = parseInt(this.point.category.substring(4));
+
+          finalData = accuracyDatas?.data?.response?.find(
+            (item) => item?.weekOfMonth === weekIndex
+          );
+        } else if (
+          typeof this.point.category === "string" &&
+          monthNames.includes(this.point.category.toUpperCase())
+        ) {
+          const hoveredMonthIndex = monthNames?.findIndex(
+            (month) => month === this.point.category
+          );
+
+          finalData = accuracyDatas?.data?.response?.find(
+            (item) => item?.monthOfYear === hoveredMonthIndex + 1
+          );
+        } else {
+          finalData = accuracyDatas?.data?.response?.find(
+            (item) => item?.dayOfMonth === this.x
+          );
+        }
+
+        if (finalData) {
+          return (
+            "Average Score: " +
+            finalData.averageScore +
+            "<br/>" +
+            "Total Correct: " +
+            finalData.totalCorrectCount
+            // "<br/>" +
+            // "Total Wrong: " +
+            // finalData.totalWrongCount
+          );
+        } else {
+          return "No data available";
+        }
       },
     },
+
     plotOptions: {
       column: {
         stacking: "normal",
+        dataLabels: {
+          enabled: false,
+          format: "{point.y}",
+        },
+        pointWidth: 20,
       },
     },
     series: [
+      // {
+      //   name: "averageScore",
+      //   data: accuracyDatas?.data?.response.map((item) => item.averageScore),
+      //   color: "#cc0000",
+      // },
       {
-        name: "Road",
-        type: "column",
+        name: "totalCorrectCount",
+        data: accuracyDatas?.data?.response.map(
+          (item) => item?.totalCorrectCount
+        ),
+        color: "#3479FE",
         yAxis: 1,
-        data: [434, 290, 307],
-        tooltip: {
-          valueSuffix: " mm",
-        },
       },
-      {
-        name: "Rail",
-        type: "column",
-        yAxis: 1,
-        data: [272, 153, 156],
-        tooltip: {
-          valueSuffix: " mm",
-        },
-      },
-      {
-        name: "Air",
-        type: "column",
-        yAxis: 1,
-        data: [13, 7, 8],
-        tooltip: {
-          valueSuffix: " mm",
-        },
-      },
-      {
-        name: "Sea",
-        type: "column",
-        yAxis: 1,
-        data: [55, 35, 41],
-        tooltip: {
-          valueSuffix: " mm",
-        },
-      },
+      // {
+      //   name: "totalWrongCount",
+      //   data: accuracyDatas?.data?.response.map((item) => item.totalWrongCount),
+      //   color: "#0000cc",
+      // },
       {
         name: "Temperature",
         type: "spline",
-        data: [13.6, 14.9, 5.8],
+        data: accuracyDatas?.data?.response.map((item) => item?.averageScore),
         tooltip: {
-          valueSuffix: "°C",
+          valueSuffix: "",
         },
+        yAxis: 0,
       },
     ],
   };
@@ -323,7 +300,7 @@ const Accuracy = () => {
                 activeColor="#fff"
                 inActiveColor="
                 #000000"
-                activeBg="#3479FE"
+                activeBg="#04306f"
                 inActiveBg="
                 #E6EEFF"
                 containerBg="
@@ -339,11 +316,11 @@ const Accuracy = () => {
                 </div>
               ) : accuracyDatas?.loading === false &&
                 accuracyDatas?.data?.response ? (
-                option && (
+                options && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
                       highcharts={Highcharts}
-                      options={option}
+                      options={options}
                       className={styles.hightchartStyles}
                     />
                   </div>
@@ -369,7 +346,10 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
-                    ? `${accuracyDatas?.data?.response[highlightIndex + 1]}%`
+                    ? `${
+                       Math.round( accuracyDatas?.data?.response[highlightIndex-1]
+                        ?.averageScore)
+                      }%`
                     : "0%"}
                 </span>
               </div>
