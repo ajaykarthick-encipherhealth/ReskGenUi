@@ -208,7 +208,7 @@ const Accuracy = () => {
       {
         // primary yAxis (right)
         title: {
-          text: "Accuracy",
+          text: "System Accuracy",
           style: {
             color: "#2dafff",
           },
@@ -227,7 +227,7 @@ const Accuracy = () => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "TotalCorrect Count",
+          text: "Reviewers Quality",
           style: {
             color: "#0b59f1",
           },
@@ -367,7 +367,7 @@ const Accuracy = () => {
 
   return (
     <>
-      <HeadTitle header="Team Accuracy Score" />
+      <HeadTitle header="System, v/s Users Accuracy Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
