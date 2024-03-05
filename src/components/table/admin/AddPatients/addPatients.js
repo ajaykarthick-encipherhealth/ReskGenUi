@@ -84,7 +84,12 @@ function AddPatientListTable({
 
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
-      <Empty />
+      <tr >
+      <td colSpan="9">
+        <Empty />
+      </td>
+    </tr>
+
     ) : (
       <>
         {patinetListAll?.map((data, index) => (
