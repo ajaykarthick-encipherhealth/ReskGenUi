@@ -55,8 +55,12 @@ function AllocatedAdminList({
             );
           }}
         >
-          <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
-          <td className={TableStyle.childBorder}>{data.patientName}</td>
+          <td className={TableStyle.firstTdBorder}>
+            {data.patientId ? data.patientId : "---"}
+          </td>
+          <td className={TableStyle.childBorder}>
+            {data.patientName ? data.patientName : "---"}
+          </td>
 
           <td className={TableStyle.childBorder}>
             {data.computedDate
@@ -64,7 +68,7 @@ function AllocatedAdminList({
               : "---"}
           </td>
           <td className={TableStyle.lastBorder}>
-            {data?.priority ? priorityStatus(data?.priority) : '---'}
+            {data?.priority ? priorityStatus(data?.priority) : "---"}
           </td>
           <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
             {loading ? (
@@ -135,7 +139,7 @@ function AllocatedAdminList({
                 )}
               </span>
             </th>
-            <th >PRIORITY</th>
+            <th>PRIORITY</th>
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <input
@@ -147,14 +151,18 @@ function AllocatedAdminList({
                     height: "20px",
                     flexhrink: "0",
                     borderRadius: "4px",
-                     cursor:"pointer"
+                    cursor: "pointer",
                   }}
                   checked={
                     selectAllChecked &&
                     selectedRowsId.length == selectedChart.length
                   }
-                  className={ selectAllChecked &&
-                    selectedRowsId.length == selectedChart.length?TableStyle.customChecked2:""}
+                  className={
+                    selectAllChecked &&
+                    selectedRowsId.length == selectedChart.length
+                      ? TableStyle.customChecked2
+                      : ""
+                  }
                 />
               </div>
             </th>
