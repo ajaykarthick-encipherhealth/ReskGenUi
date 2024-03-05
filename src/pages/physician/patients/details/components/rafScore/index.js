@@ -153,14 +153,14 @@ const RafScore = ({ rafScoreList }) => {
                                       </th>
                                       <th className={style.width_100}>
                                         {" "}
-                                        v24Score(70%)
+                                        v24Score(33%)
                                       </th>
                                       <th className={style.width_100}>
                                         V28 score
                                       </th>
                                       <th className={style.width_100}>
                                         {" "}
-                                        v28Score(30%)
+                                        v28Score(67%)
                                       </th>
                                       <th className={style.width1_100}>
                                         Overall score
