@@ -2,9 +2,8 @@ import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import styles from "./report.module.css";
 import {
-  getExportDetails,
-  getUsersList,
-} from "../../../store/actions/ReportActions";
+  getExportDetails, getUsersList,
+} from "../../../store/actions/adminAction/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
 const { Option } = Select;
 
