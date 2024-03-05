@@ -133,7 +133,7 @@ const HeadTitle = ({
               setSelectedDates([]);
             }}
           >
-            <Button disabled={isDisabled ? true : false}>Clear Date</Button>
+            <Button disabled={isDisabled ? true : false}>Refresh</Button>
           </div>
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
