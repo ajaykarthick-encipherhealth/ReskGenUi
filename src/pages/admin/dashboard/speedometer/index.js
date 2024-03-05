@@ -150,7 +150,7 @@ const SpeedoMeter = () => {
                 <Select
                   showSearch
                   style={{ width: 150 }}
-                  placeholder="Select manager"
+                  placeholder="Select User"
                   optionFilterProp="children"
                   filterOption={(input, option) => {
                     if (option && input) {
@@ -171,7 +171,7 @@ const SpeedoMeter = () => {
                   value={
                     selectOption === "clear" ? (
                       <span style={{ color: "#d9d9d9" }}>
-                        {"Select manager"}
+                        {"Select User"}
                       </span>
                     ) : (
                       selectOption

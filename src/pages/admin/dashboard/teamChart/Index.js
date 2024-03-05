@@ -28,10 +28,15 @@ const BarChart = () => {
   );
 
   const datas = teamChartData?.data ? teamChartData?.data : [];
-  const teams = datas?.response?.map((info) => {
+  const team = datas?.response?.map((info) => {
     const firstNameInitial = info?.firstName?.charAt(0) || "";
     const lastNameInitial = info?.lastName?.charAt(0) || "";
     return `${firstNameInitial}${lastNameInitial}`;
+  });
+  const teams = datas?.response?.map((info) => {
+    const firstNameInitial = info?.firstName;
+    const lastNameInitial = info?.lastName?.charAt(0) || "";
+    return `${firstNameInitial}`;
   });
   const colors = [
     "#F4EDFD",
@@ -191,12 +196,12 @@ const BarChart = () => {
       show: false,
     },
     bar: {
-      widhth: "30px",
+      width: "30px",
     },
     // colors: ["#00BC13", "#ED9331", "#DBB9FE", , "#F4EDFD"],
     chart: {
       type: "bar",
-      height: "1000px",
+      // height: "600px",
       horizontal: true,
       stacked: true,
       toolbar: {
@@ -220,7 +225,7 @@ const BarChart = () => {
     ],
     plotOptions: {
       bar: {
-        horizontal: false,
+        horizontal: true,
         borderRadius: 10,
         dataLabels: {
           total: {
@@ -240,11 +245,20 @@ const BarChart = () => {
     xaxis: {
       type: "text",
       categories: teams,
-      label: false,
-    },
-    yaxis: {
       labels: {
         show: false,
+      },
+    },
+    yaxis: {
+      categories: teams,
+      axisBorder: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false, // Hide the y-axis ticks
       },
     },
     legend: {
@@ -294,6 +308,7 @@ const BarChart = () => {
               <div
                 style={{
                   width: "100%",
+                  bottom: "0",
                 }}
                 className={styles.chartContainer}
               >
@@ -315,7 +330,7 @@ const BarChart = () => {
                       options={options2}
                       series={series2}
                       type="bar"
-                      height={780}
+                      height={680}
                     />
                     // <ReactECharts
                     //   option={option}
