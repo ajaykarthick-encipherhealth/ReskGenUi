@@ -38,6 +38,37 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
 
+  const patientList = [
+    {
+      id: "EH-1234",
+      firstName: "Francis",
+      lastName: "Tomy",
+      dob: "05/25/1898",
+      phone: 999 - 555 - 4444,
+      address: "1 E 2nd St, New York, NY 10003, USA",
+      ssn: "XXX_XXX_555",
+    },
+
+    {
+      id: "EH-1235",
+      firstName: "Charlie",
+      lastName: "Smith",
+      dob: "05/25/1878",
+      phone: 999 - 555 - 4444,
+      address: "1 E 2nd, NY 10003, USA",
+      ssn: "XXX_XXX_666",
+    },
+    {
+      id: "EH-1236",
+      firstName: "Andrew",
+      lastName: "Martinez",
+      dob: "05/25/1878",
+      phone: 999 - 555 - 4444,
+      address: "5nd St,York, NY 10003, USA",
+      ssn: "XXX_XXX_7777",
+    },
+  ];
+
   return (
     <div>
       {!usersData || usersData?.loading ? (
@@ -56,9 +87,8 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             </tr>
           </thead>
           <tbody>
-            {!usersData?.loading &&
-            usersData?.data?.response?.content?.length > 0 ? (
-              usersData?.data?.response?.content?.map((item, index) => (
+            {!usersData?.loading && patientList.length > 0 ? (
+              patientList.map((item, index) => (
                 <tr
                   key={index}
                   style={{
@@ -70,7 +100,7 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     className={TableStyle.childBorder}
                     style={{ textAlign: "center" }}
                   >
-                    EH3245
+                    {item.id}
                   </td>
                   <td
                     className={TableStyle.childBorder}
@@ -82,11 +112,10 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                     item.lastName ||
                     item?.profileImageUrl ? (
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        {item.accountStatus === true ? (
+                        {item.accountStatus === false ? (
                           <span
                             style={{
                               marginRight: "10px",
-                              color: item.accountStatus === true ? "" : "gray",
                             }}
                           >
                             {renderUserPrfoileAvatar(
@@ -100,7 +129,6 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                           <span
                             style={{
                               marginRight: "10px",
-                              color: item.accountStatus === true ? "" : "gray",
                             }}
                           >
                             {renderUserPrfoileAvatarDisabled(
@@ -112,11 +140,7 @@ const PatientList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                           </span>
                         )}
 
-                        <span
-                          style={{
-                            color: item.accountStatus === true ? "" : "gray",
-                          }}
-                        >
+                        <span>
                           {item.firstName} {item.lastName}
                         </span>
                       </div>
