@@ -421,11 +421,10 @@ const NonHcc = ({ patientNonHccResult }) => {
         });
         result.invalidDisease.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
-          // var providerList = [];
-          // providerList.push({
-          //   providerName: res.providerName,
-          //   authorizedProvider: true,
-          // });
+          var providerList = [];
+          res.provider?.map((res, index) => {
+            providerList.push(res.providerName);
+          });
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -435,7 +434,7 @@ const NonHcc = ({ patientNonHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res?.provider,
+            providerName: providerList,
           });
         });
 

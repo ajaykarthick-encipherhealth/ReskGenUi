@@ -391,9 +391,8 @@ const Radiology = ({}) => {
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
           var providerList = [];
-          providerList.push({
-            providerName: res.providerName,
-            authorizedProvider: true,
+          res.provider?.map((res, index) => {
+            providerList.push(res.providerName);
           });
           validDisArray.push({
             actualDescription: res.actualDescription,
@@ -404,7 +403,7 @@ const Radiology = ({}) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res?.provider,
+            providerName: providerList,
           });
         });
 
