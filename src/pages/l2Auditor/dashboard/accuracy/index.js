@@ -196,6 +196,8 @@ const Accuracy = () => {
           },
         },
         opposite: false,
+        min: 0, // Set the minimum value
+        max: 100,
       },
       {
         // Secondary yAxis (right)

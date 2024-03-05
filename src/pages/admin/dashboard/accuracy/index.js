@@ -221,6 +221,8 @@ const Accuracy = () => {
           },
         },
         opposite: false,
+        min: 0, 
+        max: 100, 
       },
       {
         // Secondary yAxis (right)
@@ -238,9 +240,9 @@ const Accuracy = () => {
           },
         },
         opposite: true,
-        min: 0, // Set the minimum value
-        max: 10, // Set the maximum value
-        tickInterval: 4, // Set the tick interval to 1
+        // min: 0, 
+        // max: 10, 
+        tickInterval: 4, 
       },
     ],
     legend: {
