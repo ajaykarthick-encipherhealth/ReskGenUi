@@ -558,7 +558,7 @@ function FileProcessingTable({ patinetListAll,loading }) {
 
   return (
     <div className={TableStyle.classContaineer}>
-      {loading || parsedData.length===0 ? (
+      {/* {loading || parsedData.length===0 ? (
         <div
           style={{
             display: "flex",
@@ -568,7 +568,7 @@ function FileProcessingTable({ patinetListAll,loading }) {
         >
           <SpinnerDots />
         </div>
-      ) : (
+      ) : ( */}
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>
             <tr>
@@ -590,7 +590,7 @@ function FileProcessingTable({ patinetListAll,loading }) {
             )}
           </tbody>
         </table>
-      )}
+      {/* )} */}
     </div>
   );
 }
