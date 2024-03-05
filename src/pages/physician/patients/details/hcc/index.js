@@ -467,12 +467,12 @@ const Hcc = ({ patientHccResult }) => {
         var validEncounterDateArray = [];
         validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
-          // var providerList = [];
-          // providerList.push({
-          //   providerName: res.providerName,
-          //   authorizedProvider: true,
-          // });
-          if (res.isShow == true) {
+          var providerList = [];
+          res.provider?.map((res, index) => {
+            providerList.push(res.providerName);
+          });
+
+          if (res.isShow != false) {
             validDisArray.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -482,7 +482,7 @@ const Hcc = ({ patientHccResult }) => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
-              providerName: res?.provider,
+              providerName: providerList,
               dbDescription: res.dbDescription,
               isMostSpecific: res.isMostSpecific,
               getPlace: "Hcc",
@@ -521,9 +521,8 @@ const Hcc = ({ patientHccResult }) => {
           result.deletedDiseases.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
-            providerList.push({
-              providerName: res.providerName,
-              authorizedProvider: true,
+            res.provider?.map((res, index) => {
+              providerList.push(res.providerName);
             });
             deleteHccList.push({
               actualDescription: res.actualDescription,
@@ -534,7 +533,7 @@ const Hcc = ({ patientHccResult }) => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
-              providerName: res?.provider,
+              providerName: providerList,
             });
           });
         }
@@ -548,9 +547,8 @@ const Hcc = ({ patientHccResult }) => {
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
-            providerList.push({
-              providerName: res.providerName,
-              authorizedProvider: true,
+            res.provider?.map((res, index) => {
+              providerList.push(res.providerName);
             });
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -561,7 +559,7 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Radio",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
-              providerName: res?.provider,
+              providerName: providerList,
             });
           });
 
@@ -605,9 +603,8 @@ const Hcc = ({ patientHccResult }) => {
           unMatchRes.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
-            providerList.push({
-              providerName: res.providerName,
-              authorizedProvider: true,
+            res.provider?.map((res, index) => {
+              providerList.push(res.providerName);
             });
             if (res.isHccValid == true) {
               suggestListAll.push({
@@ -620,7 +617,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
                 defaultPosition: res.defaultPosition,
-                providerName: res?.provider,
+                providerName: providerList,
               });
             } else {
               // suggestListAll.push({
@@ -641,7 +638,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
-                providerName: res?.provider,
+                providerName: providerList,
               });
             }
           });
@@ -717,6 +714,15 @@ const Hcc = ({ patientHccResult }) => {
           res.capturedSections?.map((res2, index) => {
             capturedSectionsArr?.push({
               name: res2,
+              diagnosisCode: res?.diagnosisCode,
+            });
+          });
+        });
+
+        validDiseaseNewRes?.map((res) => {
+          res.provider?.map((res2, index) => {
+            capturedSectionsArr?.push({
+              name: res2.providerName,
               diagnosisCode: res?.diagnosisCode,
             });
           });
@@ -3056,14 +3062,17 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getProviderNameList = (data) => {
-    var value = data?.map((res) =>
-      res.providerName ? (
-        <Badge
-          className={
-            res.authorizedProvider === true
-              ? `mt-2 text-start ${visitStyles.provider_name}`
-              : `mt-2 text-start ${visitStyles.un_provider_name}`
-          }
+    var dublicateCaptureDelete = removeDuplicates(data);
+    return dublicateCaptureDelete.map((res) => {
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var sectionMapArr = (
+        <span
+          className={`mt-2 text-start ${visitStyles.provider_name}`}
+          style={{ backgroundColor: backColor, color: textColor }}
         >
           <i>
             {" "}
@@ -3071,16 +3080,41 @@ const Hcc = ({ patientHccResult }) => {
               icon={faCircleUser}
               style={{
                 size: 10,
-                color:
-                  res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
+                color: textColor,
               }}
             />
           </i>
-          {res.providerName}
-        </Badge>
-      ) : null
-    );
-    return value;
+          {res}
+        </span>
+      );
+      return sectionMapArr;
+    });
+
+    // var value = data?.map((res) =>
+    //   res.providerName ? (
+    //     <Badge
+    //       className={
+    //         res.authorizedProvider === true
+    //           ? `mt-2 text-start ${visitStyles.provider_name}`
+    //           : `mt-2 text-start ${visitStyles.un_provider_name}`
+    //       }
+    //     >
+    //       <i>
+    //         {" "}
+    //         <FontAwesomeIcon
+    //           icon={faCircleUser}
+    //           style={{
+    //             size: 10,
+    //             color:
+    //               res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
+    //           }}
+    //         />
+    //       </i>
+    //       {res.providerName}
+    //     </Badge>
+    //   ) : null
+    // );
+    // return value;
   };
 
   const addComboCode = () => {
