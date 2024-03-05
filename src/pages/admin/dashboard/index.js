@@ -68,14 +68,14 @@ const index = () => {
               <BarChart />
             </Col>
           </Row>
-          <Row >
+          {/* <Row >
             <Col span={17} className={styles.first_column}>
               <DeliveryStatus />
             </Col>
             <Col span={6} className={styles.column1}>
               <SpeedoMeter />
             </Col>
-          </Row>
+          </Row> */}
           <Row >
             <Col span={17} className={styles.first_column}>
               <CompletedStatus />

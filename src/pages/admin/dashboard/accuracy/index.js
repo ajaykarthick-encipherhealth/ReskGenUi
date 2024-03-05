@@ -25,11 +25,11 @@ import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 export const TabButtons = [
   {
     id: 1,
-    title: "System Accuracy",
+    title: "CogentAI Accuracy",
   },
   {
     id: 2,
-    title: "Reviewer's Quality",
+    title: "Organization Quality",
   },
 ];
 export const getDateWeek = (date) => {
@@ -65,7 +65,7 @@ const Accuracy = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
-  const [currentTabBtn, setCurrentTabBtn] = useState("System Accuracy");
+  const [currentTabBtn, setCurrentTabBtn] = useState("CogentAI Accuracy");
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1
@@ -98,7 +98,8 @@ const Accuracy = () => {
   const handleTabButtonClick = (index, btn) => {
     setActiveTabButton(index);
     setCurrentTabBtn(btn);
-    setActiveButton("Daily")
+    // setActiveButton(0);
+    // setCurrentBtn("Daily");
   };
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
@@ -208,7 +209,7 @@ const Accuracy = () => {
       {
         // primary yAxis (right)
         title: {
-          text: "System Accuracy",
+          text: "CogentAI Accuracy",
           style: {
             color: "#2dafff",
           },
@@ -221,13 +222,13 @@ const Accuracy = () => {
           },
         },
         opposite: false,
-        min: 0, 
-        max: 100, 
+        min: 0,
+        max: 100,
       },
       {
         // Secondary yAxis (right)
         title: {
-          text: "Reviewers Quality",
+          text: "Corrected Counts",
           style: {
             color: "#0b59f1",
           },
@@ -240,9 +241,9 @@ const Accuracy = () => {
           },
         },
         opposite: true,
-        // min: 0, 
-        // max: 10, 
-        tickInterval: 4, 
+        // min: 0,
+        // max: 10,
+        tickInterval: 4,
       },
     ],
     legend: {
@@ -341,7 +342,8 @@ const Accuracy = () => {
     ],
   };
   useEffect(() => {
-    if (currentTabBtn === "System Accuracy") {
+    console.log(currentTabBtn, currentBtn, "test");
+    if (currentTabBtn === "CogentAI Accuracy") {
       if (currentBtn === "Daily") {
         dispatch(getAccuracyDaily(selectedYear, selectedMonth));
       }
@@ -367,7 +369,7 @@ const Accuracy = () => {
 
   return (
     <>
-      <HeadTitle header="System, v/s Users Accuracy Score" />
+      <HeadTitle header="Accuracy and Quality Insights" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -429,7 +431,7 @@ const Accuracy = () => {
                 </div>
               ) : accuracyDatas?.loading === false &&
                 accuracyDatas?.data?.response ? (
-                currentTabBtn === "System Accuracy" ? (
+                currentTabBtn === "CogentAI Accuracy" ? (
                   <ReactECharts
                     option={option}
                     style={{
@@ -468,7 +470,7 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {currentTabBtn === "System Accuracy"
+                  {currentTabBtn === "CogentAI Accuracy"
                     ? accuracyDatas?.data?.response &&
                       accuracyDatas?.data?.response[highlightIndex + 1]
                       ? `${Math.round(
