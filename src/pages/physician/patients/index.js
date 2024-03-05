@@ -127,7 +127,7 @@ export default function Patient() {
   useEffect(() => {
     if (patientsListFilter) {
       var resultMap = [];
-      var result = patientsListFilter?.response?.content;
+      var result = patientsListFilter?.response?.patientDTOList?.content;
       setTotalElements(patientsListFilter?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -149,8 +149,7 @@ export default function Patient() {
           allocatedByProfileImage: res.allocatedByProfileImage,
         });
       });
-      console.log(trackChart, "data");
-      // setTrackChart(patientsListFilter?.processStatusCount);
+      setTrackChart(patientsListFilter?.response?.processStatusCount);
       var newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
@@ -390,10 +389,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image
-                src={Hold}
-                style={{ height: "20%", width: "20%" }}
-              />
+              <Image src={Hold} style={{ height: "20%", width: "20%" }} />
             </div>
           </Tooltip>
         );
