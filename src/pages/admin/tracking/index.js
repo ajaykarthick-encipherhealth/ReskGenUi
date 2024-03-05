@@ -144,7 +144,7 @@ export default function Patient() {
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
   const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [clear, setClear] = useState();
+  const [clear, setClear] = useState(false);
   const [selectedDates, setSelectedDates] = useState();
   const [selectedDates2, setSelectedDates2] = useState();
   const [selectedDates3, setSelectedDates3] = useState();
@@ -206,6 +206,7 @@ export default function Patient() {
         : "",
       sort,
     };
+ 
     dispatch(getTrackingList(datas));
   }, [
     pageNo,

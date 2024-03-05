@@ -94,6 +94,8 @@ export const handleRnagePicker = (
 export const handleRnagePicker2 = ({
   date,
   dateString,
+  setStartDate,
+  setEndDate,
   setStartDate2,
   setEndDate2,
   setStartDate3,
@@ -112,6 +114,10 @@ export const handleRnagePicker2 = ({
         : date && `${date}T00:00:00.000Z`;
     return formattedDate;
   });
+  if (setStartDate && setEndDate) {
+    setStartDate(formattedDates[0]);
+    setEndDate(formattedDates[1]);
+  }
   if (setStartDate2 && setEndDate2) {
     setStartDate2(formattedDates[0]);
     setEndDate2(formattedDates[1]);
