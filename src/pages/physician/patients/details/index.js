@@ -54,7 +54,7 @@ import { useDispatch } from "react-redux";
 
 const Details = ({}) => {
   const navigate = useRouter();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const { RangePicker } = DatePicker;
   const sideMenu = useSelector((state) => state.sideMenu);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
@@ -276,8 +276,8 @@ const Details = ({}) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
@@ -292,8 +292,8 @@ const Details = ({}) => {
       processedEnd,
       e.page
     );
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleFilterClick = () => {
@@ -313,8 +313,8 @@ const Details = ({}) => {
       "",
       0
     );
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
   const handleShowCard = () => {
     setShowCard(!showCard);
@@ -1036,8 +1036,8 @@ const Details = ({}) => {
         "",
         0
       );
-      setPatientList(result?.response?.content);
-      setTotalElements(result?.response?.totalElements);
+      setPatientList(result?.response?.patientDTOList?.content);
+      setTotalElements(result?.response?.patientDTOList?.totalElements);
       setFilterDataLoading(false);
     }
 
@@ -1109,8 +1109,8 @@ const Details = ({}) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleSubmitFlag = async (event) => {
@@ -1273,7 +1273,7 @@ const Details = ({}) => {
   };
 
   const backToPatientData = () => {
-    dispatch(getPatientID(null))
+    dispatch(getPatientID(null));
     navigate.back();
     // navigate.push("/physician/patients");
   };
@@ -1341,8 +1341,8 @@ const Details = ({}) => {
       processedEnd,
       pageNo
     );
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleChangeprocessedDate = async (dateString) => {
@@ -1363,8 +1363,8 @@ const Details = ({}) => {
       convertEndDate,
       pageNo
     );
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleActionClick = (value) => {
@@ -2013,7 +2013,9 @@ const Details = ({}) => {
                                       : actionItems
                                   }
                                 >
+                                  {/* <Popover placement="bottom" content="tst"> */}
                                   DECLINED
+                                  {/* </Popover> */}
                                 </Dropdown.Button>
                               </div>
                             ) : patienIdDetails?.processedStatus == "HOLD" ? (
@@ -3271,7 +3273,7 @@ const Details = ({}) => {
                                 <ul
                                   className={`${visitStyles.patientDetailsHead}`}
                                 >
-                                  {patientList.map((data, index) => (
+                                  {patientList?.map((data, index) => (
                                     <li
                                       className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                                       key={index}
@@ -3307,7 +3309,7 @@ const Details = ({}) => {
                                       ) : null}
                                     </li>
                                   ))}
-                                  {patientList.length == 0 ? (
+                                  {patientList?.length == 0 ? (
                                     <h5 className="text-center">NO DATA</h5>
                                   ) : null}
                                 </ul>
