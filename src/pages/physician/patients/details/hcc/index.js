@@ -551,22 +551,24 @@ const Hcc = ({ patientHccResult }) => {
 
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res?.encounterDate?.split(",");
-            var providerList = [];
-            res.provider?.map((res, index) => {
-              providerList.push(res.providerName);
-            });
-            deleteHccList.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              isManuallyAdded: res.isManuallyAdded,
-              isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition,
-              providerName: providerList,
-            });
+            if (res.isShow != false) {
+              const encounterDatearray = res?.encounterDate?.split(",");
+              var providerList = [];
+              res.provider?.map((res, index) => {
+                providerList.push(res.providerName);
+              });
+              deleteHccList.push({
+                actualDescription: res.actualDescription,
+                capturedSections: res.capturedSections,
+                diagnosisCode: res.diagnosisCode,
+                encounterDate: res.encounterDate,
+                encounterDateSplit: encounterDatearray,
+                isManuallyAdded: res.isManuallyAdded,
+                isHccValid: res.isHccValid,
+                defaultPosition: res.defaultPosition,
+                providerName: providerList,
+              });
+            }
           });
         }
         if (result.suggestRadiology != null) {
@@ -633,45 +635,47 @@ const Hcc = ({ patientHccResult }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
-            const encounterDatearray = res?.encounterDate?.split(",");
-            var providerList = [];
-            res.provider?.map((res, index) => {
-              providerList.push(res.providerName);
-            });
-            if (res.isHccValid == true) {
-              suggestListAll.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-                defaultPosition: res.defaultPosition,
-                providerName: providerList,
+            if (res.isShow != false) {
+              const encounterDatearray = res?.encounterDate?.split(",");
+              var providerList = [];
+              res.provider?.map((res, index) => {
+                providerList.push(res.providerName);
               });
-            } else {
-              // suggestListAll.push({
-              //   actualDescription: res.actualDescription,
-              //   diagnosisCodeFinding: res.diagnosisCodeFinding,
-              //   isHccValid: res.isHccValid,
-              //   capturedSections: res.capturedSections,
-              //   diagnosisCode: res.diagnosisCodeFinding,
-              //   encounterDate: res.encounterDate,
-              //   getPlace: "Hcc",
-              // });
-              suggestListAllNonHcc.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-                providerName: providerList,
-              });
+              if (res.isHccValid == true) {
+                suggestListAll.push({
+                  actualDescription: res.actualDescription,
+                  diagnosisCodeFinding: res.diagnosisCode,
+                  isHccValid: res.isHccValid,
+                  capturedSections: res.capturedSections,
+                  diagnosisCode: res.diagnosisCode,
+                  encounterDate: res.encounterDate,
+                  encounterDateSplit: encounterDatearray,
+                  getPlace: "Hcc",
+                  defaultPosition: res.defaultPosition,
+                  providerName: providerList,
+                });
+              } else {
+                // suggestListAll.push({
+                //   actualDescription: res.actualDescription,
+                //   diagnosisCodeFinding: res.diagnosisCodeFinding,
+                //   isHccValid: res.isHccValid,
+                //   capturedSections: res.capturedSections,
+                //   diagnosisCode: res.diagnosisCodeFinding,
+                //   encounterDate: res.encounterDate,
+                //   getPlace: "Hcc",
+                // });
+                suggestListAllNonHcc.push({
+                  actualDescription: res.actualDescription,
+                  diagnosisCodeFinding: res.diagnosisCode,
+                  isHccValid: res.isHccValid,
+                  capturedSections: res.capturedSections,
+                  diagnosisCode: res.diagnosisCode,
+                  encounterDate: res.encounterDate,
+                  encounterDateSplit: encounterDatearray,
+                  getPlace: "Hcc",
+                  providerName: providerList,
+                });
+              }
             }
           });
         }
@@ -682,7 +686,6 @@ const Hcc = ({ patientHccResult }) => {
 
         var combiDisArray = [];
         if (result.comboDisease) {
-          console.log(comboDis);
           comboDis.map((res, index) => {
             var providerList = [];
             res.providers?.map((res, index) => {
@@ -725,8 +728,6 @@ const Hcc = ({ patientHccResult }) => {
         setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
-
-        console.log(combiDisArray);
 
         var capturedSectionsColorsMatching = [];
         var capturedSectionsArr = [];
@@ -1536,7 +1537,6 @@ const Hcc = ({ patientHccResult }) => {
     actualDescription,
     testModal
   ) => {
-    console.log(encounterDate);
     setFileLoading(true);
     setDocumentLoaded(false);
     if (
@@ -2070,7 +2070,6 @@ const Hcc = ({ patientHccResult }) => {
     setValidated(true);
   };
   const handleFormSubmitMeat = async (event) => {
-    console.log(inputValueMeat);
     var dos = dosYearDefalutSelect.label;
     const form = event.currentTarget;
     event.preventDefault();
@@ -2778,7 +2777,6 @@ const Hcc = ({ patientHccResult }) => {
     testModal,
     diagnosisCode
   ) => {
-    console.log(encounterDate);
     var dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
