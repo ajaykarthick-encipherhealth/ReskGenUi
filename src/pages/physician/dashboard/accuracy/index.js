@@ -347,7 +347,7 @@ const Accuracy = () => {
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
                     ? `${
-                        accuracyDatas?.data?.response[highlightIndex + 1]
+                        accuracyDatas?.data?.response[highlightIndex]
                           ?.averageScore
                       }%`
                     : "0%"}

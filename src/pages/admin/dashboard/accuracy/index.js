@@ -353,7 +353,7 @@ const Accuracy = () => {
         )
       );
     }
-  }, [currentBtn, selectedMonth, selectedYear, router,currentTabBtn]);
+  }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
 
   return (
     <>
@@ -458,9 +458,18 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {accuracyDatas?.data?.response &&
+                  {currentTabBtn === "Accuracy"?
+                  accuracyDatas?.data?.response &&
                   accuracyDatas?.data?.response[highlightIndex + 1]
                     ? `${accuracyDatas?.data?.response[highlightIndex + 1]}%`
+                    : "0%"
+                  :
+                  QualityAccuracyDatas?.data?.response &&
+                  QualityAccuracyDatas?.data?.response[highlightIndex]
+                    ? `${
+                        QualityAccuracyDatas?.data?.response[highlightIndex]
+                          ?.averageScore
+                      }%`
                     : "0%"}
                 </span>
               </div>
