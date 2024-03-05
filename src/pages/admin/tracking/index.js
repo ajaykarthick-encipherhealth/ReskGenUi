@@ -206,7 +206,7 @@ export default function Patient() {
         : "",
       sort,
     };
- 
+
     dispatch(getTrackingList(datas));
   }, [
     pageNo,
@@ -316,7 +316,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="COMPLETED">
             <div className="patient-status">
-              <Image src={Completed} style={{ height: "20%", width: "20%" }} />
+              <Image src={Completed} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
@@ -325,7 +325,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="PENDING">
             <div className="patient-status">
-              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
@@ -334,7 +334,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="DECLINED">
             <div className="patient-status">
-              <Image src={Declined} style={{ height: "20%", width: "20%" }} />
+              <Image src={Declined} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
@@ -343,7 +343,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="PENDING">
             <div className="patient-status">
-              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
@@ -351,7 +351,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="PENDING">
             <div className="patient-status">
-              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
@@ -362,7 +362,7 @@ export default function Patient() {
               <Image
                 src={Hold}
                 className={styles.ImgTrck}
-                style={{ height: "20%", width: "20%" }}
+                style={{ height: "25%", width: "25%" }}
               />
             </div>
           </Tooltip>
@@ -371,7 +371,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="PENDING">
             <div className="patient-status">
-              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+              <Image src={Pending} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
@@ -459,7 +459,7 @@ export default function Patient() {
               <Image
                 src={AuditPending}
                 className={styles.ImgTrck}
-                style={{ height: "35%", width: "35%" }}
+                style={{ height: "25%", width: "25%" }}
               />
             </div>
           </Tooltip>
@@ -481,7 +481,7 @@ export default function Patient() {
               <Image
                 src={AuditHold}
                 className={styles.ImgTrck}
-                style={{ height: "35%", width: "35%" }}
+                style={{ height: "25%", width: "25%" }}
               />
             </div>
           </Tooltip>
@@ -493,7 +493,7 @@ export default function Patient() {
               <Image
                 src={ReAudit}
                 className={styles.ImgTrck}
-                style={{ height: "35%", width: "35%" }}
+                style={{ height: "25%", width: "25%" }}
               />
             </div>
           </Tooltip>
@@ -505,7 +505,7 @@ export default function Patient() {
               <Image
                 src={AuditedTrack}
                 className={styles.ImgTrck}
-                style={{ height: "35%", width: "35%" }}
+                style={{ height: "25%", width: "25%" }}
               />
             </div>
           </Tooltip>
@@ -513,7 +513,7 @@ export default function Patient() {
       case "AUDITED":
         return (
           <div className="patient-status">
-            <Image src={AuditedTrack} style={{ height: "35%", width: "35%" }} />
+            <Image src={AuditedTrack} style={{ height: "25%", width: "25%" }} />
           </div>
         );
       case "NOT_AUDIT":
@@ -523,7 +523,7 @@ export default function Patient() {
               <Image
                 src={NotAudited}
                 className={styles.ImgTrck}
-                style={{ height: "35%", width: "35%" }}
+                style={{ height: "25%", width: "25%" }}
               />
             </div>
           </Tooltip>
