@@ -425,7 +425,8 @@ const Header = () => {
                             </Button>
                           </Popover>
                         )}
-                        {userRole !== "admin" && (
+
+                        {userRole === "reviewer" && (
                           <Tooltip
                             title={` Quality : ${
                               accuracy?.data?.response
@@ -468,7 +469,7 @@ const Header = () => {
                                   height: "20px",
                                   marginTop: "8px",
                                   fontWeight: "700",
-                                  marginRight:"10px"
+                                  marginRight: "10px",
                                 }}
                               />
                             </div>

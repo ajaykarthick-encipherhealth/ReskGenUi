@@ -183,7 +183,10 @@ const Accuracy = () => {
       {
         // primary yAxis (right)
         title: {
-          text: "Accuracy",
+          text: "Reviewers Accuracy",
+          style:{
+            color:'#2dafff'
+          }
         },
         labels: {
           format: "{value}%",
@@ -193,11 +196,16 @@ const Accuracy = () => {
           },
         },
         opposite: false,
+        min: 0, // Set the minimum value
+        max: 100,
       },
       {
         // Secondary yAxis (right)
         title: {
-          text: "TotalCorrect Count",
+          text: "TotalCorrected Count",
+          style:{
+            color:"#0b59f1"
+          }
         },
         labels: {
           format: "{value}",
@@ -273,6 +281,7 @@ const Accuracy = () => {
           format: "{point.y}",
         },
         pointWidth: 20,
+        borderRadius: 10,
       },
     },
     series: [
@@ -284,7 +293,7 @@ const Accuracy = () => {
       {
         name: "totalCorrectCount",
         data: accuracyDatas?.data?.response?.mapAccuracy?.map((item) => item?.totalCorrectCount),
-        color: "#3479FE",
+        color: "#0b59f1",
         yAxis:1
       },
       // {
@@ -306,7 +315,7 @@ const Accuracy = () => {
 
   return (
     <>
-      <HeadTitle header="Accuracy Score" />
+      <HeadTitle header="Team Quality Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>

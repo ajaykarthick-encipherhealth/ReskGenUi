@@ -25,11 +25,11 @@ import { getAccuracyScore } from "../../../../store/actions/DashboardActions";
 export const TabButtons = [
   {
     id: 1,
-    title: "Accuracy",
+    title: "System Accuracy",
   },
   {
     id: 2,
-    title: "Quality",
+    title: "Reviewer's Quality",
   },
 ];
 export const getDateWeek = (date) => {
@@ -65,7 +65,7 @@ const Accuracy = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
-  const [currentTabBtn, setCurrentTabBtn] = useState("Accuracy");
+  const [currentTabBtn, setCurrentTabBtn] = useState("System Accuracy");
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1
@@ -98,6 +98,7 @@ const Accuracy = () => {
   const handleTabButtonClick = (index, btn) => {
     setActiveTabButton(index);
     setCurrentTabBtn(btn);
+    setActiveButton("Daily")
   };
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
@@ -207,7 +208,10 @@ const Accuracy = () => {
       {
         // primary yAxis (right)
         title: {
-          text: "Accuracy",
+          text: "System Accuracy",
+          style: {
+            color: "#2dafff",
+          },
         },
         labels: {
           format: "{value}%",
@@ -217,11 +221,16 @@ const Accuracy = () => {
           },
         },
         opposite: false,
+        min: 0, 
+        max: 100, 
       },
       {
         // Secondary yAxis (right)
         title: {
-          text: "TotalCorrect Count",
+          text: "Reviewers Quality",
+          style: {
+            color: "#0b59f1",
+          },
         },
         labels: {
           format: "{value}",
@@ -231,9 +240,9 @@ const Accuracy = () => {
           },
         },
         opposite: true,
-        min: 0, // Set the minimum value
-        max: 10, // Set the maximum value
-        tickInterval: 4, // Set the tick interval to 1
+        // min: 0, 
+        // max: 10, 
+        tickInterval: 4, 
       },
     ],
     legend: {
@@ -296,6 +305,7 @@ const Accuracy = () => {
           format: "{point.y}",
         },
         pointWidth: 20,
+        borderRadius: 10,
       },
     },
     series: [
@@ -309,7 +319,7 @@ const Accuracy = () => {
         data: QualityAccuracyDatas?.data?.response.map(
           (item) => item?.totalCorrectCount
         ),
-        color: "#3479FE",
+        color: "#0b59f1",
         yAxis: 1,
       },
       // {
@@ -331,7 +341,7 @@ const Accuracy = () => {
     ],
   };
   useEffect(() => {
-    if (currentTabBtn === "Accuracy") {
+    if (currentTabBtn === "System Accuracy") {
       if (currentBtn === "Daily") {
         dispatch(getAccuracyDaily(selectedYear, selectedMonth));
       }
@@ -357,7 +367,7 @@ const Accuracy = () => {
 
   return (
     <>
-      <HeadTitle header="Team Accuracy Score" />
+      <HeadTitle header="System, v/s Users Accuracy Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -413,13 +423,13 @@ const Accuracy = () => {
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              {accuracyDatas?.loading ? (
+              {accuracyDatas?.loading || QualityAccuracyDatas?.loading ? (
                 <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : accuracyDatas?.loading === false &&
                 accuracyDatas?.data?.response ? (
-                currentTabBtn === "Accuracy" ? (
+                currentTabBtn === "System Accuracy" ? (
                   <ReactECharts
                     option={option}
                     style={{
@@ -458,7 +468,7 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {currentTabBtn === "Accuracy"
+                  {currentTabBtn === "System Accuracy"
                     ? accuracyDatas?.data?.response &&
                       accuracyDatas?.data?.response[highlightIndex + 1]
                       ? `${Math.round(
