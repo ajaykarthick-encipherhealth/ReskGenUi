@@ -144,14 +144,18 @@ function PatientTable({
             style={{ textAlign: "center", paddingLeft: "40px" }}
             onClick={handleTableRowClick}
           >
-            000
+            {data?.accuracyScore?.correctCount
+              ? data?.accuracyScore?.correctCount
+              : "---"}
           </td>
           <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center", paddingLeft: "40px" }}
             onClick={handleTableRowClick}
           >
-            000
+            {data?.machineScoreMap?.wrongCount
+              ? data?.machineScoreMap?.wrongCount
+              : "---"}{" "}
           </td>
 
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
@@ -197,7 +201,7 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{ width: "200px" }}>
             <AntSelect
               options={priorityOptions}
               placeholder="Set priority"
@@ -235,14 +239,14 @@ function PatientTable({
             <th>PATIENTS</th>
             <th className={TableStyle.rowStyle2}>REVIEWER</th>
             <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
-              <Tooltip placement="bottom" title="HCC VALID IDENTIFICATION">
-                HVI
+              <Tooltip placement="bottom" title="NEW DISEASE ADDITION ">
+                NDA
               </Tooltip>
             </th>
             <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
               {" "}
-              <Tooltip placement="bottom" title="REJECTED COUNT">
-                RC
+              <Tooltip placement="bottom" title="NEW DISEASE REJECTION">
+                NDR
               </Tooltip>
             </th>
 

@@ -128,7 +128,7 @@ export default function Patient() {
     if (patientsListFilter) {
       var resultMap = [];
       var result = patientsListFilter?.response?.patientDTOList?.content;
-      setTotalElements(patientsListFilter?.response?.totalElements);
+      setTotalElements(patientsListFilter?.response?.patientDTOList?.totalElements);
       result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
@@ -147,6 +147,8 @@ export default function Patient() {
           allocatedByFirstName: res.allocatedByFirstName,
           allocatedByLastName: res.allocatedByLastName,
           allocatedByProfileImage: res.allocatedByProfileImage,
+          validDiseaseCount: res.validDiseaseCount,
+          deletedDiseaseCount: res.deletedDiseaseCount
         });
       });
       setTrackChart(patientsListFilter?.response?.processStatusCount);

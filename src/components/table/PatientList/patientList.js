@@ -145,7 +145,7 @@ function PatientTable({
             onClick={handleTableRowClick}
             style={{ paddingLeft: "30px" }}
           >
-            0
+            {data.validDiseaseCount ? data.validDiseaseCount : "---"}
           </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.allocatedOn
