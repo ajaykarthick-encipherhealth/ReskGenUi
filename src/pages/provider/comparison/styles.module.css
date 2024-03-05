@@ -33,6 +33,32 @@
   font-size: 15px !important;
 }
 
+.provider_name {
+  color: #008000bf !important;
+  background: #c4ffc4 !important;
+  font-weight: 600;
+  font-size: 11px !important;
+  border-radius: 30px !important;
+  margin: 0px 0px 0px 5px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 5px;
+}
+.encounterDate {
+  font-weight: 600;
+  font-size: 11px !important;
+  border-radius: 30px !important;
+  margin: 0px 0px 0px 5px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  border: 1px solid #a1bea0 !important;
+}
+
 .addFileBtn {
   margin-left: 10px;
 }
@@ -122,5 +148,15 @@
   /* height: 100vh !important; */
   padding-top: 55px !important;
   background-color: #fff !important;
+  margin-bottom: 20px;
+}
+.patientName {
+  padding-top: 10px;
+  padding-left: 10px;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+}
+.patientListContainer {
   margin-bottom: 20px;
 }

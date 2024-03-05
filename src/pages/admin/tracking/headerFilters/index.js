@@ -546,7 +546,7 @@ const HeaderFilters = ({
                   setSelAuditAllocatedBy("");
                 }}
               >
-                <button className={`${styles.filterBtn} mx-3`}>clear</button>
+                <button className={`${styles.filterBtn} mx-3`}>Clear</button>
               </div>
             </div>
           </div>

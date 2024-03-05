@@ -246,20 +246,23 @@ const BarChart = () => {
       type: "text",
       categories: teams,
       labels: {
-        show: false,
+        show: true,
       },
     },
     yaxis: {
+      lables:{
+        show:true
+      },
       categories: teams,
-      axisBorder: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false, // Hide the y-axis ticks
-      },
+      // axisBorder: {
+      //   show: false,
+      // },
+      // axisBorder: {
+      //   show: false,
+      // },
+      // axisTicks: {
+      //   show: false, // Hide the y-axis ticks
+      // },
     },
     legend: {
       show: false,
@@ -295,14 +298,14 @@ const BarChart = () => {
         <Card borderRadius="28px" padding="0px">
           <div className={styles.buttonDiv}>
             <div className={styles.select}>
-              <Select
+              {/* <Select
                 showSearch
                 value={selectUser}
                 placeholder="Select Team"
                 className={`custom_select_user ${styles.custom_select_user}`}
                 onChange={(e) => onChangeUser(e)}
                 options={optionsUser}
-              />
+              /> */}
             </div>
             <div className={styles.header}>
               <div
@@ -330,7 +333,7 @@ const BarChart = () => {
                       options={options2}
                       series={series2}
                       type="bar"
-                      height={680}
+                      height={630}
                     />
                     // <ReactECharts
                     //   option={option}

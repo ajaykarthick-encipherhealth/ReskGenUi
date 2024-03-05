@@ -468,6 +468,7 @@ const Header = () => {
                                   height: "20px",
                                   marginTop: "8px",
                                   fontWeight: "700",
+                                  marginRight:"10px"
                                 }}
                               />
                             </div>

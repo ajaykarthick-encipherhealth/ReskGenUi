@@ -67,8 +67,8 @@ const Accuracy = () => {
     (state) => state?.l2Dashboard?.individualUser
   );
   const numberOfWeeks =
-    accuracyDatas?.data?.response?.mapAccuracy &&
-    Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length;
+    accuracyDatas?.data?.response &&
+    Object.keys(accuracyDatas?.data?.response.mapAccuracy)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -141,7 +141,7 @@ const Accuracy = () => {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
-      accuracyDatas?.data?.response?.mapAccuracy &&
+      accuracyDatas?.data?.response &&
         Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length
     );
   } else if (currentBtn === "Weekly") {
@@ -159,156 +159,151 @@ const Accuracy = () => {
     highlightIndex = currentWeek - 1;
   }
 
-  let data = [];
-  if (currentBtn && accuracyDatas?.data?.response?.mapAccuracy) {
-    data = Object.values(accuracyDatas?.data?.response?.mapAccuracy);
-  }
-  // const option = {
-  //   xAxis: {
-  //     type: "category",
-  //     data: xAxisData,
-  //   },
-  //   yAxis: {
-  //     type: "value",
-  //   },
-  //   tooltip: {
-  //     show: true,
 
-  //     formatter: function (params) {
-  //       let tooltipContent = "";
-
-  //       if (Array.isArray(params)) {
-  //         params.forEach((item) => {
-  //           const allocatedValue = Number(item.data).toFixed(2);
-  //           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-  //         });
-  //       } else if (params.data) {
-  //         const allocatedValue = Number(params.data).toFixed(2);
-  //         tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-  //       }
-
-  //       return tooltipContent;
-  //     },
-  //   },
-  //   series: [
-  //     {
-  //       data: data,
-  //       type: "bar",
-  //       itemStyle: {
-  //         barBorderRadius: [10, 10, 0, 0],
-  //         color: function (params) {
-  //           return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-  //         },
-  //       },
-  //       lineStyle: {
-  //         color: "#BD83B8",
-  //       },
-  //       showSymbol: false,
-  //     },
-  //   ],
-  // };
   const option = {
     chart: {
-      zoomType: "xy",
+      type: "column",
     },
     title: {
       text: "",
     },
 
-    xAxis: [
-      {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
-        crosshair: true,
-        labels: {
-          style: {
-            color: "gray",
-            fontWeight: "500",
-          },
+    xAxis: {
+      categories: xAxisData,
+      crosshair: true,
+      labels: {
+        style: {
+          color: "gray",
+          fontWeight: "500",
         },
-        lineColor: "#d9d9d9",
       },
-    ],
+      lineColor: "#d9d9d9",
+    },
     yAxis: [
       {
-        // Primary yAxis
-        labels: {
-          format: "{value}°C",
-          style: {
-            color: "gray",
-            fontWeight: "500",
-          },
-        },
+        // primary yAxis (right)
         title: {
-          text: "",
+          text: "Accuracy",
+        },
+        labels: {
+          format: "{value}%",
           style: {
             color: "gray",
             fontWeight: "500",
           },
         },
+        opposite: false,
       },
       {
-        // Secondary yAxis
+        // Secondary yAxis (right)
         title: {
-          text: "",
+          text: "TotalCorrect Count",
         },
         labels: {
-          format: "{value} mm",
+          format: "{value}",
           style: {
             color: "gray",
             fontWeight: "500",
           },
         },
         opposite: true,
+        min: 0, // Set the minimum value
+        max: 10, // Set the maximum value
+        tickInterval: 4, // Set the tick interval to 1
+  
       },
     ],
-    tooltip: {
-      shared: true,
-    },
     legend: {
       enabled: false,
     },
     credits: {
       enabled: false,
     },
-    series: [
-      {
-        name: "Precipitation",
-        type: "column",
-        yAxis: 1,
-        data: [
-          27.6, 28.8, 21.7, 34.1, 29.0, 28.4, 45.6, 51.7, 39.0, 60.0, 28.6,
-          32.1,
-        ],
-        tooltip: {
-          valueSuffix: " mm",
-        },
+    tooltip: {
+      formatter: function () {
+        let finalData;
+        if (
+          typeof this.point.category === "string" &&
+          this.point.category.startsWith("Week")
+        ) {
+          const weekIndex = parseInt(this.point.category.substring(4));
+
+          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
+            (item) => item?.weekOfMonth === weekIndex
+          );
+        } else if (
+          typeof this.point.category === "string" &&
+          monthNames.includes(this.point.category.toUpperCase())
+        ) {
+          const hoveredMonthIndex = monthNames?.findIndex(
+            (month) => month === this.point.category
+          );
+
+          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
+            (item) => item?.monthOfYear === hoveredMonthIndex + 1
+          );
+        } else {
+          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
+            (item) => item?.dayOfMonth === this.x
+          );
+        }
+
+        if (finalData) {
+          return (
+            "Average Score: " +
+            finalData.averageScore +
+            "<br/>" +
+            "Total Correct: " +
+            finalData.totalCorrectCount
+            // "<br/>" +
+            // "Total Wrong: " +
+            // finalData.totalWrongCount
+          );
+        } else {
+          return "No data available";
+        }
       },
+    },
+
+    plotOptions: {
+      column: {
+        stacking: "normal",
+        dataLabels: {
+          enabled: false,
+          format: "{point.y}",
+        },
+        pointWidth: 20,
+      },
+    },
+    series: [
+      // {
+      //   name: "averageScore",
+      //   data: accuracyDatas?.data?.response.map((item) => item.averageScore),
+      //   color: "#cc0000",
+      // },
+      {
+        name: "totalCorrectCount",
+        data: accuracyDatas?.data?.response?.mapAccuracy?.map((item) => item?.totalCorrectCount),
+        color: "#3479FE",
+        yAxis:1
+      },
+      // {
+      //   name: "totalWrongCount",
+      //   data: accuracyDatas?.data?.response.map((item) => item.totalWrongCount),
+      //   color: "#0000cc",
+      // },
       {
         name: "Temperature",
         type: "spline",
-        data: [
-          -13.6, -14.9, -5.8, -0.7, 3.1, 13.0, 14.5, 10.8, 5.8, -0.7, -11.0,
-          -16.4,
-        ],
+        data: accuracyDatas?.data?.response?.mapAccuracy?.map((item) => item?.averageScore),
         tooltip: {
-          valueSuffix: "°C",
+          valueSuffix: "",
         },
+        yAxis:0
       },
     ],
   };
+
   return (
     <>
       <HeadTitle header="Accuracy Score" />
@@ -360,7 +355,7 @@ const Accuracy = () => {
                   activeColor="#fff"
                   inActiveColor="
                 #000000"
-                  activeBg="#3479FE"
+                  activeBg="#04306f"
                   inActiveBg="
                 #E6EEFF"
                   containerBg="
@@ -376,7 +371,7 @@ const Accuracy = () => {
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response?.mapAccuracy ? (
+                accuracyDatas?.data?.response?.mapAccuracy.length>0 ? (
                 option && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
@@ -407,11 +402,11 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response?.mapAccuracy &&
-                  accuracyDatas?.data?.response?.mapAccuracy[highlightIndex + 1]
+                  accuracyDatas?.data?.response?.mapAccuracy[highlightIndex-1]
                     ? `${
-                        accuracyDatas?.data?.response?.mapAccuracy[
-                          highlightIndex + 1
-                        ]
+                        Math.round(accuracyDatas?.data?.response?.mapAccuracy[
+                          highlightIndex-1
+                        ]?.averageScore)
                       }%`
                     : "0%"}
                 </span>

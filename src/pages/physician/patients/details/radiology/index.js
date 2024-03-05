@@ -497,6 +497,7 @@ const Radiology = ({}) => {
 
         var newArrayColorMatchs = [];
         newArrayColorMatchs = [
+          ...sectionColorResult,
           ...sectionColorResultMatch,
           ...notMatchColorArray,
         ];

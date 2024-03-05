@@ -20,16 +20,13 @@ const SelectRole = () => {
   const [confirmModal, setConfirmModal] = useState(false);
   const [logoutMessgae, setLogoutMessage] = useState("");
 
+const rolesList= role?.slice().reverse()
   const items =
-    role?.length > 0
-      ? role?.map((info) => ({
+  rolesList?.length > 0
+      ? rolesList?.map((info) => ({
           value: info,
           label:
-            info == "REVIEWER"
-              ? "REVIEWER"
-              : info == "SUPERVISOR"
-              ? "SUPERVISOR"
-              : "ADMIN",
+            info,
         }))
       : [];
 

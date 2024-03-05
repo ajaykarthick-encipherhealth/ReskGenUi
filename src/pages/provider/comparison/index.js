@@ -191,7 +191,7 @@ const Hcc = ({ patientHccResult }) => {
         <Badge
           className={
             res.authorizedProvider === true
-              ? `mt-2 text-start ${visitStyles.provider_name}`
+              ? `mt-2 text-start ${styles.provider_name}`
               : `mt-2 text-start ${visitStyles.un_provider_name}`
           }
         >
@@ -218,9 +218,7 @@ const Hcc = ({ patientHccResult }) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        <span
-          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-        >
+        <span className={`mt-2 text-start cr-pointer ${styles.encounterDate}`}>
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
@@ -312,6 +310,9 @@ const Hcc = ({ patientHccResult }) => {
                   <div className="col-xl-6">
                     <div className="row">
                       <div className="col-xl-6">
+                        <h6 className={styles.patientName}>
+                          EH_1234 / Mary E Stone
+                        </h6>
                         <div className={styles.headerTitle}>
                           <h6 className={styles.headerName}>
                             Cogent AI Results
@@ -479,6 +480,10 @@ const Hcc = ({ patientHccResult }) => {
                         </div>
                       </div>
                       <div className="col-xl-6">
+                        <h6 className={styles.patientName}>
+                          EH-2032 / Diana M Pallo
+                        </h6>
+
                         <div className={styles.headerTitle}>
                           <div className="d-flex">
                             <h6 className={styles.headerName2}>
@@ -673,7 +678,7 @@ const Hcc = ({ patientHccResult }) => {
               </div>
             </div>
             <Modal
-              title="Upload File"
+              title="Choose Patient"
               open={fileUploadModal}
               centered
               onCancel={() => closeModal()}
@@ -687,13 +692,31 @@ const Hcc = ({ patientHccResult }) => {
                     onSubmit={handleSubmit}
                   >
                     <div className="row">
-                      <div className={styles.fileContainer}>
+                      <div className={styles.patientListContainer}>
+                        <div>
+                          <h6 className={styles.patientName}>
+                            EH_1234 / Mary E Stone
+                          </h6>
+                        </div>
+                        <div>
+                          <h6 className={styles.patientName}>
+                            EH_1235 / Snyder, Earl A
+                          </h6>
+                        </div>
+                        <div>
+                          <h6 className={styles.patientName}>
+                            EH_1234 / VAIN, Rosemary
+                          </h6>
+                        </div>
+                      </div>
+
+                      {/* <div className={styles.fileContainer}>
                         <Form.Control
                           required
                           type="file"
                           accept="application/pdf,text/plain"
                         />
-                      </div>
+                      </div> */}
                     </div>
 
                     <div>
