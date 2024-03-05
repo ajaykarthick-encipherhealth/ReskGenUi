@@ -126,7 +126,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   useEffect(() => {
     dispatch(enableUser(checkedd, rowData));
-    dispatch(getSelectUserList("SUPERVISOR"));
+    dispatch(getSelectUserList("REVIEWER"));
   }, [checkedd, rowData]);
 
   return (
@@ -139,7 +139,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             <tr>
               <th className={TableStyle.rowEmailStyle}>NAME</th>
               <th className={TableStyle.rowEmailStyle}>EMAIL</th>
-              <th style={{ textAlign: "center", width: "170px" }}>ROLE</th>
+              <th style={{ paddingLeft: "130px", width: "170px" }}>ROLE</th>
               <th
                 style={{ cursor: "pointer", textAlign: "center" }}
                 onClick={() => {
@@ -236,20 +236,15 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
-                    <span
-                      style={{
-                        color: item.accountStatus === true ? "" : "gray",
-                      }}
-                    >
-                      {" "}
-                      {item?.email ? item?.email : "---"}
-                    </span>
+                    <span>{item?.email ? item?.email : "---"}</span>
                   </td>
                   <td
                     className={TableStyle.childBorder}
                     style={{
                       backgroundColor:
                         item.accountStatus === true ? "" : "#0000001a",
+                      // paddingLeft: "70px",
+                      textAlign: "center",
                     }}
                   >
                     <div className={TableStyle.rowStyle2}>

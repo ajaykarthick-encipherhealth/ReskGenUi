@@ -103,13 +103,13 @@ function AddPatientListTable({
               className={TableStyle.firstTdBorder}
               onClick={handleTableRowClick}
             >
-              {data.patientId}
+              {data.patientId ? data.patientId : "---"}
             </td>
             <td
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.patientName}
+              {data.patientName ? data.patientName : <div>---</div>}
             </td>
 
             <td
@@ -120,9 +120,7 @@ function AddPatientListTable({
               data.createdByLastName ||
               data.createdByProfileImage ? (
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  {" "}
                   <span style={{ marginRight: "10px" }}>
-                    {" "}
                     {renderUserPrfoileAvatar(
                       data.createdByFirstName,
                       data.createdByLastName,
@@ -135,7 +133,7 @@ function AddPatientListTable({
                   </span>
                 </div>
               ) : (
-                <div style={{ textAlign: "center" }}>---</div>
+                <div style={{ paddingLeft: "50px" }}>---</div>
               )}
             </td>
             <td
@@ -237,8 +235,10 @@ function AddPatientListTable({
 
         <tbody>
           {detailsContent.length <= 0 ? (
-            <tr colSpan="9">
-              <Empty />
+            <tr >
+              <td colSpan="9">
+                <Empty />
+              </td>
             </tr>
           ) : (
             renderRows()
