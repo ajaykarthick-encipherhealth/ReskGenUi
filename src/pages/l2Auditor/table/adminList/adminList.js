@@ -25,8 +25,8 @@ const AdminList = ({ userList }) => {
             <th>COMPLETED</th>
             <th>PENDING</th>
             <th>HOLD</th>
-            <th>HCC VALID IDENTIFICATION</th>
-            <th>REJECTED COUNT</th>
+            {/* <th>HCC VALID IDENTIFICATION</th>
+            <th>REJECTED COUNT</th> */}
             <th>INVALID</th>
             <th>QUALITY</th>
           </tr>
@@ -104,7 +104,7 @@ const AdminList = ({ userList }) => {
                   </span>
                 </td>
                 {/* hcc valid identificatio */}
-                <td
+                {/* <td
                   className={TableStyle.lastBorder}
                   style={{ height: "40px !important" }}
                 >
@@ -112,7 +112,7 @@ const AdminList = ({ userList }) => {
                     {item?.totalFileHold ? item?.totalFileHold : "---"}
                   </span>
                 </td>
-                {/* rejected codes */}
+            
                 <td
                   className={TableStyle.lastBorder}
                   style={{ height: "40px !important" }}
@@ -120,7 +120,7 @@ const AdminList = ({ userList }) => {
                   <span>
                     {item?.totalFileHold ? item?.totalFileHold : "---"}
                   </span>
-                </td>
+                </td> */}
                 {/* invalid */}
                 <td
                   className={TableStyle.childBorder}
