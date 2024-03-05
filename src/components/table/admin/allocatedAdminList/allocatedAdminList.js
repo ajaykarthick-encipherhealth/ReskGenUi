@@ -105,7 +105,7 @@ function AllocatedAdminList({
       ))
     ) : (
       <tr>
-        <td colSpan={4}>
+        <td colSpan={5}>
           <Empty />
         </td>
       </tr>
