@@ -292,7 +292,7 @@ export default function Patient() {
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditPending}
-                style={{ height: "30%", width: "30%" }}
+                style={{ height: "25%", width: "25%" }}
               />
             </div>
           </Tooltip>
@@ -311,7 +311,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="AUDITHOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={AuditHold} style={{ height: "30%", width: "30%" }} />
+              <Image src={AuditHold} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
@@ -319,7 +319,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="REAUDIT">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={ReAudit} style={{ height: "30%", width: "30%" }} />
+              <Image src={ReAudit} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
@@ -329,7 +329,7 @@ export default function Patient() {
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditedTrack}
-                style={{ height: "30%", width: "30%" }}
+                style={{ height: "25%", width: "25%" }}
               />
             </div>
           </Tooltip>
@@ -337,14 +337,14 @@ export default function Patient() {
       case "AUDITED":
         return (
           <div className="patient-status" style={{ textAlign: "center" }}>
-            <Image src={AuditedTrack} style={{ height: "30%", width: "30%" }} />
+            <Image src={AuditedTrack} style={{ height: "25%", width: "25%" }} />
           </div>
         );
       case "NOT_AUDIT":
         return (
           <Tooltip placement="bottom" title="NOT_AUDIT">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={NotAudited} style={{ height: "30%", width: "30%" }} />
+              <Image src={NotAudited} style={{ height: "25%", width: "25%" }} />
             </div>
           </Tooltip>
         );
