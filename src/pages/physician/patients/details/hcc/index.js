@@ -1089,6 +1089,7 @@ const Hcc = ({ patientHccResult }) => {
 
         var newArrayColorMatchs = [];
         newArrayColorMatchs = [
+          ...sectionColorResult,
           ...sectionColorResultMatch,
           ...notMatchColorArray,
           ...sectionColorResultMatchMeat,
