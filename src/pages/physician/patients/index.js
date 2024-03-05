@@ -128,7 +128,9 @@ export default function Patient() {
     if (patientsListFilter) {
       var resultMap = [];
       var result = patientsListFilter?.response?.patientDTOList?.content;
-      setTotalElements(patientsListFilter?.response?.patientDTOList?.totalElements);
+      setTotalElements(
+        patientsListFilter?.response?.patientDTOList?.totalElements
+      );
       result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
@@ -148,7 +150,7 @@ export default function Patient() {
           allocatedByLastName: res.allocatedByLastName,
           allocatedByProfileImage: res.allocatedByProfileImage,
           validDiseaseCount: res.validDiseaseCount,
-          deletedDiseaseCount: res.deletedDiseaseCount
+          deletedDiseaseCount: res.deletedDiseaseCount,
         });
       });
       setTrackChart(patientsListFilter?.response?.processStatusCount);
@@ -348,7 +350,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "20%", width: "20%" }} />
+              <Image src={Completed} style={{ height: "18%", width: "18%" }} />
             </div>
           </Tooltip>
         );
@@ -357,7 +359,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
           </Tooltip>
         );
@@ -366,7 +368,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="DECLINED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "20%", width: "20%" }} />
+              <Image src={Declined} style={{ height: "18%", width: "18%" }} />
             </div>
           </Tooltip>
         );
@@ -375,7 +377,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
           </Tooltip>
         );
@@ -383,7 +385,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
           </Tooltip>
         );
@@ -391,7 +393,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "20%", width: "20%" }} />
+              <Image src={Hold} style={{ height: "18%", width: "18%" }} />
             </div>
           </Tooltip>
         );
@@ -399,7 +401,7 @@ export default function Patient() {
         return (
           <Tooltip placement="bottom" title="PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
           </Tooltip>
         );
