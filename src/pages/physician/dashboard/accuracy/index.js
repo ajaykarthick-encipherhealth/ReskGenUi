@@ -151,6 +151,9 @@ const Accuracy = () => {
         // primary yAxis (right)
         title: {
           text: "Accuracy",
+          style: {
+            color: "#2dafff" 
+        }
         },
         labels: {
           format: "{value}%",
@@ -165,6 +168,9 @@ const Accuracy = () => {
         // Secondary yAxis (right)
         title: {
           text: "TotalCorrect Count",
+          style: {
+            color: "#0b59f1" 
+        }
         },
         labels: {
           format: "{value}",
@@ -239,6 +245,7 @@ const Accuracy = () => {
           format: "{point.y}",
         },
         pointWidth: 20,
+        borderRadius: 10,
       },
     },
     series: [
@@ -252,7 +259,7 @@ const Accuracy = () => {
         data: accuracyDatas?.data?.response.map(
           (item) => item?.totalCorrectCount
         ),
-        color: "#3479FE",
+        color: "#0b59f1",
         yAxis: 1,
       },
       // {
