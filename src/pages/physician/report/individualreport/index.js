@@ -291,7 +291,8 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-              {!url?.extention?
+              {url?.extention}
+              {!url?.extention ? 
               <div
               style={{
                 display: "flex",

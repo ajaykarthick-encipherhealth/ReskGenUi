@@ -35,17 +35,7 @@ const CSVDisplay = ({ tableData, fileUrl, extention, loading }) => {
   };
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          
-        </div>
-      ) : fileUrl && extention && dataRows?.length > 0 ? (
+      {fileUrl && extention && dataRows?.length > 0 ? (
         <table className={styles.exceltable}>
           <thead>
             <tr>
