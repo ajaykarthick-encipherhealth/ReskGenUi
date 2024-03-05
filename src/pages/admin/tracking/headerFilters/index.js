@@ -135,6 +135,7 @@ const HeaderFilters = ({
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
+ 
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -195,6 +196,7 @@ const HeaderFilters = ({
               <RangePicker
                 value={clear ? "" : selectedDates}
                 format="YYYY-MM-DD"
+                onCalendarChange={(val) => setSelectedDates(val)}
                 onChange={(date, dateString) => {
                   handleRnagePicker2({
                     date,
@@ -202,13 +204,14 @@ const HeaderFilters = ({
                     setStartDate4,
                     setEndDate4,
                   });
-                  setSelectedDates([
-                    dayjs(dateString[0]),
-                    dayjs(dateString[1]),
-                  ]);
+
                   setClear(false);
                 }}
                 disabledDate={(current) => disableFutureDate(current)}
+                onCalendarClose={() => {
+                
+                  setSelectedDates([]);
+                }}
               />
             </div>
           </div>
@@ -219,8 +222,9 @@ const HeaderFilters = ({
                 <label className={styles.label}>{pickerlabe5}</label>
                 <div>
                   <RangePicker
-                    value={clear ? "" : selectedDates2}
+                    value={clear ? ["", ""] : selectedDates2}
                     format="YYYY-MM-DD"
+                    onCalendarChange={(val) => setSelectedDates2(val)}
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
                         date,
@@ -228,10 +232,6 @@ const HeaderFilters = ({
                         setStartDate5,
                         setEndDate5,
                       });
-                      setSelectedDates2([
-                        dayjs(dateString[0]),
-                        dayjs(dateString[1]),
-                      ]);
 
                       setClear(false);
                     }}
@@ -248,8 +248,9 @@ const HeaderFilters = ({
                 <label className={styles.label}>{pickerlabe3}</label>
                 <div>
                   <RangePicker
-                    value={clear ? "" : selectedDates3}
+                    value={clear ? ["", ""] : selectedDates3}
                     format="YYYY-MM-DD"
+                    onCalendarChange={(val) => setSelectedDates3(val)}
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
                         date,
@@ -257,10 +258,6 @@ const HeaderFilters = ({
                         setStartDate3,
                         setEndDate3,
                       });
-                      setSelectedDates3([
-                        dayjs(dateString[0]),
-                        dayjs(dateString[1]),
-                      ]);
 
                       setClear(false);
                     }}
@@ -351,19 +348,17 @@ const HeaderFilters = ({
                 <label className={styles.label}>{"Reviewer Due Date"}</label>
                 <div>
                   <RangePicker
-                    value={clear ? "" : selectedDates4}
+                    value={clear ? ["", ""] : selectedDates4}
                     format="YYYY-MM-DD"
+                    onCalendarChange={(val) => setSelectedDates4(val)}
                     onChange={(date, dateString) => {
+                     
                       handleRnagePicker2({
                         date,
                         dateString,
                         setStartDate,
                         setEndDate,
                       });
-                      setSelectedDates4([
-                        dayjs(dateString[0]),
-                        dayjs(dateString[1]),
-                      ]);
 
                       setClear(false);
                     }}
@@ -395,8 +390,9 @@ const HeaderFilters = ({
                   </label>
                   <div>
                     <RangePicker
-                      value={clear ? "" : selectedDates5}
+                      value={clear ? ["", ""] : selectedDates5}
                       format="YYYY-MM-DD"
+                      onCalendarChange={(val) => setSelectedDates5(val)}
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
                           date,
@@ -404,10 +400,6 @@ const HeaderFilters = ({
                           setStartDate6,
                           setEndDate6,
                         });
-                        setSelectedDates5([
-                          dayjs(dateString[0]),
-                          dayjs(dateString[1]),
-                        ]);
 
                         setClear(false);
                       }}
@@ -539,7 +531,20 @@ const HeaderFilters = ({
               )}
               <div
                 style={{ margin: "-35px 0px 0 40px", cursor: "pointer" }}
-                onClick={() => setClear(true)}
+                onClick={() => {
+                  setClear(true);
+                  setSelectedDates([]);
+                  setSelectedDates2([]);
+                  setSelectedDates3([]);
+                  setSelectedDates4([]);
+                  setSelectedDates5([]);
+                  setSelAllocatedTo("");
+                  setAuditSelAllocatedTo("");
+                  setSelectedOption("");
+                  setAuditSelectedOption("");
+                  setSelAllocatedBy("");
+                  setSelAuditAllocatedBy("");
+                }}
               >
                 <button className={`${styles.filterBtn} mx-3`}>clear</button>
               </div>

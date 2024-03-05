@@ -65,7 +65,7 @@ export const TrackingList = async (datas) => {
       }&searchString=${datas?.searchTextValue}&patientAllocated=${
         datas?.selAllocatedTo === "All" ? "" : datas?.selAllocatedTo
       }&auditAllocatedStart=${datas?.allocatedStartDate}&auditAllocatedEnd=${
-        datas?.auditedEndDate
+        datas?.allocatedEndDate
       }&allocatedOnStart=${datas?.auditedStartDate}&allocatedOnEnd=${
         datas?.auditedEndDate
       }&allocatedBy=${datas?.selAllocatedBy}&auditDueDateStart=${
