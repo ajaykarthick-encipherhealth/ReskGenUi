@@ -32,8 +32,8 @@ const UserList = () => {
                       <div className="">
                         <div>
                           {renderUserPrfoileAvatarCustom(
-                            "Ajit",
-                            "Kumar",
+                            "Francis",
+                            "Tomy",
                             null,
                             "header",
                             "40px",
@@ -44,12 +44,12 @@ const UserList = () => {
                       <div className="">
                         <FontAwesomeIcon icon={faIdCardClip} />
                         <label>MRN</label>
-                        <h6 className="ageDtails">EH_1234</h6>
+                        <h6 className="ageDtails">EH-1234</h6>
                       </div>
                       <div className="">
                         <FontAwesomeIcon icon={faUserCircle} />
                         <label>Name</label>
-                        <h6 className="ageDtails">Henry</h6>
+                        <h6 className="ageDtails">Francis Tomy</h6>
                       </div>
                       <div className="">
                         <FontAwesomeIcon icon={faCalendarAlt} />
@@ -59,14 +59,14 @@ const UserList = () => {
                       <div className="">
                         <FontAwesomeIcon icon={faVenusMars} />
                         <label>Gender</label>
-                        <h6 className="ageDtails">MALE</h6>
+                        <h6 className="ageDtails">FEMALE</h6>
                       </div>
                       <div className="">
                         <i className={visitStyles.dob_icon}>
                           {SVGICON.DatebirthIcon}
                         </i>
                         <label>DOB</label>
-                        <h6 className="ageDtails">05/07/1877</h6>
+                        <h6 className="ageDtails">05/25/1898 </h6>
                       </div>
                     </div>
                   </div>
@@ -75,8 +75,8 @@ const UserList = () => {
               <div className="col-xl-12">
                 <div className={styles.detailsContainer}>
                   <Tabs defaultActiveKey="1">
-                    <TabPane tab="Medical History" key="1">
-                      <Tabs defaultActiveKey="1">
+                    <TabPane tab="Observations" key="1">
+                      {/* <Tabs defaultActiveKey="1">
                         <TabPane tab="Appointments" key="1">
                           <Appointments />
                         </TabPane>
@@ -87,12 +87,13 @@ const UserList = () => {
                         <TabPane tab="Allergies" key="4"></TabPane>
                         <TabPane tab="Medications" key="5"></TabPane>
                         <TabPane tab="Assessments" key="6"></TabPane>
-                      </Tabs>
+                      </Tabs> */}
+                      {/* <Ob /> */}
                     </TabPane>
-                    <TabPane tab="Observations" key="2"></TabPane>
-                    <TabPane tab="Immunizations" key="3"></TabPane>
-                    <TabPane tab="Reports" key="4"></TabPane>
-                    <TabPane tab="Care Teams" key="5"></TabPane>
+                    <TabPane tab="Conditions" key="2"></TabPane>
+                    <TabPane tab="Procedures" key="3"></TabPane>
+                    <TabPane tab="Medications" key="4"></TabPane>
+                    {/* <TabPane tab="Care Teams" key="5"></TabPane> */}
                   </Tabs>
                 </div>
               </div>

@@ -63,11 +63,11 @@ export default function Login() {
       setIsLoading(true);
       localStorage.setItem("userRole", "EHR");
       router.push("ehr/patients");
-      // setErrors({
-      //   email: "",
-      //   password: "",
-      // });
-      // dispatch(getMFAValidation(enteredEmail, router, password));
+      setErrors({
+        email: "",
+        password: "",
+      });
+      dispatch(getMFAValidation(enteredEmail, router, password));
     } else {
       return;
     }
