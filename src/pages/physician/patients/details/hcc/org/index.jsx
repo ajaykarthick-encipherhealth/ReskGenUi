@@ -15,7 +15,7 @@ import visitStyles from "../../../../../../styles/visitdata.module.css";
 const CamboTree = ({ tree }) => {
   const [selection, setSelection] = useState([]);
   const [background, setBackground] = useState([]);
-  console.log(tree, "test");
+  const [trees, setTrees] = useState([]);
   const getBackgroundColor = async () => {
     try {
       const response = await axios.get(
@@ -122,7 +122,7 @@ const CamboTree = ({ tree }) => {
         className={`card border border-primary overflow-x-auto ${Style.chart}`}
       >
         <OrganizationChart
-          value={[tree]}
+          value={tree}
           // selectionMode="multiple"
           // selection={selection}
           // onSelectionChange={(e) => setSelection(e.data)}

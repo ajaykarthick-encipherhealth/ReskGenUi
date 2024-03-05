@@ -4124,23 +4124,23 @@ const Hcc = ({ patientHccResult }) => {
                                               setCombiTree(item);
                                             }}
                                           > */}
-                                            <div
-                                              className={visitStyles.close_icon}
-                                              style={{ background: "#c7f3c6" }}
-                                              onClick={() => {
-                                                setOpens(true);
-                                                setCombiTree(item);
-                                                console.log(item, "test");
+                                          <div
+                                            className={visitStyles.close_icon}
+                                            style={{ background: "#c7f3c6" }}
+                                            onClick={() => {
+                                              setOpens(true);
+                                              setCombiTree([item]);
+                                              console.log(item, "test");
+                                            }}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faSitemap}
+                                              style={{
+                                                size: 8,
+                                                color: "#088f39",
                                               }}
-                                            >
-                                              <FontAwesomeIcon
-                                                icon={faSitemap}
-                                                style={{
-                                                  size: 8,
-                                                  color: "#088f39",
-                                                }}
-                                              />
-                                            </div>
+                                            />
+                                          </div>
                                           {/* </Popconfirm> */}
                                         </div>
                                         <div
