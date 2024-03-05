@@ -2,10 +2,6 @@ body {
   font-family: "Manrope", sans-serif !important;
 }
 
-i {
-  margin-right: 10px;
-}
-
 .container,
 .container-fluid,
 .container-sm,
@@ -14137,4 +14133,8 @@ span.meat-name-details2 {
 .ant-tabs .ant-tabs-tab-btn {
   font-size: 15px !important;
   font-weight: 600;
+}
+
+.p-organizationchart-node-content .p-organizationchart-selectable-node {
+  margin: 0 20px;
 }

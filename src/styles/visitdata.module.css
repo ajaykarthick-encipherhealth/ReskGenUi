@@ -421,20 +421,24 @@
 }
 
 .close_icon {
-  width: 16px;
-  height: 15px;
+  width: 18px;
+  height: 16px;
   border-radius: 4px;
   background: #fee1e1;
   text-align: center;
   /* margin-left: -8px; */
   margin-top: 7px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .close_icon svg {
   text-align: center;
   display: flex;
   font-size: 10px;
-  margin: 2px 0px 0px 3px;
+  /* padding-top: 2px;
+  margin: 2px 0px 0px 3px; */
 }
 .hcc_title_name svg {
   color: #fff;

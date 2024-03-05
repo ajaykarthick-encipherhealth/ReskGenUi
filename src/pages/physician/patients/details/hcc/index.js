@@ -31,11 +31,20 @@ import {
   faCalendar,
   faCircle,
   faCircleUp,
+  faSitemap,
   faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Select, Popover, Menu, DatePicker, Dropdown } from "antd";
+import {
+  Popconfirm,
+  Select,
+  Popover,
+  Menu,
+  DatePicker,
+  Dropdown,
+  message,
+} from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
@@ -55,6 +64,7 @@ import {
   manuallyAddComboCode,
 } from "../../../../../services/PatientsListSevice";
 import RafScore from "../components/rafScore";
+import CamboTree from "./org";
 
 const { Option } = Select;
 
@@ -109,7 +119,7 @@ const Hcc = ({ patientHccResult }) => {
   const [rafScore, setRAFScore] = useState([]);
   const [patientDetails, setPatientDetails] = useState([]);
   const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-
+  const [opens, setOpens] = useState(false);
   const [rafHccList, setRafScoreHccList] = useState([]);
   const [isMatchBtn, setIsMatchBtn] = useState(false);
   const [matchHccList, setMatchHccList] = useState([]);
@@ -117,7 +127,7 @@ const Hcc = ({ patientHccResult }) => {
   const [newInValidDiseaseList, setInNewValidDiseaseList] = useState([]);
   const [unMatchResList, setNewUnMatchHccList] = useState([]);
   const [meatColorCodeList, setMeatColorCodeList] = useState([]);
-
+  const [combiTree, setCombiTree] = useState({});
   const [dbDescriptionRes, setDbDescriptionRes] = useState([]);
 
   const [openPopover, setOpenPopover] = useState(false);
@@ -3290,6 +3300,11 @@ const Hcc = ({ patientHccResult }) => {
     return newStr;
   };
 
+  const showErrorMessage = () => {
+    setOpens(false);
+    notification.info({ message: "Tree Not Available" });
+  };
+
   return (
     <>
       {fileLoading ? (
@@ -4064,33 +4079,69 @@ const Hcc = ({ patientHccResult }) => {
                                         >
                                           <span>{item.diseaseName}</span>
                                         </div>
-                                        <div className="col-xl-1 comboclose">
-                                          <Popconfirm
-                                            title="You want move to Invalid?"
+                                        <div className="col-xl-1">
+                                          <div>
+                                            <Popconfirm
+                                              title="You want move to Invalid?"
+                                              description={item.diseaseName}
+                                              onConfirm={confirmComboInvalid}
+                                              placement="leftTop"
+                                              okText="Yes"
+                                              cancelText="No"
+                                              onOpenChange={() =>
+                                                onchangeCombo(
+                                                  item.diseaseName,
+                                                  item.addOnCode
+                                                )
+                                              }
+                                            >
+                                              <div
+                                                className={
+                                                  visitStyles.close_icon
+                                                }
+                                              >
+                                                <FontAwesomeIcon
+                                                  icon={faArrowsAlt}
+                                                  style={{
+                                                    size: 8,
+                                                    color: "#a80404",
+                                                  }}
+                                                />
+                                              </div>
+                                            </Popconfirm>
+                                          </div>
+                                          {/* <Popconfirm
+                                            title="You want to see the tree view?"
                                             description={item.diseaseName}
-                                            onConfirm={confirmComboInvalid}
+                                            onConfirm={() => {
+                                              setOpens(true);
+                                              
+                                            }}
                                             placement="leftTop"
                                             okText="Yes"
                                             cancelText="No"
-                                            onOpenChange={() =>
-                                              onchangeCombo(
-                                                item.diseaseName,
-                                                item.addOnCode
-                                              )
-                                            }
-                                          >
+                                            onOpenChange={() => {
+                                              setCombiTree(item);
+                                            }}
+                                          > */}
                                             <div
                                               className={visitStyles.close_icon}
+                                              style={{ background: "#c7f3c6" }}
+                                              onClick={() => {
+                                                setOpens(true);
+                                                setCombiTree(item);
+                                                console.log(item, "test");
+                                              }}
                                             >
                                               <FontAwesomeIcon
-                                                icon={faArrowsAlt}
+                                                icon={faSitemap}
                                                 style={{
                                                   size: 8,
-                                                  color: "#a80404",
+                                                  color: "#088f39",
                                                 }}
                                               />
                                             </div>
-                                          </Popconfirm>
+                                          {/* </Popconfirm> */}
                                         </div>
                                         <div
                                           className={styles.comboDetailsHeader}
@@ -7513,6 +7564,22 @@ const Hcc = ({ patientHccResult }) => {
             </div>
           </div>
         </Modal>
+      )}
+
+      {opens && combiTree?.children?.length > 0 ? (
+        <Modal
+          title={fileModalHeader}
+          width="90%"
+          centered
+          open={opens}
+          onOk={() => setOpens(false)}
+          onCancel={() => setOpens(false)}
+          footer={null}
+        >
+          <CamboTree tree={combiTree} />
+        </Modal>
+      ) : (
+        opens && showErrorMessage()
       )}
 
       <Offcanvas
