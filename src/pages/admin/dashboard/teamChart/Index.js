@@ -295,14 +295,14 @@ const BarChart = () => {
         <Card borderRadius="28px" padding="0px">
           <div className={styles.buttonDiv}>
             <div className={styles.select}>
-              <Select
+              {/* <Select
                 showSearch
                 value={selectUser}
                 placeholder="Select Team"
                 className={`custom_select_user ${styles.custom_select_user}`}
                 onChange={(e) => onChangeUser(e)}
                 options={optionsUser}
-              />
+              /> */}
             </div>
             <div className={styles.header}>
               <div

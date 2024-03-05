@@ -141,7 +141,7 @@ const SpeedoMeter = () => {
 
   return (
     <>
-      <HeadTitle header="Accuracy" />
+      <HeadTitle header="Quality" />
       <div className={styles.card3}>
         <Card borderRadius="28px">
           <div className={styles.header}>
