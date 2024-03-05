@@ -127,50 +127,6 @@ const Accuracy = () => {
   if (currentBtn && accuracyDatas?.data?.response) {
     data = Object.values(accuracyDatas?.data?.response);
   }
-  // const option = {
-  //   xAxis: {
-  //     type: "category",
-  //     data: xAxisData,
-  //   },
-  //   yAxis: {
-  //     type: "value",
-  //   },
-  //   tooltip: {
-  //     show: true,
-
-  //     formatter: function (params) {
-  //       let tooltipContent = "";
-
-  //       if (Array.isArray(params)) {
-  //         params.forEach((item) => {
-  //           const allocatedValue = Number(item.data).toFixed(2);
-  //           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-  //         });
-  //       } else if (params.data) {
-  //         const allocatedValue = Number(params.data).toFixed(2);
-  //         tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-  //       }
-
-  //       return tooltipContent;
-  //     },
-  //   },
-  //   series: [
-  //     {
-  //       data: data,
-  //       type: "bar",
-  //       itemStyle: {
-  //         barBorderRadius: [10, 10, 0, 0],
-  //         color: function (params) {
-  //           return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-  //         },
-  //       },
-  //       lineStyle: {
-  //         color: "#BD83B8",
-  //       },
-  //       showSymbol: false,
-  //     },
-  //   ],
-  // };
   const options = {
     chart: {
       type: "column",
@@ -221,7 +177,6 @@ const Accuracy = () => {
         min: 0, // Set the minimum value
         max: 10, // Set the maximum value
         tickInterval: 4, // Set the tick interval to 1
-  
       },
     ],
     legend: {
@@ -294,9 +249,11 @@ const Accuracy = () => {
       // },
       {
         name: "totalCorrectCount",
-        data: accuracyDatas?.data?.response.map((item) => item?.totalCorrectCount),
+        data: accuracyDatas?.data?.response.map(
+          (item) => item?.totalCorrectCount
+        ),
         color: "#009900",
-        yAxis:1
+        yAxis: 1,
       },
       // {
       //   name: "totalWrongCount",
@@ -310,12 +267,10 @@ const Accuracy = () => {
         tooltip: {
           valueSuffix: "",
         },
-        yAxis:0
+        yAxis: 0,
       },
     ],
   };
-
-
 
   return (
     <>
@@ -345,7 +300,7 @@ const Accuracy = () => {
                 activeColor="#fff"
                 inActiveColor="
                 #000000"
-                activeBg="#3479FE"
+                activeBg="#04306f"
                 inActiveBg="
                 #E6EEFF"
                 containerBg="
@@ -391,7 +346,10 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
-                    ? `${accuracyDatas?.data?.response[highlightIndex + 1]?.averageScore}%`
+                    ? `${
+                        accuracyDatas?.data?.response[highlightIndex + 1]
+                          ?.averageScore
+                      }%`
                     : "0%"}
                 </span>
               </div>
