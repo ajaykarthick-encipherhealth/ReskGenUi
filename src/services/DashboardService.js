@@ -39,14 +39,14 @@ export const DailyTaskApi = async (date, router) => {
   }
 };
 
-export const accuracyScore = async (btn, month, year, router) => {
+export const accuracyScore = async (btn, month, year, router,isAdmin) => {
   const token = localStorage.getItem("token");
   const url =
     btn === "Daily"
       ? `daily?month=${month}&year=${year}`
       : btn === "Weekly"
       ? `weekly?month=${month}&year=${year}`
-      : `monthyly?year=${year}`;
+      : `monthyly?year=${year}&isAdmin=${isAdmin}`;
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}dbservice/accuracyscore/${url}`,

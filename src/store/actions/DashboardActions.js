@@ -68,7 +68,7 @@ export const getDailyTaskDatas = (date, router) => {
   };
 };
 
-export const getAccuracyScore = (btn, month, year, router) => {
+export const getAccuracyScore = (btn, month, year, router,isAdmin) => {
   return (dispatch) => {
     dispatch({
       type: ACCURACY,
@@ -77,7 +77,7 @@ export const getAccuracyScore = (btn, month, year, router) => {
       },
     });
     try {
-      accuracyScore(btn, month, year, router).then((response) => {
+      accuracyScore(btn, month, year, router,isAdmin).then((response) => {
         dispatch({
           type: ACCURACY,
           payload: {
