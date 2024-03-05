@@ -68,7 +68,7 @@ const Accuracy = () => {
   );
   const numberOfWeeks =
     accuracyDatas?.data?.response &&
-    Object.keys(accuracyDatas?.data?.response)?.length;
+    Object.keys(accuracyDatas?.data?.response.mapAccuracy)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -142,7 +142,7 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
       accuracyDatas?.data?.response &&
-        Object.keys(accuracyDatas?.data?.response)?.length
+        Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
@@ -159,50 +159,7 @@ const Accuracy = () => {
     highlightIndex = currentWeek - 1;
   }
 
-  // const option = {
-  //   xAxis: {
-  //     type: "category",
-  //     data: xAxisData,
-  //   },
-  //   yAxis: {
-  //     type: "value",
-  //   },
-  //   tooltip: {
-  //     show: true,
 
-  //     formatter: function (params) {
-  //       let tooltipContent = "";
-
-  //       if (Array.isArray(params)) {
-  //         params.forEach((item) => {
-  //           const allocatedValue = Number(item.data).toFixed(2);
-  //           tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-  //         });
-  //       } else if (params.data) {
-  //         const allocatedValue = Number(params.data).toFixed(2);
-  //         tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-  //       }
-
-  //       return tooltipContent;
-  //     },
-  //   },
-  //   series: [
-  //     {
-  //       data: data,
-  //       type: "bar",
-  //       itemStyle: {
-  //         barBorderRadius: [10, 10, 0, 0],
-  //         color: function (params) {
-  //           return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-  //         },
-  //       },
-  //       lineStyle: {
-  //         color: "#BD83B8",
-  //       },
-  //       showSymbol: false,
-  //     },
-  //   ],
-  // };
   const option = {
     chart: {
       type: "column",
@@ -271,7 +228,7 @@ const Accuracy = () => {
         ) {
           const weekIndex = parseInt(this.point.category.substring(4));
 
-          finalData = accuracyDatas?.data?.response?.find(
+          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
             (item) => item?.weekOfMonth === weekIndex
           );
         } else if (
@@ -282,11 +239,11 @@ const Accuracy = () => {
             (month) => month === this.point.category
           );
 
-          finalData = accuracyDatas?.data?.response?.find(
+          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
             (item) => item?.monthOfYear === hoveredMonthIndex + 1
           );
         } else {
-          finalData = accuracyDatas?.data?.response?.find(
+          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
             (item) => item?.dayOfMonth === this.x
           );
         }
@@ -326,8 +283,8 @@ const Accuracy = () => {
       // },
       {
         name: "totalCorrectCount",
-        data: accuracyDatas?.data?.response?.map((item) => item?.totalCorrectCount),
-        color: "#009900",
+        data: accuracyDatas?.data?.response?.mapAccuracy?.map((item) => item?.totalCorrectCount),
+        color: "#3479FE",
         yAxis:1
       },
       // {
@@ -338,7 +295,7 @@ const Accuracy = () => {
       {
         name: "Temperature",
         type: "spline",
-        data: accuracyDatas?.data?.response?.map((item) => item?.averageScore),
+        data: accuracyDatas?.data?.response?.mapAccuracy?.map((item) => item?.averageScore),
         tooltip: {
           valueSuffix: "",
         },
@@ -346,6 +303,7 @@ const Accuracy = () => {
       },
     ],
   };
+
   return (
     <>
       <HeadTitle header="Accuracy Score" />
@@ -413,7 +371,7 @@ const Accuracy = () => {
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response?.mapAccuracy ? (
+                accuracyDatas?.data?.response?.mapAccuracy.length>0 ? (
                 option && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
@@ -444,11 +402,11 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response?.mapAccuracy &&
-                  accuracyDatas?.data?.response?.mapAccuracy[highlightIndex + 1]
+                  accuracyDatas?.data?.response?.mapAccuracy[highlightIndex-1]
                     ? `${
-                        accuracyDatas?.data?.response?.mapAccuracy[
-                          highlightIndex + 1
-                        ]
+                        Math.round(accuracyDatas?.data?.response?.mapAccuracy[
+                          highlightIndex-1
+                        ]?.averageScore)
                       }%`
                     : "0%"}
                 </span>

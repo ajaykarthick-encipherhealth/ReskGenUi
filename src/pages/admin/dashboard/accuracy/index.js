@@ -309,7 +309,7 @@ const Accuracy = () => {
         data: QualityAccuracyDatas?.data?.response.map(
           (item) => item?.totalCorrectCount
         ),
-        color: "#009900",
+        color: "#3479FE",
         yAxis: 1,
       },
       // {
@@ -458,18 +458,19 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {currentTabBtn === "Accuracy"?
-                  accuracyDatas?.data?.response &&
-                  accuracyDatas?.data?.response[highlightIndex + 1]
-                    ? `${accuracyDatas?.data?.response[highlightIndex + 1]}%`
-                    : "0%"
-                  :
-                  QualityAccuracyDatas?.data?.response &&
-                  QualityAccuracyDatas?.data?.response[highlightIndex]
-                    ? `${
-                        QualityAccuracyDatas?.data?.response[highlightIndex]
+                  {currentTabBtn === "Accuracy"
+                    ? accuracyDatas?.data?.response &&
+                      accuracyDatas?.data?.response[highlightIndex + 1]
+                      ? `${Math.round(
+                          accuracyDatas?.data?.response[highlightIndex + 1]
+                        )}%`
+                      : "0%"
+                    : QualityAccuracyDatas?.data?.response &&
+                      QualityAccuracyDatas?.data?.response[highlightIndex]
+                    ? `${Math.round(
+                        QualityAccuracyDatas?.data?.response[highlightIndex - 1]
                           ?.averageScore
-                      }%`
+                      )}%`
                     : "0%"}
                 </span>
               </div>

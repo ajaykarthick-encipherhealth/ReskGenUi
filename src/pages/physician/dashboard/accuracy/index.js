@@ -252,7 +252,7 @@ const Accuracy = () => {
         data: accuracyDatas?.data?.response.map(
           (item) => item?.totalCorrectCount
         ),
-        color: "#009900",
+        color: "#3479FE",
         yAxis: 1,
       },
       // {
@@ -347,8 +347,8 @@ const Accuracy = () => {
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
                     ? `${
-                        accuracyDatas?.data?.response[highlightIndex]
-                          ?.averageScore
+                       Math.round( accuracyDatas?.data?.response[highlightIndex-1]
+                        ?.averageScore)
                       }%`
                     : "0%"}
                 </span>
