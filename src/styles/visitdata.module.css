@@ -296,8 +296,8 @@
 }
 
 .provider_name {
-  color: #008000bf !important;
-  background: #c4ffc4 !important;
+  /* color: #008000bf !important; */
+  /* background: #c4ffc4 !important; */
   font-weight: 600;
   font-size: 11px;
   border-radius: 30px !important;

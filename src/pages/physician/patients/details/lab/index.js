@@ -333,10 +333,14 @@ const Lab = ({}) => {
         validDiseaseNewRes = result.validDisease[dateofService];
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
+          // var providerList = [];
+          // providerList.push({
+          //   providerName: res.providerName,
+          //   authorizedProvider: true,
+          // });
           var providerList = [];
-          providerList.push({
-            providerName: res.providerName,
-            authorizedProvider: true,
+          res.provider?.map((res, index) => {
+            providerList.push(res.providerName);
           });
           validDisArray.push({
             actualDescription: res.actualDescription,
@@ -347,7 +351,7 @@ const Lab = ({}) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: res?.provider,
+            providerName: providerList,
           });
         });
         var capturedSectionsColorsMatching = [];
@@ -912,14 +916,17 @@ const Lab = ({}) => {
   };
 
   const getProviderNameList = (data) => {
-    var value = data?.map((res) =>
-      res.providerName ? (
-        <Badge
-          className={
-            res.authorizedProvider === true
-              ? `mt-2 text-start ${visitStyles.provider_name}`
-              : `mt-2 text-start ${visitStyles.un_provider_name}`
-          }
+    var dublicateCaptureDelete = removeDuplicates(data);
+    return dublicateCaptureDelete.map((res) => {
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var sectionMapArr = (
+        <span
+          className={`mt-2 text-start ${visitStyles.provider_name}`}
+          style={{ backgroundColor: backColor, color: textColor }}
         >
           <i>
             {" "}
@@ -927,16 +934,15 @@ const Lab = ({}) => {
               icon={faCircleUser}
               style={{
                 size: 10,
-                color:
-                  res.authorizedProvider === true ? "#ffa500" : "#ff0000cc",
+                color: textColor,
               }}
             />
           </i>
-          {res.providerName}
-        </Badge>
-      ) : null
-    );
-    return value;
+          {res}
+        </span>
+      );
+      return sectionMapArr;
+    });
   };
 
   return (
