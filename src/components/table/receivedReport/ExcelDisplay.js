@@ -32,7 +32,10 @@ const ExcelDisplay = ({ tableData, loading }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {loading ? (
+      {Array.isArray(data) && data?.length > 0 && !allEmpty ? (
+        data?.length > 0 &&
+        !allEmpty && <Spreadsheet data={data} onChange={setData} />
+      ) : (
         <div
           style={{
             display: "flex",
@@ -40,26 +43,9 @@ const ExcelDisplay = ({ tableData, loading }) => {
             alignItems: "center",
           }}
         >
-          Loading...
+          {" "}
+          <Empty />
         </div>
-      ) : (
-        <>
-          {Array.isArray(data) && data?.length > 0 && !allEmpty ? (
-            data?.length > 0 &&
-            !allEmpty && <Spreadsheet data={data} onChange={setData} />
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {" "}
-              <Empty />
-            </div>
-          )}
-        </>
       )}
     </div>
   );
