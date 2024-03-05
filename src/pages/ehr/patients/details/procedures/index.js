@@ -2,29 +2,76 @@ import React, { useEffect, useState } from "react";
 import TableStyle from "../../../../../components/table/table.module.css";
 import { Empty } from "antd";
 
-const Appointments = ({ userList, sortOrder, setSortOrder, setSort }) => {
+const Procedures = ({ userList, sortOrder, setSortOrder, setSort }) => {
+  var data = [
+    {
+      procedureName: "Appendectomy",
+      date: "2022-02-21T10:30:00.000Z",
+      performer: "John Smith",
+    },
+    {
+      procedureName: "Knee Arthroscopy",
+      date: "2022-02-23T10:30:00.000Z",
+      performer: "John Smith",
+    },
+    {
+      procedureName: "Colonoscopy",
+      date: "2022-02-24T12:15:00.000Z",
+      performer: "Emily Johnson",
+    },
+    {
+      procedureName: "Cataract Extraction",
+      date: "2022-02-21T14:00:00.000Z",
+      performer: "Emily Johnson",
+    },
+  ];
   return (
     <div class="table-responsive active-projects task-table">
       <div className={TableStyle.classContaineer}>
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>
             <tr>
-              <th style={{ textAlign: "center" }}>Appointments Type</th>
-              <th style={{ textAlign: "center" }}>Type</th>
-              <th style={{ textAlign: "center" }}>Hospital</th>
-              <th style={{ textAlign: "center" }}>Practitioner</th>
+              <th style={{ textAlign: "center" }}>Procedure Name</th>
+              <th style={{ textAlign: "center" }}>Performer</th>
               <th style={{ textAlign: "center" }}>Date</th>
-              <th style={{ textAlign: "center" }}>Status</th>
-              <th style={{ textAlign: "center" }}>SSN</th>
-              <th style={{ textAlign: "center" }}>Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td colSpan={8}>
-                <Empty />
-              </td>
-            </tr>
+            {data?.length > 0 ? (
+              data?.map((item) => (
+                <tr
+                  style={{
+                    height: "35px",
+                  }}
+                  className={TableStyle.trDiv}
+                >
+                  <td
+                    style={{ textAlign: "center" }}
+                    className={TableStyle.childBorder}
+                  >
+                    {item.procedureName}
+                  </td>
+                  <td
+                    style={{ textAlign: "center" }}
+                    className={TableStyle.childBorder}
+                  >
+                    {item.performer}
+                  </td>
+                  <td
+                    style={{ textAlign: "center" }}
+                    className={TableStyle.childBorder}
+                  >
+                    {item.date}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={8}>
+                  <Empty />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -32,4 +79,4 @@ const Appointments = ({ userList, sortOrder, setSortOrder, setSort }) => {
   );
 };
 
-export default Appointments;
+export default Procedures;

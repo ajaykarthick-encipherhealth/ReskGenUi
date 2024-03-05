@@ -14,6 +14,10 @@ import { renderUserPrfoileAvatarCustom } from "../../../../components/headerFilt
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Appointments from "./appointment";
+import Observations from "./observations";
+import Medications from "./medications";
+import Procedures from "./procedures";
+import Conditions from "./conditions";
 
 const { TabPane } = Tabs;
 
@@ -89,10 +93,17 @@ const UserList = () => {
                         <TabPane tab="Assessments" key="6"></TabPane>
                       </Tabs> */}
                       {/* <Ob /> */}
+                      <Observations />
                     </TabPane>
-                    <TabPane tab="Conditions" key="2"></TabPane>
-                    <TabPane tab="Procedures" key="3"></TabPane>
-                    <TabPane tab="Medications" key="4"></TabPane>
+                    <TabPane tab="Conditions" key="2">
+                      <Conditions />
+                    </TabPane>
+                    <TabPane tab="Procedures" key="3">
+                      <Procedures />
+                    </TabPane>
+                    <TabPane tab="Medications" key="4">
+                      <Medications></Medications>
+                    </TabPane>
                     {/* <TabPane tab="Care Teams" key="5"></TabPane> */}
                   </Tabs>
                 </div>
