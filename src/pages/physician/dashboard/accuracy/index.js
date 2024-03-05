@@ -167,7 +167,7 @@ const Accuracy = () => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "HCC Correct Count",
+          text: "Manual Correction Count",
           style: {
             color: "#0b59f1" 
         }
