@@ -429,6 +429,7 @@ const Lab = ({}) => {
 
         var newArrayColorMatchs = [];
         newArrayColorMatchs = [
+          ...sectionColorResult,
           ...sectionColorResultMatch,
           ...notMatchColorArray,
         ];

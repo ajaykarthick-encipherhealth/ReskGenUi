@@ -646,6 +646,7 @@ const NonHcc = ({ patientNonHccResult }) => {
         );
 
         var sectionColorResult = response.data.response;
+        console.log(sectionColorResult);
 
         let sectionColorResultMatch = sectionColorResult.filter((o1) =>
           dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
@@ -674,7 +675,10 @@ const NonHcc = ({ patientNonHccResult }) => {
         newArrayColorMatchs = [
           ...sectionColorResultMatch,
           ...notMatchColorArray,
+          ...sectionColorResult,
         ];
+
+        console.log(sectionColorResultMatch, notMatchColorArray);
 
         setCaptureSectionMatching(newArrayColorMatchs);
 
@@ -1478,6 +1482,7 @@ const NonHcc = ({ patientNonHccResult }) => {
   };
 
   const getProviderNameList = (data) => {
+    console.log(captureSectionMatching);
     var dublicateCaptureDelete = removeDuplicates(data);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
