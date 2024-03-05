@@ -467,25 +467,27 @@ const Hcc = ({ patientHccResult }) => {
         var validEncounterDateArray = [];
         validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
-          var providerList = [];
-          providerList.push({
-            providerName: res.providerName,
-            authorizedProvider: true,
-          });
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
-            providerName: providerList,
-            dbDescription: res.dbDescription,
-            isMostSpecific: res.isMostSpecific,
-            getPlace: "Hcc",
-          });
+          // var providerList = [];
+          // providerList.push({
+          //   providerName: res.providerName,
+          //   authorizedProvider: true,
+          // });
+          if (res.isShow == true) {
+            validDisArray.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition: res.defaultPosition,
+              providerName: res?.provider,
+              dbDescription: res.dbDescription,
+              isMostSpecific: res.isMostSpecific,
+              getPlace: "Hcc",
+            });
+          }
         });
 
         if (result?.insulinDisease) {
@@ -493,7 +495,7 @@ const Hcc = ({ patientHccResult }) => {
             actualDescription: result?.insulinDisease?.description,
             capturedSections: [result?.insulinDisease?.section],
             diagnosisCode: result?.insulinDisease?.code,
-            encounterDate: null,
+            encounterDate: result?.insulinDisease?.dos,
             encounterDateSplit: [result?.insulinDisease?.dos],
             getPlace: "Insulin",
             isHccValid: true,
@@ -532,7 +534,7 @@ const Hcc = ({ patientHccResult }) => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
-              providerName: providerList,
+              providerName: res?.provider,
             });
           });
         }
@@ -559,7 +561,7 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Radio",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
-              providerName: providerList,
+              providerName: res?.provider,
             });
           });
 
@@ -618,7 +620,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
                 defaultPosition: res.defaultPosition,
-                providerName: providerList,
+                providerName: res?.provider,
               });
             } else {
               // suggestListAll.push({
@@ -639,7 +641,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
-                providerName: providerList,
+                providerName: res?.provider,
               });
             }
           });
@@ -3386,6 +3388,10 @@ const Hcc = ({ patientHccResult }) => {
                                           {getProviderNameList(
                                             data?.providerName
                                           )}
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
                                           {getEncounterDateBackgroundHcc(
                                             data.encounterDateSplit,
                                             data.diagnosisCode
@@ -3631,6 +3637,10 @@ const Hcc = ({ patientHccResult }) => {
                                                   {getProviderNameList(
                                                     data?.providerName
                                                   )}
+                                                </div>
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
                                                   {getEncounterDateBackgroundHcc(
                                                     data.encounterDateSplit,
                                                     data.diagnosisCode
@@ -3820,6 +3830,10 @@ const Hcc = ({ patientHccResult }) => {
                                             {getProviderNameList(
                                               data?.providerName
                                             )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
                                             {getEncounterDateBackgroundHcc(
                                               data.encounterDateSplit,
                                               data.diagnosisCode
@@ -4574,6 +4588,10 @@ const Hcc = ({ patientHccResult }) => {
                                         {getProviderNameList(
                                           data?.providerName
                                         )}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
                                         {getEncounterDateBackground(
                                           data.encounterDateSplit
                                         )}
@@ -5000,6 +5018,10 @@ const Hcc = ({ patientHccResult }) => {
                                                   {getProviderNameList(
                                                     data?.providerName
                                                   )}
+                                                </div>
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
                                                   {getEncounterDateBackground(
                                                     data.encounterDateSplit
                                                   )}
@@ -5200,6 +5222,10 @@ const Hcc = ({ patientHccResult }) => {
                                             {getProviderNameList(
                                               data?.providerName
                                             )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}
@@ -5795,6 +5821,10 @@ const Hcc = ({ patientHccResult }) => {
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
                                   {getProviderNameList(data?.providerName)}
+                                </div>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
                                   {getEncounterDateBackground(
                                     data.encounterDateSplit
                                   )}
@@ -6190,6 +6220,10 @@ const Hcc = ({ patientHccResult }) => {
                                             {getProviderNameList(
                                               data?.providerName
                                             )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}
@@ -6378,6 +6412,10 @@ const Hcc = ({ patientHccResult }) => {
                                       className={`${visitStyles.encounterAndSectionHeader}`}
                                     >
                                       {getProviderNameList(data?.providerName)}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
                                       {getEncounterDateBackground(
                                         data.encounterDateSplit
                                       )}

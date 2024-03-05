@@ -421,11 +421,11 @@ const NonHcc = ({ patientNonHccResult }) => {
         });
         result.invalidDisease.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
-          var providerList = [];
-          providerList.push({
-            providerName: res.providerName,
-            authorizedProvider: true,
-          });
+          // var providerList = [];
+          // providerList.push({
+          //   providerName: res.providerName,
+          //   authorizedProvider: true,
+          // });
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -435,7 +435,7 @@ const NonHcc = ({ patientNonHccResult }) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: providerList,
+            providerName: res?.provider,
           });
         });
 
@@ -1644,6 +1644,10 @@ const NonHcc = ({ patientNonHccResult }) => {
                                         {getProviderNameList(
                                           data?.providerName
                                         )}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
                                         {getEncounterDateBackgroundHcc(
                                           data.encounterDateSplit,
                                           data.diagnosisCode
@@ -2533,8 +2537,13 @@ const NonHcc = ({ patientNonHccResult }) => {
                                       className={`${visitStyles.encounterAndSectionHeader}`}
                                     >
                                       {getProviderNameList(data?.providerName)}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
                                       {getEncounterDateBackground(
-                                        data.encounterDateSplit
+                                        data.encounterDateSplit,
+                                        data.diagnosisCode
                                       )}
                                     </div>
                                     <div
@@ -2887,8 +2896,13 @@ const NonHcc = ({ patientNonHccResult }) => {
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
                                 {getProviderNameList(data?.providerName)}
+                              </div>
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
                                 {getEncounterDateBackground(
-                                  data.encounterDateSplit
+                                  data.encounterDateSplit,
+                                  data.diagnosisCode
                                 )}
                               </div>
                               <div

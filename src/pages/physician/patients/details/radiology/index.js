@@ -404,7 +404,7 @@ const Radiology = ({}) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
-            providerName: providerList,
+            providerName: res?.provider,
           });
         });
 
@@ -1249,8 +1249,13 @@ const Radiology = ({}) => {
                                         {getProviderNameList(
                                           data?.providerName
                                         )}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
                                         {getEncounterDateBackground(
-                                          data.encounterDateSplit
+                                          data.encounterDateSplit,
+                                          data.diagnosisCode
                                         )}
                                       </div>
                                       <div>
@@ -1341,8 +1346,13 @@ const Radiology = ({}) => {
                                         {getProviderNameList(
                                           data?.providerName
                                         )}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
                                         {getEncounterDateBackground(
-                                          data.encounterDateSplit
+                                          data.encounterDateSplit,
+                                          data.diagnosisCode
                                         )}
                                       </div>
                                       <div>
@@ -1942,8 +1952,13 @@ const Radiology = ({}) => {
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
                                     {getProviderNameList(data?.providerName)}
+                                  </div>
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
                                     {getEncounterDateBackground(
-                                      data.encounterDateSplit
+                                      data.encounterDateSplit,
+                                      data.diagnosisCode
                                     )}
                                   </div>
                                   <div>
@@ -2066,8 +2081,13 @@ const Radiology = ({}) => {
                                             {getProviderNameList(
                                               data?.providerName
                                             )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
                                             {getEncounterDateBackground(
-                                              data.encounterDateSplit
+                                              data.encounterDateSplit,
+                                              data.diagnosisCode
                                             )}
                                           </div>
                                           <div>
@@ -2284,8 +2304,13 @@ const Radiology = ({}) => {
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
                               {getProviderNameList(data?.providerName)}
+                            </div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
                               {getEncounterDateBackground(
-                                data.encounterDateSplit
+                                data.encounterDateSplit,
+                                data.diagnosisCode
                               )}
                             </div>
                             <div>
@@ -2396,8 +2421,13 @@ const Radiology = ({}) => {
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
                                     {getProviderNameList(data?.providerName)}
+                                  </div>
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
                                     {getEncounterDateBackground(
-                                      data.encounterDateSplit
+                                      data.encounterDateSplit,
+                                      data.diagnosisCode
                                     )}
                                   </div>
                                   <div>
