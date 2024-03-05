@@ -18,6 +18,19 @@ import {
   getAccuracyMOnthly,
   getAccuracyWeekly,
 } from "../../../../services/adminServices/DashboardService";
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
+
+export const TabButtons = [
+  {
+    id: 1,
+    title: "System Score",
+  },
+  {
+    id: 2,
+    title: "Accuracy Score",
+  },
+];
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstDayWeek = firstDayOfMonth.getDay();
@@ -50,6 +63,8 @@ export const monthNames = [
 const Accuracy = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
+  const [activeTabButton, setActiveTabButton] = useState(0);
+  const [currentTabBtn, setCurrentTabBtn] = useState("System Score");
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1
@@ -76,6 +91,10 @@ const Accuracy = () => {
     setCurrentBtn(btn);
   };
 
+  const handleTabButtonClick = (index, btn) => {
+    setActiveTabButton(index);
+    setCurrentTabBtn(btn);
+  };
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
   };
@@ -121,6 +140,9 @@ const Accuracy = () => {
     },
     yAxis: {
       type: "value",
+      axisLabel: {
+        formatter: "{value}%",
+      },
     },
     tooltip: {
       show: true,
@@ -158,6 +180,112 @@ const Accuracy = () => {
       },
     ],
   };
+  const config = {
+    chart: {
+      zoomType: "xy",
+    },
+    title: {
+      text: "",
+    },
+
+    xAxis: [
+      {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        crosshair: true,
+        labels: {
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        lineColor: "#d9d9d9",
+      },
+    ],
+    yAxis: [
+      {
+        // Primary yAxis
+        labels: {
+          format: "{value}°C",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        title: {
+          text: "",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+      },
+      {
+        // Secondary yAxis
+        title: {
+          text: "",
+          // style: {
+          //   color:"#d9d9d9",
+          // },
+          // show:false
+        },
+        labels: {
+          format: "{value} mm",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        opposite: true,
+      },
+    ],
+    tooltip: {
+      shared: true,
+    },
+    legend: {
+      enabled: false,
+    },
+    credits: {
+      enabled: false,
+    },
+    series: [
+      {
+        name: "Precipitation",
+        type: "column",
+        yAxis: 1,
+        data: [
+          27.6, 28.8, 21.7, 34.1, 29.0, 28.4, 45.6, 51.7, 39.0, 60.0, 28.6,
+          32.1,
+        ],
+        tooltip: {
+          valueSuffix: " mm",
+        },
+      },
+      {
+        name: "Temperature",
+        type: "spline",
+        data: [
+          -13.6, -14.9, -5.8, -0.7, 3.1, 13.0, 14.5, 10.8, 5.8, -0.7, -11.0,
+          -16.4,
+        ],
+        tooltip: {
+          valueSuffix: "°C",
+        },
+      },
+    ],
+  };
   useEffect(() => {
     if (currentBtn === "Daily") {
       dispatch(getAccuracyDaily(selectedYear, selectedMonth));
@@ -176,7 +304,24 @@ const Accuracy = () => {
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
-            <div className={`d-flex ${styles.selectContainer}`}></div>
+            <div className={`d-flex ${styles.selectContainer}`}>
+              <div className={styles.btnScroller}>
+                <Buttonscroller
+                  Buttons={TabButtons}
+                  handleButtonClick={handleTabButtonClick}
+                  activeButton={activeTabButton}
+                  activeColor="#fff"
+                  inActiveColor="
+                #000000"
+                  activeBg="#043069"
+                  inActiveBg="
+                #E6EEFF"
+                  containerBg="
+                #E6EEFF"
+                  width="150px"
+                />
+              </div>
+            </div>
             <div className="d-flex">
               <div className={styles.picker}>
                 <YearPicker
@@ -200,7 +345,7 @@ const Accuracy = () => {
                   activeColor="#fff"
                   inActiveColor="
                 #000000"
-                  activeBg="#3479FE"
+                  activeBg="#043069"
                   inActiveBg="
                 #E6EEFF"
                   containerBg="
@@ -217,7 +362,7 @@ const Accuracy = () => {
                 </div>
               ) : accuracyDatas?.loading === false &&
                 accuracyDatas?.data?.response ? (
-                option && (
+                currentTabBtn === "System Score" ? (
                   <ReactECharts
                     option={option}
                     style={{
@@ -227,6 +372,14 @@ const Accuracy = () => {
                       overflowX: "hidden",
                     }}
                   />
+                ) : (
+                  <div className={styles.highchartStyle}>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={config}
+                      className={styles.hightchartStyles}
+                    />
+                  </div>
                 )
               ) : (
                 <div className={spinSTYles.spinStyle}>

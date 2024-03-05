@@ -128,7 +128,7 @@ const stageChartMap = {
   QUERY_CONDITIONS_FOUND_FAILED: 8,
   FINISHED: 9,
 };
-function FileProcessingTable({ patinetListAll }) {
+function FileProcessingTable({ patinetListAll,loading }) {
   const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -136,7 +136,7 @@ function FileProcessingTable({ patinetListAll }) {
   const [count, setCount] = useState(0);
   const [parsedData, setParsedData] = useState([]);
   const [activeId, setActiveId] = useState();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(patinetListAll);
   const [failedList, setFiledList] = useState();
   const [finished, setIsFInished] = useState(false);
@@ -169,11 +169,11 @@ function FileProcessingTable({ patinetListAll }) {
     );
 
     const fileStatusEventListener = (event) => {
-      setLoading(true);
+      // setLoading(true);
       const data = JSON.parse(event.data);
       if (data) {
         setParsedData(data);
-        setLoading(false);
+        // setLoading(false);
       }
       const patient = data?.find((item) => item?.patientId === activeId);
       if (
@@ -183,7 +183,7 @@ function FileProcessingTable({ patinetListAll }) {
         isFinished = true;
         setIsFInished(true);
         sse.close();
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -197,14 +197,14 @@ function FileProcessingTable({ patinetListAll }) {
     sse.onerror = () => {
       if (!isFinished) {
         sse.close();
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
     return () => {
       sse.removeEventListener("file-status-event", fileStatusEventListener);
       sse.close();
-      setLoading(false);
+      // setLoading(false);
     };
   }, [activeId]);
 
@@ -462,22 +462,12 @@ function FileProcessingTable({ patinetListAll }) {
                     ? "green"
                     : errStages[data?.processStageChart]
                     ? "red"
-                    : "#1677ff"
+                    : "#04306f"
                 }
               />
             </Tooltip>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              color: errStages[data?.processStageChart]
-                ? "red"
-                : stageChartMap2[data?.processStageChart] === "FINISHED"
-                ? "green"
-                : "#0000",
-            }}
-          >{`${uploadStatus}% Complete`}</div>
+
           {toggle[data?.patientId] && (
             <>
               <div
@@ -528,6 +518,17 @@ function FileProcessingTable({ patinetListAll }) {
               </div>
             </>
           )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              color: errStages[data?.processStageChart]
+                ? "red"
+                : stageChartMap2[data?.processStageChart] === "Finished"
+                ? "green"
+                : "#00000",
+            }}
+          >{`${uploadStatus}% Complete`}</div>
         </div>
         <div style={{ width: "2%", marginTop: "6px" }}>
           <div onClick={() => handleToggleStepper(index, data)}>
@@ -554,9 +555,10 @@ function FileProcessingTable({ patinetListAll }) {
       </tr>
     ));
   };
+
   return (
     <div className={TableStyle.classContaineer}>
-      {loading ? (
+      {loading || parsedData.length===0 ? (
         <div
           style={{
             display: "flex",
@@ -577,7 +579,7 @@ function FileProcessingTable({ patinetListAll }) {
           </thead>
 
           <tbody>
-            {parsedData?.length === 0 ? (
+            {!loading && parsedData?.length === 0 ? (
               <tr>
                 <td colSpan="9">
                   <Empty />

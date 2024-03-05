@@ -4,28 +4,29 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import TableStyle from "../../../../components/table/table.module.css";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import {storeUserValues} from "../../../../store/actions/l2Action/userActions";
-
+import { storeUserValues } from "../../../../store/actions/l2Action/userActions";
 
 const AdminList = ({ userList }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const gotoUserQueue =(item)=>{
+  const gotoUserQueue = (item) => {
     dispatch(storeUserValues(item)),
-    router.push(`user/userQueue?userId=${item?.userName}`)
-  }
+      router.push(`user/userQueue?userId=${item?.userName}`);
+  };
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
             <th>NAME</th>
-           
+
             <th>ALLOCATED</th>
             <th>COMPLETED</th>
             <th>PENDING</th>
             <th>HOLD</th>
+            {/* <th>HCC VALID IDENTIFICATION</th>
+            <th>REJECTED COUNT</th> */}
             <th>INVALID</th>
             <th>QUALITY</th>
           </tr>
@@ -36,9 +37,7 @@ const AdminList = ({ userList }) => {
               <tr
                 key={index}
                 style={{ height: "35px" }}
-                onClick={() =>
-                  gotoUserQueue(item)
-                }
+                onClick={() => gotoUserQueue(item)}
               >
                 {/* user id */}
                 <td
@@ -62,7 +61,7 @@ const AdminList = ({ userList }) => {
                   </span>
                 </td>
                 {/* user name */}
-           
+
                 {/* allocated */}
                 <td
                   className={TableStyle.childBorder}
@@ -104,6 +103,24 @@ const AdminList = ({ userList }) => {
                     {item?.totalFileHold ? item?.totalFileHold : "---"}
                   </span>
                 </td>
+                {/* hcc valid identificatio */}
+                {/* <td
+                  className={TableStyle.lastBorder}
+                  style={{ height: "40px !important" }}
+                >
+                  <span>
+                    {item?.totalFileHold ? item?.totalFileHold : "---"}
+                  </span>
+                </td>
+            
+                <td
+                  className={TableStyle.lastBorder}
+                  style={{ height: "40px !important" }}
+                >
+                  <span>
+                    {item?.totalFileHold ? item?.totalFileHold : "---"}
+                  </span>
+                </td> */}
                 {/* invalid */}
                 <td
                   className={TableStyle.childBorder}
@@ -134,7 +151,7 @@ const AdminList = ({ userList }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={7}>
+              <td colSpan={10}>
                 <Empty />
               </td>
             </tr>

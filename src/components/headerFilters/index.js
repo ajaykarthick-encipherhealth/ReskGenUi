@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
@@ -15,9 +15,17 @@ import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { getSelectUserListReport } from "../../store/actions/adminAction/ReportActions";
+import { getSelectUserList } from "../../store/actions/adminAction/DashboardAction";
 
 const { RangePicker } = DatePicker;
+const options = [
+  { value: "REVIEWER", label: "REVIEWER" },
+  { value: "SUPERVISOR", label: "SUPERVISOR" },
+];
+
 const HeaderFilters = ({
   // for search
   setSearch,
@@ -34,12 +42,21 @@ const HeaderFilters = ({
   setSelectedOption,
   selectOptions,
   defaultSelectValue1,
+  selectedValue,
 
   // if has 2 selectors
   selectlabel2,
   defaultSelectValue2,
   selectOptions2,
   setSelectedOption2,
+  selectedValue2,
+
+  // if has 3 selectors
+  selectlabel3,
+  defaultSelectValue3,
+  selectOptions3,
+  isSelector3,
+  setSelectedOption3,
 
   // for picker
   pickerlabel,
@@ -52,6 +69,8 @@ const HeaderFilters = ({
   setEndDate,
   isRangePicker,
   disabled,
+  pickerStartValue,
+  pickerEndValue,
   // for report
   setReceivedStartDate,
   setReceivedEndDate,
@@ -120,6 +139,7 @@ const HeaderFilters = ({
   createdByOptoons,
   setSelCreatedBy,
   defaultCreatedBy,
+  selectedCoderOptReport,
 
   bullets,
   isNextRow,
@@ -131,7 +151,10 @@ const HeaderFilters = ({
   tracking,
   selectorField,
   defaultShow = false,
-  defaultSize = 'col-xl-2'
+  setSelect,
+  defaultSize = "col-xl-2",
+  adminReport,
+  addBtn
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -152,7 +175,7 @@ const HeaderFilters = ({
               />
             </div>
           )}
-          {isSelector ? (
+          {isSelector && (
             <div className={defaultSize}>
               {" "}
               <Selector
@@ -160,21 +183,52 @@ const HeaderFilters = ({
                 setSelectedOption={setSelectedOption}
                 selectOptions={selectOptions}
                 defaultSelectValue1={defaultSelectValue1}
+                // selectedValue={selectedValue}
               />
             </div>
-          ) : null}
+          )}
           {selectOptions2 && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
               <div class="form-group has-search">
                 <Select
+                  // value={selectedValue2}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
+                    if (selectOptions3) {
+                      setSelectedOption3(null);
+                      setSelect(null);
+                    }
                   }}
                   options={selectOptions2}
-                  placeholder={defaultSelectValue2?.label}
+                  // placeholder={defaultSelectValue2?.label}
                   className="custom-react-select"
                   isSearchable={false}
+                />
+              </div>
+            </div>
+          )}
+          {isSelector3 && (
+            <div className={defaultSize}>
+              <label className={styles.label}>{selectlabel3}</label>
+              <div class="form-group has-search">
+                <Select
+                  showSearch
+                  onChange={(selectedOption) => {
+                    if (selectedCoderOptReport === "SUPERVISOR") {
+                      setSelectedOption3(selectedOption?.value);
+                      setSelectedOption2(null);
+                      setSelect(null);
+                    }
+                    if (selectedCoderOptReport === "REVIEWER") {
+                      setSelect(selectedOption?.value);
+                      setSelectedOption2(selectedOption?.value);
+                      setSelectedOption3(null);
+                    }
+                  }}
+                  className="custom-react-select"
+                  options={selectOptions3}
+                  style={{ backgroundColor: "#F3F3FF", width: "20px" }}
                 />
               </div>
             </div>
@@ -195,6 +249,7 @@ const HeaderFilters = ({
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
                 disabled={disable != "Yes" && true}
+               
               />
             </div>
           )}
@@ -268,25 +323,27 @@ const HeaderFilters = ({
                 trigger={["click"]}
                 placement="bottom"
               >
-                <Image src={warning} />
+                <Image src={warning} className="mt-[10px]" />
               </Popover>
             </div>
           )}
           {addUser && (
             <div
-              className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
+              className={`${addUser ? `col-xl-${addBtn?"4":"1"}` : "col-xl-4"}`}
               style={{ marginTop: "20px" }}
             >
               <Button
                 onClick={addUserForm}
-                className="btn btn-primary btn-sm ms-2 flr width-max-content"
+                style={{background:"#04306f"}}
+                className="btn btn-sm ms-2 flr width-max-content"
               >
                 + {btnTitle}
               </Button>
             </div>
           )}
-          {isAllocate && (
-            <div className="col-xl-8 mt-4">
+         
+            <div className="col-xl-2 mt-4">
+              {isAllocate &&
               <button
                 onClick={handleOpneModal}
                 className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
@@ -294,11 +351,11 @@ const HeaderFilters = ({
               >
                 Allocate
               </button>
+          }
             </div>
-          )}
           {activeTab === "CoderReport" && (
-            <div className="col-xl-6  d-flex justify-content-end">
-              <div className="row flr mt-3">
+            <div className={`col-xl-${!adminReport?"4":"2"} d-flex justify-content-end`}>
+              <div className="row flr">
                 <button
                   onClick={() => {
                     setIsModalVisible(true);
@@ -311,6 +368,7 @@ const HeaderFilters = ({
                       ? false
                       : true
                   }
+                  style={{color:"#04306f"}}
                 >
                   <Export />
                   Export
@@ -320,14 +378,16 @@ const HeaderFilters = ({
           )}
         </div>
       </div>
-      {(showFilters) && (
+      {showFilters && (
         <div style={{ marginTop: "50px" }}>
           <div className="row filter-contain">
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
                 onClick={() => {
-                  dispatch(getFilters(selectorField?selectorField:"allocatedBy"));
+                  dispatch(
+                    getFilters(selectorField ? selectorField : "allocatedBy")
+                  );
                 }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>

@@ -4,6 +4,7 @@ import { loginConfirmedAction, Logout } from "../store/actions/AuthActions";
 import axiosApi from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 
+export const REFRESH_TOKEN = "REFRESH_TOKEN";
 export const CurrentUser = async (userId, router) => {
   const token = localStorage.getItem("token");
   try {
@@ -156,11 +157,12 @@ export const enableMFA = async (username) => {
     console.log(Err);
   }
 };
-export const verifyCode = async (username, code) => {
+export const verifyCode = async (username, code, userpassword) => {
   const datas = {
     username: username,
     code: code,
     newMfa: true,
+    password: userpassword,
   };
   try {
     const response = await axios.post(
@@ -269,6 +271,34 @@ export const logoutAllDevice = async (email) => {
       }
     );
     return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const refreshToken = () => async (dispatch) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS.apiEndoint}securityservice/token/refreshtoken`,
+      { refreshToken: refreshToken },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response) {
+      dispatch({
+        type: REFRESH_TOKEN,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+      localStorage.setItem("token", response?.data?.response);
+    }
   } catch (err) {
     console.log(err);
   }

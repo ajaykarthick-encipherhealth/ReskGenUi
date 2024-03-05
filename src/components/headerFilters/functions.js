@@ -94,6 +94,8 @@ export const handleRnagePicker = (
 export const handleRnagePicker2 = ({
   date,
   dateString,
+  setStartDate,
+  setEndDate,
   setStartDate2,
   setEndDate2,
   setStartDate3,
@@ -112,6 +114,10 @@ export const handleRnagePicker2 = ({
         : date && `${date}T00:00:00.000Z`;
     return formattedDate;
   });
+  if (setStartDate && setEndDate) {
+    setStartDate(formattedDates[0]);
+    setEndDate(formattedDates[1]);
+  }
   if (setStartDate2 && setEndDate2) {
     setStartDate2(formattedDates[0]);
     setEndDate2(formattedDates[1]);
@@ -198,19 +204,21 @@ export const priorityStatus = (value) => {
           <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
         </>
       );
-      case "NORMAL":
+    case "NORMAL":
       return (
         <>
-        <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-        <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>{" "}
-      </>
+          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+          <span style={{ fontSize: "13px", color: "#4466ff " }}>
+            Normal
+          </span>{" "}
+        </>
       );
-      case "LOW":
+    case "LOW":
       return (
         <>
-        <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-        <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-      </>
+          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
+        </>
       );
     default:
       break;
@@ -399,6 +407,104 @@ export const renderUserPrfoileAvatar = (
         style={{
           width: "30px",
           height: "30px",
+          borderRadius: "50%",
+        }}
+      />
+    );
+    return profileAvatar;
+  }
+};
+
+export const renderUserPrfoileAvatarDisabled = (
+  firstName,
+  lastName,
+  imageUrl,
+  field
+) => {
+  const firstNameInitial = firstName?.charAt(0) || "";
+  const secondNameInitial = lastName?.charAt(0) || "";
+  const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
+  const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
+
+  if (!imageUrl) {
+    var profileAvatar = (
+      <Avatar
+        style={{
+          backgroundColor: "gray",
+          color: "white",
+          cursor: "pointer",
+          width: "30px",
+          height: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          fontWeight: 500,
+        }}
+      >
+        {firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase()}
+      </Avatar>
+    );
+    return profileAvatar;
+  } else {
+    var profileAvatar = (
+      <img
+        src={imageUrl}
+        alt="avatar"
+        // className="rounded-4 shadow-4"
+        style={{
+          width: "30px",
+          height: "30px",
+          borderRadius: "50%",
+        }}
+      />
+    );
+    return profileAvatar;
+  }
+};
+
+export const renderUserPrfoileAvatarCustom = (
+  firstName,
+  lastName,
+  imageUrl,
+  field,
+  width,
+  height
+) => {
+  const firstNameInitial = firstName?.charAt(0) || "";
+  const secondNameInitial = lastName?.charAt(0) || "";
+  const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
+  const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
+
+  if (!imageUrl) {
+    var profileAvatar = (
+      <Avatar
+        style={{
+          backgroundColor: backgroundColor,
+          color: "white",
+          cursor: "pointer",
+          width: width,
+          height: height,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          fontWeight: 500,
+        }}
+      >
+        {firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase()}
+      </Avatar>
+    );
+    return profileAvatar;
+  } else {
+    var profileAvatar = (
+      <img
+        src={imageUrl}
+        alt="avatar"
+        // className="rounded-4 shadow-4"
+        style={{
+          width: width,
+          height: height,
           borderRadius: "50%",
         }}
       />

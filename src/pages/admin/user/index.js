@@ -38,7 +38,6 @@ const RoleList = [
   { value: "SUPERVISOR", label: "SUPERVISOR" },
 ];
 
-
 const intialValues = {
   firstName: "",
   lastName: "",
@@ -89,6 +88,7 @@ const UserList = () => {
     setValidated(false);
     setAddUser(true);
   };
+  const [clear, setClear] = useState(false);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -98,7 +98,6 @@ const UserList = () => {
       setRoleValue([value]);
     }
   };
-  
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
@@ -129,7 +128,7 @@ const UserList = () => {
         setUseAdd(true);
         setFormData({
           ...intialValues,
-          userName: "", 
+          userName: "",
           confirmPassword: "",
         });
         setErrors({
@@ -217,12 +216,28 @@ const UserList = () => {
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
- 
     dispatch(
-      getUsers({ pageCount, search, startDate, endDate, status, role, sort })
+      getUsers({
+        pageCount,
+        search,
+        startDate,
+        endDate,
+        status,
+        role,
+        sort
+      })
     );
-  }, [pageCount, search, startDate, endDate, status, role, sort, useAdd]);
-
+  }, [
+    pageCount,
+    search,
+    startDate,
+    endDate,
+    status,
+    role,
+    sort,
+    useAdd,
+    clear,
+  ]);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -244,11 +259,13 @@ const UserList = () => {
                         setSelectedOption={setSelectedStatus}
                         selectOptions={options3}
                         defaultSelectValue1={""}
+                        selectedValue={status}
                         //  selecte Role
                         selectlabel2="Select Role"
                         selectOptions2={RoleList}
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
+                        selectedValue2={role}
                         // computation date
                         pickerlabel="Created date Range"
                         selectedDates={selectedDates}
@@ -257,10 +274,15 @@ const UserList = () => {
                         defaultEndDate={""}
                         setStartDate={setStartDate}
                         setEndDate={setEndDate}
+                        pickerStartValue={startDate}
+                        pickerEndValue={endDate}
                         isRangePicker={true}
                         addUser={true}
                         addUserForm={addUserForm}
                         btnTitle="Add User"
+                        setClear={setClear}
+                        clear={clear}
+                        addBtn={true}
                       />
                     </div>
                     <div
@@ -298,7 +320,7 @@ const UserList = () => {
         </div>
 
         <Offcanvas
-          onHide={setAddPatientId }
+          onHide={setAddPatientId}
           show={addPatientId}
           className="offcanvas-end"
           placement="end"
@@ -365,16 +387,17 @@ const UserList = () => {
             </div>
           </div>
         </Offcanvas>
-        {console.log(formData,"test")}
         <Offcanvas
           show={addUser}
-          onHide={() => {setAddUser(false);
+          onHide={() => {
+            setAddUser(false);
             setFormData(intialValues);
             setErrors({
               email: "",
               password: "",
               confirmPass: "",
-            })}}
+            });
+          }}
           className="offcanvas-end  offcanvas-md-size"
           placement="end"
         >
@@ -480,7 +503,10 @@ const UserList = () => {
                         { value: "ADMIN", label: "ADMIN" },
                         { value: "REVIEWER", label: "REVIEWER" },
                         { value: "SUPERVISOR", label: "SUPERVISOR" },
-                        { value: "ADMIN_TECHNICAL_SUPPORT", label: "ADMIN TECHNICAL SUPPORT" },
+                        {
+                          value: "ADMIN_TECHNICAL_SUPPORT",
+                          label: "ADMIN TECHNICAL SUPPORT",
+                        },
                         { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
                       ]}
                       onChange={(selectedOption) =>
@@ -533,8 +559,8 @@ const UserList = () => {
                       </div>
                     ) : (
                       <small id="emailHelp" class="form-text text-muted">
-                        Please enter an numeric, number with both lowercase and
-                        uppercase characters.
+                        Please enter an number with both lowercase and uppercase
+                        characters.
                       </small>
                     )}
                   </div>
@@ -555,7 +581,6 @@ const UserList = () => {
                           onChange={handleChange}
                           className={styles.passField}
                           placeholder="Confirm Password"
-
                         />
                       </div>
                       <div className={styles.passwordBox2}>

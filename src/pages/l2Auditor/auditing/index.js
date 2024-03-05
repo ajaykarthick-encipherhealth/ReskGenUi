@@ -7,7 +7,7 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { DatePicker, Spin, notification } from "antd";
+import { DatePicker, Spin, Tooltip, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
 import PatientTable from "../table/PatientList/patientList";
@@ -15,7 +15,16 @@ import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getWorkListFilter } from "../../../store/actions/l2Action/AuditorAction";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
-
+import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import Image from "next/image";
 const bullets = [
   {
     color: "#377880",
@@ -118,7 +127,7 @@ export default function Patient() {
       patientSortOrder,
       selAllocatedBy,
       sort,
-      selCreatedBy
+      selCreatedBy,
     };
 
     dispatch(getWorkListFilter(datas));
@@ -133,7 +142,7 @@ export default function Patient() {
     completedEndDate,
     patientSortOrder,
     sort,
-    selCreatedBy
+    selCreatedBy,
   ]);
 
   useEffect(() => {
@@ -168,12 +177,11 @@ export default function Patient() {
           auditDueDate: res.auditDueDate,
           auditedDate: res.auditedDate,
           patientAllocatedFirstName: res.patientAllocatedFirstName,
-          patientAllocatedLastName:res.patientAllocatedLastName,
-          patientAllocatedProfileImage:res.patientAllocatedProfileImage,
-          auditAllocatedByFirstName:res.auditAllocatedByFirstName,
-          auditAllocatedByLastName:res.auditAllocatedByLastName,
-          auditAllocatedByProfileImage:res.auditAllocatedByProfileImage
-
+          patientAllocatedLastName: res.patientAllocatedLastName,
+          patientAllocatedProfileImage: res.patientAllocatedProfileImage,
+          auditAllocatedByFirstName: res.auditAllocatedByFirstName,
+          auditAllocatedByLastName: res.auditAllocatedByLastName,
+          auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
         });
       });
       var newArray = [];
@@ -214,14 +222,18 @@ export default function Patient() {
     }
   };
 
-  const processstatusBodyTemplate = (rowData) => {
+  const processstatusBodyTemplateIcon = (rowData) => {
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
-          <div className="patient-status">
+          <div className="patient-status" style={{ textAlign: "center" }}>
             <span
               className={`badge Auditprocessing-text`}
-              style={{ color: "#E28213", background: "#FBE7D0 !important", fontSize:"9px !important" }}
+              style={{
+                color: "#E28213",
+                background: "#FBE7D0 !important",
+                fontSize: "9px !important",
+              }}
             >
               Audit Pending
             </span>
@@ -230,7 +242,7 @@ export default function Patient() {
 
       case "DECLINED":
         return (
-          <div className="patient-status">
+          <div className="patient-status" style={{ textAlign: "center" }}>
             <span className={`badge failed-text`} style={{ color: "red" }}>
               Declined
             </span>
@@ -239,7 +251,7 @@ export default function Patient() {
 
       case "AUDITHOLD":
         return (
-          <div className="patient-status">
+          <div className="patient-status" style={{ textAlign: "center" }}>
             <span
               className={`badge Audithold-text`}
               style={{ color: "#CE9900" }}
@@ -250,7 +262,7 @@ export default function Patient() {
         );
       case "REAUDIT":
         return (
-          <div className="patient-status">
+          <div className="patient-status" style={{ textAlign: "center" }}>
             <span className={`badge reAudit-text`} style={{ color: "#964B00" }}>
               Re Audit
             </span>
@@ -258,14 +270,90 @@ export default function Patient() {
         );
       case "AUDITED":
         return (
-          <div className="patient-status">
+          <div className="patient-status" style={{ textAlign: "center" }}>
             <span className={`badge audited-text`} style={{ color: "#377880" }}>
               Audited
             </span>
           </div>
         );
       case null:
-        return <div className="patient-status">---</div>;
+        return (
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            ---
+          </div>
+        );
+    }
+  };
+  const processstatusBodyTemplate = (rowData) => {
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
+        return (
+          <Tooltip placement="bottom" title="AUDIT_PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={AuditPending}
+                style={{ height: "30%", width: "30%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+
+      case "DECLINED":
+        return (
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
+          </div>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <Tooltip placement="bottom" title="AUDITHOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={AuditHold} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Tooltip>
+        );
+      case "REAUDIT":
+        return (
+          <Tooltip placement="bottom" title="REAUDIT">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={ReAudit} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Tooltip>
+        );
+      case "AUDITED":
+        return (
+          <Tooltip placement="bottom" title="AUDITED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={AuditedTrack}
+                style={{ height: "30%", width: "30%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={AuditedTrack} style={{ height: "30%", width: "30%" }} />
+          </div>
+        );
+      case "NOT_AUDIT":
+        return (
+          <Tooltip placement="bottom" title="NOT_AUDIT">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={NotAudited} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Tooltip>
+        );
+      case null:
+        return (
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            ---
+          </div>
+        );
     }
   };
 
@@ -333,9 +421,7 @@ export default function Patient() {
                             isCreatedBySelector={true}
                             createdTolabel="L1 Auditor"
                             optionKey="patientAllocated"
-                            createdByOptoons={
-                              generateOptionsList(filteredList)
-                            }
+                            createdByOptoons={generateOptionsList(filteredList)}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={false}
                             addUserForm={addPatientFormId}
@@ -375,7 +461,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-                          
                           </>
                         )}
                       </div>

@@ -77,25 +77,24 @@ export const AdminMenuList = [
   },
   {
     title: "Patient Allocate",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: SVGICON.Allocation,
     to: "/admin/allocatedUser",
   },
   {
     title: "Tracking",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: SVGICON.Tracking,
     to: "/admin/tracking",
   },
-  // {
-  //   title: "Report",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/admin/report",
-  // },
-  
-  // {
-  //   title: "Notification",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/admin/notification",
-  // },
+  {
+    title: "Report",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/admin/report",
+  },
+  {
+    title: "Notification",
+    iconStyle: SVGICON.Notification,
+    to: "/admin/notification",
+  },
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,
@@ -148,5 +147,23 @@ export const L2AuditorMenuList = [
     iconStyle: SVGICON.ReportIcon,
     to: "/l2Auditor/report",
     childRoute: "/l2Auditor/report/individualreport",
+  },
+];
+
+export const ProviderMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/provider/dashboard",
+  },
+  {
+    title: "Comparison",
+    iconStyle: SVGICON.adminUser,
+    to: "/provider/comparison",
+  },
+  {
+    title: "Query",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/l2Auditor/auditing",
   },
 ];

@@ -65,3 +65,7 @@
   color: #000000;
   font-weight: 700;
 }
+.highchartStyle > div {
+  width: 98% !important;
+  height: 280px !important;
+}

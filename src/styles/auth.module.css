@@ -14,7 +14,6 @@
   border: none !important;
   box-shadow: none !important;
   background-color: #ffff !important;
-
 }
 
 /* .passField:active,
@@ -117,7 +116,7 @@ background-color: red !important;
 .sendBtn {
   width: 100%;
   height: 42px;
-  background-color: rgba(33, 72, 192, 1);
+  background-color: #043069;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -129,8 +128,8 @@ background-color: red !important;
 .backBtn {
   width: 100%;
   height: 42px;
-  color: rgba(219, 26, 26, 1);
-  background-color: #fff;
+  color: rgba(219, 26, 26, 1) !important;
+  background-color: #fff !important;
   border: 1px solid rgba(219, 26, 26, 1);
   border-radius: 5px;
   margin-bottom: 10px;
@@ -227,13 +226,13 @@ background-color: red !important;
   font-weight: 500;
 }
 
-.loginContainer{
+.loginContainer {
   width: 80%;
   /* background: linear-gradient(90deg, hsla(180, 33%, 88%, 1) 0%, hsla(310, 76%, 82%, 1) 50%, hsla(256, 83%, 72%, 1) 100%); */
   border-radius: 10px;
 }
 
-.loginpasswordBox{
+.loginpasswordBox {
   width: 5%;
   color: gray;
   display: flex;
@@ -244,4 +243,58 @@ background-color: red !important;
   left: 370px;
   right: 0px;
   cursor: pointer;
+}
+.btnColor {
+  background-color: #043069 !important;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+.btnColor:hover,
+.btnColor:active,
+.btnColor:focus {
+  background-color: #043069 !important;
+  color: #fff;
+}
+.ehrlogoContainer {
+  display: flex;
+}
+img.ehrLogo {
+  width: 100px;
+  height: 50px;
+}
+.ehrlogoMain {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #f3f3f3;
+  margin: 0 0px 10px 0px;
+  border-radius: 10px;
+  height: 60px;
+  cursor: pointer;
+}
+.ehrlogoMainActive {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #f3f3f3;
+  margin: 0 0px 10px 0px;
+  border-radius: 10px;
+  height: 60px;
+  cursor: pointer;
+  background: #f3f3f3;
+}
+img.auth_ehrLogo2 {
+  width: 158px;
+  height: 30px;
+}
+img.auth_ehrLogo3 {
+  width: 158px;
+  height: 20px;
+}
+
+.ml_10 {
+  margin-left: 10px;
 }

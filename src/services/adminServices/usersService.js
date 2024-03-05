@@ -35,7 +35,7 @@ export const UsersList = async ({
 
 export const AddUser = async (data, setErrors) => {
   const token = localStorage.getItem("token");
-  delete data?.confirmPassword
+  delete data?.confirmPassword;
   try {
     const response = await axios.post(
       ` ${ENDPOINTS?.apiEndoint}securityservice/admin/getusers/createuser`,
@@ -81,7 +81,14 @@ export const AddUser = async (data, setErrors) => {
   }
 };
 
-export const enableUser = (checked, user, role, setPopoverVisible, field) => {
+export const enableUser = (
+  checked,
+  user,
+  role,
+  setPopoverVisible,
+  selectedManager,
+  field
+) => {
   return async (dispatch) => {
     const token = localStorage.getItem("token");
     var tenId = localStorage.getItem("tenantId");
@@ -92,6 +99,7 @@ export const enableUser = (checked, user, role, setPopoverVisible, field) => {
       tenantId: tenId,
       userId: user?.userId,
       userName: user?.userName,
+      managerId: selectedManager,
     };
 
     const datas = role
@@ -121,7 +129,9 @@ export const enableUser = (checked, user, role, setPopoverVisible, field) => {
             payload: response.data,
           });
           notification.success({
-            description: response?.data?.message,
+            description: `${user?.firstName}${user?.lastName} has ${
+              checkedVal === 0 ? "disabled" : "enabled"
+            } successfully`,
           });
           dispatch(getUsers(0));
           if (setPopoverVisible) {

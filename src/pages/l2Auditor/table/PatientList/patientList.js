@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../../../../components/table/table.module.css";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { SVGICON } from "../../../../jsx/constant/theme";
@@ -108,11 +108,10 @@ function PatientTable({
             className={TableStyle.firstTdBorder}
             onClick={handleTableRowClick}
           >
-            {data.patientId}
+            <div> {data.patientId ? data.patientId : "---"} </div>
+            <div> {data.patientName ? data.patientName : ""}</div>
           </td>
-          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-            {data.patientName}
-          </td>
+
           <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center" }}
@@ -140,6 +139,25 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center", paddingLeft: "40px" }}
+            onClick={handleTableRowClick}
+          >
+            {data?.accuracyScore?.correctCount
+              ? data?.accuracyScore?.correctCount
+              : "---"}
+          </td>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center", paddingLeft: "40px" }}
+            onClick={handleTableRowClick}
+          >
+            {data?.machineScoreMap?.wrongCount
+              ? data?.machineScoreMap?.wrongCount
+              : "---"}{" "}
+          </td>
+
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.auditAllocatedDate
               ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
@@ -183,7 +201,7 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{ width: "200px" }}>
             <AntSelect
               options={priorityOptions}
               placeholder="Set priority"
@@ -218,9 +236,20 @@ function PatientTable({
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
-            <th className={TableStyle.rowStyle2}>L1 AUDITOR</th>
+            <th>PATIENTS</th>
+            <th className={TableStyle.rowStyle2}>REVIEWER</th>
+            <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
+              <Tooltip placement="bottom" title="NEW DISEASE ADDITION ">
+                NDA
+              </Tooltip>
+            </th>
+            <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
+              {" "}
+              <Tooltip placement="bottom" title="NEW DISEASE REJECTION">
+                NDR
+              </Tooltip>
+            </th>
+
             <th
               onClick={() => {
                 sortFunction(
@@ -289,7 +318,7 @@ function PatientTable({
         <tbody>
           {patinetListAll?.length <= 0 ? (
             <tr>
-              <td colSpan="9">
+              <td colSpan="10">
                 <Empty />
               </td>
             </tr>

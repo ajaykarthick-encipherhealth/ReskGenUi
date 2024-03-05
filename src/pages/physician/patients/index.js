@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker } from "antd";
+import { DatePicker, Popover, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { notification } from "antd";
 import { InputText } from "primereact/inputtext";
@@ -19,10 +19,15 @@ import PatientTable from "../../../components/table/PatientList/patientList";
 import LoadingSpinner from "../../../components/spinner";
 import Footer from "../../../jsx/layouts/Footer";
 import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
-import {
-  disableFutureDate,
-  processstatusBodyTemplate,
-} from "../../../components/headerFilters/functions";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import { disableFutureDate } from "../../../components/headerFilters/functions";
+import DailyTask from "./dailytask";
+import Legends from "../../../components/legends";
+import HeaderFilters from "../../../components/headerFilters";
+import Image from "next/image";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -49,6 +54,12 @@ export default function Patient() {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
+  const [trackChart, setTrackChart] = useState({
+    COMPLETED: 0,
+    PENDING: 0,
+    DECLINED: 0,
+    HOLD: 0,
+  });
 
   const dueStartDate = filteratedDashboardData?.dayDate
     ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
@@ -116,8 +127,8 @@ export default function Patient() {
   useEffect(() => {
     if (patientsListFilter) {
       var resultMap = [];
-      var result = patientsListFilter?.response?.content;
-      setTotalElements(patientsListFilter?.response?.totalElements);
+      var result = patientsListFilter?.response?.patientDTOList?.content;
+      setTotalElements(patientsListFilter?.response?.patientDTOList?.totalElements);
       result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
@@ -136,8 +147,11 @@ export default function Patient() {
           allocatedByFirstName: res.allocatedByFirstName,
           allocatedByLastName: res.allocatedByLastName,
           allocatedByProfileImage: res.allocatedByProfileImage,
+          validDiseaseCount: res.validDiseaseCount,
+          deletedDiseaseCount: res.deletedDiseaseCount
         });
       });
+      setTrackChart(patientsListFilter?.response?.processStatusCount);
       var newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
@@ -229,6 +243,26 @@ export default function Patient() {
     { label: "DECLINED", value: "DECLINED" },
     { label: "HOLD", value: "HOLD" },
   ];
+  const bullets = [
+    {
+      title: "Processed Status",
+      option: [
+        {
+          color: "#FFB54D",
+          name: "Pending",
+        },
+        {
+          color: "red",
+          name: "Declined",
+        },
+        {
+          color: "#3a9b94",
+          name: "Completed",
+        },
+        { color: "#AD94FA", name: "Hold" },
+      ],
+    },
+  ];
   const onChangeStatus = (selectedOption) => {
     var value = selectedOption.value;
     if (value == "ALL") {
@@ -308,6 +342,69 @@ export default function Patient() {
       );
     }
   };
+  const processstatusBodyTemplate = (rowData) => {
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return (
+          <Tooltip placement="bottom" title="COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Completed} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
+        );
+
+      case "PENDING":
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
+        );
+
+      case "DECLINED":
+        return (
+          <Tooltip placement="bottom" title="DECLINED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
+        );
+
+      case "NOTCOMPUTED":
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
+        );
+      case "COMPUTED":
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
+        );
+      case "HOLD":
+        return (
+          <Tooltip placement="bottom" title="HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
+        );
+      case null:
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "20%", width: "20%" }} />
+            </div>
+          </Tooltip>
+        );
+    }
+  };
 
   return (
     <>
@@ -322,118 +419,89 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="col-xl-2">
-                            <label>Search by Name or ID</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => getNameSearch(e.target.value)}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              flexDirection: "row",
+                            }}
+                          >
+                            <div className="col-xl-2">
+                              <label>Search by Name or ID</label>
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) =>
+                                    getNameSearch(e.target.value)
+                                  }
+                                  className="form-control new-form-control"
+                                  placeholder="Search"
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-xl-2">
-                            <label>Select Status</label>
-                            <div class="form-group has-search">
-                              <Select
-                                onChange={(selectedOption) =>
-                                  onChangeStatus(selectedOption)
-                                }
-                                options={statusOptions}
-                                className="custom-react-select"
-                                isSearchable={false}
-                                placeholder={
-                                  filteratedDashboardData
-                                    ? filteratedDashboardData?.status?.toUpperCase()
-                                    : "Select Status"
-                                }
-                              />
+                            <div className="col-xl-2">
+                              <label>Select Status</label>
+                              <div class="form-group has-search">
+                                <Select
+                                  onChange={(selectedOption) =>
+                                    onChangeStatus(selectedOption)
+                                  }
+                                  options={statusOptions}
+                                  className="custom-react-select"
+                                  isSearchable={false}
+                                  placeholder={
+                                    filteratedDashboardData
+                                      ? filteratedDashboardData?.status?.toUpperCase()
+                                      : "Select Status"
+                                  }
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-xl-2">
-                            <label>Due Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  handleDatePickerChange(dateStrings);
-                                }}
-                                defaultValue={
-                                  filteratedDashboardData
-                                    ? [
-                                        dayjs(defaultStartDate, "MM-DD-YYYY"),
-                                        dayjs(defaultEndDate, "MM-DD-YYYY"),
-                                      ]
-                                    : []
-                                }
-                              />
+                            <div className="col-xl-2">
+                              <label>Due Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    handleDatePickerChange(dateStrings);
+                                  }}
+                                  defaultValue={
+                                    filteratedDashboardData
+                                      ? [
+                                          dayjs(defaultStartDate, "MM-DD-YYYY"),
+                                          dayjs(defaultEndDate, "MM-DD-YYYY"),
+                                        ]
+                                      : []
+                                  }
+                                />
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col-xl-2">
-                            <label>Completed Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  handleDatePickerChangeProcesseDate(
-                                    dateStrings
-                                  );
-                                }}
-                                disabledDate={(current) =>
-                                  disableFutureDate(current)
-                                }
-                              />
+                            <div className="col-xl-2">
+                              <label>Completed Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    handleDatePickerChangeProcesseDate(
+                                      dateStrings
+                                    );
+                                  }}
+                                  disabledDate={(current) =>
+                                    disableFutureDate(current)
+                                  }
+                                />
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col-xl-4">
-                            <label></label>
-                            <div
-                              className={visitStyles.flags_patientsList}
-                              style={{ marginTop: "15px" }}
-                            >
-                              <div className={visitStyles.flags}>
-                                <span
-                                  className={visitStyles.completed}
-                                  style={{ background: "#3a9b94 !important" }}
-                                ></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Completed
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.pending}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Pending
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.hold}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Hold
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span className={visitStyles.declined}></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Declined
-                                </span>
-                              </div>
-                              <div className={visitStyles.flags}>
-                                <span
-                                  className={visitStyles.declined}
-                                  style={{ background: "#87d0f5" }}
-                                ></span>
-                                <span className={visitStyles.flagCodes}>
-                                  Computed
-                                </span>
-                              </div>
+                            <HeaderFilters bullets={bullets} />
+                            <div className="col-xl-2">
+                              <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
                         </div>
@@ -469,8 +537,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-
-                       
                           </>
                         )}
                       </div>

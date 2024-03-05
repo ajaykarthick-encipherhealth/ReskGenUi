@@ -92,7 +92,7 @@ function AllocatedL2AdminList({
             ? moment.utc(data.processedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-        <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+        <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
           {processstatusBodyTemplate(data)}
         </td>
         <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
@@ -122,13 +122,7 @@ function AllocatedL2AdminList({
               checked={selectedRowsId.some(
                 (item) => item.id === data.patientId
               )}
-              style={{
-                width: "20px",
-                height: "20px",
-                flexhrink: "0",
-                borderRadius: "4px",
-                backgroundColor: "pink",
-              }}
+              className={TableStyle.customChecked}
             />
           )}
         </td>
@@ -179,7 +173,7 @@ function AllocatedL2AdminList({
               </span>
             </th>
 
-            <th style={{textAlign:"center"}}>STATUS</th>
+            <th style={{ textAlign: "center" }}>STATUS</th>
             {/* <th>Upload</th> */}
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -187,16 +181,20 @@ function AllocatedL2AdminList({
                   type="checkbox"
                   onClick={() => setSelectAllChecked(!selectAllChecked)}
                   style={{
-                    paddingTop: "10px",
                     width: "20px",
                     height: "20px",
                     flexhrink: "0",
                     borderRadius: "4px",
-                    backgroundColor: "pink",
                   }}
                   checked={
                     selectAllChecked &&
                     selectedRowsId.length == selectedChart.length
+                  }
+                  className={
+                    selectAllChecked &&
+                    selectedRowsId.length == selectedChart.length
+                      ? TableStyle.customChecked2
+                      : ""
                   }
                 />
               </div>

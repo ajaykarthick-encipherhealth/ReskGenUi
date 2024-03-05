@@ -29,6 +29,7 @@ import {
   PhysicanMenuList,
   L2AuditMenuList,
   L2AuditorMenuList,
+  ProviderMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
@@ -39,7 +40,10 @@ import {
   getNotificationAlertClear,
 } from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
-import { getFilteredList } from "../../../store/actions/PatientsActions";
+import {
+  getFilteredList,
+  getPatientID,
+} from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
 import {
@@ -54,7 +58,9 @@ import { logoutAllDevice } from "../../../services/AuthService";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-regular-svg-icons";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 const btnItems = [
   {
     id: 1,
@@ -290,6 +296,8 @@ const Header = () => {
         return PhysicanMenuList;
       case "supervisor":
         return L2AuditorMenuList;
+      case "provider":
+        return ProviderMenuList;
       default:
         return [];
     }
@@ -373,10 +381,17 @@ const Header = () => {
                         key={index}
                         onClick={() => {
                           dispatch(getFilteredList(null));
+                          dispatch(getPatientID(null));
+                          localStorage.removeItem("patientId");
                         }}
                       >
                         <Link href={data.to} className="d-flex">
-                          <div className="menu-icon">{data.iconStyle}</div>{" "}
+                          <div
+                            className="menu-icon"
+                            style={{ paddingRight: "5px" }}
+                          >
+                            {data.iconStyle}
+                          </div>{" "}
                           <span className={`nav-text header-nav-text`}>
                             {data.title}
                           </span>
@@ -410,38 +425,53 @@ const Header = () => {
                             </Button>
                           </Popover>
                         )}
-                        {(userRole !== "admin") && 
-                        <Tooltip
-                          title={` Quality : ${
-                            accuracy?.data?.response
-                              ? Math.round(accuracy?.data?.response)
-                              : 100
-                          }%`}
-                        >
-                          <div className="header-progress">
-                            <div style={{ width: 40, height: 40 }}>
-                              <CircularProgressbar
-                                value={
-                                  accuracy?.data?.response
-                                    ? Math.round(accuracy?.data?.response)
-                                    : Math.round(100)
-                                }
-                                text={`${
-                                  accuracy?.data?.response
-                                    ? Math.round(accuracy?.data?.response)
-                                    : Math.round(100)
-                                }%`}
-                              />
+                        {userRole !== "admin" && (
+                          <Tooltip
+                            title={` Quality : ${
+                              accuracy?.data?.response
+                                ? Math.round(accuracy?.data?.response)
+                                : 100
+                            }%`}
+                          >
+                            <div className="header-progress">
+                              <div style={{ width: 40, height: 40 }}>
+                                <CircularProgressbar
+                                  value={
+                                    accuracy?.data?.response
+                                      ? Math.round(accuracy?.data?.response)
+                                      : Math.round(100)
+                                  }
+                                  text={`${
+                                    accuracy?.data?.response
+                                      ? Math.round(accuracy?.data?.response)
+                                      : Math.round(100)
+                                  }%`}
+                                />
 
-                              {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
+                                {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
+                              </div>
                             </div>
-                          </div>
-                        </Tooltip> }
+                          </Tooltip>
+                        )}
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
                         >
-                          <Image src={IMAGES.chatIcons} alt="" />
+                          <div style={{ color: "#04306f" }}>
+                            {/* <i class="far fa-message"></i> */}
+                            <div style={{ color: "#04306f" }}>
+                              <FontAwesomeIcon
+                                icon={faMessage}
+                                className={styles.bellIcon}
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  marginTop: "8px",
+                                  fontWeight: "700",
+                                }}
+                              />
+                            </div>
+                          </div>
                         </div>
 
                         <div
@@ -450,9 +480,14 @@ const Header = () => {
                         >
                           <Badge
                             count={notificationAlertData?.length}
-                            color="#3479fe"
+                            color="#04306f"
                           >
-                            {SVGICON.dashboardNotification}
+                            <div style={{ color: "#04306f" }}>
+                              <FontAwesomeIcon
+                                icon={faBell}
+                                className={`fa-regular ${styles.bellIcon}`}
+                              />
+                            </div>
                           </Badge>
                         </div>
                         <div className="header-media d-flex">

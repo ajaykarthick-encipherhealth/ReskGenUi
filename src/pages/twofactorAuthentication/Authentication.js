@@ -23,7 +23,6 @@ const index = () => {
   const [skip, setSkip] = useState();
   const [code, setCode] = useState([]);
   const [password, setPassword] = useState();
-  const [decodedParams, setDecodedParams] = useState();
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
@@ -144,9 +143,17 @@ const index = () => {
               <button
                 className={styles.sendBtn}
                 onClick={() => {
-                  router?.push(
-                    `/twofactorAuthentication/GetOTP?username=${username}`
+                  const encodedParams = btoa(
+                    JSON.stringify({
+                      username: username,
+                      password: password,
+                    })
                   );
+
+                  router?.push({
+                    pathname: `/twofactorAuthentication/GetOTP`,
+                    search: `params=${encodedParams}`,
+                  });
                 }}
               >
                 ENABLE MFA

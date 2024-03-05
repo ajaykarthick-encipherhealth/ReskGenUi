@@ -256,13 +256,13 @@ function CoderReport({
                     <input
                       type="checkbox"
                       onChange={handleHeaderCheckboxChange}
+                      className={selectAll ? TableStyle.customChecked2 : ""}
                       style={{
-                        paddingTop: "10px",
-                        width: "20px",
-                        height: "20px",
+                        width: "22px",
+                        height: "22px",
                         flexhrink: "0",
                         borderRadius: "4px",
-                        backgroundColor: "pink",
+                        cursor: "pointer",
                       }}
                       checked={selectAll}
                     />
@@ -359,12 +359,7 @@ function CoderReport({
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                          }}
+                          className={TableStyle.customChecked}
                         />
                       </td>
                     </>
@@ -435,18 +430,11 @@ function CoderReport({
                           onChange={() => {
                             handleRowCheckboxChange(row);
                           }}
+                          className={TableStyle.customChecked}
                           checked={selectedRows?.some(
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                            backgroundColor: "pink",
-                            cursor: "pointer",
-                          }}
                         />
                       </td>
                     </>

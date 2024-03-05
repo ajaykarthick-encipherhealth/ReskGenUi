@@ -1,7 +1,5 @@
 .classTable > thead {
-  /* background-color: #222b40 !important; */
-  /* background-color: #133DD4 !important; */
-  background-color: #04306f !important;
+  background: #04306f !important;
   border-radius: 10px !important;
 }
 
@@ -32,7 +30,7 @@
   padding-top: 12px !important;
   padding-bottom: 12px !important;
   /* border-radius: 8px!important;
-    border: 0.2px solid #241571!important;
+    border: 0.2px solid #04306f!important;
     
     background: #FAFCFF!important; */
 }
@@ -69,7 +67,7 @@
 }
 
 .classTable &::-webkit-scrollbar-thumb {
-  background-color: #241571;
+  background-color: #04306f;
 }
 .classTable &::-webkit-scrollbar-track {
   background-color: #fafcff;
@@ -181,8 +179,7 @@
 }
 .innerProcessingDiv:nth-child(7),
 .innerProcessingDiv:nth-child(8),
-.innerProcessingDiv:nth-child(9)
-{
+.innerProcessingDiv:nth-child(9) {
   position: relative;
   left: -15px;
 }
@@ -204,7 +201,62 @@
   width: 350px;
   text-align: center;
 }
-.rowAlignment{
+.rowAlignment {
   text-align: center;
 }
 
+.customChecked[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.customChecked[type="checkbox"]:checked {
+  width: 22px;
+  height: 22px;
+  background-color: #04306f;
+}
+.customChecked[type="checkbox"]::before {
+  content: "\2713";
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: -2px;
+}
+.customChecked2[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
+  outline: none;
+  transition: background-color 0.3s;
+  background-color: #fff;
+}
+
+.customChecked2[type="checkbox"]:checked {
+  background-color: #fff;
+}
+.customChecked2[type="checkbox"]::before {
+  content: "\2713";
+  display: flex;
+  justify-content: center;
+  color: #04306f;
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: -2px;
+}
