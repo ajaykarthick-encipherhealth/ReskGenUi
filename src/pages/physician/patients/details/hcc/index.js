@@ -4129,7 +4129,7 @@ const Hcc = ({ patientHccResult }) => {
                                             style={{ background: "#c7f3c6" }}
                                             onClick={() => {
                                               setOpens(true);
-                                              setCombiTree([item]);
+                                              setCombiTree([{...item, expanded: true}]);
                                               console.log(item, "test");
                                             }}
                                           >
