@@ -257,7 +257,10 @@ const NonHcc = ({ patientNonHccResult }) => {
         setFileModalHeader(fileModalTitle);
         if (fileInitialPage != null) {
           setTargetPages(
-            (targetPage) => targetPage.pageIndex === fileInitialPage
+            (targetPage) =>
+              targetPage.pageIndex === fileInitialPage ||
+              targetPage.pageIndex === fileInitialPage + 1 ||
+              targetPage.pageIndex === fileInitialPage + 2
           );
         }
         highlight({
@@ -307,7 +310,10 @@ const NonHcc = ({ patientNonHccResult }) => {
         setMeatModalTitle(selectMeatName);
         if (fileInitialPage != null) {
           setTargetPages(
-            (targetPage) => targetPage.pageIndex === fileInitialPage
+            (targetPage) =>
+              targetPage.pageIndex === fileInitialPage ||
+              targetPage.pageIndex === fileInitialPage + 1 ||
+              targetPage.pageIndex === fileInitialPage + 2
           );
         } else {
           setTargetPages(null);
@@ -1157,7 +1163,12 @@ const NonHcc = ({ patientNonHccResult }) => {
     }
 
     var splitPoint = actualDescription.substring(" ", 10);
-    setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+    setTargetPages(
+      (targetPage) =>
+        targetPage.pageIndex === pageNumber ||
+        targetPage.pageIndex === pageNumber + 1 ||
+        targetPage.pageIndex === pageNumber + 2
+    );
     setFindFileKeyword(splitPoint);
   };
   const handleOpenModalCombinationCode = async (
@@ -1208,7 +1219,12 @@ const NonHcc = ({ patientNonHccResult }) => {
 
       setFileModalTitle(headerName);
       var splitPoint = actualDescription.substring(" ", 10);
-      setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+      setTargetPages(
+        (targetPage) =>
+          targetPage.pageIndex === pageNumber ||
+          targetPage.pageIndex === pageNumber + 1 ||
+          targetPage.pageIndex === pageNumber + 2
+      );
       setFindFileKeyword(splitPoint);
     }
   };
@@ -2482,7 +2498,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                 <Tab.Pane id="my-posts" eventKey="file">
                   <div className="my-post-content pt-3">
                     <div className="row">
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <ul className="timeline">
                           <div
                             className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -2568,7 +2584,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                           </div>
                         </ul>
                       </div>
-                      <div className="col-xl-8">
+                      <div className="col-xl-6">
                         <div className="card-body p-0">
                           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                             <div
@@ -2597,7 +2613,7 @@ const NonHcc = ({ patientNonHccResult }) => {
                           </Worker>
                         </div>
                       </div>
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <ul className="timeline">
                           <div
                             className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}

@@ -51,6 +51,9 @@
   font-weight: 500 !important;
   font-size: 13px !important;
 }
+.dob_icon {
+  margin-right: 10px;
+}
 .dob_icon svg {
   width: 18px;
   padding: 0 !important;
@@ -426,8 +429,8 @@
   border-radius: 4px;
   background: #fee1e1;
   text-align: center;
-  /* margin-left: -8px; */
-  margin-top: 7px;
+  margin-left: 3px;
+  margin-top: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1201,7 +1204,7 @@
 }
 
 .flagDetailsChange {
-  margin-top: 8px !important;
+  margin-top: 7px !important;
   /* height: 17px !important;
     width: 17px !important; */
   display: block;
