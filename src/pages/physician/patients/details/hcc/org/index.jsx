@@ -15,7 +15,7 @@ import visitStyles from "../../../../../../styles/visitdata.module.css";
 const CamboTree = ({ tree }) => {
   const [selection, setSelection] = useState([]);
   const [background, setBackground] = useState([]);
-  const [trees, setTrees] = useState([]);
+  const [trees, setTrees] = useState(Tree);
   const getBackgroundColor = async () => {
     try {
       const response = await axios.get(
@@ -80,6 +80,10 @@ const CamboTree = ({ tree }) => {
   useEffect(() => {
     getBackgroundColor();
   }, []);
+
+  useEffect(() => {
+    setTrees(tree)
+  }, [tree])
 
   const nodeTemplate = (node) => {
     return (
