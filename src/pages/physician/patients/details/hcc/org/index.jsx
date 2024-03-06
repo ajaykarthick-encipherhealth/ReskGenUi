@@ -121,9 +121,9 @@ const CamboTree = ({ tree }) => {
   };
 
   return (
-    <div style={{ backgroundColor: "#F0F6FE" }}>
+    <div style={{ backgroundColor: "#fbfdff" }}>
       <div
-        className={`card border border-primary overflow-x-auto ${Style.chart}`}
+        className={`overflow-x-auto ${Style.chart}`}
       >
         <OrganizationChart
           value={trees}

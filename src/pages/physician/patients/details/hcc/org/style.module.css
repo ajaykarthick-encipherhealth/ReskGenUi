@@ -28,9 +28,9 @@
 }
 
 .chart td {
-  border-color: inherit;
-  border-style: revert-layer;
-  border-width: 1px;
+  border-color: inherit !important;
+  border-style: revert-layer !important;
+  border-width: 1px !important;
 }
 
 .chart td > div {
