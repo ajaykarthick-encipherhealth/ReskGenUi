@@ -7,6 +7,9 @@ import dayjs from "dayjs";
 import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { selectedReport } from "../../../../store/actions/l2Action/AuditReportAction";
 
 
 function SentReportTable({
@@ -17,7 +20,12 @@ function SentReportTable({
   sortOrder,
   setSortOrder,
   setSort,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
 }) {
+  const dispatch=useDispatch()
+  const router=useRouter()
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const displayReceivedUsers = (list) => {
@@ -61,50 +69,57 @@ function SentReportTable({
       </table>
     </div>
   );
+
+  const handleReceiverReport = (row) => {
+    const info = {
+      reportUser: row,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    router?.push(
+      `/l2Auditor/report/individualreport?reportId=${row?._id}&l2Auditor=${true}`
+    );
+  };
   return (
     <div className={TableStyle.classContaineer}>
-      {loading ? (
+      {!details?.data ? (
         <SpinnerDots />
       ) : (
         <>
-          {details?.data?.length === 0 ? (
-            <Empty />
-          ) : (
-            <table className={TableStyle.classTable}>
-              <thead className={TableStyle.classTTotalhead}>
-                <tr>
-                  <th>REPORT ID</th>
-                  <th>REPORT NAME</th>
-                  {/* <th>SENDER</th> */}
-                  <th style={{paddingLeft:"100px"}}>USER LIST</th>
-                  <th
+          <table className={TableStyle.classTable}>
+            <thead className={TableStyle.classTTotalhead}>
+              <tr>
+                <th>REPORT ID</th>
+                <th>REPORT NAME</th>
+                <th style={{paddingLeft:"100px"}}>USER LIST</th>
+                <th
                   className={TableStyle.rowStyle}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer" ,paddingLeft:"15px"}}
                   onClick={() => {
-                    sortFunction(
-                      sortOrder,
-                      setSortOrder,
-                      setSort,
-                      "sendDate"
-                    );
+                    sortFunction(sortOrder, setSortOrder, setSort, "sendDate");
                   }}
                 >
-                   DATE{" "}
+                  DATE{" "}
                   {sortOrder === "ASC" ? (
                     <ArrowUpOutlined />
                   ) : (
                     <ArrowDownOutlined />
                   )}
                 </th>
-                </tr>
-              </thead>
+              </tr>
+            </thead>
 
-              <tbody>
-                {details?.data?.map((row, index) => {
-                  const formattedDate = dateFormate(dayjs,row?.sendDate);
+            <tbody>
+              {details?.data?.length > 0 ? (
+                details?.data?.map((row, index) => {
+                  const formattedDate = dateFormate(dayjs, row?.sendDate);
 
                   return (
-                    <tr key={index} style={{ height: "40px" }}>
+                    <tr key={index} style={{ height: "40px" }} 
+                    onClick={() => handleReceiverReport(row)}
+                    >
                       <td
                         style={{
                           borderTop: "  0.2px solid #e1e1e1",
@@ -135,7 +150,7 @@ function SentReportTable({
                         }}
                         className={TableStyle.childBorder}
                       >
-                        <Popover content={popCOntent}>
+                        <Popover content={popCOntent} style={{position:"relative",left:"-330px"}}>
                           <div
                             onMouseOver={() =>
                               displayReceivedUsers(row.receivedUsers)
@@ -143,7 +158,7 @@ function SentReportTable({
                           >
                             {row?.receivedUsers?.slice(0, 2)?.map((data) => (
                               <ul>
-                                <li style={{ marginBottom: "5px" }}>
+                                <li style={{ marginBottom: "5px"}}>
                                   {data.user}
                                 </li>
                               </ul>
@@ -164,10 +179,16 @@ function SentReportTable({
                       </td>
                     </tr>
                   );
-                })}
-              </tbody>
-            </table>
-          )}
+                })
+              ) : (
+                <tr>
+                  <td colSpan={4}>
+                    <Empty />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </>
       )}
       <div className="pagination-container">
@@ -186,3 +207,4 @@ function SentReportTable({
 }
 
 export default SentReportTable;
+
