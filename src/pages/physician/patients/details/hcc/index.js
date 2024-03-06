@@ -367,7 +367,10 @@ const Hcc = ({ patientHccResult }) => {
         setFileModalHeader(fileModalTitle);
         if (fileInitialPage) {
           setTargetPages(
-            (targetPage) => targetPage.pageIndex === fileInitialPage
+            (targetPage) =>
+              targetPage.pageIndex === fileInitialPage ||
+              targetPage.pageIndex === fileInitialPage + 1 ||
+              targetPage.pageIndex === fileInitialPage + 2
           );
         }
         highlight({
@@ -398,6 +401,14 @@ const Hcc = ({ patientHccResult }) => {
     );
     setUserDetails(dotLoading);
     setvalidHccDetails(dotLoading);
+  }, []);
+
+  useEffect(() => {
+    // loadFilterPatientList();
+    var orgId = localStorage.getItem("orgId");
+    var tenId = localStorage.getItem("tenantId");
+    var patientId = localStorage.getItem("patientId");
+    getPatientDetailsFileLoad(patientId, orgId, tenId);
   }, [activeTabNumber]);
 
   useEffect(() => {
@@ -408,7 +419,10 @@ const Hcc = ({ patientHccResult }) => {
         setMeatModalTitle(selectMeatName);
         if (fileInitialPage != null) {
           setTargetPages(
-            (targetPage) => targetPage.pageIndex === fileInitialPage
+            (targetPage) =>
+              targetPage.pageIndex === fileInitialPage ||
+              targetPage.pageIndex === fileInitialPage + 1 ||
+              targetPage.pageIndex === fileInitialPage + 2
           );
         } else {
           setTargetPages(null);
@@ -1133,6 +1147,25 @@ const Hcc = ({ patientHccResult }) => {
       }
     }
   };
+  const getPatientDetailsFileLoad = async (
+    patientId,
+    orgId,
+    tenId,
+    fileloadCondition
+  ) => {
+    getFileDosPageNumber();
+    if (patientHccResult) {
+      var result = patientHccResult;
+      setPatientDocumentResult(result);
+      setPatientDetails(result);
+      if (result.validDisease != null) {
+        getPatientPdfFile(result?.fileDetailDTO?.azureBlobPath, tenId);
+        setPatientFileDTO(result?.fileDetailDTO);
+      } else {
+        setIsLoading(false);
+      }
+    }
+  };
   const getPatientDetailsRadiologyYear = async (orgId, tenId) => {
     var patientId = localStorage.getItem("patientId");
     const response = await axios.get(
@@ -1529,7 +1562,12 @@ const Hcc = ({ patientHccResult }) => {
     // getSectionPageNumber(headerNames, encounterDate);
 
     var splitPoint = actualDescription.substring(" ", 10);
-    setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
+    setTargetPages(
+      (targetPage) =>
+        targetPage.pageIndex === pageNumber ||
+        targetPage.pageIndex === pageNumber + 1 ||
+        targetPage.pageIndex === pageNumber + 2
+    );
     setFindFileKeyword(splitPoint);
     // highlight({
     //   keyword: actualDescription,
@@ -2207,12 +2245,6 @@ const Hcc = ({ patientHccResult }) => {
         var suggestListAllNonHcc = [];
         var deleteHccList = [];
 
-        if (fileloadCondition != "fileNotLoad") {
-          getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
-          setSelectMeatFileId(patientHccResult.fileId);
-        }
-        // setPatientDocumentResult(result);
-
         result.encounterYears.map((res) => {
           dosYearArr.push({ value: res, label: res });
         });
@@ -2232,26 +2264,50 @@ const Hcc = ({ patientHccResult }) => {
         var unMacthResList = [];
 
         validDis = result.validDisease;
-        validDiseaseNewRes = result.validDisease;
+        validDiseaseNewRes = result?.validDisease;
         // invalidDiseaseNewRes =validDisArray;
         var validDisArray = [];
         var validEncounterDateArray = [];
-        validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
+        validDiseaseNewRes?.map((res, index) => {
+          const encounterDatearray = res?.encounterDate?.split(",");
+          var providerList = [];
+          res.provider?.map((res, index) => {
+            providerList.push(res.providerName);
           });
+
+          if (res.isShow != false) {
+            validDisArray.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition: res.defaultPosition,
+              providerName: providerList,
+              dbDescription: res.dbDescription,
+              isMostSpecific: res.isMostSpecific,
+              getPlace: "Hcc",
+            });
+          }
         });
 
-        result.invalidDisease.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+        if (result?.insulinDisease) {
+          validDisArray.push({
+            actualDescription: result?.insulinDisease?.description,
+            capturedSections: [result?.insulinDisease?.section],
+            diagnosisCode: result?.insulinDisease?.code,
+            encounterDate: result?.insulinDisease?.dos,
+            encounterDateSplit: [result?.insulinDisease?.dos],
+            getPlace: "Insulin",
+            isHccValid: true,
+            defaultPosition: null,
+          });
+        }
+
+        result?.invalidDisease?.map((res, index) => {
+          const encounterDatearray = res?.encounterDate?.split(",");
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -2266,17 +2322,24 @@ const Hcc = ({ patientHccResult }) => {
 
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
-            deleteHccList.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              isManuallyAdded: res.isManuallyAdded,
-              isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition,
-            });
+            if (res.isShow != false) {
+              const encounterDatearray = res?.encounterDate?.split(",");
+              var providerList = [];
+              res.provider?.map((res, index) => {
+                providerList.push(res.providerName);
+              });
+              deleteHccList.push({
+                actualDescription: res.actualDescription,
+                capturedSections: res.capturedSections,
+                diagnosisCode: res.diagnosisCode,
+                encounterDate: res.encounterDate,
+                encounterDateSplit: encounterDatearray,
+                isManuallyAdded: res.isManuallyAdded,
+                isHccValid: res.isHccValid,
+                defaultPosition: res.defaultPosition,
+                providerName: providerList,
+              });
+            }
           });
         }
         if (result.suggestRadiology != null) {
@@ -2287,7 +2350,11 @@ const Hcc = ({ patientHccResult }) => {
           // getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
+            var providerList = [];
+            res.provider?.map((res, index) => {
+              providerList.push(res.providerName);
+            });
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -2297,12 +2364,13 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Radio",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
+              providerName: providerList,
             });
           });
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
-              const encounterDatearray = res.encounterDate.split(",");
+              const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
                 capturedSections: [],
@@ -2321,7 +2389,7 @@ const Hcc = ({ patientHccResult }) => {
           // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -2338,30 +2406,47 @@ const Hcc = ({ patientHccResult }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
-            if (res.isHccValid == true) {
-              suggestListAll.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-                defaultPosition: res.defaultPosition,
+            if (res.isShow != false) {
+              const encounterDatearray = res?.encounterDate?.split(",");
+              var providerList = [];
+              res.provider?.map((res, index) => {
+                providerList.push(res.providerName);
               });
-            } else {
-              suggestListAllNonHcc.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-              });
+              if (res.isHccValid == true) {
+                suggestListAll.push({
+                  actualDescription: res.actualDescription,
+                  diagnosisCodeFinding: res.diagnosisCode,
+                  isHccValid: res.isHccValid,
+                  capturedSections: res.capturedSections,
+                  diagnosisCode: res.diagnosisCode,
+                  encounterDate: res.encounterDate,
+                  encounterDateSplit: encounterDatearray,
+                  getPlace: "Hcc",
+                  defaultPosition: res.defaultPosition,
+                  providerName: providerList,
+                });
+              } else {
+                // suggestListAll.push({
+                //   actualDescription: res.actualDescription,
+                //   diagnosisCodeFinding: res.diagnosisCodeFinding,
+                //   isHccValid: res.isHccValid,
+                //   capturedSections: res.capturedSections,
+                //   diagnosisCode: res.diagnosisCodeFinding,
+                //   encounterDate: res.encounterDate,
+                //   getPlace: "Hcc",
+                // });
+                suggestListAllNonHcc.push({
+                  actualDescription: res.actualDescription,
+                  diagnosisCodeFinding: res.diagnosisCode,
+                  isHccValid: res.isHccValid,
+                  capturedSections: res.capturedSections,
+                  diagnosisCode: res.diagnosisCode,
+                  encounterDate: res.encounterDate,
+                  encounterDateSplit: encounterDatearray,
+                  getPlace: "Hcc",
+                  providerName: providerList,
+                });
+              }
             }
           });
         }
@@ -2369,6 +2454,30 @@ const Hcc = ({ patientHccResult }) => {
         invalidDis = result.invalidDisease;
         comboDis = result.comboDisease;
         meatCri = result.meatCriteria;
+
+        var combiDisArray = [];
+        if (result.comboDisease) {
+          comboDis.map((res, index) => {
+            var providerList = [];
+            res.providers?.map((res, index) => {
+              providerList.push(res.providerName);
+            });
+            const encounterDatearray = res?.encounterDate?.split(",");
+            combiDisArray.push({
+              addOnCode: res.addOnCode,
+              diagnosisCodeCombo: res.diagnosisCodeCombo,
+              diseaseName: res.diseaseName,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              providerName: providerList,
+              ruleType: res.ruleType,
+              capturedSections: res.capturedSections,
+            });
+          });
+        }
+
+        // validDiseaseNewRes = validDiseaseNew[2019]
 
         var invalidDiseasesArray = [];
         var validDiseasesArray = [];
@@ -2379,13 +2488,12 @@ const Hcc = ({ patientHccResult }) => {
         for (var key in validDis) {
           validDiseasesArray.push({ name: validDis[key] });
         }
-
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
-        setComboDiseaseCodesList(comboDis);
+        setComboDiseaseCodesList(combiDisArray);
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
         setSuggestedNonHccList(suggestListAllNonHcc);
@@ -2427,13 +2535,24 @@ const Hcc = ({ patientHccResult }) => {
           "encounterDateTag6",
           "encounterDateTag7",
           "encounterDateTag8",
+          "encounterDateTag9",
+          "encounterDateTag10",
         ];
 
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
+        validDiseaseNewRes?.map((res) => {
+          res.capturedSections?.map((res2, index) => {
+            capturedSectionsArr?.push({
               name: res2,
-              diagnosisCode: res.diagnosisCode,
+              diagnosisCode: res?.diagnosisCode,
+            });
+          });
+        });
+
+        validDiseaseNewRes?.map((res) => {
+          res.provider?.map((res2, index) => {
+            capturedSectionsArr?.push({
+              name: res2.providerName,
+              diagnosisCode: res?.diagnosisCode,
             });
           });
         });
@@ -2446,11 +2565,11 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-        suggestListAll.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
+        suggestListAll?.map((res) => {
+          res?.capturedSections?.map((res2, index) => {
+            capturedSectionsArr?.push({
               name: res2,
-              diagnosisCode: res.diagnosisCode,
+              diagnosisCode: res?.diagnosisCode,
             });
           });
         });
@@ -2464,54 +2583,102 @@ const Hcc = ({ patientHccResult }) => {
             colors: COLORS2[index],
           });
         });
-        // setCaptureSectionMatching(capturedSectionsColorsMatching);
+
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
+        );
+
+        var sectionColorResult = response.data.response;
+
+        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+        );
+        let sectionColorResultNotMatch = dublicateSectionArr.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+        );
+
+        var notMatchColorArray = [];
+        sectionColorResultNotMatch?.map((res, index) => {
+          var radomColorcode = stringToColour(res.name);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArray.push({
+            sectionName: res.name,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          submitSectionColors(
+            res.name,
+            radomColorcode,
+            randomColorChangeShadow
+          );
+        });
+
+        //   var newArrayColorMatchs = [];
+        //   newArrayColorMatchs = [
+        //     ...sectionColorResultMatch,
+        //     ...notMatchColorArray,
+        //   ];
+
+        //  setCaptureSectionMatching(newArrayColorMatchs);
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
 
         validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.invalidDisease.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.unMatchedDisease?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        // if (result?.insulinDisease) {
+        //   encounterDateArr.push({
+        //     name: result?.insulinDisease?.dos,
+        //   });
+        // }
+
+        result?.unMatchedDisease?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
-        result.suggestRadiology?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.suggestRadiology?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.suggestLab?.map((res) => {
-          const array = res.encounterDate.split(",");
+        result?.suggestLab?.map((res) => {
+          const array = res?.encounterDate.split(",");
           array.map((res2) => {
-            encounterDateArr.push({
+            encounterDateArr?.push({
               name: res2,
             });
           });
         });
+
+        if (result?.insulinDisease) {
+          encounterDateArr.push({
+            name: result?.insulinDisease?.dos,
+          });
+        }
 
         var encounterDateArrDublicatesRemove = getUniqueListBy(
           encounterDateArr,
@@ -2526,7 +2693,6 @@ const Hcc = ({ patientHccResult }) => {
         });
 
         setEncounterDateMatching(encounterDateColorsMatching);
-
         var meatListArr = [];
         var meatMoniterHead = [];
         var meatEvaluteHead = [];
@@ -2537,6 +2703,8 @@ const Hcc = ({ patientHccResult }) => {
         var allMeatHeadColor = [];
         var dublicateRemoveSecondArr = [];
         var nonHccMeatListArr = [];
+
+        var meatHeaderList = [];
 
         meatCri?.map((res, index) => {
           if (
@@ -2587,7 +2755,7 @@ const Hcc = ({ patientHccResult }) => {
             });
           });
           allMeatHeadColorArr = allMeatHeadColor;
-
+          meatHeaderList = dublicateRemoveArr;
           dublicateRemoveSecondArr = getUniqueListBy(
             allMeatHeadColor,
             "header"
@@ -2666,6 +2834,41 @@ const Hcc = ({ patientHccResult }) => {
             });
           }
         });
+
+        let sectionColorResultMatchMeat = sectionColorResult.filter((o1) =>
+          meatHeaderList.some((o2) => o1.sectionName === o2.header)
+        );
+        let sectionColorResultNotMatchMeat = meatHeaderList.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.header === o2.sectionName)
+        );
+
+        var notMatchColorArrayMeat = [];
+        sectionColorResultNotMatchMeat?.map((res, index) => {
+          var radomColorcode = stringToColour(res.header);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArrayMeat.push({
+            sectionName: res.header,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          submitSectionColors(
+            res.header,
+            radomColorcode,
+            randomColorChangeShadow
+          );
+        });
+
+        var newArrayColorMatchs = [];
+        newArrayColorMatchs = [
+          ...sectionColorResult,
+          ...sectionColorResultMatch,
+          ...notMatchColorArray,
+          ...sectionColorResultMatchMeat,
+          ...notMatchColorArrayMeat,
+        ];
+
+        setCaptureSectionMatching(newArrayColorMatchs);
+
         setMeatCriteriaList(meatListArr);
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
         setIsLoadingDos(false);
@@ -3176,7 +3379,12 @@ const Hcc = ({ patientHccResult }) => {
     var pageIndex = pageNumber - 1;
     setFileInitialPage(pageIndex);
     setFileDosPageNumber(pageIndex);
-    setTargetPages((targetPage) => targetPage.pageIndex === pageIndex);
+    setTargetPages(
+      (targetPage) =>
+        targetPage.pageIndex === pageNumber ||
+        targetPage.pageIndex === pageNumber + 1 ||
+        targetPage.pageIndex === pageNumber + 2
+    );
     setFindFileKeyword(findData);
   };
 
@@ -3678,6 +3886,16 @@ const Hcc = ({ patientHccResult }) => {
                                               >
                                                 <i>{SVGICON.infoIcon}</i>
                                               </Popover>
+                                              <div
+                                                onClick={() =>
+                                                  addMeatQuery(data, "Add")
+                                                }
+                                                className={
+                                                  visitStyles.add_meat_query
+                                                }
+                                              >
+                                                {SVGICON.meatQueryIcon}
+                                              </div>
                                               {data.getPlace == "Radio" ||
                                               data.getPlace == "Lab" ? (
                                                 <Popconfirm
@@ -4665,7 +4883,7 @@ const Hcc = ({ patientHccResult }) => {
                 <Tab.Pane id="my-posts" eventKey="file">
                   <div className="my-post-content pt-3 row">
                     {!isFileFormShow ? (
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <ul className="timeline">
                           <div
                             className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -4693,7 +4911,7 @@ const Hcc = ({ patientHccResult }) => {
                                     className={`hccActiveCard ${visitStyles.hcc_card}`}
                                   >
                                     <div
-                                      className={`${visitStyles.hcc_card_nameHead}`}
+                                      className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
                                     >
                                       <div>
                                         <span className="mb-1 disease-name d-flex">
@@ -4714,88 +4932,93 @@ const Hcc = ({ patientHccResult }) => {
                                         </span>
                                       </div>
 
-                                      {data.defaultPosition ==
-                                      "VALID" ? null : data.defaultPosition ==
-                                        "INVALID" ? (
-                                        <span
-                                          className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
-                                        ></span>
-                                      ) : data.defaultPosition ==
-                                        "SUGGESTED" ? (
-                                        <span
-                                          className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
-                                        ></span>
-                                      ) : data.defaultPosition == "DELETED" ? (
-                                        <span
-                                          className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
-                                        ></span>
-                                      ) : null}
-                                      <Popover
-                                        onClick={() =>
-                                          getValidHccDetails(
-                                            data.actualDescription,
-                                            data.diagnosisCode
-                                          )
-                                        }
-                                        content={validHccDetails}
-                                        title={data.diagnosisCode}
-                                        placement="bottom"
-                                        trigger="click"
-                                      >
-                                        <Tooltip
-                                          title="HCC Veriosn Details"
+                                      <div className="d-flex">
+                                        {data.defaultPosition ==
+                                        "VALID" ? null : data.defaultPosition ==
+                                          "INVALID" ? (
+                                          <span
+                                            className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "SUGGESTED" ? (
+                                          <span
+                                            className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "DELETED" ? (
+                                          <span
+                                            className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : null}
+                                        <Popover
+                                          onClick={() =>
+                                            getValidHccDetails(
+                                              data.actualDescription,
+                                              data.diagnosisCode
+                                            )
+                                          }
+                                          content={validHccDetails}
+                                          title={data.diagnosisCode}
                                           placement="bottom"
+                                          trigger="click"
                                         >
-                                          <i className="cr-pointer">
-                                            {SVGICON.infoIcon}
-                                          </i>
-                                        </Tooltip>
-                                      </Popover>
+                                          <Tooltip
+                                            title="HCC Veriosn Details"
+                                            placement="bottom"
+                                          >
+                                            <i className="cr-pointer">
+                                              {SVGICON.infoIcon}
+                                            </i>
+                                          </Tooltip>
+                                        </Popover>
 
-                                      <Popconfirm
-                                        title="Choose an action"
-                                        icon={
-                                          <QuestionCircleOutlined
-                                            style={{
-                                              color: "blue",
-                                            }}
-                                          />
-                                        }
-                                        okText="Move to Deleted"
-                                        cancelText="Move to Suggested"
-                                        onCancel={validToSuggested}
-                                        okButtonProps={{
-                                          type: buttonClicked
-                                            ? "primary"
-                                            : "default",
-                                        }}
-                                        cancelButtonProps={{
-                                          type: buttonClicked
-                                            ? "danger"
-                                            : "default",
-                                        }}
-                                        description={data.diagnosisCode}
-                                        onConfirm={confirmvalid}
-                                        placement="leftTop"
-                                        onOpenChange={() =>
-                                          onchangeValid(
-                                            data.diagnosisCode,
-                                            data
-                                          )
-                                        }
-                                      >
-                                        <div className={visitStyles.close_icon}>
-                                          {
-                                            <FontAwesomeIcon
-                                              icon={faArrowsAlt}
+                                        <Popconfirm
+                                          title="Choose an action"
+                                          icon={
+                                            <QuestionCircleOutlined
                                               style={{
-                                                size: 8,
-                                                color: "#a80404",
+                                                color: "blue",
                                               }}
                                             />
                                           }
-                                        </div>
-                                      </Popconfirm>
+                                          okText="Move to Deleted"
+                                          cancelText="Move to Suggested"
+                                          onCancel={validToSuggested}
+                                          okButtonProps={{
+                                            type: buttonClicked
+                                              ? "primary"
+                                              : "default",
+                                          }}
+                                          cancelButtonProps={{
+                                            type: buttonClicked
+                                              ? "danger"
+                                              : "default",
+                                          }}
+                                          description={data.diagnosisCode}
+                                          onConfirm={confirmvalid}
+                                          placement="leftTop"
+                                          onOpenChange={() =>
+                                            onchangeValid(
+                                              data.diagnosisCode,
+                                              data
+                                            )
+                                          }
+                                        >
+                                          <div
+                                            className={visitStyles.close_icon}
+                                          >
+                                            {
+                                              <FontAwesomeIcon
+                                                icon={faArrowsAlt}
+                                                style={{
+                                                  size: 8,
+                                                  color: "#a80404",
+                                                }}
+                                              />
+                                            }
+                                          </div>
+                                        </Popconfirm>
+                                      </div>
                                     </div>
                                     <div
                                       className={`${visitStyles.hoverActiveHcc}`}
@@ -4854,7 +5077,7 @@ const Hcc = ({ patientHccResult }) => {
                         </ul>
                       </div>
                     ) : null}
-                    <div className="col-xl-8">
+                    <div className={isFileFormShow ? "col-xl-8" : "col-xl-6"}>
                       <div className="card-body p-0">
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                           <div
@@ -5331,172 +5554,9 @@ const Hcc = ({ patientHccResult }) => {
                           </div>
                         </div>
                       </div>
-                    ) : // <div className="col-xl-4">
-                    //   <div className="offcanvas-body">
-                    //     <div className={visitStyles.fileFormContianer}>
-                    //       <Form
-                    //         noValidate
-                    //         validated={validated}
-                    //         onSubmit={handleFormSubmit}
-                    //       >
-                    //         <div className="row">
-                    //           <div className="col-xl-12">
-                    //             <Form.Label>
-                    //               Code <span className="text-danger">*</span>{" "}
-                    //             </Form.Label>
-                    //             <Form.Control
-                    //               required
-                    //               type="text"
-                    //               id="diagnosisCode"
-                    //               name="diagnosisCode"
-                    //               onChange={handleChange}
-                    //             />
-                    //             {addValidCodeCheck == false ? (
-                    //               <span
-                    //                 className={
-                    //                   visitStyles.invalidHccCodeError
-                    //                 }
-                    //               >
-                    //                 Invalid Hcc Code
-                    //               </span>
-                    //             ) : addValidCodeCheck == true ? (
-                    //               <span
-                    //                 className={visitStyles.validHccCodeError}
-                    //               >
-                    //                 Valid Hcc Code
-                    //               </span>
-                    //             ) : null}
-                    //           </div>
-                    //           <div className="col-xl-12">
-                    //             <Form.Label>Provider name</Form.Label>
-                    //             <Form.Control
-                    //               type="text"
-                    //               id="providerName"
-                    //               name="providerName"
-                    //               onChange={handleChange}
-                    //             />
-                    //           </div>
-                    //           <div className="col-xl-12">
-                    //             <Form.Label>
-                    //               Section{" "}
-                    //               <span className="text-danger">*</span>{" "}
-                    //             </Form.Label>
-                    //             <Form.Control
-                    //               required
-                    //               type="text"
-                    //               id="capturedSections"
-                    //               name="capturedSections"
-                    //               onChange={handleChange}
-                    //             />
-                    //           </div>
-                    //           <div className={`col-xl-12`}>
-                    //             <Form.Label>
-                    //               Encoded date{" "}
-                    //               <span className="text-danger">*</span>{" "}
-                    //             </Form.Label>
-
-                    //             {/* <Form.Control
-                    //                                   required
-                    //                                   type="date"
-                    //                                   id="encodedDate"
-                    //                                   name="encodedDate"
-                    //                                   onChange={handleChange}
-                    //                                 /> */}
-                    //             <div className={visitStyles.fileFormDate}>
-                    //               <Form.Control
-                    //                 required
-                    //                 type="text"
-                    //                 id="encodedDate"
-                    //                 name="encodedDate"
-                    //                 onChange={handleChange}
-                    //                 value={inputValueFileDate}
-                    //               />
-                    //               {!dragFileDate ? (
-                    //                 <span
-                    //                   onClick={() => setdragFileDate(true)}
-                    //                 >
-                    //                   {" "}
-                    //                   <FontAwesomeIcon
-                    //                     icon={faCalendar}
-                    //                     style={{
-                    //                       color: "#918585",
-                    //                     }}
-                    //                   />
-                    //                 </span>
-                    //               ) : (
-                    //                 <span
-                    //                   onClick={() => setdragFileDate(false)}
-                    //                 >
-                    //                   {" "}
-                    //                   <FontAwesomeIcon
-                    //                     icon={faClose}
-                    //                     style={{
-                    //                       color: "#918585",
-                    //                     }}
-                    //                   />
-                    //                 </span>
-                    //               )}
-                    //             </div>
-                    //           </div>
-                    //           <DatePicker
-                    //             format="MM-DD-YYYY"
-                    //             onChange={(dates, dateStrings) => {
-                    //               handleDatePickerChangeFile(
-                    //                 dates,
-                    //                 dateStrings
-                    //               );
-                    //             }}
-                    //             open={dragFileDate}
-                    //             showNow={false}
-                    //             style={{
-                    //               visibility: "hidden",
-                    //               boxShadow: "none",
-                    //               marginBottom: "-45px",
-                    //             }}
-                    //             placeholder="MM-DD-YYYY"
-                    //             className="form-control"
-                    //           />
-                    //           {/* <DatePicker/> */}
-
-                    //           <div className="col-xl-12 mb-3">
-                    //             <Form.Label>
-                    //               Description{" "}
-                    //               <span className="text-danger">*</span>{" "}
-                    //             </Form.Label>
-                    //             <textarea
-                    //               className="form-control"
-                    //               id="actualDescription"
-                    //               name="actualDescription"
-                    //               onChange={handleChangeSuggested}
-                    //               // value={inputValue.actualDescription}
-                    //               rows="5"
-                    //               required
-                    //             ></textarea>
-                    //           </div>
-                    //         </div>
-
-                    //         <div>
-                    //           <Button
-                    //             type="submit"
-                    //             className="btn btn-primary btn-sm me-1"
-                    //           >
-                    //             Submit
-                    //           </Button>
-                    //           <Button
-                    //             // type="reset"
-                    //             onClick={() => handleCloseModal()}
-                    //             className="btn btn-danger btn-sm light ms-1"
-                    //           >
-                    //             Cancel
-                    //           </Button>
-                    //         </div>
-                    //       </Form>
-                    //     </div>
-                    //   </div>
-                    // </div>
-                    null}
+                    ) : null}
                     {!isFileFormShow ? (
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <div className="">
                           <ul className="timeline">
                             <div
