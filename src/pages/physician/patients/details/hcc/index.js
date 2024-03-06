@@ -726,6 +726,8 @@ const Hcc = ({ patientHccResult }) => {
               providerName: providerList,
               ruleType: res.ruleType,
               capturedSections: res.capturedSections,
+              children: res.children ? res.children : [],
+              expanded: true,
             });
           });
         }
@@ -4347,7 +4349,9 @@ const Hcc = ({ patientHccResult }) => {
                                             style={{ background: "#c7f3c6" }}
                                             onClick={() => {
                                               setOpens(true);
-                                              setCombiTree([{...item, expanded: true}]);
+                                              setCombiTree([
+                                                { ...item, expanded: true },
+                                              ]);
                                               console.log(item, "test");
                                             }}
                                           >
@@ -7625,8 +7629,7 @@ const Hcc = ({ patientHccResult }) => {
           </div>
         </Modal>
       )}
-
-      {opens && combiTree?.children?.length > 0 ? (
+      {opens && combiTree[0]?.children?.length > 0 ? (
         <Modal
           title={fileModalHeader}
           width="90%"
