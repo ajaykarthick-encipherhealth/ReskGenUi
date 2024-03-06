@@ -28,9 +28,12 @@
 }
 
 .chart td {
-  border-color: inherit !important;
-  border-style: revert-layer !important;
   border-width: 1px !important;
+  border-style: revert-layer !important;
+  border-color: inherit !important;
+}
+.chart td { 
+  border-style: revert-layer !important;
 }
 
 .chart td > div {
