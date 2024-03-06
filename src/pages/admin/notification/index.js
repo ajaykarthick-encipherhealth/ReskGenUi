@@ -233,6 +233,7 @@ const Notification = ({}) => {
                     onDropdownVisibleChange={(visible) =>
                       setOpenDropdown(visible)
                     }
+                    style={{height:"42px"}}
                   >
                     {filteredOptions?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
@@ -277,9 +278,9 @@ const Notification = ({}) => {
                   ) : null}
                   Send
                 </Button>
-                <Button className={`ms-3 ${styles.notificationCancelBtn}`}>
+                {/* <Button className={`ms-3 ${styles.notificationCancelBtn}`}>
                   Cancel
-                </Button>
+                </Button> */}
               </div>
             </div>
             <div className={styles.textareaContainer}>

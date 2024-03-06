@@ -6,7 +6,7 @@ import Card from "../../../../components/card";
 const DailyTask = ({ trackChart }) => {
   const bullets = [
     {
-      color: "#FFB54D",
+      color: "#0078D4",
       name: "Pending",
     },
     {
@@ -45,7 +45,7 @@ const DailyTask = ({ trackChart }) => {
               value: pending,
               name: "Pending",
               itemStyle: {
-                color: "#FFB54D",
+                color: "#5da9e4",
               },
             },
             {
