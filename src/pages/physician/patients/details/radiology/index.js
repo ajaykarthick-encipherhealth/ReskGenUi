@@ -410,6 +410,10 @@ const Radiology = ({}) => {
         var invalidDisArray = [];
         invalidDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
+          var providerList = [];
+          res.provider?.map((res, index) => {
+            providerList.push(res.providerName);
+          });
           invalidDisArray.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -419,6 +423,7 @@ const Radiology = ({}) => {
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
+            providerName: providerList,
           });
         });
 

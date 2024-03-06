@@ -128,13 +128,13 @@ const IndividualReceiverReport = () => {
             <div className={styles.container}>
               <div
                 className={"col-xl-1 d-flex"}
-                style={{ cursor: "pointer",marginLeft:"10px"}}
+                style={{ cursor: "pointer", marginLeft: "10px" }}
               >
                 <button
                   style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    router?.push("/l2Auditor/report");
+                    router?.push("/physician/report");
                     dispatch(getActiveTab("ReceivedReport"));
                     setLoading(true);
                   }}
@@ -292,18 +292,17 @@ const IndividualReceiverReport = () => {
               }}
             >
               {url?.extention}
-              {!url?.extention ? 
-              <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              loading....
-            </div>:
-             
-              url?.extention === "csv" ? (
+              {!url?.extention ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  loading....
+                </div>
+              ) : url?.extention === "csv" ? (
                 <CSVDisplay
                   tableData={csvTableData}
                   fileUrl={url?.path}
