@@ -126,7 +126,7 @@ const CamboTree = ({ tree }) => {
         className={`card border border-primary overflow-x-auto ${Style.chart}`}
       >
         <OrganizationChart
-          value={tree}
+          value={trees}
           // selectionMode="multiple"
           // selection={selection}
           // onSelectionChange={(e) => setSelection(e.data)}
