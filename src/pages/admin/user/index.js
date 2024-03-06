@@ -206,7 +206,7 @@ const UserList = () => {
       setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
-
+  console.log(formData, "data");
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -224,7 +224,7 @@ const UserList = () => {
         endDate,
         status,
         role,
-        sort
+        sort,
       })
     );
   }, [
@@ -238,6 +238,12 @@ const UserList = () => {
     useAdd,
     clear,
   ]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFormData(intialValues);
+    }, 650);
+  }, [addUser]);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -245,6 +251,7 @@ const UserList = () => {
         <div class="content-body">
           <div className="container-fluid">
             <div className="row">
+              object
               <div className="col-xl-12">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
@@ -340,7 +347,7 @@ const UserList = () => {
             </button>
           </div>
           <div className="offcanvas-body">
-            <div className="container-fluid">
+            <div className={`container-fluid ${styles.formAnimation}`}>
               <Form
                 noValidate
                 validated={validated}
@@ -422,7 +429,7 @@ const UserList = () => {
             </button>
           </div>
           <div className="offcanvas-body">
-            <div className="container-fluid">
+            <div className={`container-fluid ${styles.formAnimation}`}>
               <Form
                 noValidate
                 validated={validated}
@@ -477,6 +484,8 @@ const UserList = () => {
                         type="text"
                         onChange={handleChange}
                         placeholder="Enter User Name"
+                        autoComplete="none"
+                        value={formData?.userName}
                       />
                     </div>
                   </div>
@@ -490,6 +499,7 @@ const UserList = () => {
                       type="number"
                       onChange={handleChange}
                       placeholder="Enter Mobile Number"
+                      value={formData?.mobileNumber}
                     />
                   </div>
                   <div className="col-xl-6 mb-3">
@@ -532,10 +542,10 @@ const UserList = () => {
                           name="password"
                           required
                           type={showPassword ? "text" : "password"}
-                          value={formData?.password ? formData?.password : null}
                           onChange={handleChange}
                           className={styles.passField}
                           placeholder="Enter Password"
+                          value={formData?.password}
                         />
                       </div>
                       <div className={styles.passwordBox2}>
@@ -623,6 +633,14 @@ const UserList = () => {
                   </Button>
                 </div>
               </Form>
+              {/* <div>
+                <label>User Name</label>
+                <input name="user name" type="text" autoComplete="off" value={""} />
+              </div>
+              <div>
+                <label>Password</label>
+                <input name="password" type="password" autoComplete="off"  value={""}/>
+              </div> */}
             </div>
           </div>
         </Offcanvas>

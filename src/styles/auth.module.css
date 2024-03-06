@@ -298,3 +298,25 @@ img.auth_ehrLogo3 {
 .ml_10 {
   margin-left: 10px;
 }
+.formAnimation {
+  height: 1px;
+  overflow: hidden;
+  background-color: transparent;
+  position: relative;
+  animation-name: form;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes form {
+  0% {
+    left: 0px;
+    top: 0px;
+  }
+
+  100% {
+    left: 0px;
+    height: 80vh;
+    overflow: visible;
+  }
+}
