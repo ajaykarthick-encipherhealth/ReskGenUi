@@ -420,8 +420,10 @@ const index = () => {
                             <div className="custom-tab-1">
                               <Tab.Container
                                 defaultActiveKey={
-                                  reportActiveTab
+                                  reportActiveTab === "ReceivedReport"
                                     ? "meatCriteria"
+                                    : reportActiveTab === "SentReport"
+                                    ? "comboDiseases"
                                     : "validDiseases"
                                 }
                               >
@@ -545,6 +547,9 @@ const index = () => {
                                       setSortOrder={setSentSortOrder}
                                       sortOrder={sentSortOrder}
                                       setSort={setSort}
+                                      receivedPageNo={sentPageNo}
+                                      receivedStartDate={startDate}
+                                      receivedEndDate={endDate}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
