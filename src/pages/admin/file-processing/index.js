@@ -424,6 +424,8 @@ export default function Patient() {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
+                        {patinetListAll?.length===0 && tableLoading?
+                        "":
                         <FileProcessingTable
                           patinetListAll={patinetListAll}
                           actionBodyTemplate={actionBodyTemplate}
@@ -432,6 +434,7 @@ export default function Patient() {
                           patientDetails={patientDetails}
                           loading={tableLoading}
                         />
+}
                         {/* <div>
                               <div className="pagination-container">
                                 <Paginator
