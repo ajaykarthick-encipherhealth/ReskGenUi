@@ -206,7 +206,6 @@ const UserList = () => {
       setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
-  console.log(formData, "data");
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
