@@ -50,7 +50,7 @@ const Notifications = () => {
       ))
     ) : (
       <div className={styles.no_notificarion_container}>
-         {notificationResponse?.loading ===false &&<Image src={NoNotification} alt="" />}
+         {!notificationResponse?.loading && notificationResponse?.data?.content?.length===0 &&<Image src={NoNotification} alt="" />}
       </div>
     );
 
