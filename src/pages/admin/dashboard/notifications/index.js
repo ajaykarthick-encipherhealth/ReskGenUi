@@ -23,8 +23,10 @@ const Notifications = () => {
   };
 
   const emailSplitFunction = (email) => {
-    let emailSplit = email.split("@");
+   if(email){
+    let emailSplit = email?.split("@");
     return capitalizeFirstLetter(emailSplit[0]);
+   }
   };
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -43,8 +45,9 @@ const Notifications = () => {
             <div className={styles.time}>
               {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp;{" "}
               {moment(info.createdAt).format("hh:mm:A")} &nbsp;{" "}
-              {emailSplitFunction(info.userFrom.userName)} (
-              {info.userFrom?.role})
+              {`${emailSplitFunction(info.userFrom.userName)} (${
+                info.userFrom?.role
+              })`}
             </div>
           </div>
         </div>
