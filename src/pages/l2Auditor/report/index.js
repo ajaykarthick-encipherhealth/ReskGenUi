@@ -28,11 +28,11 @@ import TeamReport from "../table/TeamReport/teamReport";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 
 const statusOptions = [
+  { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
-  { label: "All", value: "ALL" },
 ];
 const index = () => {
   const dispatch = useDispatch();
