@@ -168,7 +168,7 @@ const Notification = ({}) => {
 
   const getTeamUser = async () => {
     var result = await SelectUserList("SUPERVISOR");
-    const options = result.response?.map((data) => ({
+    const options = result?.response?.map((data) => ({
       label: data?.firstName + "" + data?.lastName,
       value: data?.userName,
     }));
