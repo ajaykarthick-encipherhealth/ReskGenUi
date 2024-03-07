@@ -53,11 +53,13 @@ export const getSearchPatients = (pagenum, search) => {
   };
 };
 
-export const getPriorityChange = (patientId, year, priority) => {
+export const getPriorityChange = (patientId, year, priority,getFilteApi) => {
   return (dispatch) => {
     try {
       ChangePriority(patientId, year, priority).then((response) => {
-        console.log(response);
+        if(response){
+          getFilteApi()
+        }
       });
     } catch (err) {
       console.log(err);
