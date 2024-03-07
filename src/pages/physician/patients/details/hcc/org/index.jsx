@@ -15,7 +15,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
 const CamboTree = ({ tree }) => {
-  const [selection, setSelection] = useState([]);
   const [background, setBackground] = useState([]);
   const [trees, setTrees] = useState(Tree);
   const getBackgroundColor = async () => {
@@ -91,7 +90,6 @@ const CamboTree = ({ tree }) => {
   };
 
   const getEncounterDateBackground = (value) => {
-    console.log(value, "test");
     return value?.split(",")?.map((res, index) => {
       if (index < 2) {
         var backColor = "encounterDateTag1";
@@ -129,7 +127,6 @@ const CamboTree = ({ tree }) => {
 
   const getCaptureSectionBackground = (value) => {
     var dublicateCaptureDelete = removeDuplicates(value);
-    console.log(dublicateCaptureDelete, "test");
     return dublicateCaptureDelete.map((res, index) => {
       const result = background.filter((res2) => res2.sectionName == res);
       var backColor = result[0]?.backgroundColor;

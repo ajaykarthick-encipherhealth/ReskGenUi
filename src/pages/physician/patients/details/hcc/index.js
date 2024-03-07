@@ -541,6 +541,7 @@ const Hcc = ({ patientHccResult }) => {
               providerName: providerList,
               dbDescription: res.dbDescription,
               isMostSpecific: res.isMostSpecific,
+              children: res.children,
               getPlace: "Hcc",
             });
           }
@@ -3733,6 +3734,26 @@ const Hcc = ({ patientHccResult }) => {
                                             }
                                           </div>
                                         </Popconfirm>
+                                        {data.isMostSpecific == true && (
+                                          <div
+                                            className={visitStyles.close_icon}
+                                            style={{ background: "#c7f3c6" }}
+                                            onClick={() => {
+                                              setOpens(true);
+                                              setCombiTree([
+                                                { ...data, expanded: true },
+                                              ]);
+                                            }}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faSitemap}
+                                              style={{
+                                                size: 8,
+                                                color: "#088f39",
+                                              }}
+                                            />
+                                          </div>
+                                        )}
                                       </div>
                                       <div
                                         className={`${visitStyles.hoverActiveHcc}`}
@@ -4352,7 +4373,6 @@ const Hcc = ({ patientHccResult }) => {
                                               setCombiTree([
                                                 { ...item, expanded: true },
                                               ]);
-                                              console.log(item, "test");
                                             }}
                                           >
                                             <FontAwesomeIcon
