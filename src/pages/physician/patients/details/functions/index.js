@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-export const getMeatFound = (code, data, value) => {
+const getMeatFound = (code, data, value) => {
   const result = data?.filter(
     (res2) => res2.diagnosisCode.replace(".", "") == code.replace(".", "")
   );
@@ -40,3 +40,5 @@ export const getMeatFound = (code, data, value) => {
   );
   return badgeMap;
 };
+
+export default getMeatFound;
