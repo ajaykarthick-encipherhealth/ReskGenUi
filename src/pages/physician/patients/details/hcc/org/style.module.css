@@ -31,6 +31,7 @@
   border-color: inherit !important;
 }
 .chart td { 
+  border: 1px;
   border-style: revert-layer !important;
 }
 
