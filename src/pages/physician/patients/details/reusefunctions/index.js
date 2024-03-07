@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
- const getMeatFound = (code, data, value) => {
+const getMeatFound = (code, data, value) => {
   const result = data?.filter(
     (res2) => res2.diagnosisCode.replace(".", "") == code.replace(".", "")
   );
@@ -40,11 +40,11 @@ import styles from "./styles.module.css";
   // );
   return (
     <span
-    style={{ backgroundColor: backColor, color: "white" }}
-    className={`mt-2 ${styles.badgeMeat}`}
-  >
-    {value}
-  </span>
+      style={{ backgroundColor: backColor, color: "white" }}
+      className={`mt-2 ${styles.badgeMeat}`}
+    >
+      {value}
+    </span>
   );
 };
 
