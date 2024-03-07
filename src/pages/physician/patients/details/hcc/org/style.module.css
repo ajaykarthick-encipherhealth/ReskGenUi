@@ -4,7 +4,6 @@
 }
 
 .cards {
-  border: 1px solid #4a3aff;
   border-top: 5px;
   border-style: solid;
   border-color: #4a3aff;
@@ -28,7 +27,7 @@
 }
 
 .chart td {
-  border-width: 1px !important;
+  border: 1px solid !important;
   border-style: revert-layer !important;
   border-color: inherit !important;
 }
