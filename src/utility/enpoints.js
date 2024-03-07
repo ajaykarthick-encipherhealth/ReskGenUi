@@ -1,5 +1,5 @@
 const ENDPOINTS = {
-  apiEndoint: "http://192.168.1.67:8085/",
+  apiEndoint: "https://local.hcc.encipherhealth.com/secure/",
   apiEndointFileUpload: "http://13.68.177.51:8082/ai/",
   apiEndointFileUploadHcc: "https://local.hcc.encipherhealth.com/secure/",
 };
