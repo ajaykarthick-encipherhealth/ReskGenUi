@@ -3285,14 +3285,16 @@ const Hcc = ({ patientHccResult }) => {
       inputValue?.description === "" ||
       inputValue?.reason
     ) {
-      setFormErr({
-        providername: "Please enter provider name",
-        quickQuery: "Please select quick query",
-        imagingQuery: "Please select imaging query",
-        queryReason: "Please select quick reason",
-        description: "Please enter description",
-      });
-      setFileLoading(false);
+      let errors = {
+        providername: inputValue?.providerName === "" ? "Please enter provider name" : "",
+        quickQuery: inputValue?.headerName === "" ? "Please select quick query" : "",
+        imagingQuery: inputValue?.imagingTestHeader === "" ? "Please select imaging query" : "",
+        queryReason: inputValue?.queryReason === "" ? "Please select quick reason" : "",
+        description: inputValue?.description === "" ? "Please enter description" : "",
+    };
+
+    setFormErr(errors);
+      
     } else {
     if (form.checkValidity() === true) {
       var dataformat = {
@@ -3307,21 +3309,20 @@ const Hcc = ({ patientHccResult }) => {
         description: inputValue.description,
       };
       var result = await submitMeatQuery(dataformat);
-      if (result.status == "SUCCESS") {
-        setMeatQueryResult(result.response);
-        inputValue.queryComment = result.response.queryComment;
-        setIsMeatQueryModal(false);
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        setMeatQueriedDetailsModal(true);
-        setMeatQueriedDetailsShow(true);
-        var result = await getMeatQueryList(selectedDosValue, localPatientId);
-        setMeatQueryList(result.response);
-      } else {
-      }
+      // if (result.status == "SUCCESS") {
+      //   setMeatQueryResult(result.response);
+      //   inputValue.queryComment = result.response.queryComment;
+      //   setIsMeatQueryModal(false);
+      //   notification.success({
+      //     message: result.message,
+      //     placement: "top",
+      //     duration: 1,
+      //   });
+      //   setMeatQueriedDetailsModal(true);
+      //   setMeatQueriedDetailsShow(true);
+      //   var result = await getMeatQueryList(selectedDosValue, localPatientId);
+      //   setMeatQueryList(result.response);
+      // } 
     }
     }
   };
