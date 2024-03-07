@@ -35,7 +35,7 @@ const bullets = [
     title: "Processed Status",
     option: [
       {
-        color: "#FFB54D",
+        color: "#5da9e4",
         name: "Pending",
       },
       {

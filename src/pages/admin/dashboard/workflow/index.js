@@ -5,8 +5,7 @@ import completed from "../../../../images/dashboard/completed.png";
 import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
 import allocated from "../../../../images/dashboard/allocation.png";
-import pending from "../../../../images/dashboard/pending.png";
-import hold from "../../../../images/dashboard/hold.png";
+
 import { Col, Empty, Row, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
 import holdbg from "../../.../../../../images/dashboard/holdbg.png";
