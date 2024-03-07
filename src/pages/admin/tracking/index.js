@@ -55,24 +55,28 @@ const bullets = [
     title: "Audited Status",
     option: [
       {
-        color: "rgb(55, 120, 128)",
-        name: "Audited",
+        color: "#377880",
+        name: "AUDITED",
+      },
+      {
+        color: "#E28213",
+        name: "AUDIT PENDING",
+      },
+      {
+        color: "#964B00",
+        name: "RE AUDIT",
       },
       {
         color: "red",
-        name: "Not Audited",
+        name: "DECLINED",
       },
       {
-        color: "rgb(226, 130, 19)",
-        name: "Pending",
+        color: "#CE9900",
+        name: "AUDIT HOLD",
       },
       {
-        color: "rgb(206, 153, 0)",
-        name: "Audit Hold",
-      },
-      {
-        color: "rgb(150, 75, 0)",
-        name: "Re Audit",
+        color: "#C21807",
+        name: "AUDIT DECLINED",
       },
     ],
   },

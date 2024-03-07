@@ -48,6 +48,10 @@ const bullets = [
     color: "#CE9900",
     name: "AUDIT HOLD",
   },
+  {
+    color: "#C21807",
+    name: "AUDIT DECLINED",
+  },
 ];
 
 const statusOptions = [

@@ -26,7 +26,10 @@ import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
 import auditPending from "../../../../images/svg/auditPending.svg";
-import { getCurrentUserDetails, getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
+import {
+  getCurrentUserDetails,
+  getL2IndividualUser,
+} from "../../../../store/actions/l2Action/userActions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
@@ -37,12 +40,28 @@ import {
 
 const bullets = [
   {
-    color: "rgba(209, 56, 56, 1)",
-    name: "Decline",
+    color: "#377880",
+    name: "AUDITED",
   },
   {
-    color: "rgba(58, 155, 148, 1)",
-    name: "Completed",
+    color: "#E28213",
+    name: "AUDIT PENDING",
+  },
+  {
+    color: "#964B00",
+    name: "RE AUDIT",
+  },
+  {
+    color: "red",
+    name: "DECLINED",
+  },
+  {
+    color: "#CE9900",
+    name: "AUDIT HOLD",
+  },
+  {
+    color: "#C21807",
+    name: "AUDIT DECLINED",
   },
 ];
 const badges = [
@@ -80,7 +99,6 @@ const AuditOptions = [
   { label: "REAUDIT", value: "REAUDIT" },
   { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
-
 ];
 const index = () => {
   const dispatch = useDispatch();
@@ -185,11 +203,16 @@ const index = () => {
     const latestKey =
       rowData?.auditDeclinedNotes?.length > 0 &&
       Math.max(
-        ...rowData?.auditDeclinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
+        ...rowData?.auditDeclinedNotes?.map((obj) =>
+          parseInt(Object.keys(obj)[0])
+        )
       );
     let declinedData;
 
-    if (rowData?.auditDeclinedNotes && rowData?.auditDeclinedNotes?.length > 0) {
+    if (
+      rowData?.auditDeclinedNotes &&
+      rowData?.auditDeclinedNotes?.length > 0
+    ) {
       rowData?.auditDeclinedNotes?.forEach((obj) => {
         if (obj[latestKey]) {
           declinedData = obj[latestKey];
@@ -279,8 +302,13 @@ const index = () => {
         );
       case "AUDIT_DECLINED":
         return (
-          <Popover placement="bottom" title=" Status: AUDIT DECLINED"
-          content={`Reason: ${rowData.auditDeclinedNotes ? declinedData : "---"}`}>
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${
+              rowData.auditDeclinedNotes ? declinedData : "---"
+            }`}
+          >
             <div className="patient-status">
               <Image
                 src={AuditeDeclineTrack}
